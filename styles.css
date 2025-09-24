@@ -49,7 +49,7 @@ header {
 
 .nav-tabs {
   display: flex;
-  gap: 18px;
+  gap: 10px;
 }
 
 .nav-tabs a {
@@ -151,15 +151,14 @@ h1,
 }
 
 .project-body {
-  padding: 16px 18px 18px;
-  background: rgba(0, 0, 0, 0.4);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   flex: 1;
 }
 
 .project-title {
-  margin: 0 0 8px;
+  margin: 12px 0 4px;
   font-size: 1.2rem;
   font-weight: normal;
   color: #fff;
@@ -168,6 +167,7 @@ h1,
 
 .project-desc {
   margin: 0 0 14px;
+  padding: 0 12px;
   color: #d9d9d9;
   font-size: 0.96rem;
   line-height: 1.5;
@@ -175,9 +175,10 @@ h1,
 }
 
 .project-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  margin-top: auto;
+  align-self: flex-start;
+  margin-left: 12px;
+  margin-bottom: 12px;
 }
 
 .project-link {

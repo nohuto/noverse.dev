@@ -120,6 +120,7 @@ h1,
   justify-content: center;
   margin: 18px auto 0;
   padding: 0 18px;
+  width: 100%;
 }
 
 .project-card {
@@ -430,4 +431,12 @@ a.link:hover {
 
 .contact-email:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .project-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
 }

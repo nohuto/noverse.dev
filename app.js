@@ -81,45 +81,39 @@ function initRepoDescriptions() {
   });
 }
 
+function filterProjects() {
+  const searchInput = document.getElementById('project-search');
+  if (!searchInput) return; // Skip if not on the project page
+
+  const search = searchInput.value.toLowerCase();
+  const activeTags = Array.from(document.querySelectorAll('.tag-filter button.active')).map(btn => btn.textContent.toLowerCase());
+
+  document.querySelectorAll('.project-card').forEach(card => {
+    const title = card.querySelector('.project-title').textContent.toLowerCase();
+    const desc = card.querySelector('.project-desc').textContent.toLowerCase();
+    const tags = (card.dataset.tags || '').toLowerCase().split(',');
+
+    const matchesSearch = title.includes(search) || desc.includes(search);
+    const matchesTags = activeTags.length === 0 || activeTags.some(tag => tags.includes(tag));
+
+    card.style.display = (matchesSearch && matchesTags) ? '' : 'none';
+  });
+}
+
 function initFiltering() {
   const searchInput = document.getElementById('project-search');
   const tagButtons = document.querySelectorAll('.tag-filter button');
-  const cards = document.querySelectorAll('.project-card');
-  let activeTags = [];
 
-  function filterProjects() {
-    const search = searchInput.value.toLowerCase();
-    const visible = [];
+  if (!searchInput || tagButtons.length === 0) return;
 
-    cards.forEach(card => {
-      const title = card.querySelector('.project-title')?.textContent.toLowerCase() || '';
-      const desc = card.querySelector('.project-desc')?.textContent.toLowerCase() || '';
-      const tags = (card.dataset.tags || '').toLowerCase().split(',');
-
-      const matchesSearch = title.includes(search) || desc.includes(search);
-      const matchesTags = activeTags.length === 0 || activeTags.some(tag => tags.includes(tag));
-
-      const show = matchesSearch && matchesTags;
-      card.style.display = show ? '' : 'none';
-      card.classList.toggle('solo', show);
-      if (show) visible.push(card);
-    });
-
-    cards.forEach(c => c.classList.remove('solo'));
-    if (visible.length === 1) visible[0].classList.add('solo');
-  }
-
+  searchInput.addEventListener('input', filterProjects);
   tagButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      const tag = btn.getAttribute('data-tag');
       btn.classList.toggle('active');
-      activeTags = Array.from(document.querySelectorAll('.tag-filter button.active'))
-                        .map(b => b.getAttribute('data-tag').toLowerCase());
       filterProjects();
     });
   });
 
-  searchInput?.addEventListener('input', filterProjects);
   filterProjects();
 }
 

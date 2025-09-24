@@ -107,3 +107,42 @@ function initRepoDescriptions() {
     }
   });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('project-search');
+  const tagButtons = document.querySelectorAll('.tag-filter button');
+  const cards = document.querySelectorAll('.project-card');
+
+  let activeTags = [];
+
+  function filterProjects() {
+    const search = searchInput.value.trim().toLowerCase();
+
+    cards.forEach(card => {
+      const title = card.querySelector('.project-title').textContent.toLowerCase();
+      const tags = (card.getAttribute('data-tags') || '').toLowerCase();
+
+      const matchesSearch = title.includes(search);
+      const matchesTags = activeTags.length === 0 || activeTags.every(tag => tags.includes(tag.toLowerCase()));
+
+      card.style.display = matchesSearch && matchesTags ? '' : 'none';
+    });
+  }
+
+  tagButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tag = btn.getAttribute('data-tag');
+      btn.classList.toggle('active');
+
+      if (btn.classList.contains('active')) {
+        activeTags.push(tag);
+      } else {
+        activeTags = activeTags.filter(t => t !== tag);
+      }
+
+      filterProjects();
+    });
+  });
+
+  searchInput.addEventListener('input', filterProjects);
+});

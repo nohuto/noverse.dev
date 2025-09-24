@@ -205,6 +205,57 @@ h1,
   border-radius: 1px;
 }
 
+.project-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+#project-search {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  width: 100%;
+  max-width: 400px;
+}
+
+#project-search:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(96, 155, 210, 0.3);
+}
+
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.tag-filter button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.tag-filter button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tag-filter button.active {
+  background: #609bd2;
+  border-color: #609bd2;
+}
+
 .overlay {
   position: fixed;
   inset: 0;

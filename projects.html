@@ -26,11 +26,27 @@
     <section class="content-box">
       <h1 class="projects-heading">My Current Projects</h1>
       <div class="projects-divider"></div>
+      <div class="project-filter">
+        <div class="project-filter">
+        <input id="project-search" type="text" placeholder="Search..." />
 
-      <div class="project-grid">
+          <div class="tag-filter">
+              <button data-tag="OS Config">OS Config</button>
+              <button data-tag="NVIDIA">NVIDIA</button>
+              <button data-tag="Encryption">Encryption</button>
+              <button data-tag="Encoding">Encoding</button>
+              <button data-tag="Obfuscation">Obfuscation</button>
+              <button data-tag="Hashing">Hashing</button>
+              <button data-tag="Analysis">Analysis</button>
+              <button data-tag="Fetch">Fetch</button>
+              <button data-tag="Conversion">Conversion</button>
+              <button data-tag="Security">Security</button>
+          </div>
+          </div>
+        <div class="project-grid">
 
         <!-- aes-cbc -->
-        <article class="project-card" data-repo="5Noxi/aes-cbc">
+        <article class="project-card" data-repo="5Noxi/aes-cbc" data-tags="Encryption">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/aes-cbc/main/media/aes-cbc.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">AES 256-Bit CBC Encryption</h3>
@@ -42,7 +58,7 @@
         </article>
 
         <!-- blocklist-mgr -->
-        <article class="project-card" data-repo="5Noxi/blocklist-mgr">
+        <article class="project-card" data-repo="5Noxi/blocklist-mgr" sdata-tags="OS Config">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/blocklist-mgr/main/media/blocklist-mgr.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">Blocklist Manager</h3>
@@ -54,7 +70,7 @@
         </article>
 
         <!-- comp-mgr -->
-        <article class="project-card" data-repo="5Noxi/comp-mgr">
+        <article class="project-card" data-repo="5Noxi/comp-mgr" data-tags="OS Config">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/comp-mgr/main/media/comp-mgr.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">Component Manager</h3>
@@ -66,7 +82,7 @@
         </article>
 
         <!-- bitmask-calc -->
-        <article class="project-card" data-repo="5Noxi/bitmask-calc">
+        <article class="project-card" data-repo="5Noxi/bitmask-calc" data-tags="NVIDIA, OS Config">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/bitmask-calc/main/media/bitmask-calc.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">Bitmask Calculator</h3>
@@ -78,7 +94,7 @@
         </article>
 
         <!-- sym-dump -->
-        <article class="project-card" data-repo="5Noxi/sym-dump">
+        <article class="project-card" data-repo="5Noxi/sym-dump" data-tags="Analysis">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/sym-dump/main/media/sym-dump.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">Symbols Memory Dump</h3>
@@ -90,7 +106,7 @@
         </article>
 
         <!-- nvfetch -->
-        <article class="project-card" data-repo="5Noxi/nvfetch">
+        <article class="project-card" data-repo="5Noxi/nvfetch" data-tags="Fetch">
             <img class="project-media-img" src="https://raw.githubusercontent.com/5Noxi/nvfetch/main/images/output.png" alt="NVFetch preview">
             <div class="project-body">
             <h3 class="project-title">NVFetch</h3>
@@ -102,7 +118,7 @@
         </article>
 
         <!-- void -->
-        <article class="project-card" data-repo="5Noxi/void">
+        <article class="project-card" data-repo="5Noxi/void" data-tags="Obfuscation">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/void/main/media/void.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">Void Obfuscation</h3>
@@ -114,7 +130,7 @@
         </article>
 
         <!-- minifier -->
-        <article class="project-card" data-repo="5Noxi/minifier">
+        <article class="project-card" data-repo="5Noxi/minifier" data-tags="Obfuscation">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/minifier/main/media/minifier.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">PowerShell Minifier</h3>
@@ -126,7 +142,7 @@
         </article>
 
         <!-- ps12bat -->
-        <article class="project-card" data-repo="5Noxi/ps12bat">
+        <article class="project-card" data-repo="5Noxi/ps12bat" data-tags="Conversion">
             <img class="project-media-img" src="https://raw.githubusercontent.com/5Noxi/ps12bat/main/images/ps12batpre.png" alt="PS12bat preview">
             <div class="project-body">
             <h3 class="project-title">PS12bat</h3>
@@ -138,7 +154,7 @@
         </article>
 
         <!-- wpr-reg-records -->
-        <article class="project-card" data-repo="5Noxi/wpr-reg-records">
+        <article class="project-card" data-repo="5Noxi/wpr-reg-records" data-tags="Analysis, OS Config">
             <div class="project-body">
             <h3 class="project-title">WPR / Procmon Registry Activity Records</h3>
             <p class="project-desc"></p>
@@ -149,7 +165,7 @@
         </article>
 
         <!-- b64-char -->
-        <article class="project-card" data-repo="5Noxi/b64-char">
+        <article class="project-card" data-repo="5Noxi/b64-char" data-tags="Encoding">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/b64-char/main/media/b64-char.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">Base64 Encoding / Character Obfuscation</h3>
@@ -161,7 +177,7 @@
         </article>
 
         <!-- sec-audit -->
-        <article class="project-card" data-repo="5Noxi/sec-audit">
+        <article class="project-card" data-repo="5Noxi/sec-audit" data-tags="Security">
             <img class="project-media-img" src="https://raw.githubusercontent.com/5Noxi/sec-audit/main/images/secpre.png" alt="Security Audit preview">
             <div class="project-body">
             <h3 class="project-title">Security Audit</h3>
@@ -173,7 +189,7 @@
         </article>
 
         <!-- hash-gen -->
-        <article class="project-card" data-repo="5Noxi/hash-gen">
+        <article class="project-card" data-repo="5Noxi/hash-gen" data-tags="Hashing">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/hash-gen/main/media/hash-gen.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">Hash Generator</h3>
@@ -185,7 +201,7 @@
         </article>
 
         <!-- strings2-tui -->
-        <article class="project-card" data-repo="5Noxi/strings2-tui">
+        <article class="project-card" data-repo="5Noxi/strings2-tui" data-tags="Analysis">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/strings2-tui/master/media/strings2-tui.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">strings2 TUI</h3>
@@ -197,7 +213,7 @@
         </article>
 
         <!-- b64rev -->
-        <article class="project-card" data-repo="5Noxi/b64rev">
+        <article class="project-card" data-repo="5Noxi/b64rev" data-tags="Encoding">
             <video class="project-media" src="https://raw.githubusercontent.com/5Noxi/b64rev/main/media/b64rev.mp4" controls preload="metadata" playsinline muted></video>
             <div class="project-body">
             <h3 class="project-title">Base64 Reversal & Character Obfuscation</h3>
@@ -209,7 +225,7 @@
         </article>
 
         <!-- dism-wsim -->
-        <article class="project-card" data-repo="5Noxi/dism-wsim">
+        <article class="project-card" data-repo="5Noxi/dism-wsim" data-tags="OS Config">
             <div class="project-body">
             <h3 class="project-title">DISM-WSIM</h3>
             <p class="project-desc"></p>

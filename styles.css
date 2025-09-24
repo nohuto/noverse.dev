@@ -344,3 +344,18 @@ a.link:hover {
     min-width: 0;
   }
 }
+
+/* temp class for redirection */
+.small-redirect {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #aaa;
+  text-decoration: none;
+  text-align: center;
+}
+
+.small-redirect:hover {
+  text-decoration: underline;
+  color: #fff;
+}

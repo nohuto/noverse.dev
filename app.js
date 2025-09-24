@@ -83,7 +83,7 @@ function initRepoDescriptions() {
 
 function filterProjects() {
   const searchInput = document.getElementById('project-search');
-  if (!searchInput) return; // Skip if not on the project page
+  if (!searchInput) return;
 
   const search = searchInput.value.toLowerCase();
   const activeTags = Array.from(document.querySelectorAll('.tag-filter button.active')).map(btn => btn.textContent.toLowerCase());

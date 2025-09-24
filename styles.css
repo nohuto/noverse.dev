@@ -4,6 +4,7 @@
 
 * {
   box-sizing: border-box;
+  font-family: "Yu Gothic UI Light", sans-serif;
 }
 
 html, body {
@@ -18,7 +19,6 @@ body {
   display: flex;
   flex-direction: column;
   color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
   position: relative;
 }
 
@@ -28,11 +28,18 @@ header, footer {
 }
 
 header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 28px;
-  background: transparent;
+  padding: 10px 20px;
+  background: #00000080;
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid #ffffff1a;
 }
 
 .brand {
@@ -43,7 +50,7 @@ header {
 }
 
 .brand img {
-  height: 36px;
+  height: 25px;
   width: auto;
 }
 
@@ -56,7 +63,7 @@ header {
   color: #fff;
   text-decoration: none;
   font-size: 1rem;
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: 8px;
   border: 1px solid transparent;
   transition: border-color 0.25s, background 0.25s, color 0.25s;
@@ -64,14 +71,14 @@ header {
 }
 
 .nav-tabs a:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: #ffffff1a;
+  border-color: #ffffff33;
   color: #fff;
 }
 
 .nav-tabs a.active {
-  border-color: rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: #ffffff59;
+  background: #ffffff14;
 }
 
 main {
@@ -81,7 +88,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 24px;
+  padding: 20px 24px 24px;
   opacity: 1;
   transition: opacity 0.25s ease;
 }
@@ -95,8 +102,8 @@ main.no-center {
 }
 
 .content-box {
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #0000008c;
+  border: 1px solid #ffffff2e;
   border-radius: 14px;
   padding: 24px 30px;
   width: clamp(95%, 90vw, 1200px);
@@ -104,13 +111,13 @@ main.no-center {
   flex-direction: column;
   max-width: 100%;
   text-align: center;
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 25px #00000066;
 }
 
 h1,
 .content-box h1 {
   color: #fff;
-  text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
+  text-shadow: 1px 1px 6px #000000b3;
 }
 
 .project-grid {
@@ -127,8 +134,8 @@ h1,
   flex: 1 1 calc(25% - 18px);
   max-width: 400px;
   min-width: 280px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #00000059;
+  border: 1px solid #ffffff26;
   border-radius: 12px;
   overflow: hidden;
   transition: transform 0.2s, background 0.2s;
@@ -137,7 +144,7 @@ h1,
 }
 
 .project-card:hover {
-  background: rgba(0, 0, 0, 0.5);
+  background: #00000080;
   transform: translateY(-1px);
 }
 
@@ -147,7 +154,7 @@ h1,
   height: 260px;
   object-fit: cover;
   background: #000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid #ffffff1f;
   flex-shrink: 0;
 }
 
@@ -163,7 +170,7 @@ h1,
   font-size: 1.2rem;
   font-weight: normal;
   color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 2px #000000cc;
 }
 
 .project-desc {
@@ -172,7 +179,7 @@ h1,
   color: #d9d9d9;
   font-size: 0.96rem;
   line-height: 1.5;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 2px #00000066;
 }
 
 .project-actions {
@@ -190,14 +197,14 @@ h1,
   font-weight: normal;
   font-size: 0.95rem;
   color: #d3d3d3;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #ffffff14;
+  border: 1px solid #ffffff2e;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .project-link:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.28);
+  background: #ffffff24;
+  border-color: #ffffff47;
   color: #fff;
 }
 
@@ -212,7 +219,7 @@ h1,
 .projects-divider {
   width: 100%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.3);
+  background: #ffffff4d;
   margin: 0 auto 24px;
   border-radius: 1px;
 }
@@ -229,8 +236,8 @@ h1,
   padding: 8px 12px;
   font-size: 1rem;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #ffffff33;
+  background: #ffffff0d;
   color: #fff;
   width: 100%;
   max-width: 400px;
@@ -239,7 +246,7 @@ h1,
 #project-search:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px rgba(96, 155, 210, 0.3);
+  box-shadow: 0 0 0 1px #609bd24d;
 }
 
 .tag-filter {
@@ -250,28 +257,29 @@ h1,
 }
 
 .tag-filter button {
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  text-align: center;
+  background: #ffffff1a;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #ffffff33;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .tag-filter button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #ffffff33;
 }
 
 .tag-filter button.active {
-  background: #609bd2;
-  border-color: #609bd2;
+  background: #447dc5;
+  border-color: #ffffff33;
 }
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: #00000080;
   z-index: 1;
   pointer-events: none;
 }
@@ -296,12 +304,12 @@ footer {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
+  background: #ffffff26;
   transition: transform 0.2s, background 0.2s;
 }
 
 .social a:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #ffffff4d;
   transform: scale(1.08);
 }
 
@@ -309,7 +317,7 @@ footer {
   width: 22px;
   height: 22px;
   opacity: 0.85;
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(0 0 2px #00000099);
 }
 
 .social img:hover {
@@ -332,7 +340,7 @@ a.link:hover {
 .readme-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
+  background: #000000bf;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -348,8 +356,8 @@ a.link:hover {
 }
 
 .readme-content {
-  background: rgba(0,0,0,0.85);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: #000000d9;
+  border: 1px solid #ffffff33;
   border-radius: 12px;
   max-width: 900px;
   max-height: 80vh;
@@ -357,7 +365,7 @@ a.link:hover {
   overflow-y: auto;
   padding: 20px;
   color: #fff;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.6);
+  box-shadow: 0 6px 25px #00000099;
 }
 
 .readme-content h1,
@@ -368,14 +376,14 @@ a.link:hover {
 }
 
 .readme-content pre {
-  background: rgba(255,255,255,0.1);
+  background: #ffffff1a;
   padding: 10px;
   border-radius: 6px;
   overflow-x: auto;
 }
 
 .readme-content code {
-  background: rgba(255,255,255,0.1);
+  background: #ffffff1a;
   padding: 2px 4px;
   border-radius: 4px;
 }
@@ -388,12 +396,12 @@ a.link:hover {
   margin-bottom: 12px;
   padding: 4px 10px;
   border-radius: 6px;
-  background: rgba(255,255,255,0.2);
+  background: #ffffff33;
   transition: background 0.2s;
 }
 
 .readme-close:hover {
-  background: rgba(255,255,255,0.4);
+  background: #ffffff66;
 }
 
 .discord-warning {

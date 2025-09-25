@@ -91,7 +91,7 @@ function filterProjects() {
   document.querySelectorAll('.project-card').forEach(card => {
     const title = card.querySelector('.project-title').textContent.toLowerCase();
     const desc = card.querySelector('.project-desc').textContent.toLowerCase();
-    const tags = (card.dataset.tags || '').toLowerCase().split(',');
+    const tags = (card.dataset.tags || '').toLowerCase().split(',').map(tag => tag.trim());
 
     const matchesSearch = title.includes(search) || desc.includes(search);
     const matchesTags = activeTags.length === 0 || activeTags.some(tag => tags.includes(tag));
@@ -99,6 +99,7 @@ function filterProjects() {
     card.style.display = (matchesSearch && matchesTags) ? '' : 'none';
   });
 }
+
 
 function initFiltering() {
   const searchInput = document.getElementById('project-search');

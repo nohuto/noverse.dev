@@ -361,6 +361,7 @@ a.link:hover {
 }
 
 .mobile-scale-note {
+  display: none;
   text-align: center;
   font-size: 0.7rem;
   color: #535353;

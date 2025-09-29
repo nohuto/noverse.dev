@@ -359,3 +359,16 @@ a.link:hover {
   text-decoration: underline;
   color: #fff;
 }
+
+.mobile-scale-note {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-top: 6px;
+}
+
+@media (max-width: 600px) {
+  .mobile-scale-note {
+    display: block;
+  }
+}

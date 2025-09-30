@@ -368,8 +368,22 @@ a.link:hover {
   margin-top: 6px;
 }
 
+.github-langs-card {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
 @media (max-width: 600px) {
   .mobile-scale-note {
     display: block;
+  }
+
+  .github-langs-card {
+    max-width: 90%;
   }
 }

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product</title>
+  <link rel="icon" href="images/nvlogo.png">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <header>
+    <a class="brand" href="index.html">
+      <img src="images/noverse-logo.png">
+    </a>
+    <nav class="nav-tabs" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="product.html" class="active" aria-current="page">Product</a>
+      <a href="projects.html">Projects</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main class="no-center">
+    <section class="content-box" id="product">
+      <div class="product-header">
+        <div class="product-intro">
+          <p class="product-label">Product</p>
+          <h2>Windows Configuration</h2>
+          <p>
+            WinConfig is based on my personal research on several topics, which I began documenting around July 2024.
+          </p>
+        </div>
+        <div class="product-cta">
+          <span class="price-label">Lifetime license</span>
+          <span class="product-price">$10</span>
+          <p class="pricing-note">Includes updates & Discord role.</p>
+          <a class="purchase-btn" href="https://github.com/5Noxi/win-config" target="_blank" rel="noopener">
+            Purchase License
+          </a>
+        </div>
+      </div>
+      <div class="product-preview-grid">
+        <figure class="product-preview-card">
+          <img src="https://opengraph.githubassets.com/1/5Noxi/win-config" alt="Win-Config automation preview">
+          <figcaption>Automation pipeline overview</figcaption>
+        </figure>
+        <figure class="product-preview-card">
+          <img src="https://opengraph.githubassets.com/2/5Noxi/win-config" alt="Win-Config desktop cleanup preview">
+          <figcaption>Desktop &amp; policy cleanup reports</figcaption>
+        </figure>
+        <figure class="product-preview-card">
+          <img src="https://opengraph.githubassets.com/3/5Noxi/win-config" alt="Win-Config tuning presets preview">
+          <figcaption>Reusable tuning presets</figcaption>
+        </figure>
+      </div>
+      <div class="product-comparison">
+        <div class="comparison-copy">
+          <h3>Compared to other Windows configuration suites</h3>
+          <ul>
+            <li>Transparent execution logs so users can review every action, these include the value, data, type and if given the amount of modified keys. Specific options will show the PS code that got executed.</li>
+            <li>Dynamic state detection instead of relying on cached registry values, this includes static/dynamic (pattern) and all used cmdlets (which are also saved in the registry but on uncommon ways). </li>
+            <li>Documentation accompanies each option rather than generic "optimize" prompts.</li>
+            <li>Guidance includes lesser known data alongside common adjustments, for futher customization for experienced users.</li>
+            <li>Every control is available individually instead of being merged into large bundles.</li>
+            <li>Supports dark/light modes, custom color schemes, and layout preferences for search filters, rows, columns, and panel widths.</li>
+          </ul>
+        </div>
+        <div class="comparison-table" aria-label="Feature comparison">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">WinConfig</th>
+                <th scope="col">Typical tools</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Execution transparency</td>
+                <td><span class="status-pill positive">Displays each change</span></td>
+                <td><span class="status-pill neutral">Hidden</span></td>
+              </tr>
+              <tr>
+                <td>State detection</td>
+                <td><span class="status-pill positive">Dynamic</span></td>
+                <td><span class="status-pill neutral">Stored in registry</span></td>
+              </tr>
+              <tr>
+                <td>Documentation</td>
+                <td><span class="status-pill positive">Per option notes</span></td>
+                <td><span class="status-pill negative">None</span></td>
+              </tr>
+              <tr>
+                <td>Selection</td>
+                <td><span class="status-pill positive">Extensive</span></td>
+                <td><span class="status-pill neutral">Common</span></td>
+              </tr>
+              <tr>
+                <td>Customization control</td>
+                <td><span class="status-pill positive">Per change toggles</span></td>
+                <td><span class="status-pill negative">Bundled groups</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section class="content-box">
+      <div class="documentation-overview" id="documentation">
+        <div class="doc-header">
+          <p class="product-label">Documentation</p>
+          <h3>Detailed documentation for the WinConfig tool or for purely informational reasons.</h3>
+          <p>Each option has it's own somtimes detailed or less detailed documentation, containing explanations for specific changes or information for the topic itself.</p>
+        </div>
+        <div class="doc-grid">
+          <article class="doc-card">
+            <span class="doc-index">01</span>
+            <h4>System</h4>
+            <p>Operating system adjustments for services, scheduling, storage, startup behavior and more.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/system/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">02</span>
+            <h4>Visibility</h4>
+            <p>Customize Windows visuals and interface behavior.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/visibility/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">03</span>
+            <h4>Peripheral</h4>
+            <p>Change input, audio, Bluetooth, display devices... behaviors/states.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/peripheral/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">04</span>
+            <h4>Power</h4>
+            <p>Control several different power management features and other related options.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/power/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">05</span>
+            <h4>Privacy</h4>
+            <p>Privacy configuration for telemetry, diagnostics, encryption, data sharing, and more.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/privacy/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">06</span>
+            <h4>Security</h4>
+            <p>Security posture options such as elevation behavior, Defender and credential settings and more.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/security/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">07</span>
+            <h4>Network</h4>
+            <p>Change network adapter settings including DNS, sharing controls, offloads... and miscellaneous network related features.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/network/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">08</span>
+            <h4>NVIDIA</h4>
+            <p>NVIDIA driver installation, control panel settings... and resource manager values.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/nvidia/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">09</span>
+            <h4>Cleanup</h4>
+            <p>Clear caches, logs, histories, backups.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/cleanup/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">10</span>
+            <h4>Misc</h4>
+            <p>Miscellaneous external app configuration/installation, e.g. nvfetch.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/misc/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">11</span>
+            <h4>Policies</h4>
+            <p>A more detailed LGPE including keys, values and quick toggling, based on my admx-parser project.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/policies/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+          <article class="doc-card">
+            <span class="doc-index">12</span>
+            <h4>Affinities</h4>
+            <p>Configure MSI mode/message limit, IRQ settings (priority/policy), affinities.</p>
+            <a class="doc-link" href="https://github.com/5Noxi/win-config/blob/main/affinities/desc.md" target="_blank" rel="noopener">View Documentation</a>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="content-box">
+      <div class="external-tools" id="toolkit">
+        <div class="doc-header">
+          <p class="product-label">External tools</p>
+          <h3>Free &amp; open-source extension tools</h3>
+          <p>Each tool is available under GPLv3 and can be used alongside WinConfig as standalone tools.</p>
+        </div>
+        <div class="tool-grid">
+          <article class="tool-card">
+            <img src="https://opengraph.githubassets.com/1/5Noxi/app-tools" alt="App Tools preview">
+            <div>
+              <h4>App Tools</h4>
+              <p>Automates configuration for Discord, Spotify, Thorium, Steam, Ungoogled, Brave, Epic, LGHUB, and more.</p>
+              <a href="https://github.com/5Noxi/app-tools" class="tool-link" target="_blank" rel="noopener">View Repository</a>
+            </div>
+          </article>
+          <article class="tool-card">
+            <img src="https://opengraph.githubassets.com/1/5Noxi/game-tools" alt="Game Tools preview">
+            <div>
+              <h4>Game Tools</h4>
+              <p>Automates configuration VALORANT, Fortnite, Marvel Rivals, CS2, and Overwatch.</p>
+              <a href="https://github.com/5Noxi/game-tools" class="tool-link" target="_blank" rel="noopener">View Repository</a>
+            </div>
+          </article>
+          <article class="tool-card">
+            <img src="https://opengraph.githubassets.com/1/5Noxi/comp-mgr" alt="Component Manager preview">
+            <div>
+              <h4>Component Manager</h4>
+              <p>Remove/unstall packages, optional Windows features, and capability bundles.</p>
+              <a href="https://github.com/5Noxi/comp-mgr" class="tool-link" target="_blank" rel="noopener">View Repository</a>
+            </div>
+          </article>
+          <article class="tool-card">
+            <img src="https://opengraph.githubassets.com/1/5Noxi/blocklist-mgr" alt="Blocklist Manager preview">
+            <div>
+              <h4>Blocklist Manager</h4>
+              <p>Manage hosts/URL blocklists and edit your hosts directly.</p>
+              <a href="https://github.com/5Noxi/blocklist-mgr" class="tool-link" target="_blank" rel="noopener">View Repository</a>
+            </div>
+          </article>
+          <article class="tool-card">
+            <img src="https://opengraph.githubassets.com/1/5Noxi/bitmask-calc" alt="Bitmask Calculator preview">
+            <div>
+              <h4>Bitmask Calculator</h4>
+              <p>Bitfield calculator built for official NVIDIA definitions.</p>
+              <a href="https://github.com/5Noxi/bitmask-calc" class="tool-link" target="_blank" rel="noopener">View Repository</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="content-box">
+      <div class="legal-section" id="terms">
+        <div class="doc-header">
+          <p class="product-label">Terms of service</p>
+          <h3>Purchase, privacy, and license notes</h3>
+        </div>
+        <div class="legal-grid">
+          <article class="legal-card">
+            <h4>Data privacy</h4>
+            <p>
+              Win-Config only references hardware identifiers required for license verification: UUID, CPU ID, and board ID.
+              No additional system data is collected, transmitted, or stored. Learn more about the firmware identifiers via the
+              <a class="legal-link" href="https://learn.microsoft.com/en-us/windows-hardware/drivers/bringup/smbios" target="_blank" rel="noopener">official SMBIOS documentation</a>.
+            </p>
+          </article>
+          <article class="legal-card">
+            <h4>Usage &amp; redistribution</h4>
+            <p>
+              Licenses are for personal or organizational use only. Reselling, transferring, or redistributing WinConfig,
+              license files, or update packages is prohibited unless you receive explicit written permission from Nohuto.
+            </p>
+          </article>
+          <article class="legal-card">
+            <h4>Refund policy</h4>
+            <p>
+              Refunds are available if a license has not yet been registered or if WinConfig remains unused for 14 days
+              from purchase. Include proof of purchase and the unregistered key when submitting a refund request.
+            </p>
+          </article>
+          <article class="legal-card">
+            <h4>License</h4>
+            <p>
+              Each purchase grants one hardware bound license. Manual validation is required after checkout and
+              can take several minutes or hours. Keys do not transfer across devices without re-registration.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="social">
+      <a href="https://github.com/5Noxi" target="_blank" rel="noopener noreferrer">
+        <img src="images/github-icon.png">
+      </a>
+      <a href="https://www.youtube.com/@5Noverse" target="_blank" rel="noopener noreferrer">
+        <img src="images/youtube-icon.png">
+      </a>
+      <a href="mailto:nohuxi@duck.com" target="_blank" rel="noopener noreferrer">
+        <img src="images/email-icon.png">
+      </a>
+      <a href="https://discord.gg/E2ybG4j9jU" target="_blank" rel="noopener noreferrer">
+        <img src="images/discord-icon.png">
+      </a>
+    </div>
+  </footer>
+</body>
+</html>

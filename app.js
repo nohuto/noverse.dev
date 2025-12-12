@@ -20,6 +20,7 @@ async function loadPage(url, push = true) {
       setActive(new URL(url, location.href).pathname.split('/').pop() || 'index.html');
       initRepoDescriptions();
       initFiltering();
+      initQrModal();
       requestAnimationFrame(() => newMain.classList.remove('fading'));
     }, 180);
 
@@ -118,8 +119,46 @@ function initFiltering() {
   filterProjects();
 }
 
+function initQrModal() {
+  const modal = document.getElementById('qr-modal');
+  const overlay = document.querySelector('.overlay');
+  if (!modal || !overlay) return;
+
+  if (!modal.qrState) {
+    const state = {
+      open() {
+        if (!modal.hasAttribute('hidden')) return;
+        modal.removeAttribute('hidden');
+        overlay.classList.add('is-visible');
+        document.body.classList.add('modal-open');
+        document.addEventListener('keydown', state.handleKeydown);
+      },
+      close() {
+        if (modal.hasAttribute('hidden')) return;
+        modal.setAttribute('hidden', '');
+        overlay.classList.remove('is-visible');
+        document.body.classList.remove('modal-open');
+        document.removeEventListener('keydown', state.handleKeydown);
+      },
+      handleKeydown(event) {
+        if (event.key === 'Escape') state.close();
+      }
+    };
+
+    modal.qrState = state;
+    overlay.addEventListener('click', state.close);
+    modal.querySelector('[data-qr-close]')?.addEventListener('click', state.close);
+  }
+
+  const { open } = modal.qrState;
+  document.querySelectorAll('[data-qr-open]').forEach(btn => {
+    btn.addEventListener('click', open);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   setActive(location.pathname.split('/').pop() || 'index.html');
   initRepoDescriptions();
   initFiltering();
+  initQrModal();
 });

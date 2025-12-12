@@ -35,11 +35,16 @@
         </div>
         <div class="product-cta">
           <span class="price-label">Lifetime license</span>
-          <span class="product-price">$10</span>
+          <span class="product-price">10EUR</span>
           <p class="pricing-note">Includes updates & Discord role.</p>
-          <a class="purchase-btn" href="https://github.com/nohuto/win-config" target="_blank" rel="noopener">
-            Purchase License
-          </a>
+          <div class="purchase-actions">
+            <a class="purchase-btn" href="https://www.paypal.com/ncp/payment/EA38TCWLY68T4" target="_blank" rel="noopener">
+              Purchase License
+            </a>
+            <button class="qr-trigger" type="button" data-qr-open>
+              Show QR code
+            </button>
+          </div>
         </div>
       </div>
       <div class="product-preview-grid">
@@ -293,6 +298,18 @@
       </div>
     </section>
   </main>
+
+  <div id="qr-modal" class="qr-modal" hidden>
+    <div class="qr-modal-content">
+      <button class="qr-close" type="button" data-qr-close aria-label="Close QR modal">
+        <span class="qr-close-icon" aria-hidden="true">&times;</span>
+      </button>
+      <a href="https://www.paypal.com/ncp/payment/EA38TCWLY68T4" target="_blank" rel="noopener">
+        <img src="images/qrcode.png" alt="PayPal QR code for WinConfig checkout">
+      </a>
+      <p class="qr-modal-note">Scan or click to open the PayPal checkout.</p>
+    </div>
+  </div>
   <footer>
     <div class="social">
       <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer">

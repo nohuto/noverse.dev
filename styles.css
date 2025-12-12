@@ -1,5 +1,7 @@
 :root {
   --accent: #447dc5;
+  --text-primary: #dedede;
+  --text-muted: #bcbcbc;
 }
 
 * {
@@ -18,7 +20,7 @@ body {
   background-size: cover;
   display: flex;
   flex-direction: column;
-  color: #fff;
+  color: var(--text-primary);
   position: relative;
 }
 
@@ -141,13 +143,13 @@ main.no-center .content-box {
 
 .product-intro p {
   margin: 0 0 12px;
-  color: #e1e7ff;
+  color: var(--text-primary);
 }
 
 .product-intro ul {
   padding-left: 18px;
   margin: 0;
-  color: #cfd7f6;
+  color: var(--text-muted);
 }
 
 .product-intro li {
@@ -177,7 +179,7 @@ main.no-center .content-box {
 
 .pricing-note {
   margin: 6px 0 16px;
-  color: #b6c2f6;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -254,7 +256,7 @@ main.no-center .content-box {
 .product-preview-card figcaption {
   margin-top: 10px;
   font-size: 0.9rem;
-  color: #d6dbff;
+  color: var(--text-primary);
 }
 
 .product-comparison {
@@ -266,13 +268,13 @@ main.no-center .content-box {
 }
 
 .comparison-copy p {
-  color: #dbe3ff;
+  color: var(--text-primary);
 }
 
 .comparison-copy ul {
   margin: 12px 0 0;
   padding-left: 18px;
-  color: #cfd7f6;
+  color: var(--text-muted);
 }
 
 .comparison-copy li {
@@ -318,17 +320,17 @@ main.no-center .content-box {
 
 .status-pill.positive {
   background: rgba(56, 184, 103, 0.18);
-  color: #5ae99e;
+  color: #62a062;
 }
 
 .status-pill.neutral {
   background: rgba(245, 200, 95, 0.18);
-  color: #f6d086;
+  color: #dabb7a;
 }
 
 .status-pill.negative {
   background: rgba(243, 110, 117, 0.18);
-  color: #ff9aa6;
+  color: #be6262;
 }
 
 .documentation-overview,
@@ -419,7 +421,7 @@ main.no-center .content-box {
 
 .tool-card p {
   margin: 0 0 10px;
-  color: #cfd7f6;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -723,7 +725,7 @@ body.modal-open {
 
 .qr-modal-note {
   margin: 0;
-  color: #cfd7ff;
+  color: var(--text-primary);
   font-size: 0.85rem;
 }
 

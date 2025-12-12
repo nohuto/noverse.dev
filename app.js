@@ -12,6 +12,7 @@ async function loadPage(url, push = true) {
     const html = await res.text();
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const newMain = doc.querySelector('main');
+    if (!newMain) throw new Error('No main element in response');
     const newTitle = doc.querySelector('title')?.textContent || document.title;
 
     setTimeout(() => {
@@ -20,7 +21,6 @@ async function loadPage(url, push = true) {
       setActive(new URL(url, location.href).pathname.split('/').pop() || 'index.html');
       initRepoDescriptions();
       initFiltering();
-      initQrModal();
       requestAnimationFrame(() => newMain.classList.remove('fading'));
     }, 180);
 
@@ -32,9 +32,12 @@ async function loadPage(url, push = true) {
 }
 
 document.addEventListener('click', e => {
+  if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   const a = e.target.closest('a');
   const href = a?.getAttribute('href');
   if (a && href && href.endsWith('.html') && a.origin === location.origin) {
+    const targetPath = new URL(href, location.href).pathname;
+    if (targetPath === location.pathname) return;
     e.preventDefault();
     loadPage(href);
   }
@@ -119,46 +122,8 @@ function initFiltering() {
   filterProjects();
 }
 
-function initQrModal() {
-  const modal = document.getElementById('qr-modal');
-  const overlay = document.querySelector('.overlay');
-  if (!modal || !overlay) return;
-
-  if (!modal.qrState) {
-    const state = {
-      open() {
-        if (!modal.hasAttribute('hidden')) return;
-        modal.removeAttribute('hidden');
-        overlay.classList.add('is-visible');
-        document.body.classList.add('modal-open');
-        document.addEventListener('keydown', state.handleKeydown);
-      },
-      close() {
-        if (modal.hasAttribute('hidden')) return;
-        modal.setAttribute('hidden', '');
-        overlay.classList.remove('is-visible');
-        document.body.classList.remove('modal-open');
-        document.removeEventListener('keydown', state.handleKeydown);
-      },
-      handleKeydown(event) {
-        if (event.key === 'Escape') state.close();
-      }
-    };
-
-    modal.qrState = state;
-    overlay.addEventListener('click', state.close);
-    modal.querySelector('[data-qr-close]')?.addEventListener('click', state.close);
-  }
-
-  const { open } = modal.qrState;
-  document.querySelectorAll('[data-qr-open]').forEach(btn => {
-    btn.addEventListener('click', open);
-  });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   setActive(location.pathname.split('/').pop() || 'index.html');
   initRepoDescriptions();
   initFiltering();
-  initQrModal();
 });

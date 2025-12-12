@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -13,7 +13,7 @@
 
   <header>
     <a class="brand" href="index.html">
-      <img src="images/noverse-logo.png">
+      <img decoding="async" src="images/noverse-logo.png" alt="Noverse logo">
     </a>
     <nav class="nav-tabs" aria-label="Primary navigation">
       <a href="index.html">Home</a>
@@ -35,40 +35,42 @@
         </div>
         <div class="product-cta">
           <span class="price-label">Lifetime license</span>
-          <span class="product-price">10€</span>
+          <span class="product-price">10&nbsp;EUR</span>
           <p class="pricing-note">Includes updates & Discord role.</p>
           <div class="purchase-actions">
-            <a class="purchase-btn" href="https://www.paypal.com/ncp/payment/EA38TCWLY68T4" target="_blank" rel="noopener">
-              Purchase License
-            </a>
-            <button class="qr-trigger" type="button" data-qr-open>
-              Show QR code
-            </button>
+            <form class="paypal-form" action="https://www.paypal.com/ncp/payment/C4XUQMQZHS948" method="post" target="_blank">
+              <input class="paypal-button" type="submit" value="Buy WinConfig">
+              <img decoding="async" class="paypal-methods" src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="Accepted payment cards via PayPal" loading="lazy">
+              <p class="paypal-note">
+                Powered by
+                <img decoding="async" class="paypal-logo" src="images/paypal.png" alt="PayPal" loading="lazy">
+              </p>
+            </form>
           </div>
         </div>
       </div>
       <div class="product-preview-grid">
         <figure class="product-preview-card">
           <a href="images/darkbluelogs.png" target="_blank" rel="noopener">
-            <img src="images/darkbluelogs.png" alt="Dark mode blue palette with logs">
+            <img decoding="async" src="images/darkbluelogs.png" alt="Dark mode blue palette with logs" loading="lazy">
           </a>
           <figcaption>Dark mode - Blue color scheme - Logs enabled - System section</figcaption>
         </figure>
         <figure class="product-preview-card">
           <a href="images/darkreg.png" target="_blank" rel="noopener">
-            <img src="images/darkreg.png" alt="Dark mode red palette peripheral view">
+            <img decoding="async" src="images/darkreg.png" alt="Dark mode red palette peripheral view" loading="lazy">
           </a>
           <figcaption>Dark mode - Red color scheme - Logs disabled - Peripheral section</figcaption>
         </figure>
         <figure class="product-preview-card">
           <a href="images/lightblue.png" target="_blank" rel="noopener">
-            <img src="images/lightblue.png" alt="Light mode blue palette visibility view">
+            <img decoding="async" src="images/lightblue.png" alt="Light mode blue palette visibility view" loading="lazy">
           </a>
           <figcaption>Light mode - Blue color scheme - Logs disabled - Visibility section</figcaption>
         </figure>
         <figure class="product-preview-card">
           <a href="images/lightviolet.png" target="_blank" rel="noopener">
-            <img src="images/lightviolet.png" alt="Light mode violet palette privacy view">
+            <img decoding="async" src="images/lightviolet.png" alt="Light mode violet palette privacy view" loading="lazy">
           </a>
           <figcaption>Light mode - Violet color scheme - Logs disabled - Privacy section</figcaption>
         </figure>
@@ -217,44 +219,29 @@
         </div>
         <div class="tool-grid">
           <article class="tool-card">
-            <img src="https://opengraph.githubassets.com/1/nohuto/app-tools" alt="App Tools preview">
-            <div>
-              <h4>App Tools</h4>
-              <p>Automates configuration for Discord, Spotify, Thorium, Steam, Ungoogled, Brave, Epic, LGHUB, and more.</p>
-              <a href="https://github.com/nohuto/app-tools" class="tool-link" target="_blank" rel="noopener">View Repository</a>
-            </div>
+            <h4>App Tools</h4>
+            <p>Automates configuration for Discord, Spotify, Thorium, Steam, Ungoogled, Brave, Epic, LGHUB, and more.</p>
+            <a href="https://github.com/nohuto/app-tools" class="tool-link" target="_blank" rel="noopener">View Repository</a>
           </article>
           <article class="tool-card">
-            <img src="https://opengraph.githubassets.com/1/nohuto/game-tools" alt="Game Tools preview">
-            <div>
-              <h4>Game Tools</h4>
-              <p>Automates configuration VALORANT, Fortnite, Marvel Rivals, CS2, and Overwatch.</p>
-              <a href="https://github.com/nohuto/game-tools" class="tool-link" target="_blank" rel="noopener">View Repository</a>
-            </div>
+            <h4>Game Tools</h4>
+            <p>Automates configuration VALORANT, Fortnite, Marvel Rivals, CS2, and Overwatch.</p>
+            <a href="https://github.com/nohuto/game-tools" class="tool-link" target="_blank" rel="noopener">View Repository</a>
           </article>
           <article class="tool-card">
-            <img src="https://opengraph.githubassets.com/1/nohuto/comp-mgr" alt="Component Manager preview">
-            <div>
-              <h4>Component Manager</h4>
-              <p>Remove/uninstall packages, optional Windows features, and capability bundles.</p>
-              <a href="https://github.com/nohuto/comp-mgr" class="tool-link" target="_blank" rel="noopener">View Repository</a>
-            </div>
+            <h4>Component Manager</h4>
+            <p>Remove/uninstall packages, optional Windows features, and capability bundles.</p>
+            <a href="https://github.com/nohuto/comp-mgr" class="tool-link" target="_blank" rel="noopener">View Repository</a>
           </article>
           <article class="tool-card">
-            <img src="https://opengraph.githubassets.com/1/nohuto/blocklist-mgr" alt="Blocklist Manager preview">
-            <div>
-              <h4>Blocklist Manager</h4>
-              <p>Manage hosts/URL blocklists and edit your hosts directly.</p>
-              <a href="https://github.com/nohuto/blocklist-mgr" class="tool-link" target="_blank" rel="noopener">View Repository</a>
-            </div>
+            <h4>Blocklist Manager</h4>
+            <p>Manage hosts/URL blocklists and edit your hosts directly.</p>
+            <a href="https://github.com/nohuto/blocklist-mgr" class="tool-link" target="_blank" rel="noopener">View Repository</a>
           </article>
           <article class="tool-card">
-            <img src="https://opengraph.githubassets.com/1/nohuto/bitmask-calc" alt="Bitmask Calculator preview">
-            <div>
-              <h4>Bitmask Calculator</h4>
-              <p>Bitfield calculator built for official NVIDIA definitions.</p>
-              <a href="https://github.com/nohuto/bitmask-calc" class="tool-link" target="_blank" rel="noopener">View Repository</a>
-            </div>
+            <h4>Bitmask Calculator</h4>
+            <p>Bitfield calculator built for official NVIDIA definitions.</p>
+            <a href="https://github.com/nohuto/bitmask-calc" class="tool-link" target="_blank" rel="noopener">View Repository</a>
           </article>
         </div>
       </div>
@@ -299,30 +286,19 @@
     </section>
   </main>
 
-  <div id="qr-modal" class="qr-modal" hidden>
-    <div class="qr-modal-content">
-      <button class="qr-close" type="button" data-qr-close aria-label="Close QR modal">
-        <span class="qr-close-icon" aria-hidden="true">&times;</span>
-      </button>
-      <a href="https://www.paypal.com/ncp/payment/EA38TCWLY68T4" target="_blank" rel="noopener">
-        <img src="images/qrcode.png" alt="PayPal QR code for WinConfig checkout">
-      </a>
-      <p class="qr-modal-note">Scan or click to open the PayPal checkout.</p>
-    </div>
-  </div>
   <footer>
     <div class="social">
       <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer">
-        <img src="images/github-icon.png">
+        <img decoding="async" src="images/github-icon.png" loading="lazy" alt="GitHub">
       </a>
       <a href="https://www.youtube.com/@5Noverse" target="_blank" rel="noopener noreferrer">
-        <img src="images/youtube-icon.png">
+        <img decoding="async" src="images/youtube-icon.png" loading="lazy" alt="YouTube">
       </a>
-      <a href="mailto:nohuxi@duck.com" target="_blank" rel="noopener noreferrer">
-        <img src="images/email-icon.png">
+      <a href="mailto:nohuto@duck.com" target="_blank" rel="noopener noreferrer">
+        <img decoding="async" src="images/email-icon.png" loading="lazy" alt="Email">
       </a>
       <a href="https://discord.gg/E2ybG4j9jU" target="_blank" rel="noopener noreferrer">
-        <img src="images/discord-icon.png">
+        <img decoding="async" src="images/discord-icon.png" loading="lazy" alt="Discord">
       </a>
     </div>
   </footer>

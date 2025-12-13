@@ -16,8 +16,8 @@ html, body {
 }
 
 body {
-  background: url("images/stars.png") repeat center top fixed;
-  background-size: auto;
+  background: url("images/stars.png") no-repeat center top fixed;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   color: var(--text-primary);

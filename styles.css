@@ -420,25 +420,20 @@ main.no-center .content-box {
 }
 
 .doc-link {
-  display: inline-flex;
+  display: inline-block;
   margin-top: 10px;
   font-size: 0.85rem;
   text-decoration: none;
   color: var(--accent);
-  gap: 6px;
-  align-items: center;
 }
 
-.doc-link::after {
-  content: "↗";
-  font-size: 0.8rem;
-}
+
 
 .tool-grid {
   margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
+  gap: 20px;
 }
 
 .tool-card {
@@ -867,3 +862,4 @@ a.link:hover {
     opacity: 1;
   }
 }
+

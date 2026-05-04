@@ -1499,13 +1499,12 @@ video {
   flex-direction: column;
   border: 1px solid var(--border);
   background: var(--panel-alt);
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.2s ease;
   content-visibility: auto;
   contain-intrinsic-size: 360px 520px;
 }
 
 .project-card:hover {
-  transform: translateY(-2px);
   border-color: var(--accent);
 }
 
@@ -2456,11 +2455,10 @@ body.bindiff-settings-open {
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .product-preview-card:hover {
-  transform: translateY(-2px);
   border-color: var(--accent);
 }
 
@@ -2618,13 +2616,12 @@ body.bindiff-settings-open {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .doc-card:hover,
 .tool-card:hover,
 .legal-card:hover {
-  transform: translateY(-2px);
   border-color: var(--accent);
 }
 

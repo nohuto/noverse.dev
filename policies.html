@@ -78,24 +78,32 @@
               <span>Unlimited</span>
             </label>
           </div>
-          <div class="policy-view-dropdown" id="policy-view-dropdown">
-            <button id="policy-view-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
-              <span>View</span>
-              <span class="policy-view-chevron" aria-hidden="true"></span>
-            </button>
-            <div class="policy-view-menu" id="policy-view-menu" role="menu" hidden>
-              <label class="policy-view-option" role="menuitemcheckbox">
-                <input type="checkbox" data-policy-pane="tree" checked>
-                <span>Tree</span>
-              </label>
-              <label class="policy-view-option" role="menuitemcheckbox">
-                <input type="checkbox" data-policy-pane="table" checked>
+          <div class="policy-toolbar-actions">
+            <div class="policy-view-dropdown" id="policy-view-dropdown">
+              <button id="policy-view-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+                <span>View</span>
+                <span class="policy-view-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="policy-view-menu" id="policy-view-menu" role="menu" hidden>
+                <label class="policy-view-option" role="menuitemcheckbox">
+                  <input type="checkbox" data-policy-pane="tree" checked>
+                  <span>Tree</span>
+                </label>
+                <label class="policy-view-option" role="menuitemcheckbox">
+                  <input type="checkbox" data-policy-pane="table" checked>
+                  <span>Table</span>
+                </label>
+                <label class="policy-view-option" role="menuitemcheckbox">
+                  <input type="checkbox" data-policy-pane="detail">
+                  <span>Details</span>
+                </label>
+              </div>
+            </div>
+            <div class="policy-column-dropdown" id="policy-column-dropdown">
+              <button id="policy-column-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
                 <span>Table</span>
-              </label>
-              <label class="policy-view-option" role="menuitemcheckbox">
-                <input type="checkbox" data-policy-pane="detail">
-                <span>Details</span>
-              </label>
+                <span class="policy-view-chevron" aria-hidden="true"></span>
+              </button>
             </div>
           </div>
         </div>

@@ -912,6 +912,8 @@ function initPolicyExplorer() {
   const viewDropdown = root.querySelector('#policy-view-dropdown');
   const viewTrigger = root.querySelector('#policy-view-trigger');
   const viewMenu = root.querySelector('#policy-view-menu');
+  const columnDropdown = root.querySelector('#policy-column-dropdown');
+  const columnTrigger = root.querySelector('#policy-column-trigger');
   const treeEl = root.querySelector('#policy-tree');
   const tablePanel = root.querySelector('.policy-table-panel');
   const tableWrap = root.querySelector('.policy-table-wrap');
@@ -1312,16 +1314,31 @@ function initPolicyExplorer() {
     });
   };
 
-  const openColumnMenu = (x, y) => {
+  const openColumnMenu = (x, y, options = {}) => {
     if (!columnMenu) return;
     renderColumnMenu();
     columnMenu.hidden = false;
     columnMenu.style.left = `${x}px`;
     columnMenu.style.top = `${y}px`;
+    columnTrigger?.setAttribute('aria-expanded', options.fromTrigger ? 'true' : 'false');
+  };
+
+  const openColumnMenuFromTrigger = () => {
+    if (!columnTrigger) return;
+    const rect = columnTrigger.getBoundingClientRect();
+    openColumnMenu(rect.right, rect.bottom + 4, { fromTrigger: true });
+    if (!columnMenu) return;
+    const menuWidth = columnMenu.offsetWidth;
+    const menuHeight = columnMenu.offsetHeight;
+    const left = Math.min(Math.max(4, rect.right - menuWidth), window.innerWidth - menuWidth - 4);
+    const top = Math.min(rect.bottom + 4, window.innerHeight - menuHeight - 4);
+    columnMenu.style.left = `${left}px`;
+    columnMenu.style.top = `${Math.max(4, top)}px`;
   };
 
   const closeColumnMenu = () => {
     if (columnMenu) columnMenu.hidden = true;
+    columnTrigger?.setAttribute('aria-expanded', 'false');
   };
 
   const escapeRegExp = value => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1526,7 +1543,7 @@ function initPolicyExplorer() {
       });
 
       const selectRow = () => {
-        selectPolicy(policy);
+        selectPolicy(policy, { selectCategory: splitSearchTerms(searchInput.value).length > 0 });
       };
       row.addEventListener('click', selectRow);
       row.addEventListener('keydown', event => {
@@ -1561,6 +1578,7 @@ function initPolicyExplorer() {
     if (selectCategory) {
       selectedCategoryKey = policy.categoryPathKey || '';
       expandTreeForPolicy(policy);
+      renderTree();
     }
     if (updateUrl) updatePolicyUrl(policy);
     updatePaneLayout();
@@ -1914,7 +1932,18 @@ function initPolicyExplorer() {
   searchInput.addEventListener('input', scheduleSearch);
   viewTrigger?.addEventListener('click', event => {
     event.preventDefault();
+    closeColumnMenu();
     toggleViewMenu();
+  });
+  columnTrigger?.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+    closeViewMenu();
+    if (columnMenu && !columnMenu.hidden) {
+      closeColumnMenu();
+    } else {
+      openColumnMenuFromTrigger();
+    }
   });
   settingsButton?.addEventListener('click', openSettingsModal);
   settingsCloseButton?.addEventListener('click', closeSettingsModal);
@@ -2022,7 +2051,12 @@ function initPolicyExplorer() {
   });
 
   document.addEventListener('click', event => {
-    if (columnMenu && !columnMenu.hidden && !columnMenu.contains(event.target)) closeColumnMenu();
+    if (
+      columnMenu
+      && !columnMenu.hidden
+      && !columnMenu.contains(event.target)
+      && !columnDropdown?.contains(event.target)
+    ) closeColumnMenu();
     if (viewDropdown && viewMenu && !viewMenu.hidden && !viewDropdown.contains(event.target)) closeViewMenu();
   });
   document.addEventListener('keydown', event => {

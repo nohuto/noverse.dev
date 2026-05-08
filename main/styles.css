@@ -1423,6 +1423,22 @@ video {
   margin-bottom: 8px;
 }
 
+.policy-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.policy-title-row .projects-heading {
+  margin-bottom: 8px;
+}
+
+.policy-source-note {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
 .projects-divider {
   width: 100%;
   height: 1px;

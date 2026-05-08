@@ -46,90 +46,12 @@ Miscellaneous notes:
 "Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotPWAPreinstallCompleted","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsCopilot",
-  "PolicyName": "TurnOffWindowsCopilot",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Turn off Windows Copilot",
-  "ExplainText": "This policy setting allows you to turn off Windows Copilot. If you enable this policy setting, users will not be able to use Copilot. The Copilot icon will not appear on the taskbar either. If you disable or do not configure this policy setting, users will be able to use Copilot when it's available to them.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot"
-  ],
-  "ValueName": "TurnOffWindowsCopilot",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsCopilot",
-  "PolicyName": "SetCopilotHardwareKey",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER - At least Windows 11",
-  "DisplayName": "Set Copilot Hardware Key",
-  "ExplainText": "This policy setting determines which app opens when the user presses the Copilot key on their keyboard. If the policy is enabled, the specified app will open when the user presses the Copilot key. Users can change the key assignment in Settings. If the policy is not configured, Copilot will open if it's available in that country or region.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CopilotKey"
-  ],
-  "Elements": [
-    { "Type": "Text", "ValueName": "SetCopilotHardwareKey" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "Paint",
-  "PolicyName": "DisableImageCreator",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable Image Creator",
-  "ExplainText": "This policy setting allows you to control whether Image Creator functionality is disabled in the Windows Paint app. If this policy is enabled, Image Creator functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access Image Creator functionality.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
-  ],
-  "ValueName": "DisableImageCreator",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "Paint",
-  "PolicyName": "DisableCocreator",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable Cocreator",
-  "ExplainText": "This policy setting allows you to control whether Cocreator functionality is disabled in the Windows Paint app. If this policy is enabled, Cocreator functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access Cocreator functionality.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
-  ],
-  "ValueName": "DisableCocreator",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "Paint",
-  "PolicyName": "DisableGenerativeFill",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable generative fill",
-  "ExplainText": "This policy setting allows you to control whether generative fill functionality is disabled in the Windows Paint app. If this policy is enabled, generative fill functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access generative fill functionality.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
-  ],
-  "ValueName": "DisableGenerativeFill",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Windows Copilot](https://www.noverse.dev/policies.html?p=WindowsCopilot*TurnOffWindowsCopilot) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot` | `TurnOffWindowsCopilot` |
+| [Set Copilot Hardware Key](https://www.noverse.dev/policies.html?p=WindowsCopilot*SetCopilotHardwareKey) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CopilotKey` | `SetCopilotHardwareKey` |
+| [Disable Image Creator](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableImageCreator) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableImageCreator` |
+| [Disable Cocreator](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableCocreator) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableCocreator` |
+| [Disable generative fill](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableGenerativeFill) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableGenerativeFill` |

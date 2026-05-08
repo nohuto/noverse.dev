@@ -30,56 +30,10 @@ See links below for a detailed documentation.
 
 - [network/assets | probing-NcsiConfigData.c](https://github.com/nohuto/win-config/blob/main/network/assets/probing-NcsiConfigData.c)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "NoActiveProbe",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off Windows Network Connectivity Status Indicator active tests",
-  "ExplainText": "This policy setting turns off the active tests performed by the Windows Network Connectivity Status Indicator (NCSI) to determine whether your computer is connected to the Internet or to a more limited network. As part of determining the connectivity level, NCSI performs one of two active tests: downloading a page from a dedicated Web server or making a DNS request for a dedicated address. If you enable this policy setting, NCSI does not run either of the two active tests. This may reduce the ability of NCSI, and of other components that use NCSI, to determine Internet access. If you disable or do not configure this policy setting, NCSI runs one of the two active tests.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator"
-  ],
-  "ValueName": "NoActiveProbe",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "nca.admx",
-  "CategoryName": "NetworkConnectivityAssistant",
-  "PolicyName": "PassiveMode",
-  "NameSpace": "Microsoft.Policies.NetworkConnectivityAssistant",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "DirectAccess Passive Mode",
-  "ExplainText": "Specifies whether NCA service runs in Passive Mode or not. Set this to Disabled to keep NCA probing actively all the time. If this setting is not configured, NCA probing is in active mode by default.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityAssistant"
-  ],
-  "ValueName": "PassiveMode",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "NCSI.admx",
-  "CategoryName": "NCSI_Category",
-  "PolicyName": "NCSI_PassivePolling",
-  "NameSpace": "Microsoft.Policies.NCSI",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Specify passive polling",
-  "ExplainText": "This Policy setting enables you to specify passive polling behavior. NCSI polls various measurements throughout the network stack on a frequent interval to determine if network connectivity has been lost. Use the options to control the passive polling behavior.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator"
-  ],
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisablePassivePolling", "TrueValue": "1", "FalseValue": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Windows Network Connectivity Status Indicator active tests](https://www.noverse.dev/policies.html?p=ICM*NoActiveProbe) | `HKLM\Software\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator` | `NoActiveProbe` |
+| [DirectAccess Passive Mode](https://www.noverse.dev/policies.html?p=nca*PassiveMode) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityAssistant` | `PassiveMode` |
+| [Specify passive polling](https://www.noverse.dev/policies.html?p=NCSI*NCSI_PassivePolling) | `HKLM\Software\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator` | `DisablePassivePolling` |

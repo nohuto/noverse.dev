@@ -19,7 +19,6 @@ sidebar:
 - [Telemetry](/docs/win-config/nvidia/disable-telemetry/)
 - [Developer Settings](/docs/win-config/nvidia/enable-developer-settings/)
 - [Remove Context Menu Entry](/docs/win-config/nvidia/remove-context-menu-entry/)
-- [GPU Performance Counters](/docs/win-config/nvidia/gpu-performance-counters/)
 - [MPO](/docs/win-config/nvidia/disable-mpo/)
 - [NVLDDMKM Hex Values](/docs/win-config/nvidia/nvlddmkm-hex-values/)
 - [OC/UV Guide](/docs/win-config/nvidia/oc-uv-guide/)

@@ -34,24 +34,8 @@ This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/
 
 - [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "FileSys.admx",
-  "CategoryName": "Filesystem",
-  "PolicyName": "LongPathsEnabled",
-  "NameSpace": "Microsoft.Policies.FileSys",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Enable Win32 long paths",
-  "ExplainText": "Enabling Win32 long paths will allow manifested win32 applications and packaged Microsoft Store applications to access paths beyond the normal 260 character limit. Enabling this setting will cause the long paths to be accessible within the process.",
-  "KeyPath": [
-    "HKLM\\System\\CurrentControlSet\\Control\\FileSystem"
-  ],
-  "ValueName": "LongPathsEnabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Enable Win32 long paths](https://www.noverse.dev/policies.html?p=FileSys*LongPathsEnabled) | `HKLM\System\CurrentControlSet\Control\FileSystem` | `LongPathsEnabled` |

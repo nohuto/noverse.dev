@@ -10,41 +10,9 @@ sidebar:
 
 If enabled = "Windows will periodically attempt to connect with the OneSettings service to download configuration settings".
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "EnableOneSettingsAuditing",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
-  "DisplayName": "Enable OneSettings Auditing",
-  "ExplainText": "This policy setting controls whether Windows records attempts to connect with the OneSettings service to the EventLog. If you enable this policy, Windows will record attempts to connect with the OneSettings service to the Microsoft\\Windows\\Privacy-Auditing\\Operational EventLog channel. If you disable or don't configure this policy setting, Windows will not record attempts to connect with the OneSettings service to the EventLog.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "EnableOneSettingsAuditing",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "DisableOneSettingsDownloads",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
-  "DisplayName": "Disable OneSettings Downloads",
-  "ExplainText": "This policy setting controls whether Windows attempts to connect with the OneSettings service. If you enable this policy, Windows will not attempt to connect with the OneSettings Service. If you disable or don't configure this policy setting, Windows will periodically attempt to connect with the OneSettings service to download configuration settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "DisableOneSettingsDownloads",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Enable OneSettings Auditing](https://www.noverse.dev/policies.html?p=DataCollection*EnableOneSettingsAuditing) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `EnableOneSettingsAuditing` |
+| [Disable OneSettings Downloads](https://www.noverse.dev/policies.html?p=DataCollection*DisableOneSettingsDownloads) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableOneSettingsDownloads` |

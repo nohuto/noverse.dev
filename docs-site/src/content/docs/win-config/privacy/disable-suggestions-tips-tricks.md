@@ -40,123 +40,17 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 
 `SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableWindowsConsumerFeatures",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn off Microsoft consumer experiences",
-  "ExplainText": "This policy setting turns off experiences that help consumers make the most of their devices and Microsoft account. If you enable this policy setting, users will no longer see personalized recommendations from Microsoft and notifications about their Microsoft account. If you disable or do not configure this policy setting, users may see suggestions from Microsoft and notifications about their Microsoft account. Note: This setting only applies to Enterprise and Education SKUs.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableWindowsConsumerFeatures",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableSoftLanding",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Do not show Windows tips",
-  "ExplainText": "This policy setting prevents Windows tips from being shown to users. If you enable this policy setting, users will no longer see Windows tips. If you disable or do not configure this policy setting, users may see contextual popups explaining how to use Windows. Microsoft uses diagnostic data to determine which tips to show. Note: If you disable or do not configure this policy setting, but enable the \"Computer Configuration\\Administrative Templates\\Windows Components\\Data Collection and Preview Builds\\Allow Telemetry\" policy setting with a level of \"Basic\" or below, users may see a limited set of tips. Also, this setting only applies to Enterprise and Education SKUs.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableSoftLanding",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableThirdPartySuggestions",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Do not suggest third-party content in Windows spotlight",
-  "ExplainText": "If you enable this policy, Windows spotlight features like lock screen spotlight, suggested apps in Start menu or Windows tips will no longer suggest apps and content from third-party software publishers. Users may still see suggestions and tips to make them more productive with Microsoft features and apps. If you disable or do not configure this policy, Windows spotlight features may suggest apps and content from third-party software publishers in addition to Microsoft apps and content.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableThirdPartySuggestions",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ControlPanel.admx",
-  "CategoryName": "ControlPanel",
-  "PolicyName": "AllowOnlineTips",
-  "NameSpace": "Microsoft.Policies.ControlPanel",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Allow Online Tips",
-  "ExplainText": "Enables or disables the retrieval of online tips and help for the Settings app. If disabled, Settings will not contact Microsoft content services to retrieve tips and help content.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "AllowOnlineTips", "TrueValue": "1", "FalseValue": "0" }
-  ]
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "HideRecommendedSection",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows_11_0_SE - Windows 11 SE",
-  "DisplayName": "Remove Recommended section from Start Menu",
-  "ExplainText": "This policy allows you to prevent the Start Menu from displaying a list of recommended applications and files. If you enable this policy setting, the Start Menu will no longer show the section containing a list of recommended files and apps.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "HideRecommendedSection",
-  "Elements": []
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "HideRecommendedPersonalizedSites",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows_11_0_SE - Windows 11 SE",
-  "DisplayName": "Remove Personalized Website Recommendations from the Recommended section in the Start Menu",
-  "ExplainText": "Remove Personalized Website Recommendations from the Recommended section in the Start Menu",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "HideRecommendedPersonalizedSites",
-  "Elements": []
-},
-{
-  "File": "WindowsExplorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "DisableSearchBoxSuggestions",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off display of recent search entries in the File Explorer search box",
-  "ExplainText": "Disables suggesting recent queries for the Search Box and prevents entries into the Search Box from being stored in the registry for future references. File Explorer shows suggestion pop-ups as users type into the Search Box. These suggestions are based on their past entries into the Search Box. Note: If you enable this policy, File Explorer will not show suggestion pop-ups as users type into the Search Box, and it will not store Search Box entries into the registry for future references. If the user types a property, values that match this property will be shown but no data will be saved in the registry or re-shown on subsequent uses of the search box.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "DisableSearchBoxSuggestions",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Microsoft consumer experiences](https://www.noverse.dev/policies.html?p=CloudContent*DisableWindowsConsumerFeatures) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsConsumerFeatures` |
+| [Do not show Windows tips](https://www.noverse.dev/policies.html?p=CloudContent*DisableSoftLanding) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableSoftLanding` |
+| [Do not suggest third-party content in Windows spotlight](https://www.noverse.dev/policies.html?p=CloudContent*DisableThirdPartySuggestions) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableThirdPartySuggestions` |
+| [Allow Online Tips](https://www.noverse.dev/policies.html?p=ControlPanel*AllowOnlineTips) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `AllowOnlineTips` |
+| [Remove Recommended section from Start Menu](https://www.noverse.dev/policies.html?p=StartMenu*HideRecommendedSection) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecommendedSection` |
+| [Remove Personalized Website Recommendations from the Recommended section in the Start Menu](https://www.noverse.dev/policies.html?p=StartMenu*HideRecommendedPersonalizedSites) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecommendedPersonalizedSites` |
+| [Turn off display of recent search entries in the File Explorer search box](https://www.noverse.dev/policies.html?p=WindowsExplorer*DisableSearchBoxSuggestions) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `DisableSearchBoxSuggestions` |
 
 ## Miscellaneous Notes
 

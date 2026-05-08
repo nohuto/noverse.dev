@@ -16,58 +16,10 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
 `Disable Lock Screen Camera`:  
 "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen.By default, users can enable invocation of an available camera on the lock screen.If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen." (`ControlPanelDisplay.admx`)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessCamera",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access the camera",
-  "ExplainText": "This policy setting specifies whether Windows apps can access the camera. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access the camera by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access the camera and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access the camera and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access the camera by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessCamera", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "Camera.admx",
-  "CategoryName": "L_Camera_GroupPolicyCategory",
-  "PolicyName": "L_AllowCamera",
-  "NameSpace": "Microsoft.Policies.Camera",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Use of Camera",
-  "ExplainText": "This policy setting allow the use of Camera devices on the machine. If you enable or do not configure this policy setting, Camera devices will be enabled. If you disable this property setting, Camera devices will be disabled.",
-  "KeyPath": [
-    "HKLM\\software\\Policies\\Microsoft\\Camera"
-  ],
-  "ValueName": "AllowCamera",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ControlPanelDisplay.admx",
-  "CategoryName": "Personalization",
-  "PolicyName": "CPL_Personalization_NoLockScreenCamera",
-  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
-  "Supported": "Windows_6_3 - At least Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1",
-  "DisplayName": "Prevent enabling lock screen camera",
-  "ExplainText": "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen. By default, users can enable invocation of an available camera on the lock screen. If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
-  ],
-  "ValueName": "NoLockScreenCamera",
-  "Elements": []
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Let Windows apps access the camera](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessCamera) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCamera` |
+| [Allow Use of Camera](https://www.noverse.dev/policies.html?p=Camera*L_AllowCamera) | `HKLM\software\Policies\Microsoft\Camera` | `AllowCamera` |
+| [Prevent enabling lock screen camera](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenCamera) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenCamera` |

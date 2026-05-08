@@ -8,21 +8,8 @@ sidebar:
 
 This policy setting requires the user to enter Microsoft Windows credentials using a trusted path, to prevent a Trojan horse or other types of malicious code from stealing the user's Windows credentials.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "CredUI.admx",
-  "CategoryName": "CredUI",
-  "PolicyName": "EnableSecureCredentialPrompting",
-  "NameSpace": "Microsoft.Policies.CredentialsUI",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Require trusted path for credential entry",
-  "ExplainText": "This policy setting requires the user to enter Microsoft Windows credentials using a trusted path, to prevent a Trojan horse or other types of malicious code from stealing the user\u2019s Windows credentials. Note: This policy affects nonlogon authentication tasks only. As a security best practice, this policy should be enabled. If you enable this policy setting, users will be required to enter Windows credentials on the Secure Desktop by means of the trusted path mechanism. If you disable or do not configure this policy setting, users will enter Windows credentials within the user\u2019s desktop session, potentially allowing malicious code access to the user\u2019s Windows credentials.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI"
-  ],
-  "ValueName": "EnableSecureCredentialPrompting",
-  "Elements": []
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Require trusted path for credential entry](https://www.noverse.dev/policies.html?p=CredUI*EnableSecureCredentialPrompting) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\CredUI` | `EnableSecureCredentialPrompting` |

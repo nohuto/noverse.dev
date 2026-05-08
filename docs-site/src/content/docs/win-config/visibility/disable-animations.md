@@ -40,75 +40,11 @@ CMachine::RegQueryDWORD(
 
 `ForceDisableModeChangeAnimation` got added in [22621.3807/22631.3807](https://blogs.windows.com/windows-insider/2024/06/13/releasing-windows-11-builds-22621-3807-and-22631-3807-to-the-release-preview-channel/) and is used for "When you set its value to 1 (or a non-zero number), it turns off the display mode change animation. If the value is 0 or the key does not exist, the animation is set to on."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "DWM.admx",
-  "CategoryName": "CAT_DesktopWindowManager",
-  "PolicyName": "DwmDisallowAnimations_1",
-  "NameSpace": "Microsoft.Policies.DesktopWindowManager",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Do not allow window animations",
-  "ExplainText": "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM"
-  ],
-  "ValueName": "DisallowAnimations",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DWM.admx",
-  "CategoryName": "CAT_DesktopWindowManager",
-  "PolicyName": "DwmDisallowAnimations_2",
-  "NameSpace": "Microsoft.Policies.DesktopWindowManager",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Do not allow window animations",
-  "ExplainText": "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM"
-  ],
-  "ValueName": "DisallowAnimations",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Explorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "TurnOffSPIAnimations",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer2",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off common control and window animations",
-  "ExplainText": "This policy is similar to settings directly available to computer users. Disabling animations can improve usability for users with some visual disabilities as well as improving performance and battery life in some scenarios.",
-  "KeyPath": [
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "TurnOffSPIAnimations",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Logon.admx",
-  "CategoryName": "Logon",
-  "PolicyName": "EnableFirstLogonAnimation",
-  "NameSpace": "Microsoft.Policies.WindowsLogon",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Show first sign-in animation",
-  "ExplainText": "This policy setting allows you to control whether users see the first sign-in animation when signing in to the computer for the first time. This applies to both the first user of the computer who completes the initial setup and users who are added to the computer later. It also controls if Microsoft account users will be offered the opt-in prompt for services during their first sign-in. If you enable this policy setting, Microsoft account users will see the opt-in prompt for services, and users with other accounts will see the sign-in animation. If you disable this policy setting, users will not see the animation and Microsoft account users will not see the opt-in prompt for services. If you do not configure this policy setting, the user who completes the initial Windows setup will see the animation during their first sign-in. If the first user had already completed the initial setup and this policy setting is not configured, users new to this computer will not see the animation. Note: The first sign-in animation will not be shown on Server, so this policy will have no effect.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
-  ],
-  "ValueName": "EnableFirstLogonAnimation",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not allow window animations](https://www.noverse.dev/policies.html?p=DWM*DwmDisallowAnimations_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\DWM` | `DisallowAnimations` |
+| [Do not allow window animations](https://www.noverse.dev/policies.html?p=DWM*DwmDisallowAnimations_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\DWM` | `DisallowAnimations` |
+| [Turn off common control and window animations](https://www.noverse.dev/policies.html?p=Explorer*TurnOffSPIAnimations) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `TurnOffSPIAnimations` |
+| [Show first sign-in animation](https://www.noverse.dev/policies.html?p=Logon*EnableFirstLogonAnimation) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `EnableFirstLogonAnimation` |

@@ -1374,7 +1374,7 @@ function initPolicyExplorer() {
     }
 
     const elementSection = createNode('section', 'policy-section');
-    elementSection.appendChild(createNode('h3', null, 'Registry Storage'));
+    elementSection.appendChild(createNode('h3', null, 'Registry Values'));
     const storageGroups = getPolicyStorageGroups(policy);
     if (!storageGroups.length) {
       elementSection.appendChild(createNode('div', 'policy-muted', 'No ADMX elements exported for this policy.'));

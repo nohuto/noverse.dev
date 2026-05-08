@@ -53,71 +53,11 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePo
 HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\512 // Type: REG_DWORD
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
-  "PolicyName": "SS_AllowStorageSenseGlobal",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Allow Storage Sense",
-  "ExplainText": "Storage Sense can automatically clean some of the user\u2019s files to free up disk space. By default, Storage Sense is automatically turned on when the machine runs into low disk space and is set to run whenever the machine runs into storage pressure. This cadence can be changed in Storage settings or set with the \"Configure Storage Sense cadence\" group policy. Enabled: Storage Sense is turned on for the machine, with the default cadence as \u2018during low free disk space\u2019. Users cannot disable Storage Sense, but they can adjust the cadence (unless you also configure the \"Configure Storage Sense cadence\" group policy). Disabled: Storage Sense is turned off the machine. Users cannot enable Storage Sense. Not Configured: By default, Storage Sense is turned off until the user runs into low disk space or the user enables it manually. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "ValueName": "AllowStorageSenseGlobal",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
-  "PolicyName": "SS_AllowStorageSenseTemporaryFilesCleanup",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Allow Storage Sense Temporary Files cleanup",
-  "ExplainText": "When Storage Sense runs, it can delete the user\u2019s temporary files that are not in use. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: Storage Sense will delete the user\u2019s temporary files that are not in use. Users cannot disable this setting in Storage settings. Disabled: Storage Sense will not delete the user\u2019s temporary files. Users cannot enable this setting in Storage settings. Not Configured: By default, Storage Sense will delete the user\u2019s temporary files. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "ValueName": "AllowStorageSenseTemporaryFilesCleanup",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
-  "PolicyName": "SS_ConfigStorageSenseRecycleBinCleanupThreshold",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Configure Storage Sense Recycle Bin cleanup threshold",
-  "ExplainText": "When Storage Sense runs, it can delete files in the user\u2019s Recycle Bin if they have been there for over a certain amount of days. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: You must provide the minimum age threshold (in days) of a file in the Recycle Bin before Storage Sense will delete it. Supported values are: 0 - 365. If you set this value to zero, Storage Sense will not delete files in the user\u2019s Recycle Bin. The default is 30 days. Disabled or Not Configured: By default, Storage Sense will delete files in the user\u2019s Recycle Bin that have been there for over 30 days. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "ConfigStorageSenseRecycleBinCleanupThreshold", "MinValue": "0", "MaxValue": "365" }
-  ]
-},
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
-  "PolicyName": "SS_ConfigStorageSenseDownloadsCleanupThreshold",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Configure Storage Storage Downloads cleanup threshold",
-  "ExplainText": "When Storage Sense runs, it can delete files in the user\u2019s Downloads folder if they haven\u2019t been opened for more than a certain number of days. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: You must provide the minimum number of days a file can remain unopened before Storage Sense deletes it from Downloads folder. Supported values are: 0 - 365. If you set this value to zero, Storage Sense will not delete files in the user\u2019s Downloads folder. The default is 0, or never deleting files in the Downloads folder. Disabled or Not Configured: By default, Storage Sense will not delete files in the user\u2019s Downloads folder. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "ConfigStorageSenseDownloadsCleanupThreshold", "MinValue": "0", "MaxValue": "365" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow Storage Sense](https://www.noverse.dev/policies.html?p=StorageSense*SS_AllowStorageSenseGlobal) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `AllowStorageSenseGlobal` |
+| [Allow Storage Sense Temporary Files cleanup](https://www.noverse.dev/policies.html?p=StorageSense*SS_AllowStorageSenseTemporaryFilesCleanup) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `AllowStorageSenseTemporaryFilesCleanup` |
+| [Configure Storage Sense Recycle Bin cleanup threshold](https://www.noverse.dev/policies.html?p=StorageSense*SS_ConfigStorageSenseRecycleBinCleanupThreshold) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `ConfigStorageSenseRecycleBinCleanupThreshold` |
+| [Configure Storage Storage Downloads cleanup threshold](https://www.noverse.dev/policies.html?p=StorageSense*SS_ConfigStorageSenseDownloadsCleanupThreshold) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `ConfigStorageSenseDownloadsCleanupThreshold` |

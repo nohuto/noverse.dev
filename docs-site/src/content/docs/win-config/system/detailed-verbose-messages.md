@@ -16,21 +16,8 @@ Enables detailed messages at restart, shut down, sign out, and sign in, which ca
 >
 > — Windows Security Encyclopedia, [Display highly detailed status messages](https://www.windows-security.org/b74176eebf20a72c6e9cf193ddcedeb7/display-highly-detailed-status-messages)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Logon.admx",
-  "CategoryName": "System",
-  "PolicyName": "VerboseStatus",
-  "NameSpace": "Microsoft.Policies.WindowsLogon",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Display highly detailed status messages",
-  "ExplainText": "This policy setting directs the system to display highly detailed status messages. This policy setting is designed for advanced users who require this information. If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"\"Remove Boot/Shutdown/Logon/Logoff status messages\"\" policy setting is enabled.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
-  ],
-  "ValueName": "VerboseStatus",
-  "Elements": []
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Display highly detailed status messages](https://www.noverse.dev/policies.html?p=Logon*VerboseStatus) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `VerboseStatus` |

@@ -38,109 +38,16 @@ Instead of using the explorer to search for a file or folder, use [`Everything`]
 
 The `WSearch` service is needed for CmdPals `File Search` extension to work.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "PreventRemoteQueries",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "4OrLater - Any version of Microsoft Windows with Windows Search 4.0 or later",
-  "DisplayName": "Prevent clients from querying the index remotely",
-  "ExplainText": "If enabled, clients will be unable to query this computer's index remotely. Thus, when they are browsing network shares that are stored on this computer, they will not search them using the index. If disabled, client search requests will use this computer's index. Default is disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "PreventRemoteQueries",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "PreventIndexOnBattery",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "301OrLater - Microsoft Windows XP, Windows Server 2003 with Windows Search version 3.01, or any version of Microsoft Windows with Windows Search 4.0 or later",
-  "DisplayName": "Prevent indexing when running on battery power to conserve energy",
-  "ExplainText": "If enabled, the indexer pauses whenever the computer is running on battery. If disabled, the indexing follows the default behavior. Default is disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "PreventIndexOnBattery",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "AlwaysUseAutoLangDetection",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "Win8Only - Microsoft Windows 8 or later",
-  "DisplayName": "Always use automatic language detection when indexing content and properties",
-  "ExplainText": "This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. If you enable this policy setting, Windows will always use automatic language detection to index (as it did in Windows 7). Using automatic language detection can increase memory usage. We recommend enabling this policy setting only on PCs where documents are stored in many languages. If you disable or do not configure this policy setting, Windows will use automatic language detection only when it can determine the language of a document with high confidence.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "AlwaysUseAutoLangDetection",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "DoNotUseWebResults",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "WinBlueOnly - Microsoft Windows 8.1 or later",
-  "DisplayName": "Don't search the web or display web results in Search",
-  "ExplainText": "This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. If you enable this policy setting, queries won't be performed on the web and web results won't be displayed when a user performs a query in Search. If you disable this policy setting, queries will be performed on the web and web results will be displayed when a user performs a query in Search. If you don't configure this policy setting, a user can choose whether or not Search can perform queries on the web, and if the web results are displayed in Search.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "ConnectedSearchUseWeb",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "DoNotUseWebResultsOnMeteredConnections",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "WinBlueExclusive - Microsoft Windows 8.1. Not supported on Windows 10 or later",
-  "DisplayName": "Don't search the web or display web results in Search over metered connections",
-  "ExplainText": "This policy setting allows you to control whether or not Search can perform queries on the web over metered connections, and if the web results are displayed in Search. If you enable this policy setting, queries won't be performed on the web over metered connections and web results won't be displayed when a user performs a query in Search. If you disable this policy setting, queries will be performed on the web over metered connections and web results will be displayed when a user performs a query in Search. If you don't configure this policy setting, a user can choose whether or not Search can perform queries on the web over metered connections, and if the web results are displayed in Search. Note: If you enable the \"Don't search the web or display web results in Search\" policy setting, queries won't be performed on the web over metered connections and web results won't be displayed when a user performs a query in Search.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "ConnectedSearchUseWebOverMeteredConnections",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "DisableWebSearch",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "RedistOnly - Microsoft Windows XP, or Windows Server 2003 with Windows Search version 3.01 or later",
-  "DisplayName": "Do not allow web search",
-  "ExplainText": "Enabling this policy removes the option of searching the Web from Windows Desktop Search. When this policy is disabled or not configured, the Web option is available and users can search the Web via their default browser search engine.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "DisableWebSearch",
-  "Elements": []
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Prevent clients from querying the index remotely](https://www.noverse.dev/policies.html?p=Search*PreventRemoteQueries) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `PreventRemoteQueries` |
+| [Prevent indexing when running on battery power to conserve energy](https://www.noverse.dev/policies.html?p=Search*PreventIndexOnBattery) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `PreventIndexOnBattery` |
+| [Always use automatic language detection when indexing content and properties](https://www.noverse.dev/policies.html?p=Search*AlwaysUseAutoLangDetection) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AlwaysUseAutoLangDetection` |
+| [Don't search the web or display web results in Search](https://www.noverse.dev/policies.html?p=Search*DoNotUseWebResults) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWeb` |
+| [Don't search the web or display web results in Search over metered connections](https://www.noverse.dev/policies.html?p=Search*DoNotUseWebResultsOnMeteredConnections) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWebOverMeteredConnections` |
+| [Do not allow web search](https://www.noverse.dev/policies.html?p=Search*DisableWebSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableWebSearch` |
 
 ## Miscellaneous Notes
 

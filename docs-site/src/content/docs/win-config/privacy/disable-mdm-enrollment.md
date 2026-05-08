@@ -12,47 +12,9 @@ sidebar:
 `AutoEnrollMDM`:  
 "This policy setting specifies whether to automatically enroll the device to the Mobile Device Management (MDM) service configured in Azure Active Directory (Azure AD). If the enrollment is successful, the device will remotely managed by the MDM service. Important: The device must be registered in Azure AD for enrollment to succeed. If you do not configure this policy setting, automatic MDM enrollment will not be initiated. If you enable this policy setting, a task is created to initiate enrollment of the device to MDM service specified in the Azure AD. If you disable this policy setting, MDM will be unenrolled."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "MDM.admx",
-  "CategoryName": "MDM",
-  "PolicyName": "MDM_MDM_DisplayName",
-  "NameSpace": "Microsoft.Policies.MDM",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Disable MDM Enrollment",
-  "ExplainText": "This policy setting specifies whether Mobile Device Management (MDM) Enrollment is allowed. When MDM is enabled, it allows the user to have the computer remotely managed by a MDM Server. If you do not configure this policy setting, MDM Enrollment will be enabled. If you enable this policy setting, MDM Enrollment will be disabled for all users. It will not unenroll existing MDM enrollments. If you disable this policy setting, MDM Enrollment will be enabled for all users.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\MDM"
-  ],
-  "ValueName": "DisableRegistration",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "MDM.admx",
-  "CategoryName": "MDM",
-  "PolicyName": "MDM_JoinMDM_DisplayName",
-  "NameSpace": "Microsoft.Policies.MDM",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Enable automatic MDM enrollment using default Azure AD credentials",
-  "ExplainText": "This policy setting specifies whether to automatically enroll the device to the Mobile Device Management (MDM) service configured in Azure Active Directory (Azure AD). If the enrollment is successful, the device will remotely managed by the MDM service. Important: The device must be registered in Azure AD for enrollment to succeed. If you do not configure this policy setting, automatic MDM enrollment will not be initiated. If you enable this policy setting, a task is created to initiate enrollment of the device to MDM service specified in the Azure AD. If you disable this policy setting, MDM will be unenrolled.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\MDM"
-  ],
-  "ValueName": "AutoEnrollMDM",
-  "Elements": [
-    { "Type": "Enum", "ValueName": "UseAADCredentialType", "Items": [
-        { "DisplayName": "User Credential", "Data": "1" },
-        { "DisplayName": "Device Credential", "Data": "2" }
-      ]
-    },
-    { "Type": "Text", "ValueName": "MDMApplicationId" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Disable MDM Enrollment](https://www.noverse.dev/policies.html?p=MDM*MDM_MDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `DisableRegistration` |
+| [Enable automatic MDM enrollment using default Azure AD credentials](https://www.noverse.dev/policies.html?p=MDM*MDM_JoinMDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `AutoEnrollMDM`<br>`UseAADCredentialType`<br>`MDMApplicationId` |

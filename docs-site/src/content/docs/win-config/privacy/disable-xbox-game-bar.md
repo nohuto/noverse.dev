@@ -72,24 +72,8 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
 >
 > — Microsoft, [GameBar PresenceWriter](https://learn.microsoft.com/en-us/windows/win32/devnotes/gamebar-presencewriter)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "GameDVR.admx",
-  "CategoryName": "GAMEDVR",
-  "PolicyName": "AllowGameDVR",
-  "NameSpace": "Microsoft.Policies.GameDVR",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Enables or disables Windows Game Recording and Broadcasting",
-  "ExplainText": "Windows Game Recording and Broadcasting. This setting enables or disables the Windows Game Recording and Broadcasting features. If you disable this setting, Windows Game Recording will not be allowed. If the setting is enabled or not configured, then Recording and Broadcasting (streaming) will be allowed.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\GameDVR"
-  ],
-  "ValueName": "AllowGameDVR",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Enables or disables Windows Game Recording and Broadcasting](https://www.noverse.dev/policies.html?p=GameDVR*AllowGameDVR) | `HKLM\Software\Policies\Microsoft\Windows\GameDVR` | `AllowGameDVR` |

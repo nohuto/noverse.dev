@@ -83,24 +83,8 @@ if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
   *(_DWORD *)(v23 + 32) = 0x80000000;
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "WinInit.admx",
-  "CategoryName": "ShutdownOptions",
-  "PolicyName": "Hiberboot",
-  "NameSpace": "Microsoft.Policies.WindowsInitialization",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Require use of fast startup",
-  "ExplainText": "This policy setting controls the use of fast startup. If you enable this policy setting, the system requires hibernate to be enabled. If you disable or do not configure this policy setting, the local setting is used.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "HiberbootEnabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Require use of fast startup](https://www.noverse.dev/policies.html?p=WinInit*Hiberboot) | `HKLM\Software\Policies\Microsoft\Windows\System` | `HiberbootEnabled` |

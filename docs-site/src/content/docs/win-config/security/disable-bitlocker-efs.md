@@ -33,24 +33,8 @@ ERROR_VOLUME_NOT_SUPPORT_EFS = 0x8007177E;
 
 - [Windows API - Error Defines](https://github.com/arizvisa/BugId-mWindowsAPI/blob/904a1c0bd22c019ef6ca8313945fe38f4ca26f30/mDefines/mErrorDefines.py#L1793)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "FileSys.admx",
-  "CategoryName": "NTFS",
-  "PolicyName": "DisableEncryption",
-  "NameSpace": "Microsoft.Policies.FileSys",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Do not allow encryption on all NTFS volumes",
-  "ExplainText": "Encryption can add to the processing overhead of filesystem operations. Enabling this setting will prevent access to and creation of encrypted files. A reboot is required for this setting to take effect",
-  "KeyPath": [
-    "HKLM\\System\\CurrentControlSet\\Policies"
-  ],
-  "ValueName": "NtfsDisableEncryption",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not allow encryption on all NTFS volumes](https://www.noverse.dev/policies.html?p=FileSys*DisableEncryption) | `HKLM\System\CurrentControlSet\Policies` | `NtfsDisableEncryption` |

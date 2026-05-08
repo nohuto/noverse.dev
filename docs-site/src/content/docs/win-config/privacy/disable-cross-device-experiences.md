@@ -42,24 +42,8 @@ L"WifiLastDisabledNearShare",
 
 - [privacy/assets | crossdev-SharedExperiencesSingleton.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crossdev-SharedExperiencesSingleton.c)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "GroupPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "EnableCDP",
-  "NameSpace": "Microsoft.Policies.GroupPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Continue experiences on this device",
-  "ExplainText": "This policy setting determines whether the Windows device is allowed to participate in cross-device experiences (continue experiences). If you enable this policy setting, the Windows device is discoverable by other Windows devices that belong to the same user, and can participate in cross-device experiences. If you disable this policy setting, the Windows device is not discoverable by other devices, and cannot participate in cross-device experiences. If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "EnableCdp",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Continue experiences on this device](https://www.noverse.dev/policies.html?p=GroupPolicy*EnableCDP) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableCdp` |

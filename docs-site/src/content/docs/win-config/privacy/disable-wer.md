@@ -69,144 +69,15 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Memory Management : PeriodicTelemetryReportFrequency
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "DeviceSetup.admx",
-  "CategoryName": "DeviceInstall_Category",
-  "PolicyName": "DeviceInstall_GenericDriverSendToWER",
-  "NameSpace": "Microsoft.Policies.DeviceSoftwareSetup",
-  "Supported": "Windows_10_0_RS3ToVista - Windows Server 2016 Version 1709, Windows 10 Version 1709, Windows Server 2016 Version 1703, Windows 10 Version 1703, Windows 10, Windows 8.1, Windows 8, Windows 7, and Windows Vista only",
-  "DisplayName": "Do not send a Windows error report when a generic driver is installed on a device",
-  "ExplainText": "Windows has a feature that sends \"generic-driver-installed\" reports through the Windows Error Reporting infrastructure. This policy allows you to disable the feature. If you enable this policy setting, an error report is not sent when a generic driver is installed. If you disable or do not configure this policy setting, an error report is sent when a generic driver is installed.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings"
-  ],
-  "ValueName": "DisableSendGenericDriverNotFoundToWER",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DeviceSetup.admx",
-  "CategoryName": "DeviceInstall_Category",
-  "PolicyName": "DeviceInstall_RequestAdditionalSoftwareSendToWER",
-  "NameSpace": "Microsoft.Policies.DeviceSoftwareSetup",
-  "Supported": "Windows_10_0_RS3ToWindows7 - Windows Server 2016 Version 1709, Windows 10 Version 1709, Windows Server 2016 Version 1703, Windows 10 Version 1703, Windows 10, Windows 8.1, Windows 8, and Windows 7 only",
-  "DisplayName": "Prevent Windows from sending an error report when a device driver requests additional software during installation",
-  "ExplainText": "Windows has a feature that allows a device driver to request additional software through the Windows Error Reporting infrastructure. This policy allows you to disable the feature. If you enable this policy setting, Windows will not send an error report to request additional software even if this is specified by the device driver. If you disable or do not configure this policy setting, Windows sends an error report when a device driver that requests additional software is installed.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings"
-  ],
-  "ValueName": "DisableSendRequestAdditionalSoftwareToWER",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerDisable_2",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Disable Windows Error Reporting",
-  "ExplainText": "This policy setting turns off Windows Error Reporting, so that reports are not collected or sent to either Microsoft or internal servers within your organization when software unexpectedly stops working or fails. If you enable this policy setting, Windows Error Reporting does not send any problem information to Microsoft. Additionally, solution information is not available in Security and Maintenance in Control Panel. If you disable or do not configure this policy setting, the Turn off Windows Error Reporting policy setting in Computer Configuration/Administrative Templates/System/Internet Communication Management/Internet Communication settings takes precedence. If Turn off Windows Error Reporting is also either disabled or not configured, user settings in Control Panel for Windows Error Reporting are applied.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "Disabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerNoLogging_1",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Disable logging",
-  "ExplainText": "This policy setting controls whether Windows Error Reporting saves its own events and error messages to the system event log. If you enable this policy setting, Windows Error Reporting events are not recorded in the system event log. If you disable or do not configure this policy setting, Windows Error Reporting events and errors are logged to the system event log, as with other Windows-based programs.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "LoggingDisabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerAutoApproveOSDumps_1",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
-  "DisplayName": "Automatically send memory dumps for OS-generated error reports",
-  "ExplainText": "This policy setting controls whether memory dumps in support of OS-generated error reports can be sent to Microsoft automatically. This policy does not apply to error reports generated by 3rd-party products, or additional data other than memory dumps. If you enable or do not configure this policy setting, any memory dumps generated for error reports by Microsoft Windows are automatically uploaded, without notification to the user. If you disable this policy setting, then all memory dumps are uploaded according to the default consent and notification settings.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "AutoApproveOSDumps",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerAutoApproveOSDumps_2",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
-  "DisplayName": "Automatically send memory dumps for OS-generated error reports",
-  "ExplainText": "This policy setting controls whether memory dumps in support of OS-generated error reports can be sent to Microsoft automatically. This policy does not apply to error reports generated by 3rd-party products, or additional data other than memory dumps. If you enable or do not configure this policy setting, any memory dumps generated for error reports by Microsoft Windows are automatically uploaded, without notification to the user. If you disable this policy setting, then all memory dumps are uploaded according to the default consent and notification settings.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "AutoApproveOSDumps",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "TPM.admx",
-  "CategoryName": "DSHACategory",
-  "PolicyName": "OptIntoDSHA_Name",
-  "NameSpace": "Microsoft.Policies.TrustedPlatformModule",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Enable Device Health Attestation Monitoring and Reporting",
-  "ExplainText": "This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\DeviceHealthAttestationService"
-  ],
-  "ValueName": "EnableDeviceHealthAttestationService",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Reliability.admx",
-  "CategoryName": "System",
-  "PolicyName": "EE_EnablePersistentTimeStamp",
-  "NameSpace": "Microsoft.Policies.Reliability",
-  "Supported": "WindowsNET - At least Windows Server 2003",
-  "DisplayName": "Enable Persistent Time Stamp",
-  "ExplainText": "This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Reliability"
-  ],
-  "ValueName": "TimeStampEnabled",
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "TimeStampInterval", "MinValue": "1", "MaxValue": "86400" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not send a Windows error report when a generic driver is installed on a device](https://www.noverse.dev/policies.html?p=DeviceSetup*DeviceInstall_GenericDriverSendToWER) | `HKLM\Software\Policies\Microsoft\Windows\DeviceInstall\Settings` | `DisableSendGenericDriverNotFoundToWER` |
+| [Prevent Windows from sending an error report when a device driver requests additional software during installation](https://www.noverse.dev/policies.html?p=DeviceSetup*DeviceInstall_RequestAdditionalSoftwareSendToWER) | `HKLM\Software\Policies\Microsoft\Windows\DeviceInstall\Settings` | `DisableSendRequestAdditionalSoftwareToWER` |
+| [Disable Windows Error Reporting](https://www.noverse.dev/policies.html?p=ErrorReporting*WerDisable_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `Disabled` |
+| [Disable logging](https://www.noverse.dev/policies.html?p=ErrorReporting*WerNoLogging_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `LoggingDisabled` |
+| [Automatically send memory dumps for OS-generated error reports](https://www.noverse.dev/policies.html?p=ErrorReporting*WerAutoApproveOSDumps_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `AutoApproveOSDumps` |
+| [Automatically send memory dumps for OS-generated error reports](https://www.noverse.dev/policies.html?p=ErrorReporting*WerAutoApproveOSDumps_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `AutoApproveOSDumps` |
+| [Enable Device Health Attestation Monitoring and Reporting](https://www.noverse.dev/policies.html?p=TPM*OptIntoDSHA_Name) | `HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService` | `EnableDeviceHealthAttestationService` |
+| [Enable Persistent Time Stamp](https://www.noverse.dev/policies.html?p=Reliability*EE_EnablePersistentTimeStamp) | `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` | `TimeStampEnabled`<br>`TimeStampInterval` |

@@ -3,7 +3,7 @@ title: 'MPO'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 14
+  order: 13
 ---
 
 > "*Multi-Plane Overlay (MPO) refers to the use of additional dedicated hardware scanout planes in the GPU that frames can be presented to, which the GPU then takes care of scanning out to the display itself, thereby allowing the GPU to shoulder the work (again achieving lower latencies) that the DWM would otherwise do but in software (which would incur an additional latency). Typically NVIDIA assigns all of the planes it supports (usually upwards of 4 of them) to a single display while the rest of the displays goes without any.*

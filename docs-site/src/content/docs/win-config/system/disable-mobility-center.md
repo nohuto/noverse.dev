@@ -10,24 +10,8 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mobility-center.png?raw=true)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "MobilePCMobilityCenter.admx",
-  "CategoryName": "MobilityCenterCat",
-  "PolicyName": "MobilityCenterEnable_2",
-  "NameSpace": "Microsoft.Policies.MobilePCMobilityCenter",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off Windows Mobility Center",
-  "ExplainText": "This policy setting turns off Windows Mobility Center. If you enable this policy setting, the user is unable to invoke Windows Mobility Center. The Windows Mobility Center UI is removed from all shell entry points and the .exe file does not launch it. If you disable this policy setting, the user is able to invoke Windows Mobility Center and the .exe file launches it. If you do not configure this policy setting, Windows Mobility Center is on by default.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\MobilityCenter"
-  ],
-  "ValueName": "NoMobilityCenter",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Windows Mobility Center](https://www.noverse.dev/policies.html?p=MobilePCMobilityCenter*MobilityCenterEnable_2) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\MobilityCenter` | `NoMobilityCenter` |

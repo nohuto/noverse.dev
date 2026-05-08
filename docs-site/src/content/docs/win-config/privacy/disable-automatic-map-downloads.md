@@ -59,41 +59,9 @@ if ( v6 < 0 )
 }
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "WinMaps.admx",
-  "CategoryName": "Maps",
-  "PolicyName": "TurnOffAutoUpdate",
-  "NameSpace": "Microsoft.Policies.WinMaps",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn off Automatic Download and Update of Map Data",
-  "ExplainText": "Enables or disables the automatic download and update of map data. If you enable this setting the automatic download and update of map data is turned off. If you disable this setting the automatic download and update of map data is turned on. If you don't configure this setting the automatic download and update of map data is determined by a registry setting that the user can change using Windows Settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps"
-  ],
-  "ValueName": "AutoDownloadAndUpdateMapData",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "WinMaps.admx",
-  "CategoryName": "Maps",
-  "PolicyName": "DisallowUntriggeredNetworkOnSettingsPage",
-  "NameSpace": "Microsoft.Policies.WinMaps",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn off unsolicited network traffic on the Offline Maps settings page",
-  "ExplainText": "This policy setting allows you to turn on or turn off unsolicited network traffic on the Offline Maps page in Settings > System > Offline Maps. If you enable this policy setting, features that generate network traffic on the Offline Maps settings page are turned off. Note: This may turn off the entire settings page. If you disable or do not configure this policy setting, the Offline Maps setting page may generate network traffic.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps"
-  ],
-  "ValueName": "AllowUntriggeredNetworkTrafficOnSettingsPage",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Automatic Download and Update of Map Data](https://www.noverse.dev/policies.html?p=WinMaps*TurnOffAutoUpdate) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AutoDownloadAndUpdateMapData` |
+| [Turn off unsolicited network traffic on the Offline Maps settings page](https://www.noverse.dev/policies.html?p=WinMaps*DisallowUntriggeredNetworkOnSettingsPage) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AllowUntriggeredNetworkTrafficOnSettingsPage` |

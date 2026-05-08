@@ -24,31 +24,11 @@ Select the amount of recent tabs from apps in the alt+tab menu.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/20tabs.png?raw=true)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Multitasking.admx",
-  "CategoryName": "MULTITASKING",
-  "PolicyName": "BrowserAltTabBlowout",
-  "NameSpace": "Microsoft.Policies.Multitasking",
-  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
-  "DisplayName": "Configure the inclusion of app tabs into Alt-Tab",
-  "ExplainText": "This setting controls the inclusion of app tabs into Alt+Tab. This can be set to show the most recent 3, 5 or 20 tabs, or no tabs from apps. If this is set to show \"Open windows only\", the whole feature will be disabled.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "MultiTaskingAltTabFilter", "Items": [
-        { "DisplayName": "Open windows and 20 most recent tabs in apps", "Data": "1" },
-        { "DisplayName": "Open windows and 5 most recent tabs in apps", "Data": "2" },
-        { "DisplayName": "Open windows and 3 most recent tabs in apps", "Data": "3" },
-        { "DisplayName": "Open windows only", "Data": "4" }
-      ]
-    }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Configure the inclusion of app tabs into Alt-Tab](https://www.noverse.dev/policies.html?p=Multitasking*BrowserAltTabBlowout) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `MultiTaskingAltTabFilter` |
 
 The option changes it via `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced`.
 

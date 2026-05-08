@@ -3,7 +3,7 @@ title: 'NVLDDMKM Hex Values'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 15
+  order: 14
 ---
 
 I'd suggest you don't change this option and just use it for information only.

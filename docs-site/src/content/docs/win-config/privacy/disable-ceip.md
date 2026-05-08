@@ -8,59 +8,10 @@ sidebar:
 
 Voluntary program that collects usage data to help improve the quality and performance of its products.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "WinMSG_NoInstrumentation_2",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsXPSP2_Or_WindowsNET - At least Windows Server 2003 operating systems or Windows XP Professional with SP2",
-  "DisplayName": "Turn off the Windows Messenger Customer Experience Improvement Program",
-  "ExplainText": "This policy setting specifies whether Windows Messenger collects anonymous information about how Windows Messenger software and service is used. With the Customer Experience Improvement program, users can allow Microsoft to collect anonymous information about how the product is used. This information is used to improve the product in future releases. If you enable this policy setting, Windows Messenger does not collect usage information, and the user settings to enable the collection of usage information are not shown. If you disable this policy setting, Windows Messenger collects anonymous usage information, and the setting is not shown. If you do not configure this policy setting, users have the choice to opt in and allow information to be collected.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Messenger\\Client"
-  ],
-  "ValueName": "CEIP",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "CEIPEnable",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off Windows Customer Experience Improvement Program",
-  "ExplainText": "This policy setting turns off the Windows Customer Experience Improvement Program. The Windows Customer Experience Improvement Program collects information about your hardware configuration and how you use our software and services to identify trends and usage patterns. Microsoft will not collect your name, address, or any other personally identifiable information. There are no surveys to complete, no salesperson will call, and you can continue working without interruption. It is simple and user-friendly. If you enable this policy setting, all users are opted out of the Windows Customer Experience Improvement Program. If you disable this policy setting, all users are opted into the Windows Customer Experience Improvement Program. If you do not configure this policy setting, the administrator can use the Problem Reports and Solutions component in Control Panel to enable Windows Customer Experience Improvement Program for all users.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\SQMClient\\Windows"
-  ],
-  "ValueName": "CEIPEnable",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "inetres.admx",
-  "CategoryName": "InternetExplorer",
-  "PolicyName": "SQM_DisableCEIP",
-  "NameSpace": "Microsoft.Policies.InternetExplorer",
-  "Supported": "IE7_NONVISTA - At least Internet Explorer 7.0. Not supported on Windows Vista",
-  "DisplayName": "Prevent participation in the Customer Experience Improvement Program",
-  "ExplainText": "This policy setting prevents the user from participating in the Customer Experience Improvement Program (CEIP). If you enable this policy setting, the user cannot participate in the CEIP, and the Customer Feedback Options command does not appear on the Help menu. If you disable this policy setting, the user must participate in the CEIP, and the Customer Feedback Options command does not appear on the Help menu. If you do not configure this policy setting, the user can choose to participate in the CEIP.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Internet Explorer\\SQM",
-    "HKCU\\Software\\Policies\\Microsoft\\Internet Explorer\\SQM"
-  ],
-  "ValueName": "DisableCustomerImprovementProgram",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off the Windows Messenger Customer Experience Improvement Program](https://www.noverse.dev/policies.html?p=ICM*WinMSG_NoInstrumentation_2) | `HKLM\Software\Policies\Microsoft\Messenger\Client` | `CEIP` |
+| [Turn off Windows Customer Experience Improvement Program](https://www.noverse.dev/policies.html?p=ICM*CEIPEnable) | `HKLM\Software\Policies\Microsoft\SQMClient\Windows` | `CEIPEnable` |
+| [Prevent participation in the Customer Experience Improvement Program](https://www.noverse.dev/policies.html?p=inetres*SQM_DisableCEIP) | `HKLM\Software\Policies\Microsoft\Internet Explorer\SQM`<br>`HKCU\Software\Policies\Microsoft\Internet Explorer\SQM` | `DisableCustomerImprovementProgram` |

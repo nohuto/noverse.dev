@@ -31,24 +31,8 @@ Unblock-File -Path "C:\Path\Script.ps1" -> File
 dir C:\Path\*Files* | Unblock-File -> Multiple files 
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AttachmentManager.admx",
-  "CategoryName": "AM_AM",
-  "PolicyName": "AM_MarkZoneOnSavedAtttachments",
-  "NameSpace": "Microsoft.Policies.AttachmentManager",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Do not preserve zone information in file attachments",
-  "ExplainText": "This policy setting allows you to manage whether Windows marks file attachments with information about their zone of origin (such as restricted, Internet, intranet, local). This requires NTFS in order to function correctly, and will fail without notice on FAT32. By not preserving the zone information, Windows cannot make proper risk assessments. If you enable this policy setting, Windows does not mark file attachments with their zone information. If you disable this policy setting, Windows marks file attachments with their zone information. If you do not configure this policy setting, Windows marks file attachments with their zone information.",
-  "KeyPath": [
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments"
-  ],
-  "ValueName": "SaveZoneInformation",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "2" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not preserve zone information in file attachments](https://www.noverse.dev/policies.html?p=AttachmentManager*AM_MarkZoneOnSavedAtttachments) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments` | `SaveZoneInformation` |

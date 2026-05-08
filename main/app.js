@@ -1141,17 +1141,17 @@ function initPolicyExplorer() {
   const getVisibleColumns = () => columns.filter(column => visibleColumns.has(column.id));
   const getColumnMinWidth = column => column.minWidth || 80;
 
-  const copyText = async text => {
+  const copyPolicyText = async (text, successMessage = 'Copied') => {
     if (!text) return;
     try {
       await navigator.clipboard.writeText(text);
-      showToast('Key copied');
+      showToast(successMessage);
     } catch {
       showToast('Copy failed');
     }
   };
 
-  const createCopyBox = (className, text, label = 'Copy') => {
+  const createCopyBox = (className, text, label = 'Copy', successMessage = 'Copied') => {
     const box = createNode('div', className);
     const labelNode = createNode('span', 'policy-copy-text', text || '');
     const button = createNode('button', 'policy-copy-button');
@@ -1161,7 +1161,7 @@ function initPolicyExplorer() {
     const iconNode = createNode('span', 'policy-copy-icon');
     iconNode.setAttribute('aria-hidden', 'true');
     button.appendChild(iconNode);
-    button.addEventListener('click', () => copyText(text || ''));
+    button.addEventListener('click', () => copyPolicyText(text || '', successMessage));
     box.replaceChildren(labelNode, button);
     return box;
   };
@@ -1244,7 +1244,7 @@ function initPolicyExplorer() {
     const paths = createNode('section', 'policy-section');
     paths.appendChild(createNode('h3', null, 'Registry Paths'));
     const pathList = createNode('div', 'policy-code-list');
-    (policy.KeyPath || []).forEach(path => pathList.appendChild(createCopyBox('policy-copy-box', path, 'Copy registry path')));
+    (policy.KeyPath || []).forEach(path => pathList.appendChild(createCopyBox('policy-copy-box', path, 'Copy registry path', 'Copied key')));
     paths.appendChild(pathList);
     detailBody.appendChild(paths);
 
@@ -1257,7 +1257,7 @@ function initPolicyExplorer() {
       const valueList = createNode('div', 'policy-value-list');
       valueGroups.forEach(group => {
         const groupNode = createNode('div', 'policy-value-group');
-        groupNode.appendChild(createCopyBox('policy-copy-box policy-value-name', group.valueName, 'Copy value name'));
+        groupNode.appendChild(createCopyBox('policy-copy-box policy-value-name', group.valueName, 'Copy value name', 'Copied value'));
         if (group.rows.length) {
           const list = createNode('div', 'policy-element-list');
           group.rows.forEach(element => {

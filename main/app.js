@@ -4010,7 +4010,7 @@ function initConsole() {
         ['proprietor', 'Noverse'],
         ['github', 'https://github.com/nohuto'],
         ['youtube', 'https://www.youtube.com/@5Noverse'],
-        ['discord', 'https://discord.gg/E2ybG4j9jU']
+        ['discord', 'https://discord.noverse.dev']
       ]);
     },
     product: () => {
@@ -4088,7 +4088,7 @@ function initConsole() {
       addLine('contact:');
       addKeyValueLines([
         ['email', 'use the footer icon to copy'],
-        ['discord', 'https://discord.gg/E2ybG4j9jU']
+        ['discord', 'https://discord.noverse.dev']
       ]);
     },
     ascii: () => {

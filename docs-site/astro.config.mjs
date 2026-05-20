@@ -80,7 +80,7 @@ export default defineConfig({
       favicon: '/logo.png',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/nohuto' },
-        { icon: 'discord', label: 'Discord', href: 'https://discord.gg/E2ybG4j9jU' },
+        { icon: 'discord', label: 'Discord', href: 'https://discord.noverse.dev' },
       ],
       components: {
         Header: './src/components/starlight/Header.astro',

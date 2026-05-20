@@ -3,10 +3,10 @@ title: 'Scheduled Tasks'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 8
 ---
 
-This list was created using my small [`ScheduledTasksLists.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/ScheduledTasksList.ps1) parser which displays name, path, description, principals, settings, triggers, actions if given. See example output of a stock 25H2 installation: [scheduled-tasks.json](https://github.com/nohuto/win-config/blob/main/system/assets/scheduled-tasks.json).
+This list was created using my small [`scheduledTasksLists.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/scheduledTasksList.ps1) parser which displays name, path, description, principals, settings, triggers, actions if given. See example output of a stock 25H2 installation: [scheduled-tasks.json](https://github.com/nohuto/win-config/blob/main/system/assets/scheduled-tasks.json).
 
 ## Scheduled Tasks Table
 

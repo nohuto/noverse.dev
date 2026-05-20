@@ -3,7 +3,7 @@ title: 'VS Telemetry'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 8
+  order: 7
 ---
 
 Disables VS telemetry, SQM data collection, IntelliCode remote analysis, feedback features, and the `DiagnosticsHub` logger. Disabling `VSStandardCollectorService150` could cause issues, I added it as a comment.

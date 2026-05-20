@@ -21,7 +21,7 @@ It is a deprecated feature, as the banner shows:
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

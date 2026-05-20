@@ -27,7 +27,7 @@ There's also a value named `CSEnable` which I found in `srms.dat`, it doesn't se
 <pattern type="Registry">HKLM\Software\Microsoft\Sensors\LocationProvider [CSEnable]</pattern>
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

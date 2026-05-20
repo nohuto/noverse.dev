@@ -3,7 +3,7 @@ title: 'Mullvad Configuration'
 description: 'Generated from app-tools file: guides/mullvad-desktop.md.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 6
 ---
 
 [Mullvad](https://github.com/mullvad/mullvad-browser/releases) is my primary desktop browser, it's configured by default for privacy/security/fingerprinting restistance ([hard-facts](https://mullvad.net/en/browser/hard-facts)), therefore there's not much to change (it's recommended to use the default configuration to not get unique). Read more about the Mullvad browser in their [acticles](https://mullvad.net/en/browser/articles).
@@ -62,7 +62,7 @@ As said above the default configuration shouldn't be changed a lot, therefore I'
 
 ### Search
 
-See [search-engine](https://github.com/nohuto/app-tools/blob/main/search-engine.md).
+See [search-engine](https://www.noverse.dev/docs/app-tools/docs/search-engine/).
 
 ### Privacy & Security
 
@@ -83,7 +83,7 @@ See [search-engine](https://github.com/nohuto/app-tools/blob/main/search-engine.
 
 ### Extensions & [Themes](https://addons.mozilla.org/en-US/firefox/themes/)
 
-See [extensions](https://github.com/nohuto/app-tools/blob/main/extensions.md).
+See [extensions](https://www.noverse.dev/docs/app-tools/docs/extensions/).
 
 ## Flags
 

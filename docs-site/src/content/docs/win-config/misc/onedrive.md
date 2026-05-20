@@ -3,7 +3,7 @@ title: 'OneDrive'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 9
 ---
 
 `DisableLibrariesDefaultSaveToOneDrive` sets local storage as the default save location, `DisableFileSync` disables OneDrive on Windows 8.1 including app and picker access removal and stops sync and hides the Explorer entry, `DisableFileSyncNGSC` disables OneDrive via the Next-Gen Sync Client with the same effect, `DisableMeteredNetworkFileSync` set to `0` blocks syncing on all metered connections, `PreventNetworkTrafficPreUserSignIn` stops the OneDrive client from generating network traffic until the user signs in, `System.IsPinnedToNameSpaceTree` set to `0` hides OneDrive from File Explorer's navigation pane.
@@ -34,7 +34,7 @@ HKLM\SOFTWARE\WOW6432Node\Policies\Microsoft\Windows\OneDrive
 \\OneDrive*
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

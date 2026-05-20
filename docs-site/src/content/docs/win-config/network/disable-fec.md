@@ -13,7 +13,7 @@ sidebar:
 `CL74 FC-FEC/BASE-R`: Selects only BASE-R ability and request capabilities.  
 `No FEC`: Disables FEC.
 
-## Registry Values Details
+## Registry Values
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 

@@ -3,14 +3,14 @@ title: 'NIC Power Savings'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 5
+  order: 6
 ---
 
 You can get a lot of information about data ranges and more from `.inf` files, see examples below.
 
 ## [Registry Value](https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt) Overview
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal findings, mistakes may exist.
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 

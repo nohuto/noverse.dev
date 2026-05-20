@@ -8,7 +8,7 @@ sidebar:
 
 This option serves as a general values overview for the `stornvme` key. Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation.
 
-## Registry Values Details
+## Registry Values
 
 Most values are read via `ReadMultiSzRegistryValueAndCompareId` using the device id match string `VEN_vvvv&DEV_dddd&REV_rr`, so I currently assume that their type is REG_MULTI_SZ. Several values are set to 0 which sometimes also means "ignore" for example. Note that the information in this list is based on `stornvme.sys` only (if value has comment).
 
@@ -42,7 +42,7 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "MedPowerResumeLatency" = 4294967295; // REG_MULTI_SZ
     "LowestPowerResumeLatency" = 4294967295; // REG_MULTI_SZ
     "HostMemoryBufferBytes" = 4294967295; // REG_MULTI_SZ
-    "BypassSgl" = 1; // REG_MULTI_SZ, only value bit0 is used
+    "BypassSgl" = 1; // REG_MULTI_SZ, only value bit 0 is used
     "TestMdlDataBufferOffsetInBytes" = 0; // REG_MULTI_SZ
     "UseDumpPointers" = 0; // REG_MULTI_SZ
     "ReservedQueuePairCount" = 0; // REG_MULTI_SZ, valid 1-65535 (check v69-1 <= 0xFFFE)
@@ -52,7 +52,7 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "IoCompletionCapInDPC" = 100; // REG_MULTI_SZ, if nonzero clamp to 128
     "IoPollingSize" = 0x4000; // REG_MULTI_SZ
     "ErrorEtwThrottleInterval" = 0xD693A400; // REG_MULTI_SZ, if nonzero clamp to max 0xD693A400
-    "ResetEnableMask" = 0; // REG_MULTI_SZ, value bit0/1/2 set internal flags 0x40/0x800/0x1000
+    "ResetEnableMask" = 0; // REG_MULTI_SZ, value bit 0/1/2 set internal flags 0x40/0x800/0x1000
     "ReliabilityDegraded" = 0; // REG_MULTI_SZ
     "ReadOnly" = 0; // REG_MULTI_SZ
     "VolatileMemoryBackupDeviceFailed" = 0; // REG_MULTI_SZ
@@ -93,7 +93,9 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "UncachedExtAlignment" = ?;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\stornvme\\Parameters";
-    "StorageSupportedFeatures" = 1; // "Support ByPass IO"?
+    "StorageSupportedFeatures" = 1; // "Support ByPassIO"
+                                    // "BypassIO is an optimized I/O path for reading from files. The goal of this path is to reduce the CPU overhead of doing reads, which helps to meet the I/O demands of loading and running next-generation games on Windows. BypassIO is a part of the infrastructure to support DirectStorage on Windows, and is available starting in Windows 11."
+                                    // https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/bypassio
     "DmaRemappingCompatible" = 2; // https://github.com/nohuto/win-config/blob/main/security/desc.md#opt-out-dma-remapping
     "BusType" = ?; // bustype 0x11 is value of BusTypeNVMe
     "BusyPauseTimeInMs" = ?;

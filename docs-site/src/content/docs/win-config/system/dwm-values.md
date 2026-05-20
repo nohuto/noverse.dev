@@ -3,147 +3,307 @@ title: 'DWM Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 6
+  order: 4
 ---
 
-This option currently includes some speculations and default values. I haven't had time yet to test the behavior of the changed data.
+DWM = Desktop Window Manager, the component *which allows for compositing visible window rendering into a single surface*. Instead of every application drawing directly to the display, each top level window normally produces content into an offscreen surface, and DWM combines the visible parts of those surfaces into the desktop image that's then presented on the monitor. Without DWM, each program would effectively draw into the visible desktop/output directly (which can cause [visual artifacts](https://github.com/nohuto/win32/blob/docs/desktop-src/LearnWin32/the-desktop-window-manager.md#the-desktop-window-manager) if a window doesn't repaint itself correctly), with DWM, each program draws into its own surface first, DWM then takes those surfaces and creates the final desktop image.
 
-## Registry Values Details
+Composition means building the visible frame from multiple inputs (that are visible), so for DWM that can include normal application windows, transparent or rounded window frames, shadows, animations, blur/backdrop effects, etc. DWM decides the order (image below), and presents the result.
 
-See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`, `dwminit.dll`, `uDWM.dll`).
+So for example when you've a terminal opened on the right (renders through DXGI) and a browser with a video playing on the left (wouldn't show up in [PresentMon](https://github.com/GameTechDev/PresentMon/releases) if on a empty tab as DWM can just reuse the content for the desktop frame), [PresentMon](https://github.com/GameTechDev/PresentMon/releases) can show present events for both processes while both are presenting (the browser video may show `Hardware Composed: Independent Flip` if it can use DirectFlip/iFlip + MPO, the terminal should normally be part of the composed DWM frame and it always shows up cause of the blinking cursor, I guess). If the terminal covers the browser, the browser content is no longer visible, means it no longer needs to be shown as a visible plane/surface which causes it to disappear in [PresentMon](https://github.com/GameTechDev/PresentMon/releases).
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Use [PresentMon](https://github.com/GameTechDev/PresentMon/releases) without process filters to see which processes are actually producing presents and which `PresentMode` is used (only for apps that present through a graphics presentation API, e.g. DXGI, classic Win32/common control apps like my regkit project/System Informer won't show up, as their UI repainting doesn't use an DXGI swapchain).
+
+Simple way to imagine DWM composition:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/dwm-composition.png?raw=true)
+
+### [Buffers, Surfaces, Presents](https://github.com/nohuto/win32/blob/docs/desktop-src/comp_swapchain/comp-swapchain.md#diagram-of-buffers-surfaces-and-presents)
+
+- Presentation = showing the result of drawing work on screen
+- Present = one instance of presentation, used to show drawing results from a buffer on screen (optionally with timing/metadata for when/how)
+- Presentation buffer = texture containing the rendered image (apps usually have multiple buffers so one can be displayed while another is being rendered)
+- Presentation surface = content placeholder that can show one buffer at a time
+
+Means the app renders into buffers, presents one of those buffers, the surface is what DWM/presentation system can place into the desktop composition.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/buffers-surfaces-and-presents.png?raw=true)
+
+### Direct Scanout
+
+Means that presented content can be scanned out by the display hardware without first being rendered into DWMs composed desktop frame.
+
+> "*Buffers presented by your application can be displayed by the system in a few different ways.*
+>
+> *The simplest way, which is the default, is that the present will be sent to DWM, and the DWM will render a frame based on the buffer that was presented. That is, there is a copy (or more accurately, a 3D render) of the presentation buffer into the backbuffer that the DWM sends to the display. This method of displaying a present is called Composition.*
+>
+> *A more performant mode of displaying a present would be to scan out the presentation buffer directly to hardware, and eliminate the copy that takes place. This method of displaying a present is called direct scanout. When handling presents, DWM can decide to program the hardware to directly scan out of a presentation buffer, by either assigning the buffer to a multiplane overlay plane (or MPO plane, for short), or directly flip the buffer to the hardware (known as direct flip).*
+>
+> *An even more performant way to display a present would be to have presents be displayed directly by the graphics kernel, and bypass the DWM entirely. This method of presentation is known as independent flip (iFlip).*
+>
+> — Microsoft, [Presentation modes - composition, multiplane overlay, and independent flip](https://github.com/nohuto/win32/blob/docs/desktop-src/comp_swapchain/comp-swapchain.md#presentation-modescomposition-multiplane-overlay-and-independent-flip)
+
+#### Multiplane Overlay (MPO)
+
+Used when DWM can place an app/video surface on a dedicated hardware overlay plane instead of adding it into the normal composed desktop frame.
+
+> "*A type of display hardware that is able to show multiple planes shown over top of one another. Presents from the presentation manager can be displayed as part of a plane in an MPO configuration to avoid needing to copy the presentation buffer into the backbuffer that DWM sends to the display hardware."*
+
+Means that with MPO, DWM still manages the window surface, but instead of blending that surface into the normal composed desktop frame, it can assign it to a hardware overlay plane. The DWM composed desktop is normally the primary plane, while MPO planes are extra hardware planes (there's also a limit of `MaxPlanes` which is why reducing `OverlayMinFPS` shouldn't be done). The final image is then created by the display hardware combining those planes, and if the display hardware handles that plane composition incorrectly, such "artifacts" can appear.
+
+Whenever an app uses MPO it usually shows as `Hardware Composed: Independent Flip`, so for example a browser playing video can show this, as the video/app surface can be placed on an overlay plane and the display hardware combines it with the DWM desktop plane. A fullscreen game for example may show `Hardware: Independent Flip` (even with MPO enabled), as it doesn't need an extra overlay plane (see DirectFlip cases below).
+
+#### DirectFlip / iFlip
+
+A (DXGI) swapchain buffer that can be flipped directly to the display, simplified:
+
+- DirectFlip = app swapchain can be sent directly to display hardware instead of DWM composing it
+- Independent Flip (iFlip) = DirectFlip state where the app can keep presenting directly without waking DWM every frame
+
+DirectFlip cases:
+
+> "*1. **DirectFlip**: Your swapchain buffers match the screen dimensions, and your window client region covers the screen. Instead of using the DWM swapchain to display on the screen, the application swapchain is used.*  
+> *2. **DirectFlip with panel fitters**: Your window client region covers the screen, and your swapchain buffers are within some hardware-dependent scaling factor (for example, 0.25x to 4x) of the screen. The GPU scanout hardware is used to scale your buffer while sending it to the display.*  
+> *3. **DirectFlip with multi-plane overlay (MPO)**: Your swapchain buffers are within some hardware-dependent scaling factor of your window dimensions. The DWM is able to reserve a dedicated hardware scanout plane for your application, which is then scanned out and potentially stretched to an alpha-blended sub-region of the screen.*
+>
+> — Microsoft, [DirectFlip](https://github.com/nohuto/win32/blob/docs/desktop-src/direct3ddxgi/for-best-performance--use-dxgi-flip-model.md#directflip)
+
+In [PresentMon](https://github.com/GameTechDev/PresentMon/releases) ([`PresentMode` header](https://github.com/GameTechDev/PresentMon/blob/main/README-ConsoleApplication.md#csv-columns)) DirectFlip/independent flip = `Hardware: Independent Flip`/`Hardware Composed: Independent Flip` (MPO).
+
+### [Present Modes](https://github.com/GameTechDev/PresentMon/blob/main/README-ConsoleApplication.md#csv-columns)
+
+| PresentMode | Description |
+| --- | --- |
+| `Hardware: Legacy Flip` | Indicates the app took ownership of the screen, and is swapping the displayed surface every frame. (FSE) |
+| `Hardware: Legacy Copy to front buffer` | Indicates the app took ownership of the screen, and is copying new contents to an already-on-screen surface every frame. |
+| `Hardware: Independent Flip` | Indicates the app does not have ownership of the screen, but is still swapping the displayed surface every frame. |
+| `Composed: Flip` | Indicates the app is windowed, is using ["flip model" swapchains](https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-flip-model), and is sharing its surfaces with DWM to be composed. |
+| `Hardware Composed: Independent Flip` | Indicates the app is using ["flip model" swapchains](https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-flip-model), and has been granted a hardware overlay plane (MPO). |
+| `Composed: Copy with GPU GDI` | Indicates the app is windowed, and is copying contents into a surface that's shared with GDI. |
+| `Composed: Copy with CPU GDI` | Indicates the app is windowed, and is copying contents into a dedicated DirectX window surface. GDI contents are stored separately, and are composed together with DX contents by the DWM. |
+
+## [Composition Swapchain Glossary](https://github.com/nohuto/win32/blob/docs/desktop-src/comp_swapchain/comp-swapchain-glossary.md)
+
+| Term | Meaning |
+| --- | --- |
+| **Available (presentation buffer)** | A buffer that's safe for your application to render to without corrupting any previous presents. To be available, a buffer must have no previous presents that reference it that haven't entered into the retiring or retired state. A present may implicitly reference a buffer from a previous present if your application didn't update a surface, as is shown in the example in [Diagram of buffers, surfaces, and presents](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/comp_swapchain/comp-swapchain.md#diagram-of-buffers-surfaces-and-presents). |
+| **Composition (presentation mode)** | A form of presentation in which the buffer presented by your application is copied into the backbuffer that DWM renders and sends to display hardware. This form of presentation has lower system requirements than direct scanout or iflip, but it's also less efficient. |
+| **Composition Surface Handle** | A **HANDLE** that can bind a visual tree visual with a given swapchain, or presentation surface. |
+| **Direct flip** | A form of presentation in which the buffer presentation by your application is sent directly to display hardware on systems that don't support multiplane overlay. |
+| **Direct scanout** | A form of presentation in which the buffer presented by your application is not re-rendered into the buffer DWM sends to screen, but instead sent directly to the GPU scanout hardware. This might involve DWM assigning the buffer to a multiplane overlay plane, or it might be a mode in which the buffer is sent to the scanout hardware directly via *direct flip*. In a direct scanout presentation mode, DWM might be involved in programming the hardware to display the present, or it might be bypassed entirely when the system is in *iflip* mode. |
+| **Front buffer rendering** | Drawing work issued for a buffer that is currently being displayed by the system. Depending on how the buffer is being displayed, this can result in corruption or an application hang, since Direct3D protects against issuing rendering work to buffers being displayed by scanout hardware. |
+| **Hardware flip queue** | An operating system (OS) feature supported by some GPU hardware that allows GPUs to display presents independently, without CPU involvement, resulting in reduced power consumption, but potentially delaying CPU state updates such as buffer available events, present retiring fence, and present statistics. |
+| **Independent flip (iflip)** | A more efficient method of direct scanout presentation in which the presents are sent directly to the GPU scanout hardware, completely bypassing the DWM. This form of presentation has higher system requirements, but allows for lower latencies, and system power savings. |
+| **Multiplane overlay (MPO)** | A type of display hardware that is able to show multiple planes shown over top of one another. Presents from the presentation manager can be displayed as part of a plane in an MPO configuration to avoid needing to copy the presentation buffer into the backbuffer that DWM sends to the display hardware. |
+| **Present** | A single instance of presentation. A present that is intended to show the results of a drawing operation to a single buffer to the screen. |
+| **Present identifier (ID)** | An incrementing identifier, unique within a given presentation manager, associated with each present to allow it to be referred to by things such as  presentation statistics and present fences. |
+| **Present queue** | A queue of presents that a presentation manager has issued but have yet to be processed by the system. All presents issued are processed in queue order, even if their target times are not increasing. That is to say, before present *n* can be process, present *n-1* must also be processed; so if subsequent presents have an earlier target time than a particular present, then they'll immediately override that particular present. |
+| **(Present) target time** | The time at which a particular present should be shown on screen. The system will attempt to show the present as close to this time as it can. |
+| **Presentation statistics** | information returned to your application that describe how a particular present was processed. Statistics are queued in the presentation manager to be read back by your application. |
+| **Presentation surface** | a content placeholder that can be bound to a visual in a visual tree. A presentation surface can have a single displayed buffer at a time. Presentation manager presents will update the buffers for one or more presentation surfaces. |
+| **Presentation** | The concept of showing the results of drawing operations on screen. |
+| **Presentation buffer** | A Direct3D texture that has been associated with a presentation manager, and can therefore be presented by that presentation manager to screen. |
+| **Visual tree** | A tree of visuals that describes an application's layout. The composition swapchain API issues presents to one or more visuals in a visual tree. |
+| **VSync interrupt** | When a GPU displays a present, it issues a VSync interrupt to awaken the CPU to notify it that that present took place. This allows the CPU to update state such as the buffer available events, the present retiring fence, and present statistics. If the GPU supports hardware flip queue, your application can explicitly control which presents should force a VSync interrupt and immediately update state, and which presents should not, allowing for improved power efficiency at the expense of delayed feedback. |
+
+## Registry Values
+
+See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from [`dwmcore.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwmcore) ([`CCommonRegistryData::InitializeDWMKeysFromRegistry`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)), [`win32kfull.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/win32kfull), [`dwm.exe`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwm), [`dwminit.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwminit), [`uDWM.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/uDWM)).
+
+Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm";
-    "BlackOutAllReadback" = 0;
-    "ConfigureInput" = 1;
-    "CpuClipAASinkEnableIntermediates" = 1;
-    "CpuClipAASinkEnableOcclusion" = 1;
-    "CpuClipAASinkEnableRender" = 1;
-    "CpuClipAreaThreshold" = 20000;
-    "CpuClipWarpPartitionThreshold" = 1024;
-    "DisableDrawListCaching" = 0; // REG_DWORD
-    "DisableProjectedShadows" = 0;
-    "DisplayChangeTimeoutMs" = 1000;
-    "EnableBackdropBlurCaching" = 1; // REG_DWORD
-    "EnableCommonSuperSets" = 1;
-    "EnableCpuClipping" = 1;
-    "EnableDDisplayScanoutCaching" = 1;
-    "EnableEffectCaching" = 1; // REG_DWORD
-    "EnableFrontBufferRenderChecks" = 1;
-    "EnableMegaRects" = 1;
-    "EnablePrimitiveReordering" = 1;
-    "ForceFullDirtyRendering" = 0;
-    "GammaBlendPencil" = 1;
-    "GammaBlendWithFP16" = 1;
-    "InkGPUAccelOverrideVendorWhitelist" = 0;
-    "LayerClippingMode" = 2;
-    "LogExpressionPerfStats" = 0; // REG_DWORD
-    "MajorityScreenTest_MinArea" = 80;
-    "MajorityScreenTest_MinLength" = 80;
-    "MaxD3DFeatureLevel" = 0;
-    "MegaRectSearchCount" = 100;
-    "MegaRectSize" = 100000;
-    "MousewheelAnimationDurationMs" = 250;
+    // dwmcore
+    "BlackOutAllReadback" = 0; // REG_DWORD (bool)
+    "ConfigureInput" = 1; // REG_DWORD (bool)
+    "CpuClipAASinkEnableDebugColors" = 0; // REG_DWORD (bool)
+    "CpuClipAASinkEnableIntermediates" = 1; // REG_DWORD (bool)
+    "CpuClipAASinkEnableOcclusion" = 1; // REG_DWORD (bool)
+    "CpuClipAASinkEnableRender" = 1; // REG_DWORD (bool)
+    "CpuClipAASinkForceEnable" = 0; // REG_DWORD (bool)
+    "CpuClipAreaThreshold" = 20000; // REG_DWORD
+    "CpuClipWarpPartitionThreshold" = 1024; // REG_DWORD
+    "DisableDrawListCaching" = 0; // REG_DWORD (bool)
+    "DisableProjectedShadows" = 0; // REG_DWORD (bool)
+    "EnableBackdropBlurCaching" = 1; // REG_DWORD (bool)
+    "EnableCommonSuperSets" = 1; // REG_DWORD (bool)
+    "EnableCpuClipping" = 1; // REG_DWORD (bool)
+    "EnableDDisplayScanoutCaching" = 1; // REG_DWORD (bool)
+    "EnableEffectCaching" = 1; // REG_DWORD (bool)
+    "EnableFrontBufferRenderChecks" = 1; // REG_DWORD (bool)
+    "EnableMegaRects" = 1; // REG_DWORD (bool)
+    "EnablePrimitiveReordering" = 1; // REG_DWORD (bool)
+    "ForceDesktopTreeFullDirty" = 0; // REG_DWORD (bool)
+    "GammaBlendPencil" = 1; // REG_DWORD (bool)
+    "GammaBlendWithFP16" = 1; // REG_DWORD (bool)
+    "InkGPUAccelOverrideVendorWhitelist" = 0; // REG_DWORD (bool)
+    "LayerClippingMode" = 2; // REG_DWORD
+    "LogExpressionPerfStats" = 0; // REG_DWORD (bool)
+    "MajorityScreenTest_MaxCoverage" = 10; // REG_DWORD
+    "MajorityScreenTest_MinArea" = 80; // REG_DWORD
+    "MajorityScreenTest_MinLength" = 80; // REG_DWORD
+    "MaxD3DFeatureLevel" = 0; // REG_DWORD
+    "MegaRectSearchCount" = 100; // REG_DWORD
+    "MegaRectSize" = 100000; // REG_DWORD
+    "MousewheelAnimationDurationMs" = 250; // REG_DWORD
     "MousewheelScrollingMode" = 0; // REG_DWORD
-    "OptimizeForDirtyExpressions" = 1; // REG_DWORD
-    "OverlayMinFPS" = 15; // If this value is present and set to zero, the Desktop Window Manager disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
-    "RenderThreadTimeoutMilliseconds" = 5000;
-    "SuperWetExtensionTimeMicroseconds" = 1000;
-    "TelemetryFramesReportPeriodMilliseconds" = 300000;
-    "TelemetryFramesSequenceIdleIntervalMilliseconds" = 1000;
-    "TelemetryFramesSequenceMaximumPeriodMilliseconds" = 1000;
-    "UniformSpaceDpiMode" = 1;
-    "UseFastestMonitorAsPrimary" = 0;
-    "vBlankWaitTimeoutMonitorOffMs" = 250;
-    "WarpEnableDebugColor" = 0;
+    "OptimizeForDirtyExpressions" = 1; // REG_DWORD (bool)
+    "OverlayMinFPS" = 15; // If this value is present and set to zero, the DWM disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
+                          // Practically means that currently only swapchains with a min FPS of 15 would get their (MPO) overlay plane, but since overlay planes aren't unlimited ("MaxPlanes" which is sometimes only 2 and the primary DWM plane is included in there) that shouldn't be lowered
+                          // You can see your MaxPlanes via dxdiag (click "Save All Information" then search for MPO MaxPlanes)
+    "RenderThreadTimeoutMilliseconds" = 5000; // REG_DWORD
+    "SuperWetEnabled" = 1; // REG_DWORD (bool)
+    "SuperWetExtensionTimeMicroseconds" = 1000; // REG_DWORD
+    "TelemetryFramesReportPeriodMilliseconds" = 300000; // REG_DWORD
+    "TelemetryFramesSequenceIdleIntervalMilliseconds" = 1000; // REG_DWORD
+    "TelemetryFramesSequenceMaximumPeriodMilliseconds" = 1000; // REG_DWORD
+    "UniformSpaceDpiMode" = 1; // REG_DWORD (bool)
+    "UseHWDrawListEntriesOnWARP" = 0; // REG_DWORD (bool)
 
-    "BackdropBlurCachingThrottleMs" = 25; // 25ms if missing, clamped to <=1000ms when present?
-    "CompositorClockPolicy" = 1; // range 0-1
-    "CpuClipFlatteningTolerance" = 0; // scaled /1000
-    "CustomRefreshRateMode" = 0; // range 0-2
+    // dwmcore CCommonRegistryData::InitializeDWMKeysFromRegistry
+    "BackdropBlurCachingThrottleMs" = 25; // REG_DWORD (ms), >1000 = 1000
+    "CpuClipFlatteningTolerance" = 0; // REG_DWORD, stored as float(value / 1000)
+    "CustomRefreshRateMode" = 0; // REG_DWORD, range 0-2, >2 = default
     "DisableAdvancedDirectFlip" = 0; // REG_DWORD
-    "DisableIndependentFlip" = 0;
-    "DisableProjectedShadowsRendering" = 0;
-    "FlattenVirtualSurfaceEffectInput" = 0;
-    "ForceEffectMode" = 0; // range 0-2, REG_DWORD
-    "FrameCounterPosition" = 0;
-    "InteractionOutputPredictionDisabled" = 0;
-    "OverlayTestMode" = 0; // 5 = MPO disabled, REG_DWORD
-    "ParallelModePolicy" = 1; // >=3 coerced to 1
-    "ParallelModeRateThreshold" = 119; // divisor for g_qpcFrequency, missing key defaults to 119 Hz (units: Hz)? 0 disables
-    "ResampleInLinearSpace" = 0;
-    "ResampleModeOverride" = 0;
-    "SDRBoostPercentOverride" = 0; // scaled /100
-    "ShowDirtyRegions" = 0;
+    "DisableIndependentFlip" = 0; // REG_DWORD (bool)
+    "DisableProjectedShadowsRendering" = 0; // REG_DWORD
+    "EnableRenderPathTestMode" = ?; // REG_DWORD
+    "FlattenVirtualSurfaceEffectInput" = 0; // REG_DWORD (bool)
+    "ForceEffectMode" = 0; // REG_DWORD, range 0-2
+    "FrameCounterPosition" = 0; // REG_DWORD (bool), nonzero sets vertical debug frame counter
+    "InteractionOutputPredictionDisabled" = 0; // REG_DWORD (bool)
+    "OverlayTestMode" = 0; // REG_DWORD, 4 = forced MPO support, 5 = overlay/MPO disabled
+    "ParallelModePolicy" = 1; // REG_DWORD; range 0-2, >=3 = 1
+    "ResampleInLinearSpace" = 0; // REG_DWORD bool, nonzero forces pixel format 91
+    "ResampleModeOverride" = 0; // REG_DWORD, 0 = requested mode, 1 = Lanczos?, 2 = XBR?
+    "SDRBoostPercentOverride" = 0; // REG_DWORD, stored as float(value / 100)
+    "ShaderLinkingGPUBlacklist" = ?; // REG_SZ
 
-    "AnimationsShiftKey" = 0;
-    "DisableLockingMemory" = 0;
-    "ModeChangeCurtainUseDebugColor" = 0;
-    "UseDPIScaling" = 1;
+    // dwm CSettingsManager preferences
+    "AnimationsShiftKey" = 0; // REG_DWORD, nonzero sets bit (preference bit 0x2)
+    "DisableLockingMemory" = 0; // REG_DWORD, nonzero sets bit (preference bit 0x40)
+    "ModeChangeCurtainUseDebugColor" = 0; // REG_DWORD, nonzero sets bit (preference bit 0x80)
+    "UseDPIScaling" = 1; // REG_DWORD, nonzero (default) sets bit (preference bit 0x1)
 
-    "ChildWindowDpiIsolation" = 1; // range 0-1
-    "DisableDeviceBitmaps" = 0; // range 0-1
-    "EnableResizeOptimization" = 0; // REG_DWORD (no clamp?)
-    "ResizeTimeoutGdi" = 0; // range 0-4294967295 (ms)
-    "ResizeTimeoutModern" = 0; // range 0-4294967295 (ms)
+    // animation/colorization policy related
+    "DefaultColorizationColorState" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x4)
+    "DisallowAnimations" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x1) which disables DWM window animations (also causes DWM reject live preview / Aero Peek)
+                              // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-SetWindowAnimation@CDesktopManager@@SAX_N@Z.c
+                              // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-IsLivePreviewAllowed@CDesktopManager@@SA_NXZ.c
+    "ForceDisableModeChangeAnimation" = 0; // REG_DWORD (bool), nonzero sets "force disable" flag (not related to window animations like the one above)
+    "DisallowColorizationColorChanges" = 0; // REG_DWORD nonzero sets bit (policy bit 0x2)
 
-    "DefaultColorizationColorState" = 0;
-    "DisallowAnimations" = 0;
-    "DisallowColorizationColorChanges" = 0;
+    // uDWM colorization
+    "AccentColor" = ?; // REG_DWORD, only read when ColorPrevalence is nonzero
+    "AccentColorInactive" = ?; // REG_DWORD, only read when ColorPrevalence is nonzero
+    "ColorPrevalence" = ?; // REG_DWORD, nonzero enables reading AccentColor/AccentColorInactive
+    "ColorizationAfterglow" = 0; // REG_DWORD
+    "ColorizationAfterglowBalance" = 0; // REG_DWORD
+    "ColorizationBlurBalance" = 73; // REG_DWORD
+    "ColorizationColor" = 0xFF409EFE; // REG_DWORD
+    "ColorizationColorBalance" = 27; // REG_DWORD
+    "ColorizationGlassAttribute" = 0; // REG_DWORD
+    "DefaultColorizationColorAlpha" = 0; // REG_DWORD
+    "DefaultColorizationColorBlue" = 0; // REG_DWORD
+    "DefaultColorizationColorGreen" = 0; // REG_DWORD
+    "DefaultColorizationColorRed" = 0; // REG_DWORD
+    "EnableWindowColorization" = 1; // REG_DWORD
 
-    "DisableSessionTermination" = 0; // range 0-1
-    "ForceBasicDisplayAdapterOnDWMRestart" = 0; // range 0-1
-    "OneCoreNoBootDWM" = 0; // REG_DWORD, nonzero = enabled
-    "OneCoreNoDWMRawGameController" = ? // didn't look into it yet, but it's probably related to OneCoreNoBootDWM
+    // uDWM compositor
+    "DisableHologramCompositor" = 0; // REG_DWORD, nonzero skips holographic watcher config
 
-    "DisableHologramCompositor" = 0;
+    // win32kfull
+    "ChildWindowDpiIsolation" = 1; // REG_DWORD (bool)
+    "DisableDeviceBitmaps" = 0; // REG_DWORD (bool), nonzero makes bDwmDeviceBitmapsEnabled return false
+    "DisableDeviceBitmapsForMultiAdapter" = 0; // REG_DWORD (bool), nonzero makes bDwmDeviceBitmapsEnabledForMultiAdapter return false
+    "EnableDesktopOverlays" = ?; // seems to get queried but bDwmDesktopOverlaysEnabled returns 1 ("forced"?)
+    "EnableResizeOptimization" = 0; // REG_DWORD bitfield, present = override
+                                  // 0x1 = resize optimization for redirected windows?, 0x2 = resize optimization with DComposition synchronization?
+                                  // 0x4 = use ResizeTimeoutGdi for 0x1, 0x8 = use ResizeTimeoutModern for 0x2
+                                  // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-bDwmResizeOptimizationOverride@@YAHPEAK00@Z.c
+                                  // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/GreWindowResizeStarted.c
+                                  // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/GreEnableWindowResizeOptimization.c
+    "ResizeTimeoutGdi" = 0; // REG_DWORD, only used if 0x4 in EnableResizeOptimization set (GDI = Graphics Device Interface, a library of functions for graphics output devices and includes functions for line, text, and figure drawing and for graphics manipulation?)
+    "ResizeTimeoutModern" = 0; // REG_DWORD, only used if 0x8 in EnableResizeOptimization set
 
-    // Haven't looked into them yet
-    "ForceUDwmSoftwareDevice" = ?;
-    "ForceDisableModeChangeAnimation" = ?; // REG_DWORD
-
-    // procmon boot trace
-    "AccentColorInactive" = ?;
+    // procmon
     "AnimationAttributionEnabled" = 1; // REG_DWORD
     "AnimationAttributionHashingEnabled" = 1; // REG_DWORD
-    "ColorPrevalence" = ?;
-    "CpuClipAASinkEnableDebugColors" = ?;
-    "CpuClipAASinkForceEnable" = ?;
+    "CompositorClockPolicy" = 1; // ?
     "DebugFailFast" = ?;
-    "DisableDeviceBitmapsForMultiAdapter" = ?;
-    "DwmInitSessionActivityId_00000001" = ?; // a ID, REG_SZ
-    "EnableDesktopOverlays" = ?;
+    "DisableSessionTermination" = 0; // ?
+    "DisplayChangeTimeoutMs" = 1000; // ?
+    "DwmInitSessionActivityId_00000001" = ?; // REG_SZ
     "EnableMPCPerfCounter" = ?;
-    "EnableRenderPathTestMode" = ?;
-    "EnableWindowColorization" = ?;
-    "ForceDesktopTreeFullDirty" = ?;
-    "MajorityScreenTest_MaxCoverage" = ?;
+    "ForceBasicDisplayAdapterOnDWMRestart" = 0; // ?
+    "ForceFullDirtyRendering" = 0; // ?
+    "ForceUDwmSoftwareDevice" = ?; // ?
     "MarshalAllDebugInfo" = ?;
     "MPCInputRouterWaitForDebugger" = ?;
-    "ShaderLinkingGPUBlacklist" = ?; // REG_SZ
-    "SuperWetEnabled" = ?;
-    "UseHWDrawListEntriesOnWARP" = ?;
-
+    "OneCoreNoBootDWM" = 0; // ?
+    "OneCoreNoDWMRawGameController" = ?; // ?
+    "ParallelModeRateThreshold" = 119; // ?
+    "ShowDirtyRegions" = 0; // ?
+    "UseFastestMonitorAsPrimary" = 0; // ?
+    "vBlankWaitTimeoutMonitorOffMs" = 250; // ?
+    "WarpEnableDebugColor" = 0; // ?
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\Scene";
-    "EnableBloom" = 0; // REG_DWORD
-    "EnableDrawToBackbuffer" = 1; // REG_DWORD
-    "EnableImageProcessing" = 1; // REG_DWORD
-    "ImageProcessingResizeGrowth" = 200;
-    "MsaaQualityMode" = 2;
-    "SceneVisualCutoffCountOfConsecutiveIncidentsAllowed" = 5;
-    "SceneVisualCutoffThresholdInMS" = 1000;
+    // dwmcore
+    "EnableBloom" = 0; // REG_DWORD (bool)
+    "EnableDrawToBackbuffer" = 1; // REG_DWORD (bool)
+    "EnableImageProcessing" = 1; // REG_DWORD (bool)
+    "EnableShadow" = 0; // REG_DWORD (bool)
+    "ImageProcessing8bit" = 0; // REG_DWORD (bool)
+    "ImageProcessingMinHeight" = 200; // REG_DWORD
+    "ImageProcessingMinWidth" = 200; // REG_DWORD
+    "ImageProcessingResizeGrowth" = 200; // REG_DWORD
+    "MsaaQualityMode" = 2; // REG_DWORD
+    "SceneVisualCutoffCountOfConsecutiveIncidentsAllowed" = 5; // REG_DWORD
+    "SceneVisualCutoffThresholdInMS" = 1000; // REG_DWORD
 
-    "ForceNonPrimaryDisplayAdapter" = 0; // REG_DWORD
-    "ImageProcessingResizeThreshold" = 0; // scaled /100
+    // dwmcore CCommonRegistryData::InitializeDWMKeysFromRegistry
+    "ForceNonPrimaryDisplayAdapter" = 0; // REG_DWORD (bool)
+    "ImageProcessingResizeThreshold" = 0; // REG_DWORD, stored as float(value / 100)
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\GpuAccelInkTiming";
-    "ExtensionTimeMicroseconds" = 1000;
-    "PeriodicFenceMinDifferenceMicroseconds" = 500;
-    "RefreshRatePercentage" = 10;
+    // dwmcore SuperWetTiming
+    "ExtensionTimeMicroseconds" = 1000; // REG_DWORD
+    "PeriodicFenceMinDifferenceMicroseconds" = 500; // REG_DWORD
+    "RefreshRatePercentage" = 10; // REG_DWORD
+
+"HKLM\\SOFTWARE\\Microsoft\\Avalon.Graphics";
+    // dwmcore
+    "UseD3DDebugLayer" = 0; // REG_DWORD
+    "Force10Level9" = 0; // REG_DWORD
+    "Force10OnWDDM1_0" = 0; // REG_DWORD
 ```
+
+### [OverlayTestMode](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)
+
+See [Multiplane Overlay (MPO)](https://www.noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for what MPO is.
+
+| Data | Meaning |
+| --- | --- |
+| missing | No override of `m_dwOverlayTestMode`, I guess that's the same as `0` |
+| `0` | Allows MPO and no "*OverlayColor*" ([`CDrawingContext::GetSwapChainOverlayColor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-GetSwapChainOverlayColor@CDrawingContext@@AEBA-AU_D3DCOLORVALUE@@PEAVISwapChainRealization@@PEB.c) returns zero if value is `0`), I've no idea what that color is used for at the moment |
+| `1-3` | Allows MPO + "*OverlayColor*" is enabled as the value is nonzero |
+| `4` | Kind of "Force success" for MPO support ([`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c) bypasses support query), this doesn't mean that surfaces get a overlay plane |
+| `5` | Disable MPO ([`COverlayContext::OverlaysEnabled`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-OverlaysEnabled@COverlayContext@@AEBA_NXZ.c) returns false & [`COverlayContext::IsCompatibleOutputScaling`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-IsCompatibleOutputScaling@COverlayContext@@AEAA_NAEBVCMILMatrix@@@Z.c) returns 0 for one "*CompatibleOutputScaling*") |
+| `>=6` | Would go into `>=4` part in [`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c), but only exactly `4` has the this force success case? `>= 6` data is probably just invalid. |
+
+### MsaaQualityMode
+
+[`CSceneResourceManager::EnsureSceneCompositor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-EnsureSceneCompositor@CSceneResourceManager@@AEAAJXZ.c) passes it into `DwmScene.dll` / `CreateDwmSceneRenderer` which is the only relation I found, and [`ID3D11Device::CheckMultisampleQualityLevels`](https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-id3d11device-checkmultisamplequalitylevels) seems to work the same as the part in the pseudocode.
+
+| Data | AA quality | Sample count |
+| --- | --- | --- |
+| `0` | `1` | no MSAA (single sample) |
+| `1` | `2` | up to `2x` MSAA |
+| `2` | `3` | up to `4x` MSAA (default) |
+| `3` | `4` | up to `8x` MSAA |
+| `>=4` | `1` | no MSAA (fallback, same as 0) |
 
 ## RegistryMachine_* Keys
 

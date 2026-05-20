@@ -3,7 +3,7 @@ title: 'Timer Coalescing'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 6
+  order: 7
 ---
 
 "CoalesecingTimerinterval is a computer system energy-saving technique that reduces CPU power consumption by reducing the precision of software timers to allow the synchronization of process wake-ups, minimizing the number of times the CPU is forced to perform the relatively power-costly operation of entering and exiting idle states"

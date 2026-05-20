@@ -8,11 +8,11 @@ sidebar:
 
 Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation. No values are applied that apply to other options in this section.
 
-## Registry Values Details
+## Registry Values
 
 See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
@@ -20,7 +20,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "ActiveIdleThreshold" = 5000000; // PopFxActiveIdleThreshold (0x004C4B40) 
     "ActiveIdleTimeout" = 1000; // PopFxActiveIdleTimeout (0x000003E8) 
     "AllowAudioToEnableExecutionRequiredPowerRequests" = 1; // PopPowerRequestActiveAudioEnablesExecutionRequired 
-    "AllowHibernate" = 4294967295; // PopAllowHibernateReg (4294967295) - REG_DWORD
+    "AllowHibernate" = 4294967295; // PopAllowHibernateReg, REG_DWORD
     "AllowSystemRequiredPowerRequests" = 1; // PopPowerRequestConvertSystemToExecution 
     "AlwaysComputeQosHints" = 0; // PpmPerfAlwaysComputeQosEnabled 
     "BootHeteroPolicyOverride" = 0; // PpmPerfBootHeteroPolicyOverrideEnabled 
@@ -34,14 +34,14 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "DirectedDripsAction" = 3; // PopDirectedDripsAction 
     "DirectedDripsDebounceInterval" = 120; // PopDirectedDripsDebounceInterval (0x78) 
     "DirectedDripsDfxEnforcementPolicy" = 1; // PopDirectedDripsDfxEnforcementPolicy 
-    "DirectedDripsOverride" = 4294967295; // PopDirectedDripsOverride (4294967295) 
+    "DirectedDripsOverride" = 4294967295; // PopDirectedDripsOverride (4294967295)
     "DirectedDripsSurprisePowerOnTimeout" = 5; // PopDirectedDripsSurprisePowerOnTimeoutSeconds 
     "DirectedDripsTimeout" = 300; // PopDirectedDripsTimeout (0x12C) 
     "DirectedDripsWaitWakeTimeout" = 5; // PopDirectedDripsWaitWakeTimeoutSeconds 
     "DirectedFxDefaultTimeout" = 120; // PopFxDirectedFxDefaultTimeout (0x00000078) 
     "DisableDisplayBurstOnPowerSourceChange" = 0; // PopDisableDisplayBurstOnPowerSourceChange 
     "DisableIdleStatesAtBoot" = 0; // PpmIdleDisableStatesAtBoot 
-    "DisableInboxPepGeneratedConstraints" = 4294967295; // PopDisableInboxPepGeneratedConstraintsOverride (4294967295) 
+    "DisableInboxPepGeneratedConstraints" = 4294967295; // PopDisableInboxPepGeneratedConstraintsOverride (4294967295)
     "DisableVsyncLatencyUpdate" = 0; // PpmDisableVsyncLatencyUpdate 
     "DozeDeferralChecksToIgnore" = 0; // PopDozeDeferralChecksToIgnore 
     "DozeDeferralMaxSeconds" = 259200; // PopDozeDeferralMaxSeconds (0x0003F480) 
@@ -51,9 +51,9 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "DripsWatchdogAction" = 198; // PopDripsWatchdogAction (0xC6) 
     "DripsWatchdogDebounceInterval" = 120; // PopDripsWatchdogDebounceInterval (0x78) 
     "DripsWatchdogTimeout" = 300; // PopDripsWatchdogTimeout (0x12C) 
-    "EnableInputSuppression" = 4294967295; // PopEnableInputSuppressionOverride (4294967295) 
-    "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile 
-    "EnablePowerButtonSuppression" = 4294967295; // PopEnablePowerButtonSuppressionOverride (4294967295) 
+    "EnableInputSuppression" = 4294967295; // PopEnableInputSuppressionOverride (4294967295)
+    "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile, REG_DWORD
+    "EnablePowerButtonSuppression" = 4294967295; // PopEnablePowerButtonSuppressionOverride (4294967295)
     "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled 
     "EnforceAusterityMode" = 0; // PopEnforceAusterityMode 
     "EnforceConsoleLockScreenTimeout" = 0; // PopEnforceConsoleLockScreenTimeout 
@@ -61,30 +61,32 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "EventProcessorEnabled" = 1; // PopEventProcessorEnabled 
     "ExitLatencyCheckEnabled" = 0; // PpmExitLatencyCheckEnabled 
     "ExperimentalClusterIdleMitigation" = 0; // PpmIdleClusterIdleMitigation 
-    "ForceMinimalHiberFile" = 0; // PopForceMinimalHiberFile 
+    "ForceMinimalHiberFile" = 0; // PopForceMinimalHiberFile, REG_DWORD
     "FxAccountingTelemetryDisabled" = 0; // PopDiagFxAccountingTelemetryDisabled 
     "FxRuntimeLogNumberEntries" = 64; // PopFxRuntimeLogNumberEntries (0x40) - Changing it to 0 will end up with a BSoD
     "HeteroFavoredCoreRotationTimeoutMs" = 30000; // PpmHeteroFavoredCoreRotationTimeoutMs (0x00007530) 
     "HeteroHgsEePerfHintsIndependentEnabled" = 0; // PpmHeteroHgsEePerfHintsIndependentEnabled 
     "HeteroHgsPlusDisabled" = 0; // PpmHeteroHgsThreadDisabled 
-    "HeteroMultiClassParkingEnabled" = 4294967295; // PpmHeteroMultiClassParkingRegValue (4294967295) 
-    "HeteroMultiCoreClassesEnabled" = 4294967295; // PpmHeteroMultiCoreClassesRegValue (4294967295) 
+    "HeteroMultiClassParkingEnabled" = 4294967295; // PpmHeteroMultiClassParkingRegValue (4294967295)
+    "HeteroMultiCoreClassesEnabled" = 4294967295; // PpmHeteroMultiCoreClassesRegValue (4294967295)
     "HeteroWpsContainmentEnumOverride" = 0; // PpmHeteroWpsContainmentEnumOverride 
     "HeteroWpsWorkloadProminenceCutoff" = 35; // PpmHeteroWpsWorkloadProminenceCutoff (0x23) 
-    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default - REG_DWORD
-    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (4294967295)
-    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (4294967295)
+    "HiberbootEnabled" = 1; // PopHiberbootEnabledReg 
+    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent, REG_DWORD, 0-39 keeps the type logic, 40-100 uses the percent directly and PopSetHiberFileSize forces a full file
+    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (4294967295), DWORD 1 = Reduced, DWORD 2 = Full, only used while HiberFileSizePercent < 40
+    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (4294967295), fallback when HiberFileType is unset
     "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
     "HibernateChecksummingEnabled" = 1; // PopHiberChecksummingEnabledReg 
-    "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg - REG_DWORD
+    "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg, REG_DWORD
+    "HibernateEnabled" = 1; // that's the value 'powercfg /hibernate off' would set
     "HighPerfDurationBoot" = 90000; // PpmHighPerfDuration (0x00015F90) 
     "HighPerfDurationCSExit" = ?; // unk_140FC337C
     "HighPerfDurationSxExit" = ?; // unk_140FC3380
     "IdleDurationExpirationTimeout" = 4; // PpmIdleDurationExpirationTimeoutMs 
-    "IdleProcessorsRequireQosManagement" = 4294967295; // PpmPerfQosManageIdleProcessors (4294967295) 
+    "IdleProcessorsRequireQosManagement" = 4294967295; // PpmPerfQosManageIdleProcessors (4294967295)
     "IdleStateTimeout" = 500; // PopPepIdleStateTimeout (0x000001F4) 
     "IgnoreCsComplianceCheck" = 0; // PopIgnoreCsComplianceCheck 
-    "IgnoreLidStateForInputSuppression" = 4294967295; // PopLidStateForInputSuppressionOverride (4294967295) 
+    "IgnoreLidStateForInputSuppression" = 4294967295; // PopLidStateForInputSuppressionOverride (4294967295)
     "IpiLastClockOwnerDisable" = 0; // PpmIpiLastClockOwnerDisable 
     "LatencyToleranceDefault" = 100000; // PpmLatencyToleranceLimit (0x000186A0) 
     "LatencyToleranceFSVP" = 20000; // dword_140FC3428 dd 4E20
@@ -101,15 +103,15 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "MultiparkGranularity" = 8; // PpmParkMultiparkGranularity 
     "PdcIdlePhaseDefaultWatchdogTimeoutSeconds" = 30; // PopPdcIdlePhaseDefaultWatchdogTimeoutSeconds (0x0000001E) 
     "PdcOneWayEntry" = 0; // PopPowerAggregatorOneWayEntry 
-    "PerfArtificialDomain" = 4294967295; // PpmPerfArtificialDomainSetting (4294967295) 
+    "PerfArtificialDomain" = 4294967295; // PpmPerfArtificialDomainSetting (4294967295)
     "PerfBoostAtGuaranteed" = 0; // PpmPerfBoostAtGuaranteed 
     "PerfCalculateActualUtilization" = 1; // PpmPerfCalculateActualUtilization 
     "PerfCheckTimerImplementation" = 0; // PpmCheckTimerImplementation 
     "PerfIdealAggressiveIncreasePolicyThreshold" = 90; // PpmPerfIdealAggressiveIncreaseThreshold (0x5A) 
     "PerfQueryOnDevicePowerChanges" = 0; // PopFxPerfQueryOnDevicePowerChanges 
     "PerfSingleStepSize" = 5; // PpmPerfSingleStepSize (0x05) 
-    "PlatformAoAcOverride" = 4294967295; // PopPlatformAoAcOverride (4294967295) 
-    "PlatformRoleOverride" = 4294967295; // PopPlatformRoleOverride (4294967295) 
+    "PlatformAoAcOverride" = 4294967295; // PopPlatformAoAcOverride (4294967295)
+    "PlatformRoleOverride" = 4294967295; // PopPlatformRoleOverride (4294967295)
     "PoFxSystemIrpWaitForReportDevicePowered" = 0; // PopPoFxSystemIrpWaitForReportDevicePoweredReg 
     "PowerActionResumeWatchdogTimeoutDefault" = 300; // PopPowerActionResumingWatchdogTimeoutDefault (0x0000012C) 
     "PowerActionTransitioningWatchdogTimeoutDefault" = 600; // PopPowerActionTransitioningWatchdogTimeoutDefault (0x00000258) 
@@ -139,8 +141,8 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "EnergySaverState" = 2; // 1 = override state (more power savings) if != 1 no override? (WNF_PO_ENERGY_SAVER_OVERRIDE/WNF_SEB_ENERGY_SAVER_STATE_V2), this value is controlled by System > Power: Always use energy saver (1=on, 2=off)
 
     // InitializePowerWatchdogTimeoutDefaults
-    "PowerWatchdogDrvSetMonitorTimeoutMsec" = 10000; // v10[13]
-    "PowerWatchdogDwmSyncFlushTimeoutMsec" = 30000; // v10[10]
+    "PowerWatchdogDrvSetMonitorTimeoutMsec" = 10000;
+    "PowerWatchdogDwmSyncFlushTimeoutMsec" = 30000;
     "PowerWatchdogPoCalloutTimeoutMsec" = 10000;
     "PowerWatchdogPowerOnGdiTimeoutMsec" = 30000;
     "PowerWatchdogRequestQueueTimeoutMsec" = 30000;
@@ -153,24 +155,25 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "LidNotifyReliable" = ?;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled";
-    "GuardedHost" = ?; // unk_140FC5234
-    "Policy" = 0; // PopHiberForceDisabledReg 
+    "GuardedHost" = 0; // unk_140FC5234, if nonzero, PopHibernateEvaluation treats hibernation as force disabled
+    "Policy" = 0; // PopHiberForceDisabledReg, ^
 
+// Percent<MemoryBucket><Type>, PopCalculateHiberFileSize uses the first matching RAM bucket then uses Full or Reduced percentage (when HiberFileSizePercent < 40)
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
-    "Percent16GBFull" = ?; // unk_140FC36D0 - 28Hex/40Dec?
-    "Percent16GBReduced" = ?; // unk_140FC36CC - 14Hex/20Dec?
-    "Percent1GBFull" = ?; // unk_140FC3670 - 28Hex/40Dec?
-    "Percent1GBReduced" = ?; // unk_140FC366C - 14Hex/20Dec?
-    "Percent2GBFull" = ?; // unk_140FC3688 - 28Hex/40Dec?
-    "Percent2GBReduced" = ?; // unk_140FC3684 - 14Hex/20Dec?
-    "Percent32GBFull" = ?; // unk_140FC36E8 - 28Hex/40Dec?
-    "Percent32GBReduced" = ?; // unk_140FC36E4 - 14Hex/20Dec?
-    "Percent4GBFull" = ?; // unk_140FC36A0 - 28Hex/40Dec?
-    "Percent4GBReduced" = ?; // unk_140FC369C - 14Hex/20Dec?
-    "Percent8GBFull" = ?; // unk_140FC36B8 - 28Hex/40Dec?
-    "Percent8GBReduced" = ?; // unk_140FC36B4 - 14Hex/20Dec?
-    "PercentUnlimitedFull" = ?; // unk_140FC3700 - 28Hex/40Dec?
-    "PercentUnlimitedReduced" = ?; // unk_140FC36FC - 14Hex/20Dec?
+    "Percent16GBFull" = 40; // unk_140FC36D0
+    "Percent16GBReduced" = 20; // unk_140FC36CC
+    "Percent1GBFull" = 40; // unk_140FC3670
+    "Percent1GBReduced" = 20; // unk_140FC366C
+    "Percent2GBFull" = 40; // unk_140FC3688
+    "Percent2GBReduced" = 20; // unk_140FC3684
+    "Percent32GBFull" = 40; // unk_140FC36E8
+    "Percent32GBReduced" = 20; // unk_140FC36E4
+    "Percent4GBFull" = 40; // unk_140FC36A0
+    "Percent4GBReduced" = 20; // unk_140FC369C
+    "Percent8GBFull" = 40; // unk_140FC36B8
+    "Percent8GBReduced" = 20; // unk_140FC36B4
+    "PercentUnlimitedFull" = 40; // unk_140FC3700
+    "PercentUnlimitedReduced" = 20; // unk_140FC36FC
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ModernSleep";
     "EnabledActions" = 0; // PopAggressiveStandbyActionsRegValue 
@@ -225,3 +228,16 @@ Note that this is based on [binary build version 22631 (23H2)](https://github.co
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
     "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
 ```
+
+## Suboptions
+
+`Disable D3 in Modern Standby` isn't in the power key, but since the first suboption is already related to ModernStandby, and creating a new option for that would be too much, I'll add it here for now.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage";
+    "StorageD3InModernStandby" = 4294967295; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support
+```
+
+> "*When the system is not in use, Windows may opportunistically turn off power to some set of devices to conserve energy. In Modern Standby, the system remains in S0. Even while in S0, all peripheral devices may eventually be powered down due to idle timeouts. This state is defined as "S0 Low Power Idle". Once all devices are in a low-power state, even more of the system infrastructure (e.g. busses, timers, …) may be powered down. The general rule of thumb is to place the device in the deepest possible D-state when it is idle, even when the system state is S0. Depending on implementation details of the processor complex and platform design, peripheral devices may be required to go to an F-state, D3 Hot, or D3 Cold (power is cut). To mitigate the need for a function driver to manage these implementation details, drivers should go to the deepest appropriate device state in order to maximize battery life.*"
+>
+> — Microsoft, [Power Management for Storage Hardware Devices, D3 Support](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/power-management-for-storage-hardware-devices-intro#d3-support)

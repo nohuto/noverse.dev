@@ -8,17 +8,85 @@ sidebar:
 
 Prevents sending info about your computer to microsoft, disables the diagnostic log collection, bluetooth ads (`DataCollection.admx`), the inventory collector. It disables the ads ID ("Windows creates a unique advertising ID per user, allowing apps and ad networks to deliver targeted ads. When enabled, it works like a cookie, linking personal data to the ID for personalized ads. This setting only affects Windows apps using the advertising ID, not web-based ads or third-party methods.") which should be disabled by default, if you toggled all options off in the OS installation phase. See policy explanations below for more details.
 
-- [decompiled-pseudocode/tree/main/11-23H2/DiagnosticDataSettings](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/DiagnosticDataSettings) (the dll seems to exist since W10 21H+)
+It's also recommended to apply the '[Microsoft (Windows, Office, MSN)](https://github.com/hagezi/dns-blocklists#calling-native-tracker---broadband-tracker-of-devices-services-and-operating-systems-)' blocklist via the hosts file (you can use [blocklist-mgr](https://github.com/nohuto/blocklist-mgr) for that), or if you've a private DNS server, add that list to it.
 
-The option applies all kind of telemetry related values including all values that you can find in diagtrack.dll/DiagnosticDataSettings.dll (TelGetNumericPolicy, TelIsRestrictivePolicySet, TelEvaluateActiveSettingAuthority, TelGetWerTelemetryMode).
+## DiagnosticDataSettings Values
 
-```powershell
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\DataCollection : AllowTelemetry_PolicyManager
+Based on 23H2 [`DiagnosticDataSettings`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/DiagnosticDataSettings) pseudocode (see list below). I've also looked through values within `DiagSvc.dll`/`DiagTrack.dll` but beside `CEIPEnable`/`EnableDiagnostics` they don't include anything interesting.
+
+```c
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Diagnostics\\DiagTrack";
+    "RedirectedRegistryRoot" = "Software\\Microsoft\\Windows\\CurrentVersion\\Diagnostics\\DiagTrack"; // REG_SZ
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Diagnostics\\DiagTrack\\RegionalSettings";
+    "IsProcessorMode" = 0; // REG_QWORD, only lets Windows report diagnostic data processor mode when data is exactly 1
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection";
+    "AllowTelemetry" = 1; // REG_DWORD, 2 normalized to 1, 3  = diagnostic, >3 not clamped
+    "MaxTelemetryAllowed" = ?; // REG_DWORD
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\\Users\\<subkey>";
+    "AllowTelemetry" = ?; // REG_DWORD, per user group policy value
+    "AllowTelemetry_PolicyManager" = ?; // REG_DWORD
+
+"HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection";
+    "AllowTelemetry" = ?; // REG_DWORD, data 0/1/2/3 as above, >3 not clamped
+    "LimitDumpCollection" = 0; // REG_DWORD, used when active telemetry is 2/3
+    "LimitEnhancedDiagnosticDataWindowsAnalytics" = 0; // REG_DWORD
+    "DisableTelemetryOptInChangeNotification" = 0; // REG_DWORD
+    "DisableTelemetryOptInSettingsUx" = 0; // REG_DWORD
+    "DisableDeviceDelete" = 0; // REG_DWORD
+    "DisableDiagnosticDataViewer" = 0; // REG_DWORD
+    "AllowCommercialDataPipeline" = 0; // REG_DWORD
+    "LimitDiagnosticLogCollection" = 0; // REG_DWORD
+    "DisableEnterpriseAuthProxy" = 0; // REG_DWORD
+    "AllowDeviceNameInDiagnosticData" = 0; // REG_DWORD
+    "DisableOneSettingsDownloads" = 0; // REG_DWORD
+    "EnableOneSettingsAuditing" = 0; // REG_DWORD
+    "ConfigureMicrosoft365UploadEndpoint" = ?; // REG_SZ
+
+"HKLM\\OFFLINE_AUTH\\Microsoft\\Windows\\CurrentVersion\\Diagnostics\\DiagTrack";
+    "DiagTrackAuthorization" = 0; // REG_DWORD
+
+"HKLM\\OFFLINE_AUTH\\Policies\\Microsoft\\Windows\\DataCollection";
+    "LimitDumpCollection" = 0; // REG_DWORD
 ```
 
-Seems to be a [fallback](https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106) if `AllowTelemetry` isn't set.
+- [`TelpReadLocalSetting`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelpReadLocalSetting.c)
+- [`TelpReadGroupPolicySetting`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelpReadGroupPolicySetting.c)
+- [`TelpReadMdmSetting`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelpReadMdmSetting.c)
+- [`TelpReadUsersPolicySetting`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelpReadUsersPolicySetting.c)
+- [`TelEvaluateActiveSettingAuthority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelEvaluateActiveSettingAuthority.c)
+- [`TelGetMaximumAllowedTelemetryLevel`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelGetMaximumAllowedTelemetryLevel.c)
+- [`TelGetNumericPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelGetNumericPolicy.c)
+- [`TelGetWerTelemetryMode`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelGetWerTelemetryMode.c)
+- [`TelpGetTelemetryClientRegPath`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/-TelpGetTelemetryClientRegPath@@YAPEAGXZ.c)
+- [`TelIsOsInProcessorMode`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelIsOsInProcessorMode.c)
+- [`TelpReadOfflineOsPolicySetting`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelpReadOfflineOsPolicySetting.c)
+- [`TelGetWerTelemetryModeWinRE`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelGetWerTelemetryModeWinRE.c)
 
-## Windows Policies
+### Boot Capture
+
+See [23H2.txt](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/records/23H2.txt) ([24H2](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/records/24H2.txt)/[25H2](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/records/25H2.txt) don't include more than that).
+
+```
+\Registry\Machine\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection : AllowTelemetry
+\Registry\Machine\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection : CommercialId
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowDeviceNameInTelemetry
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowTelemetry
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowTelemetry_PolicyManager
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : CommercialId
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : DisableEnterpriseAuthProxy
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : DisableTelemetryOptInChangeNotification
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : LimitDiagnosticLogCollection
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : LimitDumpCollection
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : TelemetryProxyServer
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : TelemetryProxyServer_PolicyManager
+\Registry\User\<CURRENT_USER_SID>\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowTelemetry
+\Registry\User\<CURRENT_USER_SID>\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowTelemetry_PolicyManager
+```
+
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
@@ -34,4 +102,5 @@ Seems to be a [fallback](https://github.com/TechTech512/Win11Src/blob/840a619194
 | [Disable diagnostic data viewer](https://www.noverse.dev/policies.html?p=DataCollection*DisableDiagnosticDataViewer) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableDiagnosticDataViewer` |
 | [Limit Diagnostic Log Collection](https://www.noverse.dev/policies.html?p=DataCollection*LimitDiagnosticLogCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDiagnosticLogCollection` |
 | [Limit Dump Collection](https://www.noverse.dev/policies.html?p=DataCollection*LimitDumpCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDumpCollection` |
+| [Configure the Commercial ID](https://www.noverse.dev/policies.html?p=DataCollection*CommercialIdPolicy) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `CommercialId` |
 | [Turn off the advertising ID](https://www.noverse.dev/policies.html?p=UserProfiles*DisableAdvertisingId) | `HKLM\Software\Policies\Microsoft\Windows\AdvertisingInfo` | `DisabledByGroupPolicy` |

@@ -23,7 +23,7 @@ Name                           DisplayName                                      
 Ethernet                       File and Printer Sharing for Microsoft Networks    ms_server            False
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

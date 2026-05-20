@@ -3,29 +3,41 @@ title: 'Energy Estimation'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 11
+  order: 10
 ---
 
-Not needed, if you disable energy estimation:
-```json
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\TaggedEnergy": {
-  "DisableTaggedEnergyLogging": { "Type": "REG_DWORD", "Data": 1 },
-  "TelemetryMaxApplication": { "Type": "REG_DWORD", "Data": 0 },
-  "TelemetryMaxTagPerApplication": { "Type": "REG_DWORD", "Data": 0 }
-}
-```
+Energy estimation accounts for estimated power usage, components report modeled energy costs, which are tracked per process and used for battery and standby telemetry.
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator 
-    "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator 
-    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled
-                                    // If following HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\knobs\Power/Controls/EnergyEstimationEnabled, it should have a range of 0-4294967295
+    "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator, 0 allows WNF_PO_DISCHARGE_ESTIMATE updates, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
+    "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator, 0 clears WNF_PO_CHARGE_ESTIMATE, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
+    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled, https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PoEnergyEstimationEnabled
 ```
 
-- [power/assets | energyesti-PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
+- [power/assets | PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/energyesti.png?raw=true)
 
 ## Suboption
 
 `Disable Battery Capacity Section` = Disables the battery capacity section on the battery saver page of the system settings app.
+
+## IdleStatesNumber
+
+These values are located in `partmgr.sys` and can be misunderstood. `IdleStatesNumber` just tells `partmgr` how many `IdleState\x` estimation "profiles" to load, example:
+
+- `IdleStatesNumber = 1` -> read only `IdleState\1`
+- `IdleStatesNumber = 3` -> read `IdleState\1`, `IdleState\2`, `IdleState\3`
+
+So these values seem to change the estimated energy *math* part.
+
+```powershell
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME : IdleStatesNumber
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME\IdleState\1 : IdleExitEnergyMicroJoules
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME\IdleState\1 : IdleExitLatencyMs
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME\IdleState\1 : IdlePowerMw
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME\IdleState\1 : IdleTimeLengthMs
+```
+
+- [power/assets | PmPowerContextInitialization.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PmPowerContextInitialization.c)

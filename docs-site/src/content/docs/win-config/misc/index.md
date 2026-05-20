@@ -10,7 +10,6 @@ sidebar:
 - [RegKit](/docs/win-config/misc/regkit/)
 - [NVFetch](/docs/win-config/misc/nvfetch/)
 - [Explorer Blur](/docs/win-config/misc/explorer-blur/)
-- [Notepad++](/docs/win-config/misc/notepad/)
 - [StartAllBack Settings](/docs/win-config/misc/startallback-settings/)
 - [System Informer](/docs/win-config/misc/system-informer/)
 - [7-Zip Settings](/docs/win-config/misc/7-zip-settings/)

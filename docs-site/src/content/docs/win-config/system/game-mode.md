@@ -495,7 +495,12 @@ Example with a game that sets itself to real time (there're probably any game de
 
 Foreground boost is separate from process priority class, it's a temporary current priority increase for threads that belong to the foreground process. See [quantum-priority-separation/#bits-01](https://www.noverse.dev/docs/win-config/system/quantum-priority-separation/#bits-01) for more details on the topic itself. 
 
-You can test it by following the [watching-the-boost](https://www.noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) guide while using the main game thread instead of the first CPUSTRES thread.
+You can test it by following the [watching-the-boost](https://www.noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) guide while using the main game thread instead of the first CPUSTRES thread, get the instance name of a TID via e,g,:
+
+```powershell
+$TID = # add TID
+Get-CimInstance Win32_PerfRawData_PerfProc_Thread | Where-Object { $_.IDThread -eq $TID } | Select-Object Name #, IDProcess, IDThread
+```
 
 > "*Whenever a thread in the foreground process completes a wait operation on a kernel object, the kernel boosts its current (not base) priority by the current value of PsPrioritySeparation.*"
 >
@@ -688,7 +693,7 @@ WNF = Windows Notification Facility
 >
 > "*The Power Manager and various related components use WNF to signal actions*"
 >
-> - Microsoft, [Windows Internals E7, P2: Chapter 8, System mechanisms](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+> — Microsoft, [Windows Internals E7, P2: Chapter 8, System mechanisms](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 That is why the Game Mode power part uses WNF, it writes `WNF_SEB_GAME_MODE`, and the power/SEB side can get that state and apply the `GameMode` processor power profile.
 

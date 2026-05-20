@@ -8,11 +8,11 @@ sidebar:
 
 For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
 
-## Registry Values Details
+## Registry Values
 
 ```c
 // HUBREG_QueryGlobalHubValues
-"HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg"; // g_HubGlobalKeyName (aRegistryMachin_10)
+"HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg"; // g_HubGlobalKeyName
     "DisableSelectiveSuspendUI" = ?; // REG_DWORD
     "MsOsDescriptorMode" = ?; // REG_DWORD, valid values are 0-2
     "EnableDiagnosticMode" = ?; // REG_DWORD, nonzero enables diagnostic mode

@@ -3,7 +3,7 @@ title: 'Spotify Configuration'
 description: 'Generated from app-tools file: guides/spotify.md.'
 editUrl: false
 sidebar:
-  order: 8
+  order: 7
 ---
 
 By default Spotify includes trackers/ads/analytics which can be blocked using a patched version of it, see SpotX.

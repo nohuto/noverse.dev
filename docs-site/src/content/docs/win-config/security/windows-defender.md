@@ -49,7 +49,7 @@ If using [`native.winoffice.txt`](https://github.com/hagezi/dns-blocklists/blob/
   - `*.config.ecs.gov.teams.microsoft.us` (GCC-H)
   - `*.config.ecs.dod.teams.microsoft.us` (DoD)
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
@@ -83,6 +83,7 @@ If using [`native.winoffice.txt`](https://github.com/hagezi/dns-blocklists/blob/
 | [Hide all notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableNotifications` |
 | [Hide non-critical notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableEnhancedNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableEnhancedNotifications` |
 | [Configure Windows Defender SmartScreen](https://www.noverse.dev/policies.html?p=WindowsExplorer*EnableSmartScreen) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableSmartScreen`<br>`ShellSmartScreenLevel` |
+| [Turn off Microsoft Defender Antivirus](https://www.noverse.dev/policies.html?p=WindowsDefender*DisableAntiSpywareDefender) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender` | `DisableAntiSpyware` |
 
 ## Remove Defender from Image
 

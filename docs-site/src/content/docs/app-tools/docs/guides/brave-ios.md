@@ -3,7 +3,7 @@ title: 'Brave Configuration (iOS)'
 description: 'Generated from app-tools file: guides/brave-ios.md.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 3
 ---
 
 On iOS, [Brave](https://github.com/brave/brave-browser/releases) is my primary browser (more feature rich than Safari). If you don't like the UI or similar of Brave, Safari is also a good choice.
@@ -62,7 +62,7 @@ Disable Brave's Web3 features if you don't use them.
 
 ### Search Engine
 
-See [search-engine](https://github.com/nohuto/app-tools/blob/main/search-engine.md).
+See [search-engine](https://www.noverse.dev/docs/app-tools/docs/search-engine/).
 
 - `Standart Tab`: Custom Search Engine (`https://noai.duckduckgo.com/search?q=%s`)
 - `Private Tab`: Custom Search Engine (`https://noai.duckduckgo.com/search?q=%s`)
@@ -97,7 +97,7 @@ See [search-engine](https://github.com/nohuto/app-tools/blob/main/search-engine.
 
 ### Logins & Password
 
-Don't use the built-in password manager, use a [passowrd manager](https://github.com/nohuto/app-tools/blob/main/extensions.md#password-manager-firefox---chrome) instead.
+Don't use the built-in password manager, use a [passowrd manager](https://www.noverse.dev/docs/app-tools/docs/extensions/#password-manager-firefox---chrome) instead.
 
 - `Save Logins`: Off
 

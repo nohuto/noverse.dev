@@ -15,7 +15,7 @@ Excludes (deprecated, chimney too):
 "SaOffloadCapacityEnabled" = 0
 ```
 
-## Registry Values Details
+## Registry Values
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 

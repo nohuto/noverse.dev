@@ -3,7 +3,7 @@ title: 'OC/UV Guide'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 15
+  order: 14
 ---
 
 Overclocking means increasing the clock speed, which increases temperatures. Undervolting limits the voltage for the GPU, resulting in lower voltage, wattage, and temperature.

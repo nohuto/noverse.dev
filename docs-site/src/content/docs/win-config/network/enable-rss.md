@@ -34,7 +34,7 @@ void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT
 }
 ```
 
-## Registry Values Details
+## Registry Values
 
 `*MaxRssProcessors`:  
 The maximum number of RSS processors.

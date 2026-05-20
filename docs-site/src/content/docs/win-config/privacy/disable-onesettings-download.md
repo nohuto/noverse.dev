@@ -10,7 +10,7 @@ sidebar:
 
 If enabled = "Windows will periodically attempt to connect with the OneSettings service to download configuration settings".
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

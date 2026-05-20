@@ -21,7 +21,7 @@ It changes every setting, which is shown in the `Folder Options` window. Some ar
 }
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

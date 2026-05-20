@@ -8,7 +8,7 @@ sidebar:
 
 Disables all kind of synchronization, see policies.
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

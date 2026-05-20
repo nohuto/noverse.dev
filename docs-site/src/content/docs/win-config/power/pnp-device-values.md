@@ -10,7 +10,7 @@ This currently applies the values for the `USB` enumerator only, since most valu
 
 Disables USB selective suspend, idle states, and related LP features if supported.
 
-## Registry Values Details
+## Registry Values
 
 Windows Plug and Play (PnP) creates a device node (devnode) for each detected device instance ("The PnP manager is the primary component involved in supporting the ability of Windows to recognize and adapt to changing hardware configurations."). In WinDbg (`!devnode`), `InstancePath` assigns to the device instance key under:
 ```c
@@ -31,11 +31,11 @@ HKLM\SYSTEM\CurrentControlSet\Services\<ServiceName> // software key - service/d
 
 Not every instance has the same subkeys or values.
 
-I won't add details on the PnP manager here, as that's not the purpose of the repo. For more details, read [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), Chapter 6 (`The Plug and Play manager`).
+I won't add details on the PnP manager here, as that's not the purpose of the option. For more details, read [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), Chapter 6 (`The Plug and Play manager`).
 
----
+### Default Data
 
-One thing to point out here is that there're two APIs which I almost didn't notice. [`IoOpenDeviceRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendeviceregistrykey) & `PLUGPLAY_REGKEY_DEVICE` opens the per-device-instance hardware key in the `Enum` branch (`HKLM\SYSTEM\CCS\Enum\<Enumerator>\<DeviceID>\<InstanceID>\Device Parameters`). [`IoOpenDriverRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendriverregistrykey) opens the per-driver-service key in the `Services` branch (`HKLM\SYSTEM\CCS\Services\<ServiceName>\Parameters`).
+One thing to point out here is that there're two APIs which I almost didn't notice. [`IoOpenDeviceRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendeviceregistrykey) & `PLUGPLAY_REGKEY_DEVICE` opens the per-device-instance hardware key in the `Enum` branch (`HKLM\SYSTEM\CCS\Enum\<Enumerator>\<DeviceID>\<InstanceID>\Device Parameters`). [`IoOpenDriverRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendriverregistrykey) opens the per-driver-service key in the `Services` branch (`HKLM\SYSTEM\CCS\Services\<ServiceName>\Parameters`). See [power/assets/pnp](https://github.com/nohuto/win-config/tree/main/power/assets/pnp) for all used functions.
 
 A simple example here would be [GetEnhancedVerifierOptions](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/GetEnhancedVerifierOptions.c) which uses `IoOpenDriverRegistryKey` and as you can see in a boot trace, `EnhancedVerifierOptions` is used in for example `\Registry\Machine\SYSTEM\ControlSet001\Services\PEAUTH\Parameters\Wdf : EnhancedVerifierOptions`.
 
@@ -43,7 +43,7 @@ A simple example here would be [GetEnhancedVerifierOptions](https://github.com/n
 
 To create this list, I've used many driver pseudocodes (usbhub, winhub, acpi, pci, wdf, hidclass, USBHUB3...), several INF files, and W10 source for comments (which may not be accurate anymore).
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters";
@@ -52,8 +52,8 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "ComboHardwareIdV2Enabled" = 0; // REG_DWORD (bool)
     "CyclePortEnabled" = 0; // REG_DWORD (bool)
     "D3ColdReconnectTimeout" = 1000; // REG_DWORD
-    "DefaultIdleTimeout" = 5000/30000; // REG_DWORD, the USBCCID UM driver uses 5sec, devices that support MTP use 30sec? (UsbccidDriver, wpdmtp)
     "DefaultIdleState" = 1; // REG_DWORD (bool), HUBREG_SetWinUsbIdleDefaults writes 1 when queries for DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable all fail
+    "DefaultIdleTimeout" = 5000/30000; // REG_DWORD, the USBCCID UM driver uses 5sec, devices that support MTP use 30sec? (UsbccidDriver, wpdmtp)
     "DeviceIdleEnabled" = 1; // REG_DWORD (bool), ^
     "DeviceIdleIgnoreWakeEnable" = 1; // REG_DWORD (bool), ^
     "DeviceInterfaceGUID" = "{52783fc2-0179-4eca-bb46-128bba61975e}"; // REG_SZ, written if missing by HUBREG_SetWinUsbIdleDefaults, WinUSB_GetRegParams uses it as fallback when DeviceInterfaceGUIDs is unavailable
@@ -93,14 +93,11 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "WinUsbPowerPolicyOwnershipDisabled" = 1; // REG_DWORD (bool)
     "WriteReportExSupported" = 1; // REG_DWORD
 
-    "HardResetCount" = ?; // REG_DWORD, "Writes into registry information about how many times this hub has been reset for the lifetime of the devnode. It also writes the invalid port status if that is the reason for hub reset. This infromation will be read by the SQM engine."
-    "HubFWUpdateProtocol" = ?; // REG_DWORD
-    "OvercurrentDetected" = ?; // REG_DWORD (bool)
-    "WakeSystemOnConnect" = ?; // REG_DWORD (bool)
     "AOCID" = ?;
     "AutoplayOnSpecialInterface" = ?;
     "CustomWake" = ?;
     "DefaultSimulatedTarget" = ?;
+    "DeviceDumpVendorGPLogAddress" = ?; // from storport.sys
     "DeviceGroup" = ?;
     "DeviceGroups" = ?;
     "DeviceHandlers" = ?;
@@ -119,11 +116,13 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "FullPowerDownOnTransientDx" = ?;
     "FunctionDriverOptIn" = ?;
     "HackFlags" = ?;
+    "HardResetCount" = ?; // REG_DWORD, "Writes into registry information about how many times this hub has been reset for the lifetime of the devnode. It also writes the invalid port status if that is the reason for hub reset. This infromation will be read by the SQM engine."
     "HasPhysicalKeys" = ?;
     "HScrollHighResolutionDisable" = ?;
     "HScrollPageOverride" = ?;
     "HScrollScalingFactor" = ?;
     "HScrollUsageOverride" = ?;
+    "HubFWUpdateProtocol" = ?; // REG_DWORD
     "Icons" = ?;
     "IdleSupported" = ?;
     "IdleTimeoutPeriodInMilliSec" = ?;
@@ -137,6 +136,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "NoSoftEject" = ?;
     "NumberOfPairingSlots" = ?;
     "OriginalConfigurationValue" = ?;
+    "OvercurrentDetected" = ?; // REG_DWORD (bool)
     "RootBus" = ?;
     "TargetForcePriorityList" = ?;
     "TargetPriorityList" = ?;
@@ -148,6 +148,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "VScrollHighResolutionDisable" = ?;
     "VScrollPageOverride" = ?;
     "VScrollUsageOverride" = ?;
+    "WakeSystemOnConnect" = ?; // REG_DWORD (bool)
     "WheelScalingFactor" = ?;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7";
@@ -292,30 +293,36 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "DEV_18&FUN_07" = ?;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\StorPort";
-    "AdapterGuid" = ?;
-    "BusSpecificResetTimeout" = ?;
-    "BusyPauseTime" = ?;
-    "BusyRetryCount" = ?;
-    "DisableD3Cold" = ?;
-    "DisableIdlePowerManagement" = ?;
-    "DisableNVMeActiveNamespaceIDListCheck" = ?;
-    "DisableRuntimePowerManagement" = ?;
     "DlrmDisable" = ?;
-    "EnableIdlePowerManagement" = ?;
-    "EnableLogoETW" = ?;
     "EnableNVMeInterface" = ?;
     "FwActivateTimeoutForController" = ?;
-    "IdleTimeoutInMS" = ?;
-    "InitialTimestamp" = ?;
-    "Is1667Device" = ?;
-    "MinimumIdleTimeoutInMS" = ?;
-    "PLDRTimeout" = ?;
-    "PowerCycleCount" = ?;
-    "PowerCycleCountOverride" = ?;
-    "PowerSrbTimeout" = ?;
-    "QueueFullWaitIoPercentage" = ?;
     "TotalSenseDataBytes" = ?;
-    "UseDMAv3" = ?;
+
+    // from storport.sys - https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C00A88F4.c
+    "AdapterGuid" = ; // REG_BINARY, 16 bytes
+    "BusSpecificResetTimeout" = 5; // REG_DWORD, range 1-4294967295, 0 ignored
+    "DisableD3Cold" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "DisableNVMeActiveNamespaceIDListCheck" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "DisableRuntimePowerManagement" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "EnableIdlePowerManagement" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "GeneratedID" = ; // REG_BINARY, 16 bytes
+    "IdleTimeoutInMS" = 60000; // REG_DWORD, range 0-4294967295
+    "InitialTimestamp" = ; // REG_QWORD
+    "Is1667Device" = 4294967295; // REG_DWORD, range 0-4294967295
+    "PLDRTimeout" = 10; // REG_DWORD, range 1-4294967295, 0 ignored
+    "PowerCycleCount" = 0; // REG_DWORD, range 0-4294967295, used only when PowerCycleCountOverride doesn't exist
+    "PowerCycleCountOverride" = ; // REG_DWORD, range 0-4294967295
+    "PowerSrbTimeout" = ; // REG_DWORD, range 1-110, >110 clamps to 110, 0 ignored
+    "TotalSenseDataBytes" = 256; // REG_DWORD
+    "UseDMAv3" = 0; // REG_DWORD, range 0-4294967295 (bool)
+
+    // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C00A4268.c
+    "BusyPauseTime" = 250; // REG_DWORD, range 0-4294967295
+    "BusyRetryCount" = 20; // REG_DWORD, range 0-4294967295
+    "DisableIdlePowerManagement" = 0; // REG_DWORD, range 0-4294967295
+    "EnableLogoETW" = 0; // REG_DWORD, range 0-4294967295
+    "MinimumIdleTimeoutInMS" = 4294967295; // REG_DWORD, range 0-4294967295
+    "QueueFullWaitIoPercentage" = 25; // REG_DWORD, range 0-100
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\DMA Management";
     "RemappingFlags" = ?;
@@ -330,39 +337,10 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\WUDF\\CompanionConfigurations\\USBXHCI";
     "CompanionServiceList" = ?;
-```
 
-- [pnp/assets | BthUsb_QuerySelectiveSuspend.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/BthUsb_QuerySelectiveSuspend.c)
-- [pnp/assets | ExpressDownstreamSwitchPortProcessAspmPolicy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/ExpressDownstreamSwitchPortProcessAspmPolicy.c)
-- [pnp/assets | ExpressPortFindOptInOptOutPolicy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/ExpressPortFindOptInOptOutPolicy.c)
-- [pnp/assets | FDO_GetIdleSupported.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FDO_GetIdleSupported.c)
-- [pnp/assets | FxPkgPnpSaveState.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FxPkgPnpSaveState.c)
-- [pnp/assets | FxPkgPnpSleepStudyEvaluateParticipation.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FxPkgPnpSleepStudyEvaluateParticipation.c)
-- [pnp/assets | GetEnhancedVerifierOptions.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/GetEnhancedVerifierOptions.c)
-- [pnp/assets | HidpFdoConfigureIdleSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpFdoConfigureIdleSettings.c)
-- [pnp/assets | HidpGetComboHardwareIdV2Enabled.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetComboHardwareIdV2Enabled.c)
-- [pnp/assets | HidpGetPdoReenumerateSelfInterfaceEnabled.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetPdoReenumerateSelfInterfaceEnabled.c)
-- [pnp/assets | HidpGetRetainWWIrpEnabledFromRegistry.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetRetainWWIrpEnabledFromRegistry.c)
-- [pnp/assets | HidpGetSessionSecurityState.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetSessionSecurityState.c)
-- [pnp/assets | HidpToggleRemoteWakeWorker.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpToggleRemoteWakeWorker.c)
-- [pnp/assets | HUBMISC_SetExtPropDescSemaphoreInRegistry.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBMISC_SetExtPropDescSemaphoreInRegistry.c)
-- [pnp/assets | HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c)
-- [pnp/assets | HUBREG_QueryValuesInDeviceHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryValuesInDeviceHardwareKey.c)
-- [pnp/assets | HUBREG_QueryValuesInHubHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryValuesInHubHardwareKey.c)
-- [pnp/assets | HUBREG_SetWinUsbIdleDefaults.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_SetWinUsbIdleDefaults.c)
-- [pnp/assets | HUBREG_UpdateSqmFlags.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_UpdateSqmFlags.c)
-- [pnp/assets | IrqPolicySetDeviceAffinity.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/IrqPolicySetDeviceAffinity.c)
-- [pnp/assets | PciGetDeviceCustomSetting.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceCustomSetting.c)
-- [pnp/assets | PciGetDeviceCustomSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceCustomSettings.c)
-- [pnp/assets | PciGetDeviceD0DelayTime.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceD0DelayTime.c)
-- [pnp/assets | PciGetDeviceDpcCustomSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceDpcCustomSettings.c)
-- [pnp/assets | PcisuppGetRoutingInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PcisuppGetRoutingInfo.c)
-- [pnp/assets | PcisuppSetRoutingInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PcisuppSetRoutingInfo.c)
-- [pnp/assets | PowerPolicySetS0IdleSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PowerPolicySetS0IdleSettings.c)
-- [pnp/assets | UsbhGetD3Policy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/UsbhGetD3Policy.c)
-- [pnp/assets | WinUSB_DeterminePowerPolicyOwnership.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_DeterminePowerPolicyOwnership.c)
-- [pnp/assets | WinUSB_GetRegParams.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_GetRegParams.c)
-- [pnp/assets | WinUSB_UpdateSqmInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_UpdateSqmInfo.c)
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\Disk"; // enumerator is usually SCSI here
+  "UserWriteCacheSetting" = 1; // REG_DWORD, from storport.sys - https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C00633B0.c
+```
 
 ## MSPower_DeviceEnable
 

@@ -17,7 +17,7 @@ powercfg /devicequery wake_armed
 `powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state  
 `powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
 
-## Registry Values Details
+## Registry Values
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 

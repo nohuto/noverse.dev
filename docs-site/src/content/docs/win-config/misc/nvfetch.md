@@ -16,7 +16,7 @@ It currently gets most of the information using the [`Get-CimInstance`](https://
 ```powershell
 nvidia-smi -q
 ```
-[`nvfetch-win32cimv2.txt`](https://github.com/nohuto/win-config/blob/main/misc/assets) shows class names in the `root\CIMV2` namespace, filtered with `Win32*`.
+[`nvfetch-win32cimv2.txt`](https://github.com/nohuto/win-config/blob/main/misc/assets/nvfetch-win32cimv2.txt) shows class names in the `root\CIMV2` namespace, filtered with `Win32*`.
 
 | **Category** | **Query** | **Fields/Description** |
 | ---- | ---- | ---- |

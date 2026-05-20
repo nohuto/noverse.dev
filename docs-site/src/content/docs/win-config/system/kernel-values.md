@@ -3,12 +3,12 @@ title: 'Kernel Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 5
 ---
 
 Since many people don't yet know which values exist and what default value they have, here's a list. I used [IDA](https://discord.com/channels/836870260715028511/836896618410278952/1492546690413236425), WinDbg, [WinObjEx](https://github.com/hfiref0x/WinObjEx64), [Windows Internals E7 P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
-## Registry Values Details
+## Registry Values
 
 This contains details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key.
 
@@ -20,7 +20,7 @@ See [session-manager-symbols](https://github.com/nohuto/win-config/tree/main/sys
 
 The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/11-23H2/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl).
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
@@ -64,7 +64,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     // Determine what is considered in assessing whether a thread is important.
     "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling
     "EnableTickAccumulationFromAccountingPeriods" = 0; // KiEnableTickAccumulationFromAccountingPeriods
-    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting
+    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, REG_DWORD, range 0 = disabled, any nonzero 32 bit data = enabled
     "ForceBugcheckForDpcWatchdog" = 0; // KiForceBugcheckForDpcWatchdog
     "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy
     "ForceIdleGracePeriod" = 5; // KiForceIdleGracePeriodInSec
@@ -113,7 +113,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "SeAllowAllApplicationAceRemoval" = 0; // SepAllowAllApplicationAceRemoval
     "SeAllowSessionImpersonationCapability" = 0; // SepAllowSessionImpersonationCap
     "SeCompatFlags" = 0; // SeCompatFlags
-    "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting
+    "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting, REG_DWORD, 0 disables, nonzero enables
     "SeLpacEnableWatsonThrottling" = 1; // SeLpacEnableWatsonThrottling
     "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration
     // This behavior is controlled by the kernel variable KiSerializeTimerExpiration, which is initialized based on a registry setting whose value is different between a server and client installation. By modifying or creating the value SerializeTimerExpiration under HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel other than 0 or 1, serialization can be disabled, enabling timers to be distributed among processors. Deleting the value, or keeping it as 0, allows the kernel to make the decision based on Modern Standby availability, and setting it to 1 permanently enables serialization even on non-Modern Standby systems.
@@ -121,7 +121,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "SeTokenLeakDiag" = 0; // SeTokenLeakTracking
     "SeTokenSingletonAttributesConfig" = 3; // SepTokenSingletonAttributesConfig
     "SplitLargeCaches" = 0; // KiSplitLargeCaches
-    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
+    "ThreadDpcEnable" = 1; // KeThreadDpcEnable, https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs
     "ThreadReadyCount" = 1; // KiNormalPriorityBoostMaximumThreadReadyCount
     "TimerCheckFlags" = 1; // KeTimerCheckFlags
     "VerifierDpcScalingFactor" = 1; // KeVerifierDpcScalingFactor
@@ -137,15 +137,15 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "AlpcMessageLog" = 0; // AlpcpMessageLogEnabled 
     "AlpcWakePolicy" = 1; // AlpcpWakePolicyDefault 
     "CriticalSectionTimeout" = 2592000; // dword_140FC3204 dd 278D00
-    "CWDIllegalInDLLSearch" = 0; // PspCurDirDevicesSkippedForDlls 
+    "CWDIllegalInDLLSearch" = 0; // PspCurDirDevicesSkippedForDlls, can cause "There was a problem starting PolicyAgentProvider.dll The specified module could not be found" if set to 0xFFFFFFFF (https://learn.microsoft.com/en-us/troubleshoot/mem/configmgr/client-installation/client-installation-fails-with-policyagentprovider-dll)
     "Debugger Retries" = 20; // KdpContext (0x14) 
     "DisableIFEOCaching" = 0; // RtlpDisableIFEOCaching 
-    "GlobalFlag" = 0; // CmNtGlobalFlag <> 0x7061006c ?
+    "GlobalFlag" = 0; // CmNtGlobalFlag <> 0x7061006c ? https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/gflags-details
     "GlobalFlag2" = 0; // CmNtGlobalFlag2 <> 0x6c642e30 ?
-    "HeapDeCommitFreeBlockThreshold" = 4096; // qword_140FC3210 dq 1000
-    "HeapDeCommitTotalFreeThreshold" = 65536; // qword_140FC3218 dq 10000
-    "HeapSegmentCommit" = 8192; // qword_140FC3220 dq 2000
-    "HeapSegmentReserve" = 1048576; // qword_140FC3228 dq 100000
+    "HeapSegmentReserve" = 1048576; // REG_DWORD, range 65536-16580608, 65536 steps
+    "HeapSegmentCommit" = 8192; // REG_DWORD, range 4096-16580608, 4096 steps
+    "HeapDeCommitFreeBlockThreshold" = 4096; // REG_DWORD, range 0-4294967280, 16 steps
+    "HeapDeCommitTotalFreeThreshold" = 65536; // REG_DWORD, range 0-4294967280, 16 steps
     "ImageExecutionOptions" = 0; // ViImageExecutionOptions 
     "InitConsoleFlags" = 0; // InitConsoleFlags 
     "MultiUsersInSessionSupported" = 0; // RtlpMultiUsersInSessionSupported 
@@ -176,7 +176,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "DisableWpbtExecution" = ?; // REG_DWORD
     "RaiseExceptionOnPossibleDeadlock" = ?;
     "ResourcePolicies" = ?;
-    "SafeDllSearchMode" = ?;
+    "SafeDllSearchMode" = ?; // https://learn.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order#standard-search-order-for-unpackaged-apps
     "SafeProcessSearchMode" = ?;
     "SmtDelayBaseYield" = ?;
     "SmtDelayMaxYield" = ?;
@@ -231,11 +231,11 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "PagingFileQuota" = ?; // unk_140FD7DE8
     "PhysicalMemoryMapperEnforcementMode" = 0; // dword_140FC324C dd 0
     "PoolForceFullDecommit" = 0; // PoolForceFullDecommit 
-    "PoolTag" = 0; // MmSpecialPoolTag 
+    "PoolTag" = 0; // MmSpecialPoolTag, https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/gflags-details
     "PoolTagOverruns" = 1; // MmSpecialPoolCatchOverruns 
     "PoolTagSmallTableSize" = 4097; // PoolTrackTableSize (0x1001) 
     "ProtectNonPagedPool" = 0; // MmProtectFreedNonPagedPool 
-    "RemoteFileDirtyPageThreshold" = 1310720; // CcRemoteFileDPInlineFlushThreshold (0x00140000) 
+    "RemoteFileDirtyPageThreshold" = 1310720; // CcRemoteFileDPInlineFlushThreshold (0x00140000), "This value determines the maximum number of dirty pages in the cache (on a per file basis) for a remote write before an inline flush is performed."
     "SimulateCommitSavings" = 0; // dword_140FC3240 dd 0
     "SoftThrottleDelayInMs" = 0; // CcAzure_SoftThrottleDelayInMs 
     "SoftThrottleLargeWriteAtPct" = 0; // CcAzure_SoftThrottleLargeWriteAtPct 
@@ -320,16 +320,16 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
     // PopOpenPowerKey
     "AwayModeEnabled" = 0; // REG_DWORD, range 0-1
-    "HiberbootEnabled" = 0; // REG_DWORD, range 0-1, PopHiberbootEnabledReg
+    "HiberbootEnabled" = 1; // REG_DWORD, range 0-1
     "KernelResumeIoCpuTime" = 0; // REG_DWORD, milliseconds, range 0-4294967295
     "MaxHuffRatio" = 1; // REG_DWORD, range 1-98
     "MultiPhaseResumeDisabled" = 0; // REG_DWORD, range 0-1
     "SystemPowerPolicy" = "<STRUCT 232 BYTES>"; // REG_BINARY, Size=232
 
-    // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and chaning their data won't affect the boot.
-    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range 0-4294967295
-    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range 0-4294967295
-    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range 0-4294967295FFFFFFFF
+    // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and changing their data won't affect the boot.
+    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
+    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
+    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-0xFFFFFFFFFFFFFFFF
 
     // PpmInitIllegalThrottleLogging
     "ProcessorThrottleLogInterval" = 10000; // REG_DWORD, milliseconds, range 0-10000 (values >10000 are clamped to 10000)
@@ -344,12 +344,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "PerfEnablePackageIdle" = 0;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap";
-    "Enabled" = 0; // if present with DataLength==4 and nonzero type:
-                    //    RtlpLowFragHeapGlobalFlags |= 0x10;  // global segment heap enable
-                    //    if (value & 0x2)                      // low byte, bit 1
-                    //        RtlpLowFragHeapGlobalFlags |= 0x20; // extra option ?
-                    // if the value exists but is stored as REG_NONE (type==0):
-                    //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global "disable/override"
+  "Enabled"; // REG_DWORD, 0 = disable, nonzero = enable (global)
 
 // Miscellaneous values
 
@@ -384,7 +379,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "CallbackMemoryFromPool" = 0; // CmpAllocateCallbackMemoryFromPool 
     "DelayCloseSize" = 2048; // CmpDelayedCloseSize (0x800) 
     "Enabled" = 0; // CmpLKGEnabled 
-    "EnablePeriodicBackup" = 0; // CmpDoIdleProcessing 
+    "EnablePeriodicBackup" = 0; // CmpDoIdleProcessing, https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/system-registry-no-backed-up-regback-folder#more-information
     "FastBoot" = 1; // CmFastBoot 
     "FreezeThawTimeoutInSeconds" = 60; // CmFreezeThawTimeoutInSeconds (0x3C) 
     "RegistryFlushGlobalFlags" = 0; // CmpGlobalFlushControlFlags 

@@ -3,7 +3,7 @@ title: 'Printers'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 19
+  order: 20
 ---
 
 Disables printer related services (`Spooler`, `PrintWorkFlowUserSvc`, `PrintNotify`, `usbprint`, `McpManagementService`, `PrintScanBrokerService`, `PrintDeviceConfigurationService`), and various optional features / scheduled tasks.
@@ -74,7 +74,7 @@ Get-Printer
 Remove-Printer -Name "Printer Name"
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
@@ -84,3 +84,4 @@ Remove-Printer -Name "Printer Name"
 | [Turn off downloading of print drivers over HTTP](https://www.noverse.dev/policies.html?p=ICM*DisableWebPnPDownload_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
 | [Prevent addition of printers](https://www.noverse.dev/policies.html?p=Printing*NoAddPrinter) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAddPrinter` |
 | [Turn off Windows default printer management](https://www.noverse.dev/policies.html?p=Printing*LegacyDefaultPrinterMode) | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` | `LegacyDefaultPrinterMode` |
+| [Browse the network to find printers](https://www.noverse.dev/policies.html?p=Printing*DownlevelBrowse) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers\Wizard` | `Downlevel Browse` |

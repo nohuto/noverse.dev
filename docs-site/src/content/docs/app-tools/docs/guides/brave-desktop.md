@@ -3,7 +3,7 @@ title: 'Brave Configuration (Desktop)'
 description: 'Generated from app-tools file: guides/brave-desktop.md.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 2
 ---
 
 [Brave](https://github.com/brave/brave-browser/releases) is my secondary browser which I use for streaming content that requires [widevine](https://chromium.woolyss.com/#widevine) since it supports it natively.
@@ -122,15 +122,15 @@ Disable Brave's Web3 features if you don't use them.
 - `Improve search suggestions`: Off
 - `Web Discovery Project`: Off
 
-See [search-engine](https://github.com/nohuto/app-tools/blob/main/search-engine.md).
+See [search-engine](https://www.noverse.dev/docs/app-tools/docs/search-engine/).
 
 ### Extensions
 
-See [extensions](https://github.com/nohuto/app-tools/blob/main/extensions.md).
+See [extensions](https://www.noverse.dev/docs/app-tools/docs/extensions/).
 
 ### Autofill and passwords
 
-Don't use the built-in password manager, use a [passowrd manager extension](https://github.com/nohuto/app-tools/blob/main/extensions.md#password-manager-firefox---chrome) instead.
+Don't use the built-in password manager, use a [passowrd manager extension](https://www.noverse.dev/docs/app-tools/docs/extensions/#password-manager-firefox---chrome) instead.
 
 - Password Manager
   - Settings

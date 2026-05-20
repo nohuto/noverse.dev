@@ -3,10 +3,10 @@ title: 'System Informer'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 6
+  order: 5
 ---
 
-Since [system informer](https://systeminformer.io/) is a lot better than the default task manager, it is recommended to replace it.
+Since [system informer](https://systeminformer.io/) is a lot better than the default task manager, it's recommended to replace it.
 
 Enable `Theme support` (dark mode) and disable `Check for updates automatically` with:
 ```powershell

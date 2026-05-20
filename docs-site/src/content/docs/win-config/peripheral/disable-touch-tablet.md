@@ -3,7 +3,7 @@ title: 'Touch & Tablet'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 12
+  order: 13
 ---
 
 Disable the touch screen feature of your device with:
@@ -15,7 +15,7 @@ Get-PnpDevice -PresentOnly:$false | ? FriendlyName -eq 'HID-compliant touch scre
 
 ## Miscellaneous Values
 
-Everything listed below is based on personal research. Mistakes may exist, some parts are speculations. See links below for reference.
+Everything listed below is based on personal findings. Mistakes may exist, some parts are speculations. See links below for reference.
 
 ```c
 "HKLM\\SOFTWARE\\Policies\\Microsoft\\TabletPC";
@@ -40,20 +40,20 @@ Everything listed below is based on personal research. Mistakes may exist, some 
     "MultiTouchEnabled" = 1;
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PrecisionTouchPad";
-    "AAPThreshold" = 2; // range 0–4, touchpad sensitivity
-    "CursorSpeed" = 10; // range 1–20, pointer speed
-    "FeedbackIntensity" = 50; // range 0–100 (%), haptic feedback strength
-    "ClickForceSensitivity" = 50; // range 0–100 (%), relative click-force sensitivity
+    "AAPThreshold" = 2; // range 0–4
+    "CursorSpeed" = 10; // range 1–20
+    "FeedbackIntensity" = 50; // range 0–100 (%)
+    "ClickForceSensitivity" = 50; // range 0–100 (%)
     "LeaveOnWithMouse" = 1; // 0 = disable touchpad when mouse present, 1 = leave enabled
     "FeedbackEnabled" = 1; // 0 = no haptics, 1 = haptics on
-    "TapsEnabled" = 1; // 0/1, single-finger tap-to-click
-    "TapAndDrag" = 1; // 0/1, double-tap-and-drag
-    "TwoFingerTapEnabled" = 1; // 0/1
-    "RightClickZoneEnabled" = 1; // 0/1
-    "PanEnabled" = 1; // 0/1, two-finger scrolling
-    "ScrollDirection" = 0; // 0 = natural, 1 = reversed
+    "TapsEnabled" = 1; // bool
+    "TapAndDrag" = 1; // bool
+    "TwoFingerTapEnabled" = 1; // bool
+    "RightClickZoneEnabled" = 1; // bool
+    "PanEnabled" = 1; // bool
+    "ScrollDirection" = 0; // 0 = normal, 1 = reversed
     "ZoomEnabled" = 1;
-    "HonorMouseAccelSetting" = 0; // 0 = always apply acceleration, 1 = honor SPI mouse accel?
+    "HonorMouseAccelSetting" = 0;
     "RightClickZoneWidth" = 0;
     "RightClickZoneHeight" = 0;
 
@@ -79,15 +79,15 @@ Everything listed below is based on personal research. Mistakes may exist, some 
     "Color" = 0xC0000000C0000000; // ?
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TabletMode";
-    "STCDefaultMigrationCompleted" = 0; // SHRegValueExists
+    "STCDefaultMigrationCompleted" = 0;
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell";
     "TabletMode" = 0; // 0 = desktop mode, 1 = tablet mode?
-    "ExitedTabletModeWhileCSMActive" = 0; // set to 1 when a3 == 4, HasConvertibleSlateModeChanged() is true
-    "TabletModeActivated" = 0; // set to 1 when SetModeInternal() switches into tablet mode
+    "ExitedTabletModeWhileCSMActive" = 0;
+    "TabletModeActivated" = 0;
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell";
-    "AllowPPITabletModeExit" = 0; // SHRegGetBOOLWithREGSAM, non-zero allows the mode switch
+    "AllowPPITabletModeExit" = 0;
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell\\OverrideScaling";
     "SmallScreen" = 83; // ?
@@ -149,3 +149,9 @@ Windows 7/XP:
     "PreventFlicks": { "Type": "REG_DWORD", "Data": 1 }
 }
 ```
+
+## [Windows Policies](https://www.noverse.dev/policies.html)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Tablet PC touch input](https://www.noverse.dev/policies.html?p=TouchInput*TouchInputOff_2) | `HKLM\SOFTWARE\Policies\Microsoft\TabletPC` | `TurnOffTouchInput` |

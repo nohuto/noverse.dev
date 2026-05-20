@@ -8,7 +8,7 @@ sidebar:
 
 Voluntary program that collects usage data to help improve the quality and performance of its products.
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

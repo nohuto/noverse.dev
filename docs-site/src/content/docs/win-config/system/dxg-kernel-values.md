@@ -3,20 +3,20 @@ title: 'DXG Kernel Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 6
 ---
 
 `dxgkrnl.sys` is Windows DirectX/WDDM graphics kernel driver that mediates between apps and the GPU to schedule work, manage graphics memory, present frames, and handle TDR hang recovery.
 
 Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
-## Registry Values Details
+## Registry Values
 
 These are default values I found in `dxgkrnl.sys`, see [assets/dxg-values](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values) for pseudocode snippets I used / [records/Graphics-Drivers.txt](https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt) for all values that get read on boot.
 
 The `GraphicsDrivers\Scheduler` / `GraphicsDrivers\MemoryManager` values are from `dxgmms2.sys`, I used the drivers from 23H2/25H2 since they differ at some point. See [dxgmms2](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values/dxgmms2) for all used files.
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers"
@@ -153,6 +153,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "RapidHPDThresholdCount" = 5;
     "RapidHPDTime" = 1000;
 
+    // https://www.noverse.dev/docs/win-config/security/increase-tdr/
     "TdrDdiDelay" = 5;
     "TdrDebugMode" = 2;
     "TdrDelay" = 2;

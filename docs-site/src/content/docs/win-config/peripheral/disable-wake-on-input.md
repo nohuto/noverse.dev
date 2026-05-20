@@ -3,7 +3,7 @@ title: 'Wake on Input'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 15
+  order: 16
 ---
 
 ```bat
@@ -28,7 +28,7 @@ Disables the device (replace '*Device*' with the device name) from waking the sy
 Default values:
 ```c
 WakeOnInputDeviceTypes = 46
-UnDimOnInputDeviceTypes = -1  // 0xFFFFFFFF
+UnDimOnInputDeviceTypes = -1  // 4294967295
 ```
 
 - [peripheral/assets | wakedev-WakeOnInputDeviceTypes.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/wakedev-WakeOnInputDeviceTypes.c)
@@ -37,16 +37,16 @@ UnDimOnInputDeviceTypes = -1  // 0xFFFFFFFF
 
 All available flags (`powercfg /devicequery query_flag`):
 
-| `query_flag`             | Description                                                                      |
-| ------------------------ | -------------------------------------------------------------------------------- |
-| `wake_from_S1_supported` | Returns all devices that support waking the system from a light sleep state.     |
-| `wake_from_S2_supported` | Returns all devices that support waking the system from a deeper sleep state.    |
+| `query_flag` | Description |
+| --- | --- |
+| `wake_from_S1_supported` | Returns all devices that support waking the system from a light sleep state. |
+| `wake_from_S2_supported` | Returns all devices that support waking the system from a deeper sleep state. |
 | `wake_from_S3_supported` | Returns all devices that support waking the system from the deepest sleep state. |
-| `wake_from_any`          | Returns all devices that support waking the system from any sleep state.         |
-| `S1_supported`           | Lists devices supporting light sleep.                                            |
-| `S2_supported`           | Lists devices supporting deeper sleep.                                           |
-| `S3_supported`           | Lists devices supporting deepest sleep.                                          |
-| `S4_supported`           | Lists devices supporting hibernation.                                            |
-| `wake_programmable`      | Lists devices that are user-configurable to wake the system from a sleep state.  |
-| `wake_armed`             | Lists devices currently configured to wake the system from any sleep state.      |
-| `all_devices`            | Returns all devices present in the system.                                       |
+| `wake_from_any` | Returns all devices that support waking the system from any sleep state. |
+| `S1_supported` | Lists devices supporting light sleep. |
+| `S2_supported` | Lists devices supporting deeper sleep. |
+| `S3_supported` | Lists devices supporting deepest sleep. |
+| `S4_supported` | Lists devices supporting hibernation. |
+| `wake_programmable` | Lists devices that are user-configurable to wake the system from a sleep state. |
+| `wake_armed` | Lists devices currently configured to wake the system from any sleep state. |
+| `all_devices` | Returns all devices present in the system. |

@@ -3,7 +3,7 @@ title: 'StartAllBack Settings'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 5
+  order: 4
 ---
 
 Installation:
@@ -15,7 +15,7 @@ Disable Windows search via [`System > Disable Windows Search`](https://github.co
 
 All `StartAllBackCfg.exe` settings, which I currently use:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/startallback.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/misc/images/startallback.png?raw=true)
 
 All values `StartAllBack` reads that are located in `HKCU\Software\StartIsBack` (after clicking on `Properties`):
 ```powershell
@@ -199,8 +199,9 @@ __int64 __fastcall StartAllBackX64_102(_DWORD *a1)
 }
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Do not keep history of recently opened documents](https://www.noverse.dev/policies.html?p=StartMenu*NoRecentDocsHistory) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoRecentDocsHistory` |
+| [Configures search on the taskbar](https://www.noverse.dev/policies.html?p=Search*ConfigureSearchOnTaskbarMode) | `HKLM\Software\Policies\Microsoft\Windows\Windows Search` | `SearchOnTaskbarMode` |

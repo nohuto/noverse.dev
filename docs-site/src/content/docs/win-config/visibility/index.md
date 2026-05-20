@@ -36,7 +36,7 @@ sidebar:
 - [Hide Most Used Apps](/docs/win-config/visibility/hide-most-used-apps/)
 - [Spotlight](/docs/win-config/visibility/disable-spotlight/)
 - [PowerShell Colors](/docs/win-config/visibility/powershell-colors/)
-- [Theme Mouse Changes](/docs/win-config/visibility/disable-theme-mouse-changes/)
+- [Prevent Color/Theme Changes](/docs/win-config/visibility/prevent-color-theme-changes/)
 - [Hide Disabled/Disconnected Devices](/docs/win-config/visibility/hide-disabled-disconnected-devices/)
 - [Force Classic Control Panel](/docs/win-config/visibility/force-classic-control-panel/)
 - [System Clock Seconds](/docs/win-config/visibility/system-clock-seconds/)

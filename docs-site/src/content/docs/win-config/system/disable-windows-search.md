@@ -10,23 +10,23 @@ sidebar:
 
 | **Suboption** | **Description** |
 | ---- | ---- |
-| **Disable SafeSearch** | Disables the SafeSearch filter for web search, preventing strict filtering of search results. |
-| **Prevent Index on Battery** | Prevents Windows from indexing content while running on battery power, saving system resources. |
-| **Disable Index Usage for System File Search** | Disables the use of the index when searching system files, requiring a full scan each time. |
-| **Find Partial Matches** | Allows partial matches to be found when searching for files, enabling more flexible search results. |
-| **Exclude System Directories** | Excludes system directories from search results, narrowing down the search to user files and folders. |
-| **Exclude Archived Files** | Prevents archived files from being included in search results. |
-| **Disable Natural Language Search** | Disables the use of natural language search, which allows more conversational queries for search results. |
-| **Search Only in Indexed Locations** | Restricts searches in non-indexed locations to only file names, rather than searching both names and contents. |
-| **Exclude System Directories** | Excludes system directories (e.g., Windows folders) in search results when searching non-indexed locations. |
-| **Exclude Compressed Files** | Excludes compressed files (e.g., ZIP, CAB) in search results when searching non-indexed locations. |
-| **Search Only in Indexed Locations** | Disables: "Ensures that file names and contents are always searched in non-indexed locations, which may take more time." |
-| [**Disallow Indexing of Encrypted Items**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#allowindexingencryptedstoresoritems) | This policy setting allows encrypted items to be indexed. |
-| [**Disable Language Detection**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#alwaysuseautolangdetection) | This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. |
-| [**Prevent Querying Index Remotely**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#preventremotequeries) | If enabled, clients will be unable to query this computer's index remotely. Thus, when they're browsing network shares that are stored on this computer, they won't search them using the index. If disabled, client search requests will use this computer's index. |
-| [**Disable Web Results in Search**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
-| **Disable Search Highlights** | If enabled: "See content suggestions in the search boxi and in search home". |
-| **Disable Web Search** | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
+| Disable SafeSearch | Disables the SafeSearch filter for web search, preventing strict filtering of search results. |
+| Prevent Index on Battery | Prevents Windows from indexing content while running on battery power, saving system resources. |
+| Disable Index Usage for System File Search | Disables the use of the index when searching system files, requiring a full scan each time. |
+| Find Partial Matches | Allows partial matches to be found when searching for files, enabling more flexible search results. |
+| Exclude System Directories | Excludes system directories from search results, narrowing down the search to user files and folders. |
+| Exclude Archived Files | Prevents archived files from being included in search results. |
+| Disable Natural Language Search | Disables the use of natural language search, which allows more conversational queries for search results. |
+| Search Only in Indexed Locations | Restricts searches in non-indexed locations to only file names, rather than searching both names and contents. |
+| Exclude System Directories | Excludes system directories (e.g., Windows folders) in search results when searching non-indexed locations. |
+| Exclude Compressed Files | Excludes compressed files (e.g., ZIP, CAB) in search results when searching non-indexed locations. |
+| Search Only in Indexed Locations | Disables: "Ensures that file names and contents are always searched in non-indexed locations, which may take more time." |
+| [Disallow Indexing of Encrypted Items](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#allowindexingencryptedstoresoritems) | This policy setting allows encrypted items to be indexed. |
+| [Disable Language Detection](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#alwaysuseautolangdetection) | This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. |
+| [Prevent Querying Index Remotely](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#preventremotequeries) | If enabled, clients will be unable to query this computer's index remotely. Thus, when they're browsing network shares that are stored on this computer, they won't search them using the index. If disabled, client search requests will use this computer's index. |
+| [Disable Web Results in Search](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
+| Disable Search Highlights | If enabled: "See content suggestions in the search boxi and in search home". |
+| Disable Web Search | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
 
 ## Search Indexing
 
@@ -38,7 +38,7 @@ Instead of using the explorer to search for a file or folder, use [`Everything`]
 
 The `WSearch` service is needed for CmdPals `File Search` extension to work.
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
@@ -48,6 +48,9 @@ The `WSearch` service is needed for CmdPals `File Search` extension to work.
 | [Don't search the web or display web results in Search](https://www.noverse.dev/policies.html?p=Search*DoNotUseWebResults) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWeb` |
 | [Don't search the web or display web results in Search over metered connections](https://www.noverse.dev/policies.html?p=Search*DoNotUseWebResultsOnMeteredConnections) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWebOverMeteredConnections` |
 | [Do not allow web search](https://www.noverse.dev/policies.html?p=Search*DisableWebSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableWebSearch` |
+| [Set the SafeSearch setting for Search](https://www.noverse.dev/policies.html?p=Search*SafeSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchSafeSearch` |
+| [Do not allow locations on removable drives to be added to libraries](https://www.noverse.dev/policies.html?p=Search*DisableRemovableDriveIndexing) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableRemovableDriveIndexing` |
+| [Fully disable Search UI](https://www.noverse.dev/policies.html?p=Search*DisableSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableSearch` |
 
 ## Miscellaneous Notes
 

@@ -3,7 +3,7 @@ title: 'Remove Power Options'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 9
 ---
 
 Removes the `Hibernate`, `Lock`, `Sleep` power options.
@@ -24,7 +24,7 @@ HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSignOut
 HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAccount
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

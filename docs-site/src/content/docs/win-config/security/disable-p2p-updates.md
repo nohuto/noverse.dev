@@ -24,3 +24,9 @@ The option applies `0` = disables peer-to-peer (P2P) caching but still allows De
 ### [Set-DODownloadMode](https://learn.microsoft.com/en-us/powershell/module/deliveryoptimization/set-dodownloadmode?view=windowsserver2025-ps)
 
 Microsoft has a cmdlet for it, but seems like they didn't work much on it yet.
+
+## [Windows Policies](https://www.noverse.dev/policies.html)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Download Mode](https://www.noverse.dev/policies.html?p=DeliveryOptimization*DownloadMode) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization` | `DODownloadMode` |

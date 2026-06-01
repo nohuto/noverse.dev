@@ -38,7 +38,6 @@ html:not([data-has-sidebar]) {
 
 .sl-link-button.primary:is(:hover, :focus-visible) {
   border-color: var(--sl-color-accent-high);
-  color: var(--sl-color-accent-high);
 }
 
 .sl-banner {
@@ -51,18 +50,7 @@ html:not([data-has-sidebar]) {
   color: var(--sl-color-accent-high);
 }
 
-.sl-banner a:is(:hover, :focus-visible) {
-  color: var(--sl-color-accent-high);
-}
-
 .sl-badge {
-  --sl-badge-default-bg: var(--sl-color-accent-low);
-  --sl-badge-default-text: var(--sl-color-accent-high);
-  --sl-badge-success-bg: var(--sl-color-accent-low);
-  --sl-badge-success-text: var(--sl-color-accent-high);
-}
-
-[data-theme='light'] .sl-badge {
   --sl-badge-default-bg: var(--sl-color-accent-low);
   --sl-badge-default-text: var(--sl-color-accent-high);
   --sl-badge-success-bg: var(--sl-color-accent-low);
@@ -158,8 +146,7 @@ body::-webkit-scrollbar-thumb {
   color: var(--sl-color-gray-3);
 }
 
-.sidebar-tree-search-input:focus,
-.sidebar-tree-search-input:focus-visible {
+.sidebar-tree-search-input:focus {
   outline: none;
   border-color: var(--sl-color-accent);
   box-shadow: none;
@@ -244,17 +231,11 @@ site-search dialog #starlight__search {
 
 .scroll-to-top-button:hover,
 .scroll-to-top-button:active {
-  background-color: transparent !important;
   color: var(--sl-color-accent-high) !important;
-  border: 0 !important;
-  box-shadow: none !important;
 }
 
 .scroll-to-top-button.keyboard-focus {
-  background-color: transparent !important;
   color: var(--sl-color-accent-high) !important;
-  border: 0 !important;
-  box-shadow: none !important;
   outline: 2px solid color-mix(in srgb, var(--sl-color-accent) 55%, transparent) !important;
   outline-offset: 0.2rem !important;
 }
@@ -274,7 +255,6 @@ site-search dialog #starlight__search {
   justify-content: space-between !important;
   gap: 0 !important;
   padding: 0.2em var(--sl-sidebar-item-padding-inline) !important;
-  padding-inline: var(--sl-sidebar-item-padding-inline) !important;
 }
 
 .sidebar-pane ul ul li {
@@ -284,11 +264,6 @@ site-search dialog #starlight__search {
 }
 
 .sidebar-pane .top-level > li + li {
-  margin-top: 0.75rem !important;
-}
-
-.sidebar-pane .top-level > li + li:has(details),
-.sidebar-pane .top-level > li:has(details) + li:not(:has(details)) {
   margin-top: 0.75rem !important;
 }
 
@@ -361,10 +336,5 @@ site-search dialog #starlight__search {
 @media (min-width: 50rem) {
   .sidebar-pane .top-level > li + li {
     margin-top: 0.5rem !important;
-  }
-
-  .sidebar-pane .large {
-    font-size: var(--sl-text-sm) !important;
-    font-weight: inherit !important;
   }
 }

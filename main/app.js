@@ -12,11 +12,14 @@ const LIGHT_THEMES = new Set([
   'everforest-light'
 ]);
 const BG_KEY = 'nv-bg';
-const DEFAULT_BG = 'diagonal-grid';
-const BG_KEYS = ['clear', 'diagonal-grid', 'dark-noise', 'dot-matrix', 'circuit-board', 'starfield'];
+const DEFAULT_BG = 'starfield-static';
+const BG_KEYS = ['clear', 'diagonal-grid', 'dark-noise', 'dot-matrix', 'circuit-board', 'starfield', 'starfield-static'];
 const BG_SET = new Set(BG_KEYS);
 const KEYFRAMES_ICON_DARK = 'main/icons/dark/keyframes.svg';
 const KEYFRAMES_ICON_LIGHT = 'main/icons/light/keyframes.svg';
+const ACTIVE_PAGE_PATH_KEY = 'nv-active-page-path';
+const NOT_FOUND_PATH_KEY = 'nv-not-found-path';
+const MAIN_PAGE_PATHS = new Set(['/', '/index.html', '/product.html', '/projects.html', '/bin-diff.html', '/policies.html']);
 const FONT_KEY = 'nv-font';
 const FONT_SIZE_KEY = 'nv-font-size';
 const DEFAULT_FONT = 'cascadia';
@@ -132,7 +135,7 @@ let selectUiListener;
 let selectUiKeyListener;
 let binDiffAssetsPromise;
 let terminalExited = false;
-let consoleAnimationCleanup = null;
+let siteErrorReturnFocus;
 const binDiffAssetPromiseCache = new Map();
 const binDiffEntriesCache = new Map();
 const binDiffFunctionNamesCache = new Map();
@@ -149,12 +152,6 @@ const EMAIL_BYTES = [121, 120, 127, 98, 99, 120, 87, 99, 98, 99, 118, 57, 126, 1
 const getEmailAddress = () =>
   EMAIL_BYTES.map(byte => String.fromCharCode(byte ^ EMAIL_KEY)).join('');
 
-function stopConsoleAnimation() {
-  if (!consoleAnimationCleanup) return;
-  consoleAnimationCleanup();
-  consoleAnimationCleanup = null;
-}
-
 const storageGet = (key, fallback) => {
   try {
     return localStorage.getItem(key) || fallback;
@@ -167,6 +164,23 @@ const storageSet = (key, value) => {
   try {
     localStorage.setItem(key, value);
   } catch { }
+};
+
+const rememberActivePage = pathname => {
+  if (!MAIN_PAGE_PATHS.has(pathname)) return;
+  try {
+    sessionStorage.setItem(ACTIVE_PAGE_PATH_KEY, pathname);
+  } catch { }
+};
+
+const consumeNotFoundPath = () => {
+  try {
+    const pathname = sessionStorage.getItem(NOT_FOUND_PATH_KEY) || '';
+    sessionStorage.removeItem(NOT_FOUND_PATH_KEY);
+    return pathname;
+  } catch {
+    return '';
+  }
 };
 
 const hasSelectOption = (select, value) => Array.from(select.options).some(option => option.value === value);
@@ -679,6 +693,135 @@ function initClipboard() {
   });
 }
 
+function hideSiteError() {
+  const modal = document.getElementById('site-error-modal');
+  if (!modal) return;
+  modal.hidden = true;
+  if (siteErrorReturnFocus?.isConnected) {
+    siteErrorReturnFocus.focus();
+  }
+  siteErrorReturnFocus = null;
+}
+
+function createSiteErrorModal() {
+  const modal = document.createElement('div');
+  modal.className = 'site-error-modal';
+  modal.id = 'site-error-modal';
+  modal.hidden = true;
+  modal.innerHTML = `
+    <section class="site-error-dialog" role="alertdialog" aria-modal="true" aria-labelledby="site-error-title" aria-describedby="site-error-message">
+      <header class="site-error-header">
+        <h2 id="site-error-title">404</h2>
+        <button class="site-error-close" type="button" data-site-error-close aria-label="Close error message" title="Close error message">
+          <svg class="bindiff-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </header>
+      <div class="site-error-body">
+        <p id="site-error-message">The requested page could not be found.</p>
+        <code class="site-error-path"></code>
+      </div>
+    </section>
+  `;
+  const dialog = modal.querySelector('.site-error-dialog');
+  const header = modal.querySelector('.site-error-header');
+  if (!(dialog instanceof HTMLElement) || !(header instanceof HTMLElement)) return modal;
+
+  const clampDialogPosition = () => {
+    if (modal.hidden) return;
+    const maxLeft = Math.max(0, modal.clientWidth - dialog.offsetWidth);
+    const maxTop = Math.max(0, modal.clientHeight - dialog.offsetHeight);
+    dialog.style.left = `${Math.min(Math.max(0, dialog.offsetLeft), maxLeft)}px`;
+    dialog.style.top = `${Math.min(Math.max(0, dialog.offsetTop), maxTop)}px`;
+    dialog.style.transform = 'none';
+  };
+
+  const centerDialog = () => {
+    dialog.style.left = `${Math.max(0, (modal.clientWidth - dialog.offsetWidth) / 2)}px`;
+    dialog.style.top = `${Math.max(0, (modal.clientHeight - dialog.offsetHeight) / 2)}px`;
+    dialog.style.transform = 'none';
+    dialog.dataset.positioned = 'true';
+  };
+
+  header.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || modal.hidden) return;
+    if (event.target instanceof Element && event.target.closest('button')) return;
+    event.preventDefault();
+    if (dialog.dataset.positioned !== 'true') centerDialog();
+
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const startLeft = dialog.offsetLeft;
+    const startTop = dialog.offsetTop;
+    const maxLeft = Math.max(0, modal.clientWidth - dialog.offsetWidth);
+    const maxTop = Math.max(0, modal.clientHeight - dialog.offsetHeight);
+    let lastLeft = startLeft;
+    let lastTop = startTop;
+
+    header.setPointerCapture(event.pointerId);
+
+    const onMove = moveEvent => {
+      lastLeft = Math.min(Math.max(0, startLeft + moveEvent.clientX - startX), maxLeft);
+      lastTop = Math.min(Math.max(0, startTop + moveEvent.clientY - startY), maxTop);
+      dialog.style.left = `${lastLeft}px`;
+      dialog.style.top = `${lastTop}px`;
+    };
+
+    const onUp = () => {
+      dialog.dataset.positioned = 'true';
+      header.releasePointerCapture(event.pointerId);
+      header.removeEventListener('pointermove', onMove);
+      header.removeEventListener('pointerup', onUp);
+    };
+
+    header.addEventListener('pointermove', onMove);
+    header.addEventListener('pointerup', onUp);
+  });
+  window.addEventListener('resize', clampDialogPosition);
+  modal.addEventListener('click', event => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (target === modal || target?.closest('[data-site-error-close]')) {
+      hideSiteError();
+    }
+  });
+  modal.addEventListener('keydown', event => {
+    if (event.key !== 'Escape') return;
+    event.preventDefault();
+    hideSiteError();
+  });
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function showNotFoundError(url) {
+  const modal = document.getElementById('site-error-modal') || createSiteErrorModal();
+  const requestedUrl = new URL(url, location.href);
+  const path = `${requestedUrl.pathname}${requestedUrl.search}${requestedUrl.hash}`;
+  const pathElement = modal.querySelector('.site-error-path');
+  if (pathElement) pathElement.textContent = path;
+  siteErrorReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  modal.hidden = false;
+  const dialog = modal.querySelector('.site-error-dialog');
+  if (dialog instanceof HTMLElement) {
+    requestAnimationFrame(() => {
+      const maxLeft = Math.max(0, modal.clientWidth - dialog.offsetWidth);
+      const maxTop = Math.max(0, modal.clientHeight - dialog.offsetHeight);
+      if (dialog.dataset.positioned !== 'true') {
+        dialog.style.left = `${maxLeft / 2}px`;
+        dialog.style.top = `${maxTop / 2}px`;
+        dialog.dataset.positioned = 'true';
+      } else {
+        dialog.style.left = `${Math.min(Math.max(0, dialog.offsetLeft), maxLeft)}px`;
+        dialog.style.top = `${Math.min(Math.max(0, dialog.offsetTop), maxTop)}px`;
+      }
+    });
+  }
+  modal.querySelector('[data-site-error-close]')?.focus();
+}
+
 function sanitizeMain(main) {
   if (!main) return;
   main.querySelectorAll('script').forEach(script => script.remove());
@@ -700,8 +843,12 @@ function sanitizeMain(main) {
 async function loadPage(url, push = true) {
   const main = document.querySelector('main');
   try {
-    main.classList.add('fading');
     const res = await fetch(url, { credentials: 'same-origin' });
+    if (res.status === 404) {
+      showNotFoundError(url);
+      return;
+    }
+    if (!res.ok) throw new Error(`Page request failed with status ${res.status}`);
     const html = await res.text();
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const newMain = doc.querySelector('main');
@@ -709,27 +856,22 @@ async function loadPage(url, push = true) {
     sanitizeMain(newMain);
     const newTitle = doc.querySelector('title')?.textContent || document.title;
     const nextPathname = new URL(url, location.href).pathname;
-    newMain.classList.add('fading');
-
-    setTimeout(() => {
-      stopConsoleAnimation();
-      main.replaceWith(newMain);
-      document.title = newTitle;
-      setActive(nextPathname.split('/').pop() || 'index.html');
-      applyTerminalExitState();
-      updatePromptBar(nextPathname);
-      initRepoDescriptions();
-      initFiltering();
-      initSelectUI();
-      initPolicyExplorer();
-      initBinDiff();
-      initConsole();
-      requestAnimationFrame(() => newMain.classList.remove('fading'));
-    }, 180);
+    rememberActivePage(nextPathname);
+    main.replaceWith(newMain);
+    document.title = newTitle;
+    setActive(nextPathname.split('/').pop() || 'index.html');
+    applyTerminalExitState();
+    updatePromptBar(nextPathname);
+    initRepoDescriptions();
+    initClickableCards();
+    initFiltering();
+    initSelectUI();
+    initPolicyExplorer();
+    initBinDiff();
+    initConsole();
 
     if (push) history.pushState({ url }, '', url);
   } catch {
-    main.classList.remove('fading');
     location.href = url;
   }
 }
@@ -776,6 +918,27 @@ function initRepoDescriptions() {
     getRepoDescription(repo).then(desc => {
       descEl.textContent = desc;
     });
+  });
+}
+
+function initClickableCards() {
+  const cards = document.querySelectorAll('.clickable-card');
+
+  cards.forEach(card => {
+    if (!(card instanceof HTMLElement) || card.dataset.cardReady === 'true') return;
+    const href = card.dataset.cardHref || (card.dataset.repo ? `https://github.com/${card.dataset.repo}` : '');
+    if (!href) return;
+
+    const title = card.querySelector('h3, h4')?.textContent?.trim() || 'card';
+    const link = document.createElement('a');
+    link.className = 'clickable-card-link';
+    link.href = href;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.setAttribute('aria-label', `Open ${title}`);
+
+    card.dataset.cardReady = 'true';
+    card.appendChild(link);
   });
 }
 
@@ -3637,198 +3800,6 @@ function initConsole() {
     scrollToBottom();
   };
 
-  const addNodeLine = (node, className) => {
-    const line = document.createElement('div');
-    line.className = className ? `console-line ${className}` : 'console-line';
-    line.appendChild(node);
-    lines.appendChild(line);
-    scrollToBottom();
-    return line;
-  };
-
-  const addIndentedLines = (items, className) => {
-    items.forEach(item => addLine(`  ${item}`, className));
-  };
-
-  const parseAnimationDimension = value => {
-    if (value == null || value === '') return null;
-    const normalized = String(value).trim().toLowerCase();
-    if (!normalized) return null;
-    const match = normalized.match(/^(\d{1,5})(?:px)?$/);
-    if (!match) return Number.NaN;
-    const parsed = Number.parseInt(match[1], 10);
-    return Number.isFinite(parsed) && parsed > 0 ? parsed : Number.NaN;
-  };
-
-  const startTrippyAnimation = (requestedWidth = null, requestedHeight = null) => {
-    stopConsoleAnimation();
-
-    const container = document.createElement('div');
-    container.className = 'console-animation console-animation-trippy';
-
-    const gridContainer = document.createElement('div');
-    gridContainer.className = 'trippy-grid-container';
-
-    const canvas = document.createElement('canvas');
-    canvas.className = 'trippy-grid';
-    canvas.setAttribute('aria-label', 'Terminal animation');
-
-    gridContainer.appendChild(canvas);
-    container.appendChild(gridContainer);
-
-    const line = addNodeLine(container, 'console-animation-line');
-    const ctx = canvas.getContext('2d', { alpha: true });
-    if (!ctx) {
-      addLine('animation unavailable: canvas is not supported', 'muted');
-      line.remove();
-      return;
-    }
-
-    const charRangeStart = 33;
-    const charRangeEnd = 126;
-    const charRangeMax = charRangeEnd - charRangeStart;
-    const targetFrameMs = 1000 / 30;
-    let cellWidth = 10;
-    let cellHeight = 10;
-    let colCount = 0;
-    let rowCount = 0;
-    let canvasWidth = 0;
-    let canvasHeight = 0;
-    let xTerms = new Float32Array(0);
-    let yTerms = new Float32Array(0);
-    let glyphAtlas = [];
-    let palette = [];
-    let rafId = 0;
-    let lastFrame = 0;
-    let stopped = false;
-
-    const getThemePalette = () => {
-      const rootStyle = getComputedStyle(document.documentElement);
-      const nextPalette = [
-        rootStyle.getPropertyValue('--accent').trim(),
-        rootStyle.getPropertyValue('--accent-2').trim(),
-        rootStyle.getPropertyValue('--text').trim(),
-        rootStyle.getPropertyValue('--muted').trim(),
-        rootStyle.getPropertyValue('--success').trim(),
-        rootStyle.getPropertyValue('--warning').trim()
-      ].filter(Boolean);
-      return nextPalette.length ? nextPalette : ['#ffffff'];
-    };
-
-    const applyRequestedSize = () => {
-      const lineWidth = Math.max(1, line.clientWidth);
-      const outputHeight = Math.max(1, output.clientHeight);
-      const inputHeight = form.offsetHeight || 0;
-      const maxWidth = lineWidth;
-      const maxHeight = Math.max(80, outputHeight - inputHeight - 12);
-      const nextWidth = requestedWidth ? Math.min(requestedWidth, maxWidth) : maxWidth;
-      const nextHeight = requestedHeight ? Math.min(requestedHeight, maxHeight) : Math.min(Math.max(145, outputHeight * 0.26), 230, maxHeight);
-      gridContainer.style.width = `${Math.floor(nextWidth)}px`;
-      gridContainer.style.height = `${Math.floor(nextHeight)}px`;
-    };
-
-    const buildGlyphAtlas = font => {
-      glyphAtlas = palette.map(color => {
-        const colorGlyphs = [];
-        for (let code = 0; code < charRangeMax; code += 1) {
-          const glyphCanvas = document.createElement('canvas');
-          glyphCanvas.width = Math.ceil(cellWidth);
-          glyphCanvas.height = Math.ceil(cellHeight);
-          const glyphCtx = glyphCanvas.getContext('2d', { alpha: true });
-          if (glyphCtx) {
-            glyphCtx.font = font;
-            glyphCtx.textBaseline = 'top';
-            glyphCtx.fillStyle = color;
-            glyphCtx.fillText(String.fromCharCode(charRangeStart + code), 0, 0);
-          }
-          colorGlyphs.push(glyphCanvas);
-        }
-        return colorGlyphs;
-      });
-    };
-
-    const updateSize = () => {
-      if (stopped) return;
-
-      applyRequestedSize();
-
-      const rect = gridContainer.getBoundingClientRect();
-      const nextWidth = Math.max(1, Math.floor(rect.width));
-      const nextHeight = Math.max(1, Math.floor(rect.height));
-      const gridStyle = getComputedStyle(canvas);
-      const fontSize = parseFloat(gridStyle.fontSize) || 10;
-      const lineHeight = parseFloat(gridStyle.lineHeight) || fontSize;
-      const font = `${fontSize}px ${gridStyle.fontFamily}`;
-
-      ctx.font = font;
-      ctx.textBaseline = 'top';
-      cellWidth = Math.max(1, ctx.measureText('M').width);
-      cellHeight = Math.max(1, lineHeight);
-      colCount = Math.max(1, Math.floor(nextWidth / cellWidth));
-      rowCount = Math.max(1, Math.floor(nextHeight / cellHeight));
-      canvasWidth = Math.ceil(colCount * cellWidth);
-      canvasHeight = Math.ceil(rowCount * cellHeight);
-
-      canvas.width = canvasWidth;
-      canvas.height = canvasHeight;
-      canvas.style.width = `${canvasWidth}px`;
-      canvas.style.height = `${canvasHeight}px`;
-
-      ctx.imageSmoothingEnabled = false;
-      palette = getThemePalette();
-      buildGlyphAtlas(font);
-
-      xTerms = new Float32Array(colCount);
-      yTerms = new Float32Array(rowCount);
-      const cx = Math.floor(colCount / 2);
-      const cy = Math.floor(rowCount / 2);
-      for (let x = 0; x < colCount; x += 1) xTerms[x] = Math.cos((x - cx) / 8.0);
-      for (let y = 0; y < rowCount; y += 1) yTerms[y] = Math.sin((y - cy) / 8.0);
-
-      scrollToBottom();
-    };
-
-    const render = ticks => {
-      if (stopped || !line.isConnected) return;
-      rafId = requestAnimationFrame(render);
-      if (ticks - lastFrame < targetFrameMs) return;
-      lastFrame = ticks;
-
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-      const t = 100 + (ticks * 0.001);
-
-      for (let y = 0; y < rowCount; y += 1) {
-        const yTerm = yTerms[y];
-        const drawY = y * cellHeight;
-        for (let x = 0; x < colCount; x += 1) {
-          const v = (xTerms[x] + yTerm + t) * 16;
-          const charVal = Math.floor(v % charRangeMax);
-          const glyphIndex = (charVal + charRangeMax) % charRangeMax;
-          const colorIndex = glyphIndex % palette.length;
-          ctx.drawImage(glyphAtlas[colorIndex][glyphIndex], x * cellWidth, drawY);
-        }
-      }
-    };
-
-    const resizeObserver = window.ResizeObserver ? new ResizeObserver(updateSize) : null;
-    const handleThemeChange = updateSize;
-    resizeObserver?.observe(line);
-    resizeObserver?.observe(output);
-    document.addEventListener('nv:theme-change', handleThemeChange);
-    requestAnimationFrame(() => {
-      updateSize();
-      rafId = requestAnimationFrame(render);
-    });
-
-    consoleAnimationCleanup = () => {
-      stopped = true;
-      if (rafId) cancelAnimationFrame(rafId);
-      resizeObserver?.disconnect();
-      document.removeEventListener('nv:theme-change', handleThemeChange);
-      if (line.isConnected) line.remove();
-    };
-  };
-
   const extractFirstUrl = text => {
     if (!text) return null;
     const match = text.match(/https?:\/\/[^\s<>"'`]+/i);
@@ -3990,7 +3961,6 @@ function initConsole() {
         ['alias', 'list built-in aliases'],
         ['themes', 'list theme ids'],
         ['theme <id>', 'set theme'],
-        ['animation [x y]', 'some cool animation (x/y = pixels)'],
         ['fontsize <10-22>', 'set size'],
         ['clear', 'clear the terminal'],
         ['exit', 'exit (hide) terminal, reverted on site refresh']
@@ -4163,24 +4133,11 @@ function initConsole() {
       storageSet(FONT_SIZE_KEY, applied + 'px');
       addLine(`size set: ${applied}px`);
     },
-    animation: args => {
-      const requestedWidth = parseAnimationDimension(args[0]);
-      const requestedHeight = parseAnimationDimension(args[1]);
-      if (Number.isNaN(requestedWidth) || Number.isNaN(requestedHeight) || args.length > 2) {
-        addLine('usage: animation [width] [height]', 'muted');
-        addLine('example: animation 900 180', 'muted');
-        return;
-      }
-      addLine('animation', 'muted');
-      startTrippyAnimation(requestedWidth, requestedHeight);
-    },
     clear: () => {
-      stopConsoleAnimation();
       lines.replaceChildren();
       scrollToBottom();
     },
     exit: () => {
-      stopConsoleAnimation();
       terminalExited = true;
       applyTerminalExitState();
       loadPage('projects.html');
@@ -4314,6 +4271,8 @@ function initConsole() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const notFoundPath = consumeNotFoundPath();
+  rememberActivePage(location.pathname);
   setActive(location.pathname.split('/').pop() || 'index.html');
   applyTerminalExitState();
   updatePromptBar(location.pathname);
@@ -4322,9 +4281,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypography();
   initSelectUI();
   initRepoDescriptions();
+  initClickableCards();
   initFiltering();
   initBinDiff();
   initPolicyExplorer();
   initClipboard();
   initConsole();
+  if (notFoundPath) showNotFoundError(notFoundPath);
 });

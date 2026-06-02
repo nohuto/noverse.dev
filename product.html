@@ -10,7 +10,7 @@
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; form-action 'self' https://www.paypal.com">
   <title>Product</title>
-  <link rel="icon" href="main/images/nvlogo.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="/main/images/nvlogo.png">
   <script src="main/bootstrap.js"></script>
   <link rel="stylesheet" href="main/styles.css">
   <script src="main/app.js" defer></script>
@@ -64,9 +64,7 @@
           </div>
           <div class="product-intro">
             <h2>Windows Configuration</h2>
-            <p>
-              WinConfig is based on my personal research on several topics, which I began documenting around July 2024.
-            </p>
+            <p>WinConfig is based on my personal research on several topics, which I began documenting around July 2024.</p>
           </div>
           <div class="comparison-copy">
             <h3>Noteable Windows Configuration Tool Features:</h3>
@@ -157,20 +155,18 @@
         <div class="documentation-overview" id="documentation">
           <div class="doc-header">
             <h3>Detailed documentation for the WinConfig tool or for purely informational reasons.</h3>
-            <p>Each option has it's own somtimes detailed or less detailed documentation, containing explanations for
-              specific changes or information for the topic itself.</p>
-            <p class="card-click-note">Click a block below to open its documentation section.</p>
+            <p>Each option has it's own somtimes detailed or less detailed documentation, containing explanations for specific changes or information for the topic itself.</p>
           </div>
           <div class="doc-grid">
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/system/">
               <span class="doc-index">01</span>
               <h4>System</h4>
-              <p>Operating system adjustments for services, scheduling, storage, startup behavior and more.</p>
+              <p>Operating system adjustments for services, scheduling, storage, startup behavior...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/visibility/">
               <span class="doc-index">02</span>
               <h4>Visibility</h4>
-              <p>Customize Windows visuals and interface behavior.</p>
+              <p>Customize visuals/interface behavior...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/peripheral/">
               <span class="doc-index">03</span>
@@ -180,23 +176,22 @@
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/power/">
               <span class="doc-index">04</span>
               <h4>Power</h4>
-              <p>Control several different power management features and other related options.</p>
+              <p>Control several different PM features...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/privacy/">
               <span class="doc-index">05</span>
               <h4>Privacy</h4>
-              <p>Privacy configuration for telemetry, diagnostics, encryption, data sharing, and more.</p>
+              <p>Privacy configuration for telemetry, diagnostics, encryption, data sharing...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/network/">
               <span class="doc-index">06</span>
               <h4>Network</h4>
-              <p>Change network adapter settings including DNS, sharing controls, offloads... and miscellaneous network
-                related features.</p>
+              <p>Change network adapter settings including DNS, offloads, IM, probing... and all kind of other network related features.</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/nvidia/">
               <span class="doc-index">07</span>
               <h4>NVIDIA</h4>
-              <p>NVIDIA driver installation, control panel settings... and resource manager values.</p>
+              <p>NVIDIA driver installation, NVCPL settings... and resource manager values.</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/cleanup/">
               <span class="doc-index">08</span>
@@ -206,7 +201,7 @@
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/misc/">
               <span class="doc-index">09</span>
               <h4>Misc</h4>
-              <p>Miscellaneous external app configuration/installation, e.g. nvfetch.</p>
+              <p>Miscellaneous external app configuration/installation/patching, e.g. regkit/nvfetch.</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/policies/">
               <span class="doc-index">10</span>
@@ -230,10 +225,8 @@
       <div class="panel-body">
         <div class="external-tools" id="toolkit">
           <div class="doc-header">
-            <h3>Free &amp; open-source extension tools</h3>
-            <p>Each tool is available under GPLv3 and can be used alongside WinConfig as standalone tools. See all my
-              open source projects <a class="legal-link" href="projects.html">here</a>.</p>
-            <p class="card-click-note">Click a block below to open its repository.</p>
+            <h3>FOSS extensions</h3>
+            <p>Each tool is available under GPLv3 and can be used alongside WinConfig as standalone tools. See all my open source projects <a class="legal-link" href="projects.html">here</a>.</p>
           </div>
           <div class="tool-grid">
             <article class="tool-card project-card clickable-card" data-repo="nohuto/app-tools">
@@ -281,48 +274,23 @@
           <div class="legal-grid">
             <article class="legal-card">
               <h4>Data Privacy</h4>
-              <p>
-                WinConfig only references hardware identifiers required for license verification: UUID, CPU ID, and
-                board ID. If any are unavailable, it can fall back to, MAC address, video controller ID,
-                sound device ID, or USB controller ID. No additional system data is collected, transmitted, or stored.
-                Learn more about the firmware identifiers via the
-                <a class="legal-link" href="https://learn.microsoft.com/en-us/windows-hardware/drivers/bringup/smbios"
-                  target="_blank" rel="noopener noreferrer">official SMBIOS documentation</a>.
-              </p>
+              <p>WinConfig uses three hardware identifiers for license registration and verification, SMBIOS UUID, baseboard serial, and CPU ID (with MAC address or device IDs as fallbacks). Saved login data is stored locally, I don't have access to your password.</p>
             </article>
             <article class="legal-card">
               <h4>Usage &amp; Redistribution</h4>
-              <p>
-                Licenses are for personal use only. Reselling, transferring, or redistributing WinConfig is prohibited
-                unless you receive explicit written permission from Nohuto. Violations lead to immediate license
-                revocation and a permanent ban.
-              </p>
+              <p>Licenses are for personal use only. Reselling, transferring, redistributing, or SRE of WinConfig is prohibited unless you receive explicit written permission from me (Nohuto). By purchasing or using WinConfig, you accept these terms.</p>
             </article>
             <article class="legal-card">
               <h4>Refund Policy</h4>
-              <p>
-                Refunds are available only if no registration has been made and no Discord role has been assigned.
-                Include proof of purchase when submitting a refund request.
-              </p>
+              <p>Refunds are available only if no registration has been made and no Discord role has been assigned. Include proof of purchase when submitting a refund request.</p>
             </article>
             <article class="legal-card">
               <h4>License</h4>
-              <p>
-                Each purchase grants one hardware bound license. Manual validation is required after checkout and can
-                take several minutes or hours. Keys do not transfer across devices without re-registration.
-              </p>
+              <p>Each purchase grants one hardware bound license. Manual validation is required after checkout and can take several minutes or hours. Keys do not transfer across devices without re-registration.</p>
             </article>
             <article class="legal-card">
               <h4>After Purchase</h4>
-              <p>
-                After purchase, a manual process begins. To get access, you must either include your Discord ID in the
-                purchase message or send me your transaction ID so I can assign the Discord role. The role is not
-                assigned automatically, so one of these is required. Once the role is assigned, you'll get access to a
-                download link for the tool. After downloading, you must register via the tool, and then Nohuto will
-                validate your registration. Joining (or already being in) the Discord server is recommended for now so
-                you receive updates, announcements, and support. Otherwise you may miss app updates (config updates
-                would theoretically work as long as no new section gets added).
-              </p>
+              <p>To get access, you must either include your Discord ID in the purchase message or send me your transaction ID so I can assign the Discord role. The role isn't assigned automatically, so one of these is required. Once the role is assigned, you'll get access to a download link for the tool. After downloading, you must register via the tool, and then I'll validate your registration. Joining (or already being in) the Discord server is recommended for now so you receive updates, announcements, and support. Otherwise you may miss app updates (config updates would theoretically work as long as no new section/helper gets added).</p>
             </article>
           </div>
         </div>

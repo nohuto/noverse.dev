@@ -1,0 +1,807 @@
+/* Copyright (c) 2026 Nohuto. All rights reserved. */
+(function attachTerminal(global) {
+  'use strict';
+const BIN_DIFF_RELEASE_LINKS = Object.freeze([
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-21H2',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-22H2',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-26H1',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1507',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1511',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1607',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1703',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1709',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1803',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1809',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1903',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1909',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/2004',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/20H2',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/21H1',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/21H2',
+  'https://github.com/nohuto/decompiled-pseudocode/tree/main/22H2'
+]);
+const PROJECT_LIST = [
+  { title: 'Windows Configuration', repo: 'nohuto/win-config' },
+  { title: 'RegKit', repo: 'nohuto/regkit' },
+  { title: 'Decompiled Pseudocode', repo: 'nohuto/decompiled-pseudocode' },
+  { title: 'NVAPI CLI', repo: 'nohuto/nvapi-cli' },
+  { title: 'AES CBC Encryption', repo: 'nohuto/aes-cbc' },
+  { title: 'Bitmask Calculator', repo: 'nohuto/bitmask-calc' },
+  { title: 'Blocklist Manager', repo: 'nohuto/blocklist-mgr' },
+  { title: 'Component Manager', repo: 'nohuto/comp-mgr' },
+  { title: 'App Configuration Tools', repo: 'nohuto/app-tools' },
+  { title: 'Game Configuration Tools', repo: 'nohuto/game-tools' },
+  { title: 'Symbols Memory Dump', repo: 'nohuto/sym-dump' },
+  { title: 'NVFetch', repo: 'nohuto/nvfetch' },
+  { title: 'Void Obfuscation', repo: 'nohuto/void' },
+  { title: 'PowerShell Minifier', repo: 'nohuto/minifier' },
+  { title: 'PS12bat', repo: 'nohuto/ps12bat' },
+  { title: 'Base64 Encoding / Character Obfuscation', repo: 'nohuto/b64-char' },
+  { title: 'ADMX Parser', repo: 'nohuto/admx-parser' },
+  { title: 'strings2 TUI', repo: 'nohuto/strings2-tui' },
+  { title: 'Base64 Reversal & Character Obfuscation', repo: 'nohuto/b64rev' },
+  { title: 'DISM WSIM', repo: 'nohuto/dism-wsim' },
+  { title: 'reg2bat', repo: 'nohuto/reg2bat' },
+  { title: 'PBO2 UV Guide', repo: 'nohuto/pbo2-uv' },
+  { title: 'GPU OC/UV Guide', repo: 'nohuto/gpu-oc-uv' }
+];
+
+let consoleHistory = [];
+let consoleHistoryIndex = -1;
+let consoleTimestampTimer;
+let consoleFocusListener;
+let consoleResizeHandler;
+let consoleResizeObserver;
+let consoleClampRaf = 0;
+
+const ASCII_ART = [
+  '  \\  |                                    ',
+  '   \\ |   _ \\ \\ \\   /  _ \\   __|  __|   _ \\',
+  ' |\\  |  (   | \\ \\ /   __/  |   \\__ \\   __/',
+  '_| \\_| \\___/   \\_/  \\___| _|   ____/ \\___|'
+];
+
+function initConsoleWindow() {
+  const windowEl = document.getElementById('console-window');
+  const handle = document.getElementById('console-drag');
+  if (!windowEl || !handle) return;
+  if (windowEl.dataset.ready === 'true') return;
+  windowEl.dataset.ready = 'true';
+
+  const parent = windowEl.parentElement;
+
+  const materializeInitialPosition = () => {
+    if (windowEl.dataset.positioned === 'true') return;
+    if (getComputedStyle(windowEl).position !== 'absolute') {
+      windowEl.dataset.positioned = 'true';
+      return;
+    }
+    const parentRect = parent.getBoundingClientRect();
+    const rect = windowEl.getBoundingClientRect();
+    windowEl.style.left = `${Math.max(0, rect.left - parentRect.left)}px`;
+    windowEl.style.top = `${Math.max(0, rect.top - parentRect.top)}px`;
+    windowEl.style.transform = 'none';
+    windowEl.dataset.positioned = 'true';
+  };
+
+  const clampPosition = () => {
+    const parentRect = parent.getBoundingClientRect();
+    const rect = windowEl.getBoundingClientRect();
+    const maxLeft = Math.max(0, parentRect.width - rect.width);
+    const maxTop = Math.max(0, parentRect.height - rect.height);
+    const currentLeft = windowEl.offsetLeft;
+    const currentTop = windowEl.offsetTop;
+    windowEl.style.left = `${Math.min(Math.max(0, currentLeft), maxLeft)}px`;
+    windowEl.style.top = `${Math.min(Math.max(0, currentTop), maxTop)}px`;
+  };
+
+  const scheduleClampPosition = () => {
+    if (consoleClampRaf) return;
+    consoleClampRaf = requestAnimationFrame(() => {
+      consoleClampRaf = 0;
+      clampPosition();
+    });
+  };
+
+  materializeInitialPosition();
+  clampPosition();
+
+  if (consoleResizeObserver) {
+    consoleResizeObserver.disconnect();
+    consoleResizeObserver = null;
+  }
+  if (consoleClampRaf) {
+    cancelAnimationFrame(consoleClampRaf);
+    consoleClampRaf = 0;
+  }
+  if (window.ResizeObserver) {
+    consoleResizeObserver = new ResizeObserver(scheduleClampPosition);
+    consoleResizeObserver.observe(windowEl);
+  }
+
+  if (consoleResizeHandler) {
+    window.removeEventListener('resize', consoleResizeHandler);
+  }
+  consoleResizeHandler = scheduleClampPosition;
+  window.addEventListener('resize', consoleResizeHandler);
+
+  handle.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    const parentRect = parent.getBoundingClientRect();
+    const rect = windowEl.getBoundingClientRect();
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startLeft = rect.left - parentRect.left;
+    const startTop = rect.top - parentRect.top;
+    const width = rect.width;
+    const height = rect.height;
+    const maxLeft = Math.max(0, parentRect.width - width);
+    const maxTop = Math.max(0, parentRect.height - height);
+    let rafId = 0;
+    let pendingX = startX;
+    let pendingY = startY;
+    let lastLeft = startLeft;
+    let lastTop = startTop;
+
+    handle.setPointerCapture(e.pointerId);
+    windowEl.style.willChange = 'transform';
+
+    const paintDrag = () => {
+      rafId = 0;
+      const dx = pendingX - startX;
+      const dy = pendingY - startY;
+      const nextLeft = Math.min(Math.max(0, startLeft + dx), maxLeft);
+      const nextTop = Math.min(Math.max(0, startTop + dy), maxTop);
+      lastLeft = nextLeft;
+      lastTop = nextTop;
+      windowEl.style.transform = `translate3d(${nextLeft - startLeft}px, ${nextTop - startTop}px, 0)`;
+    };
+
+    const onMove = ev => {
+      pendingX = ev.clientX;
+      pendingY = ev.clientY;
+      if (rafId) return;
+      rafId = requestAnimationFrame(paintDrag);
+    };
+
+    const onUp = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      paintDrag();
+      windowEl.style.transform = 'none';
+      windowEl.style.left = `${lastLeft}px`;
+      windowEl.style.top = `${lastTop}px`;
+      windowEl.style.willChange = '';
+      if (handle.hasPointerCapture(e.pointerId)) {
+        handle.releasePointerCapture(e.pointerId);
+      }
+      handle.removeEventListener('pointermove', onMove);
+      handle.removeEventListener('pointerup', onUp);
+      handle.removeEventListener('pointercancel', onUp);
+      clampPosition();
+    };
+
+    handle.addEventListener('pointermove', onMove);
+    handle.addEventListener('pointerup', onUp);
+    handle.addEventListener('pointercancel', onUp);
+  });
+}
+
+function initConsole() {
+  const consoleRoot = document.getElementById('console');
+  const output = document.getElementById('console-output');
+  const lines = document.getElementById('console-lines');
+  const form = document.getElementById('console-form');
+  const input = document.getElementById('console-command');
+  const caret = document.getElementById('console-cursor');
+  const measure = document.getElementById('console-measure');
+  const ghost = document.getElementById('console-ghost');
+  if (!consoleRoot || !output || !lines || !form || !input || !caret || !measure || !ghost) return;
+  if (consoleRoot.dataset.ready === 'true') return;
+  consoleRoot.dataset.ready = 'true';
+
+  initConsoleWindow();
+
+  const promptUser = 'nohuto';
+  const promptHost = 'noverse';
+  const rootPath = '~/terminal';
+  let currentPath = rootPath;
+  const promptEl = consoleRoot.querySelector('.console-prompt');
+  const timestampEl = document.getElementById('console-timestamp');
+  const DOCS_ROOT_PATH = `${rootPath}/docs`;
+  const formatDisplayPath = path => {
+    if (path === rootPath) return rootPath;
+    if (path === DOCS_ROOT_PATH) return '~/docs';
+    if (String(path || '').startsWith(`${DOCS_ROOT_PATH}/`)) {
+      return String(path).replace(`${DOCS_ROOT_PATH}/`, '~/docs/');
+    }
+    if (String(path || '').startsWith(`${rootPath}/`)) {
+      return String(path).replace(`${rootPath}/`, '~/');
+    }
+    return path;
+  };
+
+  const updatePrompt = () => {
+    if (promptEl) {
+      promptEl.textContent = `${promptUser}@${promptHost}:${formatDisplayPath(currentPath)}$`;
+    }
+  };
+
+  const promptLabel = () => `${promptUser}@${promptHost}:${formatDisplayPath(currentPath)}$`;
+
+  const updateTimestamp = () => {
+    if (!timestampEl) return;
+    const now = new Date();
+    const day = new Intl.DateTimeFormat(undefined, { weekday: 'long' }).format(now);
+    const time = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(now);
+    timestampEl.textContent = `${day} at ${time}`;
+  };
+
+  const scrollToBottom = () => {
+    output.scrollTop = output.scrollHeight;
+  };
+
+  const getCompletion = () => {
+    const raw = input.value;
+    if (!raw) return '';
+    const hasTrailingSpace = /\s$/.test(raw);
+    const parts = raw.trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return '';
+    const head = parts[0];
+    const firstMatch = (options, seed, sort = false) => {
+      const matches = options.filter(option => option.startsWith(seed));
+      if (!matches.length) return '';
+      if (sort) {
+        matches.sort((a, b) => a.localeCompare(b));
+      }
+      return matches[0] || '';
+    };
+    if (head === 'cd') {
+      const cdMatch = raw.match(/^cd\s+(.+)$/);
+      if (!cdMatch) return '';
+      const seed = cdMatch[1];
+      if (!seed) return '';
+      const useBackslash = seed.startsWith('.\\');
+      const options = listDirs().map(option => useBackslash ? option.replace(/\//g, '\\') : option);
+      const match = firstMatch(options, seed);
+      return match ? `cd ${match}` : '';
+    }
+    if (head === 'theme' && (parts.length > 1 || hasTrailingSpace)) {
+      const seed = parts.length > 1 ? parts.slice(1).join(' ') : '';
+      const match = firstMatch(listThemes(), seed);
+      return match ? `theme ${match}` : '';
+    }
+    if (parts.length > 1) return '';
+    const commandMatch = firstMatch(Object.keys(commands), head, true);
+    if (commandMatch) return commandMatch;
+    return firstMatch(Object.keys(aliases), head, true);
+  };
+
+  const updateGhost = (value, pos, width) => {
+    if (!value || pos !== value.length) {
+      ghost.textContent = '';
+      return;
+    }
+    const completion = getCompletion();
+    if (!completion || completion === value || !completion.startsWith(value)) {
+      ghost.textContent = '';
+      return;
+    }
+    ghost.style.left = `${width}px`;
+    ghost.textContent = completion.slice(value.length);
+  };
+
+  const updateCaret = () => {
+    const value = input.value;
+    const pos = typeof input.selectionStart === 'number' ? input.selectionStart : value.length;
+    const head = value.slice(0, pos).replace(/ /g, '\u00a0');
+    measure.textContent = head;
+    const width = measure.getBoundingClientRect().width;
+    const caretOffset = 1;
+    const ghostOffset = 0;
+    const caretHeight = Math.round(input.offsetHeight * 0.8);
+    caret.style.left = `${width + caretOffset}px`;
+    caret.style.top = `${Math.round((input.offsetHeight - caretHeight) / 2)}px`;
+    caret.style.height = `${caretHeight}px`;
+    updateGhost(value, pos, width + ghostOffset);
+  };
+
+  const addLine = (text, className) => {
+    const line = document.createElement('div');
+    line.className = className ? `console-line ${className}` : 'console-line';
+    line.textContent = text;
+    lines.appendChild(line);
+    scrollToBottom();
+  };
+
+  const addLineParts = (parts, className) => {
+    const urlPattern = /https?:\/\/[^\s<>"'`]+/i;
+    const line = document.createElement('div');
+    line.className = className ? `console-line ${className}` : 'console-line';
+    parts.forEach(part => {
+      const span = document.createElement('span');
+      span.textContent = part.text;
+      if (part.className) span.className = part.className;
+      if (urlPattern.test(part.text || '')) span.classList.add('console-url');
+      line.appendChild(span);
+    });
+    lines.appendChild(line);
+    scrollToBottom();
+  };
+
+  const extractFirstUrl = text => {
+    if (!text) return null;
+    const match = text.match(/https?:\/\/[^\s<>"'`]+/i);
+    return match ? match[0] : null;
+  };
+
+  const openConsoleUrlFromEvent = event => {
+    if (!(event.ctrlKey || event.metaKey)) return false;
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target) return false;
+
+    const clickable = target.closest('a');
+    if (clickable && clickable.getAttribute('href')) return false;
+
+    const span = target.closest('span');
+    const line = target.closest('.console-line');
+    const url = extractFirstUrl(span?.textContent || '') || extractFirstUrl(line?.textContent || '');
+    if (!url) return false;
+
+    event.preventDefault();
+    window.open(url, '_blank', 'noopener,noreferrer');
+    return true;
+  };
+
+  const addKeyValueLines = entries => {
+    const width = entries.reduce((max, [key]) => Math.max(max, key.length), 0);
+    entries.forEach(([key, value]) => {
+      if (!value) {
+        addLine(`  ${key}`);
+        return;
+      }
+      addLineParts([
+        { text: `  ${key.padEnd(width + 2)}` },
+        { text: value, className: 'console-comment' }
+      ]);
+    });
+  };
+
+  const normalizePath = input => (input || '').replace(/\\/g, '/').trim();
+  const trimSlashes = value => (value || '').replace(/^\/+|\/+$/g, '');
+
+  const resolvePath = input => {
+    if (!input) return rootPath;
+    let raw = normalizePath(input);
+    if (!raw || raw === '~' || raw === '/' || raw === rootPath) return rootPath;
+    if (raw === '.' || raw === './' || raw === '.\\') return currentPath;
+    if (raw === '..' || raw.startsWith('../')) return rootPath;
+    if (raw.startsWith('~/')) raw = raw.slice(2);
+    if (raw.startsWith(`${rootPath}/`)) raw = raw.slice(rootPath.length + 1);
+    if (raw.startsWith('./')) raw = raw.slice(2);
+    if (raw === 'terminal') return rootPath;
+    if (raw.startsWith('terminal/')) raw = raw.slice(9);
+    raw = raw.replace(/^\/+/, '');
+
+    const segments = raw.split('/').filter(Boolean);
+    if (!segments.length) return rootPath;
+    if (segments[0] === 'terminal') return rootPath;
+
+    if (segments[0] === 'docs') {
+      const docsTail = trimSlashes(segments.slice(1).join('/'));
+      return docsTail ? `${DOCS_ROOT_PATH}/${docsTail}` : DOCS_ROOT_PATH;
+    }
+
+    if (segments.length === 1 && ['product', 'projects', 'bin-diff', 'policies'].includes(segments[0])) {
+      return `${rootPath}/${segments[0]}`;
+    }
+    return null;
+  };
+
+  const listDirs = () => {
+    if (currentPath === rootPath) {
+      return ['./product', './projects', './bin-diff', './policies', './docs'];
+    }
+    return ['..'];
+  };
+
+  const NAV_MAP = {
+    terminal: 'index.html',
+    product: 'product.html',
+    projects: 'projects.html',
+    'bin-diff': 'bin-diff.html',
+    policies: 'policies.html'
+  };
+
+  const navigateToPath = nextPath => {
+    if (nextPath === DOCS_ROOT_PATH || nextPath.startsWith(`${DOCS_ROOT_PATH}/`)) {
+      const docsRelative = nextPath === DOCS_ROOT_PATH ? '' : nextPath.slice(DOCS_ROOT_PATH.length + 1);
+      const cleanRelative = trimSlashes(docsRelative);
+      const target = cleanRelative ? `docs/${cleanRelative}/` : 'docs/';
+      const currentPathname = (location.pathname || '').replace(/^\/+/, '');
+      const normalizedCurrent = currentPathname.endsWith('/') ? currentPathname : `${currentPathname}/`;
+      if (normalizedCurrent === target) return;
+      location.href = target;
+      return;
+    }
+
+    const segment = nextPath === rootPath ? 'terminal' : nextPath.split('/').pop();
+    const target = NAV_MAP[segment];
+    if (!target) return;
+    const currentPage = location.pathname.split('/').pop() || 'index.html';
+    if (currentPage === target) return;
+    loadPage(target);
+  };
+
+  const defaultAliases = {
+    h: 'help',
+    '?': 'help',
+    usage: 'help',
+    cmds: 'help',
+    commands: 'help',
+    cls: 'clear',
+    dir: 'ls',
+    ll: 'ls',
+    la: 'ls',
+    terminal: 'cd terminal',
+    cprod: 'cd product',
+    cproj: 'cd projects',
+    cbindiff: 'cd bin-diff',
+    cpolicies: 'cd policies',
+    cdocs: 'cd docs',
+    cabout: 'about',
+    quit: 'exit',
+    '..': 'cd ..'
+  };
+  const aliases = Object.freeze({ ...defaultAliases });
+
+  const expandAlias = input => {
+    const parts = input.trim().split(/\s+/);
+    const key = parts[0];
+    const expansion = aliases[key];
+    if (!expansion) return input;
+    const rest = parts.slice(1).join(' ');
+    return rest ? `${expansion} ${rest}` : expansion;
+  };
+
+  const listThemes = () => {
+    const select = document.getElementById('theme-select');
+    if (!select) return [];
+    return Array.from(select.options).map(option => option.value);
+  };
+
+  const commands = {
+    help: () => {
+      addLine('available commands:');
+      const entries = [
+        ['help', 'show this help message'],
+        ['about', 'about me + links'],
+        ['product', 'winconfig summary + pricing'],
+        ['docs', 'documentation hub + section links'],
+        ['bindiff', 'list decompiled-pseudocode links (used by bin-diff page)'],
+        ['policies', 'open the Group Policy explorer'],
+        ['projects', 'list projects with repo links'],
+        ['terms', 'terms of service summary'],
+        ['contact', 'email + discord'],
+        ['ascii', 'print the banner'],
+        ['ls', 'list available directories'],
+        ['pwd', 'show current directory'],
+        ['cd <path>', 'change directory (./product, ./projects, ./bin-diff, ./policies, ./docs/<projectname>, ../)'],
+        ['alias', 'list built-in aliases'],
+        ['themes', 'list theme ids'],
+        ['theme <id>', 'set theme'],
+        ['fontsize <10-22>', 'set size'],
+        ['clear', 'clear the terminal'],
+        ['exit', 'exit (hide) terminal, reverted on site refresh']
+      ];
+      const width = entries.reduce((max, [cmd]) => Math.max(max, cmd.length), 0);
+      entries.forEach(([cmd, desc]) => {
+        addLineParts([
+          { text: `  ${cmd.padEnd(width + 2)}` },
+          { text: desc, className: 'console-comment' }
+        ]);
+      });
+    },
+    about: () => {
+      addLine('about:');
+      addKeyValueLines([
+        ['name', 'nohuto (Discord: ".nohuto", 836853057235976232)'],
+        ['proprietor', 'Noverse'],
+        ['github', 'https://github.com/nohuto'],
+        ['youtube', 'https://www.youtube.com/@5Noverse'],
+        ['discord', 'https://discord.noverse.dev']
+      ]);
+    },
+    product: () => {
+      addLine('product: winconfig');
+      addKeyValueLines([
+        ['price', '9.99 EUR (lifetime)'],
+        ['includes updates + discord role']
+      ]);
+      addLine('features:');
+      addIndentedLines([
+        'transparent execution logs',
+        'dynamic state detection',
+        'per-option documentation (cd ./docs/win-config)',
+        'extensive customization controls'
+      ]);
+      addLine('terms:');
+      addKeyValueLines([
+        ['data privacy', 'hardware identifiers only for licensing'],
+        ['usage', 'personal license only, no resale'],
+        ['refunds', 'only before registration/role assignment'],
+        ['license', 'hardware-bound, manual validation'],
+        ['after purchase', 'discord role assignment required']
+      ]);
+    },
+    docs: () => {
+      addLine('documentation:');
+      addKeyValueLines([
+        ['overview', 'docs/'],
+        ['winconfig', 'docs/win-config/'],
+        ['system', 'docs/win-config/system/'],
+        ['visibility', 'docs/win-config/visibility/'],
+        ['peripheral', 'docs/win-config/peripheral/'],
+        ['power', 'docs/win-config/power/'],
+        ['privacy', 'docs/win-config/privacy/'],
+        ['network', 'docs/win-config/network/'],
+        ['nvidia', 'docs/win-config/nvidia/'],
+        ['cleanup', 'docs/win-config/cleanup/'],
+        ['misc', 'docs/win-config/misc/'],
+        ['policies', 'docs/win-config/policies/'],
+        ['affinities', 'docs/win-config/affinities/'],
+        ['regkit', 'docs/regkit/'],
+        ['game-tools', 'docs/game-tools/'],
+        ['app-tools', 'docs/app-tools/'],
+        ['nvapi-cli', 'docs/nvapi-cli/']
+      ]);
+    },
+    bindiff: () => {
+      addLine('decompiled-pseudocode folders:', 'muted');
+      const items = BIN_DIFF_RELEASE_LINKS.map(link => ({
+        release: decodeURIComponent((link.split('/').pop() || '').trim()),
+        link
+      }));
+      const width = items.reduce((max, item) => Math.max(max, item.release.length), 0);
+      items.forEach(item => {
+        addLineParts([
+          { text: `  ${item.release.padEnd(width + 2)}` },
+          { text: item.link, className: 'console-comment' }
+        ]);
+      });
+    },
+    policies: () => {
+      addLine('group policy explorer:');
+      addKeyValueLines([
+        ['page', 'policies.html'],
+        ['source', 'main/data/group-policies.json'],
+        ['scope', 'ADMX-backed Administrative Template definitions'],
+        ['excludes', 'security policy, audit policy, AppLocker, WDAC, firewall, and native CSP-only policy state']
+      ]);
+      loadPage('policies.html');
+    },
+    terms: () => {
+      commands.product();
+    },
+    contact: () => {
+      addLine('contact:');
+      addKeyValueLines([
+        ['email', 'use the footer icon to copy'],
+        ['discord', 'https://discord.noverse.dev']
+      ]);
+    },
+    ascii: () => {
+      ASCII_ART.forEach(line => addLine(line, 'art'));
+    },
+    ls: () => {
+      const entries = listDirs();
+      if (!entries.length) {
+        addLine('empty', 'muted');
+        return;
+      }
+      addLine(entries.join('  '), 'muted');
+    },
+    pwd: () => {
+      addLine(formatDisplayPath(currentPath));
+    },
+    cd: args => {
+      const target = args.join(' ');
+      const nextPath = resolvePath(target);
+      if (!nextPath) {
+        addLine(`cd: no such directory: ${target || ''}`.trim(), 'muted');
+        return;
+      }
+      currentPath = nextPath;
+      updatePrompt();
+      navigateToPath(nextPath);
+    },
+    alias: args => {
+      const raw = args.join(' ').trim();
+      if (raw) {
+        addLine('custom aliases are disabled; only preconfigured aliases are available.', 'muted');
+      }
+      addLine('aliases:', 'muted');
+      const entries = Object.entries(aliases);
+      const width = entries.reduce((max, [name]) => Math.max(max, name.length), 0);
+      entries.forEach(([name, value]) => {
+        addLineParts([
+          { text: `  ${name.padEnd(width + 2)}` },
+          { text: value, className: 'console-comment' }
+        ]);
+      });
+    },
+    themes: () => {
+      addLine('themes:', 'muted');
+      addIndentedLines(listThemes());
+    },
+    theme: args => {
+      const select = document.getElementById('theme-select');
+      if (!select) return;
+      if (!args.length) {
+        addLine(`current theme: ${select.value}`);
+        return;
+      }
+      const next = args.join(' ').trim();
+      if (!hasSelectOption(select, next)) {
+        addLine(`theme not found: ${next}`, 'muted');
+        return;
+      }
+      select.value = next;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      addLine(`theme set: ${next}`);
+    },
+    fontsize: args => {
+      const sizeInput = document.getElementById('font-size');
+      if (!sizeInput) return;
+      if (!args.length) {
+        addLine(`current size: ${sizeInput.value}px`);
+        return;
+      }
+      const applied = applyFontSize(args[0]);
+      sizeInput.value = applied;
+      storageSet(FONT_SIZE_KEY, applied + 'px');
+      addLine(`size set: ${applied}px`);
+    },
+    clear: () => {
+      lines.replaceChildren();
+      scrollToBottom();
+    },
+    exit: () => {
+      terminalExited = true;
+      applyTerminalExitState();
+      loadPage('projects.html');
+    },
+    projects: () => {
+      addLine('projects:');
+      const items = PROJECT_LIST.map(project => ({
+        title: project.title,
+        link: `https://github.com/${project.repo}`
+      }));
+      const width = items.reduce((max, item) => Math.max(max, item.title.length), 0);
+      items.forEach(item => {
+        addLineParts([
+          { text: `  ${item.title.padEnd(width + 2)}` },
+          { text: item.link, className: 'console-comment' }
+        ]);
+      });
+    }
+  };
+
+  const runCommand = async raw => {
+    const trimmed = raw.trim();
+    if (!trimmed) return;
+    addLineParts([
+      { text: `${promptLabel()} `, className: 'console-prompt-text' },
+      { text: trimmed, className: 'console-muted' }
+    ]);
+    const expanded = expandAlias(trimmed);
+    const parts = expanded.split(' ').filter(Boolean);
+    const command = parts.shift().toLowerCase();
+    const handler = commands[command];
+    if (!handler) {
+      addLine(`unknown command: ${command}`, 'muted');
+      addLine('type "help" to list commands.', 'muted');
+      return;
+    }
+    await handler(parts);
+  };
+
+  const autocomplete = () => {
+    const completion = getCompletion();
+    if (!completion) return;
+    input.value = completion;
+    updateCaret();
+  };
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const value = input.value;
+    if (value.trim()) {
+      consoleHistory.push(value);
+      consoleHistoryIndex = consoleHistory.length;
+    }
+    input.value = '';
+    updateCaret();
+    await runCommand(value);
+    scrollToBottom();
+  });
+
+  ['input', 'keyup', 'click', 'focus'].forEach(eventName => {
+    input.addEventListener(eventName, updateCaret);
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Tab' || e.key === 'ArrowRight') {
+      if (e.key === 'ArrowRight') {
+        const value = input.value;
+        const pos = typeof input.selectionStart === 'number' ? input.selectionStart : value.length;
+        const completion = getCompletion();
+        const canApply =
+          pos === value.length &&
+          completion &&
+          completion !== value &&
+          completion.startsWith(value);
+        if (!canApply) return;
+      }
+      e.preventDefault();
+      autocomplete();
+      return;
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (consoleHistory.length === 0) return;
+      consoleHistoryIndex = Math.max(0, consoleHistoryIndex - 1);
+      input.value = consoleHistory[consoleHistoryIndex] || '';
+      updateCaret();
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (consoleHistory.length === 0) return;
+      consoleHistoryIndex = Math.min(consoleHistory.length, consoleHistoryIndex + 1);
+      input.value = consoleHistory[consoleHistoryIndex] || '';
+      updateCaret();
+    }
+  });
+
+  output.addEventListener('click', event => {
+    if (openConsoleUrlFromEvent(event)) return;
+    input.focus();
+  });
+
+  if (!consoleFocusListener) {
+    consoleFocusListener = e => {
+      const activeInput = document.getElementById('console-command');
+      if (!activeInput) return;
+      const target = e.target;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.tagName === 'BUTTON' || target.isContentEditable)) {
+        return;
+      }
+      activeInput.focus({ preventScroll: true });
+    };
+    document.addEventListener('keydown', consoleFocusListener);
+  }
+
+  updatePrompt();
+  updateTimestamp();
+  if (consoleTimestampTimer) {
+    clearInterval(consoleTimestampTimer);
+  }
+  consoleTimestampTimer = setInterval(updateTimestamp, 60000);
+
+  input.focus();
+  updateCaret();
+
+  ASCII_ART.forEach(line => addLine(line, 'art'));
+  addLine(' ');
+  addLine('Welcome to the terminal, use Tab or Right Arrow for autocompletion (CTRL + mouse click opens links).', 'muted');
+  addLine('Use the top sections to navigate if the terminal feels unfamiliar.', 'muted');
+  addLine(' ');
+  commands.help();
+}
+  global.initConsole = initConsole;
+})(window);

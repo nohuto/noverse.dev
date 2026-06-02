@@ -597,7 +597,7 @@ body::before {
 }
 
 /* credits: https://patterncraft.fun/ */
-html[data-bg="diagonal-grid"] body::before {
+html[data-bg="diamonds"] body::before {
   opacity: 0.8;
   background-image:
     repeating-linear-gradient(45deg,
@@ -614,7 +614,7 @@ html[data-bg="diagonal-grid"] body::before {
 }
 
 /* credits: https://patterncraft.fun/ */
-html[data-bg="dark-noise"] body::before {
+html[data-bg="noise"] body::before {
   opacity: 0.9;
   background-image:
     radial-gradient(circle at 1px 1px,
@@ -636,7 +636,7 @@ html[data-bg="clear"] body::before {
 }
 
 /* credits: https://patterncraft.fun/ */
-html[data-bg="dot-matrix"] body::before {
+html[data-bg="dots"] body::before {
   opacity: 1;
   background-image:
     radial-gradient(circle at 25% 25%, color-mix(in srgb, var(--text) 12%, transparent) 0.5px, transparent 1px),
@@ -646,35 +646,47 @@ html[data-bg="dot-matrix"] body::before {
 }
 
 /* credits: https://patterncraft.fun/ */
-html[data-bg="circuit-board"] body::before {
+html[data-bg="grid"] body::before {
   opacity: 0.95;
   background-image:
     repeating-linear-gradient(0deg,
       transparent 0,
-      transparent 19px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 19px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 20px,
-      transparent 20px,
-      transparent 39px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 39px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 40px),
+      transparent 11px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 11px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 12px,
+      transparent 12px,
+      transparent 23px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 23px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 24px),
     repeating-linear-gradient(90deg,
       transparent 0,
-      transparent 19px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 19px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 20px,
-      transparent 20px,
-      transparent 39px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 39px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 40px),
-    radial-gradient(circle at 20px 20px, color-mix(in srgb, var(--accent-2) 18%, transparent) 2px, transparent 2px),
-    radial-gradient(circle at 40px 40px, color-mix(in srgb, var(--accent-2) 18%, transparent) 2px, transparent 2px);
-  background-size: 40px 40px, 40px 40px, 40px 40px, 40px 40px;
+      transparent 11px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 11px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 12px,
+      transparent 12px,
+      transparent 23px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 23px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 24px);
+  background-size: 24px 24px, 24px 24px;
+}
+
+/* credits: https://projects.verou.me/css3patterns/ */
+html[data-bg="carbon"] body::before {
+  opacity: 0.9;
+  background-color: #131313;
+  background-image:
+    linear-gradient(27deg, #151515 5px, transparent 5px),
+    linear-gradient(207deg, #151515 5px, transparent 5px),
+    linear-gradient(27deg, #222 5px, transparent 5px),
+    linear-gradient(207deg, #222 5px, transparent 5px),
+    linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+    linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%);
+  background-size: 20px 20px;
+  background-position: 0 5px, 10px 0, 0 10px, 10px 5px;
 }
 
 /* credits: https://codepen.io/keithclark/pen/JjWyBb */
-html[data-bg="starfield"] body,
-html[data-bg="starfield-static"] body {
+html[data-bg="starfield"] body {
   perspective: 340px;
 }
 
@@ -700,17 +712,8 @@ html[data-bg="starfield"] .stars {
   animation: fly var(--starfield-speed) linear infinite !important;
 }
 
-html[data-bg="starfield-static"] .stars {
-  display: block;
-  --starfield-depth: 300px;
-  box-shadow: var(--starfield-shadow, var(--starfield-shadow-fallback));
-  transform-style: preserve-3d;
-}
-
 html[data-bg="starfield"] .stars::before,
-html[data-bg="starfield"] .stars::after,
-html[data-bg="starfield-static"] .stars::before,
-html[data-bg="starfield-static"] .stars::after {
+html[data-bg="starfield"] .stars::after {
   content: "";
   position: absolute;
   width: inherit;
@@ -718,8 +721,7 @@ html[data-bg="starfield-static"] .stars::after {
   box-shadow: inherit;
 }
 
-html[data-bg="starfield"] .stars::before,
-html[data-bg="starfield-static"] .stars::before {
+html[data-bg="starfield"] .stars::before {
   transform: translateZ(calc(var(--starfield-depth) * -1));
 }
 
@@ -727,8 +729,7 @@ html[data-bg="starfield"] .stars::before {
   animation: fade1 var(--starfield-speed) linear infinite !important;
 }
 
-html[data-bg="starfield"] .stars::after,
-html[data-bg="starfield-static"] .stars::after {
+html[data-bg="starfield"] .stars::after {
   transform: translateZ(calc(var(--starfield-depth) * -2));
 }
 

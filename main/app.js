@@ -12,8 +12,8 @@ const LIGHT_THEMES = new Set([
   'everforest-light'
 ]);
 const BG_KEY = 'nv-bg';
-const DEFAULT_BG = 'starfield-static';
-const BG_KEYS = ['clear', 'diagonal-grid', 'dark-noise', 'dot-matrix', 'circuit-board', 'starfield', 'starfield-static'];
+const DEFAULT_BG = 'dots';
+const BG_KEYS = ['clear', 'diamonds', 'noise', 'dots', 'grid', 'carbon', 'starfield'];
 const BG_SET = new Set(BG_KEYS);
 const KEYFRAMES_ICON_DARK = 'main/icons/dark/keyframes.svg';
 const KEYFRAMES_ICON_LIGHT = 'main/icons/light/keyframes.svg';

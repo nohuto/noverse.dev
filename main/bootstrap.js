@@ -3,7 +3,7 @@
   const THEME_KEY = 'nv-theme';
   const BG_KEY = 'nv-bg';
   const DEFAULT_THEME = 'default-dark';
-  const DEFAULT_BG = 'starfield-static';
+  const DEFAULT_BG = 'dots';
   const FONT_KEY = 'nv-font';
   const FONT_SIZE_KEY = 'nv-font-size';
   const FONT_SIZE_MIN = 10;
@@ -41,12 +41,12 @@
 
   const BG_OPTIONS = new Set([
     'clear',
-    'diagonal-grid',
-    'dark-noise',
-    'dot-matrix',
-    'circuit-board',
-    'starfield',
-    'starfield-static'
+    'diamonds',
+    'noise',
+    'dots',
+    'grid',
+    'carbon',
+    'starfield'
   ]);
 
   const FONT_OPTIONS = new Set([

@@ -811,6 +811,7 @@ async function loadPage(url, push = true) {
     const newTitle = doc.querySelector('title')?.textContent || document.title;
     const nextPathname = new URL(url, location.href).pathname;
     rememberActivePage(nextPathname);
+    window.stopConsoleAnimation?.();
     main.replaceWith(newMain);
     document.title = newTitle;
     setActive(nextPathname.split('/').pop() || 'index.html');

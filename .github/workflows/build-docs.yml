@@ -89,7 +89,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git status --porcelain | grep .; then
             git add docs docs-site/src/content/docs main/data/repos.json main/data/media-cache.json main/media main/images
-            git commit -m "chore(site): refresh generated site data"
+            git commit -m "update docs data"
             git push
           else
             echo "No changes to commit."

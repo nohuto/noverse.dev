@@ -2,7 +2,7 @@ import html, json, os, re, shutil, time, urllib.error, urllib.request
 from pathlib import Path
 
 R = Path(__file__).resolve().parents[1]
-A = R / 'app.js'
+A = R / 'terminal.js'
 O = R / 'data' / 'repos.json'
 MS = R / 'data' / 'media-sources.json'
 MC = R / 'data' / 'media-cache.json'

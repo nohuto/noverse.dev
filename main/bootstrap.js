@@ -50,12 +50,7 @@
   ]);
 
   const FONT_OPTIONS = new Set([
-    'cascadia',
-    'jetbrains',
-    'fira',
-    'ibm',
-    'sourcecode',
-    'consolas'
+    'cascadia'
   ]);
 
   const safeGet = key => {

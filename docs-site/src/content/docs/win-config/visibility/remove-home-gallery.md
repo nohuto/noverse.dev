@@ -16,11 +16,12 @@ sidebar:
 
 ### Miscellaneous Notes
 
-```c
-{018D5C66-4533-4307-9B53-224DE2ED1FE6} = OneDrive
-{F02C1A0D-BE21-4350-88B0-7367FC96EF3C} = Network Sharing Folder
-{031E4825-7B94-4dc3-B131-E946B44C8DD5} = Libraries Folder
+```powershell
+{018D5C66-4533-4307-9B53-224DE2ED1FE6} # OneDrive
+{F02C1A0D-BE21-4350-88B0-7367FC96EF3C} # Network Sharing Folder
+{031E4825-7B94-4dc3-B131-E946B44C8DD5} # Libraries Folder
 ```
+
 ```json
 // LaunchTo:
 // 1 = This PC

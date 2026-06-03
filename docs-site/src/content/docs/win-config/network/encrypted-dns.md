@@ -6,33 +6,38 @@ sidebar:
   order: 1
 ---
 
-The DNS server get's applied via registry (tracked while applying it via the settings):
+If you're wondering what `Family`/`Malware`/`Extended` etc. behind the provider names mean, see '[Mullvad](https://mullvad.net/en/help/dns-over-https-and-dns-over-tls#specifications)', '[Quad9](https://docs.quad9.net/services/)', '[AdGuard](https://adguard-dns.io/kb/general/dns-providers/)', '[Cloudflare](https://developers.cloudflare.com/1.1.1.1/setup/)' for details.
+
+The DNS server get's applied via registry (captured while applying it via the settings):
 ```c
 HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{NetID}\NameServer  Type: REG_SZ, Length: 24, Data: 194.242.2.5
 HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{NetID}\DohInterfaceSettings\Doh\194.242.2.5\DohTemplate  Type: ad.net/dns-query
 HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{NetID}\DohInterfaceSettings\Doh\194.242.2.5\DohFlags  Type: REG_QWORD, Length: 8, Data: 2
 ```
 
-If you're wondering what `Family`/`Malware`/`Extended` etc. behind the provider names mean, see '[Mullvad](https://mullvad.net/en/help/dns-over-https-and-dns-over-tls#specifications)', '[Quad9](https://docs.quad9.net/services/)', '[AdGuard](https://adguard-dns.io/kb/general/dns-providers/)', '[Cloudflare](https://developers.cloudflare.com/1.1.1.1/setup/)' for details. If you want to use NextDNS, create your own profile [here](https://my.nextdns.io/)
-
-`DohFlags` data meaning:
-- `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO (0x0001)`: If this option is present, then the DNS server that's referenced by this property will load its URI template from the system DNS-over-HTTPS system list. When this option is present, the Template field must be set to NULL. This option must not be used together with the DNS_DOH_SERVER_SETTINGS_ENABLE option.
-- `DNS_DOH_SERVER_SETTINGS_ENABLE (0x0002)`: If this option is present, then the Template field must point to a valid DNS-over-HTTPS URI template. This option must not be used together with the DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO option.
-- `DNS_DOH_SERVER_SETTINGS_FALLBACK_TO_UDP (0x0004)`: This option indicates that the referenced server may fallback to unsecure name resolution (UDP/TCP) if the DNS-over-HTTPS query failed. This option can be used only in addition to DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO or DNS_DOH_SERVER_SETTINGS_ENABLE.
-- `DNS_DOH_AUTO_UPGRADE_SERVER (0x0008)`: This option allows a DNS server present in an NRPT rule to use the DNS-over-HTTPS template if it has the same IP address as the server referenced by this property. This option can't be used by itself; it must be in addition to DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO or DNS_DOH_SERVER_SETTINGS_ENABLE.
-
 `NetID` is saved in your network adapter GUID key (`{4d36e972-e325-11ce-bfc1-08002be10318}`) named `NetCfgInstanceId`.
 
----
+## [`DNS_DOH_SERVER_SETTINGS`](https://learn.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-dns_doh_server_settings)
 
-| Protocol  | Explanation |
-| --------- | ---- |
-| Cleartext | Traditional DNS over UDP/TCP 53 with no encryption, so anyone on the path can read or alter your queries. |
-| DoH/3     | DNS sent inside HTTPS using HTTP/3 on port 443, encrypting lookups and making them look like normal web traffic. |
-| DoT       | DNS sent over a TLS encrypted connection on port 853, protecting queries in transit at the transport layer. |
-| DoQ       | DNS carried over QUIC with built in encryption and faster handshakes, improving reliability.|
-| DNSCrypt  | A non IETF protocol that encrypts and authenticates DNS between client and resolver, with more limited ecosystem support. |
-| DoH       | DNS sent inside HTTPS (typically HTTP/2) on port 443, providing encrypted lookups that blend in with regular HTTPS traffic. |
+This is I guess used for the `DohFlags` value.
+
+```cpp
+typedef struct _DNS_DOH_SERVER_SETTINGS {
+#if ...
+  PWSTR   Template;
+#else
+  PWSTR   Template;
+#endif
+  ULONG64 Flags;
+} DNS_DOH_SERVER_SETTINGS;
+```
+
+| Flag | Meaning |
+| --- | --- |
+| `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO (0x0001)` | If this option is present, then the DNS server that's referenced by this property will load its URI template from the system DNS-over-HTTPS system list. When this option is present, the Template field must be set to NULL. This option must not be used together with the `DNS_DOH_SERVER_SETTINGS_ENABLE` option. |
+| `DNS_DOH_SERVER_SETTINGS_ENABLE (0x0002)` | If this option is present, then the Template field must point to a valid DNS-over-HTTPS URI template. This option must not be used together with the `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO` option. |
+| `DNS_DOH_SERVER_SETTINGS_FALLBACK_TO_UDP (0x0004)` | This option indicates that the referenced server may fallback to unsecure name resolution (UDP/TCP) if the DNS-over-HTTPS query failed. This option can be used only in addition to `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO` or `DNS_DOH_SERVER_SETTINGS_ENABLE`. |
+| `DNS_DOH_AUTO_UPGRADE_SERVER (0x0008)` | This option allows a DNS server present in an NRPT rule to use the DNS-over-HTTPS template if it has the same IP address as the server referenced by this property. This option can't be used by itself; it must be in addition to `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO` or `DNS_DOH_SERVER_SETTINGS_ENABLE`. |
 
 ## Providers Compared
 
@@ -50,9 +55,21 @@ Obviously self-host a DNS resolver for the best privacy, so queries stay local.
 
 ## DNS Explained
 
-DNS (domain name system) is the phonebook of the internet, which means that it translates domains to the corresponding IP addresses (DNS resolution). See [dnssimple comics](https://dnsimple.com/comics) for a very simple explanation.
+DNS (domain name system) is the phonebook of the internet, which means that it translates domains to the corresponding IP addresses (DNS resolution). See [DNSimple comics](https://dnsimple.com/comics) for a very simple explanation/[DNSimple glossary](https://support.dnsimple.com/articles/dns-glossary/) and/or [Cloudflare DNS docs](https://www.cloudflare.com/learning/dns/what-is-dns/).
 
-The four types of DNS servers:  
+### Protocols
+
+| Protocol  | Explanation |
+| --- | --- |
+| Cleartext | Traditional DNS over UDP/TCP 53 with no encryption, so anyone on the path can read or alter your queries. |
+| DoH/3 | DNS sent inside HTTPS using HTTP/3 on port 443, encrypting lookups and making them look like normal web traffic. |
+| DoT | DNS sent over a TLS encrypted connection on port 853, protecting queries in transit at the transport layer. |
+| DoQ | DNS carried over QUIC with built in encryption and faster handshakes, improving reliability. |
+| DNSCrypt | A non IETF protocol that encrypts and authenticates DNS between client and resolver, with more limited ecosystem support. |
+| DoH | DNS sent inside HTTPS (typically HTTP/2) on port 443, providing encrypted lookups that blend in with regular HTTPS traffic. |
+
+### Types of DNS servers
+
 The **recursive resolver** sends requests to the other three nameservers (root -> TLD -> authoritative), if there's no cached data. It saves the data from the authoritative nameserver so the resolver can skip the requests and send back the IP from the domain to the client. If you're not using any specific DNS server, you're using the resolver from your ISP.
 
 The resolver firstly queries a [**root nameserver**](https://root-servers.org/), which returns the [TLD](https://www.iana.org/domains/root/db) (extension or last segment) -> e.g. `.com`, `.org`, `.net` & more. The root servers are managed by [ICANN](https://www.icann.org/resources/pages/what-2012-02-25-en). If the extension e.g. ends with `.org`, the root server would direct to the `.org` TLD nameserver.

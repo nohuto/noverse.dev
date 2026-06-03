@@ -3,7 +3,7 @@ title: 'DWM Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 5
 ---
 
 DWM = Desktop Window Manager, the component *which allows for compositing visible window rendering into a single surface*. Instead of every application drawing directly to the display, each top level window normally produces content into an offscreen surface, and DWM combines the visible parts of those surfaces into the desktop image that's then presented on the monitor. Without DWM, each program would effectively draw into the visible desktop/output directly (which can cause [visual artifacts](https://github.com/nohuto/win32/blob/docs/desktop-src/LearnWin32/the-desktop-window-manager.md#the-desktop-window-manager) if a window doesn't repaint itself correctly), with DWM, each program draws into its own surface first, DWM then takes those surfaces and creates the final desktop image.
@@ -51,7 +51,7 @@ Used when DWM can place an app/video surface on a dedicated hardware overlay pla
 
 Means that with MPO, DWM still manages the window surface, but instead of blending that surface into the normal composed desktop frame, it can assign it to a hardware overlay plane. The DWM composed desktop is normally the primary plane, while MPO planes are extra hardware planes (there's also a limit of `MaxPlanes` which is why reducing `OverlayMinFPS` shouldn't be done). The final image is then created by the display hardware combining those planes, and if the display hardware handles that plane composition incorrectly, such "artifacts" can appear.
 
-Whenever an app uses MPO it usually shows as `Hardware Composed: Independent Flip`, so for example a browser playing video can show this, as the video/app surface can be placed on an overlay plane and the display hardware combines it with the DWM desktop plane. A fullscreen game for example may show `Hardware: Independent Flip` (even with MPO enabled), as it doesn't need an extra overlay plane (see DirectFlip cases below).
+Wether an app uses MPO it usually shows as `Hardware Composed: Independent Flip`, so for example a browser playing video can show this, as the video/app surface can be placed on an overlay plane and the display hardware combines it with the DWM desktop plane. A fullscreen game for example may show `Hardware: Independent Flip` (even with MPO enabled), as it doesn't need an extra overlay plane (see DirectFlip cases below).
 
 #### DirectFlip / iFlip
 
@@ -125,8 +125,9 @@ Everything listed below is based on personal findings, mistakes may exist.
     "CpuClipAreaThreshold" = 20000; // REG_DWORD
     "CpuClipWarpPartitionThreshold" = 1024; // REG_DWORD
     "DisableDrawListCaching" = 0; // REG_DWORD (bool)
-    "DisableProjectedShadows" = 0; // REG_DWORD (bool)
-    "EnableBackdropBlurCaching" = 1; // REG_DWORD (bool)
+    "DisableProjectedShadows" = 0; // REG_DWORD (bool), probably related to https://learn.microsoft.com/en-us/uwp/api/windows.ui.composition.compositionprojectedshadow
+                                   // "Represents a scene-based shadow calculated using the relationship between the light, the visual that casts the shadow,and the visual that receives the shadow, such that the shadow is drawn differently on each receiver."
+    "EnableBackdropBlurCaching" = 1; // REG_DWORD (bool), nonzero allows updating/reusing cached backdrop blur
     "EnableCommonSuperSets" = 1; // REG_DWORD (bool)
     "EnableCpuClipping" = 1; // REG_DWORD (bool)
     "EnableDDisplayScanoutCaching" = 1; // REG_DWORD (bool)
@@ -152,7 +153,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "OverlayMinFPS" = 15; // If this value is present and set to zero, the DWM disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
                           // Practically means that currently only swapchains with a min FPS of 15 would get their (MPO) overlay plane, but since overlay planes aren't unlimited ("MaxPlanes" which is sometimes only 2 and the primary DWM plane is included in there) that shouldn't be lowered
                           // You can see your MaxPlanes via dxdiag (click "Save All Information" then search for MPO MaxPlanes)
-    "RenderThreadTimeoutMilliseconds" = 5000; // REG_DWORD
+    "RenderThreadTimeoutMilliseconds" = 5000; // REG_DWORD, range 0-4294967295, threshold for the DWM compositor scheduler loop
     "SuperWetEnabled" = 1; // REG_DWORD (bool)
     "SuperWetExtensionTimeMicroseconds" = 1000; // REG_DWORD
     "TelemetryFramesReportPeriodMilliseconds" = 300000; // REG_DWORD
@@ -162,12 +163,12 @@ Everything listed below is based on personal findings, mistakes may exist.
     "UseHWDrawListEntriesOnWARP" = 0; // REG_DWORD (bool)
 
     // dwmcore CCommonRegistryData::InitializeDWMKeysFromRegistry
-    "BackdropBlurCachingThrottleMs" = 25; // REG_DWORD (ms), >1000 = 1000
+    "BackdropBlurCachingThrottleMs" = 25; // REG_DWORD (ms), >1000 = 1000, throttles cached backdrop blur invalidation/rebuilds
     "CpuClipFlatteningTolerance" = 0; // REG_DWORD, stored as float(value / 1000)
     "CustomRefreshRateMode" = 0; // REG_DWORD, range 0-2, >2 = default
     "DisableAdvancedDirectFlip" = 0; // REG_DWORD
     "DisableIndependentFlip" = 0; // REG_DWORD (bool)
-    "DisableProjectedShadowsRendering" = 0; // REG_DWORD
+    "DisableProjectedShadowsRendering" = 0; // REG_DWORD, read but seems unused
     "EnableRenderPathTestMode" = ?; // REG_DWORD
     "FlattenVirtualSurfaceEffectInput" = 0; // REG_DWORD (bool)
     "ForceEffectMode" = 0; // REG_DWORD, range 0-2
@@ -188,11 +189,17 @@ Everything listed below is based on personal findings, mistakes may exist.
 
     // animation/colorization policy related
     "DefaultColorizationColorState" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x4)
+                                         // "This policy setting controls the default color for window frames when the user does not specify a color. If you enable this policy setting and specify a default color, this color is used in glass window frames, if the user does not specify a color. If you disable or do not configure this policy setting, the default internal color is used, if the user does not specify a color. Note: This policy setting can be used in conjunction with the "Prevent color changes of window frames" setting, to enforce a specific color for window frames that cannot be changed by users."
+                                         // https://www.noverse.dev/policies.html?p=DWM*DwmDefaultColorizationColor_2
     "DisallowAnimations" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x1) which disables DWM window animations (also causes DWM reject live preview / Aero Peek)
                               // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-SetWindowAnimation@CDesktopManager@@SAX_N@Z.c
                               // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-IsLivePreviewAllowed@CDesktopManager@@SA_NXZ.c
-    "ForceDisableModeChangeAnimation" = 0; // REG_DWORD (bool), nonzero sets "force disable" flag (not related to window animations like the one above)
-    "DisallowColorizationColorChanges" = 0; // REG_DWORD nonzero sets bit (policy bit 0x2)
+                              // "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.
+                              // https://www.noverse.dev/policies.html?p=DWM*DwmDisallowAnimations_2
+    "ForceDisableModeChangeAnimation" = 0; // REG_DWORD (bool), nonzero disables display mode change animations (duplicate/extend/disconnect style monitor change visuals)
+    "DisallowColorizationColorChanges" = 0; // REG_DWORD nonzero sets bit (policy bit 0x2) which blocks DWM colorization parameter changes
+                                            // This policy setting controls the ability to change the color of window frames. If you enable this policy setting, you prevent users from changing the default window frame color. If you disable or do not configure this policy setting, you allow users to change the default window frame color. Note: This policy setting can be used in conjunction with the "Specify a default color for window frames" policy setting, to enforce a specific color for window frames that cannot be changed by users."
+                                            // https://www.noverse.dev/policies.html?p=DWM*DwmDisallowColorizationColorChanges_1
 
     // uDWM colorization
     "AccentColor" = ?; // REG_DWORD, only read when ColorPrevalence is nonzero
@@ -204,10 +211,10 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ColorizationColor" = 0xFF409EFE; // REG_DWORD
     "ColorizationColorBalance" = 27; // REG_DWORD
     "ColorizationGlassAttribute" = 0; // REG_DWORD
-    "DefaultColorizationColorAlpha" = 0; // REG_DWORD
-    "DefaultColorizationColorBlue" = 0; // REG_DWORD
-    "DefaultColorizationColorGreen" = 0; // REG_DWORD
-    "DefaultColorizationColorRed" = 0; // REG_DWORD
+    "DefaultColorizationColorAlpha" = 0; // REG_DWORD (used when DefaultColorizationColorState)
+    "DefaultColorizationColorBlue" = 0; // REG_DWORD ^
+    "DefaultColorizationColorGreen" = 0; // REG_DWORD ^
+    "DefaultColorizationColorRed" = 0; // REG_DWORD ^
     "EnableWindowColorization" = 1; // REG_DWORD
 
     // uDWM compositor
@@ -228,26 +235,31 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ResizeTimeoutModern" = 0; // REG_DWORD, only used if 0x8 in EnableResizeOptimization set
 
     // procmon
-    "AnimationAttributionEnabled" = 1; // REG_DWORD
-    "AnimationAttributionHashingEnabled" = 1; // REG_DWORD
+    "AnimationAttributionEnabled" = 1; // REG_DWORD, comment marshaling for composition animation attributions (probably related to MarshalAllDebugInfo)
+    "AnimationAttributionHashingEnabled" = 1; // REG_DWORD, hashes those ^ comments into GUID strings
     "CompositorClockPolicy" = 1; // ?
     "DebugFailFast" = ?;
     "DisableSessionTermination" = 0; // ?
     "DisplayChangeTimeoutMs" = 1000; // ?
     "DwmInitSessionActivityId_00000001" = ?; // REG_SZ
-    "EnableMPCPerfCounter" = ?;
     "ForceBasicDisplayAdapterOnDWMRestart" = 0; // ?
     "ForceFullDirtyRendering" = 0; // ?
     "ForceUDwmSoftwareDevice" = ?; // ?
     "MarshalAllDebugInfo" = ?;
-    "MPCInputRouterWaitForDebugger" = ?;
-    "OneCoreNoBootDWM" = 0; // ?
-    "OneCoreNoDWMRawGameController" = ?; // ?
     "ParallelModeRateThreshold" = 119; // ?
     "ShowDirtyRegions" = 0; // ?
     "UseFastestMonitorAsPrimary" = 0; // ?
     "vBlankWaitTimeoutMonitorOffMs" = 250; // ?
     "WarpEnableDebugColor" = 0; // ?
+
+    // ISM
+    "CaptureDisabledFor6dof" = 0; // REG_DWORD (bool)
+    "DisableBloomFor6dof" = 0; // REG_DWORD (bool)
+    "EnableMPCPerfCounter" = 0; // REG_DWORD (bool)
+    "MPCInputRouterWaitForDebugger" = 0; // REG_DWORD (bool)
+    "OneCoreNoBootDWM" = ?; // REG_DWORD
+    "OneCoreNoDWMRawGameController" = 0; // REG_DWORD (bool)
+    "TouchHoverReportThrottleTimeInMs" = 100; // REG_DWORD (ms), no clamp?
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\Scene";
     // dwmcore
@@ -280,6 +292,57 @@ Everything listed below is based on personal findings, mistakes may exist.
     "Force10OnWDDM1_0" = 0; // REG_DWORD
 ```
 
+### BackdropBlurCachingThrottleMs
+
+It's used as a minimum time before cached blur outputs are marked dirty again (see examples below to understand what effect it has).
+
+```c
+// CCommonRegistryData::InitializeDWMKeysFromRegistry
+if ( RegGetDwmDwordHelper(L"BackdropBlurCachingThrottleMs", &v11, 0LL) )
+{
+  v7 = v11;
+  if ( v11 > 0x3E8 )
+    v7 = 1000; // >1000 clamp to 1000
+  v2 = g_qpcFrequency.QuadPart * v7;
+}
+else
+{
+  v2 = 25 * g_qpcFrequency.QuadPart; // missing = 25ms
+}
+CCommonRegistryData::m_backdropBlurCachingThrottleQPCTimeDelta = v2 / 1000;
+```
+
+[`CBackdropVisualImage::ValidateRootAndSourceRectangle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-ValidateRootAndSourceRectangle@CBackdropVisualImage@@QEAAJPEAVCVisual@@AEBV-$TMilRect_@MUMilRec.c) uses it before marking cached targets dirty again:
+
+```c
+// CBackdropVisualImage::ValidateRootAndSourceRectangle
+
+v33 = CCommonRegistryData::m_backdropBlurCachingThrottleQPCTimeDelta & -(__int64)(*((_BYTE *)this + 1912) != 0);
+
+if ( v32 - *((_QWORD *)v34 + 5) > v33 ) // current composition QPC time - cached target update time > throttle
+{
+  CCachedVisualImage::CCachedTarget::MarkDirty(v34); // rebuild afterwards
+  v14 = 1;
+}
+```
+
+#### Examples
+
+You can see the differences by moving a blurry window above a animation, for example. I used a simple [rotating dot](https://github.com/nohuto/win-config/blob/main/system/assets/rotatingdot.html).
+
+##### 1000ms
+
+<video controls width="800">
+  <source src="https://raw.githubusercontent.com/nohuto/win-config/main/system/videos/BackdropBlur1000.mp4" type="video/mp4">
+</video>
+
+
+##### 0ms
+
+<video controls width="800">
+  <source src="https://raw.githubusercontent.com/nohuto/win-config/main/system/videos/BackdropBlur0.mp4" type="video/mp4">
+</video>
+
 ### [OverlayTestMode](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)
 
 See [Multiplane Overlay (MPO)](https://www.noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for what MPO is.
@@ -292,6 +355,45 @@ See [Multiplane Overlay (MPO)](https://www.noverse.dev/docs/win-config/system/dw
 | `4` | Kind of "Force success" for MPO support ([`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c) bypasses support query), this doesn't mean that surfaces get a overlay plane |
 | `5` | Disable MPO ([`COverlayContext::OverlaysEnabled`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-OverlaysEnabled@COverlayContext@@AEBA_NXZ.c) returns false & [`COverlayContext::IsCompatibleOutputScaling`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-IsCompatibleOutputScaling@COverlayContext@@AEAA_NAEBVCMILMatrix@@@Z.c) returns 0 for one "*CompatibleOutputScaling*") |
 | `>=6` | Would go into `>=4` part in [`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c), but only exactly `4` has the this force success case? `>= 6` data is probably just invalid. |
+
+### [RenderThreadTimeoutMilliseconds](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/_dynamic_initializer_for__CCommonRegistryData--RenderThreadTimeoutMilliseconds__.c)
+
+It looks like a diagnostic threshold only, which controls when DWM may write the TraceLogging event `SinceWatchdogTimerStarted` (provider `Microsoft.Windows.Dwm.DwmCore`/`{1BF43430-9464-4B83-B7FB-E2638876AEEF}`). Since the default is `5000ms` I guess this is intended to be used as a kind of "compositor thread hang" event? The value [gets read](https://github.com/nohuto/regkit/blob/main/records/Windows-Dwm.txt) but as said, this event should normally not happen & the provider shouldn't run by default (don't see this as my final answer, just as an possible description).
+
+The related thread gets created by [`CConnection::StartCompositionThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-StartCompositionThread@CConnection@@AEAAJH@Z.c), which sets it's description to `DWM Compositor Thread`. The time is from the end of the previous [`CPartitionVerticalBlankScheduler::WaitForWork`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-WaitForWork@CPartitionVerticalBlankScheduler@@AEAAXXZ.c) call to the start of the next one.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/compositor-thread.png?raw=true)
+
+```c
+// CPartitionVerticalBlankScheduler::WaitForWork
+v4 = g_renderThreadTick;
+g_renderThreadTick = 0LL;
+if ( v4 )
+{
+  TickCount64 = GetTickCount64();
+  v6 = TickCount64 - v4;
+  if ( TickCount64 - v4 > (unsigned int)CCommonRegistryData::RenderThreadTimeoutMilliseconds // threshold check
+    && !IsDebuggerPresent()
+    && !(unsigned int)IsKernelDebuggerPresent()
+    && (unsigned int)dword_1803E3B40 > 5
+    && (unsigned __int8)tlgKeywordOn(&dword_1803E3B40, 0x400000000000LL) ) // provider/keyword
+  {
+    v32 = v6;
+    si128.m128i_i64[0] = 0x1000000LL;
+    _tlgWriteTemplate<long (_tlgProvider_t const *,void const *,_GUID const *,_GUID const *,unsigned int,_EVENT_DATA_DESCRIPTOR *),&long _tlgWriteTransfer_EventWriteTransfer(_tlgProvider_t const *,void const *,_GUID const *,_GUID const *,unsigned int,_EVENT_DATA_DESCRIPTOR *),_GUID const *,_GUID const *>::Write<_tlgWrapperByVal<8>,_tlgWrapperByVal<4>>(
+      v26,
+      (unsigned int)&unk_18037F354, // TraceLogging metadata, starts with "SinceWatchdogTimerStarted"
+      v27,
+      v28,
+      (__int64)&si128,
+      (__int64)&v32);
+  }
+}
+
+// ...
+
+g_renderThreadTick = GetTickCount64();
+```
 
 ### MsaaQualityMode
 

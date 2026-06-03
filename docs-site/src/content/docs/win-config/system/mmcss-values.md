@@ -391,7 +391,7 @@ boosted = 24 // with relative priority it can be 23-26
 The MMCSS boosts the priority of threads that are working on high-priority multimedia tasks. MMCSS determines the priority of a thread using the following factors:
 
 - The base priority of the task.
-- The *Priority* parameter of the [**AvSetMmThreadPriority**](/windows/desktop/api/Avrt/nf-avrt-avsetmmthreadpriority) function.
+- The *Priority* parameter of the [**AvSetMmThreadPriority**](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadpriority) function.
 - Whether the application is in the foreground.
 - How much CPU time is being consumed by the threads in each category.
 

@@ -3,16 +3,15 @@ title: 'FSO'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 20
+  order: 21
 ---
 
-This isn't accurate nor complete yet, it's preferable to disable FSO per application via the compability section if doing so. Disabling this option won't revert the changes like all other ones do, it'll disable FSO.
-
-See [demystifying-full-screen-optimizations](https://devblogs.microsoft.com/directx/demystifying-full-screen-optimizations/)/[SwapChain](https://wiki.special-k.info/en/SwapChain)/[PresentationModel](https://wiki.special-k.info/Presentation_Model) for some details.
+Will be updated within the next days (date of commit 20.05.2026)
 
 ## ResourcePolicyServer
 
-All values I found that are `GameDVR` related in `ResourcePolicyServer.dll`:
+Values found that are `GameDVR` related in `ResourcePolicyServer.dll`:
+
 ```c
 GameDVR_DXGIHonorFSEWindowsCompatible
 GameDVR_EFSEFeatureFlags
@@ -21,16 +20,16 @@ GameDVR_FSEBehaviorMode
 GameDVR_HonorUserFSEBehaviorMode
 ```
 
-`GameDVR_DSEBehavior` doesn't exist on my current system.
+`GameDVR_DSEBehavior` does not exist on the current system.
 
-## Compability Captures
+## Compatibility Flags
 
-Disable/enable FSO for a specific application via `Properties > Compatibility > Change settings for all users` - `Disable fullscreen optimizations` or do it per user one step before.
+The Compatibility UI option `Disable fullscreen optimizations` writes an application compatibility layer value. This can exist per-user or machine-wide.
 
 ```c
 // User
-HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
+HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\<exe path> = "~ DISABLEDXMAXIMIZEDWINDOWEDMODE"
 
 // Machine
-HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\<exe path> = "~ DISABLEDXMAXIMIZEDWINDOWEDMODE"
 ```

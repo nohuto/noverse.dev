@@ -3,7 +3,7 @@ title: 'Storage Sense'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 16
+  order: 17
 ---
 
 Storage Sense deletes temporary/user files automatically, see [windows policies](https://www.noverse.dev/docs/win-config/system/disable-storage-sense/#windows-policies) for more & [disable-notifications/#registry-values](https://www.noverse.dev/docs/win-config/system/disable-notifications/#registry-values) for storage sense related notification values.

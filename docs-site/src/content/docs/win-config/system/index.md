@@ -10,6 +10,7 @@ sidebar:
 - [Quantum/Priority Separation](/docs/win-config/system/quantum-priority-separation/)
 - [Game Mode](/docs/win-config/system/game-mode/)
 - [MMCSS Values](/docs/win-config/system/mmcss-values/)
+- [Timer Expiration](/docs/win-config/system/timer-expiration/)
 - [DWM Values](/docs/win-config/system/dwm-values/)
 - [Kernel Values](/docs/win-config/system/kernel-values/)
 - [DXG Kernel Values](/docs/win-config/system/dxg-kernel-values/)

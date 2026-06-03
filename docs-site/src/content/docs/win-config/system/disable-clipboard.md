@@ -3,7 +3,7 @@ title: 'Clipboard'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 30
+  order: 31
 ---
 
 If you copy or cut something it gets stored to your clipboard.

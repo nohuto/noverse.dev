@@ -3,7 +3,7 @@ title: 'SR-IOV'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 26
+  order: 24
 ---
 
 > "*Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe) specification that improves network performance in virtualized environments. SR-IOV allows devices, such as network adapters, to separate access to their resources among various PCIe hardware functions, enabling near-native network performance in Hyper-V virtual machines.*"

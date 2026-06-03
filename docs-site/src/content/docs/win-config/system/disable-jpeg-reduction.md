@@ -3,7 +3,7 @@ title: 'JPEG Reduction'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 28
+  order: 29
 ---
 
 Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%` via the option switch.

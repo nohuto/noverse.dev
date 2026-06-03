@@ -6,7 +6,7 @@ sidebar:
   order: 34
 ---
 
-Set your own support information in `System > About` (or `Control Panel > System and Security > System`. All values are saved in:
+Set your own support information in `System > About` (or `Control Panel > System and Security > System`). All values are saved in:
 ```
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
 ```

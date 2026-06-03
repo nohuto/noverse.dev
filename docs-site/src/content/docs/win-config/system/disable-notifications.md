@@ -3,7 +3,7 @@ title: 'Notifications'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 12
+  order: 13
 ---
 
 ## Option/Suboptions

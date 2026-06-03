@@ -38,30 +38,21 @@ Calculate it on your own, by using [bitmask-calc](https://github.com/nohuto/bitm
 ## Miscellaneous Notes
 
 If you've set a custom foreground/background color, they won't override the colors changed within the code, e.g.:
+
 ```powershell
 Write-Host "Noverse"
 ```
--> `Noverse` will have use foreground & background color of `ScreenColors`
+
+`Noverse` will have use foreground & background color of `ScreenColors`
+
 ```powershell
 Write-Host "Noverse" -ForegroundColor Blue
 ```
--> `Noverse` will be blue, `ScreenColors` gets skipped.
+
+`Noverse` will be blue, `ScreenColors` gets skipped.
+
 ```powershell
 [console]::BackgroundColor = 'Black'
 ```
--> If it doesn't get changed within the code, it'll use the background color set by `ScreenColor`.
 
-The option uses `Black` (background) and `Gray` (foreground), since it is personal preference change it to whatever you want using the information above.
-
-Add the `-NoLogo` parameter to the powershell shortcut in the start menu with the command below. It hides the startup banner:
-```
-Windows PowerShell
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
-
-PS C:\Users\Nohuto>
-```
-```powershell
-for %%L in ("%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\*.lnk") do powershell -c "$s=New-Object -ComObject WScript.Shell; $lnk=$s.CreateShortcut('%%~fL'); $lnk.TargetPath='%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe'; $lnk.Arguments='-NoLogo'; $lnk.Save()"
-```
+If it doesn't get changed within the code, it'll use the background color set by `ScreenColor`.

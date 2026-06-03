@@ -3,7 +3,7 @@ title: 'Network Buffers'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 17
+  order: 16
 ---
 
 The `default`/`min`/`max` data differs for users, e.g. if applying `4096` it may get rejected, see `inf` blocks below (this option won't try to apply the maximum size, read descriptions below).

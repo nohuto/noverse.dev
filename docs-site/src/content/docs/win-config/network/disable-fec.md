@@ -3,7 +3,7 @@ title: 'FEC'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 27
+  order: 25
 ---
 
 [FEC](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/forward-error-correction-fec-mode/) (forwarded error correction) improves link stability, but increases latency. Many high quality optics, direct attach cables, and backplane channels provide a stable link without FEC.

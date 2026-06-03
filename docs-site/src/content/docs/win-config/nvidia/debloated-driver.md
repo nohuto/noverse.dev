@@ -22,7 +22,7 @@ Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/b
 
 ### Optional DDU Cleanup
 
-Downloads [`NV-DDU.zip`](https://github.com/nohuto/files/releases/download/driver) and [`NV-DDU.ps1`](https://github.com/nohuto/files/releases/download/driver), enables Safe Boot, and reboots.
+Downloads [`NV-DDU.zip`](https://github.com/nohuto/files/releases/download/driver/NV-DDU.zip) and [`NV-DDU.ps1`](https://github.com/nohuto/files/releases/download/driver/NV-DDU.ps1), enables Safe Boot, and reboots.
 
 ### Driver Installation
 

@@ -144,7 +144,6 @@
   min-height: 12px;
   max-width: 12px;
   max-height: 12px;
-  box-sizing: border-box;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -302,7 +301,6 @@
   width: 8px;
   min-width: 8px;
   cursor: col-resize;
-  background: transparent;
   position: relative;
   touch-action: none;
 }
@@ -391,7 +389,6 @@ body.policy-resizing .policy-splitter::after {
   bottom: 0;
   left: calc(1px + (var(--policy-tree-depth, 0) * 16px));
   width: 1px;
-  background: transparent;
   pointer-events: none;
   z-index: 1;
 }
@@ -412,11 +409,6 @@ body.policy-resizing .policy-splitter::after {
 .policy-tree-chevron.is-open {
   mask-image: url("icons/ui/chevron-down.svg");
   -webkit-mask-image: url("icons/ui/chevron-down.svg");
-}
-
-.policy-tree-item:hover,
-.policy-tree-item.is-active {
-  background: transparent;
 }
 
 .policy-tree-item.is-active,
@@ -598,7 +590,6 @@ body.policy-column-resizing * {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  box-sizing: border-box;
   border: 1px solid var(--border);
   background: var(--panel-alt);
   margin: 0;
@@ -993,7 +984,6 @@ body.policy-column-resizing * {
   height: 24px;
   border: 0;
   border-bottom: 1px solid var(--border);
-  box-sizing: border-box;
 }
 
 .bindiff-field .select-option {
@@ -1050,7 +1040,6 @@ body.policy-column-resizing * {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  box-sizing: border-box;
   min-width: 12px;
   min-height: 12px;
   padding: 0;
@@ -1072,7 +1061,6 @@ body.policy-column-resizing * {
   position: absolute;
   left: 50%;
   top: 50%;
-  box-sizing: border-box;
   width: 4px;
   height: 7px;
   border-right: 1px solid transparent;
@@ -1348,7 +1336,6 @@ body.policy-column-resizing * {
   justify-content: space-between;
   gap: 8px;
   min-height: 24px;
-  box-sizing: border-box;
   padding: 0 10px;
   border-bottom: 1px solid var(--border);
   background: var(--panel-alt);
@@ -1419,7 +1406,6 @@ body.policy-column-resizing * {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  box-sizing: border-box;
   min-width: 12px;
   min-height: 12px;
   padding: 0;
@@ -1441,7 +1427,6 @@ body.policy-column-resizing * {
   position: absolute;
   left: 50%;
   top: 50%;
-  box-sizing: border-box;
   width: 4px;
   height: 7px;
   border-right: 1px solid transparent;
@@ -1596,7 +1581,6 @@ body.policy-column-resizing * {
 .bindiff-output .d2h-file-header {
   min-height: 24px;
   height: 24px;
-  box-sizing: border-box;
   padding: 0 10px;
   align-items: center;
 }

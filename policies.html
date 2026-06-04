@@ -7,8 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; form-action 'self' https://www.paypal.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; form-action 'self' https://www.paypal.com">
   <title>Policies</title>
   <link rel="icon" type="image/png" sizes="64x64" href="/main/images/nvlogo.png">
   <script src="main/bootstrap.js"></script>
@@ -51,8 +50,7 @@
         <div class="policy-intro">
           <div class="policy-title-row">
             <h1 class="projects-heading">Group Policy Explorer</h1>
-            <span class="policy-source-note">(based on <a href="https://github.com/nohuto/admx-parser"
-                rel="noopener noreferrer">admx-parser</a>)</span>
+            <span class="policy-source-note">(based on <a href="https://github.com/nohuto/admx-parser" rel="noopener noreferrer">admx-parser</a>)</span>
           </div>
           <div class="projects-divider"></div>
         </div>
@@ -60,15 +58,11 @@
         <div class="policy-toolbar">
           <div class="policy-search-field">
             <div class="policy-search-row">
-              <input id="policy-search" type="text" autocomplete="off" spellcheck="false"
-                placeholder="search policy, registry path, value, explanation">
+              <input id="policy-search" type="text" autocomplete="off" spellcheck="false" placeholder="search policy, registry path, value, explanation">
               <button id="policy-settings" type="button" aria-label="Search settings" title="Search settings">
-                <svg class="bindiff-settings-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <svg class="bindiff-settings-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path
-                    d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065">
+                  <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065">
                   </path>
                   <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
                 </svg>
@@ -77,8 +71,7 @@
           </div>
           <div class="policy-limit-controls">
             <span class="policy-limit-label">Limit</span>
-            <input id="policy-limit" type="number" min="25" max="5000" step="25" value="350"
-              aria-label="Rendered row limit">
+            <input id="policy-limit" type="number" min="25" max="5000" step="25" value="350" aria-label="Rendered row limit">
             <label class="policy-limit-toggle" for="policy-limit-unlimited">
               <input id="policy-limit-unlimited" type="checkbox">
               <span>Unlimited</span>
@@ -148,15 +141,11 @@
         </div>
 
         <div class="bindiff-settings-modal" id="policy-settings-modal" hidden>
-          <div class="bindiff-settings-dialog" id="policy-settings-dialog" role="dialog" aria-modal="true"
-            aria-labelledby="policy-settings-title">
+          <div class="bindiff-settings-dialog" id="policy-settings-dialog" role="dialog" aria-modal="true" aria-labelledby="policy-settings-title">
             <div class="bindiff-settings-header" id="policy-settings-header">
               <h2 id="policy-settings-title">Search Settings</h2>
-              <button id="policy-settings-close" type="button" aria-label="Close search settings"
-                title="Close search settings">
-                <svg class="bindiff-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <button id="policy-settings-close" type="button" aria-label="Close search settings" title="Close search settings">
+                <svg class="bindiff-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                   <path d="M18 6l-12 12"></path>
                   <path d="M6 6l12 12"></path>
@@ -219,21 +208,16 @@
       <div class="footer-copy">&copy; 2026 Nohuto. All rights reserved.</div>
       <div class="social">
         <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer">
-          <img decoding="async" src="main/icons/dark/github-icon.png" width="96" height="96" data-dark-src="main/icons/dark/github-icon.png"
-            data-light-src="main/icons/light/github-icon.png" loading="lazy" alt="GitHub">
+          <img decoding="async" src="main/icons/dark/github-icon.png" width="96" height="96" data-dark-src="main/icons/dark/github-icon.png" data-light-src="main/icons/light/github-icon.png" loading="lazy" alt="">
         </a>
         <a href="https://www.youtube.com/@5Noverse" target="_blank" rel="noopener noreferrer">
-          <img decoding="async" src="main/icons/dark/youtube-icon.png" width="96" height="96" data-dark-src="main/icons/dark/youtube-icon.png"
-            data-light-src="main/icons/light/youtube-icon.png" loading="lazy" alt="YouTube">
+          <img decoding="async" src="main/icons/dark/youtube-icon.png" width="96" height="96" data-dark-src="main/icons/dark/youtube-icon.png" data-light-src="main/icons/light/youtube-icon.png" loading="lazy" alt="">
         </a>
-        <button class="icon-button" type="button" data-email="copy" data-toast="Email copied"
-          aria-label="Copy email to clipboard">
-          <img decoding="async" src="main/icons/dark/email-icon.svg" width="24" height="24" data-dark-src="main/icons/dark/email-icon.svg"
-            data-light-src="main/icons/light/email-icon.svg" loading="lazy" alt="Email">
+        <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard">
+          <img decoding="async" src="main/icons/dark/email-icon.svg" width="24" height="24" data-dark-src="main/icons/dark/email-icon.svg" data-light-src="main/icons/light/email-icon.svg" loading="lazy" alt="">
         </button>
         <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer">
-          <img decoding="async" src="main/icons/dark/discord-icon.png" width="100" height="100" data-dark-src="main/icons/dark/discord-icon.png"
-            data-light-src="main/icons/light/discord-icon.png" loading="lazy" alt="Discord">
+          <img decoding="async" src="main/icons/dark/discord-icon.png" width="100" height="100" data-dark-src="main/icons/dark/discord-icon.png" data-light-src="main/icons/light/discord-icon.png" loading="lazy" alt="">
         </a>
       </div>
       <div class="footer-tools">

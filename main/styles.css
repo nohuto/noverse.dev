@@ -593,7 +593,6 @@ body::before {
   pointer-events: none;
   z-index: 0;
   opacity: 0;
-  background-repeat: repeat;
 }
 
 /* credits: https://patterncraft.fun/ */
@@ -632,7 +631,6 @@ html[data-bg="noise"] body::before {
 
 html[data-bg="clear"] body::before {
   opacity: 0;
-  background-image: none;
 }
 
 /* credits: https://patterncraft.fun/ */
@@ -723,17 +721,11 @@ html[data-bg="starfield"] .stars::after {
 
 html[data-bg="starfield"] .stars::before {
   transform: translateZ(calc(var(--starfield-depth) * -1));
-}
-
-html[data-bg="starfield"] .stars::before {
   animation: fade1 var(--starfield-speed) linear infinite !important;
 }
 
 html[data-bg="starfield"] .stars::after {
   transform: translateZ(calc(var(--starfield-depth) * -2));
-}
-
-html[data-bg="starfield"] .stars::after {
   animation: fade2 var(--starfield-speed) linear infinite !important;
 }
 
@@ -793,7 +785,6 @@ main.main-terminal .terminal-shell {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  cursor: default;
 }
 
 .console-window-header {
@@ -802,7 +793,6 @@ main.main-terminal .terminal-shell {
   justify-content: space-between;
   gap: 8px;
   min-height: 24px;
-  box-sizing: border-box;
   padding: 0 12px;
   background: var(--panel-alt);
   border-bottom: 1px solid var(--border);
@@ -830,7 +820,6 @@ main.main-terminal .terminal-shell {
 .overlay {
   position: fixed;
   inset: 0;
-  background: none;
   pointer-events: none;
   z-index: 1;
 }
@@ -864,7 +853,6 @@ main.main-terminal .terminal-shell {
   justify-content: space-between;
   gap: 8px;
   min-height: 24px;
-  box-sizing: border-box;
   padding: 0 10px;
   border-bottom: 1px solid var(--border);
   background: var(--panel-alt);
@@ -973,7 +961,6 @@ main {
   align-items: center;
   gap: 1px;
   height: 23px;
-  box-sizing: border-box;
   padding: 0 10px;
   border: 1px solid var(--border);
   background: var(--panel);
@@ -1249,7 +1236,6 @@ main.no-center {
   align-items: center;
   justify-content: space-between;
   min-height: 24px;
-  box-sizing: border-box;
   padding: 0 14px;
   background: var(--panel-alt);
   border-bottom: 1px solid var(--border);
@@ -1473,11 +1459,6 @@ p {
 }
 
 a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-a.link {
   color: var(--accent);
   text-decoration: none;
 }
@@ -1720,8 +1701,6 @@ video {
   gap: 10px;
   align-items: stretch;
   grid-auto-rows: 1fr;
-  width: auto;
-  padding: 0;
 }
 
 .product-preview-card {
@@ -1747,7 +1726,6 @@ video {
 }
 
 .product-preview-card img {
-  display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 7.6;
@@ -1773,7 +1751,6 @@ video {
   margin: 24px 0 0;
   width: 100%;
   padding: 20px 22px;
-  box-sizing: border-box;
 }
 
 .comparison-copy ul {
@@ -1808,7 +1785,6 @@ video {
   clear: both;
   margin-top: 6px;
   padding: 0 22px;
-  box-sizing: border-box;
 }
 
 .comparison-table table {
@@ -2077,7 +2053,6 @@ footer {
 .footer-tools .select-trigger,
 .footer-tools .size-stepper {
   height: var(--footer-control-height);
-  box-sizing: border-box;
 }
 
 .footer-tools select,

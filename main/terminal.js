@@ -278,10 +278,11 @@ function initConsole() {
       const match = firstMatch(options, seed);
       return match ? `cd ${match}` : '';
     }
-    if (head === 'theme' && (parts.length > 1 || hasTrailingSpace)) {
+    if ((head === 'theme' || head === 'bg') && (parts.length > 1 || hasTrailingSpace)) {
       const seed = parts.length > 1 ? parts.slice(1).join(' ') : '';
-      const match = firstMatch(listThemes(), seed);
-      return match ? `theme ${match}` : '';
+      const options = head === 'theme' ? listThemes() : listBackgrounds();
+      const match = firstMatch(options, seed);
+      return match ? `${head} ${match}` : '';
     }
     if (parts.length > 1) return '';
     const commandMatch = firstMatch(Object.keys(commands), head, true);
@@ -637,7 +638,7 @@ function initConsole() {
     loadPage(target);
   };
 
-  const defaultAliases = {
+  const aliases = Object.freeze({
     h: 'help',
     '?': 'help',
     usage: 'help',
@@ -656,8 +657,7 @@ function initConsole() {
     cabout: 'about',
     quit: 'exit',
     '..': 'cd ..'
-  };
-  const aliases = Object.freeze({ ...defaultAliases });
+  });
 
   const expandAlias = input => {
     const parts = input.trim().split(/\s+/);
@@ -674,26 +674,32 @@ function initConsole() {
     return Array.from(select.options).map(option => option.value);
   };
 
+  const listBackgrounds = () => {
+    const select = document.getElementById('bg-select');
+    if (!select) return [];
+    return Array.from(select.options).map(option => option.value);
+  };
+
   const commands = {
     help: () => {
-      addLine('available commands:');
+      addLine('commands:');
       const entries = [
         ['help', 'show this help message'],
         ['about', 'about me + links'],
-        ['product', 'winconfig summary + pricing'],
-        ['docs', 'documentation hub + section links'],
-        ['bindiff', 'list decompiled-pseudocode links (used by bin-diff page)'],
-        ['policies', 'open the Group Policy explorer'],
-        ['projects', 'list projects with repo links'],
-        ['terms', 'terms of service summary'],
         ['contact', 'email + discord'],
-        ['ascii', 'print the banner'],
+        ['product', 'winconfig information'],
+        ['projects', 'list projects with repo links'],
+        ['docs', 'documentation sections'],
+        ['bindiff', 'list decompiled-pseudocode links (used by bin-diff section)'],
+        ['policies', 'list ADMX parser links (used by policies section)'],
         ['ls', 'list available directories'],
-        ['pwd', 'show current directory'],
         ['cd <path>', 'change directory (./product, ./projects, ./bin-diff, ./policies, ./docs/<projectname>, ../)'],
         ['alias', 'list built-in aliases'],
+        ['bg', 'list background ids'],
+        ['bg <id>', 'set background'],
         ['themes', 'list theme ids'],
         ['theme <id>', 'set theme'],
+        ['ascii', 'print the banner'],
         ['animation [x y]', 'some cool animation (x/y = pixels)'],
         ['clear', 'clear the terminal'],
         ['exit', 'exit (hide) terminal, reverted on site refresh']
@@ -734,12 +740,11 @@ function initConsole() {
         ['data privacy', 'hardware identifiers only for licensing'],
         ['usage', 'personal license only, no resale'],
         ['refunds', 'only before registration/role assignment'],
-        ['license', 'hardware-bound, manual validation'],
-        ['after purchase', 'discord role assignment required']
+        ['license', 'hardware-bound']
       ]);
     },
     docs: () => {
-      addLine('documentation:');
+      addLine('sections:');
       addKeyValueLines([
         ['overview', 'docs/'],
         ['winconfig', 'docs/win-config/'],
@@ -761,11 +766,14 @@ function initConsole() {
       ]);
     },
     bindiff: () => {
-      addLine('decompiled-pseudocode folders:', 'muted');
-      const items = BIN_DIFF_RELEASE_LINKS.map(link => ({
+      addLine('decompiled-pseudocode folders:');
+      const items = [{
+        release: 'repo',
+        link: 'https://github.com/nohuto/decompiled-pseudocode'
+      }].concat(BIN_DIFF_RELEASE_LINKS.map(link => ({
         release: decodeURIComponent((link.split('/').pop() || '').trim()),
         link
-      }));
+      })));
       const width = items.reduce((max, item) => Math.max(max, item.release.length), 0);
       items.forEach(item => {
         addLineParts([
@@ -775,17 +783,13 @@ function initConsole() {
       });
     },
     policies: () => {
-      addLine('group policy explorer:');
+      addLine('admx-parser:');
       addKeyValueLines([
-        ['page', 'policies.html'],
-        ['source', 'main/data/group-policies.json'],
-        ['scope', 'ADMX-backed Administrative Template definitions'],
-        ['excludes', 'security policy, audit policy, AppLocker, WDAC, firewall, and native CSP-only policy state']
+        ['repo', 'https://github.com/nohuto/admx-parser'],
+        ['policies.json', 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policies.json'],
+        ['policies.yaml', 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policies.yaml'],
+        ['policyCategories.json', 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policyCategories.json']
       ]);
-      loadPage('policies.html');
-    },
-    terms: () => {
-      commands.product();
     },
     contact: () => {
       addLine('contact:');
@@ -822,7 +826,7 @@ function initConsole() {
     alias: args => {
       const raw = args.join(' ').trim();
       if (raw) {
-        addLine('custom aliases are disabled; only preconfigured aliases are available.', 'muted');
+        addLine('custom aliases are disabled, only preconfigured aliases are available.', 'muted');
       }
       addLine('aliases:', 'muted');
       const entries = Object.entries(aliases);
@@ -837,6 +841,24 @@ function initConsole() {
     themes: () => {
       addLine('themes:', 'muted');
       addIndentedLines(listThemes());
+    },
+    bg: args => {
+      const select = document.getElementById('bg-select');
+      if (!select) return;
+      if (!args.length) {
+        addLine(`current bg: ${select.value}`);
+        addLine('backgrounds:', 'muted');
+        addIndentedLines(listBackgrounds());
+        return;
+      }
+      const next = args.join(' ').trim();
+      if (!hasSelectOption(select, next)) {
+        addLine(`bg not found: ${next}`, 'muted');
+        return;
+      }
+      select.value = next;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      addLine(`bg set: ${next}`);
     },
     theme: args => {
       const select = document.getElementById('theme-select');

@@ -695,7 +695,6 @@ function initConsole() {
         ['themes', 'list theme ids'],
         ['theme <id>', 'set theme'],
         ['animation [x y]', 'some cool animation (x/y = pixels)'],
-        ['fontsize <10-22>', 'set size'],
         ['clear', 'clear the terminal'],
         ['exit', 'exit (hide) terminal, reverted on site refresh']
       ];
@@ -854,18 +853,6 @@ function initConsole() {
       select.value = next;
       select.dispatchEvent(new Event('change', { bubbles: true }));
       addLine(`theme set: ${next}`);
-    },
-    fontsize: args => {
-      const sizeInput = document.getElementById('font-size');
-      if (!sizeInput) return;
-      if (!args.length) {
-        addLine(`current size: ${sizeInput.value}px`);
-        return;
-      }
-      const applied = applyFontSize(args[0]);
-      sizeInput.value = applied;
-      storageSet(FONT_SIZE_KEY, applied + 'px');
-      addLine(`size set: ${applied}px`);
     },
     animation: args => {
       const requestedWidth = parseAnimationDimension(args[0]);

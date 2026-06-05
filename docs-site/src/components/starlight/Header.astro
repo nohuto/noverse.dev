@@ -5,6 +5,7 @@ import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import Search from 'virtual:starlight/components/Search';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import terminalIconSvg from '../../assets/terminal.svg?raw';
 
 const { id, sidebar } = Astro.locals.starlightRoute;
 
@@ -88,6 +89,9 @@ function getActiveRepo(routeId, roots) {
     </div>
     <div class:list={['sl-flex social-icons', { 'has-active-repo': hasActiveRepo }]}>
       <SocialIcons />
+      <a class="docs-home-link" href="https://noverse.dev/" aria-label="Go to Noverse home">
+        <span aria-hidden="true" class="docs-home-icon" set:html={terminalIconSvg}></span>
+      </a>
     </div>
     <ThemeSelect />
     <LanguageSelect />
@@ -242,6 +246,32 @@ function getActiveRepo(routeId, roots) {
       inline-size: 0;
       height: 2rem;
       border-inline-end: 1px solid var(--sl-color-gray-5);
+    }
+
+    .docs-home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sl-color-gray-2);
+      text-decoration: none;
+    }
+
+    .docs-home-link:hover,
+    .docs-home-link:focus-visible {
+      color: var(--sl-color-accent-high);
+      outline: none;
+    }
+
+    .docs-home-icon {
+      display: inline-flex;
+      width: 1em;
+      height: 1em;
+    }
+
+    .docs-home-icon :global(svg) {
+      display: block;
+      width: 1em;
+      height: 1em;
     }
 
     @media (max-width: 40rem) {

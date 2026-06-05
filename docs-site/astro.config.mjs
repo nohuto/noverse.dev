@@ -9,6 +9,19 @@ import starlightViewModes from 'starlight-view-modes';
 import starlightLinksValidator from 'starlight-links-validator';
 
 const sidebarRepos = ['win-config', 'regkit', 'nvapi-cli', 'app-tools', 'game-tools'];
+const noverseDocsLabels = {
+  name: 'noverse-docs-labels',
+  hooks: {
+    'config:setup'() {},
+    'i18n:setup'({ injectTranslations }) {
+      injectTranslations({
+        en: {
+          'tableOfContents.onThisPage': 'Table of Content',
+        },
+      });
+    },
+  },
+};
 const winConfigSidebarCategories = [
   'system',
   'visibility',
@@ -50,6 +63,7 @@ export default defineConfig({
   integrations: [
     starlight({
       plugins: [
+        noverseDocsLabels,
         starlightThemeRapide(),
         starlightViewModes({
           zenModeSettings: {

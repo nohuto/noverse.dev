@@ -24,11 +24,7 @@ const ACTIVE_PAGE_PATH_KEY = 'nv-active-page-path';
 const NOT_FOUND_PATH_KEY = 'nv-not-found-path';
 const MAIN_PAGE_PATHS = new Set(['/', '/index.html', '/product.html', '/projects.html', '/bin-diff.html', '/policies.html']);
 const FONT_KEY = 'nv-font';
-const FONT_SIZE_KEY = 'nv-font-size';
 const DEFAULT_FONT = 'cascadia';
-const DEFAULT_FONT_SIZE = 13;
-const FONT_SIZE_MIN = 10;
-const FONT_SIZE_MAX = 22;
 const FONT_KEYS = ['cascadia'];
 const FONT_SET = new Set(FONT_KEYS);
 const REPO_DESC_URL = 'main/data/repos.json';
@@ -516,65 +512,9 @@ function applyFont(key) {
   return applied;
 }
 
-function applyFontSize(size) {
-  const parsed = Number.parseInt(size, 10);
-  const safe = Number.isFinite(parsed)
-    ? Math.min(FONT_SIZE_MAX, Math.max(FONT_SIZE_MIN, parsed))
-    : DEFAULT_FONT_SIZE;
-  document.documentElement.style.setProperty('--font-size', safe + 'px');
-  return safe;
-}
-
 function initTypography() {
-  const sizeInput = document.getElementById('font-size');
-  const stepButtons = document.querySelectorAll('.size-step');
   applyFont(DEFAULT_FONT);
   storageSet(FONT_KEY, DEFAULT_FONT);
-  if (!sizeInput) return;
-
-  const storedSize = storageGet(FONT_SIZE_KEY, DEFAULT_FONT_SIZE);
-  const appliedSize = applyFontSize(storedSize);
-  let lastValidSize = appliedSize;
-  if (sizeInput) {
-    sizeInput.value = appliedSize;
-  }
-
-  if (sizeInput) {
-    sizeInput.addEventListener('input', () => {
-      const raw = sizeInput.value.trim();
-      const parsed = Number.parseInt(raw, 10);
-      if (!Number.isFinite(parsed)) return;
-      if (parsed < FONT_SIZE_MIN || parsed > FONT_SIZE_MAX) return;
-      const applied = applyFontSize(parsed);
-      lastValidSize = applied;
-      storageSet(FONT_SIZE_KEY, applied + 'px');
-    });
-    sizeInput.addEventListener('blur', () => {
-      const raw = sizeInput.value.trim();
-      const parsed = Number.parseInt(raw, 10);
-      if (!Number.isFinite(parsed)) {
-        sizeInput.value = lastValidSize;
-        applyFontSize(lastValidSize);
-        return;
-      }
-      const applied = applyFontSize(parsed);
-      lastValidSize = applied;
-      sizeInput.value = applied;
-      storageSet(FONT_SIZE_KEY, applied + 'px');
-    });
-  }
-
-  stepButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      if (!sizeInput) return;
-      const delta = Number.parseInt(button.dataset.step, 10) || 0;
-      const nextValue = Number.parseInt(sizeInput.value || DEFAULT_FONT_SIZE, 10) + delta;
-      const applied = applyFontSize(nextValue);
-      sizeInput.value = applied;
-      lastValidSize = applied;
-      storageSet(FONT_SIZE_KEY, applied + 'px');
-    });
-  });
 }
 
 function showToast(message) {

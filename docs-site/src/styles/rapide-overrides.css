@@ -25,6 +25,26 @@ html:not([data-has-sidebar]) {
 }
 
 @media (min-width: 72rem) {
+  html[data-has-sidebar][data-has-toc] {
+    --nv-doc-toc-width: clamp(var(--sl-sidebar-width), 24vw, 22rem);
+    --sl-content-width: min(80rem, calc(100vw - var(--sl-content-inline-start, var(--sl-sidebar-width)) - var(--nv-doc-toc-width)));
+  }
+
+  html[data-has-sidebar][data-has-toc] .right-sidebar-container {
+    width: calc(var(--nv-doc-toc-width) + (100% - var(--sl-content-width) - var(--nv-doc-toc-width)) / 2);
+  }
+
+  html[data-has-sidebar][data-has-toc] .main-pane {
+    width: calc(var(--sl-content-width) + (100% - var(--sl-content-width) - var(--nv-doc-toc-width)) / 2);
+  }
+
+  html[data-has-sidebar][data-has-toc] .right-sidebar-panel .sl-container {
+    width: calc(var(--nv-doc-toc-width) - 2 * var(--sl-sidebar-pad-x));
+    max-width: none;
+  }
+}
+
+@media (min-width: 72rem) {
   :root {
     --sl-content-pad-x: 2.125rem;
   }

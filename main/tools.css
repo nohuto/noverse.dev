@@ -1575,7 +1575,7 @@ body.policy-column-resizing * {
 .bindiff-output .d2h-file-name,
 .bindiff-output .d2h-file-stats {
   font-family: var(--font-family);
-  font-size: var(--font-size) !important;
+  font-size: 13px !important;
 }
 
 .bindiff-output .d2h-file-header {
@@ -1598,7 +1598,7 @@ body.policy-column-resizing * {
   min-width: 100%;
   table-layout: auto;
   font-family: var(--font-family);
-  font-size: var(--font-size) !important;
+  font-size: 13px !important;
 }
 
 .bindiff-output .d2h-code-line-ctn,
@@ -1606,7 +1606,7 @@ body.policy-column-resizing * {
 .bindiff-output .d2h-code-side-linenumber,
 .bindiff-output .line-num1,
 .bindiff-output .line-num2 {
-  font-size: var(--font-size) !important;
+  font-size: 13px !important;
   font-family: var(--font-family) !important;
 }
 

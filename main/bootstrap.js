@@ -8,9 +8,6 @@
   const DEFAULT_THEME = THEME_SYSTEM;
   const DEFAULT_BG = 'dots';
   const FONT_KEY = 'nv-font';
-  const FONT_SIZE_KEY = 'nv-font-size';
-  const FONT_SIZE_MIN = 10;
-  const FONT_SIZE_MAX = 22;
 
   const THEME_OPTIONS = new Set([
     'system',
@@ -89,18 +86,10 @@
     document.documentElement.setAttribute('data-theme', applied);
   };
 
-  const applyFontSize = value => {
-    const parsed = Number.parseInt(String(value || '').trim(), 10);
-    if (!Number.isFinite(parsed)) return;
-    const safe = Math.min(FONT_SIZE_MAX, Math.max(FONT_SIZE_MIN, parsed));
-    document.documentElement.style.setProperty('--font-size', `${safe}px`);
-  };
-
   try {
     setTheme(safeGet(THEME_KEY) || DEFAULT_THEME);
     setAttrIfValid('data-bg', safeGet(BG_KEY) || DEFAULT_BG, BG_OPTIONS, DEFAULT_BG);
     setAttrIfValid('data-font', safeGet(FONT_KEY), FONT_OPTIONS);
-    applyFontSize(safeGet(FONT_SIZE_KEY));
   } catch {
     // ignore storage errors or blocked access
   }

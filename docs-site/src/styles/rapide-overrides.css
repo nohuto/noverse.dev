@@ -28,15 +28,17 @@ html:not([data-has-sidebar]) {
 @media (min-width: 72rem) {
   html[data-has-sidebar][data-has-toc] {
     --nv-doc-toc-width: clamp(13rem, 15vw, 16rem);
-    --sl-content-width: min(80rem, calc(100vw - var(--sl-content-inline-start, var(--sl-sidebar-width)) - var(--nv-doc-toc-width) - 2 * var(--sl-content-pad-x)));
   }
 
   html[data-has-sidebar][data-has-toc] .right-sidebar-container {
-    width: calc(var(--nv-doc-toc-width) + max(0rem, (100% - var(--sl-content-width) - var(--nv-doc-toc-width)) / 2));
+    flex: 0 0 var(--nv-doc-toc-width);
+    width: var(--nv-doc-toc-width);
   }
 
   html[data-has-sidebar][data-has-toc] .main-pane {
-    width: calc(var(--sl-content-width) + max(0rem, (100% - var(--sl-content-width) - var(--nv-doc-toc-width)) / 2));
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
   }
 
   html[data-has-sidebar][data-has-toc] .right-sidebar-panel .sl-container {

@@ -25,21 +25,38 @@ html:not([data-has-sidebar]) {
   --sl-content-width: 80rem;
 }
 
+@media (min-width: 50rem) {
+  :root {
+    --sl-sidebar-width: 18.5rem;
+  }
+}
+
+@media (min-width: 110rem) {
+  :root {
+    --sl-sidebar-width: 22rem;
+  }
+}
+
 @media (min-width: 72rem) {
   html[data-has-sidebar][data-has-toc] {
+    --nv-doc-main-width: 72rem;
+    --nv-doc-cluster-gap: 1.5rem;
     --nv-doc-toc-width: clamp(13rem, 16vw, 18rem);
   }
 
   html[data-has-sidebar][data-has-toc] .main-frame > .lg\:sl-flex {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--nv-doc-toc-width);
+    grid-template-columns: minmax(0, var(--nv-doc-main-width)) var(--nv-doc-toc-width);
+    column-gap: var(--nv-doc-cluster-gap);
+    justify-content: start;
     width: 100%;
   }
 
   html[data-has-sidebar][data-has-toc] .main-pane {
+    grid-column: 1;
     order: 1;
     min-width: 0;
-    --sl-content-margin-inline: 0;
+    --sl-content-margin-inline: auto;
     width: auto !important;
   }
 
@@ -49,10 +66,12 @@ html:not([data-has-sidebar]) {
 
   html[data-has-sidebar][data-has-toc] .main-pane .sl-container {
     width: 100%;
-    max-width: none;
+    max-width: var(--nv-doc-main-width);
+    margin-inline: auto;
   }
 
   html[data-has-sidebar][data-has-toc] .right-sidebar-container {
+    grid-column: 2;
     order: 2;
     min-width: 0;
     width: auto !important;
@@ -69,6 +88,18 @@ html:not([data-has-sidebar]) {
   html[data-has-sidebar][data-has-toc] .right-sidebar-panel .sl-container {
     width: 100%;
     max-width: none;
+  }
+}
+
+@media (min-width: 110rem) {
+  html[data-has-sidebar][data-has-toc] {
+    --nv-doc-main-width: 76rem;
+  }
+}
+
+@media (min-width: 120rem) {
+  html[data-has-sidebar][data-has-toc] .main-frame > .lg\:sl-flex {
+    justify-content: center;
   }
 }
 

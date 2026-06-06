@@ -273,7 +273,6 @@ site-search dialog #starlight__search {
   height: 1.7rem;
 }
 
-/* Keep Rapide theme overall, but restore Starlight-like default sidebar styling */
 .sidebar-pane {
   border-inline-end: 1px solid var(--sl-color-hairline-shade) !important;
 }

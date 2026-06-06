@@ -27,29 +27,48 @@ html:not([data-has-sidebar]) {
 
 @media (min-width: 72rem) {
   html[data-has-sidebar][data-has-toc] {
-    --nv-doc-toc-width: clamp(13rem, 15vw, 16rem);
+    --nv-doc-toc-width: clamp(13rem, 16vw, 18rem);
   }
 
-  html[data-has-sidebar][data-has-toc] .right-sidebar-container {
-    flex: 0 0 var(--nv-doc-toc-width);
-    width: var(--nv-doc-toc-width);
+  html[data-has-sidebar][data-has-toc] .main-frame > .lg\:sl-flex {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--nv-doc-toc-width);
+    width: 100%;
   }
 
   html[data-has-sidebar][data-has-toc] .main-pane {
-    flex: 1 1 0;
+    order: 1;
     min-width: 0;
-    width: auto;
+    --sl-content-margin-inline: 0;
+    width: auto !important;
+  }
+
+  html[data-has-sidebar][data-has-toc] .main-pane main {
+    min-width: 0;
+  }
+
+  html[data-has-sidebar][data-has-toc] .main-pane .sl-container {
+    width: 100%;
+    max-width: none;
+  }
+
+  html[data-has-sidebar][data-has-toc] .right-sidebar-container {
+    order: 2;
+    min-width: 0;
+    width: auto !important;
+  }
+
+  html[data-has-sidebar][data-has-toc] .right-sidebar {
+    width: var(--nv-doc-toc-width);
+  }
+
+  html[data-has-sidebar][data-has-toc] .right-sidebar-panel {
+    padding-inline: 1rem;
   }
 
   html[data-has-sidebar][data-has-toc] .right-sidebar-panel .sl-container {
-    width: calc(var(--nv-doc-toc-width) - 2 * var(--sl-sidebar-pad-x));
+    width: 100%;
     max-width: none;
-  }
-}
-
-@media (min-width: 94rem) {
-  html[data-has-sidebar][data-has-toc] {
-    --nv-doc-toc-width: clamp(18rem, 18vw, 22rem);
   }
 }
 

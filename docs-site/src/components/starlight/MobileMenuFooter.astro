@@ -3,55 +3,13 @@ import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import terminalIconSvg from '../../assets/terminal.svg?raw';
+import { getActiveRepo } from '../../utils/active-repo';
 
 const { id, sidebar } = Astro.locals.starlightRoute;
 
-const knownRoots = collectKnownRoots(sidebar);
-const activeRepo = getActiveRepo(id, knownRoots);
+const activeRepo = getActiveRepo(id, sidebar);
 const hasActiveRepo = Boolean(activeRepo && !['index', '404'].includes(activeRepo));
 const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
-
-function normalize(value) {
-  return String(value || '').trim().toLowerCase();
-}
-
-function hrefRootSegment(href) {
-  if (!href) return '';
-  try {
-    const url = new URL(href, 'https://example.invalid');
-    const parts = url.pathname.split('/').filter(Boolean).map(normalize);
-    if (parts[0] === 'docs' && parts.length > 1) return parts[1];
-    return parts[0] || '';
-  } catch {
-    return '';
-  }
-}
-
-function collectKnownRoots(entries, roots = new Set()) {
-  entries.forEach((entry) => {
-    if (entry.type === 'link') {
-      const root = hrefRootSegment(entry.href);
-      if (root) roots.add(root);
-      return;
-    }
-    const labelRoot = normalize(entry.label).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    if (labelRoot) roots.add(labelRoot);
-    collectKnownRoots(entry.entries, roots);
-  });
-  return roots;
-}
-
-function getActiveRepo(routeId, roots) {
-  const segments = String(routeId || '')
-    .split('/')
-    .filter(Boolean)
-    .map(normalize)
-    .filter((segment) => segment !== 'docs');
-
-  if (segments.length === 0) return '';
-  const firstMatch = segments.find((segment) => roots.has(segment));
-  return firstMatch || segments[0] || '';
-}
 ---
 
 <div class="mobile-preferences sl-flex">

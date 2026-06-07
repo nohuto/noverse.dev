@@ -407,6 +407,15 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
   border-radius: var(--nv-ui-radius) !important;
 }
 
+.scroll-to-top-button,
+.expressive-code .frame,
+.expressive-code.cb-fullscreen__active,
+.cb-fullscreen__button[data-tooltip]:hover::after,
+.cb-fullscreen__hint,
+.cb-fullscreen__font-controls {
+  box-shadow: none !important;
+}
+
 .sidebar-pane a:hover,
 .sidebar-pane a:focus {
   color: var(--sl-color-white);

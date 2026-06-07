@@ -221,7 +221,6 @@
   min-width: 128px;
   border: 1px solid var(--border-strong);
   background: var(--panel);
-  box-shadow: 0 10px 26px var(--shadow);
   padding: 0;
 }
 
@@ -539,7 +538,7 @@ body.policy-column-resizing * {
 }
 
 .policy-table tbody tr.is-active td:first-child {
-  box-shadow: inset 2px 0 0 var(--accent);
+  border-inline-start: 2px solid var(--accent);
 }
 
 .policy-table td[data-column="scope"],
@@ -561,7 +560,6 @@ body.policy-column-resizing * {
   min-width: 150px;
   border: 1px solid var(--border-strong);
   background: var(--panel);
-  box-shadow: 0 10px 26px var(--shadow);
   padding: 0;
 }
 
@@ -1324,7 +1322,6 @@ body.policy-column-resizing * {
   width: min(460px, calc(100vw - 24px));
   border: 1px solid var(--border);
   background: var(--panel);
-  box-shadow: 0 12px 30px var(--shadow);
   left: 0;
   top: 0;
   transform: none;

@@ -17,7 +17,6 @@
   --warning: #e4c07a;
   --danger: #ff6b6b;
   --starfield-dot: color-mix(in srgb, var(--text) 90%, transparent);
-  --shadow: rgba(0, 0, 0, 0.35);
   --font-family: "Cascadia Mono", "Cascadia Code", Consolas, "SFMono-Regular", Menlo, Monaco, "Liberation Mono", monospace;
   --scrollbar-track: var(--bg-alt);
   --scrollbar-thumb: var(--border-strong);
@@ -758,7 +757,6 @@ main.main-terminal .terminal-shell {
   max-height: 100%;
   border: 1px solid var(--border-strong);
   background: var(--panel);
-  box-shadow: 0 10px 26px var(--shadow);
   resize: both;
   overflow: hidden;
   display: flex;
@@ -821,7 +819,6 @@ main.main-terminal .terminal-shell {
   width: min(460px, calc(100vw - 24px));
   border: 1px solid var(--border);
   background: var(--panel);
-  box-shadow: 0 12px 30px var(--shadow);
   transform: none;
 }
 
@@ -897,7 +894,6 @@ main {
   padding: 10px 16px;
   background: var(--bg-alt);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 4px 16px var(--shadow);
 }
 
 .prompt-line {
@@ -1074,7 +1070,6 @@ select option:active {
   right: 0;
   background: var(--panel);
   border: 1px solid var(--border);
-  box-shadow: 0 8px 20px var(--shadow);
   display: none;
   z-index: 30;
 }
@@ -1206,7 +1201,6 @@ main.no-center {
 .content-box {
   background: var(--panel);
   border: 1px solid var(--border);
-  box-shadow: 0 6px 20px var(--shadow);
 }
 
 .panel-header {
@@ -1957,7 +1951,6 @@ video {
 .social img {
   width: 16px;
   height: 16px;
-  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
 }
 
 footer {

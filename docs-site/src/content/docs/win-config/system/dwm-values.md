@@ -175,7 +175,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "FrameCounterPosition" = 0; // REG_DWORD (bool), nonzero sets vertical debug frame counter
     "InteractionOutputPredictionDisabled" = 0; // REG_DWORD (bool)
     "OverlayTestMode" = 0; // REG_DWORD, 4 = forced MPO support, 5 = overlay/MPO disabled
-    "ParallelModePolicy" = 1; // REG_DWORD; range 0-2, >=3 = 1
+    "ParallelModePolicy" = 1; // REG_DWORD, range 0-2, >=3 = 1
     "ResampleInLinearSpace" = 0; // REG_DWORD bool, nonzero forces pixel format 91
     "ResampleModeOverride" = 0; // REG_DWORD, 0 = requested mode, 1 = Lanczos?, 2 = XBR?
     "SDRBoostPercentOverride" = 0; // REG_DWORD, stored as float(value / 100)
@@ -218,7 +218,9 @@ Everything listed below is based on personal findings, mistakes may exist.
     "EnableWindowColorization" = 1; // REG_DWORD
 
     // uDWM compositor
-    "DisableHologramCompositor" = 0; // REG_DWORD, nonzero skips holographic watcher config
+    "DisableHologramCompositor" = 0; // REG_DWORD, nonzero skips holographic driver watcher registration, which seems to be used for special monitors that are ignored by DWM
+                                     // https://learn.microsoft.com/en-us/windows-hardware/drivers/display/specialized-monitors
+                                     // https://learn.microsoft.com/en-us/uwp/api/windows.devices.display.core
 
     // win32kfull
     "ChildWindowDpiIsolation" = 1; // REG_DWORD (bool)

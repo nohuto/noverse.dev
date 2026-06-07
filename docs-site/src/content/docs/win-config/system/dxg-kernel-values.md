@@ -6,9 +6,7 @@ sidebar:
   order: 7
 ---
 
-`dxgkrnl.sys` is Windows DirectX/WDDM graphics kernel driver that mediates between apps and the GPU to schedule work, manage graphics memory, present frames, and handle TDR hang recovery.
-
-Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
+Many applied values are defaults, some not. See documentation below for details.
 
 ## Registry Values
 

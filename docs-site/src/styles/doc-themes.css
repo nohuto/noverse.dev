@@ -549,12 +549,9 @@
   --sl-color-hairline-shade: var(--nv-doc-border-strong);
   --sl-color-backdrop-overlay: color-mix(in srgb, var(--nv-doc-bg) 78%, transparent);
 
-  --sl-shadow-sm: 0 1px 1px color-mix(in srgb, var(--nv-doc-bg) 28%, transparent),
-    0 2px 1px color-mix(in srgb, var(--nv-doc-bg) 36%, transparent);
-  --sl-shadow-md: 0 8px 18px color-mix(in srgb, var(--nv-doc-bg) 32%, transparent),
-    0 3px 8px color-mix(in srgb, var(--nv-doc-bg) 24%, transparent);
-  --sl-shadow-lg: 0 28px 48px color-mix(in srgb, var(--nv-doc-bg) 42%, transparent),
-    0 10px 18px color-mix(in srgb, var(--nv-doc-bg) 28%, transparent);
+  --sl-shadow-sm: none;
+  --sl-shadow-md: none;
+  --sl-shadow-lg: none;
 
   --sl-rapide-ui-bg-color: var(--nv-doc-panel);
   --sl-rapide-ui-header-bg-color: color-mix(in srgb, var(--nv-doc-panel-alt) 92%, transparent);
@@ -620,9 +617,9 @@ docs-theme-select {
 
 .docs-theme-trigger:focus-visible,
 docs-theme-select[data-open='true'] .docs-theme-trigger {
-  outline: none;
+  outline: 1px solid var(--sl-color-accent);
+  outline-offset: 1px;
   border-color: var(--sl-color-accent);
-  box-shadow: 0 0 0 1px var(--sl-color-accent);
 }
 
 .docs-theme-current {
@@ -672,7 +669,6 @@ docs-theme-select[data-open='true'] .docs-theme-trigger::after {
   border: 1px solid var(--sl-color-hairline-shade);
   border-radius: var(--nv-ui-radius);
   background: var(--nv-doc-panel);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.34);
   overflow: hidden;
 }
 

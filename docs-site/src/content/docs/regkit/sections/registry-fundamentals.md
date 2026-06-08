@@ -3,7 +3,7 @@ title: 'Registry Fundamentals'
 description: 'Generated from regkit README section: Registry Fundamentals.'
 editUrl: false
 sidebar:
-  order: 13
+  order: 12
 ---
 
 ### Standard hives & REGISTRY Comparison

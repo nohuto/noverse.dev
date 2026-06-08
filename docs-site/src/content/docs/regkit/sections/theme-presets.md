@@ -3,7 +3,7 @@ title: 'Theme Presets'
 description: 'Generated from regkit README section: Theme Presets.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 3
 ---
 
 RegKit includes built in presets and a theme editor to customize colors (backgrounds, text, selection, borders, focus). Presets can be saved, exported, and imported as `.rktheme` files to share themes across machines. Examples:

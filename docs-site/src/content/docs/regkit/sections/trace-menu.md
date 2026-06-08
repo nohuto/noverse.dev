@@ -3,7 +3,7 @@ title: 'Trace Menu'
 description: 'Generated from regkit README section: Trace Menu.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 6
 ---
 
 There are three trace files which are quite similar, 23H2/24H2/25H2. I've done all of them on new installations. Trace loading supports multiple active traces at once and shows "Read on boot" as `Yes (TraceName, ...)`.

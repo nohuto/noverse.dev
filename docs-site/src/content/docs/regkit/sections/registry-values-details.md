@@ -3,7 +3,7 @@ title: 'Registry Values Details'
 description: 'Generated from regkit README section: Registry Values Details.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 9
 ---
 
 This includes details on keys/values which are either poorly documented or not documented/mentioned anywhere at all.

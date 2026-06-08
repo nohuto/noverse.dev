@@ -3,7 +3,7 @@ title: 'Icon Sets'
 description: 'Generated from regkit README section: Icon Sets.'
 editUrl: false
 sidebar:
-  order: 5
+  order: 4
 ---
 
 RegKit comes with multiple icon sets and supports user provided icons. Switch sets from `Options > Icons`.

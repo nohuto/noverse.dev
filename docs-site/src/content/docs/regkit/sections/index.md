@@ -8,7 +8,6 @@ sidebar:
 ---
 
 - [Overview](/docs/regkit/sections/overview/)
-- [Table of Content](/docs/regkit/sections/table-of-content/)
 - [Differences to Default RegEdit](/docs/regkit/sections/differences-to-default-regedit/)
 - [Theme Presets](/docs/regkit/sections/theme-presets/)
 - [Icon Sets](/docs/regkit/sections/icon-sets/)

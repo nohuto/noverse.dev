@@ -3,7 +3,7 @@ title: 'Rights and Elevation'
 description: 'Generated from regkit README section: Rights and Elevation.'
 editUrl: false
 sidebar:
-  order: 9
+  order: 8
 ---
 
 RegKit can relaunch itself under different security contexts because many registry areas are protected by ACLs and/or owned by TI (TrustedInstaller). Some keys are owned by TI, and only that SID has write permissions (SYSTEM may be read-only). If a key is readable but writes fail with access denied, check the owner and ACLs. If the owner is TI, use the TI mode, if it is SYSTEM, use SYSTEM. Use the Options menu to restart with higher rights or to make the app always relaunch with them on startup.

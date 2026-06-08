@@ -22,6 +22,26 @@ The comments of some values with more details are based on pseudocode, if so I a
 
 Everything listed below is based on personal findings, mistakes may exist.
 
+| Prefix | Component |
+| --- | --- |
+| `Alpcp` | Advanced Local Procedure Calls |
+| `Cc` | Common Cache |
+| `Cm` / `Cmp` | Configuration manager |
+| `Dbgk` | Debugging Framework for user mode |
+| `Ex` / `Exp` | Executive support routines |
+| `Hvl` | Hypervisor library |
+| `Io` / `Iop` | I/O manager |
+| `Kd` / `Kdp` | Kernel debugger |
+| `Ke` / `Ki` | Kernel / Kernel internal |
+| `Mm` | Memory manager |
+| `Ob` / `Obp` | Object manager |
+| `Po` / `Pop` | Power manager |
+| `Ppm` | Processor power manager |
+| `Ps` / `Psp` | Process support |
+| `Rtlp` | Run-time library |
+| `Se` / `Sep` | Security Reference Monitor |
+| `Vf` / `Vi` / `Dif*` | Driver Verifier |
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
     "AdjustDpcThreshold" = 20; // KiAdjustDpcThreshold, per CPU countdown value. When it reaches 1, it's reloaded and current DPC queue depth is incremented up to DpcQueueDepth ("number of clock ticks before DpcQueueDepth is incremented if DPCs are not pending") (KeAccumulateTicks, KiInitPrcb)
@@ -62,7 +82,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     // Policy for dynamic thread that is deemed important but run a short amount of time.
     "DynamicHeteroCpuPolicyMask" = 7; // (foreground status = 1, priority = 2, expected run time = 4)
     // Determine what is considered in assessing whether a thread is important.
-    "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling, https://www.noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling
+    "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling, https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling
     "EnableTickAccumulationFromAccountingPeriods" = 0; // KiEnableTickAccumulationFromAccountingPeriods, controls how CPU time used by threads etc. get counted?
                                                        // >= 2 = disabled (adds CPU time when clock ticks happen)
                                                        // 0/1/missing = enabled (measure time between accounting points)
@@ -117,7 +137,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SeCompatFlags" = 0; // SeCompatFlags
     "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting, REG_DWORD, 0 disables, nonzero enables
     "SeLpacEnableWatsonThrottling" = 1; // SeLpacEnableWatsonThrottling
-    "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration, https://www.noverse.dev/docs/win-config/system/timer-expiration/#serializetimerexpiration
+    "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration, https://noverse.dev/docs/win-config/system/timer-expiration/#serializetimerexpiration
     "SeTokenDoesNotTrackSessionObject" = 0; // SeTokenDoesNotTrackSessionObject
     "SeTokenLeakDiag" = 0; // SeTokenLeakTracking
     "SeTokenSingletonAttributesConfig" = 3; // SepTokenSingletonAttributesConfig
@@ -490,7 +510,7 @@ if ( (ExpPoolFlags & 1) != 0 )
   KeCheckForTimer(BugCheckParameter3);
 ```
 
-[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=ntoskrnl&function=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
+[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=ntoskrnl&function=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
 
 ```c
 // VfMiscKeInitializeTimerEx_Entry (23H2)

@@ -122,15 +122,15 @@ Disable Brave's Web3 features if you don't use them.
 - `Improve search suggestions`: Off
 - `Web Discovery Project`: Off
 
-See [search-engine](/docs/app-guides/search-engine/).
+See [search-engine](https://noverse.dev/docs/app-guides/search-engine/).
 
 ### Extensions
 
-See [extensions](/docs/app-guides/extensions/).
+See [extensions](https://noverse.dev/docs/app-guides/extensions/).
 
 ### Autofill and passwords
 
-Don't use the built-in password manager, use a [passowrd manager extension](/docs/app-guides/extensions/#password-manager-firefox---chrome) instead.
+Don't use the built-in password manager, use a [passowrd manager extension](https://noverse.dev/docs/app-guides/extensions/#password-manager-firefox---chrome) instead.
 
 - Password Manager
   - Settings

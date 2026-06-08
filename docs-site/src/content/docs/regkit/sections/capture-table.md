@@ -3,7 +3,7 @@ title: 'Capture Table'
 description: 'Generated from regkit README section: Capture Table.'
 editUrl: false
 sidebar:
-  order: 12
+  order: 11
 ---
 
 Most activities were captured during boot, there are some others such as `Steam.txt`, `TLOU2.txt`, `StartAllBack.txt`, and `Lighshot.txt`, that were captured using Procmon during use.

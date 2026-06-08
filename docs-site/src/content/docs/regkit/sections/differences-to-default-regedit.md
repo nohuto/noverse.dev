@@ -3,7 +3,7 @@ title: 'Differences to Default RegEdit'
 description: 'Generated from regkit README section: Differences to Default RegEdit.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 2
 ---
 
 RegKit adds functionality that standard regedit doesn't support/expose:

@@ -3,7 +3,7 @@ title: 'Icons Meaning'
 description: 'Generated from regkit README section: Icons Meaning.'
 editUrl: false
 sidebar:
-  order: 6
+  order: 5
 ---
 
 ### Symlink Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/symlink.ico?raw=true" width="16" height="16">

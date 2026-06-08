@@ -3,7 +3,7 @@ title: 'Default Menu'
 description: 'Generated from regkit README section: Default Menu.'
 editUrl: false
 sidebar:
-  order: 8
+  order: 7
 ---
 
 Default presets are `.reg` exports that fill the value list's `Default` column with data from new installations. If a value is included in the registry but not in the defaults list, it'll be displayed as `(Missing)`.

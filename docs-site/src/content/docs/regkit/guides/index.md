@@ -4,7 +4,7 @@ description: 'Auto-generated overview for Guides.'
 editUrl: false
 sidebar:
   hidden: true
-  order: 1
+  order: 2
 ---
 
 - [Tracing Program Registry Activity](/docs/regkit/guides/procmon/)

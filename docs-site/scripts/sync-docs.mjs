@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { CATEGORY_LABELS } from '../docs-constants.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,41 +12,18 @@ const CONTENT_DIR = path.join(DOCS_SITE_DIR, 'src', 'content', 'docs');
 const DOC_REPO_ORDER = [
   'win-config',
   'regkit',
-  'nvapi-cli',
-  'app-tools',
-  'game-tools',
+  'app-guides',
 ];
 
 const WIN_CONFIG_REPO_URL = trimRepoUrl(
   process.env.WIN_CONFIG_REPO_URL || 'https://github.com/nohuto/win-config'
 );
-const NVAPI_CLI_REPO_URL = trimRepoUrl(
-  process.env.NVAPI_CLI_REPO_URL || 'https://github.com/nohuto/nvapi-cli'
-);
 const REGKIT_REPO_URL = trimRepoUrl(
   process.env.REGKIT_REPO_URL || 'https://github.com/nohuto/regkit'
 );
-const APP_TOOLS_REPO_URL = trimRepoUrl(
-  process.env.APP_TOOLS_REPO_URL || 'https://github.com/nohuto/app-tools'
+const APP_GUIDES_REPO_URL = trimRepoUrl(
+  process.env.APP_GUIDES_REPO_URL || 'https://github.com/nohuto/app-guides'
 );
-const GAME_TOOLS_REPO_URL = trimRepoUrl(
-  process.env.GAME_TOOLS_REPO_URL || 'https://github.com/nohuto/game-tools'
-);
-
-const CATEGORY_LABELS = {
-  affinities: 'Affinities',
-  cleanup: 'Cleanup',
-  misc: 'Misc',
-  network: 'Network',
-  nvidia: 'NVIDIA',
-  peripheral: 'Peripheral',
-  policies: 'Policies',
-  power: 'Power',
-  privacy: 'Privacy',
-  security: 'Security',
-  system: 'System',
-  visibility: 'Visibility',
-};
 
 const CATEGORY_ORDER = [
   'system',
@@ -54,13 +32,42 @@ const CATEGORY_ORDER = [
   'power',
   'privacy',
   'network',
+  'security',
   'nvidia',
-  'cleanup',
   'misc',
   'policies',
-  'security',
   'affinities',
 ];
+
+const INCLUDED_WIN_CONFIG_CATEGORIES = new Set(CATEGORY_ORDER);
+
+const APP_GUIDES_ORDER = [
+  'mullvad-desktop.md',
+  'brave-desktop.md',
+  'brave-ios.md',
+  'discord.md',
+  'lghub.md',
+  'spotify.md',
+  'steam.md',
+  'steelseries.md',
+  'vsc.md',
+  'extensions.md',
+  'search-engine.md',
+];
+
+const APP_GUIDES_TITLES = {
+  'mullvad-desktop.md': 'Mullvad',
+  'brave-desktop.md': 'Brave (Desktop)',
+  'brave-ios.md': 'Brave (iOS)',
+  'discord.md': 'Discord',
+  'lghub.md': 'LGHUB',
+  'spotify.md': 'Spotify',
+  'steam.md': 'Steam',
+  'steelseries.md': 'SteelSeries',
+  'vsc.md': 'VSC',
+  'extensions.md': 'Browser Extensions',
+  'search-engine.md': 'Search Engines',
+};
 
 const entries = [];
 
@@ -68,25 +75,19 @@ main();
 
 function main() {
   const winConfigDir = resolveRepoDirectory('win-config', WIN_CONFIG_REPO_URL);
-  const nvapiCliDir = resolveRepoDirectory('nvapi-cli', NVAPI_CLI_REPO_URL);
   const regkitDir = resolveRepoDirectory('regkit', REGKIT_REPO_URL);
-  const appToolsDir = resolveRepoDirectory('app-tools', APP_TOOLS_REPO_URL);
-  const gameToolsDir = resolveRepoDirectory('game-tools', GAME_TOOLS_REPO_URL);
+  const appGuidesDir = resolveRepoDirectory('app-guides', APP_GUIDES_REPO_URL);
 
   assertDirectory(winConfigDir, 'win-config');
-  assertDirectory(nvapiCliDir, 'nvapi-cli');
   assertDirectory(regkitDir, 'regkit');
-  assertDirectory(appToolsDir, 'app-tools');
-  assertDirectory(gameToolsDir, 'game-tools');
+  assertDirectory(appGuidesDir, 'app-guides');
 
   resetContentDir();
   generateRootOverview();
 
   const winConfigStats = generateWinConfig(winConfigDir);
-  const nvapiCliStats = generateNvapiCli(nvapiCliDir);
   const regkitStats = generateRegkit(regkitDir);
-  const appToolsStats = generateAppTools(appToolsDir);
-  const gameToolsStats = generateGameTools(gameToolsDir);
+  const appGuidesStats = generateAppGuides(appGuidesDir);
   const sectionIndexPages = generateSectionIndexes();
 
   normalizeGeneratedEntries();
@@ -95,14 +96,9 @@ function main() {
   console.log(
     `[sync-docs] Generated ${entries.length} pages (` +
       `win-config options: ${winConfigStats.optionPages}, ` +
-      `nvapi-cli sections: ${nvapiCliStats.sectionPages}, ` +
-      `nvapi-cli docs: ${nvapiCliStats.docPages}, ` +
-      `regkit sections: ${regkitStats.sectionPages}, ` +
+      `regkit overview: ${regkitStats.overviewPages}, ` +
       `regkit guides: ${regkitStats.guidePages}, ` +
-      `app-tools sections: ${appToolsStats.sectionPages}, ` +
-      `app-tools docs: ${appToolsStats.docPages}, ` +
-      `game-tools sections: ${gameToolsStats.sectionPages}, ` +
-      `game-tools docs: ${gameToolsStats.docPages}, ` +
+      `app-guides pages: ${appGuidesStats.pages}, ` +
       `section indexes: ${sectionIndexPages}).`
   );
 }
@@ -143,6 +139,8 @@ function generateWinConfig(winConfigDir) {
   let optionPages = 0;
 
   for (const { category, filePath } of sorted) {
+    if (!INCLUDED_WIN_CONFIG_CATEGORIES.has(category)) continue;
+
     const categoryLabel = CATEGORY_LABELS[category] || toTitleCase(category);
 
     const raw = readText(filePath);
@@ -177,84 +175,39 @@ function generateWinConfig(winConfigDir) {
 
   return { optionPages };
 }
-function generateNvapiCli(repoDir) {
-  const sectionPages = generateReadmeSections({
-    repoKey: 'nvapi-cli',
-    repoDir,
-    sectionLevel: 2,
-    outputDirectory: 'nvapi-cli/sections',
-    routeDirectory: '/docs/nvapi-cli/sections/',
-  });
-
-  const docPages = generateRepoMarkdownDirectory({
-    repoKey: 'nvapi-cli',
-    repoDir,
-    sourceDirectory: 'docs',
-    outputDirectory: 'nvapi-cli/docs',
-    routeDirectory: '/docs/nvapi-cli/docs/',
-  });
-
-  return { sectionPages, docPages };
-}
-
 function generateRegkit(repoDir) {
-  const sectionPages = generateReadmeSections({
+  const overviewPages = generateReadmeOverview({
     repoKey: 'regkit',
     repoDir,
-    sectionLevel: 2,
-    outputDirectory: 'regkit/sections',
-    routeDirectory: '/docs/regkit/sections/',
+    outputDirectory: 'regkit',
+    routeDirectory: '/docs/regkit/',
   });
 
-  const guidePages = generateRepoMarkdownDirectory({
+  const guidePages = generateMarkdownFilesFromDirectory({
     repoKey: 'regkit',
     repoDir,
     sourceDirectory: 'guides',
     outputDirectory: 'regkit/guides',
     routeDirectory: '/docs/regkit/guides/',
+    sidebarOrderStart: 2,
   });
 
-  return { sectionPages, guidePages };
+  return { overviewPages, guidePages };
 }
 
-function generateAppTools(repoDir) {
-  const sectionPages = generateReadmeSections({
-    repoKey: 'app-tools',
+function generateAppGuides(repoDir) {
+  const pages = generateMarkdownFilesFromDirectory({
+    repoKey: 'app-guides',
     repoDir,
-    sectionLevel: 2,
-    outputDirectory: 'app-tools/sections',
-    routeDirectory: '/docs/app-tools/sections/',
+    sourceDirectory: '.',
+    outputDirectory: 'app-guides',
+    routeDirectory: '/docs/app-guides/',
+    excludeFiles: new Set(['readme.md']),
+    fileOrder: APP_GUIDES_ORDER,
+    titleOverrides: APP_GUIDES_TITLES,
   });
 
-  const docPages = generateRepoMarkdownFromRoot({
-    repoKey: 'app-tools',
-    repoDir,
-    outputDirectory: 'app-tools/docs',
-    routeDirectory: '/docs/app-tools/docs/',
-    collapseSingleDescLeaf: true,
-  });
-
-  return { sectionPages, docPages };
-}
-
-function generateGameTools(repoDir) {
-  const sectionPages = generateReadmeSections({
-    repoKey: 'game-tools',
-    repoDir,
-    sectionLevel: 2,
-    outputDirectory: 'game-tools/sections',
-    routeDirectory: '/docs/game-tools/sections/',
-  });
-
-  const docPages = generateRepoMarkdownFromRoot({
-    repoKey: 'game-tools',
-    repoDir,
-    outputDirectory: 'game-tools/docs',
-    routeDirectory: '/docs/game-tools/docs/',
-    collapseSingleDescLeaf: true,
-  });
-
-  return { sectionPages, docPages };
+  return { pages };
 }
 
 function resolveRepoDirectory(repoName, repoUrl) {
@@ -262,6 +215,7 @@ function resolveRepoDirectory(repoName, repoUrl) {
     path.resolve(DOCS_SITE_DIR, '..', repoName),
     path.resolve(DOCS_SITE_DIR, '..', 'sources', repoName),
     path.resolve(DOCS_SITE_DIR, '..', '..', repoName),
+    path.resolve(DOCS_SITE_DIR, '..', '..', 'tools', repoName),
     path.resolve(DOCS_SITE_DIR, '..', '..', '..', repoName),
     path.resolve(DOCS_SITE_DIR, '..', '_tmp_repos', repoName),
     path.resolve(DOCS_SITE_DIR, '..', '..', '_tmp_repos', repoName),
@@ -291,150 +245,73 @@ function resolveRepoDirectory(repoName, repoUrl) {
   }
 }
 
-function generateReadmeSections({
+function generateReadmeOverview({
   repoKey,
   repoDir,
-  sectionLevel,
   outputDirectory,
   routeDirectory,
 }) {
   const readmePath = path.join(repoDir, 'README.md');
   if (!fs.existsSync(readmePath)) return 0;
+
   const raw = readText(readmePath);
-  const sections = splitByHeadingLevel(raw, sectionLevel);
-  const headingCounts = new Map();
-  const routeSlugSet = new Set();
   const titleMatch = raw.match(/^#\s+(.+)$/m);
   const readmeTitle = titleMatch ? titleMatch[1].trim() : toTitleCase(repoKey);
+  const body = stripFirstH1(raw).trim();
 
-  let sectionPages = 0;
-
-  for (const section of sections) {
-    const isOverview = section.heading === null;
-    const heading = isOverview ? 'Overview' : section.heading;
-    const body = isOverview
-      ? stripFirstH1(section.lines.join('\n')).trim()
-      : section.lines.join('\n').trim();
-
-    if (!body && isOverview) {
-      continue;
-    }
-
-    const anchor = isOverview ? '' : uniqueGitHubAnchor(heading, headingCounts);
-    const routeSlug = isOverview ? 'overview' : uniqueSlug(slugify(heading), routeSlugSet);
-    const route = `${routeDirectory}${routeSlug}/`;
-
-    addEntry({
-      relativePath: `${outputDirectory}/${routeSlug}.md`,
-      route,
-      title: heading,
-      description:
-        heading === 'Overview'
-          ? `${readmeTitle} overview generated from README.`
-          : `Generated from ${repoKey} README section: ${heading}.`,
-      sidebarOrder: sectionPages + 1,
-      body,
-    });
-
-    sectionPages += 1;
+  if (!body) {
+    return 0;
   }
 
-  return sectionPages;
+  addEntry({
+    relativePath: `${outputDirectory}/overview.md`,
+    route: `${routeDirectory}overview/`,
+    title: 'Overview',
+    description: `${readmeTitle} overview generated from README.`,
+    sidebarOrder: 1,
+    body,
+  });
+
+  return 1;
 }
 
-function generateRepoMarkdownDirectory({
+function generateMarkdownFilesFromDirectory({
   repoKey,
   repoDir,
   sourceDirectory,
   outputDirectory,
   routeDirectory,
+  excludeFiles = new Set(),
+  sidebarOrderStart = 1,
+  fileOrder = [],
+  titleOverrides = {},
 }) {
   const sourceDirPath = path.join(repoDir, sourceDirectory);
   if (!fs.existsSync(sourceDirPath)) return 0;
+  const fileOrderRank = new Map(fileOrder.map((name, index) => [name.toLowerCase(), index]));
 
-  const readmeFileOrder = buildReadmeMarkdownFileOrder(repoDir);
-  const markdownFiles = sortMarkdownFilesBySourceOrder(
-    listMarkdownFiles(sourceDirPath),
-    readmeFileOrder,
-    sourceDirectory
-  );
-  let generated = 0;
-
-  for (const fileRelativePath of markdownFiles) {
-    const raw = readText(path.join(sourceDirPath, fileRelativePath));
-    const titleMatch = raw.match(/^#\s+(.+)$/m);
-    const title = titleMatch
-      ? titleMatch[1].trim()
-      : toTitleCase(path.posix.basename(fileRelativePath, '.md'));
-    const body = stripFirstH1(raw).trim();
-
-    const normalizedRelativePath = fileRelativePath.replace(/\\/g, '/');
-    const routeSlug = normalizedRelativePath
-      .replace(/\.md$/i, '')
-      .split('/')
-      .map((segment) => slugify(segment))
-      .join('/');
-    const route = `${routeDirectory}${routeSlug}/`;
-    const relativePath = `${outputDirectory}/${routeSlug}.md`;
-
-    addEntry({
-      relativePath,
-      route,
-      title,
-      description: `Generated from ${repoKey} file: ${sourceDirectory}/${normalizedRelativePath}.`,
-      sidebarOrder: generated + 1,
-      body,
+  const markdownFiles = fs
+    .readdirSync(sourceDirPath, { withFileTypes: true })
+    .filter((dirent) => dirent.isFile() && dirent.name.toLowerCase().endsWith('.md'))
+    .map((dirent) => dirent.name)
+    .filter((name) => !excludeFiles.has(name.toLowerCase()))
+    .sort((a, b) => {
+      const aRank = fileOrderRank.get(a.toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
+      const bRank = fileOrderRank.get(b.toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
+      if (aRank !== bRank) return aRank - bRank;
+      return a.localeCompare(b);
     });
 
-    generated += 1;
-  }
-
-  return generated;
-}
-
-function generateRepoMarkdownFromRoot({
-  repoKey,
-  repoDir,
-  outputDirectory,
-  routeDirectory,
-  collapseSingleDescLeaf = false,
-}) {
-  const readmeFileOrder = buildReadmeMarkdownFileOrder(repoDir);
-  const markdownFiles = sortMarkdownFilesBySourceOrder(listMarkdownFiles(repoDir), readmeFileOrder);
-  const collapseDescLeaf =
-    collapseSingleDescLeaf || repoKey === 'app-tools' || repoKey === 'game-tools';
   let generated = 0;
 
-  for (const fileRelativePath of markdownFiles) {
-    const normalizedRelativePath = fileRelativePath.replace(/\\/g, '/');
-    const normalizedLower = normalizedRelativePath.toLowerCase();
-
-    // README is parsed separately into sections. Skip repo meta/docs noise.
-    if (normalizedLower === 'readme.md') continue;
-    if (normalizedLower.startsWith('.github/')) continue;
-
-    const raw = readText(path.join(repoDir, normalizedRelativePath));
-    if (!raw.trim()) continue;
-
-    const isDescLeaf = normalizedLower.endsWith('/desc.md');
-    const descDirectory = path.posix.dirname(normalizedRelativePath);
-    const collapsedDescTitle =
-      collapseDescLeaf && isDescLeaf && descDirectory !== '.'
-        ? toTitleCase(path.posix.basename(descDirectory))
-        : '';
-    const titleMatch = raw.match(/^(?:\uFEFF)?#\s+(.+)$/m);
-    const title = collapsedDescTitle
-      || (titleMatch ? titleMatch[1].trim() : toTitleCase(path.posix.basename(normalizedRelativePath, '.md')));
-    const strippedBody = stripFirstH1(raw).trim();
-    const body = strippedBody || raw.trim();
-
-    const routeInput = collapseDescLeaf && isDescLeaf && descDirectory !== '.'
-      ? descDirectory
-      : normalizedRelativePath.replace(/\.md$/i, '');
-    const routeSlug = routeInput
-      .split('/')
-      .map((segment) => slugify(segment))
-      .join('/');
+  for (const fileName of markdownFiles) {
+    const raw = readText(path.join(sourceDirPath, fileName));
+    const titleMatch = raw.match(/^#\s+(.+)$/m);
+    const title = titleOverrides[fileName.toLowerCase()] || (titleMatch
+      ? titleMatch[1].trim()
+      : toTitleCase(path.posix.basename(fileName, '.md')));
+    const body = stripFirstH1(raw).trim();
+    const routeSlug = slugify(path.posix.basename(fileName, '.md'));
     const route = `${routeDirectory}${routeSlug}/`;
     const relativePath = `${outputDirectory}/${routeSlug}.md`;
 
@@ -442,8 +319,8 @@ function generateRepoMarkdownFromRoot({
       relativePath,
       route,
       title,
-      description: `Generated from ${repoKey} file: ${normalizedRelativePath}.`,
-      sidebarOrder: generated + 1,
+      description: `Generated from ${repoKey} file: ${sourceDirectory}/${fileName}.`,
+      sidebarOrder: sidebarOrderStart + generated,
       body,
     });
 
@@ -506,6 +383,15 @@ function rewriteRepoMentions(markdown) {
 
 function normalizeGeneratedMarkdown(markdown) {
   return markdown
+    .replace(/https:\/\/www\.noverse\.dev\/docs\/nvapi-cli\/sections\/overview\/?/g, 'https://github.com/nohuto/nvapi-cli')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-tools\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-tools\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-tools\/docs\/?/g, '/docs/app-guides/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g, '/docs/app-guides/')
+    .replace(/https:\/\/github\.com\/nohuto\/app-tools/g, 'https://github.com/nohuto/app-guides')
+    .replace(/\bapp-tools\b/g, 'app-guides')
     .replace(/\]\(\((https?:\/\/[^)\s]+)\)\)/gi, ']($1)')
     .replace(/\[([^\]]+)\]\(\[([^\]]+)\]\(([^)]+)\)\)/g, '[$1]($3)');
 }
@@ -558,11 +444,10 @@ function getDirectoryChildren(directory, allDirectories) {
 }
 
 function sortDirectoryChild(parentDirectory, a, b) {
+  if (a.order !== b.order) return a.order - b.order;
   if (a.type !== b.type) return a.type === 'directory' ? -1 : 1;
 
   if (a.type === 'directory' && b.type === 'directory') {
-    if (a.order !== b.order) return a.order - b.order;
-
     if (parentDirectory === 'win-config') {
       const aRank = categorySortRank(a.segment);
       const bRank = categorySortRank(b.segment);
@@ -572,7 +457,6 @@ function sortDirectoryChild(parentDirectory, a, b) {
     return a.label.localeCompare(b.label);
   }
 
-  if (a.order !== b.order) return a.order - b.order;
   return a.label.localeCompare(b.label);
 }
 
@@ -616,10 +500,8 @@ function getDirectoryLabel(directory) {
   const segment = directory.split('/').pop() || directory;
 
   if (segment === 'win-config') return 'win-config';
-  if (segment === 'nvapi-cli') return 'nvapi-cli';
   if (segment === 'regkit') return 'regkit';
-  if (segment === 'app-tools') return 'app-tools';
-  if (segment === 'game-tools') return 'game-tools';
+  if (segment === 'app-guides') return 'app-guides';
   if (segment === 'sections') return 'Sections';
   if (segment === 'guides') return 'Guides';
   if (segment === 'docs') return 'Docs';
@@ -849,96 +731,6 @@ function normalizeWinConfigTitle(value) {
     .trim();
 
   return cleaned || value.trim();
-}
-
-function buildReadmeMarkdownFileOrder(repoDir) {
-  const readmePath = path.join(repoDir, 'README.md');
-  if (!fs.existsSync(readmePath)) return new Map();
-
-  const raw = readText(readmePath);
-  const order = new Map();
-  const markdownLinkRegex = /\[[^\]]+\]\(([^)]+)\)/g;
-  let index = 1;
-  let match;
-
-  while ((match = markdownLinkRegex.exec(raw)) !== null) {
-    const href = match[1].trim().replace(/^<|>$/g, '');
-    const targetPath = resolveReadmeMarkdownLink(href);
-    if (!targetPath) continue;
-
-    const key = targetPath.toLowerCase();
-    if (!order.has(key)) {
-      order.set(key, index);
-      index += 1;
-    }
-  }
-
-  return order;
-}
-
-function resolveReadmeMarkdownLink(href) {
-  if (!href) return '';
-
-  let target = href;
-
-  if (/^https?:\/\//i.test(target)) {
-    try {
-      const url = new URL(target);
-      const blobMatch = url.pathname.match(/\/blob\/[^/]+\/(.+)$/i);
-      if (!blobMatch) return '';
-      target = decodeURIComponent(blobMatch[1]);
-    } catch {
-      return '';
-    }
-  }
-
-  target = target.split('#')[0].split('?')[0].trim();
-  if (!target || target.startsWith('/')) return '';
-
-  const normalized = path.posix.normalize(target.replace(/\\/g, '/').replace(/^\.\//, ''));
-  if (normalized.startsWith('../') || !normalized.toLowerCase().endsWith('.md')) return '';
-  return normalized;
-}
-
-function sortMarkdownFilesBySourceOrder(markdownFiles, sourceOrder, sourcePrefix = '') {
-  const normalizedPrefix = sourcePrefix ? `${sourcePrefix.replace(/\\/g, '/').replace(/\/+$/, '')}/` : '';
-
-  const rankFor = (fileRelativePath) => {
-    const normalizedPath = fileRelativePath.replace(/\\/g, '/').replace(/^\.\//, '').toLowerCase();
-    const key = normalizedPrefix ? `${normalizedPrefix}${normalizedPath}` : normalizedPath;
-    return sourceOrder.get(key) ?? Number.MAX_SAFE_INTEGER;
-  };
-
-  return [...markdownFiles].sort((a, b) => {
-    const rankDiff = rankFor(a) - rankFor(b);
-    if (rankDiff !== 0) return rankDiff;
-    return a.localeCompare(b);
-  });
-}
-
-function listMarkdownFiles(rootDir) {
-  const out = [];
-  const stack = [rootDir];
-
-  while (stack.length > 0) {
-    const current = stack.pop();
-    const dirents = fs.readdirSync(current, { withFileTypes: true });
-
-    for (const dirent of dirents) {
-      const fullPath = path.join(current, dirent.name);
-      if (dirent.isDirectory()) {
-        if (dirent.name === '.git' || dirent.name === 'node_modules') continue;
-        stack.push(fullPath);
-        continue;
-      }
-
-      if (!dirent.isFile() || !dirent.name.toLowerCase().endsWith('.md')) continue;
-      const rel = path.relative(rootDir, fullPath).replace(/\\/g, '/');
-      out.push(rel);
-    }
-  }
-
-  return out;
 }
 
 function readText(filePath) {

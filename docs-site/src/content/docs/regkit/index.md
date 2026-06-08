@@ -7,5 +7,5 @@ sidebar:
   order: 1
 ---
 
+- [Overview](/docs/regkit/overview/)
 - [Guides](/docs/regkit/guides/)
-- [Sections](/docs/regkit/sections/)

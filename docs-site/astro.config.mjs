@@ -7,8 +7,9 @@ import starlightCodeblockFullscreen from 'starlight-codeblock-fullscreen';
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightViewModes from 'starlight-view-modes';
 import starlightLinksValidator from 'starlight-links-validator';
+import { CATEGORY_LABELS } from './docs-constants.mjs';
 
-const sidebarRepos = ['win-config', 'regkit', 'nvapi-cli', 'app-tools', 'game-tools'];
+const sidebarRepos = ['win-config', 'regkit', 'app-guides'];
 const noverseDocsLabels = {
   name: 'noverse-docs-labels',
   hooks: {
@@ -29,11 +30,10 @@ const winConfigSidebarCategories = [
   'power',
   'privacy',
   'network',
+  'security',
   'nvidia',
-  'cleanup',
   'misc',
   'policies',
-  'security',
   'affinities',
 ];
 
@@ -43,10 +43,25 @@ function createSidebarRepoEntry(repoName) {
       label: repoName,
       collapsed: true,
       items: winConfigSidebarCategories.map((category) => ({
-        label: category,
+        label: CATEGORY_LABELS[category] || category,
         collapsed: true,
         autogenerate: { directory: `win-config/${category}`, collapsed: true },
       })),
+    };
+  }
+
+  if (repoName === 'regkit') {
+    return {
+      label: repoName,
+      collapsed: true,
+      items: [
+        { label: 'Overview', slug: 'regkit/overview' },
+        {
+          label: 'Guides',
+          collapsed: true,
+          autogenerate: { directory: 'regkit/guides', collapsed: true },
+        },
+      ],
     };
   }
 
@@ -90,7 +105,7 @@ export default defineConfig({
       ],
       title: 'Noverse Docs',
       description:
-        'Generated docs from win-config, regkit, nvapi-cli, app-tools, and game-tools.',
+        'Generated docs from win-config, regkit, and app-guides.',
       favicon: '/logo.png',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/nohuto' },

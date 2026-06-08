@@ -32,7 +32,7 @@ const PROJECT_LIST = [
   { title: 'Bitmask Calculator', repo: 'nohuto/bitmask-calc' },
   { title: 'Blocklist Manager', repo: 'nohuto/blocklist-mgr' },
   { title: 'Component Manager', repo: 'nohuto/comp-mgr' },
-  { title: 'App Configuration Tools', repo: 'nohuto/app-tools' },
+  { title: 'App Guides', repo: 'nohuto/app-guides' },
   { title: 'Game Configuration Tools', repo: 'nohuto/game-tools' },
   { title: 'Symbols Memory Dump', repo: 'nohuto/sym-dump' },
   { title: 'NVFetch', repo: 'nohuto/nvfetch' },
@@ -812,15 +812,13 @@ function initConsole() {
         ['power', 'docs/win-config/power/'],
         ['privacy', 'docs/win-config/privacy/'],
         ['network', 'docs/win-config/network/'],
+        ['security', 'docs/win-config/security/'],
         ['nvidia', 'docs/win-config/nvidia/'],
-        ['cleanup', 'docs/win-config/cleanup/'],
         ['misc', 'docs/win-config/misc/'],
         ['policies', 'docs/win-config/policies/'],
         ['affinities', 'docs/win-config/affinities/'],
         ['regkit', 'docs/regkit/'],
-        ['game-tools', 'docs/game-tools/'],
-        ['app-tools', 'docs/app-tools/'],
-        ['nvapi-cli', 'docs/nvapi-cli/']
+        ['app-guides', 'docs/app-guides/'],
       ]);
     },
     bindiff: () => {

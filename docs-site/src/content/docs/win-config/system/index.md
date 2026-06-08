@@ -22,7 +22,7 @@ sidebar:
 - [Notifications](/docs/win-config/system/disable-notifications/)
 - [Optimize File System](/docs/win-config/system/optimize-file-system/)
 - [Hyper-V](/docs/win-config/system/disable-hyper-v/)
-- [Service Splitting](/docs/win-config/system/disable-service-splitting/)
+- [Service Splitting](/docs/win-config/system/service-splitting/)
 - [Storage Sense](/docs/win-config/system/disable-storage-sense/)
 - [Accessibility Features](/docs/win-config/system/disable-accessibility-features/)
 - [Windows Search](/docs/win-config/system/disable-windows-search/)

@@ -3,7 +3,7 @@ title: 'Tracing Program Registry Activity'
 description: 'Generated from regkit file: guides/procmon.md.'
 editUrl: false
 sidebar:
-  order: 1
+  order: 2
 ---
 
 Requirements are [process monitor](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon) and the program you want to trace. I'll trace the activity of the game `The Last Of Us Part II`.

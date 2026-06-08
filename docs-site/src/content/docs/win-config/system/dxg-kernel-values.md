@@ -6,7 +6,9 @@ sidebar:
   order: 7
 ---
 
-Many applied values are defaults, some not. See documentation below for details.
+`dxgkrnl.sys` is Windows DirectX/WDDM graphics kernel driver that mediates between apps and the GPU to schedule work, manage graphics memory, present frames, and handle TDR hang recovery.
+
+Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
 ## Registry Values
 
@@ -151,7 +153,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "RapidHPDThresholdCount" = 5;
     "RapidHPDTime" = 1000;
 
-    // https://noverse.dev/docs/win-config/security/increase-tdr/
+    // https://www.noverse.dev/docs/win-config/security/increase-tdr/
     "TdrDdiDelay" = 5;
     "TdrDebugMode" = 2;
     "TdrDelay" = 2;

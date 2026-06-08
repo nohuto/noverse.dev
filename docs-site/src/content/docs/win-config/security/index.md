@@ -4,7 +4,7 @@ description: 'Auto-generated overview for Security.'
 editUrl: false
 sidebar:
   hidden: true
-  order: 11
+  order: 7
 ---
 
 - [Windows Defender](/docs/win-config/security/windows-defender/)

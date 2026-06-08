@@ -3,7 +3,7 @@ title: 'Boot Registry Activity'
 description: 'Generated from regkit file: guides/wpr-wpa.md.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 3
 ---
 
 Requirement is the [Windows Performance Toolkit](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-recorder) which you can get from [ADK](https://go.microsoft.com/fwlink/?linkid=2337875), or install it via `winget install Microsoft.WindowsADK`, but this will install more than the Performance Toolkit.

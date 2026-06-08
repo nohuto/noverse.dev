@@ -4,7 +4,7 @@ description: 'Auto-generated overview for NVIDIA.'
 editUrl: false
 sidebar:
   hidden: true
-  order: 7
+  order: 8
 ---
 
 - [Bitmask Calculator](/docs/win-config/nvidia/bitmask-calculator/)

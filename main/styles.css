@@ -1041,7 +1041,9 @@ select option:active {
 }
 
 .select-trigger-label {
+  display: block;
   min-width: 0;
+  line-height: 1;
   pointer-events: none;
 }
 
@@ -2035,22 +2037,6 @@ footer {
 .footer-tools .select-trigger {
   align-items: center;
   padding: 2px 28px 2px 10px;
-  line-height: normal;
-}
-
-.footer-tools .select-trigger-label {
-  display: inline-flex;
-  align-items: center;
-  height: 100%;
-  line-height: 1;
-}
-
-.footer-tools .select-trigger::after {
-  transform: translateY(-50%) rotate(45deg);
-}
-
-.footer-tools .select-ui.open .select-trigger::after {
-  transform: translateY(-50%) rotate(225deg);
 }
 
 .toast {

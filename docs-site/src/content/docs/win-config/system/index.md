@@ -35,7 +35,6 @@ sidebar:
 - [Display Scaling](/docs/win-config/system/display-scaling/)
 - [Reduce Shutdown Time](/docs/win-config/system/reduce-shutdown-time/)
 - [Detailed Verbose Messages](/docs/win-config/system/detailed-verbose-messages/)
-- [JPEG Reduction](/docs/win-config/system/disable-jpeg-reduction/)
 - [Prefetch & Superfetch](/docs/win-config/system/disable-prefetch-superfetch/)
 - [Clipboard](/docs/win-config/system/disable-clipboard/)
 - [Detailed BSoD](/docs/win-config/system/enable-detailed-bsod/)

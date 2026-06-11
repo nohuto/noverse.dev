@@ -6,11 +6,9 @@ sidebar:
   order: 11
 ---
 
-BCDEdit is the CL editor for the Boot Configuration Database (BCD), a registry hive under `HKLM\BCD00000000` backed by a hidden BCD file (UEFI: `\EFI\Microsoft\Boot\BCD`). The BCD replaced `boot.ini` (before Windows Vista) and stores per installation boot configuration. Each entry is a BCD object (GUID) under `Objects`, and each object has `Elements` subkeys with numeric element IDs. The `Element` value is the data that maps to a readable BCDEdit option or boot parameter. BCDEdit exposes symbolic names for objects/elements and can edit online or offline stores (`/store`), and the same data can be modified by loading the BCD hive (including remote hives).
+BCDEdit is the CL editor for the *Boot Configuration Database* (BCD), a registry hive under `HKLM\BCD00000000` backed by a hidden BCD file (UEFI: `\EFI\Microsoft\Boot\BCD`). The BCD replaced `boot.ini` (before Windows Vista) and stores per installation boot configuration. Each entry is a BCD object (GUID) under `Objects`, and each object has `Elements` subkeys with numeric element IDs. The `Element` value is the data that maps to a readable BCDEdit option or boot parameter. BCDEdit exposes symbolic names for objects/elements and can edit online or offline stores (`/store`), and the same data can be modified by loading the BCD hive (including remote hives).
 
-BCDEdit is primarily used for boot troubleshooting, recovery, debugging, and security/boot behavior changes (Safe Mode, driver loading, hypervisor settings). Some may not be used on latest Windows versions anymore (e.g. HalpTscSyncPolicy, see pseudocode below).
-
-BitLocker validates a subset of BCD settings at boot to detect security sensitive changes. The validated set can be extended or reduced via policy, and the hex value of a triggering setting is logged (event ID 523). Friendly names can be listed with `bcdedit /enum all`, but some settings have no friendly name and must be configured by hex. BCD settings are also scoped to specific boot applications (for example, `winload`, `winresume`, `bootmgr`), policy entries can be prefixed with the target application (for example, `winload:nx` or `all:locale`). When secure boot is used for integrity validation, the enhanced BCD validation profile policy is ignored, and secure boot enforces its own BCD rules.
+BCDEdit is primarily used for boot troubleshooting, recovery, debugging, and security/boot behavior changes. Some may not be used on latest Windows versions anymore (e.g. HalpTscSyncPolicy, see pseudocode below).
 
 ## Registry Values
 

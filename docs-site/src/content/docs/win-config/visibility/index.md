@@ -35,6 +35,7 @@ sidebar:
 - [Hide Lock Screen](/docs/win-config/visibility/hide-lock-screen/)
 - [Hide Most Used Apps](/docs/win-config/visibility/hide-most-used-apps/)
 - [Spotlight](/docs/win-config/visibility/disable-spotlight/)
+- [JPEG Reduction](/docs/win-config/visibility/disable-jpeg-reduction/)
 - [PowerShell Colors](/docs/win-config/visibility/powershell-colors/)
 - [Prevent Color/Theme Changes](/docs/win-config/visibility/prevent-color-theme-changes/)
 - [Hide Disabled/Disconnected Devices](/docs/win-config/visibility/hide-disabled-disconnected-devices/)

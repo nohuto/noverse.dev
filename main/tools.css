@@ -179,7 +179,7 @@
 .policy-column-dropdown {
   position: relative;
   align-self: end;
-  width: 84px;
+  width: 76px;
 }
 
 #policy-view-trigger,
@@ -190,6 +190,8 @@
   grid-template-columns: minmax(0, 1fr) 12px;
   gap: 6px;
   align-items: center;
+  justify-items: start;
+  text-align: left;
   padding: 0 8px;
   line-height: 1;
   border: 1px solid var(--border);
@@ -276,7 +278,7 @@
 }
 
 #policy-explorer.policy-hide-table .policy-layout {
-  grid-template-columns: minmax(180px, var(--policy-tree-width, 17rem)) minmax(300px, 1fr);
+  grid-template-columns: minmax(180px, var(--policy-tree-width, 17rem)) 8px minmax(300px, 1fr);
 }
 
 #policy-explorer.policy-hide-tree.policy-hide-detail .policy-layout,
@@ -1813,7 +1815,7 @@ body.bindiff-settings-open {
 
   .policy-view-dropdown,
   .policy-column-dropdown {
-    width: 84px;
+    width: 76px;
   }
 
   #policy-explorer .policy-layout,
@@ -1907,7 +1909,7 @@ body.bindiff-settings-open {
 
   .policy-view-dropdown,
   .policy-column-dropdown {
-    width: 76px;
+    width: 72px;
   }
 
   #policy-view-trigger,

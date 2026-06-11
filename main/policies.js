@@ -430,7 +430,7 @@ function initPolicyExplorer() {
     { id: 'registry', label: 'Registry', width: 360, minWidth: 180, value: policy => getPrimaryPath(policy) },
     { id: 'admx', label: 'ADMX', width: 150, minWidth: 90, value: policy => policy.File || '' }
   ];
-  const visibleColumns = new Set(['setting', 'scope', 'supported']);
+  const visibleColumns = new Set(['setting', 'scope', 'supported', 'value']);
   let tableWidthSignature = '';
 
   const getVisibleColumns = () => columns.filter(column => visibleColumns.has(column.id));
@@ -488,7 +488,7 @@ function initPolicyExplorer() {
     splitters.forEach(splitter => {
       const type = splitter.dataset.policySplitter;
       splitter.hidden = type === 'tree'
-        ? !(paneState.tree && paneState.table)
+        ? !(paneState.tree && (paneState.table || paneState.detail))
         : !(paneState.table && paneState.detail);
     });
     paneToggles.forEach(button => {
@@ -1232,7 +1232,7 @@ function initPolicyExplorer() {
     const minTree = 180;
     const minDetail = 300;
     const minTable = 460;
-    const maxTree = Math.max(minTree, layoutRect.width - minTable - (paneState.detail ? minDetail : 0));
+    const maxTree = Math.max(minTree, layoutRect.width - (paneState.table ? minTable : 0) - (paneState.detail ? minDetail : 0));
     const maxDetail = Math.max(minDetail, layoutRect.width - minTable - (paneState.tree ? minTree : 0));
     let rafId = 0;
     let pendingX = startX;

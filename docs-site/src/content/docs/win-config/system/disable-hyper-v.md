@@ -3,7 +3,7 @@ title: 'Hyper-V'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 15
+  order: 16
 ---
 
 > "*The Hyper-V hypervisor (also known as Windows hypervisor) is a type-1 (native or bare-metal) hypervisor: a mini operating system that runs directly on the host's hardware to manage a single root and one or more guest operating systems. Unlike type-2 (or hosted) hypervisors, which run on the base of a conventional OS like normal applications, the Windows hypervisor abstracts the root OS, which knows about the existence of the hypervisor and communicates with it to allow the execution of one or more guest virtual machines.*"

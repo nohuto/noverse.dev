@@ -48,12 +48,12 @@ jobs:
           ref: main
           path: sources/regkit
 
-      - name: Checkout app-tools
+      - name: Checkout app-guides
         uses: actions/checkout@v6
         with:
-          repository: nohuto/app-tools
+          repository: nohuto/app-guides
           ref: main
-          path: sources/app-tools
+          path: sources/app-guides
 
       - name: Checkout game-tools
         uses: actions/checkout@v6
@@ -80,7 +80,7 @@ jobs:
           WIN_CONFIG_REPO_URL: https://github.com/nohuto/win-config
           NVAPI_CLI_REPO_URL: https://github.com/nohuto/nvapi-cli
           REGKIT_REPO_URL: https://github.com/nohuto/regkit
-          APP_TOOLS_REPO_URL: https://github.com/nohuto/app-tools
+          APP_TOOLS_REPO_URL: https://github.com/nohuto/app-guides
           GAME_TOOLS_REPO_URL: https://github.com/nohuto/game-tools
 
       - name: Commit generated site changes

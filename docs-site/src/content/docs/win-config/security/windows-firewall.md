@@ -57,7 +57,7 @@ Most apps will work fine with `443` + `TCP`, games often need specific TCP Remot
 
 ### Event Viewer
 
-After finishing the parts above you might run into scenarious where apps/games won't work as a connection gets blocked. To find out what port/protocol must be added to `$rules`, enable failure logging via:
+After finishing the parts above you might run into scenarios where apps/games won't work as a connection gets blocked. To find out what port/protocol must be added to `$rules`, enable failure logging via:
 
 ```powershell
 auditpol /set /category:"System" /subcategory:"Filtering Platform Connection" /failure:enable # /failure:disable afterwards
@@ -70,7 +70,7 @@ Reproduce the same issue, then open `Event Viewer` and go to `Windows Logs > Sec
 I didn't add RemotePort `3724` which causes server connection failures:
 
 ```powershell
-@{ DisplayName = 'Overwatch TCP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'TCP'; RemotePort = @('443', '1119') },
+@{ DisplayName = 'Overwatch TCP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'TCP'; RemotePort = @('443', '1119') }
 ```
 
 ```c
@@ -93,7 +93,7 @@ Network Information:
 Here we can see that we've to allow RemotePort `3724` (outbound, TCP):
 
 ```powershell
-@{ DisplayName = 'Overwatch TCP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'TCP'; RemotePort = @('443', '3724', '1119') },
+@{ DisplayName = 'Overwatch TCP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'TCP'; RemotePort = @('443', '3724', '1119') }
 ```
 
 #### Protocol Numbers

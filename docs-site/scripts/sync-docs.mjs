@@ -384,15 +384,15 @@ function rewriteRepoMentions(markdown) {
 function normalizeGeneratedMarkdown(markdown) {
   return markdown
     .replace(/https:\/\/www\.noverse\.dev\/docs\/nvapi-cli\/sections\/overview\/?/g, 'https://github.com/nohuto/nvapi-cli')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-tools\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-tools\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-tools\/docs\/?/g, '/docs/app-guides/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g, '/docs/app-guides/')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g, '/docs/app-guides/')
     .replace(/https:\/\/www\.noverse\.dev\/(product|projects|bin-diff|policies)\.html/g, 'https://www.noverse.dev/$1')
-    .replace(/https:\/\/github\.com\/nohuto\/app-tools/g, 'https://github.com/nohuto/app-guides')
-    .replace(/\bapp-tools\b/g, 'app-guides')
+    .replace(/https:\/\/github\.com\/nohuto\/app-guides/g, 'https://github.com/nohuto/app-guides')
+    .replace(/\bapp-guides\b/g, 'app-guides')
     .replace(/\]\(\((https?:\/\/[^)\s]+)\)\)/gi, ']($1)')
     .replace(/\[([^\]]+)\]\(\[([^\]]+)\]\(([^)]+)\)\)/g, '[$1]($3)');
 }

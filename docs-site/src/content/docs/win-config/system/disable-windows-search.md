@@ -3,7 +3,7 @@ title: 'Windows Search'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 19
+  order: 20
 ---
 
 ## Suboptions

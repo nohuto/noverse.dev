@@ -17,7 +17,7 @@ sidebar:
     "HwSchTreatExperimentalAsStable" = 0; // bool
 ```
 
-Query the current states using the name RVAs (`dword_1C01404B8` = HwSchMode, `byte_1C01404BC` = HwSchOverrideBlockList, `byte_1C01404BD` = HwSchTreatExperimentalAsStable for the part below, obviously these names depend on the IDA auto generation so they'll unlikely be the same for you), then follow the [DriverStart + RVAs](https://noverse.dev/docs/win-config/system/mmcss-values/#driverstart--rvas) guide.
+Query the current states using the name RVAs (`dword_1C01404B8` = HwSchMode, `byte_1C01404BC` = HwSchOverrideBlockList, `byte_1C01404BD` = HwSchTreatExperimentalAsStable for the part below, obviously these names depend on the IDA auto generation so they'll unlikely be the same for you), follow the [DriverStart + RVAs](https://noverse.dev/docs/win-config/system/mmcss-values/#driverstart--rvas) guide if you want to try it.
 
 ```c
 lkd> dd dxgkrnl+1404b8 L1
@@ -110,9 +110,9 @@ typedef enum _DXGK_FEATURE_ID
 } DXGK_FEATURE_ID;
 ```
 
-## D3DKMTQueryAdapterInfo
+## query_hwsch
 
-`query_hwsch.c` calls `D3DKMTQueryAdapterInfo` (`KMTQAITYPE_WDDM_2_9_CAPS`/`KMTQAITYPE_WDDM_3_0_CAPS`) to get the `DriverSupportState`/`Enabled` bits, you can either use the [prebuild binary](https://github.com/nohuto/win-config/blob/main/system/assets/query_hwsch.exe), or build it yourself from [source](https://github.com/nohuto/win-config/tree/main/system/assets/query_hwsch):
+`query_hwsch` calls `D3DKMTQueryAdapterInfo` (`KMTQAITYPE_WDDM_2_9_CAPS`/`KMTQAITYPE_WDDM_3_0_CAPS`) to get the `DriverSupportState`/`Enabled` bits, you can either use the [prebuild binary](https://github.com/nohuto/win-config/blob/main/system/assets/query_hwsch.exe), or build it yourself from [source](https://github.com/nohuto/win-config/tree/main/system/assets/query_hwsch):
 
 ```powershell
 cmake -S . -B build

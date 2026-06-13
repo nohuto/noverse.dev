@@ -1241,6 +1241,13 @@ main.product-main {
   width: min(1200px, 100%);
 }
 
+main.policies-main,
+main.bindiff-main {
+  width: 100%;
+  max-width: none;
+  padding: 10px 10px 24px;
+}
+
 .console-output {
   border: none;
   background: transparent;

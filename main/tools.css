@@ -16,13 +16,6 @@
   font-size: 0.82rem;
 }
 
-.policies-main,
-.bindiff-main {
-  width: 100%;
-  max-width: none;
-  padding: 10px 10px 24px;
-}
-
 #bin-diff-app .panel-body {
   padding: 12px 14px 14px;
 }

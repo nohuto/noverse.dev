@@ -441,6 +441,10 @@ function initBinDiff() {
   let diffSettings = readBinDiffSettings();
   let settingsFocusRestore = null;
 
+  const setBusy = busy => {
+    root.setAttribute('aria-busy', busy ? 'true' : 'false');
+  };
+
   const setMaximized = maximized => {
     const next = Boolean(maximized);
     if (isMaximized === next) return;
@@ -453,11 +457,9 @@ function initBinDiff() {
   };
 
   const setComparisonUiVisible = visible => {
-    viewTools.style.display = visible ? '' : 'none';
-    linksWrap.style.display = visible ? '' : 'none';
-    swapButton.style.display = visible ? 'block' : 'none';
-    settingsButton.style.display = visible ? 'block' : 'none';
-    maximizeButton.style.display = visible ? 'block' : 'none';
+    [viewTools, linksWrap, swapButton, settingsButton, maximizeButton].forEach(node => {
+      node.hidden = !visible;
+    });
     if (!visible) {
       setMaximized(false);
     }
@@ -799,6 +801,7 @@ function initBinDiff() {
     if (!leftFileMap.has(functionName) || !rightFileMap.has(functionName)) return;
 
     try {
+      setBusy(true);
       await ensureBinDiffAssets();
 
       const leftFile = leftFileMap.get(functionName);
@@ -831,6 +834,8 @@ function initBinDiff() {
       lastComparisonState = { leftSource, rightSource, options };
     } catch (error) {
       clearComparison();
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -841,6 +846,8 @@ function initBinDiff() {
     if (!leftRelease || !rightRelease || !module) return;
 
     const token = ++selectionUpdateToken;
+    setBusy(true);
+    runButton.disabled = true;
     try {
       const [leftFiles, rightFiles] = await Promise.all([
         listRepoFunctionFiles([leftRelease, module]),
@@ -868,6 +875,8 @@ function initBinDiff() {
     } catch (error) {
       if (token !== selectionUpdateToken) return;
       clearComparison();
+    } finally {
+      if (token === selectionUpdateToken) setBusy(false);
     }
   };
 
@@ -877,6 +886,8 @@ function initBinDiff() {
     if (!leftRelease || !rightRelease) return;
 
     const token = ++selectionUpdateToken;
+    setBusy(true);
+    runButton.disabled = true;
     try {
       const [leftModules, rightModules] = await Promise.all([
         listRepoDirectories([leftRelease]),
@@ -898,6 +909,8 @@ function initBinDiff() {
     } catch (error) {
       if (token !== selectionUpdateToken) return;
       clearComparison();
+    } finally {
+      if (token === selectionUpdateToken) setBusy(false);
     }
   };
 
@@ -925,11 +938,13 @@ function initBinDiff() {
   };
 
   const initialize = async () => {
+    setBusy(true);
     clearComparison();
     runButton.disabled = true;
     try {
       const releases = (await listRepoDirectories([])).sort(compareReleaseNames);
       if (!releases.length) {
+        clearComparison();
         return;
       }
 
@@ -951,6 +966,9 @@ function initBinDiff() {
       applyViewState(urlState);
       await refreshModules(urlState.module, urlState.functionName, false);
     } catch (error) {
+      clearComparison();
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -1141,7 +1159,9 @@ function initBinDiff() {
 
   initFunctionSearchLimit();
   syncSettingsUi();
-  initialize();
+  requestAnimationFrame(() => {
+    initialize();
+  });
 }
   global.initBinDiff = initBinDiff;
 })(window);

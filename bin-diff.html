@@ -41,7 +41,7 @@
   </header>
 
     <main id="main" class="no-center bindiff-main">
-    <section class="content-box panel" id="bin-diff-app" data-title="bin-diff">
+    <section class="content-box panel" id="bin-diff-app" data-title="bin-diff" aria-busy="true">
       <div class="panel-header">
         <span class="panel-title">bin-diff</span>
       </div>
@@ -56,19 +56,27 @@
           <div class="bindiff-grid">
             <div class="bindiff-field bindiff-field-compact">
               <label for="bindiff-left-release">Left build</label>
-              <select class="select-enhanced" id="bindiff-left-release" name="left-release"></select>
+              <select class="select-enhanced" id="bindiff-left-release" name="left-release">
+                <option value=""></option>
+              </select>
             </div>
             <div class="bindiff-field bindiff-field-compact">
               <label for="bindiff-right-release">Right build</label>
-              <select class="select-enhanced" id="bindiff-right-release" name="right-release"></select>
+              <select class="select-enhanced" id="bindiff-right-release" name="right-release">
+                <option value=""></option>
+              </select>
             </div>
             <div class="bindiff-field bindiff-field-compact">
               <label for="bindiff-module">Binary</label>
-              <select class="select-enhanced" id="bindiff-module" name="module"></select>
+              <select class="select-enhanced" id="bindiff-module" name="module">
+                <option value=""></option>
+              </select>
             </div>
             <div class="bindiff-field bindiff-field-compact bindiff-field-function">
               <label for="bindiff-function">Function</label>
-              <select class="select-enhanced" data-searchable="true" data-search-limit="300" id="bindiff-function" name="function"></select>
+              <select class="select-enhanced" data-searchable="true" data-search-limit="300" id="bindiff-function" name="function">
+                <option value=""></option>
+              </select>
             </div>
           </div>
 
@@ -76,7 +84,7 @@
             <div class="bindiff-actions">
               <button id="bindiff-run" type="button">Compare</button>
             </div>
-            <div class="bindiff-view-tools" id="bindiff-view-tools">
+            <div class="bindiff-view-tools" id="bindiff-view-tools" hidden>
               <div class="bindiff-view-toggle" aria-label="View mode" id="bindiff-view-mode" role="group">
                 <button class="bindiff-view-button is-active" type="button" data-mode="side-by-side" aria-pressed="true">Side by side</button>
                 <button class="bindiff-view-button" type="button" data-mode="line-by-line" aria-pressed="false">Line by line</button>
@@ -86,7 +94,7 @@
         </div>
 
         <div class="bindiff-output-frame">
-          <button id="bindiff-swap" type="button" aria-label="Swap builds" title="Swap builds">
+          <button id="bindiff-swap" type="button" aria-label="Swap builds" title="Swap builds" hidden>
             <svg class="bindiff-swap-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
               <path d="M16 3l4 4l-4 4"></path>
@@ -96,7 +104,7 @@
             </svg>
             <span class="sr-only">Swap builds</span>
           </button>
-          <button id="bindiff-settings" type="button" aria-label="Diff settings" title="Diff settings">
+          <button id="bindiff-settings" type="button" aria-label="Diff settings" title="Diff settings" hidden>
             <svg class="bindiff-settings-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
               <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065"></path>
@@ -104,7 +112,7 @@
             </svg>
             <span class="sr-only">Diff settings</span>
           </button>
-          <button id="bindiff-maximize" type="button" aria-pressed="false" aria-label="Maximize diff" title="Maximize diff">
+          <button id="bindiff-maximize" type="button" aria-pressed="false" aria-label="Maximize diff" title="Maximize diff" hidden>
             <svg class="bindiff-maximize-icon icon-maximize" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
               <path d="M16 4h4v4"></path>
@@ -189,7 +197,7 @@
           </div>
         </div>
 
-        <div class="bindiff-links" id="bindiff-links">
+        <div class="bindiff-links" id="bindiff-links" hidden>
           <a id="bindiff-left-link" class="link" href="#" target="_blank" rel="noopener noreferrer">Left source</a>
           <a id="bindiff-right-link" class="link" href="#" target="_blank" rel="noopener noreferrer">Right source</a>
         </div>

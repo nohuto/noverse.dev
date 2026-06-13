@@ -775,6 +775,10 @@ const loadPageFeatureStyle = href => {
   return promise;
 };
 
+const loadPageFeatureStyles = root => Promise.all(PAGE_FEATURES
+  .filter(feature => feature.styleHref && root.querySelector(`#${feature.rootId}`))
+  .map(feature => loadPageFeatureStyle(feature.styleHref)));
+
 async function initPageFeatures() {
   for (const feature of PAGE_FEATURES) {
     if (!document.getElementById(feature.rootId)) continue;
@@ -821,6 +825,7 @@ async function loadPage(url, push = true) {
     const newTitle = doc.querySelector('title')?.textContent || document.title;
     const nextPathname = route ? route.clean : requestedUrl.pathname;
     rememberActivePage(nextPathname);
+    await loadPageFeatureStyles(newMain);
     window.stopConsoleAnimation?.();
     if (header && newHeader) header.replaceWith(newHeader);
     main.replaceWith(newMain);

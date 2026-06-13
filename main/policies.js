@@ -832,6 +832,7 @@ function initPolicyExplorer() {
 
   const renderTableHeader = () => {
     tableHead.replaceChildren();
+    tableHead.hidden = false;
     getVisibleColumns().forEach(column => {
       const th = document.createElement('th');
       th.scope = 'col';
@@ -1426,7 +1427,6 @@ function initPolicyExplorer() {
 
   syncSearchSettingsUi();
   updatePaneLayout();
-  renderTableHeader();
   setBusy(true);
   afterNextPaint()
     .then(() => Promise.all([loadPolicyData(), loadPolicyCategoryData()]))
@@ -1456,6 +1456,7 @@ function initPolicyExplorer() {
       }
       updatePaneLayout();
       renderTree();
+      renderTableHeader();
       applyFilters();
     })
     .catch(error => {

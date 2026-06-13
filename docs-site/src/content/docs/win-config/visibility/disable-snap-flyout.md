@@ -3,7 +3,7 @@ title: 'Snap Flyout'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 23
+  order: 24
 ---
 
 Hides the snap assist flyout that would appear after hovering over the maximize/restore down icon:

@@ -3,7 +3,7 @@ title: 'Taskbar Settings'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 9
+  order: 10
 ---
 
 Removes the search box, moves the taskbar to the left, removes badges, disables the flashes on the app icons, removes the "Task View" button (`Personalization > Taskbar`). See details about the `Add 'End Task' to Taskbar Context Menu` option [here](https://www.youtube.com/watch?v=5HWyyNep6t0).
@@ -18,6 +18,7 @@ Removes the search box, moves the taskbar to the left, removes badges, disables 
 ```
 
 I removed the value since you can't apply it even with `TrustedInstaller`/`SYSTEM` previledges. Note that the value is still actively used by `SystemSettings`:
+
 
 ```c
 // Personalization > Taskbar - Widgets (off)
@@ -36,3 +37,8 @@ Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0
 | [Remove the People Bar from the taskbar](https://noverse.dev/policies?p=StartMenu*HidePeopleBar) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HidePeopleBar` |
 | [Hide the TaskView button](https://noverse.dev/policies?p=Taskbar*HideTaskViewButton) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideTaskViewButton` |
 | [Configures search on the taskbar](https://noverse.dev/policies?p=Search*ConfigureSearchOnTaskbarMode) | `HKLM\Software\Policies\Microsoft\Windows\Windows Search` | `SearchOnTaskbarMode` |
+
+```
+SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate\Data	Type: REG_BINARY, Length: 41, Data: 43 42 01 00 0A 02 01 00 2A 06 B1 80 B7 D1 06 2A
+SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate\Data	Type: REG_BINARY, Length: 43, Data: 43 42 01 00 0A 02 01 00 2A 06 B3 80 B7 D1 06 2A
+```

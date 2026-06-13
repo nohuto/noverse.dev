@@ -10,6 +10,7 @@ sidebar:
 - [Desktop Wallpaper](/docs/win-config/visibility/desktop-wallpaper/)
 - [Pointer Style](/docs/win-config/visibility/pointer-style/)
 - [Rounded Corners](/docs/win-config/visibility/disable-rounded-corners/)
+- [Night Light](/docs/win-config/visibility/night-light/)
 - [Optimize Visual Effects](/docs/win-config/visibility/optimize-visual-effects/)
 - [Dark Theme](/docs/win-config/visibility/enable-dark-theme/)
 - [Transparency](/docs/win-config/visibility/disable-transparency/)

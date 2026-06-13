@@ -3,7 +3,7 @@ title: 'Account Picture'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 11
+  order: 12
 ---
 
 Changes the user account picture via:

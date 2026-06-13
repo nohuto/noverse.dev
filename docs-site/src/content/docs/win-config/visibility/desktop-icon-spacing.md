@@ -3,7 +3,7 @@ title: 'Desktop Icon Spacing'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 20
+  order: 21
 ---
 
 Location:

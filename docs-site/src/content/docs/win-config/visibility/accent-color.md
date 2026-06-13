@@ -3,7 +3,7 @@ title: 'Accent Color'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 11
 ---
 
 This set's the accent color globally and if `AccentColor` (`HKEY_CURRENT_USER\Software\Noverse`) isn't set via the tool settings yet, this will also directly impact the WinConfig colors.

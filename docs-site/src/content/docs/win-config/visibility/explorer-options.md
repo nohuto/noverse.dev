@@ -3,7 +3,7 @@ title: 'Explorer Options'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 8
+  order: 9
 ---
 
 It changes every setting, which is shown in the `Folder Options` window. Some are personal preference, see suboptions bellow for customization.

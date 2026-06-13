@@ -3,7 +3,7 @@ title: 'Settings Page Visibility'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 36
+  order: 37
 ---
 
 It controls which pages in the windows settings app are visible (blocked pages are removed from view and direct access redirects to the main settings page).

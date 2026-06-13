@@ -3,7 +3,7 @@ title: 'PowerShell Colors'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 30
+  order: 31
 ---
 
 Since `powershell.exe` has default color of white (foreground) and blue (background), some may want to change it. If you use Windows Terminal, this option will have no effect.

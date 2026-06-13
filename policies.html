@@ -122,13 +122,14 @@
               <table class="policy-table">
                 <colgroup id="policy-table-cols"></colgroup>
                 <thead>
-                  <tr id="policy-table-head" hidden></tr>
+                  <tr id="policy-table-head">
+                    <th scope="col" data-column="setting" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Name</span></span></th>
+                    <th scope="col" data-column="scope" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Scope</span></span></th>
+                    <th scope="col" data-column="supported" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Supported On</span></span></th>
+                    <th scope="col" data-column="value" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Value</span></span></th>
+                  </tr>
                 </thead>
-                <tbody id="policy-table-body">
-                  <tr class="policy-placeholder-row"><td></td></tr>
-                  <tr class="policy-placeholder-row"><td>&nbsp;</td></tr>
-                  <tr class="policy-placeholder-row"><td>&nbsp;</td></tr>
-                </tbody>
+                <tbody id="policy-table-body"></tbody>
               </table>
             </div>
             <div class="policy-table-note" id="policy-table-note"></div>

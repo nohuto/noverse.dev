@@ -6,30 +6,34 @@
   const POLICY_CATEGORY_DATA_URL = 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policyCategories.json';
   let policyDataPromise;
   let policyCategoryDataPromise;
-const loadPolicyData = () => {
-  if (policyDataPromise) return policyDataPromise;
-  policyDataPromise = fetch(POLICY_DATA_URL, { cache: 'force-cache' })
-    .then(async response => {
-      if (!response.ok) throw new Error(`Policy data request failed (${response.status})`);
-      const json = await response.json();
-      return Array.isArray(json) ? json : [];
-    });
-  return policyDataPromise;
-};
+  const afterNextPaint = () => new Promise(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  });
 
-const loadPolicyCategoryData = () => {
-  if (policyCategoryDataPromise) return policyCategoryDataPromise;
-  policyCategoryDataPromise = fetch(POLICY_CATEGORY_DATA_URL, { cache: 'force-cache' })
-    .then(async response => {
-      if (!response.ok) {
-        console.warn(`Policy category data request failed (${response.status})`);
-        return {};
-      }
-      const json = await response.json();
-      return json?.categories && typeof json.categories === 'object' ? json.categories : {};
-    });
-  return policyCategoryDataPromise;
-};
+  const loadPolicyData = () => {
+    if (policyDataPromise) return policyDataPromise;
+    policyDataPromise = fetch(POLICY_DATA_URL, { cache: 'force-cache' })
+      .then(async response => {
+        if (!response.ok) throw new Error(`Policy data request failed (${response.status})`);
+        const json = await response.json();
+        return Array.isArray(json) ? json : [];
+      });
+    return policyDataPromise;
+  };
+
+  const loadPolicyCategoryData = () => {
+    if (policyCategoryDataPromise) return policyCategoryDataPromise;
+    policyCategoryDataPromise = fetch(POLICY_CATEGORY_DATA_URL, { cache: 'force-cache' })
+      .then(async response => {
+        if (!response.ok) {
+          console.warn(`Policy category data request failed (${response.status})`);
+          return {};
+        }
+        const json = await response.json();
+        return json?.categories && typeof json.categories === 'object' ? json.categories : {};
+      });
+    return policyCategoryDataPromise;
+  };
 
 const getPolicyScope = policy => {
   const hives = new Set((policy.KeyPath || [])
@@ -145,6 +149,10 @@ function initPolicyExplorer() {
     direction: 'asc'
   };
   const collator = new Intl.Collator(undefined, { sensitivity: 'base' });
+
+  const setBusy = busy => {
+    root.setAttribute('aria-busy', busy ? 'true' : 'false');
+  };
 
   const getCategory = policy => policy.CategoryName || 'Uncategorized';
   const normalizeCategorySegment = segment => String(segment || '').trim().toLowerCase();
@@ -1419,7 +1427,9 @@ function initPolicyExplorer() {
   syncSearchSettingsUi();
   updatePaneLayout();
   renderTableHeader();
-  Promise.all([loadPolicyData(), loadPolicyCategoryData()])
+  setBusy(true);
+  afterNextPaint()
+    .then(() => Promise.all([loadPolicyData(), loadPolicyCategoryData()]))
     .then(([data, categories]) => {
       categoryMap = new Map(Object.entries(categories || {}));
       policies = data.map(normalizePolicy).sort((left, right) => {
@@ -1453,6 +1463,9 @@ function initPolicyExplorer() {
       renderTree();
       renderTable();
       renderDetail(null);
+    })
+    .finally(() => {
+      setBusy(false);
     });
 }
   global.initPolicyExplorer = initPolicyExplorer;

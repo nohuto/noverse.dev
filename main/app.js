@@ -43,8 +43,8 @@ const REPO_DESC_URL = 'main/data/repos.json';
 const SELECT_SEARCH_RENDER_LIMIT_DEFAULT = 300;
 const PAGE_FEATURES = Object.freeze([
   { rootId: 'console', src: 'main/terminal.js', initName: 'initConsole' },
-  { rootId: 'policy-explorer', src: 'main/policies.js', styleHref: 'main/tools.css', initName: 'initPolicyExplorer' },
-  { rootId: 'bin-diff-app', src: 'main/bin-diff.js', styleHref: 'main/tools.css', initName: 'initBinDiff' }
+  { rootId: 'policy-explorer', src: 'main/policies.js', styleHref: 'main/tools.css', initName: 'initPolicyExplorer', deferInit: true },
+  { rootId: 'bin-diff-app', src: 'main/bin-diff.js', styleHref: 'main/tools.css', initName: 'initBinDiff', deferInit: true }
 ]);
 const SYSTEM_THEME_QUERY = '(prefers-color-scheme: light)';
 
@@ -62,6 +62,10 @@ const EMAIL_BYTES = [121, 120, 127, 98, 99, 120, 87, 99, 98, 99, 118, 57, 126, 1
 
 const getEmailAddress = () =>
   EMAIL_BYTES.map(byte => String.fromCharCode(byte ^ EMAIL_KEY)).join('');
+
+const afterNextPaint = () => new Promise(resolve => {
+  requestAnimationFrame(() => requestAnimationFrame(resolve));
+});
 
 const storageGet = (key, fallback) => {
   try {
@@ -784,6 +788,7 @@ async function initPageFeatures() {
     if (typeof initialize !== 'function') {
       throw new Error(`Page feature did not register ${feature.initName}`);
     }
+    if (feature.deferInit) await afterNextPaint();
     initialize();
   }
 }
@@ -826,6 +831,7 @@ async function loadPage(url, push = true) {
     initClickableCards();
     initFiltering();
     initSelectUI();
+    await afterNextPaint();
     await initPageFeatures();
 
     if (push) history.pushState({ url: historyUrl }, '', historyUrl);

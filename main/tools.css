@@ -352,6 +352,23 @@ body.policy-resizing .policy-splitter::after {
   padding: 6px 0 6px 8px;
 }
 
+.policy-tree-placeholder,
+.policy-placeholder-row td {
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.policy-tree-placeholder {
+  padding: 0 10px;
+  line-height: 24px;
+}
+
+.policy-placeholder-row td {
+  height: 28px;
+}
+
 .policy-tree-level {
   position: relative;
   min-width: 0;
@@ -1115,6 +1132,14 @@ body.policy-column-resizing * {
   gap: 8px;
 }
 
+.bindiff-view-tools[hidden],
+.bindiff-links[hidden],
+#bindiff-swap[hidden],
+#bindiff-settings[hidden],
+#bindiff-maximize[hidden] {
+  display: none;
+}
+
 .bindiff-view-button {
   height: 24px;
   min-width: 120px;
@@ -1223,7 +1248,7 @@ body.policy-column-resizing * {
   cursor: pointer;
   z-index: 10;
   padding: 0;
-  display: none;
+  display: block;
 }
 
 .bindiff-swap-icon,
@@ -1247,7 +1272,7 @@ body.policy-column-resizing * {
   cursor: pointer;
   z-index: 10;
   padding: 0;
-  display: none;
+  display: block;
 }
 
 #bindiff-swap:hover {
@@ -1270,7 +1295,7 @@ body.policy-column-resizing * {
   cursor: pointer;
   z-index: 10;
   padding: 0;
-  display: none;
+  display: block;
 }
 
 .bindiff-maximize-icon {
@@ -1700,13 +1725,19 @@ body.bindiff-settings-open {
   overflow: hidden;
 }
 
+body.bindiff-maximized > .prompt-bar,
+body.bindiff-maximized > footer {
+  display: none;
+}
+
 #bin-diff-app.bindiff-maximized {
   position: fixed;
-  inset: 8px;
+  inset: 0;
   z-index: 100;
   margin: 0;
-  width: auto;
-  height: calc(100vh - 16px);
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   max-width: none;
   max-height: none;
   display: flex;

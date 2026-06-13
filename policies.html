@@ -41,7 +41,7 @@
   </header>
 
   <main id="main" class="no-center policies-main">
-    <section class="content-box panel" id="policy-explorer" data-title="policies">
+    <section class="content-box panel" id="policy-explorer" data-title="policies" aria-busy="true">
       <div class="panel-header">
         <span class="panel-title">admx definitions</span>
       </div>
@@ -111,7 +111,9 @@
             <div class="policy-pane-header">
               <span>Categories</span>
             </div>
-            <div class="policy-tree" id="policy-tree" role="tree"></div>
+            <div class="policy-tree" id="policy-tree" role="tree">
+              <div class="policy-tree-placeholder"></div>
+            </div>
           </aside>
           <div class="policy-splitter" data-policy-splitter="tree" aria-hidden="true"></div>
 
@@ -120,9 +122,18 @@
               <table class="policy-table">
                 <colgroup id="policy-table-cols"></colgroup>
                 <thead>
-                  <tr id="policy-table-head"></tr>
+                  <tr id="policy-table-head">
+                    <th scope="col" data-column="setting" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Name</span></span></th>
+                    <th scope="col" data-column="scope" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Scope</span></span></th>
+                    <th scope="col" data-column="supported" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Supported On</span></span></th>
+                    <th scope="col" data-column="value" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Value</span></span></th>
+                  </tr>
                 </thead>
-                <tbody id="policy-table-body"></tbody>
+                <tbody id="policy-table-body">
+                  <tr class="policy-placeholder-row"><td colspan="4"></td></tr>
+                  <tr class="policy-placeholder-row"><td colspan="4">&nbsp;</td></tr>
+                  <tr class="policy-placeholder-row"><td colspan="4">&nbsp;</td></tr>
+                </tbody>
               </table>
             </div>
             <div class="policy-table-note" id="policy-table-note"></div>

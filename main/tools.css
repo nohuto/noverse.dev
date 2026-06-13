@@ -345,8 +345,7 @@ body.policy-resizing .policy-splitter::after {
   padding: 6px 0 6px 8px;
 }
 
-.policy-tree-placeholder,
-.policy-placeholder-row td {
+.policy-tree-placeholder {
   color: var(--muted);
   font-size: 0.82rem;
   text-transform: uppercase;
@@ -356,10 +355,6 @@ body.policy-resizing .policy-splitter::after {
 .policy-tree-placeholder {
   padding: 0 10px;
   line-height: 24px;
-}
-
-.policy-placeholder-row td {
-  height: 28px;
 }
 
 .policy-tree-level {

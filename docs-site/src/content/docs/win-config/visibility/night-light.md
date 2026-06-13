@@ -6,7 +6,7 @@ sidebar:
   order: 4
 ---
 
-Uses warmer colors to block blue light, since the data for them is a bit compliated as shown below, I'll support for modifying it in a later WinConfig version.
+Uses warmer colors to block blue light, since the data for them is a bit compliated as shown below, I'll add support for modifying it in a later WinConfig version.
 
 ```powershell
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings : Data # REG_BINARY
@@ -69,7 +69,7 @@ Example data:
 | 70 | `previewColorTemperatureChanges` | bool | Specifies whether blue light reduction color temperature changes should be previewed. | not present |
 | 80 | `darkMode` | bool | Specifies whether app mode should change when blue light reduction is turned on or off. | not present |
 
-`ScheduleTime` has type int8, field `0` is `hour` and field `1` is `minute` (Windows often leaves `minute` out when it is `0`).
+`ScheduleTime` has type int8, field `0` is `hour` and field `1` is `minute` (often leaves `minute` out when it is `0`).
 
 ## [Windows.Data.BlueLightReduction.BlueLightReductionState](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionbluelightreductionstate-structure) structure
 
@@ -88,7 +88,7 @@ Example data:
 
 ## SystemSettings Captures
 
-Procmon doesn't show the entire data, therefore this isn't accurate (and sometimes useless).
+Procmon doesn't show the entire data, therefore this isn't accurate (and sometimes useless, e.g. the 'Strength' capture).
 
 ```c
 // System > Display : Night light
@@ -99,14 +99,11 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\C
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate\Data	Type: REG_BINARY, Length: 43, Data: 43 42 01 00 0A 02 01 00 2A 06 AF 86 B7 D1 06 2A
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate\Data	Type: REG_BINARY, Length: 41, Data: 43 42 01 00 0A 02 01 00 2A 06 B1 86 B7 D1 06 2A
 
-// System > Display > Night light: Strength (ca 0-5)
-HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 53, Data: 43 42 01 00 0A 02 01 00 2A 06 84 88 B7 D1 06 2A
-HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 53, Data: 43 42 01 00 0A 02 01 00 2A 06 86 88 B7 D1 06 2A
-HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 53, Data: 43 42 01 00 0A 02 01 00 2A 06 88 88 B7 D1 06 2A
-HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 53, Data: 43 42 01 00 0A 02 01 00 2A 06 8A 88 B7 D1 06 2A
-HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 53, Data: 43 42 01 00 0A 02 01 00 2A 06 8C 88 B7 D1 06 2A
-HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 53, Data: 43 42 01 00 0A 02 01 00 2A 06 8E 88 B7 D1 06 2A
-HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 50, Data: 43 42 01 00 0A 02 01 00 2A 06 90 88 B7 D1 06 2A
+// System > Display > Night light: Strength (0-3)
+HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 55, Data: 43 42 01 00 0A 02 01 00 2A 06 99 AD B7 D1 06 2A
+HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 55, Data: 43 42 01 00 0A 02 01 00 2A 06 9B AD B7 D1 06 2A
+HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 55, Data: 43 42 01 00 0A 02 01 00 2A 06 9D AD B7 D1 06 2A
+
 
 // System > Display > Night light: Schedule night light
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 50, Data: 43 42 01 00 0A 02 01 00 2A 06 98 88 B7 D1 06 2A

@@ -3,7 +3,7 @@ title: 'Time Zone'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 25
+  order: 27
 ---
 
 | ID                              | Display Name                                                  | ID                              | Display Name                                              |

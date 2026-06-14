@@ -3,10 +3,10 @@ title: 'Minimal Window Snapping'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 34
+  order: 15
 ---
 
-The main option leaves window snapping enabled, while disabling the snap bar/snap flyout etc., for a "minimal" version of it. You can configure window snapping behaviour via the suboptions, if you don't like the main option.
+The main option leaves window snapping enabled, while disabling the snap bar/snap flyout/ snap group etc., for a "minimal" version of it. You can configure window snapping behaviour via the suboptions, if you don't like the main option.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/window-snapping.png?raw=true)
 

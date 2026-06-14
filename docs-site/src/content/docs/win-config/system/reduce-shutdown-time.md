@@ -3,7 +3,7 @@ title: 'Reduce Shutdown Time'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 27
+  order: 29
 ---
 
 Forces hung apps and services to terminate faster, see 'Windows Internals' section for details.

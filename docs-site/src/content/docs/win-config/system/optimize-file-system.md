@@ -3,7 +3,7 @@ title: 'Optimize File System'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 15
+  order: 17
 ---
 
 Small documentation on several values the option applies, see links below for more details.

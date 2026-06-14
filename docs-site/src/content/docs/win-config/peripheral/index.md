@@ -17,7 +17,7 @@ sidebar:
 - [StorNVMe Values](/docs/win-config/peripheral/stornvme-values/)
 - [StorPort Values](/docs/win-config/peripheral/storport-values/)
 - [Audio Ducking](/docs/win-config/peripheral/audio-ducking/)
-- [Spatial Audio](/docs/win-config/peripheral/disable-spatial-audio/)
+- [Sound Mode](/docs/win-config/peripheral/sound-mode/)
 - [AutoPlay/Autorun](/docs/win-config/peripheral/disable-autoplay-autorun/)
 - [Touch & Tablet](/docs/win-config/peripheral/disable-touch-tablet/)
 - [Bluetooth](/docs/win-config/peripheral/disable-bluetooth/)

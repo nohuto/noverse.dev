@@ -38,14 +38,28 @@ SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDri
 SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
 ```
 
-## Suboption
+## Suboptions
 
-`Prevent Window Minimization on Monitor Disconnection` disables `Minimize windows then a monitor is diconnected` (`System > Display`).
+### Prevent Window Minimization on Monitor Disconnection
 
 ```c
+// System > Display : Minimize windows when a monitor is disconnected
+
 // Enabled
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 0
 
 // Disabled
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+### Forget Window Locations for Connected Monitors
+
+```c
+// System > Display : Remember windows locations based on monitor connection
+
+// Enabled
+HKCU\Control Panel\Desktop\RestorePreviousStateRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 0
+
+// Disabled
+HKCU\Control Panel\Desktop\RestorePreviousStateRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
 ```

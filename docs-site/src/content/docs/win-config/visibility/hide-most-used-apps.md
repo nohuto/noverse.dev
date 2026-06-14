@@ -3,7 +3,7 @@ title: 'Hide Most Used Apps'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 28
+  order: 27
 ---
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/mostused.jpg?raw=true)

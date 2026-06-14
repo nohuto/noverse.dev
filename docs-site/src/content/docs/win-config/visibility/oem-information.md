@@ -3,7 +3,7 @@ title: 'OEM Information'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 36
+  order: 35
 ---
 
 Set your own support information in `System > About` (or `Control Panel > System and Security > System`). All values are saved in:

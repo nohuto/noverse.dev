@@ -1,9 +1,9 @@
 ---
-title: 'Aero Shake'
+title: 'Window Shake'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 34
+  order: 35
 ---
 
 Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse.

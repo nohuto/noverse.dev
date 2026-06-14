@@ -40,6 +40,7 @@ sidebar:
 - [Detailed BSoD](/docs/win-config/system/enable-detailed-bsod/)
 - [Autoruns](/docs/win-config/system/disable-autoruns/)
 - [Export Explorer/Taskbar Pins](/docs/win-config/system/export-explorer-taskbar-pins/)
-- [Aero Shake](/docs/win-config/system/disable-aero-shake/)
+- [Minimal Window Snapping](/docs/win-config/system/minimal-window-snapping/)
+- [Window Shake](/docs/win-config/system/disable-window-shake/)
 - [App Archive](/docs/win-config/system/app-archive/)
 - [Mobility Center](/docs/win-config/system/disable-mobility-center/)

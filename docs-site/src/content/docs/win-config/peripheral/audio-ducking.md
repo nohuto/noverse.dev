@@ -6,11 +6,15 @@ sidebar:
   order: 11
 ---
 
-> "*Windows audio ducking is a dynamic audio processing technique that enables the automatic adjustment of audio levels between different audio sources on a Windows-based computer or operating system.*"
+> "*A communication device is used primarily for placing or receiving telephone calls on the computer. For a computer that has only one rendering device (speaker) and one capture device (microphone), these audio devices also act as the default communication devices.*"
 >
-> — EaseUS, [Windows audio ducking](https://multimedia.easeus.com/ai-article/windows-audio-ducking.html)
+> — Microsoft, [Using a Communication Device](https://learn.microsoft.com/en-us/windows/win32/coreaudio/using-the-communication-device)
 
-Can be disabled manually via `mmsys.cpl > Communications` `Do nothing`.
+> "*Consider a scenario where a user receives a phone call while listening to music on the computer. During the phone call, the user wants to reduce the volume level of the music while attending to the phone call, and resume the original volume after the phone call has ended. Depending on the options specified by the user in the Sounds control panel, the operating system automatically provides this functionality through ducking or stream attenuation—reduction in the intensity of an audio stream.*
+>
+> *The default attenuation experience depends on the user's preference, as specified in the control panel's Sound option. On the Communications tab, the user can choose an attenuation level (default value is 80%), mute all non-communication streams, or disable the default stream attenuation experience. The system allows new non-communication streams (except for new system sounds) to be opened during the communication session but the new streams are not automatically attenuated. When all of the communication streams are closed, the system ends the communication session and restores the volume of the streams that were attenuated during the communication session.*"
+>
+> — Microsoft, [Default Ducking Experience](https://learn.microsoft.com/en-us/windows/win32/coreaudio/stream-attenuation)
 
 ## Registry Value
 

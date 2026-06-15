@@ -3,7 +3,7 @@ title: 'FSO'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 23
+  order: 22
 ---
 
 Will be updated within the next weeks (date of commit 20.05.2026)

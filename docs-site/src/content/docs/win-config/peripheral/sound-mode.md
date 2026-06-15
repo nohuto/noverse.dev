@@ -3,7 +3,7 @@ title: 'Sound Mode'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 12
+  order: 13
 ---
 
 ## Spatial Audio
@@ -14,7 +14,7 @@ sidebar:
 
 ### Registry Values
 
-See '[AudioSRV Values](https://noverse.dev/docs/win-config/peripheral/audiosrv-values/)' for other related values.
+See '[Audio Values](https://noverse.dev/docs/win-config/peripheral/audio-values/)' for other related values.
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";

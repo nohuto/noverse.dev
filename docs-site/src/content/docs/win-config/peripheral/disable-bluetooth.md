@@ -3,7 +3,7 @@ title: 'Bluetooth'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 15
+  order: 16
 ---
 
 | Service/Driver | Description |

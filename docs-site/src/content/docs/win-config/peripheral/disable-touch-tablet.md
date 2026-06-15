@@ -3,7 +3,7 @@ title: 'Touch & Tablet'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 14
+  order: 15
 ---
 
 Disable the touch screen feature of your device with:

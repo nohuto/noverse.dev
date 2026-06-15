@@ -3,7 +3,7 @@ title: 'Wake on Input'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 16
+  order: 17
 ---
 
 ```bat

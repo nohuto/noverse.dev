@@ -11,6 +11,7 @@ Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nea
 ## SystemSettings Captures
 
 Changing "Share across devices" option via `SystemSettings`:
+
 ```c
 // Off
 HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 0

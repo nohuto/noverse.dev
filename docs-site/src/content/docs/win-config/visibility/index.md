@@ -41,5 +41,6 @@ sidebar:
 - [Hide Disabled/Disconnected Devices](/docs/win-config/visibility/hide-disabled-disconnected-devices/)
 - [Force Classic Control Panel](/docs/win-config/visibility/force-classic-control-panel/)
 - [System Clock Seconds](/docs/win-config/visibility/system-clock-seconds/)
+- [PC Name](/docs/win-config/visibility/pc-name/)
 - [OEM Information](/docs/win-config/visibility/oem-information/)
 - [Settings Page Visibility](/docs/win-config/visibility/settings-page-visibility/)

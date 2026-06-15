@@ -27,7 +27,9 @@ v16 = L"FailedToGetReason"; // if value is missing
   "CopilotDisabledReason": { "Type": "REG_SZ", "Data": "FeatureIsDisabled" }
 }
 ```
+
 `FeatureIsDisabled` seems to be used by default here (`IsRequiredEdgeBrowserInstalledFailed` exists too):
+
 ```c
 // procmon boot trace (value unset)
 "Explorer.EXE","HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotDisabledReason","SUCCESS","Type: REG_SZ, Length: 36, Data: FeatureIsDisabled"

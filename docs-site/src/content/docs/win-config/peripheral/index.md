@@ -15,7 +15,6 @@ sidebar:
 - [USBHUB Values](/docs/win-config/peripheral/usbhub-values/)
 - [Keyboard Values](/docs/win-config/peripheral/keyboard-values/)
 - [Audio Values](/docs/win-config/peripheral/audio-values/)
-- [AudioSrvPolicyManager.dll](/docs/win-config/peripheral/audiosrvpolicymanager-dll/)
 - [StorNVMe Values](/docs/win-config/peripheral/stornvme-values/)
 - [StorPort Values](/docs/win-config/peripheral/storport-values/)
 - [Audio Ducking](/docs/win-config/peripheral/audio-ducking/)

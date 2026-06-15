@@ -1,12 +1,32 @@
 ---
-title: 'AudioSRV Values'
+title: 'AudioSrvPolicyManager.dll'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 8
+  order: 9
 ---
 
-You can find all functions in [decompiled-pseudocode/11-23H2/audiosrv](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv), everything below is currently based on xrefs of `RegGetValueW`. Since the function names often already tell a lot, I've written them down where they're from. See a boot capture of `CurrentVersion\\Audio` key [here](https://github.com/nohuto/regkit/blob/main/records/Audio.txt).
+```c
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
+  // CProcess::UseOfResourceAllowed
+  "AllowClassicOffload" = 0; // REG_DWORD (bool)
+
+  // GrantExemptionForBCMStartupLatency
+  "DisableExemptionForBCMStartupLatency" = 0; // REG_DWORD (bool), 0 = can skip BeginBCMStartupLatencyGracePeriod, nonzero disables the exemption & starts the grace period
+
+  // CAastPreStartContext::RuntimeClassInitialize
+  "AastRenderDelayInMs" = 0; // REG_DWORD, range 0-4294967295 ms, delays UpdateEndpointVolume
+
+"HKCU\\Software\\Microsoft\\Multimedia\\Audio";
+  // LoadUserSettings
+  "UserDuckingPreference" = 1; // REG_DWORD, range 0-3, >3 = 1
+                               // 0 = -96 dB
+                               // 1 = -18 dB
+                               // 2 = -6 dB
+                               // 3 = 0 dB
+```
+
+## audiosrv.dll
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";

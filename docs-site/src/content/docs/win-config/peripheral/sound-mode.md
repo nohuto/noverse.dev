@@ -3,7 +3,7 @@ title: 'Sound Mode'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 13
+  order: 12
 ---
 
 ## Spatial Audio

@@ -3,7 +3,7 @@ title: 'System Sounds'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 21
+  order: 20
 ---
 
 Disables system sounds and removes sound events. I did use the keys, which Windows would disable:

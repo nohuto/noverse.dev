@@ -9,11 +9,13 @@ sidebar:
 Disables the lock screen (skips the lock screen and go directly to the login screen). See content below for details on the suboptions.
 
 Add a custom text to the sign in screen via:
+
 ```c
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 // legalnoticecaption -	Type: REG_SZ - Data: Noverse
 // legalnoticetext	- Type: REG_SZ - Data: https://noverse.dev
 ```
+
 By adding them, you'll have to click `OK` every time you boot/log in:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/legalnotice.png?raw=true)

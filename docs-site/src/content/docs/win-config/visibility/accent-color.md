@@ -28,6 +28,7 @@ Something I noticed while creating the option is that procmon doesn't show the a
 ## SystemSettings Captures
 
 Changing the color via `Personalization > Colors` sets:
+
 ```c
 // Nord Theme (#2e3440)
 HKCU\Software\Microsoft\Windows\DWM\ColorizationColor	Type: REG_DWORD, Length: 4, Data: 3291823178

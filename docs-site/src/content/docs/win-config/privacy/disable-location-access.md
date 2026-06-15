@@ -22,6 +22,7 @@ Disables app access to your location, locating your system will be disabled, geo
 ---
 
 There's also a value named `CSEnable` which I found in `srms.dat`, it doesn't seem to exist anymore.
+
 ```html
 <!-- Help improve Microsoft services by sending some location data when you use location-aware apps -->
 <pattern type="Registry">HKLM\Software\Microsoft\Sensors\LocationProvider [CSEnable]</pattern>

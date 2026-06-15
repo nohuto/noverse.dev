@@ -14,12 +14,12 @@ sidebar:
 
 ## Scheduled Task Actions
 
-`\Microsoft\Windows\Device Information` runs:
+`\Microsoft\Windows\Device Information`:
 ```powershell
 %windir%\system32\devicecensus.exe SystemCxt
 ```
 
-`\Microsoft\Windows\Device Information` runs:
+`\Microsoft\Windows\Device Information`:
 ```powershell
 %windir%\system32\devicecensus.exe UserCxt
 ```

@@ -8,9 +8,9 @@ sidebar:
 
 Since `powershell.exe` has default color of white (foreground) and blue (background), some may want to change it. If you use Windows Terminal, this option will have no effect.
 
-`ScreenColors` value, located in `HKCU\Console\%WINDIR%_System32_WindowsPowerShell_v1.0_powershell.exe`  
-`0-3` bit = `Foreground color`  
-`4-7` bit = `Background color`
+- `ScreenColors`, located in `HKCU\Console\%WINDIR%_System32_WindowsPowerShell_v1.0_powershell.exe`  
+  - `0-3` bit = `Foreground color`  
+  - `4-7` bit = `Background color`
 
 ### Color Table
 

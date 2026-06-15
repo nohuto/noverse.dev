@@ -6,9 +6,8 @@ sidebar:
   order: 28
 ---
 
-Spotlight is used to provide new pictures on your lock screen.
+Spotlight is used to provide new pictures on your lock screen. These exist by default on 25H2:
 
-These exist by default on 25H2:
 ```json
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\DesktopSpotlight\\Settings": {
   "IsDisabledByCommercialControl": { "Type": "REG_DWORD", "Data": 0 },
@@ -19,9 +18,11 @@ These exist by default on 25H2:
   "SpotlightNotOnboardedReason": { "Type": "REG_DWORD", "Data": 4 }
 }
 ```
+
 Disabling it via policies etc. is enough, therefore I won't add them as there's no documentation on them either.
 
-`EnabledState` gets read.
+`EnabledState` value gets read.
+
 ```
 \Registry\User\S-<ID>\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\DesktopSpotlight\Settings : EnabledState
 ```

@@ -16,7 +16,7 @@ The memory manager can be instructed to combine identical pages across the syste
 
 `Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value on recent builds, so it's most likely deprecated.
 
-```c
+```asm
 INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
 INIT:0000000140B9C348                 dq offset aDisablepagecom ; "DisablePageCombining"
 INIT:0000000140B9C350                 dq offset dword_140D1D1C8

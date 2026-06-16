@@ -3,7 +3,7 @@ title: 'Timer Expiration'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 2
 ---
 
 ```asm

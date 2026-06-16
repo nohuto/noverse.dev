@@ -3,7 +3,7 @@ title: 'Game Mode'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 5
 ---
 
 Game Mode is a RM (Resource Manager) feature for a foreground process that Windows identifies as a game through `expandedResources` (or GCS data). Note that everything below is based on pseudocode (from 23H2, things might've changed in newer builds, see [bin-diff](https://noverse.dev/bin-diff)) and interpretations, this isn't official documentation just a personal attempt to document how Game Mode works, mistakes may exist and feel free to correct me. I don't claim that anything below is correct nor complete, that's just how I understood the sequence of Game Mode initialization + (un)registration. I've tried to link all functions that I used, for anyone who wants to take a look for themselves.

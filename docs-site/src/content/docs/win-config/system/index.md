@@ -7,12 +7,12 @@ sidebar:
   order: 1
 ---
 
-- [Quantum/Priority Separation](/docs/win-config/system/quantum-priority-separation/)
-- [Game Mode](/docs/win-config/system/game-mode/)
 - [MMCSS Values](/docs/win-config/system/mmcss-values/)
 - [Timer Expiration](/docs/win-config/system/timer-expiration/)
 - [DWM Values](/docs/win-config/system/dwm-values/)
 - [Kernel Values](/docs/win-config/system/kernel-values/)
+- [Game Mode](/docs/win-config/system/game-mode/)
+- [Quantum/Priority Separation](/docs/win-config/system/quantum-priority-separation/)
 - [DXG Kernel Values](/docs/win-config/system/dxg-kernel-values/)
 - [HAGS](/docs/win-config/system/hags/)
 - [Heap Type](/docs/win-config/system/heap-type/)

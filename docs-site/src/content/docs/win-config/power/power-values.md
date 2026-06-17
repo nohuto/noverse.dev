@@ -12,13 +12,13 @@ Several values are applied, some have been changed, others are default values. T
 
 See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
 
-Everything listed below is based on personal findings, mistakes may exist.
-
 | Prefix | Component |
 | --- | --- |
 | `PoFx` | Power Framework |
 | `Pop` | Power Manager |
 | `Ppm` | Processor Power Manager |
+
+Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";

@@ -732,5 +732,4 @@ docs-theme-select[data-open='true'] .docs-theme-trigger::after {
 *::after {
   animation: none !important;
   scroll-behavior: auto !important;
-  transition: none !important;
 }

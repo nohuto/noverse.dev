@@ -3,7 +3,7 @@ title: 'Optimize Visual Effects'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 5
+  order: 6
 ---
 
 Disables all kind of animations, while leaving font smoothing + window content while dragging + thumbnails instead of icons enabled.

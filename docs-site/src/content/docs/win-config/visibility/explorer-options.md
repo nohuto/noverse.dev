@@ -3,7 +3,7 @@ title: 'Explorer Options'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 9
+  order: 2
 ---
 
 It changes every setting, which is shown in the `Folder Options` window. Some are personal preference, see suboptions bellow for customization.
@@ -231,17 +231,6 @@ It changes every setting, which is shown in the `Folder Options` window. Some ar
   HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Search\PrimaryProperties\UnindexedLocations\SearchOnly Type: REG_DWORD, Length: 4, Data: 0
   // Disabled
   HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Search\PrimaryProperties\UnindexedLocations\SearchOnly Type: REG_DWORD, Length: 4, Data: 1
-```
-
-## Miscellaneous Notes
-
-```json
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
-  "ShellState": { "Type": "REG_BINARY", "Data": "240000003e20000000000000000000000001000000130000000000000042000000" }
-},
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
-  "Settings": { "Type": "REG_BINARY", "Data": "0c0002000a01000060000000" }
-}
 ```
 
 ## [Windows Policies](https://noverse.dev/policies)

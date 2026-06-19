@@ -8,6 +8,7 @@ sidebar:
 ---
 
 - [Desktop Wallpaper](/docs/win-config/visibility/desktop-wallpaper/)
+- [Explorer Options](/docs/win-config/visibility/explorer-options/)
 - [Pointer Style](/docs/win-config/visibility/pointer-style/)
 - [Rounded Corners](/docs/win-config/visibility/disable-rounded-corners/)
 - [Night Light](/docs/win-config/visibility/night-light/)
@@ -15,7 +16,6 @@ sidebar:
 - [Dark Theme](/docs/win-config/visibility/enable-dark-theme/)
 - [Transparency](/docs/win-config/visibility/disable-transparency/)
 - [Animations](/docs/win-config/visibility/disable-animations/)
-- [Explorer Options](/docs/win-config/visibility/explorer-options/)
 - [Taskbar Settings](/docs/win-config/visibility/taskbar-settings/)
 - [Accent Color](/docs/win-config/visibility/accent-color/)
 - [Account Picture](/docs/win-config/visibility/account-picture/)

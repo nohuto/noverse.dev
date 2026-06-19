@@ -6,7 +6,7 @@ sidebar:
   order: 2
 ---
 
-It changes every setting, which is shown in the `Folder Options` window. Some are personal preference, see suboptions bellow for customization.
+It changes every setting which is shown in the `Folder Options` window. Some are personal preference, see suboptions below for customization.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/explorer.png?raw=true)
 
@@ -56,6 +56,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellState Type: REG_BIN
 ```
 
 ### View
+
 ```c
 // Always show icons, never thumbnails
 // Enabled

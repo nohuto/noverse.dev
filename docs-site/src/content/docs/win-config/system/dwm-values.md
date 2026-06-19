@@ -108,7 +108,7 @@ In [PresentMon](https://github.com/GameTechDev/PresentMon/releases) ([`PresentMo
 
 ## Registry Values
 
-See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from [`dwmcore.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwmcore) ([`CCommonRegistryData::InitializeDWMKeysFromRegistry`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)), [`win32kfull.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/win32kfull), [`dwm.exe`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwm), [`dwminit.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwminit), [`uDWM.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/uDWM)).
+Based on pseudocode of [`dwmcore.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwmcore), [`win32kfull.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/win32kfull), [`dwm.exe`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwm), [`dwminit.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwminit), [`uDWM.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/uDWM).
 
 Everything listed below is based on personal findings, mistakes may exist.
 

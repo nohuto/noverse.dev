@@ -8,9 +8,9 @@ sidebar:
 
 Small documentation on several values the option applies, see links below for more details.
 
-### [Registry Values](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt)
+### Registry Values
 
-This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) boot trace for more.
+This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) for all values that get read on boot ([boot capture guide](https://noverse.dev/docs/regkit/guides/wpr-wpa/)).
 
 | Value | Description |
 | ----- | ------------ |

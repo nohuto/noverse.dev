@@ -1,5 +1,1 @@
-<<<<<<< Updated upstream
-{"version":"1.4.0","languages":{"en":{"hash":"en_a9e55b599d","wasm":"en","page_count":273}},"include_characters":["_","‿","⁀","⁔","︳","︴","﹍","﹎","﹏","＿"]}
-=======
-{"version":"1.4.0","languages":{"en":{"hash":"en_25ced633ae","wasm":"en","page_count":270}},"include_characters":["_","‿","⁀","⁔","︳","︴","﹍","﹎","﹏","＿"]}
->>>>>>> Stashed changes
+{"version":"1.4.0","languages":{"en":{"hash":"en_e322306acd","wasm":"en","page_count":273}},"include_characters":["_","‿","⁀","⁔","︳","︴","﹍","﹎","﹏","＿"]}

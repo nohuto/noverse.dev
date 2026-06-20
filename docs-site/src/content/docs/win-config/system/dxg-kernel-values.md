@@ -167,6 +167,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "TdrLevel" = 3; // REG_DWORD, range 0/1/3, other = 3
     "TdrLimitCount" = 5; // REG_DWORD, range 1-32
     "TdrLimitTime" = 60; // REG_DWORD, range 5-3600
+    "TdrTestMode" = ?; // reserved?
 
     // DpiMiracastGetForcedMode
     "MiracastForceDisable" = 2; // REG_DWORD

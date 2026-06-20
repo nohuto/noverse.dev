@@ -13,8 +13,8 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 ```c
 // HUBREG_QueryGlobalUsb20HardwareLpmSettings
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\Usb20HardwareLpm"; // g_Usb20HardwareLpmKeyName
-    "Usb20HardwareLpmOverride" = 1; // REG_DWORD, default behavior enabled, 0 disables it
-    "Usb20HardwareLpmTimeout" = 2; // REG_DWORD, accepted range 0-255
+    "Usb20HardwareLpmOverride" = 1; // REG_DWORD
+    "Usb20HardwareLpmTimeout" = 2; // REG_DWORD, range 0-255
 
 // HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\AutomaticSurpriseRemoval"; // g_UsbAutomaticSurpriseRemovalKeyName (aRegistryMachin_6)
@@ -22,41 +22,41 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 // HUBREG_QueryUsbHardwareVerifierValue
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\HardwareVerifier"; // g_HwVerifierKeyName
-    "<VID><PID><REV>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, first lookup
+    "<VID><PID><REV>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, first query
     "<VID><PID>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, fallback
     "global\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, last fallback
 
 // HUBREG_QueryGlobalUsbLtmSettings
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\UsbLtm"; // g_UsbLtmKeyName
-    "UsbLtmEnable" = 0; // REG_DWORD, nonzero enables USB LTM
+    "UsbLtmEnable" = 0; // REG_DWORD
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USB";
-    "DualRoleFeaturesTestOverride" = ?; // REG_DWORD, queried from GetPersistedKeyPath
+    "DualRoleFeaturesTestOverride" = ?; // REG_DWORD
     "UcmIsPresent" = ?; // REG_DWORD
 
 // these are taken from the W10 source, they seem to exist on latest builds (they do exist in usbport.sys on 23H2)
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usb";
-    "debuglevel" = 0; // REG_DWORD, default to 1/2 when DEBUG1/DEBUG2 builds, higher numbers enable more logs
+    "debuglevel" = 0; // REG_DWORD
     "debuglogmask" = 0xFFFFFFFE; // REG_DWORD, bitmask for log categories
-    "debuglogenable" = 1; // REG_DWORD (bool), enables debug log output
-    "debugcatc" = 0; // REG_DWORD (bool), enables CATC analyzer trigger
-    "DisableSelectiveSuspend" = 0; // REG_DWORD (bool), global disable for selective suspend (GlobalUsbhubLegacyValues?)
-    "DisableCcDetect" = 0; // REG_DWORD (bool), global disable for CC detection
+    "debuglogenable" = 1; // REG_DWORD (bool)
+    "debugcatc" = 0; // REG_DWORD (bool)
+    "DisableSelectiveSuspend" = 0; // REG_DWORD (bool)
+    "DisableCcDetect" = 0; // REG_DWORD (bool
     "EnPMDebug" = 0; // REG_DWORD (bool), for debugging power management
-    "ForceHcD3NoWakeArm" = 0 // REG_DWORD (bool), prevents wake-arming when forcing HC to D3
-    "EnableDCA" = 0 // REG_DWORD (bool), enables direct controller access (HCT diagnostics)
-    "ForcePortsHighSpeed" = 0; // REG_DWORD (bool), forces ports to remain under EHCI (HCT compatibility)
+    "ForceHcD3NoWakeArm" = 0 // REG_DWORD (bool)
+    "EnableDCA" = 0 // REG_DWORD (bool), direct controller access
+    "ForcePortsHighSpeed" = 0; // REG_DWORD (bool), forces ports to remain under EHCI
 
 // "This class is reserved for USB host controllers and USB hubs", I'll add them here as they're also in usbport.sys and also taken from the W10 source
 
 "HKLM\\System\\CurrentControlSet\\Control\\Class\\{36FC9E60-C465-11CF-8056-444553540000}\\<instance>";
-    "HcFlavor" = ? // REG_DWORD, auto detect
-    "TotalBusBandwidth" = ? // REG_DWORD, calculated from miniport registration (bits/ms), overrides bus bandwidth accounting
-    "HcDisableAllSelectiveSuspend" = 0 (non-IA64), 1 (IA64); // REG_DWORD, nonzero disables selective suspend
+    "HcFlavor" = ? // REG_DWORD
+    "TotalBusBandwidth" = ? // REG_DWORD
+    "HcDisableAllSelectiveSuspend" = 0 (non-IA64), 1 (IA64); // REG_DWORD
     "CommonBuffer2GBLimit" = 0; // REG_DWORD, when nonzero, forces common buffers below 2GB ("Limit common buffer allocations for the miniport to the physical address range below 2GB.  Only bits 0 through 30 of the physical address can be set.  Bit 31 of the physical address cannot be set.")
     "ForceHCResetOnResume" = 0; // REG_DWORD, forces controller reset on resume
-    "FastResumeEnable" = 0; // REG_DWORD, enables fast S0 resume
+    "FastResumeEnable" = 0; // REG_DWORD, fast S0 resume
 
     //HcDisableSelectiveSuspend
 

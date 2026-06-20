@@ -95,16 +95,16 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DefaultMemoryRefreshLatencyToleranceNoContext" = 30000; // REG_DWORD
     "DefaultPowerNotRequiredTimeout" = 25000; // REG_DWORD
     "DisableDevicePowerRequired" = 0; // REG_DWORD (bool)
-    "DisablePStateManagement" = 0; // REG_DWORD (bool)
+    "DisablePStateManagement" = 0; // REG_DWORD (bool), nonzero skips P-state query
     "EnablePODebounce" = 0; // REG_DWORD (bool)
     "EnableRuntimePowerManagement" = 1; // REG_DWORD (bool)
     "lowdebounce" = 3; // REG_DWORD
     "MonitorLatencyTolerance" = 300000; // REG_DWORD
     "MonitorRefreshLatencyTolerance" = 17000; // REG_DWORD
-    "uglitch" = 900; // REG_DWORD
-    "uhigh" = 700; // REG_DWORD
-    "uideal" = 500; // REG_DWORD
-    "ulow" = 300; // REG_DWORD
+    "uglitch" = 900; // REG_DWORD, P-state requires ulow < uideal < uhigh < uglitch <= 1000
+    "uhigh" = 700; // REG_DWORD, ^
+    "uideal" = 500; // REG_DWORD, ^
+    "ulow" = 300; // REG_DWORD, ^
 
     // DXGGLOBAL::Initialize
     "AllowAdvancedEtwLogging" = 0; // REG_DWORD (bool)
@@ -234,7 +234,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "MaxFocusGpuQuantumWithoutPresent" = 100; // REG_DWORD, 25H2
 
     // VidSchiReadGlobalConfiguration (23H2)
-    "DdiSuspendMode" = 0; // REG_DWORD, valid 0-2
+    "DdiSuspendMode" = 0; // REG_DWORD, range 0-2
     "EnableContextDelay" = 1; // REG_DWORD (bool)
     "EnableFlipImmediateSwFlipQueue" = 1; // REG_DWORD (bool)
     "InitDriverFenceId" = 0; // REG_DWORD
@@ -251,7 +251,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "NpuPreemptionQuantum" = 60000; // REG_DWORD, minimum 1
 
     // VidSchiReadDeviceConfiguration
-    "FlipOverrideMode" = 0; // REG_DWORD, valid 0-2
+    "FlipOverrideMode" = 0; // REG_DWORD, range 0-2
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\MemoryManager";
     // VIDMM_GLOBAL::ReadConfiguration
@@ -385,7 +385,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     // VIDMM_GLOBAL::ReadTestAndStagingConfiguration
     "AlwaysDecommitOnOffer" = 0; // REG_DWORD (bool)
     "BudgetThreshold" = 25; // REG_DWORD, max 100
-    "DecommitRepurposeMode" = 1; // REG_DWORD, valid 0-2, 23H2
+    "DecommitRepurposeMode" = 1; // REG_DWORD, range 0-2, 23H2
     "DxgMms2OfferReclaim" = 4294967295; // REG_DWORD, uses 0/1/2/4294967295
     "ExpandTo64KBAllocationSizeThreshold" = 4194304; // REG_DWORD
     "LargifyUpgradeThresholdBytes" = 0; // REG_DWORD, 25H2
@@ -440,20 +440,20 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DebugMode" = 0; // REG_DWORD, bit 0 only
     "EnablePageTracking" = 0; // REG_DWORD (bool)
     "ForceDmaRemapping" = 0; // REG_DWORD, bit 0 only
-    "ForceEnableIommu" = 0; // REG_DWORD, valid 0-2
+    "ForceEnableIommu" = 0; // REG_DWORD, range 0-2
     "IdentityMappedPassthrough" = 0; // REG_DWORD (bool), 25H2 only
-    "LogicalAddressMode" = 0; // REG_DWORD, valid 0-2
+    "LogicalAddressMode" = 0; // REG_DWORD, range 0-2
     "PreferHighLogicalAddresses" = 0; // REG_DWORD, bit 0 only
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\DMM";
     // VIDPN_MGR::_ReadConfiguration
     "AssertOnDdiViolation" = 0; // REG_DWORD (bool)
-    "BadMonitorModeDiag" = 2; // REG_DWORD, valid 1-2
+    "BadMonitorModeDiag" = 2; // REG_DWORD, range 1-2
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\DMM";
     // ADAPTER_DISPLAY::Initialize
     "EnableVirtualRefreshRateOnExternalMonitor" = 0; // REG_DWORD (bool)
-    "HPDFilterLimit" = 20000000; // REG_DWORD, valid 1000000-100000000
+    "HPDFilterLimit" = 20000000; // REG_DWORD, range 1000000-100000000
     "LongLinkTrainingTimeout" = 1000; // REG_DWORD, valid when greater than ShortLinkTrainingTimeout + less than 30000
     "ModeListCaching" = 1; // REG_DWORD, enabled only if exactly 1
     "SetTimingsFlags" = 0; // REG_DWORD
@@ -469,7 +469,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\MonitorDataStore\\MONITOR-ID"
     // DXGMONITOR::_RetrieveMonitorConfigurationFromMonitorStore
-    "DockedOrientation" = 0; // REG_DWORD, valid 0-3
+    "DockedOrientation" = 0; // REG_DWORD, range 0-3
     "EnableBoostRefreshRateByDefault" = 0; // REG_DWORD (bool)
     "MonitorOrientation" = 4294967295; // REG_DWORD, default depends on monitor
 

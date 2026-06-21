@@ -6,15 +6,21 @@ sidebar:
   order: 8
 ---
 
-[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) (*Hardware-accelerated GPU scheduling*) changes who handles high frequency GPU scheduling work, classic WDDM uses a high priority CPU scheduler thread, HAGS offloads much of that scheduling/context switch work to a GPU scheduling processor. Note that `TEAS` in the dropdown = `ThreatExpimentalAsStable`.
+[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) (*Hardware-accelerated GPU scheduling*) changes who handles high frequency GPU scheduling work, classic WDDM uses a high priority CPU scheduler thread, HAGS offloads much of that scheduling/context switch work to a GPU scheduling processor. Note that `TEAS` in the dropdown = `TreatExperimentalAsStable`.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/HwQueue.png?raw=true)
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers";
-    "HwSchMode" = 0; // range 0-2, >=3 = 0
-    "HwSchOverrideBlockList" = 1; // bool
-    "HwSchTreatExperimentalAsStable" = 0; // bool
+    "HwSchMode" = 0; // REG_DWORD, range 0-2, >=3 = 0
+    "HwSchOverrideBlockList" = 1; // REG_DWORD (bool)
+    "HwSchTreatExperimentalAsStable" = 0; // REG_DWORD (bool)
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler";
+    "HwSchThreadOffloadMode" = 2; // REG_DWORD, 24H2+
+    "HwQueuedRenderPacketGroupLimit" = 2; // REG_DWORD, min 1
+    "HwQueuedRenderPacketGroupLimitPerNode" = ?; // REG_BINARY
+    "HwQueuePacketCap" = ?; // REG_DWORD, driver default, range 1-14
 ```
 
 Query the current states using the name RVAs (`dword_1C01404B8` = HwSchMode, `byte_1C01404BC` = HwSchOverrideBlockList, `byte_1C01404BD` = HwSchTreatExperimentalAsStable for the part below, obviously these names depend on the IDA auto generation so they'll unlikely be the same for you), follow the [DriverStart + RVAs](https://noverse.dev/docs/win-config/system/mmcss-values/#driverstart--rvas) guide if you want to try it.
@@ -108,6 +114,58 @@ typedef enum _DXGK_FEATURE_ID
     DXGK_FEATURE_HWFLIPQUEUE                    = DXGK_DEFINE_FEATURE_ID(DXGK_FEATURE_CATEGORY_DRIVER, DXGK_DRIVER_FEATURE_HWFLIPQUEUE), // A hardware flip queue allows multiple future frames to be submitted to the display controller queue. The CPU and parts of the GPU can transition to lower power states while the display controller is processing multiple queued frames, improving power efficiency of video playback scenarios on capable hardware.
     DXGK_FEATURE_USER_MODE_SUBMISSION           = DXGK_DEFINE_FEATURE_ID(DXGK_FEATURE_CATEGORY_DRIVER, DXGK_DRIVER_FEATURE_USER_MODE_SUBMISSION),
 } DXGK_FEATURE_ID;
+```
+
+## Scheduler Values
+
+These are related to (dxgmms2) scheduler [hardware queue](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/gpu-hardware-queue) behavior.
+
+| Value | Default data | Description |
+| --- | --- | --- |
+| `HwSchThreadOffloadMode` (24H2+) | `2` | Decides whether staged HW queues are handled via `ProcessHwQueue` or by the scheduler thread |
+| `HwQueuedRenderPacketGroupLimit` | `2`, minimum `1` | Per node render packet group token count |
+| `HwQueuedRenderPacketGroupLimitPerNode` | `REG_BINARY` | Per node override for the value above |
+| `HwQueuePacketCap` | driver default, clamped `1-14` | Max DMA packets allowed queued to a node |
+
+### HwSchThreadOffloadMode
+
+`HwSchThreadOffloadMode` decides where staged [hardware queues](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/gpu-hardware-queue) are getting handled.
+
+- `0`/`>=3` handles all staged queues directly through `ProcessHwQueue` on current caller
+- `1` moves (offloads) all staged HW queues to the scheduler list and wakes the scheduler thread (`VidSchiWorkerThread`)
+- `2` (default) only moves queues marked with `VIDSCH_HW_QUEUE`, others get handled by `ProcessHwQueue`
+
+`ProcessHwQueues` has no `HwSchThreadOffloadMode`/`KLOCK_QUEUE_HANDLE` argument in 23H2 and previous builds, it's very similar to the "other values" part of `HwSchThreadOffloadMode`.
+
+```c
+// HwQueueStagingList::ProcessHwQueues
+
+v6 = *(_DWORD *)(*(_QWORD *)this + 304LL); // HwSchThreadOffloadMode
+
+if ( v6 == 1 )
+{
+  // move all staged HW queues to scheduler HW queue list
+  goto LABEL_20;
+}
+
+if ( v6 == 2 ) // default
+{
+  if ( *((_BYTE *)v12 - 30) ) // VIDSCH_HW_QUEUE + 146
+  {
+    // move selected HW queue to same scheduler HW queue list
+    v5 = 1;
+  }
+  if ( v5 )
+  {
+LABEL_20:
+    *(_BYTE *)(*(_QWORD *)this + 296LL) = 0;
+    *(_QWORD *)(*(_QWORD *)this + 1480LL) = MEMORY[0xFFFFF78000000320];
+    KeSetEvent((PRKEVENT)(*(_QWORD *)this + 1448LL), 0, 0);
+  }
+}
+
+// remaining queues
+HwQueueStagingList::ProcessHwQueue(this, (HwQueueStagingList *)((char *)v18 - 176), a2);
 ```
 
 ## query_hwsch

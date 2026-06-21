@@ -12,7 +12,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers"
-    // GetCabcOptionFromRegistry / TriggerCabcV2Wnf
+    // GetCabcOptionFromRegistry
     "CABCOption" = 2; // REG_DWORD, if missing + if DisableCABC == 1 its 0, otherwise 2
     "DisableCABC" = 0; // REG_DWORD (bool), fallback for missing CABCOption
 
@@ -158,7 +158,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "RapidHPDThresholdCount" = 5; // REG_DWORD
     "RapidHPDTime" = 1000; // REG_DWORD
 
-    // TdrInit, https://noverse.dev/docs/win-config/security/increase-tdr/
+    // TdrInit, see https://noverse.dev/docs/win-config/security/increase-tdr/ for descriptions etc.
     "TdrDdiDelay" = 5; // REG_DWORD, range 1-900
     "TdrDebugMode" = 2; // REG_DWORD, range 0-3, other = 2
     "TdrDelay" = 2; // REG_DWORD, range 1-900
@@ -167,7 +167,6 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "TdrLevel" = 3; // REG_DWORD, range 0/1/3, other = 3
     "TdrLimitCount" = 5; // REG_DWORD, range 1-32
     "TdrLimitTime" = 60; // REG_DWORD, range 5-3600
-    "TdrTestMode" = ?; // reserved?
 
     // DpiMiracastGetForcedMode
     "MiracastForceDisable" = 2; // REG_DWORD
@@ -218,8 +217,9 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "ForceFlipTrueImmediateMode" = 0; // REG_DWORD, range 0-2, other ignored
     "ForegroundPriorityBoost" = 1; // REG_DWORD (bool)
     "HistoryLogSize" = 64; // REG_DWORD, range 16-65536 (must be power of two)
-    "HwQueuedRenderPacketGroupLimit" = 2; // REG_DWORD, minimum 1
-    "HwQueuePacketCap" = ?; // REG_DWORD, range 1-14
+    "HwQueuedRenderPacketGroupLimit" = 2; // REG_DWORD, min 1
+    "HwQueuedRenderPacketGroupLimitPerNode" = ?; // REG_BINARY
+    "HwQueuePacketCap" = ?; // REG_DWORD, driver default, range 1-14
     "MaximumAllowedPreemptionDelay" = 900; // REG_DWORD
     "MaxYieldInterval" = 16; // REG_DWORD
     "NumberOfDmaPacketPool" = 20; // REG_DWORD, minimum 16
@@ -246,7 +246,8 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DebugLargeSmoothenedDuration" = 1; // REG_DWORD (bool)
     "EnableDirectSubmission" = ?; // REG_DWORD (bool)
     "FrameServerAutoBoostPriority" = 17; // REG_DWORD
-    "HwSchThreadOffloadMode" = 2; // REG_DWORD
+
+    "HwSchThreadOffloadMode" = 2; // REG_DWORD, 24H2+
     "MinYieldInterval" = 8000; // REG_DWORD
     "NpuContextSwitchQuantum" = 30000; // REG_DWORD, minimum 1
     "NpuPreemptionQuantum" = 60000; // REG_DWORD, minimum 1

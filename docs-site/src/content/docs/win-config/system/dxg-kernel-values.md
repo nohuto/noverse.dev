@@ -556,6 +556,79 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DpiValue" = 0; // REG_DWORD, https://noverse.dev/docs/win-config/system/display-scaling/
 ```
 
+## ForegroundPriorityBoost
+
+Gives foreground graphics contexts with a priority below `16` a minimum GPU scheduling priority of `16`, means when the GPU is busy, their queued GPU work can run before work with a lower scheduling priority.
+
+```c
+// ForegroundPriorityBoost = 0
+lkd> .reload /f dxgkrnl.sys
+lkd> r @$t0 = poi(dxgkrnl+0x140aa8) // DXGGLOBAL::m_pGlobal
+lkd> r @$t1 = poi(@$t0+0x300) // DXGADAPTER
+lkd> r @$t2 = poi(@$t1+0xb70) // ADAPTER_RENDER
+lkd> r @$t3 = poi(@$t2+0x2e8) // VIDSCH_GLOBAL
+lkd> .printf "ForegroundPriorityBoost=%u\n", (dwo(@$t3+0x9E8)&0x400)>>0xa // see below
+ForegroundPriorityBoost=0
+```
+
+```c
+// ForegroundPriorityBoost = 1
+lkd> .reload /f dxgkrnl.sys
+lkd> r @$t0 = poi(dxgkrnl+0x140aa8)
+lkd> r @$t1 = poi(@$t0+0x300)
+lkd> r @$t2 = poi(@$t1+0xb70)
+lkd> r @$t3 = poi(@$t2+0x2e8)
+lkd> .printf "ForegroundPriorityBoost=%u\n", (dwo(@$t3+0x9E8)&0x400)>>0xa
+ForegroundPriorityBoost=1
+```
+
+[`VidSchiReadGlobalConfiguration`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dxgmms2/VidSchiReadGlobalConfiguration.c) sets bit `0x400` in the scheduler flags at offset `2536` (`0x9E8`) if `ForegroundPriorityBoost` is nonzero, [`VidSchiComputePriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dxgmms2/VidSchiComputePriority.c) reads that bit before applying the priority floor.
+
+```c
+// VidSchiReadGlobalConfiguration
+
+v112[156] = L"ForegroundPriorityBoost";
+v112[157] = &v62; // value data
+
+*(_DWORD *)(a1 + 2536) = (v62 != 0 ? 0x400 : 0) | (v61 != 0 ? 0x100 : 0) | (v60 != 0 ? 0x10 : 0) | (v59 != 0) | (v58 != 0 ? 4 : 0) | (v57 != 0 ? 2 : 0) | *(_DWORD *)(a1 + 2536) & 0xFFFFFAE8;
+```
+
+```c
+// VidSchiComputePriority
+
+{
+  if ( (*(_DWORD *)(v8 + 2536) & 0x400) != 0 && (a4 & 1) != 0 && *a5 < 0x10u )
+    *a5 = 16;
+  return 0LL;
+}
+```
+
+## DisableVersionMismatchCheck
+
+Controls whether the display driver's INF & KMD (`.sys`) versions get compared and if they match. `0` (default) = compare versions, nonzero = skip. See the current `.inf` file name via:
+
+```powershell
+Get-PnpDevice -Class Display -PresentOnly | Get-PnpDeviceProperty -KeyName DEVPKEY_Device_DriverInfPath | Select-Object -ExpandProperty Data
+```
+
+```inf
+; C:\Windows\INF\oem23.inf
+
+[Version]
+Signature   = "$Windows NT$"
+Provider    = %NVIDIA%
+ClassGUID   = {4D36E968-E325-11CE-BFC1-08002BE10318}
+Class       = Display
+DriverVer   = 05/19/2026, 32.0.16.1047
+PnpLockdown = 1
+CatalogFile = NV_DISP.CAT
+[nv_CplInstaller]
+Default_addreg = nv_CplInstaller_addreg
+Default_copyfiles = nv_CplInstaller_copyfiles
+```
+
+`nvlddmkm.sys` = version `32.0.16.1047`, means the version matches. An mismatch fails adapter initialization with `STATUS_DEVICE_CONFIGURATION_ERROR` (`0xC0000182`) and records a live dump. There're some allowed mismatched, e.g. both major versions are below `21`, 
+
 ## RegistryMachin_* Keys
 
 These are from `dxgkrnl.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).

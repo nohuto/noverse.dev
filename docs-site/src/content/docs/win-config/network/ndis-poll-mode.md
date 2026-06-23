@@ -33,7 +33,7 @@ When enabled on TX side, the following capabilities are not be supported:
 
 ### Setup Information
 
-```inf
+```c
 HKR, Ndi\params\*NdisPoll,       ParamDesc,            0, "Ndis Poll Mode"
 HKR, Ndi\params\*NdisPoll,       Type,                 0, "enum"
 HKR, Ndi\params\*NdisPoll,       Default,              0, "1"
@@ -58,7 +58,7 @@ This feature allows packet burst handling, while avoiding packet drops that may 
 ```
 
 | Data | Meaning |
-| :----: | ---- |
+| ---- | ---- |
 | 0 | Disabled (default) |
 | 1 | Enables packet burst buffering using threaded DPC |
 | 2 | Enables packet burst buffering using polling |
@@ -72,7 +72,7 @@ Sets the completion methods of the receive packets, and it affects network throu
 
 ### Setup Information
 
-```inf
+```c
 HKR, NDI\Params\RecvCompletionMethod,  ParamDesc, 0, "%RecvCompletionMethod%"
 HKR, NDI\Params\RecvCompletionMethod,  Type,  0, "enum"
 HKR, NDI\Params\RecvCompletionMethod,  Default, 0, "1"

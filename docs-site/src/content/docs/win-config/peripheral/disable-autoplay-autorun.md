@@ -13,7 +13,7 @@ AutoPlay is a feature that detects the type of content on newly inserted media o
 Disabling `ShellHWDetection` causes CmdPal to not start directly after boot for whatever reason, which is why I added a suboption to enable the service.
 
 Example `autorun.inf` content:
-```inf
+```c
 [autorun]
 open=Launch.exe
 icon=Launch.exe

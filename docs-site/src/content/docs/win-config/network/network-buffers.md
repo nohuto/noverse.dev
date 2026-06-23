@@ -16,7 +16,7 @@ The `default`/`min`/`max` data differs for users, e.g. if applying `4096` it may
 
 ## Setup Information
 
-```inf
+```c
 , *TransmitBuffers
 HKR, Ndi\params\*TransmitBuffers,               ParamDesc,              0, %TransmitBuffers%
 HKR, Ndi\params\*TransmitBuffers,               default,                0, "512"

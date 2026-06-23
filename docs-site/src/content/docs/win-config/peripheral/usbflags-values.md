@@ -6,7 +6,7 @@ sidebar:
   order: 4
 ---
 
-Value names in [`usbflags-HUBREG_QueryUsbflagsValuesForDevice.c`](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsValuesForDevice.c) are mostly UNICODE_STRING globals, the names below are resolved from `dq offset ... ; "Name"`. The usbflags device key base path is `HKLM\SYSTEM\CurrentControlSet\Control\usbflags` (from `LRegistryMachineSystemCurrentControlSetControlusbflags` in `HUBREG_OpenCreateUsbflagsDeviceKey`).
+Value names in [`HUBREG_QueryUsbflagsValuesForDevice.c`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBHUB3/HUBREG_QueryUsbflagsValuesForDevice.c) are mostly UNICODE_STRING globals, the names below are resolved from `dq offset ; "Name"`. The usbflags device key base path is `HKLM\SYSTEM\CurrentControlSet\Control\usbflags` (from `LRegistryMachineSystemCurrentControlSetControlusbflags` in `HUBREG_OpenCreateUsbflagsDeviceKey`).
 
 ## USB_DEVICE_HACKS
 
@@ -131,19 +131,6 @@ Everything listed below is based on personal findings, mistakes may exist.
     //"EnablePLDRDuringCyclePort"
     //"ResetOnErrorInD2Resume"
 ```
-
-- [peripheral/assets | HUBDSM_QueryingRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBDSM_QueryingRegistryValuesForDevice.c)
-- [peripheral/assets | HUBMISC_QueryAndCacheRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBMISC_QueryAndCacheRegistryValuesForDevice.c)
-- [peripheral/assets | HUBREG_OpenCreateUsbflagsDeviceKey.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_OpenCreateUsbflagsDeviceKey.c)
-- [peripheral/assets | HUBREG_QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsValuesForDevice.c)
-- [peripheral/assets | HUBREG_QueryHubErrataFlags.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryHubErrataFlags.c)
-- [peripheral/assets | HUBREG_QueryUsbflagsAlternateSettingFilter.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsAlternateSettingFilter.c)
-- [peripheral/assets | RegQueryGenericCompositeUSBDeviceString.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/RegQueryGenericCompositeUSBDeviceString.c)
-- [peripheral/assets | GetConfigValue.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/GetConfigValue.c)
-- [peripheral/assets | Controller_IsRegKeySetToDisableS0Idle.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_IsRegKeySetToDisableS0Idle.c)
-- [peripheral/assets | Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c)
-- [peripheral/assets | Controller_PopulateTestRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateTestRegistrySettings.c)
-- [peripheral/assets | Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c)
 
 ## RegistryMachin_* Keys
 

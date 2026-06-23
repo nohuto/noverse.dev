@@ -53,12 +53,6 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "{GUID}" = ?; // value name from RtlStringFromGUID
 ```
 
-- [peripheral/assets | HUBREG_QueryUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryUxdDeviceKey.c)
-- [peripheral/assets | HUBREG_DeleteUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_DeleteUxdDeviceKey.c)
-- [peripheral/assets | HUBREG_QueryGlobalUxdSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalUxdSettings.c)
-- [peripheral/assets | HUBREG_QueryGlobalHubValues.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalHubValues.c)
-- [peripheral/assets | HUBREG_GetUxdPnpValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_GetUxdPnpValue.c)
-
 ## RegistryMachin_* Keys
 
 Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).

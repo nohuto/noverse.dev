@@ -43,7 +43,8 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "EnableWDDM23Synchronization" = 0; // REG_DWORD (bool)
     "Force32BitFences" = 0; // REG_DWORD (bool)
     "ForceAccessedPhysically" = 0; // REG_DWORD (bool)
-    "ForceDirectFlip" = 0; // REG_DWORD (bool)
+    "ForceDirectFlip" = 0; // REG_DWORD (bool), if enabled it forces SupportDirectFlip (D3DKMDT_PREEMPTION_CAPS) to return true, which would for example skip such requirements (which would happen if SupportDirectFlip is false)
+                           // "Driver reports SupportMultiPlaneOverlay cap but DirectFlip is not supported." (DXGADAPTER::Initialize)
     "ForceEnableDxgMms2" = 0; // REG_DWORD (bool)
     "ForceExplicitResidencyNotification" = 0; // REG_DWORD (bool)
     "ForceInitPagingProcessVaSpace" = 0; // REG_DWORD (bool)
@@ -581,14 +582,6 @@ return *(_BYTE *)(*((_QWORD *)this + 2) + 2756LL);
 ```
 
 That value is also kind of related to DWM's [`OverlayTestMode`](https://noverse.dev/docs/win-config/system/dwm-values/#overlaytestmode), `OverlayTestMode = 5` disables DWM's overlay use in `dwmcore`, while `DisableOverlays = 1` disables MPO support in `dxgkrnl` (both can prevent `Hardware Composed: Independent Flip`).
-
-### ForceDirectFlip
-
-Placeholder
-
-### ForceEnableDxgMms2
-
-Placeholder
 
 ### ForegroundPriorityBoost
 

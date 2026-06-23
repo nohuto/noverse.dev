@@ -65,14 +65,6 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "BootPathSurpriseRemovalCount" = ?;
 ```
 
-- [peripheral/assets | GetPersistedKeyPath.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/GetPersistedKeyPath.c)
-- [peripheral/assets | HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)
-- [peripheral/assets | HUBREG_QueryGlobalUsb20HardwareLpmSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryGlobalUsb20HardwareLpmSettings.c)
-- [peripheral/assets | HUBREG_QueryGlobalUsbLtmSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryGlobalUsbLtmSettings.c)
-- [peripheral/assets | HUBREG_QueryUsbHardwareVerifierValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryUsbHardwareVerifierValue.c)
-- [peripheral/assets | ReadManifestAssignedValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/ReadManifestAssignedValue.c)
-- [peripheral/assets | UsbDualRoleFeaturesQueryLocalMachine.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/UsbDualRoleFeaturesQueryLocalMachine.c)
-
 ## RegistryMachin_* Keys
 
 These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
@@ -121,11 +113,9 @@ aRegistryMachin_1 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\us
 
 ## Miscellaneous Notes
 
-`AttemptRecoveryFromUsbPowerDrain` is used to stop USB devices when your screen is off, obviously only for laptop users.
+[`AttemptRecoveryFromUsbPowerDrain`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBHUB3/HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c) is used to stop USB devices when your screen is off, obviously only for laptop users.
 
 ```
 Stop USB devices when my screen is off to help battery.
 ```
 `Bluetooth & devices` > `USB` > `USB battery saver`
-
-- [power/assets | usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)

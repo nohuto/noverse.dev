@@ -105,12 +105,17 @@ export default defineConfig({
       ],
       title: 'Noverse Docs',
       description:
-        'Generated docs from win-config, regkit, and app-guides.',
+        'Docs from win-config, regkit, app-guides.',
       favicon: '/logo.png',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/nohuto' },
         { icon: 'discord', label: 'Discord', href: 'https://discord.noverse.dev' },
       ],
+      tableOfContents: {
+        minHeadingLevel: 2,
+        maxHeadingLevel: 6,
+      },
+      routeMiddleware: './src/route-data.ts',
       components: {
         Header: './src/components/starlight/Header.astro',
         PageTitle: './src/components/starlight/PageTitle.astro',

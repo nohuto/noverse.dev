@@ -3,7 +3,7 @@ title: 'USB Audio Idle'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 5
+  order: 6
 ---
 
 It's a mechanism (for audio drivers) for idle detection that switches an audio device between active `D0` (highest power state) and low power sleep (normally [`D3`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-sleeping-states#device-power-state-d3) = *lowest powered device low power state*), after the configured timeout expires.

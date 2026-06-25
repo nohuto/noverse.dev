@@ -3,7 +3,7 @@ title: 'NIC Power Savings'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 6
+  order: 7
 ---
 
 You can get a lot of information about data ranges and more from `.inf` files, see examples below.

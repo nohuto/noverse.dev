@@ -3,7 +3,7 @@ title: 'DXG Kernel Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 6
 ---
 
 ## Registry Values

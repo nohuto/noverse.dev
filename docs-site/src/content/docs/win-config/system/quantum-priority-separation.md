@@ -3,7 +3,7 @@ title: 'Quantum/Priority Separation'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 6
+  order: 9
 ---
 
 A quantum is the amount of time a thread is permitted to run before Windows checks to see whether another thread at the same priority is waiting to run. If a thread completes its quantum and there are no other threads at its priority, Windows permits the thread to run for another quantum.

@@ -185,6 +185,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "DefaultHeteroCpuPolicy" = 5; // KiDefaultHeteroCpuPolicy
     "DeviceOwnerProtectionDowngradeAllowed" = 0; // SeDeviceOwnerProtectionDowngradeAllowed
     "DisableControlFlowGuardExportSuppression" = 0; // PspDisableControlFlowGuardExportSuppression
+    "DisableControlFlowGuardXfg" = ? // MmDisableControlFlowGuardXfgOverride
     "DisableExceptionChainValidation" = 2; // PspSehValidationPolicy
     "DisableLightWeightSuspend" = 0; // KiDisableLightWeightSuspend, nonzero blocks lightweight suspend part in KiSuspendThread and uses the APC path (KiSuspendThread)
     "DisableLowQosTimerResolution" = 1; // KeDisableLowQosTimerResolution, uses ExpUpdateTimerResolution for specific processes etc? (PspSetProcessTimerResolutionPolicy)

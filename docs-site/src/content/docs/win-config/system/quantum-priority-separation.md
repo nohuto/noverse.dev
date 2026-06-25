@@ -127,27 +127,15 @@ Note that everything above is based on 23H2 and is not complete yet.
 
 I won't add much more details here since [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) contains details, see 'Quantum / Priority Boosts' (Chapter 3).
 
-- [ntoskrnl/PsChangeQuantumTable.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c)
-- [ntoskrnl/PspComputeQuantum.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PspComputeQuantum.c)
-- [ntoskrnl/PspInitPhase0.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PspInitPhase0.c)
-- [ntoskrnl/MmIsThisAnNtAsSystem.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/MmIsThisAnNtAsSystem.c)
-- [ntoskrnl/KeSetQuantumProcess.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeSetQuantumProcess.c)
-- [ntoskrnl/KeStartThread.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeStartThread.c)
-- [ntoskrnl/KiSetQuantumTargetThread.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiSetQuantumTargetThread.c)
-- [ntoskrnl/KiInitializeForegroundBoostThread.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiInitializeForegroundBoostThread.c)
-- [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiComputeEffectivePriority.c)
-- [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/NtSetSystemInformation.c)
-- [ntoskrnl/CmInitSystem0.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/CmInitSystem0.c)
-- [ntoskrnl/CmpGetSystemControlValues.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/CmpGetSystemControlValues.c)
-
 ---
 
 Miscellaneous notes:
+
 ```c
 // from procmon boot trace
 "HKLM\\System\\CurrentControlSet\\Control\\PriorityControl";
     "ConvertibilityEnabled" = ?;
     "ConvertibleSlateMode" = 0; // REG_DWORD
     "SystemDockMode" = ?;
-    "Win32PrioritySeparation" = 2;
+    "Win32PrioritySeparation" = 2; // REG_DWORD
 ```

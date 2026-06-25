@@ -42,6 +42,7 @@ html:not([data-has-sidebar]) {
     --nv-doc-main-width: 72rem;
     --nv-doc-cluster-gap: 1.5rem;
     --nv-doc-toc-width: clamp(13rem, 16vw, 18rem);
+    --nv-doc-active-toc-width: var(--nv-doc-toc-width);
   }
 
   html[data-has-sidebar][data-has-toc] .main-frame > .lg\:sl-flex {
@@ -80,7 +81,7 @@ html:not([data-has-sidebar]) {
   }
 
   html[data-has-sidebar][data-has-toc] .right-sidebar {
-    width: var(--nv-doc-toc-width);
+    width: var(--nv-doc-active-toc-width);
   }
 
   html[data-has-sidebar][data-has-toc] .right-sidebar-panel {
@@ -88,7 +89,7 @@ html:not([data-has-sidebar]) {
   }
 
   html[data-has-sidebar][data-has-toc] .right-sidebar-panel .sl-container {
-    width: 100%;
+    width: calc(var(--nv-doc-active-toc-width) - 2rem);
     max-width: none;
   }
 }
@@ -100,6 +101,21 @@ html:not([data-has-sidebar]) {
 }
 
 @media (min-width: 120rem) {
+  html[data-has-sidebar][data-has-toc] {
+    --nv-doc-active-toc-width: min(
+      30rem,
+      max(
+        var(--nv-doc-toc-width),
+        calc(
+          (
+              100vw - var(--sl-content-inline-start, var(--sl-sidebar-width)) -
+                var(--nv-doc-main-width) - var(--nv-doc-cluster-gap) + var(--nv-doc-toc-width)
+            ) / 2 - 1rem
+        )
+      )
+    );
+  }
+
   html[data-has-sidebar][data-has-toc] .main-frame > .lg\:sl-flex {
     justify-content: center;
   }

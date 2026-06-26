@@ -572,7 +572,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     // DpiPersistence::ReadDpiFromRegistry
     "DpiValue" = 0; // REG_DWORD, https://noverse.dev/docs/win-config/system/display-scaling/
 
-// miscellaneous PnP key values that I found while looking through xrefs of RtlQueryRegistryValuesEx within dxgkrnl/dxgmms2
+// miscellaneous (display adapter) PnP key values that I found while looking through xrefs of RtlQueryRegistryValuesEx within dxgkrnl/dxgmms2
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\XXXX";
     // DpiReadPnpRegistryValue

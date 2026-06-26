@@ -134,14 +134,14 @@ fffff800`3aee82f8  0000000a // 10
 
 ## SystemResponsiveness
 
-For other values than 100, [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c) splits `SchedulerPeriod` with `CiSystemResponsiveness`, see [`SchedulerPeriod`](https://noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section for more details on that. If `SystemResponsiveness == 100`, [`CiConfigInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigInitialize.c) returns before the rest of the values and the `Tasks` key are read, it also prevents scheduler initialization later in [`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CsInitialize.c), means as written above it disables MMCSS.
+For other values than 100, [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c) splits `SchedulerPeriod` with `CiSystemResponsiveness`, see [`SchedulerPeriod`](https://noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section for more details on that. If `SystemResponsiveness == 100`, [`CiConfigInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigInitialize.c) returns before the rest of the values and the `Tasks` key are read, it also prevents scheduler initialization later in [`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CsInitialize.c), means it disables MMCSS.
 
 ```c
 exhausted = SchedulerPeriod * CiSystemResponsiveness / 100
 boosted = SchedulerPeriod - (SchedulerPeriod * CiSystemResponsiveness / 100)
 ```
 
-During the boosted duration, scheduled MMCSS threads run at their task/category priority & during the exhausted duration, [`CiSchedulerSetPriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerSetPriority.c) lowers them to their exhausted priority (`1-7`), which gives lower priority work a chance to run.
+During the boosted duration, scheduled MMCSS threads run at their task priority & during the exhausted duration, [`CiSchedulerSetPriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerSetPriority.c) lowers them to their exhausted priority (`1-7`), which gives lower priority work a chance to run.
 
 `CiSystemResponsiveness` is also used later by [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) when checking idle/starvation state, so the value affects more than just the initial boosted/exhausted split.
 

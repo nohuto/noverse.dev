@@ -170,7 +170,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 
     // dwmcore CCommonRegistryData::InitializeDWMKeysFromRegistry
     "BackdropBlurCachingThrottleMs" = 25; // REG_DWORD (ms), >1000 = 1000, throttles cached backdrop blur invalidation/rebuilds
-    "CpuClipFlatteningTolerance" = 0; // REG_DWORD, stored as float(value / 1000)
+    "CpuClipFlatteningTolerance" = 0; // REG_DWORD
     "CustomRefreshRateMode" = 0; // REG_DWORD, range 0-2, >2 = default
     "DisableAdvancedDirectFlip" = 0; // REG_DWORD
     "DisableIndependentFlip" = 0; // REG_DWORD (bool)
@@ -180,11 +180,11 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ForceEffectMode" = 0; // REG_DWORD, range 0-2
     "FrameCounterPosition" = 0; // REG_DWORD (bool), nonzero sets vertical debug frame counter
     "InteractionOutputPredictionDisabled" = 0; // REG_DWORD (bool)
-    "OverlayTestMode" = 0; // REG_DWORD, 4 = forced MPO support, 5 = overlay/MPO disabled
+    "OverlayTestMode" = 0; // REG_DWORD, 4 = forced MPO support, 5 = MPO disabled
     "ParallelModePolicy" = 1; // REG_DWORD, range 0-2, >=3 = 1
     "ResampleInLinearSpace" = 0; // REG_DWORD bool, nonzero forces pixel format 91
     "ResampleModeOverride" = 0; // REG_DWORD, 0 = requested mode, 1 = Lanczos?, 2 = XBR?
-    "SDRBoostPercentOverride" = 0; // REG_DWORD, stored as float(value / 100)
+    "SDRBoostPercentOverride" = 0; // REG_DWORD
     "ShaderLinkingGPUBlacklist" = ?; // REG_SZ
 
     // dwm CSettingsManager preferences
@@ -285,7 +285,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 
     // dwmcore CCommonRegistryData::InitializeDWMKeysFromRegistry
     "ForceNonPrimaryDisplayAdapter" = 0; // REG_DWORD (bool)
-    "ImageProcessingResizeThreshold" = 0; // REG_DWORD, stored as float(value / 100)
+    "ImageProcessingResizeThreshold" = 0; // REG_DWORD
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\GpuAccelInkTiming";
     // dwmcore SuperWetTiming

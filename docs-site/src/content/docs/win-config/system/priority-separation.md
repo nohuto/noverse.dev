@@ -63,7 +63,7 @@ if ( !v2 || !PspUseJobSchedulingClasses )
   return *((_BYTE *)&PspForegroundQuantum + (PsPrioritySeparation & (unsigned int)-(a2 != 0))); // a2 == 0 uses index 0
 ```
 
-The ms were calculated while `KeMaximumIncrement` = `2625a`/`15.625 ms` (`5.208 ms` per QU on 23H2, `0.868 ms` per 24H2 `ShortThreadQuantum` QU), see '[Cycles per QU]()'.
+The ms were calculated while `KeMaximumIncrement` = `2625a`/`15.625 ms` (`5.208 ms` per QU on 23H2, `0.868 ms` per 24H2 `ShortThreadQuantum` QU), see '[Cycles per QU](https://noverse.dev/docs/win-config/system/priority-separation/#cycles-per-qu)'.
 
 | Quantum table | Index `0` | Index `1` | Index `2` |
 | --- | ---: | ---: | ---: |
@@ -203,7 +203,7 @@ Note that I've done that test on 23H2, and it *seems* to be fixed on 25H2 (haven
 >
 > — Windows Internals, [E7, P1: 'Quantum'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-The client default of two clock intervals is the background (index `0`) value, see '[Index Table]()'. The quote above is valid on 23H2, but with `ShortThreadQuantum` on 24H2, it makes each unit six times smaller (`clock interval / 18` instead of `clock interval / 3`) and adds a per thread `BamQosLevel` override (see '[QoS Quantum Override]()').
+The client default of two clock intervals is the background (index `0`) value, see '[Index Table](https://noverse.dev/docs/win-config/system/priority-separation/#index-table)'. The quote above is valid on 23H2, but with `ShortThreadQuantum` on 24H2, it makes each unit six times smaller (`clock interval / 18` instead of `clock interval / 3`) and adds a per thread `BamQosLevel` override (see '[QoS Quantum Override (`BamQosLevel`)](https://noverse.dev/docs/win-config/system/priority-separation/#qos-quantum-override-bamqoslevel)').
 
 ### Threads QuantumReset
 
@@ -288,11 +288,11 @@ LABEL_7:
 KiVariableQuantumEnabled = 1; // 01/client default
 ```
 
-See '[QoS Quantum Override (`BamQosLevel`)]()' to understand what `KiVariableQuantumEnabled` is used for.
+See '[QoS Quantum Override (`BamQosLevel`)](https://noverse.dev/docs/win-config/system/priority-separation/#qos-quantum-override-bamqoslevel)' to understand what `KiVariableQuantumEnabled` is used for.
 
 ### Long/Short Interval (`5:4`)
 
-Each table has six bytes, the first three are the short entries, the last three are the long entries, see '[Index Table]()' for the length differences.
+Each table has six bytes, the first three are the short entries, the last three are the long entries, see '[Index Table](https://noverse.dev/docs/win-config/system/priority-separation/#index-table)' for the length differences.
 
 | Bits `5:4` | Meaning |
 | --- | --- |

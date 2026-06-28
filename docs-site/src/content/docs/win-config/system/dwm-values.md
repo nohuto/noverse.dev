@@ -3,7 +3,7 @@ title: 'DWM Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 4
 ---
 
 DWM = Desktop Window Manager, the component *which allows for compositing visible window rendering into a single surface*. Instead of every application drawing directly to the display, each top level window normally produces content into an offscreen surface, and DWM combines the visible parts of those surfaces into the desktop image that's then presented on the monitor. Without DWM, each program would effectively draw into the visible desktop/output directly (which can cause [visual artifacts](https://github.com/nohuto/win32/blob/docs/desktop-src/LearnWin32/the-desktop-window-manager.md#the-desktop-window-manager) if a window doesn't repaint itself correctly), with DWM, each program draws into its own surface first, DWM then takes those surfaces and creates the final desktop image.

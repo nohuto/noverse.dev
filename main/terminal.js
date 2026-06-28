@@ -58,6 +58,7 @@ let consolePageShowHandler;
 let consoleResizeObserver;
 let consoleClampRaf = 0;
 let consoleAnimationCleanup = null;
+let bitmaskCleanup = null;
 
 const ASCII_ART = [
   '  \\  |                                    ',
@@ -630,6 +631,147 @@ function initConsole() {
     });
   };
 
+  const initBitmaskCalculator = () => {
+    bitmaskCleanup?.();
+    const layer = document.getElementById('bitmask-layer');
+    const dialog = document.getElementById('bitmask-window');
+    const handle = document.getElementById('bitmask-drag');
+    const closeButton = document.getElementById('bitmask-close');
+    const field = document.getElementById('bitmask-field');
+    const decOutput = document.getElementById('bitmask-dec');
+    const hexOutput = document.getElementById('bitmask-hex');
+    const binOutput = document.getElementById('bitmask-bin');
+    if (!layer || !dialog || !handle || !closeButton || !field || !decOutput || !hexOutput || !binOutput) return () => {};
+
+    let value = 0n;
+    let restoreFocus = null;
+
+    for (let byte = 3; byte >= 0; byte -= 1) {
+      const group = document.createElement('div');
+      group.className = 'bitmask-byte';
+      for (let offset = 7; offset >= 0; offset -= 1) {
+        const bit = byte * 8 + offset;
+        const cell = document.createElement('div');
+        const label = document.createElement('span');
+        const button = document.createElement('button');
+        cell.className = 'bitmask-bit-cell';
+        label.className = 'bitmask-bit-index';
+        label.textContent = String(bit);
+        button.type = 'button';
+        button.className = 'bitmask-bit';
+        button.dataset.bit = String(bit);
+        button.setAttribute('aria-pressed', 'false');
+        button.innerHTML = '<strong>0</strong>';
+        cell.append(label, button);
+        group.appendChild(cell);
+      }
+      field.appendChild(group);
+    }
+
+    const render = () => {
+      field.querySelectorAll('.bitmask-bit').forEach(button => {
+        const bit = BigInt(button.dataset.bit);
+        const active = (value & (1n << bit)) !== 0n;
+        button.setAttribute('aria-pressed', String(active));
+        button.setAttribute('aria-label', `Bit ${bit}: ${active ? 'on' : 'off'}`);
+        button.querySelector('strong').textContent = active ? '1' : '0';
+      });
+      decOutput.value = value.toString(10);
+      hexOutput.value = `0x${value.toString(16).toUpperCase().padStart(8, '0')}`;
+      binOutput.value = value.toString(2).padStart(32, '0').match(/.{8}/g).join(' ');
+    };
+
+    const clamp = () => {
+      if (layer.hidden) return;
+      const maxLeft = Math.max(12, layer.clientWidth - dialog.offsetWidth - 12);
+      const maxTop = Math.max(12, layer.clientHeight - dialog.offsetHeight - 12);
+      dialog.style.left = `${Math.min(Math.max(12, dialog.offsetLeft), maxLeft)}px`;
+      dialog.style.top = `${Math.min(Math.max(12, dialog.offsetTop), maxTop)}px`;
+    };
+
+    const center = () => {
+      dialog.style.left = `${Math.max(12, (layer.clientWidth - dialog.offsetWidth) / 2)}px`;
+      dialog.style.top = `${Math.max(12, (layer.clientHeight - dialog.offsetHeight) / 2)}px`;
+    };
+
+    const close = () => {
+      layer.hidden = true;
+      restoreFocus?.focus({ preventScroll: true });
+    };
+
+    const open = () => {
+      restoreFocus = document.activeElement;
+      layer.hidden = false;
+      requestAnimationFrame(() => {
+        if (dialog.dataset.positioned !== 'true') center();
+        else clamp();
+        field.querySelector('.bitmask-bit')?.focus({ preventScroll: true });
+      });
+    };
+
+    field.addEventListener('click', event => {
+      const button = event.target.closest('.bitmask-bit');
+      if (!button) return;
+      value ^= 1n << BigInt(button.dataset.bit);
+      render();
+    });
+    dialog.querySelector('.bitmask-actions').addEventListener('click', event => {
+      const action = event.target.closest('[data-bitmask-action]')?.dataset.bitmaskAction;
+      if (!action) return;
+      if (action === 'clear') value = 0n;
+      if (action === 'all') value = (1n << 32n) - 1n;
+      if (action === 'invert') value ^= (1n << 32n) - 1n;
+      render();
+    });
+    closeButton.addEventListener('click', close);
+    layer.addEventListener('click', event => {
+      if (event.target === layer) close();
+    });
+    const onKeyDown = event => {
+      if (event.key === 'Escape' && !layer.hidden) close();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    handle.addEventListener('pointerdown', event => {
+      if (event.button !== 0 || event.target.closest('button')) return;
+      event.preventDefault();
+      const startX = event.clientX;
+      const startY = event.clientY;
+      const startLeft = dialog.offsetLeft;
+      const startTop = dialog.offsetTop;
+      const maxLeft = Math.max(12, layer.clientWidth - dialog.offsetWidth - 12);
+      const maxTop = Math.max(12, layer.clientHeight - dialog.offsetHeight - 12);
+      handle.setPointerCapture(event.pointerId);
+
+      const move = moveEvent => {
+        dialog.style.left = `${Math.min(Math.max(12, startLeft + moveEvent.clientX - startX), maxLeft)}px`;
+        dialog.style.top = `${Math.min(Math.max(12, startTop + moveEvent.clientY - startY), maxTop)}px`;
+      };
+      const stop = () => {
+        dialog.dataset.positioned = 'true';
+        handle.releasePointerCapture(event.pointerId);
+        handle.removeEventListener('pointermove', move);
+        handle.removeEventListener('pointerup', stop);
+        handle.removeEventListener('pointercancel', stop);
+      };
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('pointerup', stop);
+      handle.addEventListener('pointercancel', stop);
+    });
+
+    const resizeObserver = window.ResizeObserver ? new ResizeObserver(clamp) : null;
+    resizeObserver?.observe(dialog);
+    window.addEventListener('resize', clamp);
+    bitmaskCleanup = () => {
+      resizeObserver?.disconnect();
+      document.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('resize', clamp);
+    };
+    render();
+    return open;
+  };
+
+  const openBitmaskCalculator = initBitmaskCalculator();
+
   const normalizePath = input => (input || '').replace(/\\/g, '/').trim();
   const trimSlashes = value => (value || '').replace(/^\/+|\/+$/g, '');
 
@@ -750,6 +892,7 @@ function initConsole() {
         ['docs', 'documentation sections'],
         ['bindiff', 'list decompiled-pseudocode links (used by bin-diff section)'],
         ['policies', 'list ADMX parser links (used by policies section)'],
+        ['bitmask', 'minimal (32 bit) bitmask calculator'],
         ['ls', 'list available directories'],
         ['cd <path>', 'change directory (./product, ./projects, ./bin-diff, ./policies, ./docs/<projectname>, ../)'],
         ['alias', 'list built-in aliases'],
@@ -847,6 +990,7 @@ function initConsole() {
         ['policyCategories.json', 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policyCategories.json']
       ]);
     },
+    bitmask: openBitmaskCalculator,
     contact: () => {
       addLine('contact:');
       addKeyValueLines([
@@ -1055,6 +1199,7 @@ function initConsole() {
     consoleFocusListener = e => {
       const activeInput = document.getElementById('console-command');
       if (!activeInput) return;
+      if (e.ctrlKey || e.metaKey || e.altKey || ['Control', 'Meta', 'Alt', 'Shift'].includes(e.key)) return;
       const target = e.target;
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.tagName === 'BUTTON' || target.isContentEditable)) {
         return;

@@ -66,6 +66,31 @@
             </div>
           </div>
         </div>
+        <div class="bitmask-layer" id="bitmask-layer" hidden>
+          <div class="bitmask-window" id="bitmask-window" role="dialog" aria-modal="true" aria-labelledby="bitmask-title">
+            <div class="bitmask-header" id="bitmask-drag">
+              <h2 id="bitmask-title">bitmask</h2>
+              <button class="bitmask-close" id="bitmask-close" type="button" aria-label="Close bitmask calculator" title="Close">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M18 6 6 18M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="bitmask-body">
+              <div class="bitmask-field" id="bitmask-field" aria-label="32-bit field"></div>
+              <div class="bitmask-values" aria-live="polite">
+                <div><span>DEC</span><output id="bitmask-dec">0</output></div>
+                <div><span>HEX</span><output id="bitmask-hex">0x00000000</output></div>
+                <div><span>BIN</span><output id="bitmask-bin">00000000 00000000 00000000 00000000</output></div>
+              </div>
+              <div class="bitmask-actions">
+                <button type="button" data-bitmask-action="invert">Invert</button>
+                <button type="button" data-bitmask-action="all">Set all</button>
+                <button type="button" data-bitmask-action="clear">Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>

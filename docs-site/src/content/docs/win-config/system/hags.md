@@ -3,7 +3,7 @@ title: 'HAGS'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 8
 ---
 
 [HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) (*Hardware-accelerated GPU scheduling*) changes who handles high frequency GPU scheduling work, classic WDDM uses a high priority CPU scheduler thread, HAGS offloads much of that scheduling/context switch work to a GPU scheduling processor. Note that `TEAS` in the dropdown = `TreatExperimentalAsStable`.

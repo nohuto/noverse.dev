@@ -934,7 +934,7 @@ main.main-terminal .terminal-shell {
   font-variant-numeric: tabular-nums;
 }
 
-.bitmask-values div {
+.bitmask-values label {
   width: min(370px, 100%);
   display: grid;
   grid-template-columns: 30px minmax(0, 1fr);
@@ -946,7 +946,7 @@ main.main-terminal .terminal-shell {
   color: var(--muted);
 }
 
-.bitmask-values output {
+.bitmask-values input {
   min-width: 0;
   height: 24px;
   padding: 0 6px;
@@ -957,6 +957,10 @@ main.main-terminal .terminal-shell {
   line-height: 22px;
   scrollbar-width: none;
   white-space: nowrap;
+}
+
+.bitmask-values input[aria-invalid="true"] {
+  border-color: var(--danger);
 }
 
 .bitmask-actions {

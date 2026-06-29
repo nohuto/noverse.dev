@@ -79,9 +79,9 @@
             <div class="bitmask-body">
               <div class="bitmask-field" id="bitmask-field" aria-label="32-bit field"></div>
               <div class="bitmask-values" aria-live="polite">
-                <div><span>DEC</span><output id="bitmask-dec">0</output></div>
-                <div><span>HEX</span><output id="bitmask-hex">0x00000000</output></div>
-                <div><span>BIN</span><output id="bitmask-bin">00000000 00000000 00000000 00000000</output></div>
+                <label><span>DEC</span><input id="bitmask-dec" type="text" value="0" inputmode="numeric" autocomplete="off" spellcheck="false"></label>
+                <label><span>HEX</span><input id="bitmask-hex" type="text" value="0x00000000" autocomplete="off" spellcheck="false"></label>
+                <label><span>BIN</span><input id="bitmask-bin" type="text" value="00000000 00000000 00000000 00000000" inputmode="numeric" autocomplete="off" spellcheck="false"></label>
               </div>
               <div class="bitmask-actions">
                 <button type="button" data-bitmask-action="invert">Invert</button>

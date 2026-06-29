@@ -638,13 +638,14 @@ function initConsole() {
     const handle = document.getElementById('bitmask-drag');
     const closeButton = document.getElementById('bitmask-close');
     const field = document.getElementById('bitmask-field');
-    const decOutput = document.getElementById('bitmask-dec');
-    const hexOutput = document.getElementById('bitmask-hex');
-    const binOutput = document.getElementById('bitmask-bin');
-    if (!layer || !dialog || !handle || !closeButton || !field || !decOutput || !hexOutput || !binOutput) return () => {};
+    const decInput = document.getElementById('bitmask-dec');
+    const hexInput = document.getElementById('bitmask-hex');
+    const binInput = document.getElementById('bitmask-bin');
+    if (!layer || !dialog || !handle || !closeButton || !field || !decInput || !hexInput || !binInput) return () => {};
 
     let value = 0n;
     let restoreFocus = null;
+    const maxValue = (1n << 32n) - 1n;
 
     for (let byte = 3; byte >= 0; byte -= 1) {
       const group = document.createElement('div');
@@ -668,7 +669,7 @@ function initConsole() {
       field.appendChild(group);
     }
 
-    const render = () => {
+    const render = source => {
       field.querySelectorAll('.bitmask-bit').forEach(button => {
         const bit = BigInt(button.dataset.bit);
         const active = (value & (1n << bit)) !== 0n;
@@ -676,9 +677,46 @@ function initConsole() {
         button.setAttribute('aria-label', `Bit ${bit}: ${active ? 'on' : 'off'}`);
         button.querySelector('strong').textContent = active ? '1' : '0';
       });
-      decOutput.value = value.toString(10);
-      hexOutput.value = `0x${value.toString(16).toUpperCase().padStart(8, '0')}`;
-      binOutput.value = value.toString(2).padStart(32, '0').match(/.{8}/g).join(' ');
+      const values = new Map([
+        [decInput, value.toString(10)],
+        [hexInput, `0x${value.toString(16).toUpperCase().padStart(8, '0')}`],
+        [binInput, value.toString(2).padStart(32, '0').match(/.{8}/g).join(' ')]
+      ]);
+      values.forEach((formatted, input) => {
+        if (input !== source) input.value = formatted;
+        input.removeAttribute('aria-invalid');
+      });
+    };
+
+    const parseValue = input => {
+      let raw = input.value.trim();
+      let pattern;
+      let prefix;
+      if (input === binInput) {
+        raw = raw.replace(/\s+/g, '').replace(/^0b/i, '');
+        pattern = /^[01]{1,32}$/;
+        prefix = '0b';
+      } else if (input === hexInput) {
+        raw = raw.replace(/^0x/i, '');
+        pattern = /^[0-9a-f]{1,8}$/i;
+        prefix = '0x';
+      } else {
+        pattern = /^\d{1,10}$/;
+        prefix = '';
+      }
+      if (!pattern.test(raw)) return null;
+      const parsed = BigInt(`${prefix}${raw}`);
+      return parsed <= maxValue ? parsed : null;
+    };
+
+    const updateFromInput = input => {
+      const parsed = parseValue(input);
+      if (parsed === null) {
+        input.setAttribute('aria-invalid', 'true');
+        return;
+      }
+      value = parsed;
+      render(input);
     };
 
     const clamp = () => {
@@ -715,12 +753,21 @@ function initConsole() {
       value ^= 1n << BigInt(button.dataset.bit);
       render();
     });
+    [decInput, hexInput, binInput].forEach(input => {
+      input.addEventListener('input', () => updateFromInput(input));
+      input.addEventListener('blur', () => render());
+      input.addEventListener('keydown', event => {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        input.blur();
+      });
+    });
     dialog.querySelector('.bitmask-actions').addEventListener('click', event => {
       const action = event.target.closest('[data-bitmask-action]')?.dataset.bitmaskAction;
       if (!action) return;
       if (action === 'clear') value = 0n;
-      if (action === 'all') value = (1n << 32n) - 1n;
-      if (action === 'invert') value ^= (1n << 32n) - 1n;
+      if (action === 'all') value = maxValue;
+      if (action === 'invert') value ^= maxValue;
       render();
     });
     closeButton.addEventListener('click', close);

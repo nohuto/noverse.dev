@@ -7,8 +7,8 @@ sidebar:
   order: 2
 ---
 
-- [Desktop Wallpaper](/docs/win-config/visibility/desktop-wallpaper/)
 - [Explorer Options](/docs/win-config/visibility/explorer-options/)
+- [Desktop Wallpaper](/docs/win-config/visibility/desktop-wallpaper/)
 - [Pointer Style](/docs/win-config/visibility/pointer-style/)
 - [Rounded Corners](/docs/win-config/visibility/disable-rounded-corners/)
 - [Night Light](/docs/win-config/visibility/night-light/)

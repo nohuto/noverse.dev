@@ -3,7 +3,7 @@ title: 'PSR'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 54
+  order: 55
 ---
 
 > "*Steps Recorder, also known as Problems Steps Recorder (PSR) in Windows 7, is a Windows inbox program that records screenshots of the desktop along with the annotated steps while recording the activity on the screen. The screenshots and annotated text are saved to a file for later viewing.*"

@@ -3,7 +3,7 @@ title: 'Message Sync'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 41
+  order: 42
 ---
 
 "This policy setting allows backup and restore of cellular text messages to Microsoft's cloud services. Disable this feature to avoid information being stored on servers outside of your organization's control."

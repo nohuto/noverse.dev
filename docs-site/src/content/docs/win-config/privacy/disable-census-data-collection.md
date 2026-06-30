@@ -3,7 +3,7 @@ title: 'Census Data Collection'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 50
+  order: 51
 ---
 
 `DeviceCensus.exe` = "Device and configuration data collection tool"

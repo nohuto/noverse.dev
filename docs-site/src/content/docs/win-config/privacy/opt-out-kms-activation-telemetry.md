@@ -3,7 +3,7 @@ title: 'Opt-Out KMS Activation Telemetry'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 45
+  order: 46
 ---
 
 Friendly name: `Turn off KMS Client Online AVS Validation`

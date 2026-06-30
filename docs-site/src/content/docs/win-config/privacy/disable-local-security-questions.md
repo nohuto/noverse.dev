@@ -3,7 +3,7 @@ title: 'Local Security Questions'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 47
+  order: 48
 ---
 
 Prevent the use of security questions for local accounts.

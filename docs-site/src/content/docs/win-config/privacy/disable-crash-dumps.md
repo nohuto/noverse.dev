@@ -3,7 +3,7 @@ title: 'Crash Dumps'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 37
+  order: 38
 ---
 
 Disables the crash dump, logging. Not all values may be read on your system.

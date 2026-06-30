@@ -3,7 +3,7 @@ title: 'WMPlayer Telemetry'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 55
+  order: 56
 ---
 
 WMPlayer (Windows Media Player) sends player usage data by default, if using the "Recommended ". This option turns off the `Diagnistics and Feedback` option, use the suboptions for further configuration.

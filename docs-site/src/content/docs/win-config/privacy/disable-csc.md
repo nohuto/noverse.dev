@@ -3,7 +3,7 @@ title: 'CSC'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 42
+  order: 43
 ---
 
 Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, disables `CSC`/`CscService`, disables the two `Offline Files` scheduled tasks (they're disabled by default), and renames `mobsync.exe` to block execution.

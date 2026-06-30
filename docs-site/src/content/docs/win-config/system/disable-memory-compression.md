@@ -32,6 +32,6 @@ PSComputerName               :
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress3.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true)

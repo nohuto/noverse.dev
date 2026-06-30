@@ -646,6 +646,12 @@ function initConsole() {
     let value = 0n;
     let restoreFocus = null;
     const maxValue = (1n << 32n) - 1n;
+    const isBitmaskHash = () => location.hash.toLowerCase() === '#bitmask';
+    const syncBitmaskHash = active => {
+      if (active === isBitmaskHash()) return;
+      const hash = active ? '#bitmask' : '';
+      history.replaceState(history.state, '', `${location.pathname}${location.search}${hash}`);
+    };
 
     for (let byte = 3; byte >= 0; byte -= 1) {
       const group = document.createElement('div');
@@ -732,12 +738,15 @@ function initConsole() {
       dialog.style.top = `${Math.max(12, (layer.clientHeight - dialog.offsetHeight) / 2)}px`;
     };
 
-    const close = () => {
+    const close = (syncUrl = true) => {
       layer.hidden = true;
+      if (syncUrl) syncBitmaskHash(false);
       restoreFocus?.focus({ preventScroll: true });
     };
 
-    const open = () => {
+    const open = (syncUrl = true) => {
+      if (syncUrl) syncBitmaskHash(true);
+      if (!layer.hidden) return;
       restoreFocus = document.activeElement;
       layer.hidden = false;
       requestAnimationFrame(() => {
@@ -777,7 +786,12 @@ function initConsole() {
     const onKeyDown = event => {
       if (event.key === 'Escape' && !layer.hidden) close();
     };
+    const onHashChange = () => {
+      if (isBitmaskHash()) open(false);
+      else if (!layer.hidden) close(false);
+    };
     document.addEventListener('keydown', onKeyDown);
+    window.addEventListener('hashchange', onHashChange);
     handle.addEventListener('pointerdown', event => {
       if (event.button !== 0 || event.target.closest('button')) return;
       event.preventDefault();
@@ -808,9 +822,12 @@ function initConsole() {
     const resizeObserver = window.ResizeObserver ? new ResizeObserver(clamp) : null;
     resizeObserver?.observe(dialog);
     window.addEventListener('resize', clamp);
+    const directOpenFrame = requestAnimationFrame(onHashChange);
     bitmaskCleanup = () => {
+      cancelAnimationFrame(directOpenFrame);
       resizeObserver?.disconnect();
       document.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('hashchange', onHashChange);
       window.removeEventListener('resize', clamp);
     };
     render();

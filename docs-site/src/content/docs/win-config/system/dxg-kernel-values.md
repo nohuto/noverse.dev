@@ -65,6 +65,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "KnownProcessBoostMode" = 1; // REG_DWORD, 25H2
     "SmallQuantumMode" = 1; // REG_DWORD, 25H2, 0 = disabled, 1 = auto (if GPU is MCDM adapter enabled), 2 = force enable
                             // related to VidSch scheduling quanta for GPU contexts
+                            // pnputil /enum-devices /class ComputeAccelerator
     "HighPriorityCompletionMode" = 1; // REG_DWORD, 25H2
     "GpuPriorityChangeMode" = 1; // REG_DWORD, 25H2
 

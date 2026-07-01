@@ -6,6 +6,14 @@ sidebar:
   order: 21
 ---
 
+Windows search provides content indexing, property caching, and search results for files, e-mail, and other content. Instead of using the explorer/windows start menu to search for a file/folder/app, use [`Everything`](https://www.voidtools.com/downloads/) for searching for files/folders and [SAB](https://www.startallback.com/) ([manual SAB activation](https://noverse.dev/docs/win-config/misc/startallback-config/#sab-activation)) as start menu. Note that enabling this option breaks the start menu, and apps like e.g. CmdPal (PowerToys) do need the `WSearch` service for the `File Search` extension to work.
+
+## Search Indexing
+
+[Search indexing](https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview) builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/searchindex.png?raw=true)
+
 ## Suboptions
 
 | **Suboption** | **Description** |
@@ -27,16 +35,6 @@ sidebar:
 | [Disable Web Results in Search](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
 | Disable Search Highlights | If enabled: "See content suggestions in the search boxi and in search home". |
 | Disable Web Search | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
-
-## Search Indexing
-
-[Search indexing](https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview) builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/searchindex.png?raw=true)
-
-Instead of using the explorer to search for a file or folder, use [`Everything`](https://www.voidtools.com/downloads/), it's a lot faster.
-
-The `WSearch` service is needed for CmdPals `File Search` extension to work.
 
 ## [Windows Policies](https://noverse.dev/policies)
 

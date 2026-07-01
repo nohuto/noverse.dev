@@ -3,7 +3,7 @@ title: 'Power Values'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 5
 ---
 
 Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation. No values are applied that apply to other options in this section.
@@ -11,6 +11,12 @@ Several values are applied, some have been changed, others are default values. T
 ## Registry Values
 
 See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
+
+| Prefix | Component |
+| --- | --- |
+| `PoFx` | Power Framework |
+| `Pop` | Power Manager |
+| `Ppm` | Processor Power Manager |
 
 Everything listed below is based on personal findings, mistakes may exist.
 
@@ -183,7 +189,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
 ```
 
-## [PowerThrottlingOff](https://www.noverse.dev/policies?p=Power*PowerThrottlingTurnOff)
+### [PowerThrottlingOff](https://noverse.dev/policies?p=Power*PowerThrottlingTurnOff)
 
 > "*The Quality of Service (QoS) associated with a thread is used to indicate the desired performance and power efficiency. Each thread is assigned to a QoS level. While scheduling priority remains the main metric by which the system determines which thread to schedule next, QoS can influence core selection and processor power management. On platforms with heterogeneous processors, the QoS of a thread may restrict scheduling to a subset of processors, or indicate a preference for a particular class of processor.*"
 >
@@ -200,7 +206,7 @@ See current value using WinDbg:
 dd nt!PpmPerfQosGroupPolicyDisable L1
 ```
 
-### Processor QoS
+#### Processor QoS
 
 [`PopInitializeHeteroProcessors`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PopInitializeHeteroProcessors.c) decides whether PPM (processor power management) QoS is allowed:
 
@@ -254,7 +260,7 @@ I currently don't know if the `KeActiveProcessors` offset is the same for all bu
 uf nt!KeQueryActiveProcessorCountEx
 ```
 
-### QoS Policies
+#### QoS Policies
 
 [`PpmPerfCalculateQosClassPolicies`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmPerfCalculateQosClassPolicies.c) also uses the value:
 
@@ -266,7 +272,7 @@ if ( PpmPerfQosGroupPolicyDisable )
 
 A nonzero value adds flag `0x100` & skips the remaining policy part for that class.
 
-### Idle Duration Expiration
+#### Idle Duration Expiration
 
 `v5 = 0` can also prevent one call to [`PpmIdleEnableIdleDurationExpirationTimeout`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmIdleEnableIdleDurationExpirationTimeout.c):
 
@@ -284,15 +290,15 @@ dd nt!PpmIdleDurationExpirationTimeout L1
 
 Everything above is based on 23H2, things changed a bit on 24H2, e.g. `PpmEcoQosProfile`/`PpmUtilityQosProfile` got added, but other parts seem to work the same.
 
-## Suboptions
+## [StorageD3InModernStandby](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/power-management-for-storage-hardware-devices-intro#d3-support)
 
-`Disable D3 in Modern Standby` isn't in the power key, but since the first suboption is already related to ModernStandby, and creating a new option for that would be too much, I'll add it here for now.
+Used in the `Disable D3 in Modern Standby` suboption, the value isn't in the power key, but since the first suboption is already related to ModernStandby, and creating a new option for that would be too much, I'll add it here for now.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage";
     "StorageD3InModernStandby" = 4294967295; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support
 ```
 
-> "*When the system is not in use, Windows may opportunistically turn off power to some set of devices to conserve energy. In Modern Standby, the system remains in S0. Even while in S0, all peripheral devices may eventually be powered down due to idle timeouts. This state is defined as "S0 Low Power Idle". Once all devices are in a low-power state, even more of the system infrastructure (e.g. busses, timers, …) may be powered down. The general rule of thumb is to place the device in the deepest possible D-state when it is idle, even when the system state is S0. Depending on implementation details of the processor complex and platform design, peripheral devices may be required to go to an F-state, D3 Hot, or D3 Cold (power is cut). To mitigate the need for a function driver to manage these implementation details, drivers should go to the deepest appropriate device state in order to maximize battery life.*"
+> "*When the system is not in use, Windows may opportunistically turn off power to some set of devices to conserve energy. In Modern Standby, the system remains in S0. Even while in S0, all peripheral devices may eventually be powered down due to idle timeouts. This state is defined as "S0 Low Power Idle". Once all devices are in a low-power state, even more of the system infrastructure (e.g. busses, timers, ...) may be powered down. The general rule of thumb is to place the device in the deepest possible D-state when it is idle, even when the system state is S0. Depending on implementation details of the processor complex and platform design, peripheral devices may be required to go to an F-state, D3 Hot, or D3 Cold (power is cut). To mitigate the need for a function driver to manage these implementation details, drivers should go to the deepest appropriate device state in order to maximize battery life.*"
 >
 > — Microsoft, [Power Management for Storage Hardware Devices, D3 Support](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/power-management-for-storage-hardware-devices-intro#d3-support)

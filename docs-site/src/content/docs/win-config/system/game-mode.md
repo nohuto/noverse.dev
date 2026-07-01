@@ -3,10 +3,10 @@ title: 'Game Mode'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 6
 ---
 
-Game Mode is a RM (Resource Manager) feature for a foreground process that Windows identifies as a game through `expandedResources` (or GCS data). Note that everything below is based on pseudocode (from 23H2, things might've changed in newer builds, see [bin-diff](https://www.noverse.dev/bin-diff)) and interpretations, this isn't official documentation just a personal attempt to document how Game Mode works, mistakes may exist and feel free to correct me. I don't claim that anything below is correct nor complete, that's just how I understood the sequence of Game Mode initialization + (un)registration. I've tried to link all functions that I used, for anyone who wants to take a look for themselves.
+Game Mode is a RM (Resource Manager) feature for a foreground process that Windows identifies as a game through `expandedResources` (or GCS data). Note that everything below is based on pseudocode (from 23H2, things might've changed in newer builds, see [bin-diff](https://noverse.dev/bin-diff)) and interpretations, this isn't official documentation just a personal attempt to document how Game Mode works, mistakes may exist and feel free to correct me. I don't claim that anything below is correct nor complete, that's just how I understood the sequence of Game Mode initialization + (un)registration. I've tried to link all functions that I used, for anyone who wants to take a look for themselves.
 
 It can apply CPU set policy, GPU scheduler/budget policy, optional process priority, optional Game Mode power profile notification, global Game Mode active state, optional expanded resource extension notification. The global state is updated through `WNF_RM_GAME_MODE_ACTIVE` (`RM` prefix in `WNF_RM_GAME_MODE_ACTIVE` = '*Game Mode Resource Manager*').
 
@@ -64,7 +64,7 @@ The `AllowAutoGameMode` value gets read by [`EvaluateAppForGameMode`](https://gi
 
 Obviously, this doesn't include every single part, rather I've tried to keep it simple and focus on the main parts.
 
-### 1 - Shell Entry
+### Shell Entry
 
 It starts in `twinui.pcshell.dll`, [`BroadcastDVRComponent::EvaluateAppForGameMode`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-EvaluateAppForGameMode@BroadcastDVRComponent@@AEAAXPEAUIApplicationView@@PEAUBroadcastDVRActive.c) is called if application change, application view change, Game Mode enable change tasks happen.
 
@@ -89,7 +89,7 @@ When the user enables Game Mode for the active window, [`OnGameModeEnableChangeT
 BroadcastDVRComponent::EvaluateAppForGameMode(this, v6, (HWND *)v7); // v6 = application view, v7 = active app info
 ```
 
-### 2 - Get Values
+### Get Values
 
 `EvaluateAppForGameMode` first gets the two values, a missing value passes, `0` blocks registration. Means if you set one of these values to `0`, all steps below won't run.
 
@@ -108,7 +108,7 @@ if ( (SHRegGetDWORD(
 
 Note that this is a AND logic (`&&`) so both must either be `1` or not present.
 
-### 3 - Check expandedResources
+### Check expandedResources
 
 `EvaluateAppForGameMode` first checks whether the active view has the `expandedResources` capability through [`BroadcastDVRComponent::IsExpandedResources`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-IsExpandedResources@BroadcastDVRComponent@@AEAAJPEAUIApplicationView@@PEA_N@Z.c) (this is separate from the public [`HasExpandedResources`](https://learn.microsoft.com/en-us/windows/win32/api/expandedresources/nf-expandedresources-hasexpandedresources) API in `gamemode.dll`).
 
@@ -126,7 +126,7 @@ if ( !v27 ) // fallback to GCS
 }
 ```
 
-### 4 - Resolve the Process
+### Resolve the Process
 
 It converts the active HWND (window handle) to a PID with [`GetWindowThreadProcessId`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowthreadprocessid). If the same PID is already registered, it doesn't register the primary process again.
 
@@ -173,7 +173,7 @@ if ( a2 )
 }
 ```
 
-### 5 - Build the Request
+### Build the Request
 
 It initializes a RM request, asks the service for the current request limits, then adds GCS and registry values in [`GetGameModeRequest`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-GetGameModeRequest@BroadcastDVRComponent@@AEAAXW4GameModeReason@@PEAUGameConfigInfo@@PEAU_RM_GA.c).
 
@@ -213,7 +213,7 @@ if ( (int)sub_180005FC0(&unk_180022A10, Binding) >= 0 )
 }
 ```
 
-### 6 - Set Defaults
+### Set Defaults
 
 [`RmGameModeInitializeResourceRequest`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/rmclient/RmGameModeInitializeResourceRequest.c) writes the default values into the request.
 
@@ -235,7 +235,7 @@ __int64 __fastcall RmGameModeInitializeResourceRequest(__int64 a1)
 }
 ```
 
-### 7 - Validate in the Service
+### Validate in the Service
 
 [`RmSrvGameModeRegisterProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmSrvGameModeRegisterProcess@@YAJPEAU_RM_SERVICE_GLOBALS@@PEAXPEAU_RM_GAME_MODE_RESOURCE_REQUES.c) receives the registration request inside the service, it validates the request in [`RmpGameModeIsResourceRequestValid`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeIsResourceRequestValid@@YAEPEAU_RM_SERVICE_GLOBALS@@PEAU_RM_GAME_MODE_RESOURCE_REQUE.c), then calls [`RmpGameModeRegisterProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeRegisterProcess@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAXPEAU_RM_GAME_MODE_RESOURCE_REQUES.c).
 
@@ -298,13 +298,13 @@ if ( *(_DWORD *)a2 == 6 ) // request version
 }
 ```
 
-### 8 - Create Process State
+### Create Process State
 
 After validation [`RmpGameModeRegisterProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeRegisterProcess@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAXPEAU_RM_GAME_MODE_RESOURCE_REQUES.c) turns the request into a service managed process state. The request is copied by [`RmpGameModeInitializeRecipientProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeInitializeRecipientProcess@@YAXPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RESOURCE.c), then [`RmpGameModeFindProcessOrCompleteInsertion`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeFindProcessOrCompleteInsertion@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAXPEAU_RM_GAME_MODE_.c) checks whether that PID is already known to the service.
 
 If it's a new PID, [`RmpGameModeAllocateObjectsForRecipientProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeAllocateObjectsForRecipientProcess@@YAJPEAU_RM_GAME_MODE_RECIPIENT_PROCESS@@PEAX@Z.c) prepares the service state for it, it creates the process exit wait object, opens its own process handle and stores the PID. [`RmpGameModeInsertRecipientProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeInsertRecipientProcess@@YAXPEAU_RM_GAME_MODE_RECIPIENT_PROCESS@@@Z.c) then adds that process state to the Game Mode context, starts the exit wait, and queues the policy worker.
 
-### 9 - Apply Resource Policies
+### Apply Resource Policies
 
 [`RmpGameModePolicyWorker`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModePolicyWorker@@YAXPEAU_TP_CALLBACK_INSTANCE@@PEAXPEAU_TP_WORK@@@Z.c) applies Game Mode policy. For newly registered processes it can acquire global resources (`RmpGameModeAcquireGlobalResources`), apply per process policies (`RmpGameModeApplyNewRecipientPolicies`), apply global policies (`RmpGameModeApplyGlobalPolicies`), release unused global resources (`RmpGameModeReleaseUnusedGlobalResources`).
 
@@ -333,7 +333,7 @@ while ( a2->Flink != a2 ) // a2 = list of processes waiting for policy applicati
 
 [`RmpGameModeAcquireAndApplyRecipientResources`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeAcquireAndApplyRecipientResources@@YAXPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_R.c) uses five resource policy entries and calls the apply function for each active entry. 
 
-More detail about them in [CPU set policy](https://www.noverse.dev/docs/win-config/system/game-mode/#cpu-sets), [GPU policy](https://www.noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget), [power profile state](https://www.noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state), [process priority](https://www.noverse.dev/docs/win-config/system/game-mode/#process-priority-class), [extension state](https://www.noverse.dev/docs/win-config/system/game-mode/#expanded-resource-extension-notification).
+More detail about them in [CPU set policy](https://noverse.dev/docs/win-config/system/game-mode/#cpu-sets), [GPU policy](https://noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget), [power profile state](https://noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state), [process priority](https://noverse.dev/docs/win-config/system/game-mode/#process-priority-class), [extension state](https://noverse.dev/docs/win-config/system/game-mode/#expanded-resource-extension-notification).
 
 ```c
 // RmpGameModeAcquireAndApplyRecipientResources
@@ -364,11 +364,11 @@ LABEL_11:
 }
 ```
 
-### 10 - Register Related Processes
+### Register Related Processes
 
 After primary registration, `twinui.pcshell.dll` stores the registered PID, gets the current non service process list and calls [`ApplyGameRelatedForGameModeProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-ApplyGameRelatedForGameModeProcess@BroadcastDVRComponent@@AEAAXKAEBV-$vector@U-$pair@KVString@I.c). It asks the game manager for related process names, compares process image names, and calls [`ApplyGameRelatedForRelatedProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-ApplyGameRelatedForRelatedProcess@BroadcastDVRComponent@@AEAAXKGK@Z.c) for matches.
 
-See more detail in [Related Processes](https://www.noverse.dev/docs/win-config/system/game-mode/#related-processes).
+See more detail in [Related Processes](https://noverse.dev/docs/win-config/system/game-mode/#related-processes).
 
 ```c
 // BroadcastDVRComponent::EvaluateAppForGameMode
@@ -382,11 +382,11 @@ BroadcastDVRComponent::GetSortedUniqueProcessList(v25, &v33, (char *)this + 352)
 BroadcastDVRComponent::TelemetryLogProcessesLaunchedWithGame(v26, (char *)this + 352);
 ```
 
-### 11 - Pair Auxiliary Processes
+### Pair Auxiliary Processes
 
 Related processes are paired with the primary process through `RmGameModeRegisterPairedAuxiliaryProcess`, they're matched by process image name against the related process list returned by the GCS/game manager.
 
-### 12 - End by Toggle Disable
+### End by Toggle Disable
 
 When Game Mode is disabled for the active HWND/PID, [`OnGameModeEnableChangeTask`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-OnGameModeEnableChangeTask@BroadcastDVRComponent@@AEAAXPEAUHWND__@@_N@Z.c) calls `RmGameModeDisableForRegisteredProcess`, then `RmGameModeUnregisterProcess`.
 
@@ -398,11 +398,11 @@ if ( v14 < 0 )
 v14 = RmGameModeUnregisterProcess(v13); // remove process
 ```
 
-### 13 - End by Process Exit or Focus Change
+### End by Process Exit or Focus Change
 
 The service also watches process lifetime with a threadpool wait. When the process terminates, paired auxiliary processes are cleared and the process is removed from Game Mode service state ([`RmpGameModeRecipientProcessTerminationCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeRecipientProcessTerminationCallback@@YAXPEAU_TP_CALLBACK_INSTANCE@@PEAXPEAU_TP_WAIT@.c)). Input focus changes queue the same policy worker so the active Game Mode state can move to another registered primary process ([`RmpSystemNotificationInputFocusChangeCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpSystemNotificationInputFocusChangeCallback@@YAJU_WNF_STATE_NAME@@KPEAU_WNF_TYPE_ID@@PEAXPEBX.c)).
 
-This can be validated using [`gm_effects`](https://www.noverse.dev/docs/win-config/system/game-mode#gm_effects) with the `--pid` argument, so you enable Game Mode, start the game, use `--pid` with the PID of the game, move the game to FG/BG. By doing so you'll see that the state changes.
+This can be validated using [`gm_effects`](https://noverse.dev/docs/win-config/system/game-mode#gm_effects) with the `--pid` argument, so you enable Game Mode, start the game, use `--pid` with the PID of the game, move the game to FG/BG. By doing so you'll see that the state changes.
 
 ```ini
 ; not in FG
@@ -493,9 +493,9 @@ Example with a game that sets itself to real time (there're probably any game de
 
 #### FG Boost with Game Mode
 
-Foreground boost is separate from process priority class, it's a temporary current priority increase for threads that belong to the foreground process. See [quantum-priority-separation/#bits-01](https://www.noverse.dev/docs/win-config/system/quantum-priority-separation/#bits-01) for more details on the topic itself. 
+Foreground boost is separate from process priority class, it's a temporary current priority increase for threads that belong to the foreground process. See '[PsPrioritySeparation (`1:0`)](https://noverse.dev/docs/win-config/system/priority-separation/#pspriorityseparation-10)' for more details on the topic itself. 
 
-You can test it by following the [watching-the-boost](https://www.noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) guide while using the main game thread instead of the first CPUSTRES thread, get the instance name of a TID via e,g,:
+You can test it by following the '[Watching the FG Priority Boost](https://noverse.dev/docs/win-config/system/priority-separation/#watching-the-fg-priority-boost)' guide while using the main game thread instead of the first CPUSTRES thread, get the instance name of a TID via e,g,:
 
 ```powershell
 $TID = # add TID
@@ -551,7 +551,7 @@ Game Mode can request CPU set allocation and apply CPU set restrictions and defa
 
 I've tried to see differences between on/off within Overwatch/CS2, but `GetProcessDefaultCpuSets` returned `DefaultCpuSetCount=0` even while Game Mode was active. Other games I tested were Forza Horizon 5/Cyberpunk 2077 which don't register with Game Mode at all.
 
-During registration ([9 - Apply Resource Policies](https://www.noverse.dev/docs/win-config/system/game-mode/#9---apply-resource-policies)), [`RmpGameModeAcquireCpuSetAllocation`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeAcquireCpuSetAllocation@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_P.c) asks the CPU set manager for a valid allocation, the CPU set manager chooses the actual CPU sets from the request and current system CPU set state, then [`RmpCpuSetManagerApplySystemAllowedMask`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpCpuSetManagerApplySystemAllowedMask@@YAJPEAU_RM_CPU_SET_MANAGER@@@Z.c) can reduce the CPU sets available to general system activity. [`RmpGameModeTryApplyCpuSetAllocation`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeTryApplyCpuSetAllocation@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_.c) then applies that allocation to the registered process.
+During registration ([9 - Apply Resource Policies](https://noverse.dev/docs/win-config/system/game-mode/#9---apply-resource-policies)), [`RmpGameModeAcquireCpuSetAllocation`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeAcquireCpuSetAllocation@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_P.c) asks the CPU set manager for a valid allocation, the CPU set manager chooses the actual CPU sets from the request and current system CPU set state, then [`RmpCpuSetManagerApplySystemAllowedMask`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpCpuSetManagerApplySystemAllowedMask@@YAJPEAU_RM_CPU_SET_MANAGER@@@Z.c) can reduce the CPU sets available to general system activity. [`RmpGameModeTryApplyCpuSetAllocation`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeTryApplyCpuSetAllocation@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_.c) then applies that allocation to the registered process.
 
 The final calls are [`RmpSystemSetProcessDefaultCpuSets`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpSystemSetProcessDefaultCpuSets@@YAJPEAXPEA_K@Z.c) (preferred selection), [`RmpSystemSetProcessConstrainedCpuSets`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpSystemSetProcessConstrainedCpuSets@@YAJPEAXE@Z.c) (limit to selected CPU sets), [`RmpSystemSetProcessAllowedCpuSets`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpSystemSetProcessAllowedCpuSets@@YAJPEAXPEA_K@Z.c) (updated when the allocation changes).
 
@@ -657,7 +657,7 @@ if ( (unsigned int)result > 8 )
   *v34 = v35; // invalid yield falls back to HKCU value
 ```
 
-The service validates the final request in [`RmpGameModeIsResourceRequestValid`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeIsResourceRequestValid@@YAEPEAU_RM_SERVICE_GLOBALS@@PEAU_RM_GAME_MODE_RESOURCE_REQUE.c) with ranges listed in [7 - Validate in the Service](https://www.noverse.dev/docs/win-config/system/game-mode/#7---validate-in-the-service). The actual graphics update is in [`RmpGameModeTryApplyGraphicsPriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeTryApplyGraphicsPriority@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_.c), Game Mode saves the original graphics settings during initialization, applies the Game Mode values while active, and restores the saved values when Game Mode is removed.
+The service validates the final request in [`RmpGameModeIsResourceRequestValid`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeIsResourceRequestValid@@YAEPEAU_RM_SERVICE_GLOBALS@@PEAU_RM_GAME_MODE_RESOURCE_REQUE.c) with ranges listed in [7 - Validate in the Service](https://noverse.dev/docs/win-config/system/game-mode/#7---validate-in-the-service). The actual graphics update is in [`RmpGameModeTryApplyGraphicsPriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeTryApplyGraphicsPriority@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_.c), Game Mode saves the original graphics settings during initialization, applies the Game Mode values while active, and restores the saved values when Game Mode is removed.
 
 ```c
 // RmpGameModeTryApplyGraphicsPriority
@@ -727,7 +727,7 @@ return NtUpdateWnfStateData(&WNF_SEB_GAME_MODE, &v2, 8LL, 0LL, 0LL, 0, 0);
 
 When enabled, WNF uses low value `3`, when disabled, it uses low value `1`. The high value stays `0xFFFFFFFF` in both cases. The GameMode profile has one processor override `Minimum processor state` = `100%` for AC/DC (note that you won't see the changes via powercfg, as these are profile values not a scheme).
 
-You can use [`gm_effects`](https://www.noverse.dev/docs/win-config/system/game-mode#gm_effects) to see what value is set.
+You can use [`gm_effects`](https://noverse.dev/docs/win-config/system/game-mode#gm_effects) to see what value is set.
 
 [`BroadcastDVRComponent::IsUsingPowerProfile`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-IsUsingPowerProfile@BroadcastDVRComponent@@AEAA_NAEBU_GUID@@@Z.c) checks whether the active power scheme is `GUID_MIN_POWER_SAVINGS` (High Performance), the request builder uses that result as "already using a performance plan". In the default cases, it asks the service for the GameMode power profile only when the current plan isn't High Performance (`GUID_MIN_POWER_SAVINGS` has `PROCTHROTTLEMIN`/`PROCTHROTTLEMIN1` at `100` by default).
 
@@ -820,13 +820,13 @@ else
 ## Summary (& Opinion)
 
 - WU driver updates/automatic restarts/restart notifications shouldn't be enabled, so that behavior doesn't matter.
-- [Process priority class](https://www.noverse.dev/docs/win-config/system/game-mode/#process-priority-class) can prevent a game from setting itself to `REALTIME_PRIORITY_CLASS` as Game Mode would overwrite that with `NORMAL_PRIORITY_CLASS`. If a game doesn't have such issues, the priority classes Game Mode uses are usually similar to what normal games already use.
-- Game Mode prevents the FG boost from happening (tested on 23H2), if you don't use `PsPrioritySeparation` FG boost (`1`/`2`), then this doesn't matter (follow [watching-the-boost](https://www.noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) but with the game, as said in the section).
-- I haven't seen any game yet where Game Mode applied [CPU Sets](https://www.noverse.dev/docs/win-config/system/game-mode/#cpu-sets) through `GetProcessDefaultCpuSets`, if Game Mode chose proper CPU set IDs, this could be useful, but I wouldn't trust Microsoft with that.
-- [GPU policy](https://www.noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget) should only be noticeable if the system has GPU scheduling (`D3DKMTSetYieldPercentage`, means when there's a lot of GPU work in the background, see '[GPU yield percentage](https://www.noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget)' description?) or GPU memory issues (if VRAM is kind of used while background processes need GPU memory, e.g. high quality captures?).
-- [Game Mode power profile](https://www.noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state) doesn't seem to have any effect when the active scheme is already `GUID_MIN_POWER_SAVINGS` or a modified version of that scheme (must be GUID of `GUID_MIN_POWER_SAVINGS`, so not a copied version of it).
+- [Process priority class](https://noverse.dev/docs/win-config/system/game-mode/#process-priority-class) can prevent a game from setting itself to `REALTIME_PRIORITY_CLASS` as Game Mode would overwrite that with `NORMAL_PRIORITY_CLASS`. If a game doesn't have such issues, the priority classes Game Mode uses are usually similar to what normal games already use.
+- Game Mode prevents the FG boost from happening (tested on 23H2), if you don't use `PsPrioritySeparation` FG boost (`1`/`2`), then this doesn't matter (follow '[Watching the FG Priority Boost](https://noverse.dev/docs/win-config/system/priority-separation/#watching-the-fg-priority-boost)' but with the game, as said in the section).
+- I haven't seen any game yet where Game Mode applied [CPU Sets](https://noverse.dev/docs/win-config/system/game-mode/#cpu-sets) through `GetProcessDefaultCpuSets`, if Game Mode chose proper CPU set IDs, this could be useful, but I wouldn't trust Microsoft with that.
+- [GPU policy](https://noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget) should only be noticeable if the system has GPU scheduling (`D3DKMTSetYieldPercentage`, means when there's a lot of GPU work in the background, see '[GPU yield percentage](https://noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget)' description?) or GPU memory issues (if VRAM is kind of used while background processes need GPU memory, e.g. high quality captures?).
+- [Game Mode power profile](https://noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state) doesn't seem to have any effect when the active scheme is already `GUID_MIN_POWER_SAVINGS` or a modified version of that scheme (must be GUID of `GUID_MIN_POWER_SAVINGS`, so not a copied version of it).
 
-FPS testing isn't a good way to decide whether Game Mode has any benefits for you, rather check whether the game registers with Game Mode at all, whether the game already sets priority class correctly itself, whether CPU sets are applied, and if they are applied, which CPU set IDs are used. Use [gm_effects](https://www.noverse.dev/docs/win-config/system/game-mode#gm_effects)/WPR (see below, I'll add more on it soon to see if it's actually useful, since wevtutil doesn't show events)/SI for it.
+FPS testing isn't a good way to decide whether Game Mode has any benefits for you, rather check whether the game registers with Game Mode at all, whether the game already sets priority class correctly itself, whether CPU sets are applied, and if they are applied, which CPU set IDs are used. Use [gm_effects](https://noverse.dev/docs/win-config/system/game-mode#gm_effects)/WPR (see below, I'll add more on it soon to see if it's actually useful, since wevtutil doesn't show events)/SI for it.
 
 ```powershell
 Provider: Microsoft.Windows.ResourceManager

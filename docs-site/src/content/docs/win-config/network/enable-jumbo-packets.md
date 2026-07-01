@@ -20,7 +20,7 @@ As the name says ("Jumbo"), it is used for big packets, you won't use this featu
 
 ## Setup Information
 
-```inf
+```c
 HKR, Ndi\params\*JumboPacket,	ParamDesc,	0, %JumboPacket%
 HKR, Ndi\params\*JumboPacket,	Type,		0, "enum"
 HKR, Ndi\params\*JumboPacket\enum,	"0",	0, "%Bytes1514%"

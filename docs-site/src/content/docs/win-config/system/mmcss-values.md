@@ -3,10 +3,10 @@ title: 'MMCSS Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 1
 ---
 
-Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://www.noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds)/ WPR (`Microsoft-Windows-MMCSS` provider).
+Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds)/ WPR (`Microsoft-Windows-MMCSS` provider).
 
 > "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
 >
@@ -20,10 +20,33 @@ CurrentThread = KeGetCurrentThread();
 CiThreadsMovedUp = 1;
 CiSchedulerThread = CurrentThread;
 CiSchedulerInLazyMode = 0;
-KeSetActualBasePriorityThread(CurrentThread, 27LL); // worker priority
+KeSetActualBasePriorityThread(CurrentThread, 27LL); // scheduler thread priority
 ```
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mmcssprio.png?raw=true)
+
+You can practically also see the priority of `CiSchedulerThread` using WinDbg:
+
+```c
+lkd> dq mmcss!CiSchedulerThread L1
+fffff800`3aee8298  ffffe409`67145040
+
+lkd> !thread ffffe409`67145040
+THREAD ffffe40967145040  Cid 0004.0a2c  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT: (Executive) KernelMode Alertable
+    ffffe409634683b0  Timer2SynchronizationObject
+Not impersonating
+DeviceMap                 ffff840575e1a610
+Owning Process            ffffe4095d502080       Image:         System
+Attached Process          N/A            Image:         N/A
+Wait Start TickCount      224914         Ticks: 28 (0:00:00:00.437)
+Context Switch Count      376449         IdealProcessor: 2             
+UserTime                  00:00:00.000
+KernelTime                00:00:00.000
+Win32 Start Address 0xfffff8003aee2e60
+Stack Init fffffa80b5f7fc30 Current fffffa80b5f7f350
+Base fffffa80b5f80000 Limit fffffa80b5f79000 Call 0000000000000000
+Priority 27  BasePriority 27  Priority Floor 27  IoPriority 2  PagePriority 5
+```
 
 ## Registry Values
 
@@ -42,17 +65,87 @@ All values below are read via [`CiConfigReadDWORD`](https://github.com/nohuto/de
     "MaxThreadsTotal" = 256; // range 64-65535
 ```
 
+### DriverStart + RVAs
+
+Everything below isn't needed when reloading the MMCSS module, simple way:
+
+```c
+lkd> .reload /f mmcss.sys
+lkd> lm m mmcss
+Browse full module list
+start             end                 module name
+fffff801`890e0000 fffff801`890f6000   mmcss      (pdb symbols)          C:\ProgramData\Dbg\sym\mmcss.pdb\9E36707273FDF82AB362DBA6ACCC09671\mmcss.pdb
+lkd> dd mmcss!CiSystemResponsiveness L1
+fffff801`890e82f8  00000014
+lkd> dd mmcss!CiNetworkThrottlingIndex L1
+fffff801`890e81c0  0000000a
+lkd> db mmcss!CiSchedulerDisallowLazyMode L1
+fffff801`890e82d5  00                                               .
+lkd> dd mmcss!CiSchedulerIdleDetectionCycles L1
+fffff801`890e828c  00000002
+lkd> dd mmcss!CiSchedulerLazyModeTimeout L1
+fffff801`890e81c4  000f4240
+lkd> dd mmcss!CiSchedulerTimerResolution L1
+fffff801`890e81c8  00002710
+lkd> dd mmcss!CiSchedulerPeriod L1
+fffff801`890e81cc  000186a0
+lkd> dd mmcss!CiMaxThreadsTotal L1
+fffff801`890e8090  00000100
+lkd> dd mmcss!CiMaxThreadsPerProcess L1
+fffff801`890e8094  00000020
+```
+
+A different way to read current values is via RVAs (*Relative Virtual Address*, means an address relative to the modules image base), to do so get the `DriverStart` address + the RVA of whatever you want to read.
+
+```c
+lkd> !drvobj MMCSS
+Driver object (ffffb68b3754ba70) is for:
+ \Driver\MMCSS
+
+Driver Extension List: (id , addr)
+
+Device Object list:
+ffffb68b375dfca0  
+lkd> dt nt!_DRIVER_OBJECT ffffb68b3754ba70 DriverStart
+   +0x018 DriverStart : 0xfffff801`890e0000 Void
+
+// or just via lm
+
+lkd> lm m mmcss
+Browse full module list
+start             end                 module name
+fffff801`890e0000 fffff801`890f6000   mmcss      (pdb symbols)          C:\ProgramData\Dbg\sym\mmcss.pdb\9E36707273FDF82AB362DBA6ACCC09671\mmcss.pdb
+```
+
+So for example you want to read the current value of `CiSystemResponsiveness` (IDA):
+
+```asm
+.data:00000001C00082F8 CiSystemResponsiveness dd 0
+```
+
+Get the current image base from `Edit > Segments > Rebase program` (`0x1C0000000` for me), and subtract it from the address above, means `0x1C00082F8 - 0x1C0000000 = 0x82F8` which is the RVA for `CiSystemResponsiveness`.
+
+Then use the `DriverStart` address + RVA:
+
+```c
+lkd> dd 0xfffff801`890e82F8 L1
+fffff800`3aee82f8  0000000a // 10
+```
+
 ## SystemResponsiveness
 
-If `SystemResponsiveness == 100`, [`CiConfigInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigInitialize.c) returns before the rest of the values and the `Tasks` key are read, it also prevents scheduler initialization later in [`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CsInitialize.c), means as written above it disables MMCSS.
+For other values than 100, [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c) splits `SchedulerPeriod` with `CiSystemResponsiveness`, see [`SchedulerPeriod`](https://noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section for more details on that. If `SystemResponsiveness == 100`, [`CiConfigInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigInitialize.c) returns before the rest of the values and the `Tasks` key are read, it also prevents scheduler initialization later in [`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CsInitialize.c), means it disables MMCSS.
+
+```c
+exhausted = SchedulerPeriod * CiSystemResponsiveness / 100
+boosted = SchedulerPeriod - (SchedulerPeriod * CiSystemResponsiveness / 100)
+```
+
+During the boosted duration, scheduled MMCSS threads run at their task priority & during the exhausted duration, [`CiSchedulerSetPriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerSetPriority.c) lowers them to their exhausted priority (`1-7`), which gives lower priority work a chance to run.
+
+`CiSystemResponsiveness` is also used later by [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) when checking idle/starvation state, so the value affects more than just the initial boosted/exhausted split.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
-
-For other values than 100, [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c) splits `SchedulerPeriod` with `CiSystemResponsiveness`, see [`SchedulerPeriod`](https://www.noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section for more details on that.
-
-> "*Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*"
->
-> — Microsoft, [Multimedia Class Scheduler Service](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
 
 ```c
 // CiConfigInitialize
@@ -140,7 +233,7 @@ MMCSS samples CPU idle/starvation (`CiPotentiallyStarvedProcessors`) state and i
 
 `NoLazyMode = 1` only disables idle detection, causing `IdleDetection` & `IdleDetectionLazy` to disappear. It doesn't disable the normal boosted/exhausted sleeps (`Realtime`/`SleepResponsiveness`), `DeepSleep`, or an already set lazy state sleep (`SleepRealtimeLazy`). That's also why the `SchedulerPeriod` split is visible with `NoLazyMode = 1`, as `Realtime`/`SleepResponsiveness` use the boosted/exhausted durations (with `NoLazyMode = 0` it would show that as `IdleDetection`).
 
-You can see that in the picture of the [SchedulerPeriod](https://www.noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section.
+You can see that in the picture of the [SchedulerPeriod](https://noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section.
 
 ```c
 // CiConfigInitialize
@@ -166,6 +259,29 @@ if ( !CiSchedulerDisallowLazyMode )
 | `IdleDetection` | idle history exists but hasn't reached `CiSchedulerIdleCycleBitMask` | `SchedulerPeriod` |
 | `IdleDetectionLazy` | idle history reached `CiSchedulerIdleCycleBitMask` | `LazyModeTimeout` |
 | `DeepSleep` | [`CiSchedulerDeepSleep`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerDeepSleep.c) | `4,294,967,295` |
+
+```xml
+<bitMap name="wakeupReasonMap">
+  <map value="0x1" message="$(string.map_wakeupReasonMapNewThread)"/>
+  <map value="0x2" message="$(string.map_wakeupReasonMapProcessResume)"/>
+  <map value="0x4" message="$(string.map_wakeupReasonMapProcessSuspend)"/>
+  <map value="0x8" message="$(string.map_wakeupReasonMapExit)"/>
+  <map value="0x10" message="$(string.map_wakeupReasonMapInternalDeadline)"/>
+  <map value="0x20" message="$(string.map_wakeupReasonMapYieldDeadline)"/>
+  <map value="0x80" message="$(string.map_wakeupReasonMapNoClientThreads)"/>
+  <map value="0x8000" message="$(string.map_wakeupReasonMapDeepSleep)"/>
+</bitMap>
+<valueMap name="sleepReasonMap">
+  <map value="0x0" message="$(string.map_sleepReasonMapSleepResponsiveness)"/>
+  <map value="0x1" message="$(string.map_sleepReasonMapRealtime)"/>
+  <map value="0x2" message="$(string.map_sleepReasonMapSleepRealtimeLazy)"/>
+  <map value="0x3" message="$(string.map_sleepReasonMapIdleDetection)"/>
+  <map value="0x4" message="$(string.map_sleepReasonMapIdleDetectionLazy)"/>
+  <map value="0x5" message="$(string.map_sleepReasonMapDeepSleep)"/>
+</valueMap>
+```
+
+- [Manifests-Win10-18990/Microsoft-Windows-MMCSS.xml](https://github.com/repnz/etw-providers-docs/blob/master/Manifests-Win10-18990/Microsoft-Windows-MMCSS.xml)
 
 ## IdleDetectionCycles
 
@@ -333,6 +449,15 @@ v9 = CiTryIncrementTotalThreadCount(&CiTotalThreads, CiMaxThreadsTotal);
 v9 = CiTryIncrementTotalThreadCount((volatile signed __int32 *)(v8 + 92), CiMaxThreadsPerProcess);
 ```
 
+You can use WinDbg to see the current total:
+
+```c
+lkd> dd mmcss!CiTotalThreads L1
+fffff800`3aee82d0  00000004
+```
+
+You can also get MMCSS thread counts from processes via WinDbg but thats not as simple which is why I won't add it here.
+
 ## Tasks
 
 > *MMCSS uses information stored in the registry to identify supported tasks and determine the relative priority of threads performing these tasks. Each thread that is performing work related to a particular task calls the [AvSetMmMaxThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmmaxthreadcharacteristicsa) or [AvSetMmThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsa) function to inform MMCSS that it is working on that task.*"
@@ -376,7 +501,7 @@ Some additional notes:
 
 This part `For tasks with a Scheduling Category of High, this value is always treated as 2.` doesn't refer to the exhausted priority, only to the boosted priority. `Priority` gets stored as `prio - 1`, means 2 = 1, 3 = 2 etc., value 1 (which would be 0) gets clamped to 1 when calculating the exhausted priority. This doesn't mean that 1 and 2 are the same (they've the same exhaused priority), but boosted priority still differs.
 
-The boosted priority gets calculated using the `Scheduling Category` and the `Priority` value (after subtraction), so if using category `Medium` + priority of `6` the boosted priority would be `16 + 5 = 21`. If using category `High` and `Priority = 6`, the exhausted priority would be `5`, but the boosted base is forced to `24` (by [`CiConfigTaskPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigTaskPolicy.c)). Relative priority can then move that boosted value within `23-26` (see [relative-priorities](https://www.noverse.dev/docs/win-config/system/mmcss-values/#relative-priorities)), means:
+The boosted priority gets calculated using the `Scheduling Category` and the `Priority` value (after subtraction), so if using category `Medium` + priority of `6` the boosted priority would be `16 + 5 = 21`. If using category `High` and `Priority = 6`, the exhausted priority would be `5`, but the boosted base is forced to `24` (by [`CiConfigTaskPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigTaskPolicy.c)). Relative priority can then move that boosted value within `23-26` (see [relative-priorities](https://noverse.dev/docs/win-config/system/mmcss-values/#relative-priorities)), means:
 
 ```c
 // Low/Medium

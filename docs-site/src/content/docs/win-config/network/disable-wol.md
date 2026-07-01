@@ -33,7 +33,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 ### Setup Information
 
 `Disable Wait for Link`:
-```inf
+```c
 , Wait for Link
 HKR, Ndi\Params\WaitAutoNegComplete,            ParamDesc,              0, %WaitAutoNegComplete%
 HKR, Ndi\Params\WaitAutoNegComplete,            default,                0, "2"
@@ -43,7 +43,7 @@ HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "2",                    0, %Auto
 HKR, Ndi\Params\WaitAutoNegComplete,            type,                   0, "enum"
 ```
 
-```inf
+```c
 HKR, Ndi\Params\*WakeOnMagicPacket,		ParamDesc,	0, 	%MagicPacket%
 HKR, Ndi\Params\*WakeOnMagicPacket,		Type,		0, 	"enum"
 HKR, Ndi\Params\*WakeOnMagicPacket\enum,	"1",		0, 	%Enabled%

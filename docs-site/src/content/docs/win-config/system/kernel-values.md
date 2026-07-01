@@ -3,22 +3,169 @@ title: 'Kernel Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 6
+  order: 5
 ---
 
-Since many people don't yet know which values exist and what default value they have, here's a list. I used [IDA](https://discord.com/channels/836870260715028511/836896618410278952/1492546690413236425), WinDbg, [WinObjEx](https://github.com/hfiref0x/WinObjEx64), [Windows Internals E7 P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
+## CmControlVector
+
+CM = configuration manager, it loads & manages registry hives, inserts the `\REGISTRY` key object into the namespace and more. See regkits '[Registry fundamentals](https://noverse.dev/docs/regkit/overview/#registry-fundamentals)' documentation for more information on the topic.
+
+`CmControlVector` is a table used by [`CmpGetSystemControlValues`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/CmpGetSystemControlValues.c) while early CM init. Each entry is `0x30` bytes (six pointers), this is just a simple way to imagine each block:
+
+```c
+struct CM_CONTROL_VECTOR_ENTRY {
+  PCWSTR KeyPath; // relative to \CurrentControlSet\Control
+  PCWSTR ValueName; // registry value name
+  PVOID  Destination; // kernel global receiving the data
+  PULONG Length; // defaults to 4 bytes when NULL (optional)
+  PULONG Type; // registry type (optional)
+  ULONG_PTR Flags; // checked for ControlSetOverride (optional)
+};
+```
+
+The function first opens the active control set and then the `control` key, means the key paths are relative to `HKLM\SYSTEM\CurrentControlSet\Control`.
+
+```c
+// CmpGetSystemControlValues
+
+RtlInitUnicodeString(&DestinationString, L"current"); // active control set
+ControlSet = CmpFindControlSet((ULONG_PTR)&CmControlHive, v7, (int)&DestinationString, (_BYTE *)&v28 + 1);
+if ( ControlSet == -1 )
+  KeBugCheckEx(0x74u, 1uLL, 2uLL, (ULONG_PTR)&CmControlHive, (ULONG_PTR)&DestinationString);
+
+RtlInitUnicodeString(&DestinationString, L"control"); // "base key" for CmControlVector
+SubKeyByName = CmpFindSubKeyByName((ULONG_PTR)&CmControlHive);
+if ( SubKeyByName == -1 )
+  KeBugCheckEx(0x74u, 1uLL, 3uLL, v10, (ULONG_PTR)&DestinationString);
+```
+
+Table walk related snippets:
+
+```c
+// CmpGetSystemControlValues
+
+v3 = CmControlVector; // first table entry
+
+if ( a3 != 1 || *((_BYTE *)v3 + 40) ) // low byte of Flags
+
+v14 = CmpWalkPath((ULONG_PTR)&CmControlHive, SubKeyByName, *v3); // KeyPath
+
+RtlInitUnicodeString(&DestinationString, v3[1]); // ValueName
+ValueByName = CmpFindValueByName((int)&CmControlHive, v16, (int)&DestinationString);
+
+v21 = (unsigned int *)v3[3]; // Length
+v22 = 4;
+if ( v21 )
+  v22 = *v21;
+
+if ( v13 && !(unsigned __int8)CmpGetBootValueData(0x80000000LL, v24, v3[2], v13) ) // Destination
+
+v26 = v3[4]; // Type
+if ( v26 )
+  *(_DWORD *)v26 = *(_DWORD *)(v24 + 12);
+
+v18 = (unsigned int *)v3[3];
+if ( v18 )
+  *v18 = v13;
+
+v3 += 6; // next entry
+```
+
+### Examples
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\Power
+; ValueName = CoalescingTimerInterval
+; Destination = PopCoalescingTimerInterval
+; Length/Type/Flags = 0
+
+INIT:0000000140BA2B20                 dq offset aPower_2        ; "Power"
+INIT:0000000140BA2B28                 dq offset aCoalescingtime ; "CoalescingTimerInterval"
+INIT:0000000140BA2B30                 dq offset PopCoalescingTimerInterval
+INIT:0000000140BA2B38                 dq 3 dup(0)
+```
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power
+; ValueName = SleepStudyDisabled
+; Destination = PopSleepStudyDisabled
+; Length/Type/Flags = 0
+
+INIT:0000000140BA1B00                 dq offset aSessionManager_4 ; "Session Manager\\Power"
+INIT:0000000140BA1B08                 dq offset aSleepstudydisa   ; "SleepStudyDisabled"
+INIT:0000000140BA1B10                 dq offset PopSleepStudyDisabled
+INIT:0000000140BA1B18                 dq 3 dup(0)
+```
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+; ValueName = LargePageDrivers
+; Destination = MmLargePageDriverBuffer
+; Length = MmLargePageDriverBufferLength
+; Type/Flags = 0
+
+INIT:0000000140BA04B0                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
+INIT:0000000140BA04B8                 dq offset aLargepagedrive ; "LargePageDrivers"
+INIT:0000000140BA04C0                 dq offset MmLargePageDriverBuffer
+INIT:0000000140BA04C8                 dq offset MmLargePageDriverBufferLength
+INIT:0000000140BA04D0                 align 20h
+```
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\ProductOptions
+; ValueName = ProductSuite
+; Destination = CmSuiteBuffer
+; Length = CmSuiteBufferLength
+; Type = CmSuiteBufferType
+; Flags = 0
+
+INIT:0000000140BA3870                 dq offset aProductoptions_1 ; "ProductOptions"
+INIT:0000000140BA3878                 dq offset aProductsuite ; "ProductSuite"
+INIT:0000000140BA3880                 dq offset CmSuiteBuffer
+INIT:0000000140BA3888                 dq offset CmSuiteBufferLength
+INIT:0000000140BA3890                 dq offset CmSuiteBufferType
+INIT:0000000140BA3898                 dq 0
+```
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+; ValueName = VerifyDrivers
+; Destination = MmVerifyDriverBuffer
+; Length = MmVerifyDriverBufferLength
+; Type = 0
+; Flags = 1
+
+INIT:0000000140BA0960                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
+INIT:0000000140BA0968                 dq offset aVerifydrivers ; "VerifyDrivers"
+INIT:0000000140BA0970                 dq offset MmVerifyDriverBuffer
+INIT:0000000140BA0978                 dq offset MmVerifyDriverBufferLength
+INIT:0000000140BA0980                 dq 0
+INIT:0000000140BA0988                 dq 1
+```
 
 ## Registry Values
 
-This contains details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key.
+This includes details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key. See [nt-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/nt-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/11-23H2/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl).
 
-See [session-manager-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/session-manager-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)).
-
-- [session-manager/assets | ProcLibGlobalInit.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/ProcLibGlobalInit.c)
-- [session-manager/assets | GetRegistryQwordValue.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/GetRegistryQwordValue.c)
-- [session-manager/assets | RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/RtlpHpApplySegmentHeapConfigurations.c)
-
-The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/11-23H2/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl).
+| Prefix | Component |
+| --- | --- |
+| `Alpcp` | Advanced Local Procedure Calls |
+| `Cc` | Common Cache |
+| `Cm` / `Cmp` | Configuration manager |
+| `Dbgk` | Debugging Framework for user mode |
+| `Ex` / `Exp` | Executive support routines |
+| `Hvl` | Hypervisor library |
+| `Io` / `Iop` | I/O manager |
+| `Kd` / `Kdp` | Kernel debugger |
+| `Ke` / `Ki` | Kernel / Kernel internal |
+| `Mm` | Memory manager |
+| `Ob` / `Obp` | Object manager |
+| `Po` / `Pop` | Power manager |
+| `Ppm` | Processor power manager |
+| `Ps` / `Psp` | Process support |
+| `Rtlp` | Run-time library |
+| `Se` / `Sep` | Security Reference Monitor |
+| `Vf` / `Vi` / `Dif*` | Driver Verifier |
 
 Everything listed below is based on personal findings, mistakes may exist.
 
@@ -38,6 +185,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "DefaultHeteroCpuPolicy" = 5; // KiDefaultHeteroCpuPolicy
     "DeviceOwnerProtectionDowngradeAllowed" = 0; // SeDeviceOwnerProtectionDowngradeAllowed
     "DisableControlFlowGuardExportSuppression" = 0; // PspDisableControlFlowGuardExportSuppression
+    "DisableControlFlowGuardXfg" = ? // MmDisableControlFlowGuardXfgOverride
     "DisableExceptionChainValidation" = 2; // PspSehValidationPolicy
     "DisableLightWeightSuspend" = 0; // KiDisableLightWeightSuspend, nonzero blocks lightweight suspend part in KiSuspendThread and uses the APC path (KiSuspendThread)
     "DisableLowQosTimerResolution" = 1; // KeDisableLowQosTimerResolution, uses ExpUpdateTimerResolution for specific processes etc? (PspSetProcessTimerResolutionPolicy)
@@ -62,13 +210,13 @@ Everything listed below is based on personal findings, mistakes may exist.
     // Policy for dynamic thread that is deemed important but run a short amount of time.
     "DynamicHeteroCpuPolicyMask" = 7; // (foreground status = 1, priority = 2, expected run time = 4)
     // Determine what is considered in assessing whether a thread is important.
-    "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling, https://www.noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling
+    "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling, https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling
     "EnableTickAccumulationFromAccountingPeriods" = 0; // KiEnableTickAccumulationFromAccountingPeriods, controls how CPU time used by threads etc. get counted?
                                                        // >= 2 = disabled (adds CPU time when clock ticks happen)
                                                        // 0/1/missing = enabled (measure time between accounting points)
     "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, https://noverse.dev/docs/win-config/privacy/disable-wer/#enableweruserreporting
     "ForceBugcheckForDpcWatchdog" = 0; // KiForceBugcheckForDpcWatchdog
-    "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy
+    "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy, https://noverse.dev/docs/win-config/system/priority-separation/#forceforegroundboostdecay
     "ForceIdleGracePeriod" = 5; // KiForceIdleGracePeriodInSec
     "ForceParkingRequested" = 1; // KiForceParkingConfiguration
     "GlobalTimerResolutionRequests" = 0; // KiGlobalTimerResolutionRequests
@@ -85,13 +233,8 @@ Everything listed below is based on personal findings, mistakes may exist.
     "HgsPlusMinimumScoreDifferenceForSwap" = 25; // dword_140FC33E8
     "HgsPlusThreadCreationDefaultClass" = 0; // dword_140FC33E4
     "HotpatchTestMode" = 0; // KeHotpatchTestMode
-<<<<<<< Updated upstream
     "HyperStartDisabled" = 0; // HvlVpStartDisabled, Hvl = Hypervisor library
     "IdealDpcRate" = 20; // KiIdealDpcRate, "Number of DPCs per clock tick before the maximum DPC queue depth is decremented if DPCs are pending but no interrupt was generated"
-=======
-    "HyperStartDisabled" = 0; // HvlVpStartDisabled
-    "IdealDpcRate" = 20; // KiIdealDpcRate
->>>>>>> Stashed changes
     "IdealNodeRandomized" = 1; // PspIdealNodeRandomized
     "InterruptSteeringFlags" = 0; // KiInterruptSteeringFlags
     "LongDpcQueueThreshold" = 3; // KiLongDpcQueueThreshold
@@ -99,7 +242,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "MaxDynamicTickDuration" = 8; // KiMaxDynamicTickDurationSize
     "MaximumCooperativeIdleSearchWidth" = 16; // KiMaximumCooperativeIdleSearchWidth
     "MaximumSharedReadyQueueSize" = 260; // KiMaximumSharedReadyQueueSize
-    "MinimumDpcRate" = 3; // KiMinimumDpcRate
+    "MinimumDpcRate" = 3; // KiMinimumDpcRate, "Number of DPCs per clock tick where low DPCs will not cause a local interrupt to be generated"
     "MitigationAuditOptions" = 0; // PspSystemMitigationAuditOptions
     "MitigationOptions" = 0; // PspSystemMitigationOptions
     "ObCaseInsensitive" = 1; // ObpCaseInsensitive
@@ -122,12 +265,12 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SeCompatFlags" = 0; // SeCompatFlags
     "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting, https://noverse.dev/docs/win-config/privacy/disable-wer/#selpacenablewatsonreporting
     "SeLpacEnableWatsonThrottling" = 1; // SeLpacEnableWatsonThrottling
-    "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration, https://www.noverse.dev/docs/win-config/system/timer-expiration/#serializetimerexpiration
+    "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration, https://noverse.dev/docs/win-config/system/timer-expiration/#serializetimerexpiration
     "SeTokenDoesNotTrackSessionObject" = 0; // SeTokenDoesNotTrackSessionObject
     "SeTokenLeakDiag" = 0; // SeTokenLeakTracking
     "SeTokenSingletonAttributesConfig" = 3; // SepTokenSingletonAttributesConfig
     "SplitLargeCaches" = 0; // KiSplitLargeCaches
-    "ThreadDpcEnable" = 1; // KeThreadDpcEnable, https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs
+    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
     "ThreadReadyCount" = 1; // KiNormalPriorityBoostMaximumThreadReadyCount
     "TimerCheckFlags" = 1; // REG_DWORD, KeTimerCheckFlags
     "VerifierDpcScalingFactor" = 1; // KeVerifierDpcScalingFactor
@@ -145,7 +288,10 @@ Everything listed below is based on personal findings, mistakes may exist.
     "CriticalSectionTimeout" = 2592000; // dword_140FC3204
     "CWDIllegalInDLLSearch" = 0; // PspCurDirDevicesSkippedForDlls, can cause "There was a problem starting PolicyAgentProvider.dll The specified module could not be found" if set to 0xFFFFFFFF (https://learn.microsoft.com/en-us/troubleshoot/mem/configmgr/client-installation/client-installation-fails-with-policyagentprovider-dll)
     "Debugger Retries" = 20; // KdpContext
+    "DebuggerMaxModuleMsgs" = 500; // DbgkpMaxModuleMsgs, 0 is changed to 500 by DbgkpInitializePhase0
     "DisableIFEOCaching" = 0; // RtlpDisableIFEOCaching
+    "ErrorPortCommTimeout" = 10000; // DbgkErrorPortCommTimeout
+    "ErrorPortStartTimeout" = 15000; // DbgkErrorPortStartTimeout
     "GlobalFlag" = 0; // CmNtGlobalFlag <> 0x7061006c ? https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/gflags-details
     "GlobalFlag2" = 0; // CmNtGlobalFlag2 <> 0x6c642e30 ?
     // lkd> !gflag
@@ -159,6 +305,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "InitConsoleFlags" = 0; // InitConsoleFlags
     "MultiUsersInSessionSupported" = 0; // RtlpMultiUsersInSessionSupported
     "ObjectSecurityMode" = 1; // ObpObjectSecurityMode
+    "PowerSimulateHiberBugcheck" = 4294967295; // PopSimulateHiberBugcheck
     "PowerPolicySimulate" = 0; // PopSimulate
     "ProtectionMode" = 1; // ObpProtectionMode, REG_DWORD
     "ResourceCheckFlags" = 3; // REG_DWORD, ExResourceCheckFlags
@@ -225,6 +372,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ForceValidateIo" = 0; // dword_140FC31F0
     "HighMemoryThreshold" = 0; // qword_140FC3238
     "KernelPadSectionsOverride" = 0; // dword_140FC3248
+    "LargePageDrivers" = ?; // MmLargePageDriverBuffer, maximum length 1024 bytes
     "LargeWriteSize" = 0; // CcAzure_LargeWriteSize
     "LazyWriterPercentageOfNumProcs" = 0; // CcAzure_LazyWriterPercentageOfNumProcs
     "LowMemoryThreshold" = 0; // qword_140FC3230
@@ -267,6 +415,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "VerifierIrpTimeout" = 0; // VfWdIrpTimeoutMsec
     "VerifierNewRuleWorkaround" = 0; // VerifierNewRuleWorkaround
     "VerifierOptions" = 0; // VfOptionFlags
+    "VerifierPoolTracesLength" = 0; // VfPoolTracesLength
     "VerifierRandomTargets" = 0; // VfRandomVerifiedDrivers
     "VerifierSettingState" = 0; // VfRuleClasses
     "VerifierSettingStateSize" = 4294967295; // VfRuleClassesSize
@@ -308,6 +457,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Executive";
     "AdditionalCriticalWorkerThreads" = 0; // ExpAdditionalCriticalWorkerThreads
     "AdditionalDelayedWorkerThreads" = 0; // ExpAdditionalDelayedWorkerThreads
+    "CoverageMaxPagedPool" = 4194304; // ExCovMaxPagedPoolToUse
     "ForceEnableMutantAutoboost" = 0; // ExpForceEnableMutantAutoboost
     "KernelWorkerTestFlags" = 0; // ExpWorkerQueueTestFlags
     "MaximumKernelWorkerThreads" = 4096; // ExpMaximumKernelWorkerThreads
@@ -369,7 +519,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "Bias" = 480; // ExpAltTimeZoneBias
     "RealTimeIsUniversal" = 0; // ExpRealTimeIsUniversal
 
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\I/O System";
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\I/O System";
     "DisableDiskCounters" = 0; // PsDisableDiskCounters
     "IoAllowLoadCrashDumpDriver" = 0; // IopAllowLoadCrashDumpDriver
     "IoBlockLegacyFsFilters" = 0; // IopBlockLegacyFsFilters
@@ -382,12 +532,11 @@ Everything listed below is based on personal findings, mistakes may exist.
     "MediumIrpStackLocations" = 2; // IopMediumIrpStackLocations
     "RequireDeviceAccessCheck" = 1; // IopRequireDeviceAccessCheck
 
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Configuration Manager";
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Configuration Manager";
     "BugcheckRecoveryEnabled" = 0; // CmBugcheckRecoveryEnabled
     "CallbackMemoryFromPerProcLookaside" = 1; // CmpAllocateCallbackMemoryFromPerProcLookaside
     "CallbackMemoryFromPool" = 0; // CmpAllocateCallbackMemoryFromPool
     "DelayCloseSize" = 2048; // CmpDelayedCloseSize
-    "Enabled" = 0; // CmpLKGEnabled
     "EnablePeriodicBackup" = 0; // CmpDoIdleProcessing, https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/system-registry-no-backed-up-regback-folder#more-information
     "FastBoot" = 1; // CmFastBoot
     "FreezeThawTimeoutInSeconds" = 60; // CmFreezeThawTimeoutInSeconds
@@ -404,6 +553,12 @@ Everything listed below is based on personal findings, mistakes may exist.
     "VirtualizationEnabled" = 1; // CmVEEnabled
     "VolatileBoot" = 0; // CmpVolatileBoot
 
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Configuration Manager\\LastKnownGood";
+    "Enabled" = 0; // CmpLKGEnabled
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\QoS";
+    "StorageBaseIOSize" = 8192; // IopDiskIoAttributionBaseIoSize
+
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\StateSeparation\\Policy";
     "AllHivesVolatile" = 0; // CmStateSeparationAllHivesVolatile
     "DevelopmentMode" = 0; // CmStateSeparationDevMode
@@ -415,12 +570,11 @@ Everything listed below is based on personal findings, mistakes may exist.
 "HKLM\\System\\CurrentControlSet\\Control\\Processor";
     "AllowGuestPerfStates" = 0;
     "AllowPepPerfStates" = 0;
-    "Capabilities" = 4294967288; // Fallback of 0 ?
+    "Capabilities" = 0; // REG_QWORD
     "DisableAsserts" = 0;
     "Overrides" = 0;
 ```
 
-<<<<<<< Updated upstream
 ### Capabilities
 
 `Globals[0]` is the capability mask that shows what the system supports, `qword_1C00124C8` = `Capabilities` value. `Globals[0] &= ~qword_1C00124C8` removes active capability bits which are set in the registry value, so `Capabilities` is a kind of disable mask.
@@ -543,9 +697,6 @@ fffff801`a91424c0  0000bb8c`bdd7f677
 ```
 
 ### TimerCheckFlags
-=======
-## TimerCheckFlags
->>>>>>> Stashed changes
 
 ```asm
 INIT:0000000140BA1A70                 dq offset aSessionManager_5 ; "Session Manager\\Kernel"
@@ -621,7 +772,7 @@ if ( (ExpPoolFlags & 1) != 0 )
   KeCheckForTimer(BugCheckParameter3);
 ```
 
-[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://www.noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=ntoskrnl&function=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
+[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=ntoskrnl&function=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
 
 ```c
 // VfMiscKeInitializeTimerEx_Entry (23H2)
@@ -636,7 +787,6 @@ if ( (VfRuleClasses & 0x400000) == 0 )
 return ViMiscValidateSynchronizationObject(*(_QWORD *)(a1 + 16));
 ```
 
-<<<<<<< Updated upstream
 ### ResourceCheckFlags
 
 ```asm
@@ -782,8 +932,6 @@ lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4f
 ![](https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable2.png?raw=true)
 
-=======
->>>>>>> Stashed changes
 ## RegistryMachin_* Keys
 
 These are from `ntoskrnl.exe`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).

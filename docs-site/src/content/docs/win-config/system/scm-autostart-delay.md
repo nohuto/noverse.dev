@@ -3,7 +3,7 @@ title: 'SCM Autostart Delay'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 24
+  order: 25
 ---
 
 Windows marks some services as delayed autostart to reduce boot contention. The Service Control Manager (SCM) waits before starting those services, the default delay is 120 seconds as shown below.

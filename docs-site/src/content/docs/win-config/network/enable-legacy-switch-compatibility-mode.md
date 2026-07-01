@@ -15,7 +15,7 @@ This should only be enabled, if needed. The text above is just a personal assump
 
 ## Setup Information
 
-```inf
+```c
 ; Legacy Switch Compatibility Mode
 HKR, Ndi\params\LinkNegotiationProcess,                 ParamDesc,              0, %LinkNegotiationProcess%
 HKR, Ndi\params\LinkNegotiationProcess,                 default,                0, "1"

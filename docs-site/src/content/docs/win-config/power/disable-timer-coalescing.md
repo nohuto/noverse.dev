@@ -3,7 +3,7 @@ title: 'Timer Coalescing'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 3
 ---
 
 "CoalesecingTimerinterval is a computer system energy-saving technique that reduces CPU power consumption by reducing the precision of software timers to allow the synchronization of process wake-ups, minimizing the number of times the CPU is forced to perform the relatively power-costly operation of entering and exiting idle states"
@@ -13,7 +13,7 @@ sidebar:
 `TimerCoalescing` (queried by [InitTimerCoalescing](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/InitTimerCoalescing.c)) is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`), interpreted as 20 DWORDs. The value is used to load two four entry timer coalescing tolerance blocks.
 
 ```c
-// InitTimerCoalescing.c
+// InitTimerCoalescing
 
 if ( ZwQueryValueKey(
       KeyHandle,
@@ -30,7 +30,7 @@ if ( ZwQueryValueKey(
 ### Data Formatting
 
 ```c
-// InitTimerCoalescing.c
+// InitTimerCoalescing
 
 for ( i = &v19; !*(_DWORD *)i; i += 4 ) // DWORDs 1-3 must be zero
 {
@@ -71,9 +71,7 @@ for ( i = &v19; !*(_DWORD *)i; i += 4 ) // DWORDs 1-3 must be zero
 
 Note that this only shows the data range etc., there's more information in relation to [`SetTimerCoalescingTolerance`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/SetTimerCoalescingTolerance.c) (mode selection), `gCurrentTimerCoalescingTolerance`, [`InternalSetTimer`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/InternalSetTimer.c), coalescable timers (affected ones) etc. I might or might not add more details whenever I've time.
 
-## InitTimerPowerSaving Details
-
-Note that is my current interpretation, don't see this as my final answer nor as correct. All used functions are somewhere linked.
+## InitTimerPowerSaving
 
 ```c
 // 23H2
@@ -91,11 +89,11 @@ void InitTimerPowerSaving(void)
 }
 ```
 
-Looks like a typo from MS (`demon` = `daemon`), which got probably fixed within the first W11 builds, see  [bin-diff 2004 & 21H2](https://www.noverse.dev/bin-diff?left=2004&right=11-21H2&module=win32kfull&function=-InitTimerPowerSaving%40%40YAXXZ.c&mode=side-by-side) comparision (the value name didn't change).
+Looks like a typo from MS (`demon` = `daemon`), which got probably fixed within the first W11 builds, see  [bin-diff 2004 & 21H2](https://noverse.dev/bin-diff?left=2004&right=11-21H2&module=win32kfull&function=-InitTimerPowerSaving%40%40YAXXZ.c&mode=side-by-side) comparision (the value name didn't change).
 
 ### When TimerPowerSaving Applies
 
-`RITdemonTimerPowerSaveElapse` is the base timer interval. `RITdemonTimerPowerSaveCoalescing` is a kind of extra coalescing related parameter passed into the timer setup path.
+`RITdemonTimerPowerSaveElapse` is the base timer interval. `RITdemonTimerPowerSaveCoalescing` is passed as the timer coalescing value into the timer setup path.
 
 At [RawInputThread](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/RawInputThread.c) start it does call `InitTimerPowerSaving();` but also directly calls `ConfigureRITDelayableTimers(0);` which isn't the "TimerPowerSave" mode. So [`ConfigureRITDelayableTimers`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-ConfigureRITDelayableTimers@@YAXW4RitTimerRate@@@Z.c) uses these values as we can see here:
 
@@ -108,6 +106,7 @@ if ( gnRITdaemonTimerId ) {
             0,
             gnRITdaemonTimerId,
             gdwRITdaemonTimerPowerSaveElapse,
+            lambda_2bb7a2ff8864d6893c712a9e9ac801fb_::_lambda_invoker_cdecl_,
             gdwRITdaemonTimerPowerSaveCoalescing,
             4);
     } else {
@@ -117,7 +116,7 @@ LABEL_4:
 }
 ```
 
-This shows `a1 == 0` & `a1 == 1` don't go into the [`InternalSetTimer`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/InternalSetTimer.c) part, so any other than `0`/`1` would use the TimerPowerSave values. When does it get anything else than `0`/`1`?
+This shows `a1 == 0` & `a1 == 1` don't use the TimerPowerSave values, so any other value uses them, but when does it get anything else than `0`/`1`?
 
 ```c
 // SetTimerCoalescingTolerance
@@ -147,9 +146,17 @@ if ( v8 == 1 ) {
 
 Note that only applies to non service sessions (`if ( v3 != gServiceSessionId )`, [SetTimerCoalescingTolerance](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/SetTimerCoalescingTolerance.c)).
 
-So this whole TimerPowerSave part only applies only applies when [`SetTimerCoalescingTolerance`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/SetTimerCoalescingTolerance.c) returns `ConfigureRITDelayableTimers(2)` which happens through lock/screensaver (`giScreenSaveTimeOutMs`)/session state transitions.
+So this TimerPowerSave part only applies when [`SetTimerCoalescingTolerance`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/SetTimerCoalescingTolerance.c) returns `ConfigureRITDelayableTimers(2)` which happens through lock/screensaver (`giScreenSaveTimeOutMs`)/session state transitions.
 
 ### Default Data
+
+```c
+lkd> dd win32kfull!gdwRITdaemonTimerPowerSaveElapse L1
+fffff11d`f1289214  02932e00 // 43200000
+
+lkd> dd win32kfull!gdwRITdaemonTimerPowerSaveCoalescing L1
+fffffa1a`ab689210  02932e00 // 43200000
+```
 
 ```c
 // ConfigureRITDelayableTimers
@@ -204,18 +211,53 @@ else
 }
 ```
 
-`RITdemonTimerPowerSaveElapse`:
+### Range (& Meaning)
+
+#### RITdemonTimerPowerSaveElapse
+
 - Default = `43200000`
 - Minimum = `10`
 - Maximum = `0x7FFFFFFF`
 
-`RITdemonTimerPowerSaveCoalescing`:
-- Default = `43200000`
-- Any value beside `0` & `-1` are valid (these 2 are special cases as shown above, `-1` clears bit `0x200` and skips some part)
+#### RITdemonTimerPowerSaveCoalescing
 
-So practically `RITdemonTimerPowerSaveElapse` = `10` & `RITdemonTimerPowerSaveCoalescing` = `4294967295` should cause the least power saving.
+- Default = `43200000`
+- No min/max clamp (means `0-0xFFFFFFFF`)
+- `0xFFFFFFFF` (`-1`) disables coalescing here, as it always clears bit `0x200`, means no coalescing value is written
+- `0` could also disable coalescing, but only when the thread has bit `0x800000000` set in `GetAppCompatFlags2QuadWord` (saved in THREADINFO)
+
+You can dump the bit via WinDbg:
+
+```c
+lkd> !process 0 0 csrss.exe
+PROCESS ffffdb8b6da2f080
+    SessionId: 0  Cid: 02e4    Peb: f56fc32000  ParentCid: 02b8
+    DirBase: 10a790000  ObjectTable: ffffb587a746dc40  HandleCount: 299.
+    Image: csrss.exe
+
+PROCESS ffffdb8b6ec33140
+    SessionId: 1  Cid: 036c    Peb: 83046d0000  ParentCid: 035c
+    DirBase: 10ffb9000  ObjectTable: ffffb587aa7a2c40  HandleCount: 454.
+    Image: csrss.exe
+
+lkd> .process /p /r ffffdb8b6ec33140
+Implicit process is now ffffdb8b`6ec33140
+Loading User Symbols
+.......................
+lkd> dq win32kbase!gptiRit L1
+fffff11d`f0e94028  ffffb587`aa7b9010
+lkd> r @$t0 = poi(win32kbase!gptiRit)
+lkd> dq @$t0+0x288 L1
+ffffb587`aa7b9298  00000000`00000000
+lkd> ? poi(@$t0+0x288) & 0x800000000 // tagTHREADINFO offset
+Evaluate expression: 0 = 00000000`00000000 // not set
+```
 
 ## Miscellaneous Values
+
+| Prefix | Component |
+| --- | --- |
+| `Pop` | Power Manager |
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
@@ -223,8 +265,8 @@ So practically `RITdemonTimerPowerSaveElapse` = `10` & `RITdemonTimerPowerSaveCo
     "DeepIoCoalescingEnabled" = 0; // PopDeepIoCoalescingEnabled 
 ```
 
-The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepIoCoalescingEnabled` one is set to `0` by default - both are located in `ntoskrnl.exe`), but doesn't get read on 24H2, the `RITdemonTimerPowerSave...` & `TimerCoalescing` ones get read.
+The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepIoCoalescingEnabled` one is set to `0` by default, both are located in `ntoskrnl.exe`), but doesn't get read on 24H2, the `RITdemonTimerPowerSave...` & `TimerCoalescing` ones get read.
 
-- [power/assets | coalesc-InitTimerCoalescing.c](https://github.com/nohuto/win-config/blob/main/power/assets/coalesc-InitTimerCoalescing.c)
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/coalesc.png?raw=true)

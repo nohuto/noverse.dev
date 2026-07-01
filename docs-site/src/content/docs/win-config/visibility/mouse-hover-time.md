@@ -3,16 +3,16 @@ title: 'Mouse Hover Time'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 13
+  order: 14
 ---
 
-`MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
-
-`MenuShowDelay` controls the menu hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
+- `MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
+- `MenuShowDelay` controls the menu hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
 
 ## CMenuToolbarBase::_SetTimer
 
 [`SPI_GETMENUSHOWDELAY`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa):
+
 > "*Retrieves the time, in milliseconds, that the system waits before displaying a shortcut menu when the mouse cursor is over a submenu item. The pvParam parameter must point to a DWORD variable that receives the time of the delay.*"
 
 ```c

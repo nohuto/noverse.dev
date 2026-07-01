@@ -3,7 +3,7 @@ title: 'Pointer Style'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 3
 ---
 
 Windows has four main pointer style modes in `SystemSettings Accessibility > Mouse pointer and touch`: `White`, `Black`, `Inverted`, and `Custom color`. The first three are controlled by `CursorType`, custom colors switch `CursorType` to `6` and store the selected color in `CursorColor`. That color is stored as a Win32 [`COLORREF`](https://learn.microsoft.com/en-us/windows/win32/gdi/colorref), so the DWORD uses the `0x00bbggrr` layout instead of a plain RGB hex string. Standard styles point to system cursor files under `%SystemRoot%\cursors\...`, while custom colors point to generated per user cursor files under `%LOCALAPPDATA%\Microsoft\Windows\Cursors\*_eoa.cur`.
@@ -87,4 +87,4 @@ HKCU\Software\Microsoft\Accessibility\CursorColor = 16760576	// Turquise (0x00FF
 HKCU\Software\Microsoft\Accessibility\CursorColor = 12582656	// Green (0x00BFFF00)
 ```
 
-*Note: when applying these manually via the registry the cursor can be refreshed using [SPI_SETCURSORS](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa), this only works for dark+light+inverted+custom, the color ones build `*_eoa.cur` files as said above which the function doesn't do (which is also kind of why the dropdown doesn't include colored cursors).
+When applying these manually via the registry the cursor can be refreshed using [SPI_SETCURSORS](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa), this only works for dark+light+inverted+custom, the color ones build `*_eoa.cur` files as said above which the function doesn't do (which is also kind of why the dropdown doesn't include colored cursors).

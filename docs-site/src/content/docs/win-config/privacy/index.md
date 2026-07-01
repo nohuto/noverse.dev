@@ -43,6 +43,7 @@ sidebar:
 - [Feedback Prompts](/docs/win-config/privacy/disable-feedback-prompts/)
 - [CEIP](/docs/win-config/privacy/disable-ceip/)
 - [Cortana](/docs/win-config/privacy/disable-cortana/)
+- [DRM Internet Access](/docs/win-config/privacy/disable-drm-internet-access/)
 - [Crash Dumps](/docs/win-config/privacy/disable-crash-dumps/)
 - [Sleep Study](/docs/win-config/privacy/disable-sleep-study/)
 - [RSoP Logging](/docs/win-config/privacy/disable-rsop-logging/)

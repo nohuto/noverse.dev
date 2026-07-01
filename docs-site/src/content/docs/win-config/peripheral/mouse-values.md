@@ -125,7 +125,7 @@ That `0x800` flag isn't related to what device you use, it's set from mouse raw 
 
 I've checked that the `0x800` behavior is true with two small apps, one registered mouse raw input with `0x8100`, the other with only `0x0100`. By moving both to the background (`RawMouseThrottleDuration = 20`), the `0x8100` app stayed at `~1000 Hz`, while the `0x0100` app dropped to `~60 Hz`. So with `RawMouseThrottleForced = 0`, the forced registration bypassed throttling (I didn't find any app that uses that flag nor are there docs on it, means it's most likely unused).
 
-You can use [riflags](https://www.noverse.dev/docs/win-config/peripheral/mouse-values/#riflags) to see which processes have a mouse registration with `0x8000`. Read through the section for more details.
+You can use [riflags](https://noverse.dev/docs/win-config/peripheral/mouse-values/#riflags) to see which processes have a mouse registration with `0x8000`. Read through the section for more details.
 
 ### Duration / Leeway
 
@@ -230,7 +230,7 @@ cmake --build .\build --config Release
 
 The main option doesn't change `MouseSensitivity` (leaves it at `10`).
 
-It's recommended to change the pointer speed via `Bluetooth & devices > Mouse`, instead of `Mouse Properties`. Reason is simply that via `Mouse Properties` is only exposes 1, 2, 4, 6, 8, 10... 20 (step = 2 steps), the system settings exposes every single step (they both do the exact same, apart from the fact that four other values are reapplied via mouse properties, see above).
+It's recommended to change the pointer speed via `Bluetooth & devices > Mouse`, instead of `Mouse Properties`. Reason is simply that via `Mouse Properties` is only exposes 1, 2, 4, 6, 8, 10... 20 (step = 2 steps), the system settings exposes every single step (they both do the exact same).
 
 Located in `HKCU\\Control Panel\\Mouse`:
 
@@ -256,16 +256,15 @@ Located in `HKCU\\Control Panel\\Cursors`:
 | `CursorDeadzoneJumpingSetting` | `REG_DWORD` | Controls whether the pointer jumps over the non-overlapping seam between misaligned monitors so that it doesn't get stuck on edges/corners when switching between screens. If this option is disabled, the cursor will stop at these seams instead of crossing them. |
 
 Enabling/disabling `Enhance pointer precision` sets:
+
 ```c
 // Enabled
-HKCU\Control Panel\Mouse\MouseTrails	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseThreshold1	Type: REG_SZ, Length: 4, Data: 6
 HKCU\Control Panel\Mouse\MouseThreshold2	Type: REG_SZ, Length: 6, Data: 10
 HKCU\Control Panel\Mouse\MouseSpeed	Type: REG_SZ, Length: 4, Data: 1
 //HKCU\Control Panel\Mouse\MouseSensitivity	Type: REG_SZ, Length: 6, Data: 10 // pointer speed, reapplies current active speed
 
 // Disabled
-HKCU\Control Panel\Mouse\MouseTrails	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseThreshold1	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseThreshold2	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseSpeed	Type: REG_SZ, Length: 4, Data: 0
@@ -273,6 +272,7 @@ HKCU\Control Panel\Mouse\MouseSpeed	Type: REG_SZ, Length: 4, Data: 0
 ```
 
 Scrolling related values:
+
 ```c
 // Roll the mouse whell to scroll (just a toggle to let users use 'Lines to scroll at a time')
 // One screen at a time (this data would gray out 'Lines to scroll at a time') = -1

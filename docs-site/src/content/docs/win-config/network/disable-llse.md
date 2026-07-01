@@ -16,7 +16,7 @@ The following events are logged:
 
 ## Setup Information
 
-```inf
+```c
 ,Log Link State Event
 HKR,Ndi\Params\LogLinkStateEvent,                       ParamDesc,              0, %LogLinkState%
 HKR,Ndi\Params\LogLinkStateEvent,                       Type,                   0, "enum"

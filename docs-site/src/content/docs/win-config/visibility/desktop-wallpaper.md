@@ -3,7 +3,7 @@ title: 'Desktop Wallpaper'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 1
+  order: 2
 ---
 
 This is a collection of some wallpapers that I've found over time. Added for people who may never have spent time changing their background, or for anyone else. Head over to [visibility/desc.md#desktop-wallpaper](https://github.com/nohuto/win-config/blob/main/visibility/desc.md#desktop-wallpaper), if you want to see the wallpapers in a seperate window.
@@ -164,8 +164,8 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true)
 
-## [Windows Policies](https://www.noverse.dev/policies)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Desktop Wallpaper](https://www.noverse.dev/policies?p=Desktop*Wallpaper) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `Wallpaper`<br>`WallpaperStyle` |
+| [Desktop Wallpaper](https://noverse.dev/policies?p=Desktop*Wallpaper) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `Wallpaper`<br>`WallpaperStyle` |

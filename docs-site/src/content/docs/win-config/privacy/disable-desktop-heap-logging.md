@@ -3,7 +3,7 @@ title: 'Desktop Heap Logging'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 40
+  order: 41
 ---
 
 > "*It is meant to log information about desktop heap usage. This can be helpful when diagnosing issues where system resources for desktop objects might be strained.*"

@@ -3,7 +3,7 @@ title: 'Touch & Tablet'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 13
+  order: 14
 ---
 
 Disable the touch screen feature of your device with:
@@ -150,8 +150,8 @@ Windows 7/XP:
 }
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Tablet PC touch input](https://www.noverse.dev/policies?p=TouchInput*TouchInputOff_2) | `HKLM\SOFTWARE\Policies\Microsoft\TabletPC` | `TurnOffTouchInput` |
+| [Turn off Tablet PC touch input](https://noverse.dev/policies?p=TouchInput*TouchInputOff_2) | `HKLM\SOFTWARE\Policies\Microsoft\TabletPC` | `TurnOffTouchInput` |

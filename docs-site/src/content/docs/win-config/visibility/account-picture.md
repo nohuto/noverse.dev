@@ -3,21 +3,23 @@ title: 'Account Picture'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 11
+  order: 12
 ---
 
 Changes the user account picture via:
+
 ```
 C:\ProgramData\Microsoft\Default Account Pictures
 ```
 
-### Suboption
+## Suboption
 
-`Global Account Picture`:  
-"This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture."
+`Global Account Picture`:
 
-## [Windows Policies](https://www.noverse.dev/policies)
+> "*This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture.*"
+
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Apply the default account picture to all users](https://www.noverse.dev/policies?p=Cpls*UseDefaultTile) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `UseDefaultTile` |
+| [Apply the default account picture to all users](https://noverse.dev/policies?p=Cpls*UseDefaultTile) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `UseDefaultTile` |

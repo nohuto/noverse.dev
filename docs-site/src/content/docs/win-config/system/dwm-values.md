@@ -51,11 +51,11 @@ Means that presented content can be scanned out by the display hardware without 
 
 #### Multiplane Overlay (MPO)
 
-Used when DWM can place an app/video surface on a dedicated hardware overlay plane instead of adding it into the normal composed desktop frame.
+Used when DWM can place an app/video surface on a dedicated hardware overlay plane instead of adding it into the composed desktop frame.
 
 > "*A type of display hardware that is able to show multiple planes shown over top of one another. Presents from the presentation manager can be displayed as part of a plane in an MPO configuration to avoid needing to copy the presentation buffer into the backbuffer that DWM sends to the display hardware."*
 
-Means that with MPO, DWM still manages the window surface, but instead of blending that surface into the normal composed desktop frame, it can assign it to a hardware overlay plane. The DWM composed desktop is normally the primary plane, while MPO planes are extra hardware planes (there's also a limit of `MaxPlanes` which is why reducing `OverlayMinFPS` shouldn't be done). The final image is then created by the display hardware combining those planes, and if the display hardware handles that plane composition incorrectly, such "artifacts" can appear.
+Means that with MPO, DWM still manages the window surface, but instead of blending that surface into the composed desktop frame, it can assign it to a hardware overlay plane. The DWM composed desktop is normally the primary plane, while MPO planes are extra hardware planes (there's also a limit of `MaxPlanes` which is why reducing `OverlayMinFPS` shouldn't be done). The final image is then created by the display hardware combining those planes, and if the display hardware handles that plane composition incorrectly, such "artifacts" can appear.
 
 Wether an app uses MPO it usually shows as `Hardware Composed: Independent Flip`, so for example a browser playing video can show this, as the video/app surface can be placed on an overlay plane and the display hardware combines it with the DWM desktop plane. A fullscreen game for example may show `Hardware: Independent Flip` (even with MPO enabled), as it doesn't need an extra overlay plane (see DirectFlip cases below).
 

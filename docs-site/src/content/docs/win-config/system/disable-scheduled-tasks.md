@@ -3,7 +3,7 @@ title: 'Scheduled Tasks'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 9
 ---
 
 This list was created using my small [`ScheduledTasksList.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/ScheduledTasksList.ps1) parser which displays name, path, description, principals, settings, triggers, actions if given.

@@ -1026,6 +1026,7 @@ function initConsole() {
         ['affinities', 'docs/win-config/affinities/'],
         ['regkit', 'docs/regkit/'],
         ['app-guides', 'docs/app-guides/'],
+        ['windbg-notes', 'docs/windbg-notes/'],
       ]);
     },
     bindiff: () => {

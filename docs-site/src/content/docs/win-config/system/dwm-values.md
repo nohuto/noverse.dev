@@ -3,7 +3,7 @@ title: 'DWM Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 5
 ---
 
 DWM = Desktop Window Manager, the component *which allows for compositing visible window rendering into a single surface*. Instead of every application drawing directly to the display, each top level window normally produces content into an offscreen surface, and DWM combines the visible parts of those surfaces into the desktop image that's then presented on the monitor. Without DWM, each program would effectively draw into the visible desktop/output directly (which can cause [visual artifacts](https://github.com/nohuto/win32/blob/docs/desktop-src/LearnWin32/the-desktop-window-manager.md#the-desktop-window-manager) if a window doesn't repaint itself correctly), with DWM, each program draws into its own surface first, DWM then takes those surfaces and creates the final desktop image.
@@ -28,12 +28,6 @@ Simple way to imagine DWM composition:
 Means the app renders into buffers, presents one of those buffers, the surface is what DWM/presentation system can place into the desktop composition.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/buffers-surfaces-and-presents.png?raw=true)
-
-#### DXGI Flip Model Swapchain
-
-Another different example including more params, see '[Swap Chain Parameters](https://www.intel.com/content/www/us/en/developer/articles/code-sample/sample-application-for-direct3d-12-flip-model-swap-chains.html)' for details on the parameters.
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/intel-presentation.png?raw=true)
 
 ### Direct Scanout
 
@@ -114,7 +108,7 @@ In [PresentMon](https://github.com/GameTechDev/PresentMon/releases) ([`PresentMo
 
 ## Registry Values
 
-Based on pseudocode of [`dwmcore.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwmcore), [`win32kfull.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/win32kfull), [`dwm.exe`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwm), [`dwminit.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwminit), [`uDWM.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/uDWM).
+See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from [`dwmcore.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwmcore) ([`CCommonRegistryData::InitializeDWMKeysFromRegistry`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)), [`win32kfull.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/win32kfull), [`dwm.exe`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwm), [`dwminit.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwminit), [`uDWM.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/uDWM)).
 
 Everything listed below is based on personal findings, mistakes may exist.
 
@@ -170,7 +164,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 
     // dwmcore CCommonRegistryData::InitializeDWMKeysFromRegistry
     "BackdropBlurCachingThrottleMs" = 25; // REG_DWORD (ms), >1000 = 1000, throttles cached backdrop blur invalidation/rebuilds
-    "CpuClipFlatteningTolerance" = 0; // REG_DWORD
+    "CpuClipFlatteningTolerance" = 0; // REG_DWORD, stored as float(value / 1000)
     "CustomRefreshRateMode" = 0; // REG_DWORD, range 0-2, >2 = default
     "DisableAdvancedDirectFlip" = 0; // REG_DWORD
     "DisableIndependentFlip" = 0; // REG_DWORD (bool)
@@ -180,11 +174,11 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ForceEffectMode" = 0; // REG_DWORD, range 0-2
     "FrameCounterPosition" = 0; // REG_DWORD (bool), nonzero sets vertical debug frame counter
     "InteractionOutputPredictionDisabled" = 0; // REG_DWORD (bool)
-    "OverlayTestMode" = 0; // REG_DWORD, 4 = forced MPO support, 5 = MPO disabled
-    "ParallelModePolicy" = 1; // REG_DWORD, range 0-2, >=3 = 1
+    "OverlayTestMode" = 0; // REG_DWORD, 4 = forced MPO support, 5 = overlay/MPO disabled
+    "ParallelModePolicy" = 1; // REG_DWORD; range 0-2, >=3 = 1
     "ResampleInLinearSpace" = 0; // REG_DWORD bool, nonzero forces pixel format 91
     "ResampleModeOverride" = 0; // REG_DWORD, 0 = requested mode, 1 = Lanczos?, 2 = XBR?
-    "SDRBoostPercentOverride" = 0; // REG_DWORD
+    "SDRBoostPercentOverride" = 0; // REG_DWORD, stored as float(value / 100)
     "ShaderLinkingGPUBlacklist" = ?; // REG_SZ
 
     // dwm CSettingsManager preferences
@@ -196,16 +190,16 @@ Everything listed below is based on personal findings, mistakes may exist.
     // animation/colorization policy related
     "DefaultColorizationColorState" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x4)
                                          // "This policy setting controls the default color for window frames when the user does not specify a color. If you enable this policy setting and specify a default color, this color is used in glass window frames, if the user does not specify a color. If you disable or do not configure this policy setting, the default internal color is used, if the user does not specify a color. Note: This policy setting can be used in conjunction with the "Prevent color changes of window frames" setting, to enforce a specific color for window frames that cannot be changed by users."
-                                         // https://noverse.dev/policies?p=DWM*DwmDefaultColorizationColor_2
+                                         // https://www.noverse.dev/policies?p=DWM*DwmDefaultColorizationColor_2
     "DisallowAnimations" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x1) which disables DWM window animations (also causes DWM reject live preview / Aero Peek)
                               // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-SetWindowAnimation@CDesktopManager@@SAX_N@Z.c
                               // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-IsLivePreviewAllowed@CDesktopManager@@SA_NXZ.c
                               // "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.
-                              // https://noverse.dev/policies?p=DWM*DwmDisallowAnimations_2
+                              // https://www.noverse.dev/policies?p=DWM*DwmDisallowAnimations_2
     "ForceDisableModeChangeAnimation" = 0; // REG_DWORD (bool), nonzero disables display mode change animations (duplicate/extend/disconnect style monitor change visuals)
     "DisallowColorizationColorChanges" = 0; // REG_DWORD nonzero sets bit (policy bit 0x2) which blocks DWM colorization parameter changes
                                             // This policy setting controls the ability to change the color of window frames. If you enable this policy setting, you prevent users from changing the default window frame color. If you disable or do not configure this policy setting, you allow users to change the default window frame color. Note: This policy setting can be used in conjunction with the "Specify a default color for window frames" policy setting, to enforce a specific color for window frames that cannot be changed by users."
-                                            // https://noverse.dev/policies?p=DWM*DwmDisallowColorizationColorChanges_1
+                                            // https://www.noverse.dev/policies?p=DWM*DwmDisallowColorizationColorChanges_1
 
     // uDWM colorization
     "AccentColor" = ?; // REG_DWORD, only read when ColorPrevalence is nonzero
@@ -224,9 +218,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "EnableWindowColorization" = 1; // REG_DWORD
 
     // uDWM compositor
-    "DisableHologramCompositor" = 0; // REG_DWORD, nonzero skips holographic driver watcher registration, which seems to be used for special monitors that are ignored by DWM
-                                     // https://learn.microsoft.com/en-us/windows-hardware/drivers/display/specialized-monitors
-                                     // https://learn.microsoft.com/en-us/uwp/api/windows.devices.display.core
+    "DisableHologramCompositor" = 0; // REG_DWORD, nonzero skips holographic watcher config
 
     // win32kfull
     "ChildWindowDpiIsolation" = 1; // REG_DWORD (bool)
@@ -285,7 +277,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 
     // dwmcore CCommonRegistryData::InitializeDWMKeysFromRegistry
     "ForceNonPrimaryDisplayAdapter" = 0; // REG_DWORD (bool)
-    "ImageProcessingResizeThreshold" = 0; // REG_DWORD
+    "ImageProcessingResizeThreshold" = 0; // REG_DWORD, stored as float(value / 100)
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\GpuAccelInkTiming";
     // dwmcore SuperWetTiming
@@ -353,93 +345,16 @@ You can see the differences by moving a blurry window above a animation, for exa
 
 ### [OverlayTestMode](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)
 
-See [Multiplane Overlay (MPO)](https://noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for what MPO is.
-
-```c
-// OverlayTestMode = 0
-brave.exe[5508]:
-    000001C2D33F0050 (DXGI): SyncInterval=1 Flags=256 CPU=16.715ms (59.9 fps) Display=16.675ms (60.0 fps) GPU=16.714ms Latency=22.490ms Hardware Composed: Independent Flip
-
-// OverlayTestMode = 3
-brave.exe[6944]:
-    000001DD865B2050 (DXGI): SyncInterval=1 Flags=256 CPU=16.636ms (60.2 fps) Display=16.675ms (60.0 fps) GPU=16.635ms Latency=22.392ms Hardware Composed: Independent Flip
-
-// OverlayTestMode = 5
-brave.exe[4556]:
-    000002AFEE8B3050 (DXGI): SyncInterval=1 Flags=256 CPU=16.643ms (60.1 fps) Display=17.046ms (58.7 fps) GPU=3.548ms Latency=22.678ms Composed: Flip
-
-// OverlayTestMode = 6
-brave.exe[4584]:
-    00000218E3C90050 (DXGI): SyncInterval=1 Flags=256 CPU=38.330ms (26.1 fps) Display=43.594ms (23.0 fps) GPU=38.078ms Latency=44.017ms Hardware Composed: Independent Flip
-```
+See [Multiplane Overlay (MPO)](https://www.noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for what MPO is.
 
 | Data | Meaning |
 | --- | --- |
 | missing | No override of `m_dwOverlayTestMode`, I guess that's the same as `0` |
-| `0` | Allows MPO and no "*OverlayColor*" ([`CDrawingContext::GetSwapChainOverlayColor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-GetSwapChainOverlayColor@CDrawingContext@@AEBA-AU_D3DCOLORVALUE@@PEAVISwapChainRealization@@PEB.c) returns zero if value is `0`) |
+| `0` | Allows MPO and no "*OverlayColor*" ([`CDrawingContext::GetSwapChainOverlayColor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-GetSwapChainOverlayColor@CDrawingContext@@AEBA-AU_D3DCOLORVALUE@@PEAVISwapChainRealization@@PEB.c) returns zero if value is `0`), I've no idea what that color is used for at the moment |
 | `1-3` | Allows MPO + "*OverlayColor*" is enabled as the value is nonzero |
 | `4` | Kind of "Force success" for MPO support ([`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c) bypasses support query), this doesn't mean that surfaces get a overlay plane |
 | `5` | Disable MPO ([`COverlayContext::OverlaysEnabled`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-OverlaysEnabled@COverlayContext@@AEBA_NXZ.c) returns false & [`COverlayContext::IsCompatibleOutputScaling`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-IsCompatibleOutputScaling@COverlayContext@@AEAA_NAEBVCMILMatrix@@@Z.c) returns 0 for one "*CompatibleOutputScaling*") |
-| `>=6` | Would go into `>=4` part in [`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c), but only exactly `4` has the this force success case? Using `6` does allow MPO + uses the "*OverlayColor*", so it's the same as `1-3` after all.  |
-
-#### [GetSwapChainOverlayColor](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-GetSwapChainOverlayColor%40CDrawingContext%40%40AEBA-AU_D3DCOLORVALUE%40%40PEAVISwapChainRealization%40%40PEB.c)
-
-The mentioned "*OverlayColor*" are overlay debug rectrangles from DWM, there are 4 different colors that DWM can use (red, yellow, orange, cyan). These colors aren't related to present modes, and I can't really tell their actual meaning yet, here's my current findings:
-
-- Transparent = DWM draws no color
-- Red = `IBitmapResource::IsWhitePixelInTopLeft()` = true
-- Yellow = `swapChain->QueryInterface(GUID_51e2a1f0_4a0d_4788_800f_3cee7a2512a6)` succeeds + swap chain has advanced DirectFlip
-- Cyan = `swapChain->QueryInterface(GUID_51e2a1f0_4a0d_4788_800f_3cee7a2512a6)` fails + no advanced DirectFlip
-- Orange = `swapChain->QueryInterface(GUID_51e2a1f0_4a0d_4788_800f_3cee7a2512a6)` fails (similar to cyan but it has an extra flag?)
-
-"Advanced DirectFlip" isn't the same as DirectFlip described at the beginning.
-
-```c
-// CDrawingContext::GetSwapChainOverlayColor
-
-v4 = CCommonRegistryData::m_dwOverlayTestMode == 0;
-*(_OWORD *)&retstr->r = 0LL; // transparent
-if ( v4 )
-  return retstr; // OverlayTestMode = 0
-
-if ( (*(unsigned __int8 (__fastcall **)(const struct IBitmapResource *))(*(_QWORD *)a4 + 56LL))(a4) )
-{
-  retstr->g = 0.0;
-  retstr->b = 0.0;
-  retstr->r = 1.0;
-  retstr->a = 0.5; // red
-  goto LABEL_12;
-}
-
-if ( v9(v8 + 8, &GUID_51e2a1f0_4a0d_4788_800f_3cee7a2512a6, &v14) < 0 )
-{
-  v11 = *(_BYTE *)(*((_QWORD *)this + 6) + 11297LL);
-  retstr->a = 0.5;
-
-  if ( v11 )
-  {
-    retstr->r = 1.0;
-    retstr->g = 0.77999997;
-    retstr->b = 0.055; // orange
-    goto LABEL_12;
-  }
-
-  retstr->r = 0.0;
-  retstr->b = 1.0; // cyan
-}
-else
-{
-  retstr->b = 0.0;
-  retstr->r = 1.0;
-  retstr->a = 0.5; // yellow
-}
-
-retstr->g = 1.0;
-```
-
-Example (screenshot APIs don't capture the overlay color which is why I've used my phone):
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/debugcolor.jpg?raw=true)
+| `>=6` | Would go into `>=4` part in [`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c), but only exactly `4` has the this force success case? `>= 6` data is probably just invalid. |
 
 ### [RenderThreadTimeoutMilliseconds](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/_dynamic_initializer_for__CCommonRegistryData--RenderThreadTimeoutMilliseconds__.c)
 

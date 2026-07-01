@@ -3,7 +3,7 @@ title: 'WMPlayer Telemetry'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 56
+  order: 55
 ---
 
 WMPlayer (Windows Media Player) sends player usage data by default, if using the "Recommended ". This option turns off the `Diagnistics and Feedback` option, use the suboptions for further configuration.
@@ -128,6 +128,6 @@ Miscellaneous notes:
 // Save network bandwidth by playing video at lower resolution
 "HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "AllowLowResolution" = 0; // DWORD. 0 = Off (default), 1 = On
 
-// Process video automatically to enhance it (depends on your device hardware)
+// Process video automatically to enhance it (depends ony our device hardware)
 "HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "EnableAutoEnhanceDuringPlayback" = 0; // DWORD, 0 = Off, 1 = On
 ```

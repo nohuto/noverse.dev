@@ -22,7 +22,7 @@ sidebar:
 
 `*NdisPoll` is a MS INF keyword for enabling/disabling NDIS Poll Mode support:
 
-```c
+```inf
 HKR, Ndi\params\*NdisPoll,       ParamDesc,            0, "Ndis Poll Mode"
 HKR, Ndi\params\*NdisPoll,       Type,                 0, "enum"
 HKR, Ndi\params\*NdisPoll,       Default,              0, "1"
@@ -45,7 +45,7 @@ That guide ([WinOF-2 v23.7](https://docs.nvidia.com/nvidia-winof-2-documentation
 This feature (used by mlx driver) allows packet burst handling, while avoiding packet drops that may occur when a large amount of packets is sent in a short period of time.
 
 | Data | Meaning |
-| ---- | ---- |
+| :----: | ---- |
 | 0 | Disabled (default) |
 | 1 | Enables packet burst buffering using threaded DPC |
 | 2 | Enables packet burst buffering using polling |
@@ -60,7 +60,7 @@ This feature (used by mlx driver) allows packet burst handling, while avoiding p
 
 ### Setup Information
 
-```c
+```inf
 HKR, NDI\Params\RecvCompletionMethod,  ParamDesc, 0, "%RecvCompletionMethod%"
 HKR, NDI\Params\RecvCompletionMethod,  Type,  0, "enum"
 HKR, NDI\Params\RecvCompletionMethod,  Default, 0, "1"

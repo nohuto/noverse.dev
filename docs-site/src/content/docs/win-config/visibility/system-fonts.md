@@ -3,7 +3,7 @@ title: 'System Fonts'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 13
+  order: 12
 ---
 
 W11 uses `Segoe UI` by default. You can change it via registry edits, the selected font will be used for desktop interfaces, explorer, some apps (`StartAllBack` will use it), but won't get applied for e.g., `SystemSettings.exe` and app fonts in general. Some fonts will cause issues - `Yu Gothic UI Light` uses `¥` instead of `\` (picture).
@@ -26,7 +26,6 @@ Add-Type -AssemblyName System.Drawing;[System.Drawing.FontFamily]::Families | % 
 ## Manually Adding Custom Fonts
 
 The option lists the default fonts, add your own custom font via:
-
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts": {
   "Segoe UI (TrueType)": { "Type": "REG_SZ", "Data": "" },
@@ -51,7 +50,6 @@ The option lists the default fonts, add your own custom font via:
 ```
 
 Revert the changes:
-
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts": {
   "Segoe UI (TrueType)": { "Type": "REG_SZ", "Data": "segoeui.ttf" },
@@ -93,7 +91,6 @@ Edit text sizes via [`TextScaleFactor`](https://learn.microsoft.com/en-us/uwp/ap
     v6 = 100LL; // fallback to 100 if missing or out of range (<100 / >225)
   }
 ```
-
 - [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
 
 Applying changes via `Accessibility > Text size`:
@@ -104,7 +101,6 @@ RegSetValue    HKCU\Software\Microsoft\Accessibility\TextScaleFactor    Type: RE
 // 225%
 RegSetValue    HKCU\Software\Microsoft\Accessibility\TextScaleFactor    Type: REG_DWORD, Length: 4, Data: 225
 ```
-
 Depending on the selected size, `CaptionFont`, `SmCaptionFont`, `MenuFont`, `StatusFont`, `MessageFont`, `IconFont` (located in `HKCU\Control Panel\Desktop\WindowMetrics`) will also change. Not every % increase will edit them, I may add exact data soon. Example of `100%`/`225%`:
 
 ```c

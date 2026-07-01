@@ -3,7 +3,7 @@ title: 'AutoPlay/Autorun'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 13
+  order: 12
 ---
 
 AutoRun is a mechanism that uses an `autorun.inf` file on removable media (like CDs or old USB sticks) to specify a program that should start automatically when the media is inserted. Typical use case was auto starting setup programs on software CDs. Because malware abused this behavior, Windows now strongly restricts or disables automatic execution from `autorun.inf` on most removable drives.
@@ -13,7 +13,7 @@ AutoPlay is a feature that detects the type of content on newly inserted media o
 Disabling `ShellHWDetection` causes CmdPal to not start directly after boot for whatever reason, which is why I added a suboption to enable the service.
 
 Example `autorun.inf` content:
-```c
+```inf
 [autorun]
 open=Launch.exe
 icon=Launch.exe
@@ -75,11 +75,11 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserCho
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\AutorunINFLegacyArrival\(Default)	Type: REG_SZ, Length: 30, Data: MSTakeNoAction
 ```
 
-## [Windows Policies](https://noverse.dev/policies)
+## [Windows Policies](https://www.noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Set the default behavior for AutoRun](https://noverse.dev/policies?p=AutoPlay*NoAutorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAutorun` |
-| [Turn off Autoplay](https://noverse.dev/policies?p=AutoPlay*Autorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoDriveTypeAutoRun` |
-| [Disallow Autoplay for non-volume devices](https://noverse.dev/policies?p=AutoPlay*NoAutoplayfornonVolume) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoAutoplayfornonVolume` |
-| [Prevent AutoPlay from remembering user choices.](https://noverse.dev/policies?p=AutoPlay*DontSetAutoplayCheckbox) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer` | `DontSetAutoplayCheckbox` |
+| [Set the default behavior for AutoRun](https://www.noverse.dev/policies?p=AutoPlay*NoAutorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAutorun` |
+| [Turn off Autoplay](https://www.noverse.dev/policies?p=AutoPlay*Autorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoDriveTypeAutoRun` |
+| [Disallow Autoplay for non-volume devices](https://www.noverse.dev/policies?p=AutoPlay*NoAutoplayfornonVolume) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoAutoplayfornonVolume` |
+| [Prevent AutoPlay from remembering user choices.](https://www.noverse.dev/policies?p=AutoPlay*DontSetAutoplayCheckbox) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer` | `DontSetAutoplayCheckbox` |

@@ -23,7 +23,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 
 ## Setup Information
 
-```c
+```inf
 , *FlowControl
 HKR, Ndi\Params\*FlowControl,                   ParamDesc,              0, %FlowControl%
 HKR, Ndi\Params\*FlowControl,                   default,                0, "3"

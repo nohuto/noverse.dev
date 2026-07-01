@@ -33,7 +33,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 ## Setup Information
 
 Intel driver example:
-```c
+```inf
 HKR, Ndi\params\*SpeedDuplex,                           ParamDesc,              0, %SpeedDuplex%
 HKR, Ndi\params\*SpeedDuplex,                           default,                0, "0"
 HKR, Ndi\params\*SpeedDuplex,                           type,                   0, "enum"

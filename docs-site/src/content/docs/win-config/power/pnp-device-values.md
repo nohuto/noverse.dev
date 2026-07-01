@@ -3,7 +3,7 @@ title: 'PnP Device Values'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 3
 ---
 
 This currently applies the values for the `USB` enumerator only, since most values were found in USB related drivers and kind of all of them (which I use in the option) only get read in the USB enumerator.

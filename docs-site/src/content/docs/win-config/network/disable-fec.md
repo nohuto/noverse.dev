@@ -37,7 +37,7 @@ RegistryKey<enum HdSplitLocation>::Initialize(
 
 ### Setup Information
 
-```c
+```inf
 HKR, Ndi\Params\FecMode,                         ParamDesc,              0, %FecMode%
 HKR, Ndi\Params\FecMode,                         default,                0, "0"
 HKR, Ndi\Params\FecMode,                         min,                    0, "0"

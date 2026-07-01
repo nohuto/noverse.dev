@@ -3,26 +3,22 @@ title: 'OEM Information'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 36
+  order: 34
 ---
 
 Set your own support information in `System > About` (or `Control Panel > System and Security > System`). All values are saved in:
 ```
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
 ```
-
 You used to change the logo via:
-
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OEMInformation": {
   "Logo": { "Type": "REG_SZ", "Data": "path\\OEM.bmp" }
 }
 ```
-
 But it seems deprecated (doesn't work for me). Limitation were `120x120` pixels, `.bmp` file & `32-bit` color depth.
 
 Edit registered owner/orga (visible in `winver`) via:
-
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion": {
   "RegisteredOwner": { "Type": "REG_SZ", "Data": "Nohuto" },
@@ -39,7 +35,7 @@ Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`
   "Manufacturer": { "Type": "REG_SZ", "Data": "Noverse" },
   "Model": { "Type": "REG_SZ", "Data": "Windows 11" },
   "SupportHours": { "Type": "REG_SZ", "Data": "24H" },
-  "SupportPhone": { "Type": "REG_SZ", "Data": "noverse@example.dev" },
+  "SupportPhone": { "Type": "REG_SZ", "Data": "noverse@test.dev" },
   "SupportURL": { "Type": "REG_SZ", "Data": "https://discord.noverse.dev" }
 }
 ```

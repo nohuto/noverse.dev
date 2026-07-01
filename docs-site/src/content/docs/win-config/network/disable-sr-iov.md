@@ -32,7 +32,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 
 ### Setup Information
 
-```c
+```inf
 , SRIOV Default switch registry keys.
 ,
 HKR, NicSwitches\0, *SwitchId,   %REG_DWORD%, 0

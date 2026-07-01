@@ -3,7 +3,7 @@ title: 'Census Data Collection'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 51
+  order: 50
 ---
 
 `DeviceCensus.exe` = "Device and configuration data collection tool"
@@ -14,12 +14,12 @@ sidebar:
 
 ## Scheduled Task Actions
 
-`\Microsoft\Windows\Device Information`:
+`\Microsoft\Windows\Device Information` runs:
 ```powershell
 %windir%\system32\devicecensus.exe SystemCxt
 ```
 
-`\Microsoft\Windows\Device Information`:
+`\Microsoft\Windows\Device Information` runs:
 ```powershell
 %windir%\system32\devicecensus.exe UserCxt
 ```

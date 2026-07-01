@@ -3,7 +3,7 @@ title: 'Page Combining'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 24
+  order: 23
 ---
 
 Page combining spots identical RAM pages across processes and merges them into a single shared page. Instead of keeping 50 copies of the same DLL/data page, the memory manager keeps one, maps it to everyone, and marks it `copy-on-write`. As long as nobody changes it, everyone shares the same physical page and RAM usage drops. If a process writes to it, Windows gives that process its own private copy and leaves the shared one intact. It's a background RAM deduplicator, basically.
@@ -16,7 +16,7 @@ The memory manager can be instructed to combine identical pages across the syste
 
 `Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value on recent builds, so it's most likely deprecated.
 
-```asm
+```c
 INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
 INIT:0000000140B9C348                 dq offset aDisablepagecom ; "DisablePageCombining"
 INIT:0000000140B9C350                 dq offset dword_140D1D1C8

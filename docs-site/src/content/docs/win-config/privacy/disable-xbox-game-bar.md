@@ -8,7 +8,7 @@ sidebar:
 
 GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, with optional background recording.
 
-## WindowsMediaCapture Values
+## WindowsMediaCapture Settings
 
 ```c
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR";
@@ -18,44 +18,44 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
     "CustomVideoEncodingHeight" // REG_DWORD
     "CustomVideoEncodingWidth" // REG_DWORD
     "AppCaptureEnabled" // REG_DWORD, bool
-    "HistoricalBufferLength" // REG_DWORD
+    "HistoricalBufferLength" // REG_DWORD, min 10, if HistoricalBufferLengthUnit==1 max 600, otherwise max is GameDVRUtility::MaxHistoricalBufferLengthInMegabytes()
     "HistoricalBufferLengthUnit" // REG_DWORD
     "HistoricalCaptureEnabled" // REG_DWORD, bool
     "HistoricalCaptureOnBatteryAllowed" // REG_DWORD, bool
     "HistoricalCaptureOnWirelessDisplayAllowed" // REG_DWORD, bool
-    "MaximumRecordLength" // REG_QWORD
+    "MaximumRecordLength" // REG_QWORD, validated to 300000000-143700000000 (100 ns units)
     "VideoEncodingBitrateMode" // REG_DWORD
     "VideoEncodingResolutionMode" // REG_DWORD
     "VideoEncodingFrameRateMode" // REG_DWORD
     "EchoCancellationEnabled" // REG_DWORD, bool
     "CursorCaptureEnabled" // REG_DWORD, bool
-    "VKToggleGameBar" // REG_DWORD
-    "VKMToggleGameBar" // REG_DWORD
-    "VKSaveHistoricalVideo" // REG_DWORD
-    "VKMSaveHistoricalVideo" // REG_DWORD
-    "VKToggleRecording" // REG_DWORD
-    "VKMToggleRecording" // REG_DWORD
-    "VKTakeScreenshot" // REG_DWORD
-    "VKMTakeScreenshot" // REG_DWORD
-    "VKToggleRecordingIndicator" // REG_DWORD
-    "VKMToggleRecordingIndicator" // REG_DWORD
-    "VKToggleMicrophoneCapture" // REG_DWORD
-    "VKMToggleMicrophoneCapture" // REG_DWORD
-    "VKToggleCameraCapture" // REG_DWORD
-    "VKMToggleCameraCapture" // REG_DWORD
-    "VKToggleBroadcast" // REG_DWORD
-    "VKMToggleBroadcast" // REG_DWORD
+    "VKToggleGameBar" // REG_DWORD, ASCII/virtual-key value for the Game Bar key binding
+    "VKMToggleGameBar" // REG_DWORD, 0/1 toggle for whether the Game Bar shortcut is enabled
+    "VKSaveHistoricalVideo" // REG_DWORD, ASCII/virtual-key value for the save historical video key binding
+    "VKMSaveHistoricalVideo" // REG_DWORD, 0/1 toggle for whether the save historical video shortcut is enabled
+    "VKToggleRecording" // REG_DWORD, ASCII/virtual-key value for the recording key binding
+    "VKMToggleRecording" // REG_DWORD, 0/1 toggle for whether the recording shortcut is enabled
+    "VKTakeScreenshot" // REG_DWORD, ASCII/virtual-key value for the screenshot key binding
+    "VKMTakeScreenshot" // REG_DWORD, 0/1 toggle for whether the screenshot shortcut is enabled
+    "VKToggleRecordingIndicator" // REG_DWORD, ASCII/virtual-key value for the recording-indicator key binding
+    "VKMToggleRecordingIndicator" // REG_DWORD, 0/1 toggle for whether the recording-indicator shortcut is enabled
+    "VKToggleMicrophoneCapture" // REG_DWORD, ASCII/virtual-key value for the microphone-capture key binding
+    "VKMToggleMicrophoneCapture" // REG_DWORD, 0/1 toggle for whether the microphone-capture shortcut is enabled
+    "VKToggleCameraCapture" // REG_DWORD, ASCII/virtual-key value for the camera-capture key binding
+    "VKMToggleCameraCapture" // REG_DWORD, 0/1 toggle for whether the camera-capture shortcut is enabled
+    "VKToggleBroadcast" // REG_DWORD, ASCII/virtual-key value for the broadcast key binding
+    "VKMToggleBroadcast" // REG_DWORD, 0/1 toggle for whether the broadcast shortcut is enabled
     "MicrophoneCaptureEnabled" // REG_DWORD, bool
-    "SystemAudioGain" // REG_QWORD, clamped to 0.0-2.0
-    "MicrophoneGain" // REG_QWORD, clamped to 0.0-2.0
+    "SystemAudioGain" // REG_QWORD, clamped to 0.0-2.0 and stored as gain * 10000
+    "MicrophoneGain" // REG_QWORD, clamped to 0.0-2.0 and stored as gain * 10000
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AppBroadcast\\GlobalSettings";
     "AudioCaptureEnabled" // REG_DWORD, bool
     "MicrophoneCaptureEnabledByDefault" // REG_DWORD, bool
     "EchoCancellationEnabled" // REG_DWORD, bool
     "CursorCaptureEnabled" // REG_DWORD, bool
-    "SystemAudioGain" // REG_QWORD, clamped to 0.0-2.0
-    "MicrophoneGain" // REG_QWORD, clamped to 0.0-2.0
+    "SystemAudioGain" // REG_QWORD, clamped to 0.0-2.0 and stored as gain * 10000
+    "MicrophoneGain" // REG_QWORD, clamped to 0.0-2.0 and stored as gain * 10000
     "CameraCaptureEnabledByDefault" // REG_DWORD, bool
     "CameraOverlayLocation" // REG_DWORD
     "CameraOverlaySize" // REG_DWORD
@@ -72,8 +72,8 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
 >
 > — Microsoft, [GameBar PresenceWriter](https://learn.microsoft.com/en-us/windows/win32/devnotes/gamebar-presencewriter)
 
-## [Windows Policies](https://noverse.dev/policies)
+## [Windows Policies](https://www.noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Enables or disables Windows Game Recording and Broadcasting](https://noverse.dev/policies?p=GameDVR*AllowGameDVR) | `HKLM\Software\Policies\Microsoft\Windows\GameDVR` | `AllowGameDVR` |
+| [Enables or disables Windows Game Recording and Broadcasting](https://www.noverse.dev/policies?p=GameDVR*AllowGameDVR) | `HKLM\Software\Policies\Microsoft\Windows\GameDVR` | `AllowGameDVR` |

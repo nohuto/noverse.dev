@@ -3,7 +3,7 @@ title: 'Accent Color'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 11
+  order: 10
 ---
 
 This set's the accent color globally and if `AccentColor` (`HKEY_CURRENT_USER\Software\Noverse`) isn't set via the tool settings yet, this will also directly impact the WinConfig colors.
@@ -28,7 +28,6 @@ Something I noticed while creating the option is that procmon doesn't show the a
 ## SystemSettings Captures
 
 Changing the color via `Personalization > Colors` sets:
-
 ```c
 // Nord Theme (#2e3440)
 HKCU\Software\Microsoft\Windows\DWM\ColorizationColor	Type: REG_DWORD, Length: 4, Data: 3291823178

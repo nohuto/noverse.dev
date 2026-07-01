@@ -3,7 +3,7 @@ title: 'System Sounds'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 20
+  order: 19
 ---
 
 Disables system sounds and removes sound events. I did use the keys, which Windows would disable:
@@ -62,8 +62,8 @@ The revert data is based on `W11 LTSC IoT Enterprise 2024` defaults.
 
 `DisableStartupSound` is set to `1` by default (`LogonUI\BootAnimation`).
 
-## [Windows Policies](https://noverse.dev/policies)
+## [Windows Policies](https://www.noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Windows Startup sound](https://noverse.dev/policies?p=Logon*DisableStartupSound) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DisableStartupSound` |
+| [Turn off Windows Startup sound](https://www.noverse.dev/policies?p=Logon*DisableStartupSound) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DisableStartupSound` |

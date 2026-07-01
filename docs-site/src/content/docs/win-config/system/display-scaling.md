@@ -3,7 +3,7 @@ title: 'Display Scaling'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 27
+  order: 26
 ---
 
 Changes the size of text, apps, and other items. Note that on laptops the default display scaling might not be `100%`. You can set a custom scaling size via `System > Display > Custom scaling`:
@@ -38,28 +38,14 @@ SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDri
 SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
 ```
 
-## Suboptions
+## Suboption
 
-### Prevent Window Minimization on Monitor Disconnection
-
-```c
-// System > Display : Minimize windows when a monitor is disconnected
-
-// Enabled
-HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 0
-
-// Disabled
-HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
-```
-
-### Forget Window Locations for Connected Monitors
+`Prevent Window Minimization on Monitor Disconnection` disables `Minimize windows then a monitor is diconnected` (`System > Display`).
 
 ```c
-// System > Display : Remember windows locations based on monitor connection
-
 // Enabled
-HKCU\Control Panel\Desktop\RestorePreviousStateRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 0
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 0
 
 // Disabled
-HKCU\Control Panel\Desktop\RestorePreviousStateRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
 ```

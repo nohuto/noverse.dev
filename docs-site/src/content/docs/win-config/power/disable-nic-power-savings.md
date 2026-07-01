@@ -3,16 +3,16 @@ title: 'NIC Power Savings'
 description: 'Power option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 6
 ---
 
 You can get a lot of information about data ranges and more from `.inf` files, see examples below.
 
 ## [Registry Value](https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt) Overview
 
-See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
-
 Everything listed below is based on personal findings, mistakes may exist.
+
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -49,7 +49,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 
 ### Setup Information
 
-```c
+```inf
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,ParamDesc,    ,%DeviceSleepOnDisconnectDesc%
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,type,         ,enum
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,default,      ,0

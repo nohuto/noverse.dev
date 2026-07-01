@@ -3,10 +3,10 @@ title: 'FSO'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 22
+  order: 21
 ---
 
-Will be updated within the next weeks (date of commit 20.05.2026)
+Will be updated within the next days (date of commit 20.05.2026)
 
 ## ResourcePolicyServer
 

@@ -11,6 +11,7 @@ const CONTENT_DIR = path.join(DOCS_SITE_DIR, 'src', 'content', 'docs');
 
 const DOC_REPO_ORDER = [
   'win-config',
+  'windbg-notes',
   'regkit',
   'app-guides',
 ];
@@ -23,6 +24,9 @@ const REGKIT_REPO_URL = trimRepoUrl(
 );
 const APP_GUIDES_REPO_URL = trimRepoUrl(
   process.env.APP_GUIDES_REPO_URL || 'https://github.com/nohuto/app-guides'
+);
+const WINDBG_NOTES_REPO_URL = trimRepoUrl(
+  process.env.WINDBG_NOTES_REPO_URL || 'https://github.com/nohuto/windbg-notes'
 );
 
 const CATEGORY_ORDER = [
@@ -69,6 +73,12 @@ const APP_GUIDES_TITLES = {
   'search-engine.md': 'Search Engines',
 };
 
+const WINDBG_NOTES_ORDER = [
+  'init.md',
+  'thread-internals.md',
+  'rva-driverstart.md',
+];
+
 const entries = [];
 
 main();
@@ -77,10 +87,12 @@ function main() {
   const winConfigDir = resolveRepoDirectory('win-config', WIN_CONFIG_REPO_URL);
   const regkitDir = resolveRepoDirectory('regkit', REGKIT_REPO_URL);
   const appGuidesDir = resolveRepoDirectory('app-guides', APP_GUIDES_REPO_URL);
+  const windbgNotesDir = resolveRepoDirectory('windbg-notes', WINDBG_NOTES_REPO_URL);
 
   assertDirectory(winConfigDir, 'win-config');
   assertDirectory(regkitDir, 'regkit');
   assertDirectory(appGuidesDir, 'app-guides');
+  assertDirectory(windbgNotesDir, 'windbg-notes');
 
   resetContentDir();
   generateRootOverview();
@@ -88,6 +100,7 @@ function main() {
   const winConfigStats = generateWinConfig(winConfigDir);
   const regkitStats = generateRegkit(regkitDir);
   const appGuidesStats = generateAppGuides(appGuidesDir);
+  const windbgNotesStats = generateWindbgNotes(windbgNotesDir);
   const sectionIndexPages = generateSectionIndexes();
 
   normalizeGeneratedEntries();
@@ -99,6 +112,7 @@ function main() {
       `regkit overview: ${regkitStats.overviewPages}, ` +
       `regkit guides: ${regkitStats.guidePages}, ` +
       `app-guides pages: ${appGuidesStats.pages}, ` +
+      `windbg-notes pages: ${windbgNotesStats.pages}, ` +
       `section indexes: ${sectionIndexPages}).`
   );
 }
@@ -210,6 +224,24 @@ function generateAppGuides(repoDir) {
   return { pages };
 }
 
+function generateWindbgNotes(repoDir) {
+  const pages = generateMarkdownFilesFromDirectory({
+    repoKey: 'windbg-notes',
+    repoDir,
+    sourceDirectory: '.',
+    outputDirectory: 'windbg-notes',
+    routeDirectory: '/docs/windbg-notes/',
+    includeFiles: new Set(WINDBG_NOTES_ORDER),
+    fileOrder: WINDBG_NOTES_ORDER,
+  });
+
+  if (pages !== WINDBG_NOTES_ORDER.length) {
+    throw new Error(`windbg-notes is missing one or more configured Markdown files`);
+  }
+
+  return { pages };
+}
+
 function resolveRepoDirectory(repoName, repoUrl) {
   const candidatePaths = [
     path.resolve(DOCS_SITE_DIR, '..', repoName),
@@ -282,6 +314,7 @@ function generateMarkdownFilesFromDirectory({
   outputDirectory,
   routeDirectory,
   excludeFiles = new Set(),
+  includeFiles = null,
   sidebarOrderStart = 1,
   fileOrder = [],
   titleOverrides = {},
@@ -294,6 +327,7 @@ function generateMarkdownFilesFromDirectory({
     .readdirSync(sourceDirPath, { withFileTypes: true })
     .filter((dirent) => dirent.isFile() && dirent.name.toLowerCase().endsWith('.md'))
     .map((dirent) => dirent.name)
+    .filter((name) => !includeFiles || includeFiles.has(name.toLowerCase()))
     .filter((name) => !excludeFiles.has(name.toLowerCase()))
     .sort((a, b) => {
       const aRank = fileOrderRank.get(a.toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
@@ -503,6 +537,7 @@ function getDirectoryLabel(directory) {
   if (segment === 'win-config') return 'win-config';
   if (segment === 'regkit') return 'regkit';
   if (segment === 'app-guides') return 'app-guides';
+  if (segment === 'windbg-notes') return 'windbg-notes';
   if (segment === 'sections') return 'Sections';
   if (segment === 'guides') return 'Guides';
   if (segment === 'docs') return 'Docs';

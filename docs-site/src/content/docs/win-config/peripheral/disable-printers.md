@@ -3,7 +3,7 @@ title: 'Printers'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 21
+  order: 20
 ---
 
 Disables printer related services (`Spooler`, `PrintWorkFlowUserSvc`, `PrintNotify`, `usbprint`, `McpManagementService`, `PrintScanBrokerService`, `PrintDeviceConfigurationService`), and various optional features / scheduled tasks.
@@ -74,14 +74,14 @@ Get-Printer
 Remove-Printer -Name "Printer Name"
 ```
 
-## [Windows Policies](https://noverse.dev/policies)
+## [Windows Policies](https://www.noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off printing over HTTP](https://noverse.dev/policies?p=ICM*DisableHTTPPrinting_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
-| [Turn off printing over HTTP](https://noverse.dev/policies?p=ICM*DisableHTTPPrinting_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
-| [Turn off downloading of print drivers over HTTP](https://noverse.dev/policies?p=ICM*DisableWebPnPDownload_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
-| [Turn off downloading of print drivers over HTTP](https://noverse.dev/policies?p=ICM*DisableWebPnPDownload_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
-| [Prevent addition of printers](https://noverse.dev/policies?p=Printing*NoAddPrinter) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAddPrinter` |
-| [Turn off Windows default printer management](https://noverse.dev/policies?p=Printing*LegacyDefaultPrinterMode) | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` | `LegacyDefaultPrinterMode` |
-| [Browse the network to find printers](https://noverse.dev/policies?p=Printing*DownlevelBrowse) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers\Wizard` | `Downlevel Browse` |
+| [Turn off printing over HTTP](https://www.noverse.dev/policies?p=ICM*DisableHTTPPrinting_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
+| [Turn off printing over HTTP](https://www.noverse.dev/policies?p=ICM*DisableHTTPPrinting_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
+| [Turn off downloading of print drivers over HTTP](https://www.noverse.dev/policies?p=ICM*DisableWebPnPDownload_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
+| [Turn off downloading of print drivers over HTTP](https://www.noverse.dev/policies?p=ICM*DisableWebPnPDownload_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
+| [Prevent addition of printers](https://www.noverse.dev/policies?p=Printing*NoAddPrinter) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAddPrinter` |
+| [Turn off Windows default printer management](https://www.noverse.dev/policies?p=Printing*LegacyDefaultPrinterMode) | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` | `LegacyDefaultPrinterMode` |
+| [Browse the network to find printers](https://www.noverse.dev/policies?p=Printing*DownlevelBrowse) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers\Wizard` | `Downlevel Browse` |

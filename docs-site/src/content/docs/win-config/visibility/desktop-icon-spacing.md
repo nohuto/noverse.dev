@@ -3,25 +3,22 @@ title: 'Desktop Icon Spacing'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 21
+  order: 20
 ---
 
 Location:
-
-```csv
+```
 \Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconSpacing
 \Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconVerticalSpacing
 ```
-
-- `IconSpacing` = Horizontal
-- `IconVerticalSpacing` = Vertical
+`IconSpacing` = Horizontal
+`IconVerticalSpacing` = Vertical
 
 Default: `75px` (`-1125`)
 Min: `32px` (`-480`)
 Max: `182px` (`-2730`)
 
 Value gets calculated with:
-
 ```c
 -15*px
 

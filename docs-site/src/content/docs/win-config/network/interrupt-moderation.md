@@ -29,7 +29,7 @@ ITR = Interrupt Throttle Rate.
 ## Setup Information
 
 Data/default is driver specific.
-```c
+```inf
 ;  Interrupt Throttle Rate
 HKR, Ndi\Params\ITR,                                    ParamDesc,              0, %InterruptThrottleRate%
 HKR, Ndi\Params\ITR,                                    default,                0, "65535"

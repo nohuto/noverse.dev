@@ -3,14 +3,14 @@ title: 'Optimize File System'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 16
+  order: 14
 ---
 
 Small documentation on several values the option applies, see links below for more details.
 
-### Registry Values
+### [Registry Values](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt)
 
-This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) for all values that get read on boot ([boot capture guide](https://noverse.dev/docs/regkit/guides/wpr-wpa/)).
+This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) boot trace for more.
 
 | Value | Description |
 | ----- | ------------ |
@@ -34,8 +34,8 @@ This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/
 
 - [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
 
-## [Windows Policies](https://noverse.dev/policies)
+## [Windows Policies](https://www.noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Enable Win32 long paths](https://noverse.dev/policies?p=FileSys*LongPathsEnabled) | `HKLM\System\CurrentControlSet\Control\FileSystem` | `LongPathsEnabled` |
+| [Enable Win32 long paths](https://www.noverse.dev/policies?p=FileSys*LongPathsEnabled) | `HKLM\System\CurrentControlSet\Control\FileSystem` | `LongPathsEnabled` |

@@ -14,10 +14,10 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 // HUBREG_QueryGlobalHubValues
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg"; // g_HubGlobalKeyName
     "DisableSelectiveSuspendUI" = ?; // REG_DWORD
-    "MsOsDescriptorMode" = ?; // REG_DWORD, range 0-2
-    "EnableDiagnosticMode" = ?; // REG_DWORD
-    "DisableOnSoftRemove" = 1; // REG_DWORD
-    "DisableUxdSupport" = ?; // REG_DWORD
+    "MsOsDescriptorMode" = ?; // REG_DWORD, valid values are 0-2
+    "EnableDiagnosticMode" = ?; // REG_DWORD, nonzero enables diagnostic mode
+    "DisableOnSoftRemove" = 1; // REG_DWORD, default behavior enabled, 0 disables it
+    "DisableUxdSupport" = ?; // REG_DWORD, nonzero disables UXD support
     "EnableExtendedValidation" = ?; // REG_DWORD
     "WakeOnConnectUI" = ?; // REG_DWORD, nonzero enables wake on connect UI ("This controls the UI check box 'Allow this device to wake the system'. Essentially this is control for the wake on connect feature.")
     "PreventDebounceTimeForSuperSpeedDevices" = ?; // REG_DWORD, nonzero enables extra debounce handling ("Checks if we need to give extra time to SuperSpeed devices before talking to them")
@@ -39,10 +39,10 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 // HUBREG_QueryGlobalUxdSettings (the defaults were taken from the W10 source)
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\policy"; // g_UxdGlobalSettingsKey (aRegistryMachin_12)
-    "UxdGlobalDeleteOnShutdown" = 0; // REG_DWORD
-    "UxdGlobalDeleteOnReload" = 0; // REG_DWORD
-    "UxdGlobalDeleteOnDisconnect" = 0; // REG_DWORD
-    "UxdGlobalEnable" = 0; // REG_DWORD
+    "UxdGlobalDeleteOnShutdown" = 0; // REG_DWORD, nonzero enables delete on shutdown
+    "UxdGlobalDeleteOnReload" = 0; // REG_DWORD, nonzero enables delete on reload
+    "UxdGlobalDeleteOnDisconnect" = 0; // REG_DWORD, nonzero enables delete on disconnect
+    "UxdGlobalEnable" = 0; // REG_DWORD, nonzero enables UXD globally
 
 // HUBREG_QueryUxdDeviceKey / HUBREG_DeleteUxdDeviceKey
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\devices"; // g_UxdDeviceSettingsKey (aRegistryMachin_5)
@@ -52,6 +52,12 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\pnp"; // g_UxdGuidSettingsKey (aRegistryMachin_3)
     "{GUID}" = ?; // value name from RtlStringFromGUID
 ```
+
+- [peripheral/assets | HUBREG_QueryUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryUxdDeviceKey.c)
+- [peripheral/assets | HUBREG_DeleteUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_DeleteUxdDeviceKey.c)
+- [peripheral/assets | HUBREG_QueryGlobalUxdSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalUxdSettings.c)
+- [peripheral/assets | HUBREG_QueryGlobalHubValues.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalHubValues.c)
+- [peripheral/assets | HUBREG_GetUxdPnpValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_GetUxdPnpValue.c)
 
 ## RegistryMachin_* Keys
 

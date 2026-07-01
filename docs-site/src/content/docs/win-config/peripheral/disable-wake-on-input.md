@@ -3,7 +3,7 @@ title: 'Wake on Input'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 17
+  order: 16
 ---
 
 ```bat
@@ -18,13 +18,11 @@ powercfg /devicedisablewake device
 ```
 Disables the device (replace '*Device*' with the device name) from waking the system from any sleep state. 
 
-[`WakeOnInputDeviceTypes`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-UpdateWakeOnInputDeviceTypesFromRegistry%40CInputGlobals%40%40QEAAXXZ.c) probably handles wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
-
+[`WakeOnInputDeviceTypes`](https://github.com/nohuto/regkit/blob/main/records/Input.txt) probably handles wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
 ```
 \Registry\Machine\SYSTEM\INPUT : UnDimOnInputDeviceTypes
 \Registry\Machine\SYSTEM\INPUT : WakeOnInputDeviceTypes
 ```
-
 `UnDimOnInputDeviceTypes` probably refers to any dimmed elemets (pure speculation)? Disabling it wouldn't make sense. Values named `ButtonsAsVKeys` & `HardwareButtonsAsVKeys` may exist in `SYSTEM\\INPUT\\BUTTONS`, but I haven't looked further into it.
 
 Default values:
@@ -32,6 +30,8 @@ Default values:
 WakeOnInputDeviceTypes = 46
 UnDimOnInputDeviceTypes = -1  // 4294967295
 ```
+
+- [peripheral/assets | wakedev-WakeOnInputDeviceTypes.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/wakedev-WakeOnInputDeviceTypes.c)
 
 ## query_flag
 

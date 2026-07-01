@@ -9,13 +9,10 @@ sidebar:
 Runs updates and scans daily when your PC is idle, it helps keep your system secure and efficient without affecting performance. Theres no actual reason to disable it, as it doesn't do anything while being active, however if you've any reason for not wanting it to run the tasks while being in idle, toggle the switch.
 
 You can see your current maintenance tasks with:
-
 ```powershell
 Get-ScheduledTask | ? {$_.Settings.MaintenanceSettings}
 ```
-
 `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance` trace:
-
 ```
 \Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance : Activation Boundary
 \Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance : MaintenanceDisabled

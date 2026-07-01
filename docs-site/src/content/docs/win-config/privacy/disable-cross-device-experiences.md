@@ -11,7 +11,6 @@ Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nea
 ## SystemSettings Captures
 
 Changing "Share across devices" option via `SystemSettings`:
-
 ```c
 // Off
 HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 0
@@ -43,8 +42,8 @@ L"WifiLastDisabledNearShare",
 
 - [privacy/assets | crossdev-SharedExperiencesSingleton.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crossdev-SharedExperiencesSingleton.c)
 
-## [Windows Policies](https://noverse.dev/policies)
+## [Windows Policies](https://www.noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Continue experiences on this device](https://noverse.dev/policies?p=GroupPolicy*EnableCDP) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableCdp` |
+| [Continue experiences on this device](https://www.noverse.dev/policies?p=GroupPolicy*EnableCDP) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableCdp` |

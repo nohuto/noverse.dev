@@ -34,13 +34,6 @@ jobs:
           ref: main
           path: sources/win-config
 
-      - name: Checkout nvapi-cli
-        uses: actions/checkout@v6
-        with:
-          repository: nohuto/nvapi-cli
-          ref: main
-          path: sources/nvapi-cli
-
       - name: Checkout regkit
         uses: actions/checkout@v6
         with:
@@ -55,12 +48,12 @@ jobs:
           ref: main
           path: sources/app-guides
 
-      - name: Checkout game-tools
+      - name: Checkout windbg-notes
         uses: actions/checkout@v6
         with:
-          repository: nohuto/game-tools
+          repository: nohuto/windbg-notes
           ref: main
-          path: sources/game-tools
+          path: sources/windbg-notes
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -78,10 +71,9 @@ jobs:
         working-directory: docs-site
         env:
           WIN_CONFIG_REPO_URL: https://github.com/nohuto/win-config
-          NVAPI_CLI_REPO_URL: https://github.com/nohuto/nvapi-cli
           REGKIT_REPO_URL: https://github.com/nohuto/regkit
-          APP_TOOLS_REPO_URL: https://github.com/nohuto/app-guides
-          GAME_TOOLS_REPO_URL: https://github.com/nohuto/game-tools
+          APP_GUIDES_REPO_URL: https://github.com/nohuto/app-guides
+          WINDBG_NOTES_REPO_URL: https://github.com/nohuto/windbg-notes
 
       - name: Commit generated site changes
         run: |

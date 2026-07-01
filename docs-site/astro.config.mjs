@@ -9,7 +9,7 @@ import starlightViewModes from 'starlight-view-modes';
 import starlightLinksValidator from 'starlight-links-validator';
 import { CATEGORY_LABELS } from './docs-constants.mjs';
 
-const sidebarRepos = ['win-config', 'regkit', 'app-guides'];
+const sidebarRepos = ['win-config', 'windbg-notes', 'regkit', 'app-guides'];
 const noverseDocsLabels = {
   name: 'noverse-docs-labels',
   hooks: {
@@ -105,7 +105,7 @@ export default defineConfig({
       ],
       title: 'Noverse Docs',
       description:
-        'Docs from win-config, regkit, app-guides.',
+        'Docs from win-config, regkit, app-guides, and windbg-notes.',
       favicon: '/logo.png',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/nohuto' },

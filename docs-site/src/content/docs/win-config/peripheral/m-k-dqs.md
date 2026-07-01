@@ -3,12 +3,12 @@ title: 'M/K DQS'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 22
+  order: 21
 ---
 
 The value exists by default and is set to `100` decimal (`64` hex). Reducing it doesn't "reduce your latency", leave it default. E.g. setting it to `1` (MouseDataQueueSize) = queue size is 24 bytes (1 mouse packet) = one packet can be buffered, so bursts are much more likely to be dropped = worse. Decreasing it for saving memory is also very minimal, therefore there's no reason I could currently think of for decreasing it below 100.
 
-```c
+```inf
 ; keyboard.inf
 [KbdClass.HW]
 AddReg = KbdClass_HW_AddReg
@@ -28,12 +28,12 @@ HKR,,"MouseDataQueueSize",0x00010003,100
 >
 > — Microsoft KB Archive, [MouseDataQueueSize](https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990)
 
-## [MouseDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mouclass/MouConfiguration.c)
+## [MouseDataQueueSize](https://github.com/nohuto/win-config/blob/main/peripheral/assets/mkdata-MouConfiguration.c)
 
-- not present = default `100` -> `2400`
-- present and `0` = forced to `100` -> `2400`
-- present and `1-0x0AAAAAAA` -> `24 * raw`
-- present and `> 0x0AAAAAAA` -> `2400`
+- not present = default `100` -> final `2400`
+- present and `0` = forced to `100` -> final `2400`
+- present and `1-0x0AAAAAAA` -> final `24 * raw`
+- present and `> 0x0AAAAAAA` -> final `2400`
 
 ```c
 *((_DWORD *)&WPP_MAIN_CB.Reserved + 2) = 100; // default
@@ -58,12 +58,12 @@ LABEL_10:
 *((_DWORD *)&WPP_MAIN_CB.Reserved + 2) = v11;
 ```
 
-## [KeyboardDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/kbdclass/KbdConfiguration.c)
+## [KeyboardDataQueueSize](https://github.com/nohuto/win-config/blob/main/peripheral/assets/mkdata-KbdConfiguration.c)
 
-- not present = default `100` -> `1200`
-- present and `0` = forced to `100` -> `1200`
-- present and `1-0x15555555` -> `12 * raw`
-- present and `> 0x15555555` -> `1200`
+- not present = default `100` -> final `1200`
+- present and `0` = forced to `100` -> final `1200`
+- present and `1-0x15555555` -> final `12 * raw`
+- present and `> 0x15555555` -> final `1200`
 
 ```c
 dword_1C000A234 = 100; // default

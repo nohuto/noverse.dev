@@ -8,5 +8,6 @@ sidebar:
 ---
 
 - [Initialization](/docs/windbg-notes/init/)
+- [Symbols](/docs/windbg-notes/symbols/)
 - [Thread Internals](/docs/windbg-notes/thread-internals/)
-- [RVA + DriverStart](/docs/windbg-notes/rva-driverstart/)
+- [Cheat Sheet](/docs/windbg-notes/cheat-sheet/)

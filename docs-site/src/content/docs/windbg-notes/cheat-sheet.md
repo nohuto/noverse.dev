@@ -9,5 +9,5 @@ sidebar:
 <iframe
   src="https://cdn.jsdelivr.net/gh/nohuto/windbg-notes@main/assets/WinDbg-CheatSheet.pdf"
   width="100%"
-  height="900">
+  style="height: 80dvh">
 </iframe>

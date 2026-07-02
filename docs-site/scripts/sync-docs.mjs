@@ -75,8 +75,9 @@ const APP_GUIDES_TITLES = {
 
 const WINDBG_NOTES_ORDER = [
   'init.md',
+  'symbols.md',
   'thread-internals.md',
-  'rva-driverstart.md',
+  'cheat-sheet.md',
 ];
 
 const entries = [];
@@ -231,13 +232,10 @@ function generateWindbgNotes(repoDir) {
     sourceDirectory: '.',
     outputDirectory: 'windbg-notes',
     routeDirectory: '/docs/windbg-notes/',
-    includeFiles: new Set(WINDBG_NOTES_ORDER),
+    excludeFiles: new Set(['readme.md']),
     fileOrder: WINDBG_NOTES_ORDER,
+    titleOverrides: { 'cheat-sheet.md': 'Cheat Sheet' },
   });
-
-  if (pages !== WINDBG_NOTES_ORDER.length) {
-    throw new Error(`windbg-notes is missing one or more configured Markdown files`);
-  }
 
   return { pages };
 }
@@ -259,7 +257,10 @@ function resolveRepoDirectory(repoName, repoUrl) {
   }
 
   const cacheDir = path.join(DOCS_SITE_DIR, '.cache', 'repos', repoName);
-  if (fs.existsSync(cacheDir) && fs.statSync(cacheDir).isDirectory()) return cacheDir;
+  if (fs.existsSync(cacheDir) && fs.statSync(cacheDir).isDirectory()) {
+    refreshRepoCache(cacheDir);
+    return cacheDir;
+  }
 
   try {
     const normalizedRepoUrl = (repoUrl || '').replace(/\/+$/, '');
@@ -275,6 +276,17 @@ function resolveRepoDirectory(repoName, repoUrl) {
   } catch {
     return '';
   }
+}
+
+function refreshRepoCache(cacheDir) {
+  try {
+    execFileSync('git', ['reset', '--hard', 'HEAD'], { cwd: cacheDir, stdio: 'pipe' });
+    execFileSync('git', ['fetch', '--depth', '1', 'origin', 'main'], {
+      cwd: cacheDir,
+      stdio: 'pipe',
+    });
+    execFileSync('git', ['reset', '--hard', 'FETCH_HEAD'], { cwd: cacheDir, stdio: 'pipe' });
+  } catch {}
 }
 
 function generateReadmeOverview({
@@ -342,7 +354,7 @@ function generateMarkdownFilesFromDirectory({
     const raw = readText(path.join(sourceDirPath, fileName));
     const titleMatch = raw.match(/^#\s+(.+)$/m);
     const title = titleOverrides[fileName.toLowerCase()] || (titleMatch
-      ? titleMatch[1].trim()
+      ? titleMatch[1].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim()
       : toTitleCase(path.posix.basename(fileName, '.md')));
     const body = stripFirstH1(raw).trim();
     const routeSlug = slugify(path.posix.basename(fileName, '.md'));

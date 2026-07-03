@@ -18,7 +18,7 @@ function cloneGroup(group, entries) {
   return { ...group, entries };
 }
 
-function flattenSectionsGroups(entries) {
+function flattenSectionsGroups(entries, capitalizeGroups = false) {
   const flattened = [];
   const orderedEntries = orderSectionsFirst(entries);
 
@@ -32,12 +32,16 @@ function flattenSectionsGroups(entries) {
 
     if (entry.type === 'group') {
       const isSectionsGroup = slugifyLabel(entry.label) === 'sections';
-      const flattenedChildren = flattenSectionsGroups(entry.entries || []);
+      const capitalizeChildren = capitalizeGroups || slugifyLabel(entry.label) === 'windbg-notes';
+      const flattenedChildren = flattenSectionsGroups(entry.entries || [], capitalizeChildren);
       if (isSectionsGroup) {
         flattened.push(...flattenedChildren);
         continue;
       }
-      flattened.push(cloneGroup(entry, flattenedChildren));
+      const label = capitalizeGroups
+        ? entry.label.charAt(0).toUpperCase() + entry.label.slice(1)
+        : entry.label;
+      flattened.push(cloneGroup({ ...entry, label }, flattenedChildren));
     }
   }
 

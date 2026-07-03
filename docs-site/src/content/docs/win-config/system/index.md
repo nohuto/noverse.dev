@@ -22,7 +22,7 @@ sidebar:
 - [Page File](/docs/win-config/system/page-file/)
 - [Notifications](/docs/win-config/system/disable-notifications/)
 - [Minimal Window Snapping](/docs/win-config/system/minimal-window-snapping/)
-- [Optimize File System](/docs/win-config/system/optimize-file-system/)
+- [File System Values](/docs/win-config/system/file-system-values/)
 - [Hyper-V](/docs/win-config/system/disable-hyper-v/)
 - [Service Splitting](/docs/win-config/system/service-splitting/)
 - [Storage Sense](/docs/win-config/system/disable-storage-sense/)

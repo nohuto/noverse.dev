@@ -7,7 +7,7 @@ sidebar:
   order: 1
 ---
 
-- [Initialization](/docs/windbg-notes/init/)
+- [Init](/docs/windbg-notes/init/)
 - [Symbols](/docs/windbg-notes/symbols/)
-- [Thread Internals](/docs/windbg-notes/thread-internals/)
+- [Threads](/docs/windbg-notes/threads/)
 - [Cheat Sheet](/docs/windbg-notes/cheat-sheet/)

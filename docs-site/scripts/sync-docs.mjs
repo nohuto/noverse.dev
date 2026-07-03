@@ -9,26 +9,6 @@ const __dirname = path.dirname(__filename);
 const DOCS_SITE_DIR = path.resolve(__dirname, '..');
 const CONTENT_DIR = path.join(DOCS_SITE_DIR, 'src', 'content', 'docs');
 
-const DOC_REPO_ORDER = [
-  'win-config',
-  'windbg-notes',
-  'regkit',
-  'app-guides',
-];
-
-const WIN_CONFIG_REPO_URL = trimRepoUrl(
-  process.env.WIN_CONFIG_REPO_URL || 'https://github.com/nohuto/win-config'
-);
-const REGKIT_REPO_URL = trimRepoUrl(
-  process.env.REGKIT_REPO_URL || 'https://github.com/nohuto/regkit'
-);
-const APP_GUIDES_REPO_URL = trimRepoUrl(
-  process.env.APP_GUIDES_REPO_URL || 'https://github.com/nohuto/app-guides'
-);
-const WINDBG_NOTES_REPO_URL = trimRepoUrl(
-  process.env.WINDBG_NOTES_REPO_URL || 'https://github.com/nohuto/windbg-notes'
-);
-
 const CATEGORY_ORDER = [
   'system',
   'visibility',
@@ -45,63 +25,92 @@ const CATEGORY_ORDER = [
 
 const INCLUDED_WIN_CONFIG_CATEGORIES = new Set(CATEGORY_ORDER);
 
-const APP_GUIDES_ORDER = [
-  'mullvad-desktop.md',
-  'brave-desktop.md',
-  'brave-ios.md',
-  'discord.md',
-  'lghub.md',
-  'spotify.md',
-  'steam.md',
-  'steelseries.md',
-  'vsc.md',
-  'extensions.md',
-  'search-engine.md',
+const REPOSITORIES = [
+  {
+    name: 'win-config',
+    url: repoUrl('WIN_CONFIG_REPO_URL', 'https://github.com/nohuto/win-config'),
+    type: 'win-config',
+  },
+  {
+    name: 'windbg-notes',
+    url: repoUrl('WINDBG_NOTES_REPO_URL', 'https://github.com/nohuto/windbg-notes'),
+    files: [
+      'init/loading-modules.md',
+      'init/noisy-symbol-loading.md',
+      'init/symbol-server.md',
+      'symbols/reading-symbols.md',
+      'symbols/rva-driverstart.md',
+      'threads/thread-address.md',
+      'threads/thread-structures.md',
+      'threads/thread-activity.md',
+      'cheat-sheet.md',
+    ],
+  },
+  {
+    name: 'regkit',
+    url: repoUrl('REGKIT_REPO_URL', 'https://github.com/nohuto/regkit'),
+    readmeOverview: true,
+    sidebarOrderStart: 2,
+    files: ['guides/procmon.md', 'guides/wpr-wpa.md'],
+  },
+  {
+    name: 'app-guides',
+    url: repoUrl('APP_GUIDES_REPO_URL', 'https://github.com/nohuto/app-guides'),
+    files: [
+      'mullvad-desktop.md',
+      'brave-desktop.md',
+      'brave-ios.md',
+      'discord.md',
+      'lghub.md',
+      'spotify.md',
+      'steam.md',
+      'steelseries.md',
+      'vsc.md',
+      'extensions.md',
+      'search-engine.md',
+    ],
+    titleOverrides: {
+      'mullvad-desktop.md': 'Mullvad',
+      'brave-desktop.md': 'Brave (Desktop)',
+      'brave-ios.md': 'Brave (iOS)',
+      'discord.md': 'Discord',
+      'lghub.md': 'LGHUB',
+      'spotify.md': 'Spotify',
+      'steam.md': 'Steam',
+      'steelseries.md': 'SteelSeries',
+      'vsc.md': 'VSC',
+      'extensions.md': 'Browser Extensions',
+      'search-engine.md': 'Search Engines',
+    },
+  },
 ];
 
-const APP_GUIDES_TITLES = {
-  'mullvad-desktop.md': 'Mullvad',
-  'brave-desktop.md': 'Brave (Desktop)',
-  'brave-ios.md': 'Brave (iOS)',
-  'discord.md': 'Discord',
-  'lghub.md': 'LGHUB',
-  'spotify.md': 'Spotify',
-  'steam.md': 'Steam',
-  'steelseries.md': 'SteelSeries',
-  'vsc.md': 'VSC',
-  'extensions.md': 'Browser Extensions',
-  'search-engine.md': 'Search Engines',
-};
-
-const WINDBG_NOTES_ORDER = [
-  'init.md',
-  'symbols.md',
-  'thread-internals.md',
-  'cheat-sheet.md',
-];
+const DOC_REPO_ORDER = REPOSITORIES.map((repo) => repo.name);
 
 const entries = [];
 
 main();
 
 function main() {
-  const winConfigDir = resolveRepoDirectory('win-config', WIN_CONFIG_REPO_URL);
-  const regkitDir = resolveRepoDirectory('regkit', REGKIT_REPO_URL);
-  const appGuidesDir = resolveRepoDirectory('app-guides', APP_GUIDES_REPO_URL);
-  const windbgNotesDir = resolveRepoDirectory('windbg-notes', WINDBG_NOTES_REPO_URL);
-
-  assertDirectory(winConfigDir, 'win-config');
-  assertDirectory(regkitDir, 'regkit');
-  assertDirectory(appGuidesDir, 'app-guides');
-  assertDirectory(windbgNotesDir, 'windbg-notes');
+  const repoDirs = new Map(REPOSITORIES.map((repo) => {
+    const repoDir = resolveRepoDirectory(repo.name, repo.url);
+    assertDirectory(repoDir, repo.name);
+    return [repo.name, repoDir];
+  }));
 
   resetContentDir();
   generateRootOverview();
 
-  const winConfigStats = generateWinConfig(winConfigDir);
-  const regkitStats = generateRegkit(regkitDir);
-  const appGuidesStats = generateAppGuides(appGuidesDir);
-  const windbgNotesStats = generateWindbgNotes(windbgNotesDir);
+  const repoStats = REPOSITORIES.map((repo) => {
+    const repoDir = repoDirs.get(repo.name);
+    if (repo.type === 'win-config') {
+      return `${repo.name} options: ${generateWinConfig(repoDir).optionPages}`;
+    }
+
+    let pages = repo.readmeOverview ? generateReadmeOverview(repo, repoDir) : 0;
+    pages += generateMarkdownFiles(repo, repoDir);
+    return `${repo.name} pages: ${pages}`;
+  });
   const sectionIndexPages = generateSectionIndexes();
 
   normalizeGeneratedEntries();
@@ -109,12 +118,7 @@ function main() {
 
   console.log(
     `[sync-docs] Generated ${entries.length} pages (` +
-      `win-config options: ${winConfigStats.optionPages}, ` +
-      `regkit overview: ${regkitStats.overviewPages}, ` +
-      `regkit guides: ${regkitStats.guidePages}, ` +
-      `app-guides pages: ${appGuidesStats.pages}, ` +
-      `windbg-notes pages: ${windbgNotesStats.pages}, ` +
-      `section indexes: ${sectionIndexPages}).`
+      `${repoStats.join(', ')}, section indexes: ${sectionIndexPages}).`
   );
 }
 
@@ -134,6 +138,10 @@ function generateRootOverview() {
 
 function trimRepoUrl(url) {
   return url.replace(/\/+$/, '');
+}
+
+function repoUrl(envName, fallback) {
+  return trimRepoUrl(process.env[envName] || fallback);
 }
 
 function assertDirectory(dirPath, label) {
@@ -166,13 +174,10 @@ function generateWinConfig(winConfigDir) {
     }
 
     const sectionSlugSet = new Set();
-    const githubAnchorCounts = new Map();
-
     for (let index = 0; index < sections.length; index += 1) {
       const section = sections[index];
       const routeSlug = uniqueSlug(slugify(section.heading), sectionSlugSet);
       const route = `/docs/win-config/${category}/${routeSlug}/`;
-      const githubAnchor = uniqueGitHubAnchor(section.heading, githubAnchorCounts);
       const title = normalizeWinConfigTitle(section.heading);
 
       optionPages += 1;
@@ -190,56 +195,6 @@ function generateWinConfig(winConfigDir) {
 
   return { optionPages };
 }
-function generateRegkit(repoDir) {
-  const overviewPages = generateReadmeOverview({
-    repoKey: 'regkit',
-    repoDir,
-    outputDirectory: 'regkit',
-    routeDirectory: '/docs/regkit/',
-  });
-
-  const guidePages = generateMarkdownFilesFromDirectory({
-    repoKey: 'regkit',
-    repoDir,
-    sourceDirectory: 'guides',
-    outputDirectory: 'regkit/guides',
-    routeDirectory: '/docs/regkit/guides/',
-    sidebarOrderStart: 2,
-  });
-
-  return { overviewPages, guidePages };
-}
-
-function generateAppGuides(repoDir) {
-  const pages = generateMarkdownFilesFromDirectory({
-    repoKey: 'app-guides',
-    repoDir,
-    sourceDirectory: '.',
-    outputDirectory: 'app-guides',
-    routeDirectory: '/docs/app-guides/',
-    excludeFiles: new Set(['readme.md']),
-    fileOrder: APP_GUIDES_ORDER,
-    titleOverrides: APP_GUIDES_TITLES,
-  });
-
-  return { pages };
-}
-
-function generateWindbgNotes(repoDir) {
-  const pages = generateMarkdownFilesFromDirectory({
-    repoKey: 'windbg-notes',
-    repoDir,
-    sourceDirectory: '.',
-    outputDirectory: 'windbg-notes',
-    routeDirectory: '/docs/windbg-notes/',
-    excludeFiles: new Set(['readme.md']),
-    fileOrder: WINDBG_NOTES_ORDER,
-    titleOverrides: { 'cheat-sheet.md': 'Cheat Sheet' },
-  });
-
-  return { pages };
-}
-
 function resolveRepoDirectory(repoName, repoUrl) {
   const candidatePaths = [
     path.resolve(DOCS_SITE_DIR, '..', repoName),
@@ -289,18 +244,13 @@ function refreshRepoCache(cacheDir) {
   } catch {}
 }
 
-function generateReadmeOverview({
-  repoKey,
-  repoDir,
-  outputDirectory,
-  routeDirectory,
-}) {
+function generateReadmeOverview(repo, repoDir) {
   const readmePath = path.join(repoDir, 'README.md');
   if (!fs.existsSync(readmePath)) return 0;
 
   const raw = readText(readmePath);
   const titleMatch = raw.match(/^#\s+(.+)$/m);
-  const readmeTitle = titleMatch ? titleMatch[1].trim() : toTitleCase(repoKey);
+  const readmeTitle = titleMatch ? titleMatch[1].trim() : toTitleCase(repo.name);
   const body = stripFirstH1(raw).trim();
 
   if (!body) {
@@ -308,8 +258,8 @@ function generateReadmeOverview({
   }
 
   addEntry({
-    relativePath: `${outputDirectory}/overview.md`,
-    route: `${routeDirectory}overview/`,
+    relativePath: `${repo.name}/overview.md`,
+    route: `/docs/${repo.name}/overview/`,
     title: 'Overview',
     description: `${readmeTitle} overview generated from README.`,
     sidebarOrder: 1,
@@ -319,61 +269,52 @@ function generateReadmeOverview({
   return 1;
 }
 
-function generateMarkdownFilesFromDirectory({
-  repoKey,
-  repoDir,
-  sourceDirectory,
-  outputDirectory,
-  routeDirectory,
-  excludeFiles = new Set(),
-  includeFiles = null,
-  sidebarOrderStart = 1,
-  fileOrder = [],
-  titleOverrides = {},
-}) {
-  const sourceDirPath = path.join(repoDir, sourceDirectory);
-  if (!fs.existsSync(sourceDirPath)) return 0;
-  const fileOrderRank = new Map(fileOrder.map((name, index) => [name.toLowerCase(), index]));
+function generateMarkdownFiles(repo, repoDir) {
+  const titleOverrides = repo.titleOverrides || {};
+  const sidebarOrderStart = repo.sidebarOrderStart || 1;
 
-  const markdownFiles = fs
-    .readdirSync(sourceDirPath, { withFileTypes: true })
-    .filter((dirent) => dirent.isFile() && dirent.name.toLowerCase().endsWith('.md'))
-    .map((dirent) => dirent.name)
-    .filter((name) => !includeFiles || includeFiles.has(name.toLowerCase()))
-    .filter((name) => !excludeFiles.has(name.toLowerCase()))
-    .sort((a, b) => {
-      const aRank = fileOrderRank.get(a.toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
-      const bRank = fileOrderRank.get(b.toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
-      if (aRank !== bRank) return aRank - bRank;
-      return a.localeCompare(b);
-    });
+  for (let index = 0; index < repo.files.length; index += 1) {
+    const sourcePath = repo.files[index];
+    const filePath = path.join(repoDir, ...sourcePath.split('/'));
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`${repo.name} is missing configured Markdown file: ${sourcePath}`);
+    }
 
-  let generated = 0;
-
-  for (const fileName of markdownFiles) {
-    const raw = readText(path.join(sourceDirPath, fileName));
+    const raw = readText(filePath);
     const titleMatch = raw.match(/^#\s+(.+)$/m);
-    const title = titleOverrides[fileName.toLowerCase()] || (titleMatch
+    const title = titleOverrides[sourcePath.toLowerCase()] || (titleMatch
       ? titleMatch[1].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim()
-      : toTitleCase(path.posix.basename(fileName, '.md')));
-    const body = stripFirstH1(raw).trim();
-    const routeSlug = slugify(path.posix.basename(fileName, '.md'));
-    const route = `${routeDirectory}${routeSlug}/`;
-    const relativePath = `${outputDirectory}/${routeSlug}.md`;
+      : toTitleCase(path.posix.basename(sourcePath, '.md')));
+    const body = rewriteRelativeMarkdownLinks(stripFirstH1(raw).trim(), repo.name, sourcePath);
+    const outputPath = markdownOutputPath(sourcePath);
+    const displaySourcePath = sourcePath.includes('/') ? sourcePath : `./${sourcePath}`;
 
     addEntry({
-      relativePath,
-      route,
+      relativePath: `${repo.name}/${outputPath}.md`,
+      route: `/docs/${repo.name}/${outputPath}/`,
       title,
-      description: `Generated from ${repoKey} file: ${sourceDirectory}/${fileName}.`,
-      sidebarOrder: sidebarOrderStart + generated,
+      description: `Generated from ${repo.name} file: ${displaySourcePath}.`,
+      sidebarOrder: sidebarOrderStart + index,
       body,
     });
-
-    generated += 1;
   }
 
-  return generated;
+  return repo.files.length;
+}
+
+function rewriteRelativeMarkdownLinks(markdown, repoName, sourcePath) {
+  return markdown.replace(/\]\((?![a-z]+:|\/|#)([^)\s]+\.md)(#[^)]*)?\)/gi, (_, target, hash = '') => {
+    const resolvedPath = path.posix.normalize(path.posix.join(path.posix.dirname(sourcePath), target));
+    return `](/docs/${repoName}/${markdownOutputPath(resolvedPath)}/${hash})`;
+  });
+}
+
+function markdownOutputPath(sourcePath) {
+  return sourcePath
+    .replace(/\.md$/i, '')
+    .split('/')
+    .map(slugify)
+    .join('/');
 }
 
 function generateSectionIndexes() {
@@ -432,13 +373,8 @@ function normalizeGeneratedMarkdown(markdown) {
     .replace(/https:\/\/www\.noverse\.dev\/docs\/nvapi-cli\/sections\/overview\/?/g, 'https://github.com/nohuto/nvapi-cli')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g, '/docs/app-guides/')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g, '/docs/app-guides/')
     .replace(/https:\/\/www\.noverse\.dev\/(product|projects|bin-diff|policies)\.html/g, 'https://www.noverse.dev/$1')
-    .replace(/https:\/\/github\.com\/nohuto\/app-guides/g, 'https://github.com/nohuto/app-guides')
-    .replace(/\bapp-guides\b/g, 'app-guides')
     .replace(/\]\(\((https?:\/\/[^)\s]+)\)\)/gi, ']($1)')
     .replace(/\[([^\]]+)\]\(\[([^\]]+)\]\(([^)]+)\)\)/g, '[$1]($3)');
 }
@@ -546,10 +482,7 @@ function categorySortRank(segment) {
 function getDirectoryLabel(directory) {
   const segment = directory.split('/').pop() || directory;
 
-  if (segment === 'win-config') return 'win-config';
-  if (segment === 'regkit') return 'regkit';
-  if (segment === 'app-guides') return 'app-guides';
-  if (segment === 'windbg-notes') return 'windbg-notes';
+  if (DOC_REPO_ORDER.includes(segment)) return segment;
   if (segment === 'sections') return 'Sections';
   if (segment === 'guides') return 'Guides';
   if (segment === 'docs') return 'Docs';
@@ -712,27 +645,6 @@ function splitByHeadingLevel(markdown, level) {
   }
 
   return sections;
-}
-
-function uniqueGitHubAnchor(heading, counts) {
-  const base = githubAnchorSlug(heading) || 'section';
-  const seen = counts.get(base) || 0;
-  counts.set(base, seen + 1);
-  return seen === 0 ? base : `${base}-${seen}`;
-}
-
-function githubAnchorSlug(input) {
-  const stripped = input
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\- ]/g, '')
-    .replace(/ /g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
-
-  return stripped;
 }
 
 function slugify(input) {

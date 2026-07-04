@@ -3,7 +3,7 @@ title: 'Mouse Hover Time'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 14
+  order: 15
 ---
 
 - `MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.

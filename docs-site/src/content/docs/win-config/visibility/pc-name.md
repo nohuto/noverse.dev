@@ -3,7 +3,7 @@ title: 'PC Name'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 35
+  order: 30
 ---
 
 Query current name via:

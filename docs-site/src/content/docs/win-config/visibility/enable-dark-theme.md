@@ -3,7 +3,7 @@ title: 'Dark Theme'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 8
 ---
 
 ## Registry Values

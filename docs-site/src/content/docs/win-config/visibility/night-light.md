@@ -3,7 +3,7 @@ title: 'Night Light'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 5
+  order: 6
 ---
 
 Uses warmer colors to block blue light, since the data for them is a bit complicated as shown below, I'll add support for modifying it in a later WinConfig version.

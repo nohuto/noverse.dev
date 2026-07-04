@@ -3,7 +3,7 @@ title: 'Taskbar Settings'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 11
 ---
 
 Removes the search box, moves the taskbar to the left, removes badges, disables the flashes on the app icons, removes the "Task View" button (`Personalization > Taskbar`). See details about the `Add 'End Task' to Taskbar Context Menu` option [here](https://www.youtube.com/watch?v=5HWyyNep6t0).
@@ -26,6 +26,59 @@ SystemSettings.exe	HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advan
 ```
 
 Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0, but it grays out & disables the option.
+
+## Suboptions
+
+### Hide Language Bar
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/languagebar.png?raw=true)
+
+#### Text Services and Input Languages Captures
+
+`Time & language > Typing > Advanced keyboard settings > Language bar options`:
+```c
+// Floating On Desktop
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 0
+
+// Hidden
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 3
+
+// Docked in the taskbar
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 4
+```
+
+`Show the Language bar as transparent when inactive`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 64
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 255
+```
+
+`Show additional Language bar icons in the taskbar`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+`Show text labels on the Language bar`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+### System Clock Seconds
+
+"*Uses more power*" (in relation to laptops).
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/clock.png?raw=true)
 
 ## [Windows Policies](https://noverse.dev/policies)
 

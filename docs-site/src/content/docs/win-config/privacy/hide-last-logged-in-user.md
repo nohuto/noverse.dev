@@ -8,7 +8,7 @@ sidebar:
 
 Note that if you use this option and don't have a password, you'll have to enter your username at each boot ([policy](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name)).
 
-"This security setting determines whether the Windows sign-in screen will show the username of the last person who signed in on this PC."
+> "*This security setting determines whether the Windows sign-in screen will show the username of the last person who signed in on this PC.*"
 
 ```c
 // Enabled

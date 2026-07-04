@@ -6,19 +6,20 @@ sidebar:
   order: 11
 ---
 
-SSTP VPN & other VPNs - enable the services, to revert it.
-
 Get current VPN connections:
+
 ```powershell
 Get-VpnConnection
 ```
+
 Remove a VPN connection with (or `Remove-VpnConnection`):
+
 ```bat
 rasphone -r "Name"
 ```
 or `WIN + I` > Network & Internet > VPN > Remove
 
-### `Allow VPN over metered networks`
+### Allow VPN over metered networks
 
 ```c
 OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters_1 = 
@@ -35,7 +36,7 @@ if ( !v17[0] )
     g_donotUseCosted = 0, // default
 ```
 
-### `Allow VPN while Roaming`
+### Allow VPN while Roaming
 
 ```c
 OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters = 

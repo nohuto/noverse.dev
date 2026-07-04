@@ -25,7 +25,6 @@ sidebar:
 - [Device Manager](/docs/win-config/peripheral/device-manager/)
 - [Wake on Input](/docs/win-config/peripheral/disable-wake-on-input/)
 - [Dynamic Lighting](/docs/win-config/peripheral/disable-dynamic-lighting/)
-- [Disk Write Cache Policy](/docs/win-config/peripheral/disk-write-cache-policy/)
 - [System Sounds](/docs/win-config/peripheral/disable-system-sounds/)
 - [Printers](/docs/win-config/peripheral/disable-printers/)
 - [M/K DQS](/docs/win-config/peripheral/m-k-dqs/)

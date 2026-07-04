@@ -3,10 +3,11 @@ title: 'System Sounds'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 20
+  order: 19
 ---
 
 Disables system sounds and removes sound events. I did use the keys, which Windows would disable:
+
 ```powershell
 "HKCU\AppEvents\Schemes\Apps\.Default\SystemAsterisk\.Current\(Default)","Type: REG_SZ, Length: 0"
 "HKCU\AppEvents\Schemes\Apps\.Default\Notification.Reminder\.Current\(Default)","Type: REG_SZ, Length: 0"

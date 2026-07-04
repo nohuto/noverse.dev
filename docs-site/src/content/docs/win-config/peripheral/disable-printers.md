@@ -3,13 +3,14 @@ title: 'Printers'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 21
+  order: 20
 ---
 
 Disables printer related services (`Spooler`, `PrintWorkFlowUserSvc`, `PrintNotify`, `usbprint`, `McpManagementService`, `PrintScanBrokerService`, `PrintDeviceConfigurationService`), and various optional features / scheduled tasks.
 
 Remove the `Print` option from the context menu:
-```
+
+```powershell
 Remove-Item "Registry::HKEY_CLASSES_ROOT\Applications\photoviewer.dll\shell\print" -Force -Recurse
 Remove-Item "Registry::HKEY_CLASSES_ROOT\batfile\shell\print" -Force -Recurse
 Remove-Item "Registry::HKEY_CLASSES_ROOT\cmdfile\shell\print" -Force -Recurse

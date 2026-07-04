@@ -3,7 +3,7 @@ title: 'PowerShell & .NET Telemetry'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 18
+  order: 19
 ---
 
 ### [POWERSHELL_TELEMETRY_OPTOUT](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_telemetry?view=powershell-7.2)

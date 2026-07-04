@@ -3,7 +3,7 @@ title: 'File History'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 27
+  order: 28
 ---
 
 "File History automatically backs up versions of files in your user folders (Documents, Music, Pictures, Videos, Desktop) and offline OneDrive. It tracks changes via the NTFS change journal (fast, low overhead) and saves only changed files. You must choose a backup target (external drive or network share). If that target is unavailable, it caches copies locally and syncs them when the target returns. You can browse and restore any version or recover lost/deleted files."

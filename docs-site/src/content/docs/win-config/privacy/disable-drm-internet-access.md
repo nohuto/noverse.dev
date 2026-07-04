@@ -3,7 +3,7 @@ title: 'DRM Internet Access'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 30
+  order: 31
 ---
 
 Prevents Windows Media Digital Rights Management (DRM) from accessing the Internet (or intranet). When enabled, Windows Media DRM is prevented from accessing the Internet (or intranet) for license acquisition and security upgrades. Secure content that is already licensed to the local computer will continue to play.

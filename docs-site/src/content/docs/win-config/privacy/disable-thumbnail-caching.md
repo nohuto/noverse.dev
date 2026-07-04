@@ -3,7 +3,7 @@ title: 'Thumbnail Caching'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 36
+  order: 37
 ---
 
 Disables persistent File Explorer thumbnail caching so previews are less likely to remain stored after browsing folders. Windows normally rebuilds thumbnail caches automatically (use `Thumbnail Cache` option in 'Cleanup' section to clear it).

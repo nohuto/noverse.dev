@@ -18,7 +18,7 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\stornvme\\Parameters\\Device";
-    "MaxTransferSize" = 0; // REG_MULTI_SZ, range 1-2048, clamp to 2048 (value << 10) 0 = ignore
+    "MaxTransferSize" = 0; // REG_MULTI_SZ, range 1-2048
     "IoQueueDepth" = 0; // REG_MULTI_SZ
     "IoSubmissionQueueCount" = 0; // REG_MULTI_SZ
     "IoCompletionQueueCount" = 0; // REG_MULTI_SZ

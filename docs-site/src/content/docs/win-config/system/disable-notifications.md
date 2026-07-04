@@ -6,7 +6,9 @@ sidebar:
   order: 14
 ---
 
-## Option/Suboptions
+The '*System Template*' won't disable all notifications, so e.g. critical Defender notifications will still be shown.
+
+## (Sub)Options
 
 | Option | Description |
 | ---- | ---- |

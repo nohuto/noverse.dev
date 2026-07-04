@@ -3,7 +3,7 @@ title: 'Dynamic Lock'
 description: 'Security option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 21
+  order: 18
 ---
 
 Automatically locks your device when you're away. It requires Bluetooth to be active. This option is disabled by default.

@@ -3,7 +3,7 @@ title: 'Increase TDR'
 description: 'Security option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 18
+  order: 16
 ---
 
 Disabling TDR removes a valuable layer of protection, so it is generally recommended that you keep it enabled.

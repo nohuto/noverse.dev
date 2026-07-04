@@ -8,7 +8,6 @@ sidebar:
 ---
 
 - [Explorer Options](/docs/win-config/visibility/explorer-options/)
-- [Remove Quick Access](/docs/win-config/visibility/remove-quick-access/)
 - [Desktop Wallpaper](/docs/win-config/visibility/desktop-wallpaper/)
 - [Pointer Style](/docs/win-config/visibility/pointer-style/)
 - [Rounded Corners](/docs/win-config/visibility/disable-rounded-corners/)
@@ -24,7 +23,6 @@ sidebar:
 - [Mouse Hover Time](/docs/win-config/visibility/mouse-hover-time/)
 - [Audio / Video Preview](/docs/win-config/visibility/disable-audio-video-preview/)
 - [Classic Context Menu](/docs/win-config/visibility/classic-context-menu/)
-- [Automatic Folder Type Discovery](/docs/win-config/visibility/disable-automatic-folder-type-discovery/)
 - [Hide Shortcut Icon](/docs/win-config/visibility/hide-shortcut-icon/)
 - ['New' Context Menu](/docs/win-config/visibility/new-context-menu/)
 - [Desktop Icon Spacing](/docs/win-config/visibility/desktop-icon-spacing/)
@@ -33,9 +31,7 @@ sidebar:
 - [Hide Lock Screen](/docs/win-config/visibility/hide-lock-screen/)
 - [Spotlight](/docs/win-config/visibility/disable-spotlight/)
 - [PowerShell Colors](/docs/win-config/visibility/powershell-colors/)
-- [Prevent Color/Theme Changes](/docs/win-config/visibility/prevent-color-theme-changes/)
 - [Hide Disabled/Disconnected Devices](/docs/win-config/visibility/hide-disabled-disconnected-devices/)
 - [Force Classic Control Panel](/docs/win-config/visibility/force-classic-control-panel/)
-- [PC Name](/docs/win-config/visibility/pc-name/)
 - [OEM Information](/docs/win-config/visibility/oem-information/)
 - [Settings Page Visibility](/docs/win-config/visibility/settings-page-visibility/)

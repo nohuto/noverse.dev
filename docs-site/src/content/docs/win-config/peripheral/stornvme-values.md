@@ -26,15 +26,15 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "InterruptCoalescingEntry" = 0; // REG_MULTI_SZ
     "ArbitrationBurst" = 255; // REG_MULTI_SZ
     "ContiguousMemoryFromAnyNode" = 0; // REG_MULTI_SZ
-    "ShutdownTimeout" = 0; // REG_MULTI_SZ, >0xFF coerced to 0xFF, 0 ignored
+    "ShutdownTimeout" = 0; // REG_MULTI_SZ, >0xFF clamped to 0xFF, 0 ignored
     "DeallocateMaxLbaCount" = 0; // REG_MULTI_SZ
     "DisableDeallocate" = 0; // REG_MULTI_SZ
     "ControllerBasicInit" = 0; // REG_MULTI_SZ
-    "AsyncEventMask" = ?; // REG_MULTI_SZ, nonzero override is masked with 0x1F (init observed: 23H2=1823, 24H2=134219551)
-    "IdlePowerMode" = 0; // REG_MULTI_SZ, applied only if value < 6, skipped when StorPortExtendedFunction(97) sets mode=2
+    "AsyncEventMask" = ?; // REG_MULTI_SZ
+    "IdlePowerMode" = 0; // REG_MULTI_SZ, applied only if value < 6
     "DiagnosticFlags" = 0; // REG_MULTI_SZ, bit 1 (0x2) forces LogSize default to 0x100000 bytes
-    "LogSize" = 0; // REG_MULTI_SZ, stored as bytes (value << 10) 0 ignored (unless DiagnosticFlags set)
-    "IoStripeAlignment" = 0; // REG_MULTI_SZ, applied only if (value << 10) is 4K-aligned
+    "LogSize" = 0; // REG_MULTI_SZ, 0 ignored (unless DiagnosticFlags set)
+    "IoStripeAlignment" = 0; // REG_MULTI_SZ
     "MedPowerFxIdleTimeout" = 4294967295; // REG_MULTI_SZ
     "LowestPowerFxIdleTimeout" = 50; // REG_MULTI_SZ
     "MedPowerD3IdleTimeout" = 3000; // REG_MULTI_SZ
@@ -45,23 +45,23 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "BypassSgl" = 1; // REG_MULTI_SZ, only value bit 0 is used
     "TestMdlDataBufferOffsetInBytes" = 0; // REG_MULTI_SZ
     "UseDumpPointers" = 0; // REG_MULTI_SZ
-    "ReservedQueuePairCount" = 0; // REG_MULTI_SZ, valid 1-65535 (check v69-1 <= 0xFFFE)
+    "ReservedQueuePairCount" = 0; // REG_MULTI_SZ, valid 1-65535
     "NvmeTestSwitch" = 1; // REG_MULTI_SZ
-    "IoQueuePercentageInPollingMode" = 0; // REG_MULTI_SZ, >100 coerced to 100
-    "IoPollingInterval" = 0; // REG_MULTI_SZ, >100000 coerced to 100000
+    "IoQueuePercentageInPollingMode" = 0; // REG_MULTI_SZ, >100 clamped to 100
+    "IoPollingInterval" = 0; // REG_MULTI_SZ, >100000 clamped to 100000
     "IoCompletionCapInDPC" = 100; // REG_MULTI_SZ, if nonzero clamp to 128
     "IoPollingSize" = 0x4000; // REG_MULTI_SZ
     "ErrorEtwThrottleInterval" = 0xD693A400; // REG_MULTI_SZ, if nonzero clamp to max 0xD693A400
-    "ResetEnableMask" = 0; // REG_MULTI_SZ, value bit 0/1/2 set internal flags 0x40/0x800/0x1000
+    "ResetEnableMask" = 0; // REG_MULTI_SZ
     "ReliabilityDegraded" = 0; // REG_MULTI_SZ
     "ReadOnly" = 0; // REG_MULTI_SZ
     "VolatileMemoryBackupDeviceFailed" = 0; // REG_MULTI_SZ
     "AvailableSpare" = 0; // REG_MULTI_SZ
     "AvailableSpareThreshold" = 0; // REG_MULTI_SZ
-    "ForcedPhysicalSectorSizeInBytes" = ?; // REG_MULTI_SZ, nonzero required before write
-    "RetainAsyncEventControlMask" = ?; // REG_MULTI_SZ, written directly when read succeeds
-    "ShutdownTimeoutForSurpriseRemove" = 0; // REG_MULTI_SZ, >0xFF coerced to 0xFF, 0 ignored
-    "MaxIoCountLimit" = 0; // REG_MULTI_SZ, nonzero required before write
+    "ForcedPhysicalSectorSizeInBytes" = ?; // REG_MULTI_SZ
+    "RetainAsyncEventControlMask" = ?; // REG_MULTI_SZ
+    "ShutdownTimeoutForSurpriseRemove" = 0; // REG_MULTI_SZ, >0xFF clamped to 0xFF, 0 ignored
+    "MaxIoCountLimit" = 0; // REG_MULTI_SZ
     "SubmissionQueueAssignmentPolicy" = 0; // REG_MULTI_SZ
     "DisableMFNDCCDuringRemoval" = ?; // REG_MULTI_SZ
     "EnableSingleDpcForIoCompletion" = ?; // REG_MULTI_SZ
@@ -71,11 +71,11 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "DisableGetActiveNSIDList" = 0; // REG_MULTI_SZ
     "ForceCryptoEraseToUseFormatNVM" = 0; // REG_MULTI_SZ
 
-    "ControllerResetWaitTimeCushion" = 20000; // REG_MULTI_SZ, GetDynamicRegistrySettings writes the read value directly (including 0)
-    "DisableActivateFWWithoutReset" = 0; // REG_MULTI_SZ, read in GetRegistrySettingsForSpecificKey and returned directly
+    "ControllerResetWaitTimeCushion" = 20000; // REG_MULTI_SZ
+    "DisableActivateFWWithoutReset" = 0; // REG_MULTI_SZ
 
     // present in 24H2 path (not present in 23H2 path)
-    "DisableDSTThrottle" = ?; // REG_MULTI_SZ, GetDynamicRegistrySettings first clears flag 0x200000, then sets it when value is nonzero
+    "DisableDSTThrottle" = ?; // REG_MULTI_SZ
     "DisableF0TimestampSync" = 0; // REG_MULTI_SZ
     "DisableForwardedIO" = 0; // REG_MULTI_SZ
     "EnableIntelTSESplitIOWorkaround" = 0; // REG_MULTI_SZ

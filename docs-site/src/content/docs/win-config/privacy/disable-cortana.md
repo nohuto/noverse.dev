@@ -6,7 +6,9 @@ sidebar:
   order: 30
 ---
 
-"[Cortana](https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)) was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users."
+Cortana is [deprecated](https://support.microsoft.com/en-us/cortana/end-of-support-for-cortana) in W11 and is no longer the supported voice assistant.
+
+> "*[Cortana](https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)) was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
 

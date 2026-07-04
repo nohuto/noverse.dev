@@ -8,7 +8,7 @@ sidebar:
 
 Note that whenever you use this option while having UWP apps, it'll break notifications, background sync, etc., also *some apps, including Cortana and Search, might not function as expected if you set 'Let apps run in the background' to 'Force Deny'*.
 
-> *This policy setting specifies whether Windows apps can run in the background.*
+> "*This policy setting specifies whether Windows apps can run in the background.*
 >
 > *You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting.*
 >

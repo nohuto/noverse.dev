@@ -6,7 +6,7 @@ sidebar:
   order: 5
 ---
 
-For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
+For values with "any nonzero" comment, the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
 
 ## Registry Values
 
@@ -38,15 +38,15 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usb";
     "debuglevel" = 0; // REG_DWORD
-    "debuglogmask" = 0xFFFFFFFE; // REG_DWORD, bitmask for log categories
+    "debuglogmask" = 0xFFFFFFFE; // REG_DWORD
     "debuglogenable" = 1; // REG_DWORD (bool)
     "debugcatc" = 0; // REG_DWORD (bool)
     "DisableSelectiveSuspend" = 0; // REG_DWORD (bool)
     "DisableCcDetect" = 0; // REG_DWORD (bool
     "EnPMDebug" = 0; // REG_DWORD (bool), for debugging power management
     "ForceHcD3NoWakeArm" = 0 // REG_DWORD (bool)
-    "EnableDCA" = 0 // REG_DWORD (bool), direct controller access
-    "ForcePortsHighSpeed" = 0; // REG_DWORD (bool), forces ports to remain under EHCI
+    "EnableDCA" = 0 // REG_DWORD (bool), DCA = direct controller access
+    "ForcePortsHighSpeed" = 0; // REG_DWORD (bool), forces ports to stay under EHCI
 
 // "This class is reserved for USB host controllers and USB hubs", I'll add them here as they're also in usbport.sys and also taken from the W10 source
 

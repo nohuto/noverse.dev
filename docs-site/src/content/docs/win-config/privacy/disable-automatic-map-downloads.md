@@ -6,7 +6,7 @@ sidebar:
   order: 6
 ---
 
-Disables automatic network traffic on the settings page and prevents automatic downloading or updating of map data, limiting location-related data updates.
+Disables automatic network traffic on the settings page and prevents automatic downloading or updating of map data, limiting location related data updates.
 
 `AllowOfflineMapsDownloadOverMeteredConnection` & `EnableOfflineMapsAutoUpdate`:
 

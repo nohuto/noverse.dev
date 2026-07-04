@@ -41,10 +41,11 @@ sidebar:
 
 ## Suboptions
 
-`Disable DHA Report`:  
+### DHA Report
+
 > "*This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.*"
 
-`Disable Persistent System Timestamp`:
+### Persistent System Timestamp
 
 Disables the Reliability policy that periodically writes the current system time to disk. Windows uses that persistent timestamp as a "last known alive" time so Reliability Monitor / WER can estimate when an unexpected shutdown, power loss, hard reset, or crash happened (see policies below).
 
@@ -58,6 +59,31 @@ if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbD
 `TimeStampInterval` under `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` is in seconds, the value under `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` is read as minutes and multiplied by 60.
 
 - [privacy/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/timestamp-OsEventsTimestampInterval.c)
+
+### Crash Dumps
+
+Disables the crash dump, logging. Not all values may be read on your system.
+
+#### [Data Meaning](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery)
+
+```c
+CrashDumpEnabled REG_DWORD 0x0 = None
+CrashDumpEnabled REG_DWORD 0x1 = Complete memory dump
+CrashDumpEnabled REG_DWORD 0x2 = Kernel memory dump
+CrashDumpEnabled REG_DWORD 0x3 = Small memory dump (64 KB)
+CrashDumpEnabled REG_DWORD 0x7 = Automatic memory dump
+CrashDumpEnabled REG_DWORD 0x1 and FilterPages REG_DWORD 0x1 = Active memory dump
+```
+
+There're two values named [`CrashDumpEnabled.New`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt) & [`CrashDumpEnabled.Old`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt), I haven't looked into them yet, see this as note for future reference.
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.New
+\Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.Old
+```
+
+- [privacy/assets | crashdmp.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp.c)
+- [privacy/assets | crashdmp-SecureDump_PrepareForInit.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp-SecureDump_PrepareForInit.c)
 
 ## Miscellaneous Notes
 

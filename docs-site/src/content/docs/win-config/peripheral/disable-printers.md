@@ -63,7 +63,7 @@ This list was created on a stock `W11 LTSC IoT Enterprise 2024` installation via
 dir Registry::HKEY_CLASSES_ROOT -Recurse -ea SilentlyContinue | ? { $_.Name -like '*\shell\print' } | select -ExpandProperty Name
 ```
 
-## Printer Connections
+### Printer Connections
 
 [List](https://learn.microsoft.com/en-us/powershell/module/printmanagement/get-printer?view=windowsserver2025-ps) all printer connections:
 ```powershell

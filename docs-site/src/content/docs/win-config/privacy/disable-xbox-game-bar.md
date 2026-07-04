@@ -8,7 +8,7 @@ sidebar:
 
 GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, with optional background recording.
 
-## WindowsMediaCapture Values
+### WindowsMediaCapture Values
 
 ```c
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR";
@@ -66,7 +66,7 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
 - [privacy/assets | gamebar-WindowsMediaCaptureIAppBroadcastGlobalSettings.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/gamebar-WindowsMediaCaptureIAppBroadcastGlobalSettings.c) (`HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AppBroadcast\\GlobalSettings`)
 - [settings/settings-windows-11.md#gaming-game-bar-game-mode-gaming-shortcuts](https://github.com/MicrosoftDocs/windows-dev-docs/blob/docs/hub/apps/develop/settings/settings-windows-11.md#gaming-game-bar-game-mode-gaming-shortcuts)
 
-## Game Bar Precense Writer
+### Game Bar Precense Writer
 
 > "*Game Bar Presence Writer is a component that is notified when a game's "presence" state (i.e. is a game running in the foreground) changes. This functionality is available in Windows 10 and later operating systems. By default, the existing Game Bar Presence Writer will set a user's Xbox Live presence state for a running game if the Xbox App is installed, the user is signed into their Xbox account, and the user has enabled Xbox Live presence to be set when they run a game on their PC. It is possible for Windows Application developers to override this default behavior with their own implementation.*"
 >

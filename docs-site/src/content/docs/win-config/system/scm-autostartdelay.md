@@ -51,7 +51,7 @@ __int64 __fastcall CDelayStartContext::GetAutostartDelay(CDelayStartContext *thi
 }
 ```
 
-## EnableAutostartEvents Notes
+## EnableAutostartEvents
 
 Note on a different option which I didn't implement (this information is based on [Windows Internals E7 P2](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf), P448-449):
 

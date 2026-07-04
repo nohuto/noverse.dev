@@ -13,7 +13,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\C
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate: Data # REG_BINARY
 ```
 
-## [Windows.Data.BlueLightReduction.Settings](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionsettings-structure) structure
+## [BlueLightReduction.Settings](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionsettings-structure) structure
 
 The data itself is [Microsoft Bond Compact Binary](https://microsoft.github.io/bond/reference/cpp/compact__binary_8h_source.html), `43 42 01 00` prefix means `CB` (compact binary) version `1`.
 
@@ -71,7 +71,7 @@ Example data:
 
 `ScheduleTime` has type int8, field `0` is `hour` and field `1` is `minute` (often leaves `minute` out when it is `0`).
 
-## [Windows.Data.BlueLightReduction.BlueLightReductionState](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionbluelightreductionstate-structure) structure
+## [BlueLightReduction.BlueLightReductionState](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionbluelightreductionstate-structure) structure
 
 Example data:
 

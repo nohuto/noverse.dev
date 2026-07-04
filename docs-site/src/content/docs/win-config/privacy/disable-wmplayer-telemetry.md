@@ -12,23 +12,7 @@ WMPlayer (Windows Media Player) sends player usage data by default, if using the
 
 Note: I gathered all registry values via the legacy WMPlayer.
 
-## Suboptions
-
-| Option | Description |
-| ---- | ---- |
-| `Disable History` | Disables storing and displaying a list of recent/frequently played music, videos, pictures, playlists (`UsageLoggerCategories` disables "Save recently used to the Jumplist instead of frequently used"). |
-| `Prevent Send User ID` | Prevents sending a unique player ID to content providers. |
-| `Disable Metadata Retrieval` | Disables displaying media information from the internet and updating music files by retrieving media info from the internet. |
-| `Prevent Usage Rights Download` | Prevents downloading usage rights automatically when playing or syncing a file. |
-| `Prevent Auto Clock` | Prevents setting the clock on devices automatically. |
-| `Max Connection Speed` | Selects the `LAN (10 Mbps or more)` connection speed, which is the highest available. |
-| `Prevent Frame Dropping` | Prevents dropping frames in order to keep audio and video synchronized. |
-| `Disable Video Smoothing` | Disables the `Use video smoothing` option.|
-| `Disable Multicast Streams` | Disallows the player from receiving multicast streams. |
-| `Enable Screensaver` | Allows the screen saver to stay enabled during playback. |
-| `Prevent Internet Connection` | Disables the `Connect to the Internet (overrides other commands)` option. |
-
-## setup_wm Capture
+### setup_wm Capture
 
 Registry values `setup_wm.exe` creates on first start, if unticking all options:
 ```powershell
@@ -118,16 +102,31 @@ HKCU\Software\Microsoft\MediaPlayer\Preferences\WebScriptCommandsEnabled	Type: R
 HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
----
+## Suboptions
 
-Miscellaneous notes:
+| Option | Description |
+| ---- | ---- |
+| `Disable History` | Disables storing and displaying a list of recent/frequently played music, videos, pictures, playlists (`UsageLoggerCategories` disables "Save recently used to the Jumplist instead of frequently used"). |
+| `Prevent Send User ID` | Prevents sending a unique player ID to content providers. |
+| `Disable Metadata Retrieval` | Disables displaying media information from the internet and updating music files by retrieving media info from the internet. |
+| `Prevent Usage Rights Download` | Prevents downloading usage rights automatically when playing or syncing a file. |
+| `Prevent Auto Clock` | Prevents setting the clock on devices automatically. |
+| `Max Connection Speed` | Selects the `LAN (10 Mbps or more)` connection speed, which is the highest available. |
+| `Prevent Frame Dropping` | Prevents dropping frames in order to keep audio and video synchronized. |
+| `Disable Video Smoothing` | Disables the `Use video smoothing` option.|
+| `Disable Multicast Streams` | Disallows the player from receiving multicast streams. |
+| `Enable Screensaver` | Allows the screen saver to stay enabled during playback. |
+| `Prevent Internet Connection` | Disables the `Connect to the Internet (overrides other commands)` option. |
+
+
+## Miscellaneous Notes
 
 ```c
 // Apps > Video playback
 
 // Save network bandwidth by playing video at lower resolution
-"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "AllowLowResolution" = 0; // DWORD. 0 = Off (default), 1 = On
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\VideoSettings": "AllowLowResolution" = 0 // DWORD. 0 = Off (default), 1 = On
 
 // Process video automatically to enhance it (depends on your device hardware)
-"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "EnableAutoEnhanceDuringPlayback" = 0; // DWORD, 0 = Off, 1 = On
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\VideoSettings": "EnableAutoEnhanceDuringPlayback" = 0 // DWORD, 0 = Off, 1 = On
 ```

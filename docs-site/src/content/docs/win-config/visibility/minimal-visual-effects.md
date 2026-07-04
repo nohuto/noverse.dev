@@ -37,6 +37,6 @@ Anything written as "- *text*" behind the linked name equals the source where th
 | 39 | `0x00000080` in high dword | [Suppress/apply global input-settings updates on focus/delegation changes (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/EditionKeyboardInputDelegationChanged.c) |
 | 41 | `0x00000200` in high dword | [Pen button yield / pen quick-launch hotkey (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-NotifyISMPenButtonYieldSettingChange@@YAXXZ.c) |
 
-## Font Smoothing
+### Font Smoothing
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/visual1.jpg?raw=true)

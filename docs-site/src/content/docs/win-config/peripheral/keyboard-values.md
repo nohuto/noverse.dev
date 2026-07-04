@@ -3,7 +3,7 @@ title: 'Keyboard Values'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 8
 ---
 
 | Setting | Description | Default | Changed To |

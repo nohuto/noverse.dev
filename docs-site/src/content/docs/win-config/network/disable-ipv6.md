@@ -24,7 +24,7 @@ Recommended by Microsoft: `0x20` (Prefer IPv4 over IPv6)
 |Re-enable IPv6 on all tunnel interfaces|Binary xxx xxx0|
 |Re-enable IPv6 on nontunnel interfaces and on IPv6 tunnel interfaces|Binary xxx0 xxx0|
 
-## [How to calculate the registry value](https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-server/networking/configure-ipv6-in-windows.md#how-to-calculate-the-registry-value)
+## [Value Calculation](https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-server/networking/configure-ipv6-in-windows.md#how-to-calculate-the-registry-value)
 
 Windows use bitmasks to check the `DisabledComponents` values and determine whether a component should be disabled.
 

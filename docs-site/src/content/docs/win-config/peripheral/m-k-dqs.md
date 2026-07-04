@@ -28,7 +28,7 @@ HKR,,"MouseDataQueueSize",0x00010003,100
 >
 > — Microsoft KB Archive, [MouseDataQueueSize](https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990)
 
-## [MouseDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mouclass/MouConfiguration.c)
+### [MouseDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mouclass/MouConfiguration.c)
 
 - not present = default `100` -> `2400`
 - present and `0` = forced to `100` -> `2400`
@@ -58,7 +58,7 @@ LABEL_10:
 *((_DWORD *)&WPP_MAIN_CB.Reserved + 2) = v11;
 ```
 
-## [KeyboardDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/kbdclass/KbdConfiguration.c)
+### [KeyboardDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/kbdclass/KbdConfiguration.c)
 
 - not present = default `100` -> `1200`
 - present and `0` = forced to `100` -> `1200`

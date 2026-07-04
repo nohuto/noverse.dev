@@ -3,7 +3,7 @@ title: 'Audio Ducking'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 11
+  order: 12
 ---
 
 > "*A communication device is used primarily for placing or receiving telephone calls on the computer. For a computer that has only one rendering device (speaker) and one capture device (microphone), these audio devices also act as the default communication devices.*"
@@ -50,7 +50,7 @@ Fun fact: the `Reduce the volume of other sounds by 80%` audio ducking option is
 
 - [LoadUserSettings](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/AudioSrvPolicyManager/-LoadUserSettings@@YAXPEAVTSSession@@PEAUHKEY__@@@Z.c)
 
-## MMSYS Capture
+### MMSYS Capture
 
 Capture of `control mmsys.cpl,,3`.
 

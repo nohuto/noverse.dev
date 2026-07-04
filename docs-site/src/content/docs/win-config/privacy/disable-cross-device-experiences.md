@@ -8,7 +8,7 @@ sidebar:
 
 Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nearby Sharing` functionalities) & share accross devices. With `Share across devices`, you can continue app experiences on other devices connected to your account (set to `My device only` by default).
 
-## SystemSettings Captures
+### SystemSettings Captures
 
 Changing "Share across devices" option via `SystemSettings`:
 

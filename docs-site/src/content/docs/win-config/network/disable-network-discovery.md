@@ -10,7 +10,7 @@ LLTDIO and Responder are network protocol drivers used for Link Layer Topology D
 
 The [Link Layer Discovery Protocol (LLDP)](https://en.wikipedia.org/wiki/Link_Layer_Discovery_Protocol) is a vendor neutral link layer protocol used by network devices for advertising their identity, capabilities, and neighbors on a local area network based on IEEE 802 technology, principally wired Ethernet. LLDP performs functions similar to several proprietary protocols, such as CDP, FDP, NDP and LLTD.
 
-## NetFirewallRule Capture
+### NetFirewallRule Capture
 
 Disable network discovery (includes LLTDIO, Rspndr, LLTD), by pasting the desired command into `powershell`:
 ```powershell

@@ -3,7 +3,7 @@ title: 'Application Compatibility'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 38
+  order: 39
 ---
 
 Disables Windows Application Experience telemetry and compatibility components, Microsoft Compatibility Appraiser (including its daily task and `CompatTelRunner.exe`) and the Application Experience tasks. It reduces telemetry, and some attack surface, but removes most automatic compatibility checks, upgrade assessments and some app related backup/recovery features.

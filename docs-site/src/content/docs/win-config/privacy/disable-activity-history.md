@@ -3,8 +3,10 @@ title: 'Activity History'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 27
+  order: 28
 ---
+
+> "*Activity History shows a history of activities a user has performed and can even synchronize activities across multiple devices for the same user. Synchronization across devices only works when a user signs in with the same account. This feature is available in versions of Windows released prior to January 2024, and has been discontinued in new versions of Windows.*"
 
 `EnableActivityFeed` enables or disables publishing and syncing of activities across devices. `PublishUserActivities` allows or blocks local publishing of user activities. `UploadUserActivities` allows or blocks uploading of user activities to the cloud, deletion is not affected.
 

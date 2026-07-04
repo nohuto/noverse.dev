@@ -3,7 +3,7 @@ title: 'Clipboard'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 12
+  order: 13
 ---
 
 If you copy or cut something it gets stored to your clipboard, see policies below for more details.

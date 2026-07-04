@@ -3,7 +3,7 @@ title: 'Text Input Hosts'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 24
+  order: 25
 ---
 
 `ctfmon.exe` is the classic CTF (Collaborative Translation Framework) loader, it's started for the user at logon by `\Microsoft\Windows\TextServicesFramework\MsCtfMonitor`. It seems to handle [IME](https://learn.microsoft.com/en-us/windows/apps/develop/input/input-method-editors) (Input Method Editor) support, language/input profiles, language bar/input indicator, and [keyboard layout switching](https://noverse.dev/docs/win-config/peripheral/keyboard-values/). 

@@ -3,7 +3,7 @@ title: 'Sleep Study'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 32
+  order: 33
 ---
 
 Sleep Study tracks modern sleep states to analyze energy usage and pinpoint battery drain. It disables Sleep Study by making ETL logs read-only, disabling related diagnostics, and turning off the scheduled task.

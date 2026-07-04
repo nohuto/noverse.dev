@@ -3,7 +3,7 @@ title: 'Background Apps'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 11
 ---
 
 Note that whenever you use this option while having UWP apps, it'll break notifications, background sync, etc., also *some apps, including Cortana and Search, might not function as expected if you set 'Let apps run in the background' to 'Force Deny'*.

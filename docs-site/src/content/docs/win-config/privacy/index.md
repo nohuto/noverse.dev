@@ -13,6 +13,7 @@ sidebar:
 - [Troubleshooter Preference](/docs/win-config/privacy/troubleshooter-preference/)
 - [Suggestions/Tips/Tricks](/docs/win-config/privacy/disable-suggestions-tips-tricks/)
 - [Automatic Map Downloads](/docs/win-config/privacy/disable-automatic-map-downloads/)
+- [Time Sync](/docs/win-config/privacy/disable-time-sync/)
 - [Cross-Device Experiences](/docs/win-config/privacy/disable-cross-device-experiences/)
 - [Phone Linking](/docs/win-config/privacy/disable-phone-linking/)
 - [Hide Last Logged-In User](/docs/win-config/privacy/hide-last-logged-in-user/)

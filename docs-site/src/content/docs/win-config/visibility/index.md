@@ -28,7 +28,6 @@ sidebar:
 - [Detailed File Transfer](/docs/win-config/visibility/detailed-file-transfer/)
 - [Alt-Tab App Tabs](/docs/win-config/visibility/alt-tab-app-tabs/)
 - [Hide Lock Screen](/docs/win-config/visibility/hide-lock-screen/)
-- [Spotlight](/docs/win-config/visibility/disable-spotlight/)
 - [PowerShell Colors](/docs/win-config/visibility/powershell-colors/)
 - [Classic Control Panel](/docs/win-config/visibility/classic-control-panel/)
 - [OEM Information](/docs/win-config/visibility/oem-information/)

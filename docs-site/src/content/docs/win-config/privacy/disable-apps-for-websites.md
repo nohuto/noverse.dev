@@ -3,7 +3,7 @@ title: 'Apps for Websites'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 11
+  order: 12
 ---
 
 Prevents websites from opening their associated apps through HTTP or HTTPS links, keeping those links in the default browser instead.

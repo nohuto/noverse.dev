@@ -3,7 +3,7 @@ title: 'Location Access'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 17
+  order: 18
 ---
 
 Disables app access to your location, locating your system will be disabled, geolocation service gets disabled.

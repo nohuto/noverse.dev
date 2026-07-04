@@ -3,7 +3,7 @@ title: 'Cortana'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 30
+  order: 31
 ---
 
 Cortana is [deprecated](https://support.microsoft.com/en-us/cortana/end-of-support-for-cortana) in W11 and is no longer the supported voice assistant.

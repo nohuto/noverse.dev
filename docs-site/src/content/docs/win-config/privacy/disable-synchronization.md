@@ -3,10 +3,10 @@ title: 'Synchronization'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 26
+  order: 27
 ---
 
-Disables all kind of synchronization, see policies.
+When settings synchronization is turned on, a user's settings are synced across all Windows devices when they sign in with the same account.
 
 ## [Windows Policies](https://noverse.dev/policies)
 

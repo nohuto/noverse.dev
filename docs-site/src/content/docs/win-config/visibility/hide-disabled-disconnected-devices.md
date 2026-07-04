@@ -3,7 +3,7 @@ title: 'Hide Disabled/Disconnected Devices'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 32
+  order: 28
 ---
 
 Hides disabled/disconnected devices in the `mmsys.cpl` window.

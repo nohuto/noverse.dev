@@ -3,7 +3,7 @@ title: 'Prevent Color/Theme Changes'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 31
+  order: 27
 ---
 
 Prevents changing color/appearance, desktop background, desktop icons, start background, themes. It also stops themes from changing mouse pointers and desktop icons.

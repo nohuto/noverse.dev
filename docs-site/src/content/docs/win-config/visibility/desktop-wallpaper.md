@@ -3,7 +3,7 @@ title: 'Desktop Wallpaper'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 3
 ---
 
 This is a collection of some wallpapers that I've found over time. Added for people who may never have spent time changing their background, or for anyone else. Head over to [visibility/desc.md#desktop-wallpaper](https://github.com/nohuto/win-config/blob/main/visibility/desc.md#desktop-wallpaper), if you want to see the wallpapers in a seperate window.
@@ -171,6 +171,31 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 ### Zelda
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true)
+
+## JPEG Reduction
+
+Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%` via the suboption.
+
+### [TranscodeImage](https://github.com/nohuto/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
+
+```c
+if ( (int)SHRegGetDWORD(
+            HKEY_CURRENT_USER,
+            L"Control Panel\\Desktop",
+            L"JPEGImportQuality",
+            (unsigned int *)&v38) < 0 )
+{
+  v17 = FLOAT_85_0;
+}
+else
+{
+  v17 = fmaxf((float)(int)v38, 60.0);
+  if ( v17 > 100.0 )
+    v17 = FLOAT_100_0;
+}
+```
+
+Default value is `85` -> `85%` (gets used if value isn't present), clamp range is `60-100`, if set above `100` it gets clamped to `100`, if set below `60`, it gets clamped to `60`.
 
 ## [Windows Policies](https://noverse.dev/policies)
 

@@ -3,7 +3,7 @@ title: 'Synchronization'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 25
+  order: 26
 ---
 
 Disables all kind of synchronization, see policies.

@@ -18,6 +18,7 @@ sidebar:
 - [Hide Last Logged-In User](/docs/win-config/privacy/hide-last-logged-in-user/)
 - [Background Apps](/docs/win-config/privacy/disable-background-apps/)
 - [Apps for Websites](/docs/win-config/privacy/disable-apps-for-websites/)
+- [Clipboard](/docs/win-config/privacy/disable-clipboard/)
 - [Auto Maintenance](/docs/win-config/privacy/disable-auto-maintenance/)
 - [Microsoft Copilot](/docs/win-config/privacy/disable-microsoft-copilot/)
 - [Recall](/docs/win-config/privacy/disable-recall/)

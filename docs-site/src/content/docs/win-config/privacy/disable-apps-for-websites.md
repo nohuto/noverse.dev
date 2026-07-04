@@ -14,7 +14,7 @@ Prevents websites from opening their associated apps through HTTP or HTTPS links
 >
 > *Disabling this policy disables web-to-app linking and http(s) URIs will be opened in the default browser instead of launching the associated app.*
 >
-> *If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.*
+> *If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.*"
 
 ## Website Access to Language List
 

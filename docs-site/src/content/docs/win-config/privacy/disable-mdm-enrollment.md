@@ -3,7 +3,7 @@ title: 'MDM Enrollment'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 28
+  order: 29
 ---
 
 `DisableRegistration`:

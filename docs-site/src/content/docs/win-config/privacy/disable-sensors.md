@@ -3,7 +3,7 @@ title: 'Sensors'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 17
+  order: 18
 ---
 
 Blocks apps/system from using hardware sensors such as ambient light, orientation, and other motion/position sensors (features like adaptive brightness, auto rotation and sensor based behaviors will no longer work).

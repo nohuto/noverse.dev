@@ -28,11 +28,11 @@ As the value name already says (`DisplayParameters`) it will just show additiona
 
 #### Enabled
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/detailed-bsod.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/detailed-bsod.jpg?raw=true)
 
 #### Disabled
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/default-bsod.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/default-bsod.jpg?raw=true)
 
 Enabling the options includes setting [`AutoReboot`](https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options) to `0`, to prevent auto restarting.
 

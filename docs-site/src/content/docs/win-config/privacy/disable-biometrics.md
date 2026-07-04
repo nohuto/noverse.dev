@@ -3,7 +3,7 @@ title: 'Biometrics'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 19
+  order: 20
 ---
 
 Biometric is used for fingerprint, facial recognition, and other biometric authentication methods in Windows Hello and related security features.

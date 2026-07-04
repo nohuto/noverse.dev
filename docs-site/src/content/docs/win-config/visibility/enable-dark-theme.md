@@ -57,10 +57,10 @@ Values below are based on `RegGetValueW`/`SHRegGetDWORD`/`SHRegGetUSDWORDW` xref
   "TextScaleFactor" = 100; // REG_DWORD, range 0-4294967295 (percent)
 ```
 
-## Light Theme
+### Light Theme
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme1.png?raw=true)
 
-## Dark Theme
+### Dark Theme
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme2.png?raw=true)

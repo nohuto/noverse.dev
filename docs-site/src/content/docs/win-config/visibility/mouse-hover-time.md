@@ -9,7 +9,7 @@ sidebar:
 - `MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
 - `MenuShowDelay` controls the menu hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
 
-## CMenuToolbarBase::_SetTimer
+### CMenuToolbarBase::_SetTimer
 
 [`SPI_GETMENUSHOWDELAY`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa):
 

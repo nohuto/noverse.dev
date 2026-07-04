@@ -16,8 +16,6 @@ sidebar:
 
 ## Service/Driver Table
 
-### HyperV
-
 | Service/Driver | Description |
 | --- | --- |
 | `bttflt` | Microsoft Hyper-V VHDPMEM BTT Filter |

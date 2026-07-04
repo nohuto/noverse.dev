@@ -3,7 +3,7 @@ title: 'USB Values'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 5
+  order: 6
 ---
 
 For values with "any nonzero" comment, the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
@@ -65,7 +65,7 @@ For values with "any nonzero" comment, the code treats the DWORD as a boolean, m
     "BootPathSurpriseRemovalCount" = ?;
 ```
 
-## RegistryMachin_* Keys
+### RegistryMachin_* Keys
 
 These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
 

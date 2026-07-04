@@ -31,7 +31,7 @@ Disabling UAC stops the prompts for administrative permissions, allowing program
 
 Read more about UAC/file virtualization/(auto-)elevation in [Windows Internals E7, P1 - P.722f. 'User Account Control and virtualization'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
 
-## [Registry Values Details](https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg)
+## [Registry Values](https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg)
 
 Value: `FilterAdministratorToken`
 

@@ -8,7 +8,7 @@ sidebar:
 
 Prefetcher features are used to speed up the boot process and application startup by preloading data (shouldn't be disabled). Read through the pictures for more detailed information.
 
-## Value Meanings
+### Value Meanings
 
 - [`EnablePrefetcher`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded.
 - [`EnableSuperfetch`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory.

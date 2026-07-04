@@ -10,7 +10,7 @@ Storage Sense deletes temporary/user files automatically, see [windows policies]
 
 Head over to the `Policies` tab, then `StorageSense` to configure other related policies.
 
-## SystemSettings Captures
+### SystemSettings Captures
 
 The main storage sense toggle in `System > Storage` does the same as the `Automatic User content cleanup` in `System > Storage > Storage Sense`.
 

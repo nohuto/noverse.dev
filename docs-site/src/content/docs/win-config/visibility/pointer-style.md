@@ -8,7 +8,7 @@ sidebar:
 
 Windows has four main pointer style modes in `SystemSettings Accessibility > Mouse pointer and touch`: `White`, `Black`, `Inverted`, and `Custom color`. The first three are controlled by `CursorType`, custom colors switch `CursorType` to `6` and store the selected color in `CursorColor`. That color is stored as a Win32 [`COLORREF`](https://learn.microsoft.com/en-us/windows/win32/gdi/colorref), so the DWORD uses the `0x00bbggrr` layout instead of a plain RGB hex string. Standard styles point to system cursor files under `%SystemRoot%\cursors\...`, while custom colors point to generated per user cursor files under `%LOCALAPPDATA%\Microsoft\Windows\Cursors\*_eoa.cur`.
 
-## Installing Custom Cursors
+### Installing Custom Cursors
 
 If you want a full custom cursor pack instead of Windows built in white, black, inverted, or recolored accessibility cursors, you can install one from diffrenrent sources such as [vsthemes.org](https://vsthemes.org/en/cursors/).
 
@@ -16,7 +16,7 @@ If you want a full custom cursor pack instead of Windows built in white, black, 
 2. Copy the pack files into `%SystemRoot%\Cursors\<Pack Name>` if you want to keep them in the standard system cursor location
 3. Open `main.cpl`, go to the `Pointers` tab, select a cursor role, click `Browse`, and pick the downloaded `.cur` or `.ani` file
 
-## Cursor Previews
+#### Cursor Previews
 
 | Name | Preview |
 | --- | --- |
@@ -28,7 +28,7 @@ If you want a full custom cursor pack instead of Windows built in white, black, 
 | [Capitaine](https://vsthemes.org/en/cursors/black/27320-capitaine.html) (Dark, White, Gruvbox, Gruvbox White, Nord, Nord White, Palenight, Palenight White) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/capitaine.webp?raw=true) |
 | [Skyrim](https://vsthemes.org/en/cursors/games/45588-the-elder-scrolls-5-skyrim.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/skyrim.webp?raw=true) |
 
-## Pointer Style Captures
+### Pointer Style Captures
 
 ```c
 // Main style

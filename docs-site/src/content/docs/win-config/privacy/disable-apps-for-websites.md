@@ -16,7 +16,9 @@ Prevents websites from opening their associated apps through HTTP or HTTPS links
 >
 > *If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.*"
 
-## Website Access to Language List
+## Suboption
+
+### Website Access to Language List
 
 "Sets the HTTP Accept Language from the Language List opt-out setting." Disables [`Let websites provide locally relevant content by accessing my language list`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#181-general).
 

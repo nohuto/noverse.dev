@@ -8,7 +8,7 @@ sidebar:
 
 Will be updated within the next weeks (date of commit 20.05.2026)
 
-## ResourcePolicyServer
+### ResourcePolicyServer
 
 Values found that are `GameDVR` related in `ResourcePolicyServer.dll`:
 
@@ -22,7 +22,7 @@ GameDVR_HonorUserFSEBehaviorMode
 
 `GameDVR_DSEBehavior` does not exist on the current system.
 
-## Compatibility Flags
+### Compatibility Flags
 
 The Compatibility UI option `Disable fullscreen optimizations` writes an application compatibility layer value. This can exist per-user or machine-wide.
 

@@ -3,7 +3,7 @@ title: 'Audio Enhancements'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 4
 ---
 
 Audio enhancements are software based sound processing features that change or improve how playback or microphone audio sounds on a device. In general, they are used to improve clarity, balance volume, reduce noise, boost certain frequencies, or simulate spatial/surround effects, depending on the device and driver, but they can also cause audio issues etc., which is why you may want to disable them.

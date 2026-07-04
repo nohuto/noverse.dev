@@ -23,7 +23,7 @@ Disabling `NetbiosOptions` via network center:
 RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip_{58f1d738-585f-40e2-aa37-39937f740875}\NetbiosOptions	Type: REG_DWORD, Length: 4, Data: 2
 ```
 
-## Protocols Notes
+### Protocols Notes
 
 | Protocol | Purpose | How it works | Notes |
 | -------- | ------- | ------------ | ----- |

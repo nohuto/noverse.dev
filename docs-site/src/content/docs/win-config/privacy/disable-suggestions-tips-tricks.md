@@ -8,7 +8,7 @@ sidebar:
 
 Disables all kind of suggestions, in start, text suggestions (multilingual...), in the timeline, content (also includes disabling spotlight, see below). `338389` is the only value named `SubscribedContent-{number}Enabled` that exists by default.
 
-## SubscribedContent IDs
+### SubscribedContent IDs
 
 Since the `SubscribedContent-*` values aren't documented literally anywhere I've tried to get some information to see which exist and what they do. You can find information on them in `ContentDeliveryManager.Utilities.dll`, see [contentdelivery.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/contentdelivery.c) for machine code snippets that include these information.
 
@@ -40,7 +40,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 
 `SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
 
-## Windows Spotlight
+### Windows Spotlight
 
 > "*Windows spotlight is a feature that displays different wallpapers and offers suggestions, fun facts, tips, or organizational messages:*
 > *- Wallpapers: Windows spotlight displays a new image on the lock screen and in the background every day*
@@ -49,7 +49,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 >
 > — Microsoft, [Configure Windows spotlight](https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11)
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/lockscreen-spotlight.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/privacy/images/lockscreen-spotlight.png?raw=true)
 
 ## [Windows Policies](https://noverse.dev/policies)
 

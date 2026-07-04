@@ -12,7 +12,7 @@ sidebar:
 
 It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
 
-## [Registry Values Details](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov)
+## [Registry Values](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov)
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 

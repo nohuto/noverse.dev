@@ -21,7 +21,9 @@ Energy estimation accounts for estimated power usage, components report modeled 
 
 ## Suboption
 
-`Disable Battery Capacity Section` = Disables the battery capacity section on the battery saver page of the system settings app.
+### Battery Capacity Section
+
+Disables the battery capacity section on the battery saver page of the system settings app.
 
 ## IdleStatesNumber
 

@@ -9,6 +9,7 @@ sidebar:
 
 - [Mouse Values](/docs/win-config/peripheral/mouse-values/)
 - [Sample Rate](/docs/win-config/peripheral/sample-rate/)
+- [Sound Mode](/docs/win-config/peripheral/sound-mode/)
 - [Audio Enhancements](/docs/win-config/peripheral/disable-audio-enhancements/)
 - [USBFlags Values](/docs/win-config/peripheral/usbflags-values/)
 - [USB Values](/docs/win-config/peripheral/usb-values/)
@@ -18,7 +19,6 @@ sidebar:
 - [StorNVMe Values](/docs/win-config/peripheral/stornvme-values/)
 - [StorPort Values](/docs/win-config/peripheral/storport-values/)
 - [Audio Ducking](/docs/win-config/peripheral/audio-ducking/)
-- [Sound Mode](/docs/win-config/peripheral/sound-mode/)
 - [AutoPlay/Autorun](/docs/win-config/peripheral/disable-autoplay-autorun/)
 - [Touch & Tablet](/docs/win-config/peripheral/disable-touch-tablet/)
 - [Bluetooth](/docs/win-config/peripheral/disable-bluetooth/)

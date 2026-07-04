@@ -8,7 +8,9 @@ sidebar:
 
 Will be updated soon, date of commit `04.07.2026`.
 
-## Clearing Page File on Shutdown
+## Suboption
+
+### Clear Page File on Shutdown
 
 Paging files can contain fragments of process or kernel data, enabling the option mitigates offline data exposure at the cost of longer shutdowns.
 

@@ -14,26 +14,6 @@ Task offloading has to be enabled, or RSS won't work (`DisableTaskOffload`).
 
 I may add more details here soon. RSS is enabled by default, so this is currently more of a placeholder containing the official documentation (see links below), disabling the option therefore won't "disable" RSS, it only removes the created values.
 
-## RssReadRegistryParameters
-
-[`RSS::RssReadRegistryParameters`](https://github.com/nohuto/win-config/blob/main/network/assets/intel-nic/RSS_RssReadRegistryParameters.c) shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-config/blob/main/power/assets/intelnet6x.c) for reference:
-```c
-void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
-{
-  v5 = L"*RSS";
-  v13 = L"*RssBaseProcNumber";
-  v21 = L"*MaxRssProcessors";
-  v29 = L"*NumaNodeId";
-  v37 = L"DisablePortScaling";
-  v45 = L"ManyCoreScaling";
-  v52 = L"*NumRssQueues";
-  v60 = L"NumRssQueuesPerVPort";
-  v69 = L"EnableLHRssWA";
-  v77 = L"ReceiveScalingMode";
-  REGISTRY::RegReadRegTable(v3, a2, a3, (struct REGTABLE_ENTRY *)&v4, 0xAu);
-}
-```
-
 ## Registry Values
 
 `*MaxRssProcessors`:  
@@ -101,4 +81,24 @@ Enables strict argument validation for upper layer testing. Set along with the R
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\Parameters : RssBaseCpu
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : MaxNumRssCpus
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : RssBaseCpu
+```
+
+### RssReadRegistryParameters
+
+[`RSS::RssReadRegistryParameters`](https://github.com/nohuto/win-config/blob/main/network/assets/intel-nic/RSS_RssReadRegistryParameters.c) shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-config/blob/main/power/assets/intelnet6x.c) for reference:
+```c
+void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
+{
+  v5 = L"*RSS";
+  v13 = L"*RssBaseProcNumber";
+  v21 = L"*MaxRssProcessors";
+  v29 = L"*NumaNodeId";
+  v37 = L"DisablePortScaling";
+  v45 = L"ManyCoreScaling";
+  v52 = L"*NumRssQueues";
+  v60 = L"NumRssQueuesPerVPort";
+  v69 = L"EnableLHRssWA";
+  v77 = L"ReceiveScalingMode";
+  REGISTRY::RegReadRegTable(v3, a2, a3, (struct REGTABLE_ENTRY *)&v4, 0xAu);
+}
 ```

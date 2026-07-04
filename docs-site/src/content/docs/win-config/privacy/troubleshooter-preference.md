@@ -23,7 +23,7 @@ It's set to `Ask me before running` by default.
 
 These get disabled in the `Don't run any` option.
 
-## SystemSettings Captures
+### SystemSettings Captures
 
 `System > Troubleshoot` - `Recommended troubleshooter preferences`:
 ```c

@@ -57,7 +57,7 @@ Prevents changing color/appearance, desktop background, desktop icons, start bac
 
 Use the suboptions to prevent/allow specific parts.
 
-## [Windows Policies](https://noverse.dev/policies)
+### [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |

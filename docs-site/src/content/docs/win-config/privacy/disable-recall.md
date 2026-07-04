@@ -3,7 +3,7 @@ title: 'Recall'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 15
+  order: 14
 ---
 
 > "*Allows you to control whether Windows saves snapshots of the screen and analyzes the user's activity on their device. If you enable this policy setting, Windows will not be able to save snapshots and users won't be able to search for or browse through their historical device activity using Recall. If you disable or do not configure this policy setting, Windows will save snapshots of the screen and users will be able to search for or browse through a timeline of their past activities using Recall.*"

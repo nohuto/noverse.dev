@@ -3,7 +3,7 @@ title: 'Spotlight'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 23
+  order: 22
 ---
 
 Spotlight is used to provide new pictures on your lock screen. These exist by default on 25H2:

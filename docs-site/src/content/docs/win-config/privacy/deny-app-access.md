@@ -3,7 +3,7 @@ title: 'Deny App Access'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 24
+  order: 21
 ---
 
 Denies the access for everything, only leaving the microphone enabled. See JSON content below for details. Note `Deny 'User Info Access'` = prevents users from managing the ability to allow apps (not desktop apps) to access the user name, account picture, and domain information - this option doesn't get applied via the main option.

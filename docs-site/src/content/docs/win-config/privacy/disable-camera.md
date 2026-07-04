@@ -3,7 +3,7 @@ title: 'Camera'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 29
+  order: 24
 ---
 
 Disallows the use of a camera on your system, by denying access via `LetAppsAccessCamera`/`AllowCamera`/services (and app permission).

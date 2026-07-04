@@ -3,7 +3,7 @@ title: 'Cross-Device Experiences'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 8
+  order: 7
 ---
 
 Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nearby Sharing` functionalities) & share accross devices. With `Share across devices`, you can continue app experiences on other devices connected to your account (set to `My device only` by default).

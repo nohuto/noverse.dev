@@ -6,7 +6,7 @@ sidebar:
   order: 5
 ---
 
-Disables all kind of suggestions, in start, text suggestions (multilingual...), in the timeline, content (also includes disabling spotlight, see below). `338389` is the only value named `SubscribedContent-{number}Enabled` that exists by default.
+Disables all kind of suggestions, in start, text suggestions (multilingual...), in the timeline, content. `338389` is the only value named `SubscribedContent-{number}Enabled` that exists by default.
 
 ### SubscribedContent IDs
 
@@ -15,7 +15,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 | Feature | IDs | Practical meaning |
 |---|---|---|
 | `LockScreen` | `338380`, `338387` | Windows Spotlight / lock-screen creative content |
-| `WindowsTip` | `338382`, `338389` | tips, tricks, and suggested Windows content - `338389` is used for 'System > Notifications > Additional settings - Get tips and suggestions when using Windows' |
+| `WindowsTip` | `338382`, `338389` | tips, tricks, and suggested Windows content - `338389` is used for '*System > Notifications > Additional settings - Get tips and suggestions when using Windows*' |
 | `StartSuggestions` | `338381`, `338388` | suggested/recommended content in Start |
 | `Settings` | `338386`, `338393` | promoted content inside Settings |
 | `SettingsHome` | `353697`, `353696` | Settings Home recommendations/cards |
@@ -30,7 +30,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 | `PeopleAppSuggestions` | `314562`, `314563` | People-related app suggestions |
 | `DynamicLayouts` | `314558`, `314559` | dynamic layout-driven targeted content |
 | `DynamicLayoutsSV` | `88000531`, `88000530` | variant of dynamic layouts |
-| `Timeline` | `353699`, `353698` | Timeline-related suggested content |
+| `Timeline` | `353699`, `353698` | Timeline related suggested content |
 | `AppDefaultsEdgeEnlightenment` | `88000044`, `88000045` | Edge/default-app promotion |
 | `OneDriveLocal` | `280797`, `280811` | local OneDrive promotion/setup |
 | `OneDriveSync` | `280817`, `280810` | OneDrive sync promotion/setup |
@@ -42,9 +42,9 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 
 ### Windows Spotlight
 
-> "*Windows spotlight is a feature that displays different wallpapers and offers suggestions, fun facts, tips, or organizational messages:*
-> *- Wallpapers: Windows spotlight displays a new image on the lock screen and in the background every day*
-> *- Suggestions, fun facts, tips: recommendations on how to enhance the user's productivity of Microsoft products. They're displayed in different locations, such as the lock screen, the background, the taskbar, or the Get Started app*
+> "*Windows spotlight is a feature that displays different wallpapers and offers suggestions, fun facts, tips, or organizational messages:*  
+> *- Wallpapers: Windows spotlight displays a new image on the lock screen and in the background every day*  
+> *- Suggestions, fun facts, tips: recommendations on how to enhance the user's productivity of Microsoft products. They're displayed in different locations, such as the lock screen, the background, the taskbar, or the Get Started app*  
 > *- Organizational messages: messages from your organization, which can be displayed in the lock screen, taskbar, the notification area, or the Get Started app*"
 >
 > — Microsoft, [Configure Windows spotlight](https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11)
@@ -71,70 +71,3 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 | [Turn off Windows Spotlight on Action Center](https://noverse.dev/policies?p=CloudContent*DisableWindowsSpotlightOnActionCenter) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightOnActionCenter` |
 | [Turn off Windows Spotlight on Settings](https://noverse.dev/policies?p=CloudContent*DisableWindowsSpotlightOnSettings) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightOnSettings` |
 | [Turn off the Windows Welcome Experience](https://noverse.dev/policies?p=CloudContent*DisableWindowsSpotlightWindowsWelcomeExperience) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightWindowsWelcomeExperience` |
-
-## Miscellaneous Notes
-
-Disable edge related suggestions with (search suggestions in address bar):
-```json
-"HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge": {
-  "SearchSuggestEnabled": { "Type": "REG_DWORD", "Data": 0 },
-  "LocalProvidersEnabled": { "Type": "REG_DWORD", "Data": 0 }
-},
-"HKLM\\Software\\Policies\\Microsoft\\MicrosoftEdge\\SearchScopes": {
-  "ShowSearchSuggestionsGlobal": { "Type": "REG_DWORD", "Data": 0 }
-}
-```
-
-All `Microsoft\INPUT\Settings` values which get read on boot:
-```
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAP
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTFIRSTWORD
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollBottomZone
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollThreshold
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollTopZone
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : BluebirdDTWMultiplier
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DisablePersonalizationGTKM
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DynamicAutocorrectionAllowed
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EMOJISUGGESTION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbAutocorrection2
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbTextPrediction
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : FLIPDebugOptions
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HASTRAILER
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbNavigationOverrideMode
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbTextPredictionDelay
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : INPUTHISTORYGUID
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Insights
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : InsightsEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : KEYBOARDMODE
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : LMDataLoggerEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MAXCORRECTIONS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MultilingualEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : NotActiveLanguagePenalty
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PERIODSHORTCUT
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabledCleared
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PRIVATE
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : RULEBASEDCONVERSION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_1
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_10
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_3
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeDataSources
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_10
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_4
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_5
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SHAPEWRITINGPREDICTION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShortenMultilingualTraversal
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShowAllSuggestions
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SPELLCHECK
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SUPPRESSCONVERSION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Transliteration
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONONTHEFLY
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONSYMBOLS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : USEDANDA
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : UserStatsEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementLimit
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementUpLimit
-```

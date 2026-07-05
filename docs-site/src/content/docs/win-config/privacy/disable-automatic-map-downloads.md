@@ -18,7 +18,9 @@ Disables automatic network traffic on the settings page and prevents automatic d
 
 - [privacy/assets | maps.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/maps.c)
 
-## moshostcore (Downloaded Maps Manager Core) Snippets
+## moshostcore Snippets
+
+- `moshostcore` = Downloaded Maps Manager Core
 
 ```c
 v8 = 1; // Default

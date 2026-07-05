@@ -23,6 +23,8 @@ icon=Launch.exe
 | --- | --- |
 | `ShellHWDetection` | Provides notifications for AutoPlay hardware events. |
 
+### SystemSettings Capture
+
 ```c
 // Bluetooth & devices > AutoPlay (same for Control Panel > All Control Panel Items > AutoPlay)
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\DisableAutoplay	Type: REG_DWORD, Length: 4, Data: 1

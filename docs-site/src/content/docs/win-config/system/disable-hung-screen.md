@@ -3,7 +3,7 @@ title: 'Hung Screen'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 28
+  order: 27
 ---
 
 Causes hung apps to get automatically get terminated, making the 'Hung program' screen to not show up. It's recommended to leave the timeouts at their default, see 'Windows Internals' section below for more details on each value.

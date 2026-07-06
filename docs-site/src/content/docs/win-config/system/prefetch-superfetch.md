@@ -3,7 +3,7 @@ title: 'Prefetch & Superfetch'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 30
+  order: 29
 ---
 
 Prefetcher features are used to speed up the boot process and application startup by preloading data (shouldn't be disabled). Read through the pictures for more detailed information.

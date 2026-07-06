@@ -27,5 +27,4 @@ sidebar:
 - [Dynamic Lighting](/docs/win-config/peripheral/disable-dynamic-lighting/)
 - [System Sounds](/docs/win-config/peripheral/disable-system-sounds/)
 - [Printers](/docs/win-config/peripheral/disable-printers/)
-- [M/K DQS](/docs/win-config/peripheral/m-k-dqs/)
 - [Monitor Settings](/docs/win-config/peripheral/monitor-settings/)

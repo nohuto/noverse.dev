@@ -3,7 +3,7 @@ title: 'Detailed Status Messages'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 29
+  order: 28
 ---
 
 Enables detailed messages at restart, shut down, sign out, and sign in, e.g.: "*RPCSS is starting...*" or "*Waiting for machine group policies to finish...*".

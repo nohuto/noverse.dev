@@ -10,4 +10,5 @@ sidebar:
 - [Init](/docs/windbg-notes/init/)
 - [Symbols](/docs/windbg-notes/symbols/)
 - [Threads](/docs/windbg-notes/threads/)
+- [Kernel](/docs/windbg-notes/kernel/)
 - [Cheat Sheet](/docs/windbg-notes/cheat-sheet/)

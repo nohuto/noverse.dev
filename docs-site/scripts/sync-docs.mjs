@@ -43,6 +43,7 @@ const REPOSITORIES = [
       'threads/thread-address.md',
       'threads/thread-structures.md',
       'threads/thread-activity.md',
+      'kernel/prcb.md',
       'cheat-sheet.md',
     ],
   },

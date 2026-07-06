@@ -3,7 +3,7 @@ title: 'Monitor Settings'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 22
+  order: 21
 ---
 
 Before starting the configuration, load your default settings, as many settings are already correctly configured by default.

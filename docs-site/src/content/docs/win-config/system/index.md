@@ -31,7 +31,6 @@ sidebar:
 - [FSO](/docs/win-config/system/enable-fso/)
 - [Memory Compression](/docs/win-config/system/disable-memory-compression/)
 - [Page Combining](/docs/win-config/system/page-combining/)
-- [SCM AutoStartDelay](/docs/win-config/system/scm-autostartdelay/)
 - [Time Zone](/docs/win-config/system/time-zone/)
 - [Display Scaling](/docs/win-config/system/display-scaling/)
 - [Hung Screen](/docs/win-config/system/disable-hung-screen/)

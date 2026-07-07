@@ -32,9 +32,9 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 
 ### Setup Information
 
-```c
-, SRIOV Default switch registry keys.
-,
+```powershell
+; SRIOV Default switch registry keys.
+
 HKR, NicSwitches\0, *SwitchId,   %REG_DWORD%, 0
 HKR, NicSwitches\0, *SwitchName, %REG_SZ%, "%DefaultSwitchName%"
 HKR, NicSwitches\0, *SwitchType,   %REG_DWORD%, 1

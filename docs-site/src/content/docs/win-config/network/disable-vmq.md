@@ -37,7 +37,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 
 ### Setup Information
 
-```c
+```powershell
 ; Mellanox
 ; mlx4eth NT specific
 HKR, Ndi\Params\*VMQ,  ParamDesc, 0, "%VMQ%"

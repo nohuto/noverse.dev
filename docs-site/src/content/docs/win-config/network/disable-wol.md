@@ -33,8 +33,8 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 ### Setup Information
 
 `Disable Wait for Link`:
-```c
-, Wait for Link
+```powershell
+; Wait for Link
 HKR, Ndi\Params\WaitAutoNegComplete,            ParamDesc,              0, %WaitAutoNegComplete%
 HKR, Ndi\Params\WaitAutoNegComplete,            default,                0, "2"
 HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "0",                    0, %Off%

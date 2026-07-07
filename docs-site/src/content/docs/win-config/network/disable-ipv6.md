@@ -8,9 +8,8 @@ sidebar:
 
 `0xFFFFFFFF` disables all IPv6 interfaces, even ones Windows needs. The TCP/IP stack then waits for them to initialize and times out, which adds the `~5s` boot delay. The documentation below was taken from the official support articles.
 
-Min Value: `0x00` (default value)  
-Max Value: `0xFF` (IPv6 disabled)
-Recommended by Microsoft: `0x20` (Prefer IPv4 over IPv6)
+- Min Value: `0x00` (default value)  
+- Max Value: `0xFF` (IPv6 disabled)
 
 |IPv6 Functionality|Registry value and comments|
 |---|---|

@@ -16,8 +16,8 @@ The `default`/`min`/`max` data differs for users, e.g. if applying `4096` it may
 
 ## Setup Information
 
-```c
-, *TransmitBuffers
+```powershell
+; *TransmitBuffers
 HKR, Ndi\params\*TransmitBuffers,               ParamDesc,              0, %TransmitBuffers%
 HKR, Ndi\params\*TransmitBuffers,               default,                0, "512"
 HKR, Ndi\params\*TransmitBuffers,               min,                    0, "80"
@@ -26,7 +26,7 @@ HKR, Ndi\params\*TransmitBuffers,               step,                   0, "8"
 HKR, Ndi\params\*TransmitBuffers,               Base,                   0, "10"
 HKR, Ndi\params\*TransmitBuffers,               type,                   0, "int"
 
-, *ReceiveBuffers
+; *ReceiveBuffers
 HKR, Ndi\params\*ReceiveBuffers,                ParamDesc,              0, %ReceiveBuffers%
 HKR, Ndi\params\*ReceiveBuffers,                default,                0, "256"
 HKR, Ndi\params\*ReceiveBuffers,                min,                    0, "80"

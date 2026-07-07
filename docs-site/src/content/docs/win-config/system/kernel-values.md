@@ -223,15 +223,15 @@ Everything listed below is based on personal findings, mistakes may exist.
     "HeteroFavoredCoreFallback" = 0; // PpmHeteroFavoredCoreFallback
     "HeteroSchedulerOptions" = 0; // KiHeteroSchedulerOptions
     "HeteroSchedulerOptionsMask" = 0; // KiHeteroSchedulerOptionsMask
-    "HgsPlusFeedbackUpdateThresholdNetRuntime" = 20; // dword_140FC33C0
-    "HgsPlusFeedbackUpdateThresholdRuntime" = 20; // dword_140FC33B4
-    "HgsPlusHigherPerfClassFeedbackThreshold" = 1; // dword_140FC33E0
-    "HgsPlusInvalidFeedbackDefaultClass" = 0; // dword_140FC33D4
-    "HgsPlusInvalidFeedbackDefaultClassSet" = 0; // dword_140FC33D8
-    "HgsPlusInvalidFeedbackLimit" = 50; // dword_140FC33D0
-    "HgsPlusLowerPerfClassFeedbackThreshold" = 4; // dword_140FC33DC
-    "HgsPlusMinimumScoreDifferenceForSwap" = 25; // dword_140FC33E8
-    "HgsPlusThreadCreationDefaultClass" = 0; // dword_140FC33E4
+    "HgsPlusFeedbackUpdateThresholdNetRuntime" = 20;
+    "HgsPlusFeedbackUpdateThresholdRuntime" = 20;
+    "HgsPlusHigherPerfClassFeedbackThreshold" = 1;
+    "HgsPlusInvalidFeedbackDefaultClass" = 0;
+    "HgsPlusInvalidFeedbackDefaultClassSet" = 0;
+    "HgsPlusInvalidFeedbackLimit" = 50;
+    "HgsPlusLowerPerfClassFeedbackThreshold" = 4;
+    "HgsPlusMinimumScoreDifferenceForSwap" = 25;
+    "HgsPlusThreadCreationDefaultClass" = 0;
     "HotpatchTestMode" = 0; // KeHotpatchTestMode
     "HyperStartDisabled" = 0; // HvlVpStartDisabled, Hvl = Hypervisor library
     "IdealDpcRate" = 20; // KiIdealDpcRate, "Number of DPCs per clock tick before the maximum DPC queue depth is decremented if DPCs are pending but no interrupt was generated"
@@ -285,7 +285,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
     "AlpcMessageLog" = 0; // AlpcpMessageLogEnabled
     "AlpcWakePolicy" = 1; // AlpcpWakePolicyDefault
-    "CriticalSectionTimeout" = 2592000; // dword_140FC3204
+    "CriticalSectionTimeout" = 2592000;
     "CWDIllegalInDLLSearch" = 0; // PspCurDirDevicesSkippedForDlls, can cause "There was a problem starting PolicyAgentProvider.dll The specified module could not be found" if set to 0xFFFFFFFF (https://learn.microsoft.com/en-us/troubleshoot/mem/configmgr/client-installation/client-installation-fails-with-policyagentprovider-dll)
     "Debugger Retries" = 20; // KdpContext
     "DebuggerMaxModuleMsgs" = 500; // DbgkpMaxModuleMsgs, 0 is changed to 500 by DbgkpInitializePhase0
@@ -359,8 +359,8 @@ Everything listed below is based on personal findings, mistakes may exist.
                           // fffff807`21f1eaa0  00                                               .
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management";
-    "AllocationPreference" = 0; // dword_140FC3200
-    "AllowUserHotPatchWithoutVbs" = 0; // dword_140FC3250
+    "AllocationPreference" = 0;
+    "AllowUserHotPatchWithoutVbs" = 0;
     "CacheUnmapBehindLengthInMB" = 8388608; // CcUnmapBehindLength
     "CustomDTPDenominator" = 8; // CcClientDTPDenominator
     "DeadlockRecursionDepthLimit" = 0; // ViRecursionDepthLimitFromRegistry
@@ -368,37 +368,37 @@ Everything listed below is based on personal findings, mistakes may exist.
     "DifPluginConfigData" = 635710207; // DifPluginConfigData
     "DifPluginConfigDataLength" = 1276097421; // DifPluginConfigDataLength
     "DisableCacheTelemetry" = 2; // CcDisableTelemetryRegKeyAtInit
-    "DisablePageCombining" = 0; // dword_140FC31E8
-    "DisablePagingExecutive" = 0; // dword_140FC31E4
+    "DisablePageCombining" = 0;
+    "DisablePagingExecutive" = 0;
     "EnableAsyncLazywrite" = 2; // CcEnableAsyncLazywriteOverride
     "EnableAsyncLazywriteMulti" = 2; // CcEnableAsyncLazywriteMultiOverride
-    "EnableCooling" = 0; // dword_140FC31F8
+    "EnableCooling" = 0;
     "EnablePerVolumeLazyWriter" = 2; // CcEnablePerVolumeLazyWriterOverride
-    "ForceValidateIo" = 0; // dword_140FC31F0
-    "HighMemoryThreshold" = 0; // qword_140FC3238
-    "KernelPadSectionsOverride" = 0; // dword_140FC3248
+    "ForceValidateIo" = 0;
+    "HighMemoryThreshold" = 0;
+    "KernelPadSectionsOverride" = 0;
     "LargePageDrivers" = ?; // MmLargePageDriverBuffer, maximum length 1024 bytes
     "LargeWriteSize" = 0; // CcAzure_LargeWriteSize
     "LazyWriterPercentageOfNumProcs" = 0; // CcAzure_LazyWriterPercentageOfNumProcs
     "LowMemoryThreshold" = 0; // qword_140FC3230
     "MaxLazyWritePages" = 0; // CcMaxLazyWritePagesOverride
-    "MinimumStackCommitInBytes" = 0; // dword_140FC3208
-    "Mirroring" = 0; // dword_140FC31F4
-    "ModifiedWriteMaximum" = ?; // dword_140FC31FC
+    "MinimumStackCommitInBytes" = 0;
+    "Mirroring" = 0;
+    "ModifiedWriteMaximum" = ?;
     "MoveImages" = 1; // MmRegistryState
     "NonPagedPoolQuota" = 4294967295; // PspDefaultResourceLimits
     "PagedPoolQuota" = ?; // unk_140FD7DE4
     "PageValidationAction" = 0; // MmPageValidationAction
     "PageValidationFrequency" = 0; // MmPageValidationFrequency
     "PagingFileQuota" = ?; // unk_140FD7DE8
-    "PhysicalMemoryMapperEnforcementMode" = 0; // dword_140FC324C
+    "PhysicalMemoryMapperEnforcementMode" = 0;
     "PoolForceFullDecommit" = 0; // PoolForceFullDecommit
     "PoolTag" = 0; // MmSpecialPoolTag, https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/gflags-details
     "PoolTagOverruns" = 1; // MmSpecialPoolCatchOverruns
     "PoolTagSmallTableSize" = 4097; // PoolTrackTableSize
     "ProtectNonPagedPool" = 0; // MmProtectFreedNonPagedPool
     "RemoteFileDirtyPageThreshold" = 1310720; // CcRemoteFileDPInlineFlushThreshold, "This value determines the maximum number of dirty pages in the cache (on a per file basis) for a remote write before an inline flush is performed."
-    "SimulateCommitSavings" = 0; // dword_140FC3240
+    "SimulateCommitSavings" = 0;
     "SoftThrottleDelayInMs" = 0; // CcAzure_SoftThrottleDelayInMs
     "SoftThrottleLargeWriteAtPct" = 0; // CcAzure_SoftThrottleLargeWriteAtPct
     "SpecialPurposeMemoryPages" = 0; // MmSpecialPurposeMemoryPages
@@ -406,7 +406,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SpecialPurposeMemoryStartPageValueSize" = 4294967295; // MmSpecialPurposeMemoryStartPageValueSize
     "TopBottomDPTEqual" = 0; // CcAzure_TopBottomDPTEqual
     "TrackLockedPages" = 0; // MmTrackLockedPages
-    "TrackPtes" = 0; // dword_140FC31EC
+    "TrackPtes" = 0;
     "VerifierDifPoolTags" = 0; // DifpPoolTags
     "VerifierDifPoolTagsSizeBytes" = 4294967295; // DifpPoolTagsSizeBytes
     "VerifierFaultApplications" = 0; // VerifierFaultApplicationsBuffer
@@ -470,7 +470,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "WorkerFactoryThreadCreationTimeout" = 10; // ExpWorkerFactoryThreadCreationTimeoutInSeconds
     "WorkerFactoryThreadIdleTimeout" = 67; // ExpWorkerFactoryThreadIdleTimeoutInSeconds
     "WorkerThreadTimeoutInSeconds" = 600; // ExpWorkerThreadTimeoutInSeconds
-    "TickcountRolloverDelay" = 0; // ? (InitTickRolloverDelay) - InitTickRolloverDelay <> 24848b00, InitTickRolloverDelayLength <> 5e4130c4, InitTickRolloverDelayType <> e2894460
+    "TickcountRolloverDelay" = ; // ?
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power";
     "FlushPolicy" = 0; // PopFlushPolicy
@@ -520,7 +520,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ProcessAccessesToAudit" = 0; // SepProcessAccessesToAudit
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\TimeZoneInformation";
-    "ActiveTimeBias" = ?; // dword_140FCE974
+    "ActiveTimeBias" = ?;
     "Bias" = 480; // ExpAltTimeZoneBias
     "RealTimeIsUniversal" = 0; // ExpRealTimeIsUniversal
 
@@ -864,6 +864,31 @@ Has a default of `1`, and is a kind of bool, `>1` data is probably the same as `
 ```c
 lkd> dd nt!KeThreadDpcEnable L1
 fffff806`6d11d17c  00000001
+```
+
+It seems to also be possible to dump the state via the [KPRCB structure](https://noverse.dev/docs/windbg-notes/kernel/prcb/#_kprcb-structure) (per processor):
+
+```c
+lkd> !prcb // processor 0
+PRCB for Processor 0 at fffff8026b2a4180:
+Current IRQL -- 0
+Threads--  Current ffff80025babc080 Next 0000000000000000 Idle fffff8026dd4d700
+Processor Index 0 Number (0, 0) GroupSetMember 1
+Interrupt Count -- 0001f496
+Times -- Dpc    00000003 Interrupt 00000002 
+         Kernel 00000cb1 User      000000bf 
+lkd> dt nt!_KPRCB fffff8026b2a4180 ThreadDpcEnable
+   +0x33b8 ThreadDpcEnable : 0x1 ''
+lkd> !prcb 6 // processor 6
+PRCB for Processor 6 at ffffd981f4fb2180:
+Current IRQL -- 0
+Threads--  Current ffff80025054f040 Next 0000000000000000 Idle ffff80025054f040
+Processor Index 6 Number (0, 6) GroupSetMember 40
+Interrupt Count -- 0008feae
+Times -- Dpc    00000007 Interrupt 00000000 
+         Kernel 000012a3 User      00000000 
+lkd> dt nt!_KPRCB ffffd981f4fb2180 ThreadDpcEnable
+   +0x33b8 ThreadDpcEnable : 0x1 ''
 ```
 
 > "*A threaded DPC is a DPC that the system executes at IRQL equal to PASSIVE_LEVEL.*

@@ -163,22 +163,6 @@ The timer table stores queued timers until their due time (left = serialized):
 | `TimerTable` | KTIMER_TABLE | List heads for the timer table lists (256, or 512 on more recent builds). |
 | `DpcNormalTimerExpiration` | Bit | Indicates that a `DISPATCH_LEVEL` interrupt has been raised to request timer expiration. |
 
-```c
-lkd> dt nt!_KPRCB ClockOwner
-   +0x021 ClockOwner : UChar
-lkd> dt nt!_KPRCB TimerTable
-   +0x3c00 TimerTable : _KTIMER_TABLE
-lkd> dt nt!_KPRCB DpcNormalTimerExpiration
-   +0x33bc DpcNormalTimerExpiration : Pos 3, 1 Bit
-lkd> dt nt!_KTIMER_TABLE
-   +0x000 TimerExpiry      : [64] Ptr64 _KTIMER
-   +0x200 TimerEntries     : [2] [256] _KTIMER_TABLE_ENTRY
-   +0x4200 TableState       : _KTIMER_TABLE_STATE
-lkd> dt nt!_KTIMER_TABLE_STATE
-   +0x000 LastTimerExpiration : [2] Uint8B
-   +0x010 LastTimerHand    : [2] Uint4B
-```
-
 ### !timer
 
 [`!timer`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-timer) shows where `KTIMER` objects are queued (dumps all the current registered timers), which is another way to see the timer table differences (the code blocks below show snippets from my output, not everything).

@@ -12,7 +12,7 @@ Energy estimation accounts for estimated power usage, components report modeled 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
     "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator, 0 allows WNF_PO_DISCHARGE_ESTIMATE updates, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
     "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator, 0 clears WNF_PO_CHARGE_ESTIMATE, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
-    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled, https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PoEnergyEstimationEnabled
+    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled, https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PoEnergyEstimationEnabled.c
 ```
 
 - [power/assets | PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)

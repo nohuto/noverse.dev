@@ -53,7 +53,7 @@ Mono combines left and right audio channels into one, stereo uses two channels.
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/mono-stereo.jpg?raw=true)
 
-## SystemSettings Capture
+### SystemSettings Capture
 
 ```c
 // System > Sound : Mono audio

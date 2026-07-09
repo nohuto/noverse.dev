@@ -23,7 +23,7 @@ icon=Launch.exe
 | --- | --- |
 | `ShellHWDetection` | Provides notifications for AutoPlay hardware events. |
 
-### SystemSettings Capture
+### SystemSettings Captures
 
 ```c
 // Bluetooth & devices > AutoPlay (same for Control Panel > All Control Panel Items > AutoPlay)

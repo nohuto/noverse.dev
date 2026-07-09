@@ -25,7 +25,7 @@ Something I noticed while creating the option is that procmon doesn't show the a
 99EBFF004CC2FF000091F8000078D4000067C000003E9200001A6800F7630C00
 ```
 
-## SystemSettings Captures
+### SystemSettings Captures
 
 Changing the color via `Personalization > Colors` sets:
 

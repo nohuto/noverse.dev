@@ -14,28 +14,28 @@ Changes the size of text, apps, and other items. Note that on laptops the defaul
 
 ```c
 // 100%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
 
 // 125%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
 
 // 150%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
 
 // 175%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
 
 // 200%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
 
 // 225%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
 ```
 
 ## Suboptions

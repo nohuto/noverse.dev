@@ -1,5 +1,5 @@
 ---
-title: 'Processor Control Block'
+title: 'KPRCB'
 description: 'Generated from windbg-notes file: kernel/prcb.md.'
 editUrl: false
 sidebar:

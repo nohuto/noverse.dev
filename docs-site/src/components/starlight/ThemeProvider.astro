@@ -45,7 +45,11 @@ import { docsDefaultThemes, docsLightThemeIds, docsThemeIds } from '../../utils/
 
     const loadTheme = () => {
       if (typeof localStorage === 'undefined') return '';
-      return parseTheme(localStorage.getItem(storageKey));
+      try {
+        return parseTheme(localStorage.getItem(storageKey));
+      } catch {
+        return '';
+      }
     };
 
     const applyTheme = (requestedTheme) => {
@@ -89,7 +93,9 @@ import { docsDefaultThemes, docsLightThemeIds, docsThemeIds } from '../../utils/
 
     const storeTheme = (theme) => {
       if (typeof localStorage === 'undefined') return;
-      localStorage.setItem(storageKey, theme);
+      try {
+        localStorage.setItem(storageKey, theme);
+      } catch {}
     };
 
     const setTheme = (theme) => {

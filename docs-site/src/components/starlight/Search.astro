@@ -12,6 +12,7 @@ const pagefindTranslations = {
 
 const dataAttributes: DOMStringMap = { 'data-translations': JSON.stringify(pagefindTranslations) };
 if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash'] = '';
+dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode') ? 'zen-mode' : 'default';
 ---
 
 <site-search class={Astro.props.class} {...dataAttributes}>
@@ -30,9 +31,6 @@ if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash
 
 	<dialog style="padding:0" aria-label={Astro.locals.t('search.label')}>
 		<div class="dialog-frame sl-flex">
-			{
-				/* TODO: Make the layout of this button flexible to accommodate different word lengths. Currently hard-coded for English: “Cancel” */
-			}
 			<button data-close-modal class="sl-flex md:sl-hidden">
 				{Astro.locals.t('search.cancelLabel')}
 			</button>
@@ -130,12 +128,34 @@ if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash
 			const shouldStrip = this.dataset.stripTrailingSlash !== undefined;
 			const stripTrailingSlash = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2');
 			const formatURL = shouldStrip ? stripTrailingSlash : (path: string) => path;
+			const currentMode = this.dataset.mode || 'default';
+			const insertModeInPath = (path: string) => {
+				if (currentMode !== 'zen-mode' || path.includes('/zen-mode/')) return path;
 
-			window.addEventListener('DOMContentLoaded', () => {
+				const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+				if (basePath && path.startsWith(`${basePath}/`)) {
+					return `${basePath}/zen-mode/${path.slice(basePath.length + 1)}`;
+				}
+				if (path.startsWith('/')) return `/zen-mode${path}`;
+				return path;
+			};
+			const preserveCurrentMode = (urlString: string) => {
+				try {
+					const url = new URL(urlString, window.location.origin);
+					url.pathname = insertModeInPath(url.pathname);
+					return url.origin === window.location.origin
+						? `${url.pathname}${url.search}${url.hash}`
+						: url.toString();
+				} catch {
+					return insertModeInPath(urlString);
+				}
+			};
+
+			const initPagefind = () => {
 				if (import.meta.env.DEV) return;
 				const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
 				onIdle(async () => {
-					// @ts-expect-error — Missing types for @pagefind/default-ui package.
+					// @ts-expect-error Missing types for @pagefind/default-ui package.
 					const { PagefindUI } = await import('@pagefind/default-ui');
 					new PagefindUI({
 						...pagefindUserConfig,
@@ -147,16 +167,24 @@ if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash
 						translations,
 						showSubResults: false,
 						processResult: (result: { url: string; sub_results: Array<{ url: string }> }) => {
-							result.url = formatURL(result.url);
+							result.url = preserveCurrentMode(formatURL(result.url));
 							result.sub_results = [];
 							return result;
 						},
 					});
 				});
-			});
+			};
+
+			if (document.readyState === 'loading') {
+				window.addEventListener('DOMContentLoaded', initPagefind, { once: true });
+			} else {
+				initPagefind();
+			}
 		}
 	}
-	customElements.define('site-search', SiteSearch);
+	if (!customElements.get('site-search')) {
+		customElements.define('site-search', SiteSearch);
+	}
 </script>
 
 <style>

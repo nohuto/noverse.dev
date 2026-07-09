@@ -7,9 +7,10 @@ import starlightCodeblockFullscreen from 'starlight-codeblock-fullscreen';
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightViewModes from 'starlight-view-modes';
 import starlightLinksValidator from 'starlight-links-validator';
-import { CATEGORY_LABELS } from './docs-constants.mjs';
+import { CATEGORY_LABELS, WIN_CONFIG_CATEGORIES } from './docs-constants.mjs';
 
 const sidebarRepos = ['win-config', 'windbg-notes', 'regkit', 'app-guides'];
+const expandedSidebarRepos = new Set(['win-config', 'windbg-notes', 'regkit']);
 const noverseDocsLabels = {
   name: 'noverse-docs-labels',
   hooks: {
@@ -23,26 +24,17 @@ const noverseDocsLabels = {
     },
   },
 };
-const winConfigSidebarCategories = [
-  'system',
-  'visibility',
-  'peripheral',
-  'power',
-  'privacy',
-  'network',
-  'security',
-  'nvidia',
-  'misc',
-  'policies',
-  'affinities',
-];
+
+function collapsedIfNeeded(repoName) {
+  return expandedSidebarRepos.has(repoName) ? {} : { collapsed: true };
+}
 
 function createSidebarRepoEntry(repoName) {
   if (repoName === 'win-config') {
     return {
       label: repoName,
-      collapsed: true,
-      items: winConfigSidebarCategories.map((category) => ({
+      ...collapsedIfNeeded(repoName),
+      items: WIN_CONFIG_CATEGORIES.map((category) => ({
         label: CATEGORY_LABELS[category] || category,
         collapsed: true,
         autogenerate: { directory: `win-config/${category}`, collapsed: true },
@@ -53,7 +45,7 @@ function createSidebarRepoEntry(repoName) {
   if (repoName === 'regkit') {
     return {
       label: repoName,
-      collapsed: true,
+      ...collapsedIfNeeded(repoName),
       items: [
         { label: 'Overview', slug: 'regkit/overview' },
         {
@@ -67,7 +59,7 @@ function createSidebarRepoEntry(repoName) {
 
   return {
     label: repoName,
-    collapsed: true,
+    ...collapsedIfNeeded(repoName),
     autogenerate: { directory: repoName, collapsed: true },
   };
 }

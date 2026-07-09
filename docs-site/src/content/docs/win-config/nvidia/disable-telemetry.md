@@ -46,7 +46,7 @@ int __cdecl main(int argc, char* argv[])
         deleteKey(HKEY_CURRENT_USER, VIDEO_TELEMETRY_OPTIN_OPTOUT_REGPATH, OPTIN_OUT_KEY, dwOptInOutWOW, bOptInOutPathExists, bOptInOutExists);
     }
 ```
-```h
+```c
     /* @brief Helper method to set regkey value which is used to determine whether user wants to send telemetry data or not
      * @param userOptInOrOut = 1 if user wants to opt in for sending telemetry data else userOptInOrOut =  0
      */

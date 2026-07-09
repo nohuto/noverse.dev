@@ -1,8 +1,12 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const DOCS_SITE_DIR = resolve(__dirname, '..');
 const targetFile = resolve(
-  process.cwd(),
+  DOCS_SITE_DIR,
   'node_modules/starlight-codeblock-fullscreen/src/libs/ec-fullscreen.js'
 );
 

@@ -18,6 +18,7 @@ const BG_KEY = 'nv-bg';
 const DEFAULT_BG = 'dots';
 const BG_KEYS = ['clear', 'diamonds', 'noise', 'dots', 'grid', 'carbon', 'starfield'];
 const BG_SET = new Set(BG_KEYS);
+const STARFIELD_STYLESHEET = 'main/data/starfield-stars.css';
 const KEYFRAMES_ICON_DARK = 'main/icons/dark/keyframes.svg';
 const KEYFRAMES_ICON_LIGHT = 'main/icons/light/keyframes.svg';
 const ACTIVE_PAGE_PATH_KEY = 'nv-active-page-path';
@@ -511,6 +512,9 @@ function initTheme() {
 function applyBackground(key) {
   const applied = BG_SET.has(key) ? key : DEFAULT_BG;
   document.documentElement.setAttribute('data-bg', applied);
+  if (applied === 'starfield') {
+    loadPageFeatureStyle(STARFIELD_STYLESHEET).catch(() => { });
+  }
   return applied;
 }
 

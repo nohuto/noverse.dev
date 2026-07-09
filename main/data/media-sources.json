@@ -52,10 +52,6 @@
     "path": "images/projects/nvapi-cli.png"
   },
   {
-    "url": "https://raw.githubusercontent.com/nohuto/app-guides/main/discord/media/discordtui.png",
-    "path": "images/projects/app-guides-discordtui.png"
-  },
-  {
     "url": "https://raw.githubusercontent.com/nohuto/game-tools/main/marvel-rivals/media/mrtui.png",
     "path": "images/projects/game-tools-mrtui.png"
   },

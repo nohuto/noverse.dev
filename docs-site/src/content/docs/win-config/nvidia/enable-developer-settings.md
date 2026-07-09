@@ -8,7 +8,7 @@ sidebar:
 
 Enables `Enable Developer Settings` in the NVIDIA control panel.
 
-```h
+```c
 //Profile info related
 NV_REG_CPL_PERFCOUNT_RESTRICTION  "RmProfilingAdminOnly"
 NV_REG_CPL_DEVTOOLS_VISIBLE       "NvDevToolsVisible"

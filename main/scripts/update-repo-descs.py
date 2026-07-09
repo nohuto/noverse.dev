@@ -66,15 +66,15 @@ def upd_repos():
 
 def pull(url, dst, cache):
     hh = dict(H)
+    p = R / dst
     e = cache.get(url, {})
-    if e.get('etag'):
+    if p.is_file() and e.get('etag'):
         hh['If-None-Match'] = e['etag']
-    if e.get('last_modified'):
+    if p.is_file() and e.get('last_modified'):
         hh['If-Modified-Since'] = e['last_modified']
     try:
         req = urllib.request.Request(url, headers=hh)
         with urllib.request.urlopen(req, timeout=60) as resp:
-            p = R / dst
             p.parent.mkdir(parents=True, exist_ok=True)
             t = p.with_suffix(p.suffix + '.tmp')
             with open(t, 'wb') as f:

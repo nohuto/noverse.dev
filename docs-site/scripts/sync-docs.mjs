@@ -2,28 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { CATEGORY_LABELS } from '../docs-constants.mjs';
+import { CATEGORY_LABELS, WIN_CONFIG_CATEGORIES } from '../docs-constants.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DOCS_SITE_DIR = path.resolve(__dirname, '..');
 const CONTENT_DIR = path.join(DOCS_SITE_DIR, 'src', 'content', 'docs');
 
-const CATEGORY_ORDER = [
-  'system',
-  'visibility',
-  'peripheral',
-  'power',
-  'privacy',
-  'network',
-  'security',
-  'nvidia',
-  'misc',
-  'policies',
-  'affinities',
-];
-
-const INCLUDED_WIN_CONFIG_CATEGORIES = new Set(CATEGORY_ORDER);
+const INCLUDED_WIN_CONFIG_CATEGORIES = new Set(WIN_CONFIG_CATEGORIES);
 
 const REPOSITORIES = [
   {
@@ -479,7 +465,7 @@ function getExplicitDirectorySidebarOrder(directory) {
 }
 
 function categorySortRank(segment) {
-  const rank = CATEGORY_ORDER.indexOf(segment);
+  const rank = WIN_CONFIG_CATEGORIES.indexOf(segment);
   return rank === -1 ? Number.MAX_SAFE_INTEGER : rank;
 }
 
@@ -597,7 +583,7 @@ function findDescFiles(rootDir) {
 }
 
 function sortCategories(items) {
-  const order = new Map(CATEGORY_ORDER.map((name, index) => [name, index]));
+  const order = new Map(WIN_CONFIG_CATEGORIES.map((name, index) => [name, index]));
 
   return [...items].sort((a, b) => {
     const aRank = order.has(a.category) ? order.get(a.category) : Number.MAX_SAFE_INTEGER;

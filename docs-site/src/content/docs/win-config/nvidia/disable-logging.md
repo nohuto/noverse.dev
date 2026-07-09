@@ -18,7 +18,7 @@ sidebar:
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : LogPagingEntries
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : LogWarningEntries
 ```
-```h
+```c
 // Whenever new LOG is Created, add corresponding RegKey from nvdm.cpp in the comment in front of it.
 #if DEBUG
 LOG_EVENT_SIZE      0x2000                  // 8192 event entries (debug) L"LogEventEntries" 

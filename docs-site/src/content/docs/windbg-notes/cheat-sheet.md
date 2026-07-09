@@ -3,7 +3,7 @@ title: 'Cheat Sheet'
 description: 'Generated from windbg-notes file: ./cheat-sheet.md.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 13
 ---
 
 <iframe

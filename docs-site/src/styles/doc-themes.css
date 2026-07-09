@@ -101,7 +101,7 @@
   --nv-doc-accent: #d79921;
   --nv-doc-accent-2: #9d6b2b;
   --nv-doc-accent-contrast: #0f1010;
-  --nv-doc-success: #9d6b2b;
+  --nv-doc-success: #98bb6c;
   --nv-doc-warning: #d79921;
   --nv-doc-danger: #cc241d;
 }
@@ -117,9 +117,9 @@
   --nv-doc-text: #3b3b38;
   --nv-doc-muted: #6f6d68;
   --nv-doc-accent: #d79921;
-  --nv-doc-accent-2: #98971a;
+  --nv-doc-accent-2: #9d6b2b;
   --nv-doc-accent-contrast: #3c3836;
-  --nv-doc-success: #98971a;
+  --nv-doc-success: #3d7233;
   --nv-doc-warning: #d79921;
   --nv-doc-danger: #cc241d;
 }

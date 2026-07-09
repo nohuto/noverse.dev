@@ -109,7 +109,7 @@
   --accent: #d79921;
   --accent-2: #9d6b2b;
   --accent-contrast: #0f1010;
-  --success: #9d6b2b;
+  --success: #98bb6c;
   --warning: #d79921;
   --danger: #cc241d;
 }
@@ -124,9 +124,9 @@
   --text: #3b3b38;
   --muted: #6f6d68;
   --accent: #d79921;
-  --accent-2: #98971a;
+  --accent-2: #9d6b2b;
   --accent-contrast: #3c3836;
-  --success: #98971a;
+  --success: #3d7233;
   --warning: #d79921;
   --danger: #cc241d;
 }

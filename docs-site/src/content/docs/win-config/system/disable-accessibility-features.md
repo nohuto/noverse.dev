@@ -71,25 +71,25 @@ Not complete yet, will be extended over time.
 
   // Size
   // 1
-  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 1
+  HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 1
   // 2
-  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 2
+  HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 2
 
   // Touch indicator
   // Enabled
-  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 1
-  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 31
+  HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 1
+  HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 31
     // Make the circle darker and larger
-    SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 2
+    HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 2
   // Disabled
-  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 0
-  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 2
+  HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 0
+  HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 2
 
 // Accessibility > Text cursor
 
   // Text cursor indicator
   // Enabled
-  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 32, Data: cursorindicator
+  HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 32, Data: cursorindicator
   // Disabled
-  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 2, Data: 
+  HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 2, Data: 
 ```

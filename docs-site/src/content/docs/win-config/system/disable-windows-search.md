@@ -57,7 +57,7 @@ Exists in [Search Policies](https://learn.microsoft.com/en-us/windows/client-man
 It probably got replaced by:
 ```c
 // Privacy & security > Search - Show search highlights
-SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings\IsDynamicSearchBoxEnabled	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings\IsDynamicSearchBoxEnabled	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
 ## [Windows Policies](https://noverse.dev/policies)

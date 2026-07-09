@@ -940,8 +940,8 @@ lkd> dt nt!_KPRCB poi(nt!KiProcessorBlock) DpcData
    +0x3340 DpcData : [2] _KDPC_DATA
 lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA (*)[2])0xfffff806684ef4c0))
 (*((ntkrnlmp!_KDPC_DATA (*)[2])0xfffff806684ef4c0))                 [Type: _KDPC_DATA [2]]
-    [0]              [Type: _KDPC_DATA] // 
-    [1]              [Type: _KDPC_DATA]
+    [0]              [Type: _KDPC_DATA] // DPC_NORMAL
+    [1]              [Type: _KDPC_DATA] // DPC_THREADED
 lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4c0))
 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4c0))                 [Type: _KDPC_DATA]
     [+0x000] DpcList          [Type: _KDPC_LIST]

@@ -42,7 +42,7 @@ export const docsLightThemeIds = docsThemes
   .map((theme) => theme.id);
 
 export const docsDefaultThemes = {
-  dark: 'system',
-  light: 'system',
+  dark: 'gruvbox-dark',
+  light: 'gruvbox-dark',
 } as const;
 

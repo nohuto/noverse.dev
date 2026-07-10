@@ -7,6 +7,6 @@ sidebar:
   order: 6
 ---
 
-- [Thread Address](/docs/windbg-notes/threads/thread-address/)
-- [Thread Structures](/docs/windbg-notes/threads/thread-structures/)
-- [Thread Activity](/docs/windbg-notes/threads/thread-activity/)
+- [Thread Internals](/docs/windbg-notes/threads/thread-internals/)
+- [Examining Thread Activity](/docs/windbg-notes/threads/examining-thread-activity/)
+- [Thread Scheduling](/docs/windbg-notes/threads/thread-scheduling/)

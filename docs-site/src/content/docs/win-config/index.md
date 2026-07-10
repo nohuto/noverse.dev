@@ -1,6 +1,6 @@
 ---
 title: 'Overview'
-description: 'Auto-generated overview for win-config.'
+description: 'Auto-generated overview for Win Config.'
 editUrl: false
 sidebar:
   hidden: true

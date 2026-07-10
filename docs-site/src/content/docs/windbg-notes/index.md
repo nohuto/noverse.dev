@@ -1,14 +1,14 @@
 ---
 title: 'Overview'
-description: 'Auto-generated overview for windbg-notes.'
+description: 'Auto-generated overview for Windbg Notes.'
 editUrl: false
 sidebar:
   hidden: true
   order: 1
 ---
 
-- [Init](/docs/windbg-notes/init/)
+- [WinDbg Init](/docs/windbg-notes/windbg-init/)
 - [Symbols](/docs/windbg-notes/symbols/)
 - [Threads](/docs/windbg-notes/threads/)
-- [Kernel](/docs/windbg-notes/kernel/)
+- [System Mechanisms](/docs/windbg-notes/system-mechanisms/)
 - [Cheat Sheet](/docs/windbg-notes/cheat-sheet/)

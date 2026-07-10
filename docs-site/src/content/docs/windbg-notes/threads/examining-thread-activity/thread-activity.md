@@ -1,0 +1,226 @@
+---
+title: 'Examining Thread Activity'
+description: 'Generated from windbg-notes file: threads/examining-thread-activity/thread-activity.md.'
+editUrl: false
+sidebar:
+  order: 8
+---
+
+Thread activity = what a thread is currently doing and how much execution time (UM/KM) it has used. Rather use cycles (delta) than UM/KM time, that time gets calculated via `KeMaximumIncrement`, e.g.:
+
+```c
+lkd> !thread ffffd8886cbd2080 6
+THREAD ffffd8886cbd2080  Cid 23cc.108c  Teb: 0000000000ff2000 Win32Thread: 0000000000000000 RUNNING on processor 5
+Not impersonating
+DeviceMap                 ffff8900a79f99f0
+Owning Process            ffffd888733f4080       Image:         CPUSTRES.EXE
+Attached Process          N/A            Image:         N/A
+Wait Start TickCount      910845         Ticks: 20 (0:00:00:00.312)
+Context Switch Count      6948           IdealProcessor: 5             
+UserTime                  00:00:00.015 // 1 * 15.625
+KernelTime                00:00:00.031 // 2 * 15.625 = 31.25
+
+lkd> dd KeMaximumIncrement L1
+fffff801`3c51ea54  0002625a // 15.625
+lkd> dt nt!_KTHREAD ffffd8886cbd2080 UserTime
+   +0x2dc UserTime : 1
+lkd> dt nt!_KTHREAD ffffd8886cbd2080 KernelTime
+   +0x28c KernelTime : 2
+```
+
+There's no actual need to see the activity via WinDbg, use [System Informer](https://github.com/winsiderss/systeminformer/releases), open the properties of a process, go into the *Threads* section, choose columns *Kernel time*, *User time*, *State* (this can show [`_KTHREAD_STATE`](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/#_kthread_state)/[`_KWAIT_REASON`](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/#_kwait_reason) depending on whenever the thread is waiting). Note that processes don't run, they just provide resources and a context in which their threads would run.
+
+![](https://github.com/nohuto/windbg-notes/blob/main/assets/si-activity.png?raw=true)
+
+## CPU Time & Cycles
+
+`User time` & `Kernel time` (see above to understand how they're getting calculated) are cumulative clock intervals counted to a thread in UM/KM (they don't include time spent waiting). [`CycleTime`](https://learn.microsoft.com/en-us/windows/win32/api/realtimeapiset/nf-realtimeapiset-querythreadcycletime) is the cumulative number of CPU clock cycles used by the thread in UM/KM, you can't really see the "live" delta via WinDbg (unless substracting cycles from two different times).
+
+| System Informer | Meaning |
+| --- | --- |
+| `User time` | Cumulative clock intervals counted in UM |
+| `Kernel time` | Cumulative clock intervals counted in KM |
+| `Cycles` | Cumulative CPU cycles in UM/KM |
+| `Cycles delta` | Cycles accumulated since previous refresh (you can just hold `F5` to see the changes) |
+| `CPU` | `thread cycle delta / system cycle delta` |
+
+A waiting thread can have a large `Cycles` value with a current delta of `0`:
+
+![](https://github.com/nohuto/windbg-notes/blob/main/assets/cycles-compare.png?raw=true)
+
+Therefore use `Cycles` for the amount since thread creation & `Cycles delta` for amount since the latest refresh.
+
+![](https://github.com/nohuto/windbg-notes/blob/main/assets/active-cycles.png?raw=true)
+![](https://github.com/nohuto/windbg-notes/blob/main/assets/inactive-cycles.png?raw=true)
+
+```c
+lkd> !process 0 4 CPUSTRES.exe
+PROCESS ffffd88864c33080
+    SessionId: 1  Cid: 19a0    Peb: 00889000  ParentCid: 0ff0
+    DirBase: 7551fe000  ObjectTable: 00000000  HandleCount:   0.
+    Image: CPUSTRES.EXE
+
+No active threads
+
+PROCESS ffffd88871aee080
+    SessionId: 1  Cid: 22c8    Peb: 00887000  ParentCid: 0ff0
+    DirBase: 4cfeb6000  ObjectTable: 00000000  HandleCount:   0.
+    Image: CPUSTRES.EXE
+
+No active threads
+
+PROCESS ffffd888666f1080
+    SessionId: 1  Cid: 1cb0    Peb: 009ed000  ParentCid: 0ff0
+    DirBase: 725da3000  ObjectTable: 00000000  HandleCount:   0.
+    Image: CPUSTRES.EXE
+
+No active threads
+
+PROCESS ffffd888733f4080
+    SessionId: 1  Cid: 23cc    Peb: 00fe0000  ParentCid: 0ff0
+    DirBase: 268f19000  ObjectTable: ffff8900b916ec00  HandleCount: 196.
+    Image: CPUSTRES.EXE
+
+        THREAD ffffd88866ab0080  Cid 23cc.10cc  Teb: 0000000000fe2000 Win32Thread: ffffd88864a28330 WAIT
+        THREAD ffffd8886cbd2080  Cid 23cc.108c  Teb: 0000000000ff2000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd88863850080  Cid 23cc.1fc0  Teb: 0000000000ff6000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd88867fde080  Cid 23cc.1c80  Teb: 0000000000ffa000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd88861b45080  Cid 23cc.1454  Teb: 0000000000e00000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd88864432080  Cid 23cc.1434  Teb: 0000000000e10000 Win32Thread: 0000000000000000 WAIT
+
+lkd> dt nt!_KTHREAD ffffd8886cbd2080 CycleTime
+   +0x048 CycleTime : 0x00000018`031c8e7c // 103,131,418,236
+```
+
+### System Idle Process
+
+The *System Idle Process* (`PID 0`) is a fake process used to account for idle CPU cycle. It has one idle thread per logical processor, each processors `_KPRCB` (shown by `!pcr`) points to its idle thread, which runs only when that processor has no other thread to execute.
+
+![](https://github.com/nohuto/windbg-notes/blob/main/assets/idle-process-cycles.png?raw=true)
+
+```c
+lkd> !pcr 8
+KPCR for Processor 8 at ffffd400306d3000:
+	               Prcb: ffffd400306d3180
+
+lkd> dt nt!_KPRCB ffffd400306d3180 CurrentThread NextThread IdleThread
+   +0x008 CurrentThread : 0xffffc184`0b805080 _KTHREAD
+   +0x010 NextThread    : (null)
+   +0x018 IdleThread    : 0xffffc184`ff755040 _KTHREAD
+
+lkd> dt nt!_KTHREAD ffffc184ff755040 Process CycleTime UserTime KernelTime Priority
+   +0x048 CycleTime  : 0x000009dc`fdbdeb0b // 10,844,754,537,227
+   +0x0c3 Priority   : 0
+   +0x220 Process    : 0xfffff800`0b349f40 _KPROCESS
+   +0x28c KernelTime : 0x31173 // 201,075 * 156,250 * 100ns = 3,141.796875sec = 00:52:21.796875
+   +0x2dc UserTime   : 0
+
+lkd> dt nt!_EPROCESS fffff8000b349f40 UniqueProcessId ImageFileName ActiveThreads
+   +0x440 UniqueProcessId : (null) 
+   +0x5a8 ImageFileName   : [15]  "Idle"
+   +0x5f0 ActiveThreads   : 0
+```
+
+## User Mode
+
+Attach WinDbg to the process, then list its threads using `~`:
+
+![](https://github.com/nohuto/windbg-notes/blob/main/assets/attach-process.png?raw=true)
+
+```c
+0:006> ~
+   0  Id: 2064.22a0 Suspend: 1 Teb: 00eaf000 Unfrozen
+   1  Id: 2064.1a00 Suspend: 1 Teb: 00ebf000 Unfrozen
+   2  Id: 2064.2710 Suspend: 2 Teb: 00ec3000 Unfrozen
+   3  Id: 2064.25c4 Suspend: 2 Teb: 00ec7000 Unfrozen
+   4  Id: 2064.bb8 Suspend: 2 Teb: 00ecb000 Unfrozen
+   5  Id: 2064.2638 Suspend: 1 Teb: 00eeb000 Unfrozen
+.  6  Id: 2064.1eb4 Suspend: 1 Teb: 00eef000 Unfrozen
+```
+
+Each line shows the thread index (assigned by debugger), `PID.TID`, suspend count, TEB address & debugger freeze state. See '[Cheat Sheet](https://noverse.dev/docs/windbg-notes/cheat-sheet/)' for more related commands.
+
+[`!runaway 7`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-runaway) is useful for seeing a CPU consuming thread (values are cumulative).
+
+```c
+0:006> !runaway 7
+ User Mode Time
+  Thread       Time
+    1:1a00     0 days 0:00:00.531
+    6:1eb4     0 days 0:00:00.000
+    5:2638     0 days 0:00:00.000
+    4:bb8      0 days 0:00:00.000
+    3:25c4     0 days 0:00:00.000
+    2:2710     0 days 0:00:00.000
+    0:22a0     0 days 0:00:00.000
+ Kernel Mode Time
+  Thread       Time
+    1:1a00     0 days 0:00:00.015
+    6:1eb4     0 days 0:00:00.000
+    5:2638     0 days 0:00:00.000
+    4:bb8      0 days 0:00:00.000
+    3:25c4     0 days 0:00:00.000
+    2:2710     0 days 0:00:00.000
+    0:22a0     0 days 0:00:00.000
+ Elapsed Time
+  Thread       Time
+    0:22a0     0 days 0:32:07.384
+    1:1a00     0 days 0:32:07.369
+    2:2710     0 days 0:32:07.368
+    3:25c4     0 days 0:32:07.367
+    4:bb8      0 days 0:32:07.367
+    5:2638     0 days 0:00:12.731
+    6:1eb4     0 days 0:00:12.666
+```
+
+`~` selects threads only in UM debugging, in KM debugging the same selects processors.
+
+## Kernel Mode
+
+See '[Thread Addresses](https://noverse.dev/docs/windbg-notes/threads/thread-internals/thread-addresses/)' for understanding how to get the `_ETHREAD` address.
+
+```c
+lkd> !process 0 0 CPUSTRES.exe
+PROCESS ffffd888702d3080
+    SessionId: 1  Cid: 2064    Peb: 00eab000  ParentCid: 0ff0
+    DirBase: 41b56f000  ObjectTable: ffff8900b1b2a040  HandleCount: 196.
+    Image: CPUSTRES.EXE
+
+lkd> !process ffffd888702d3080 4
+PROCESS ffffd888702d3080
+    SessionId: 1  Cid: 2064    Peb: 00eab000  ParentCid: 0ff0
+    DirBase: 41b56f000  ObjectTable: ffff8900b1b2a040  HandleCount: 196.
+    Image: CPUSTRES.EXE
+
+        THREAD ffffd88867cb5080  Cid 2064.22a0  Teb: 0000000000ead000 Win32Thread: ffffd88867f10110 WAIT
+        THREAD ffffd88863435080  Cid 2064.1a00  Teb: 0000000000ebd000 Win32Thread: 0000000000000000 RUNNING on processor 5
+        THREAD ffffd88861d74080  Cid 2064.2710  Teb: 0000000000ec1000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd88861fa7080  Cid 2064.25c4  Teb: 0000000000ec5000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd888653f5080  Cid 2064.0bb8  Teb: 0000000000ec9000 Win32Thread: 0000000000000000 WAIT
+```
+
+`!process <EPROCESS> 4` shows one line per thread, use `!process <EPROCESS> 2` whenever you also want to see waits and dispatcher objects. Via [`!thread <ETHREAD> 6`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-thread) we can see `UserTime` & `KernelTime`. I'll use ETHREAD `ffffd88863435080` here, as that's thread address of the thread thats active in CPUSTRES.
+
+```c
+lkd> !thread ffffd88863435080 6
+THREAD ffffd88863435080  Cid 2064.1a00  Teb: 0000000000ebd000 Win32Thread: 0000000000000000 RUNNING on processor 5
+Not impersonating
+DeviceMap                 ffff8900a79f99f0
+Owning Process            ffffd888702d3080       Image:         CPUSTRES.EXE
+Attached Process          N/A            Image:         N/A
+Wait Start TickCount      319710         Ticks: 20 (0:00:00:00.312)
+Context Switch Count      21216          IdealProcessor: 5             
+UserTime                  00:00:00.531
+KernelTime                00:00:00.015
+Win32 Start Address 0x0000000000446be0
+Stack Init fffff90660357c30 Current fffff90660357570
+Base fffff90660358000 Limit fffff90660351000 Call 0000000000000000
+Priority 8  BasePriority 8  IoPriority 2  PagePriority 5
+Unable to get context for thread running on processor 5, HRESULT 0x80004001
+```
+
+| Flag | Meaning |
+| --- | --- |
+| `0` | Minimal thread information |
+| `2` | Wait state |
+| `6` | Wait state and stack |

@@ -866,7 +866,7 @@ lkd> dd nt!KeThreadDpcEnable L1
 fffff806`6d11d17c  00000001
 ```
 
-It seems to also be possible to dump the state via the [KPRCB structure](https://noverse.dev/docs/windbg-notes/kernel/prcb/#_kprcb-structure) (per processor):
+It seems to also be possible to dump the state via the [KPRCB structure](https://noverse.dev/docs/windbg-notes/system-mechanisms/processor-execution-model/processor-control-region/#_kprcb-structure) (per processor):
 
 ```c
 lkd> !prcb // processor 0

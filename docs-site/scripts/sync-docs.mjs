@@ -2,7 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { CATEGORY_LABELS, WIN_CONFIG_CATEGORIES } from '../docs-constants.mjs';
+import {
+  CATEGORY_LABELS,
+  WIN_CONFIG_CATEGORIES,
+  getDirectoryLabel,
+  toTitleCase,
+} from '../docs-constants.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,18 +26,19 @@ const REPOSITORIES = [
     name: 'windbg-notes',
     url: repoUrl('WINDBG_NOTES_REPO_URL', 'https://github.com/nohuto/windbg-notes'),
     files: [
-      'init/loading-modules.md',
-      'init/noisy-symbol-loading.md',
-      'init/symbol-server.md',
+      'windbg-init/loading-modules.md',
+      'windbg-init/noisy-symbol-loading.md',
+      'windbg-init/symbol-server.md',
       'symbols/reading-symbols.md',
       'symbols/rva-driverstart.md',
-      'threads/thread-address.md',
-      'threads/thread-structures.md',
-      'threads/thread-activity.md',
-      'kernel/prcb.md',
-      'kernel/interrupts/interrupts.md',
-      'kernel/interrupts/irqls.md',
-      'kernel/interrupts/dpcs.md',
+      'threads/thread-internals/data-structures.md',
+      'threads/thread-internals/thread-addresses.md',
+      'threads/examining-thread-activity/thread-activity.md',
+      'threads/thread-scheduling/thread-states.md',
+      'system-mechanisms/processor-execution-model/processor-control-region.md',
+      'system-mechanisms/trap-dispatching/interrupt-dispatching.md',
+      'system-mechanisms/trap-dispatching/interrupt-request-levels.md',
+      'system-mechanisms/software-interrupts/deferred-procedure-calls.md',
       'cheat-sheet.md',
     ],
   },
@@ -469,18 +475,6 @@ function categorySortRank(segment) {
   return rank === -1 ? Number.MAX_SAFE_INTEGER : rank;
 }
 
-function getDirectoryLabel(directory) {
-  const segment = directory.split('/').pop() || directory;
-
-  if (DOC_REPO_ORDER.includes(segment)) return segment;
-  if (segment === 'sections') return 'Sections';
-  if (segment === 'guides') return 'Guides';
-  if (segment === 'docs') return 'Docs';
-  if (CATEGORY_LABELS[segment]) return CATEGORY_LABELS[segment];
-
-  return toTitleCase(segment);
-}
-
 function buildDirectoryListingMarkdown(children) {
   const lines = [];
 
@@ -664,14 +658,6 @@ function uniqueSlug(baseSlug, set) {
 
 function stripFirstH1(markdown) {
   return markdown.replace(/^(?:\uFEFF)?#\s+.+\n?/m, '').trimStart();
-}
-
-function toTitleCase(value) {
-  return value
-    .split(/[-_\s]+/)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
 }
 
 function normalizeWinConfigTitle(value) {

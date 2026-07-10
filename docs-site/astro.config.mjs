@@ -7,7 +7,11 @@ import starlightCodeblockFullscreen from 'starlight-codeblock-fullscreen';
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightViewModes from 'starlight-view-modes';
 import starlightLinksValidator from 'starlight-links-validator';
-import { CATEGORY_LABELS, WIN_CONFIG_CATEGORIES } from './docs-constants.mjs';
+import {
+  CATEGORY_LABELS,
+  WIN_CONFIG_CATEGORIES,
+  getDirectoryLabel,
+} from './docs-constants.mjs';
 
 const sidebarRepos = ['win-config', 'windbg-notes', 'regkit', 'app-guides'];
 const expandedSidebarRepos = new Set(['win-config', 'windbg-notes', 'regkit']);
@@ -29,6 +33,22 @@ function collapsedIfNeeded(repoName) {
   return expandedSidebarRepos.has(repoName) ? {} : { collapsed: true };
 }
 
+function createSidebarDirectory(directory) {
+  return {
+    label: getDirectoryLabel(directory),
+    collapsed: true,
+    autogenerate: { directory, collapsed: true },
+  };
+}
+
+function createSidebarGroup(directory, items) {
+  return {
+    label: getDirectoryLabel(directory),
+    collapsed: true,
+    items,
+  };
+}
+
 function createSidebarRepoEntry(repoName) {
   if (repoName === 'win-config') {
     return {
@@ -39,6 +59,28 @@ function createSidebarRepoEntry(repoName) {
         collapsed: true,
         autogenerate: { directory: `win-config/${category}`, collapsed: true },
       })),
+    };
+  }
+
+  if (repoName === 'windbg-notes') {
+    return {
+      label: repoName,
+      ...collapsedIfNeeded(repoName),
+      items: [
+        createSidebarDirectory('windbg-notes/windbg-init'),
+        createSidebarDirectory('windbg-notes/symbols'),
+        createSidebarGroup('windbg-notes/threads', [
+          createSidebarDirectory('windbg-notes/threads/thread-internals'),
+          createSidebarDirectory('windbg-notes/threads/examining-thread-activity'),
+          createSidebarDirectory('windbg-notes/threads/thread-scheduling'),
+        ]),
+        createSidebarGroup('windbg-notes/system-mechanisms', [
+          createSidebarDirectory('windbg-notes/system-mechanisms/processor-execution-model'),
+          createSidebarDirectory('windbg-notes/system-mechanisms/trap-dispatching'),
+          createSidebarDirectory('windbg-notes/system-mechanisms/software-interrupts'),
+        ]),
+        { label: 'Cheat Sheet', slug: 'windbg-notes/cheat-sheet' },
+      ],
     };
   }
 

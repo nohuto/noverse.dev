@@ -1,6 +1,6 @@
 ---
 title: 'Overview'
-description: 'Auto-generated overview for app-guides.'
+description: 'Auto-generated overview for App Guides.'
 editUrl: false
 sidebar:
   hidden: true

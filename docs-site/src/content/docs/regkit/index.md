@@ -1,6 +1,6 @@
 ---
 title: 'Overview'
-description: 'Auto-generated overview for regkit.'
+description: 'Auto-generated overview for Regkit.'
 editUrl: false
 sidebar:
   hidden: true

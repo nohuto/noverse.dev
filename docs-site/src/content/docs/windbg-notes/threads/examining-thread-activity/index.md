@@ -7,4 +7,4 @@ sidebar:
   order: 8
 ---
 
-- [Examining Thread Activity](/docs/windbg-notes/threads/examining-thread-activity/thread-activity/)
+- [Thread Activity](/docs/windbg-notes/threads/examining-thread-activity/thread-activity/)

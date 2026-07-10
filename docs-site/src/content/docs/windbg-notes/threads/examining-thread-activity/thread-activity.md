@@ -1,5 +1,5 @@
 ---
-title: 'Examining Thread Activity'
+title: 'Thread Activity'
 description: 'Generated from windbg-notes file: threads/examining-thread-activity/thread-activity.md.'
 editUrl: false
 sidebar:

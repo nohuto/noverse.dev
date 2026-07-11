@@ -2,6 +2,7 @@
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import repoIconSvg from '../../assets/repo.svg?raw';
 import terminalIconSvg from '../../assets/terminal.svg?raw';
 import { getActiveRepo } from '../../utils/active-repo';
 
@@ -13,20 +14,20 @@ const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
 ---
 
 <div class="mobile-preferences sl-flex">
-  <div class:list={['mobile-links', { 'has-active-repo': hasActiveRepo }]}>
+  <div class="mobile-links">
+    {
+      hasActiveRepo && (
+        <a class="mobile-repo-link" href={repoHref} target="_blank" rel="noopener noreferrer" aria-label={`Open ${activeRepo} repository`}>
+          <span aria-hidden="true" class="mobile-repo-icon" set:html={repoIconSvg}></span>
+        </a>
+      )
+    }
     <div class="social-icons">
       <SocialIcons />
       <a class="docs-home-link" href="https://noverse.dev/" aria-label="Go to Noverse home">
         <span aria-hidden="true" class="docs-home-icon" set:html={terminalIconSvg}></span>
       </a>
     </div>
-    {
-      hasActiveRepo && (
-        <a class="mobile-repo-link" href={repoHref} target="_blank" rel="noopener noreferrer">
-          {activeRepo}
-        </a>
-      )
-    }
   </div>
   <ThemeSelect />
   <LanguageSelect />
@@ -87,37 +88,22 @@ const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
       outline: none;
     }
 
-    .docs-home-icon {
-      display: inline-flex;
-      width: 1em;
-      height: 1em;
-    }
-
-    .docs-home-icon :global(svg) {
+    .docs-home-icon,
+    .mobile-repo-icon {
       display: block;
       width: 1em;
       height: 1em;
     }
 
-    .mobile-links.has-active-repo .social-icons::after {
-      content: '';
-      align-self: stretch;
-      border-inline-end: 1px solid var(--sl-color-gray-5);
-      margin-inline: 0.35rem 0.55rem;
+    .docs-home-icon :global(svg),
+    .mobile-repo-icon :global(svg) {
+      display: block;
+      width: 1em;
+      height: 1em;
     }
 
-    .mobile-repo-link {
-      order: 2;
-      justify-content: flex-start;
-      min-width: 0;
-      max-width: 8.5rem;
-      padding-inline: 0;
-      font-size: var(--sl-text-xs);
-      font-weight: 600;
-      line-height: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .mobile-repo-icon :global(svg) {
+      fill: currentColor;
     }
   }
 </style>

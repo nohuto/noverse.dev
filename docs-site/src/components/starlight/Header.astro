@@ -5,6 +5,7 @@ import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import Search from 'virtual:starlight/components/Search';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import repoIconSvg from '../../assets/repo.svg?raw';
 import terminalIconSvg from '../../assets/terminal.svg?raw';
 import { getActiveRepo } from '../../utils/active-repo';
 
@@ -35,17 +36,15 @@ const shouldRenderSearch =
   <div class="sl-flex print:hidden">
     {shouldRenderSearch && <Search />}
   </div>
-  <div class:list={['sl-hidden md:sl-flex print:hidden right-group', { 'has-active-repo': hasActiveRepo }]}>
-    <div class="header-shortcuts">
-      {
-        hasActiveRepo && (
-          <a class="header-shortcut" href={repoHref} target="_blank" rel="noopener noreferrer">
-            {activeRepo}
-          </a>
-        )
-      }
-    </div>
-    <div class:list={['sl-flex social-icons', { 'has-active-repo': hasActiveRepo }]}>
+  <div class="sl-hidden md:sl-flex print:hidden right-group">
+    {
+      hasActiveRepo && (
+        <a class="header-shortcut" href={repoHref} target="_blank" rel="noopener noreferrer" aria-label={`Open ${activeRepo} repository`}>
+          <span aria-hidden="true" class="header-shortcut-icon" set:html={repoIconSvg}></span>
+        </a>
+      )
+    }
+    <div class="sl-flex social-icons">
       <SocialIcons />
       <a class="docs-home-link" href="https://noverse.dev/" aria-label="Go to Noverse home">
         <span aria-hidden="true" class="docs-home-icon" set:html={terminalIconSvg}></span>
@@ -99,13 +98,6 @@ const shouldRenderSearch =
     .right-group > :global(docs-theme-select),
     .right-group > :global(starlight-lang-select) {
       margin-inline-start: 0.45rem;
-    }
-
-    .header-shortcuts {
-      display: flex;
-      gap: 0.85rem;
-      margin-right: 0.9rem;
-      align-items: center;
     }
 
     .prompt-line {
@@ -167,22 +159,24 @@ const shouldRenderSearch =
       outline: none;
     }
 
-    .header-shortcut {
+    .header-shortcut,
+    .docs-home-link {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       color: var(--sl-color-gray-2);
-      font-size: var(--sl-text-xs);
-      font-weight: 600;
-      line-height: 1;
-      white-space: nowrap;
+      line-height: 0;
       text-decoration: none;
-      border: 0;
-      background: transparent;
-      padding: 0;
+    }
+
+    .header-shortcut {
+      margin-inline-end: 1rem;
     }
 
     .header-shortcut:hover,
-    .header-shortcut:focus-visible {
+    .header-shortcut:focus-visible,
+    .docs-home-link:hover,
+    .docs-home-link:focus-visible {
       color: var(--sl-color-accent-high);
       outline: none;
     }
@@ -199,37 +193,27 @@ const shouldRenderSearch =
       content: none;
     }
 
-    .social-icons.has-active-repo::before {
-      content: '';
-      inline-size: 0;
-      height: 2rem;
-      border-inline-end: 1px solid var(--sl-color-gray-5);
-    }
-
-    .docs-home-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--sl-color-gray-2);
-      text-decoration: none;
-    }
-
-    .docs-home-link:hover,
-    .docs-home-link:focus-visible {
-      color: var(--sl-color-accent-high);
-      outline: none;
-    }
-
+    .header-shortcut-icon,
     .docs-home-icon {
-      display: inline-flex;
+      display: block;
       width: 1em;
       height: 1em;
     }
 
+    .header-shortcut-icon :global(svg),
     .docs-home-icon :global(svg) {
       display: block;
       width: 1em;
       height: 1em;
+    }
+
+    .header-shortcut-icon :global(svg) {
+      fill: currentColor;
+    }
+
+    .docs-home-icon :global(svg) {
+      fill: none;
+      stroke: currentColor;
     }
 
     @media (max-width: 40rem) {

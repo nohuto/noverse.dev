@@ -46,7 +46,6 @@
     'noise',
     'dots',
     'grid',
-    'carbon',
     'starfield'
   ]);
   const FONT_OPTIONS = new Set([

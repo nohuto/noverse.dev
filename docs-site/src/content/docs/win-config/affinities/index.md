@@ -7,4 +7,4 @@ sidebar:
   order: 11
 ---
 
-- [Interrupt Handling and Affinity Policies](/docs/win-config/affinities/interrupt-handling-and-affinity-policies/)
+- [Interrupt Handling & Affinities](/docs/win-config/affinities/interrupt-handling-affinities/)

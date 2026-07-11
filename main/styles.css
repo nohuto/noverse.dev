@@ -704,6 +704,7 @@ main.main-terminal {
   max-width: none;
   padding: 0;
   gap: 0;
+  min-height: 0;
 }
 
 main.main-terminal .terminal-shell {
@@ -734,7 +735,7 @@ main.main-terminal .terminal-shell {
   transform: none;
   width: min(950px, 92%);
   height: min(665px, 86%);
-  min-width: 280px;
+  min-width: min(365px, 100%);
   min-height: 360px;
   max-width: 100%;
   max-height: 100%;
@@ -752,7 +753,7 @@ main.main-terminal .terminal-shell {
   justify-content: space-between;
   gap: 8px;
   min-height: 24px;
-  padding: 0 12px;
+  padding: 0 10px 0 8px;
   background: var(--panel-alt);
   border-bottom: 1px solid var(--border);
   text-transform: uppercase;
@@ -763,9 +764,20 @@ main.main-terminal .terminal-shell {
   touch-action: none;
 }
 
-.console-window-meta {
-  color: var(--muted);
-  font-size: 0.73rem;
+.console-window-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.console-window-icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .console-window-body {
@@ -2239,23 +2251,38 @@ footer {
 }
 
 @media (max-width: 720px) {
+  main.main-terminal {
+    padding: 0;
+  }
+
   .window-surface {
-    min-height: 70vh;
-    height: 70vh;
+    display: flex;
+    align-self: stretch;
+    width: 100%;
+    min-height: 0;
+    height: auto;
     overflow: hidden;
+    padding: 12px;
   }
 
   .console-window {
-    position: relative;
+    position: static;
     inset: auto;
-    top: 0;
-    left: 0;
     margin: 0;
     transform: none;
+    flex: 1 1 auto;
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-width: 0;
     min-height: 0;
+    max-width: none;
+    max-height: none;
     resize: none;
+  }
+
+  .console-window-header {
+    cursor: default;
+    touch-action: auto;
   }
 
   .console-window-body {

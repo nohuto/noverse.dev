@@ -55,7 +55,6 @@ let consoleTimestampTimer;
 let consoleFocusListener;
 let consoleResizeHandler;
 let consolePageShowHandler;
-let consoleResizeObserver;
 let consoleClampRaf = 0;
 let consoleAnimationCleanup = null;
 let bitmaskCleanup = null;
@@ -81,6 +80,9 @@ function initConsoleWindow() {
   windowEl.dataset.ready = 'true';
 
   const parent = windowEl.parentElement;
+  const compactMedia = window.matchMedia('(max-width: 720px)');
+  let mode = '';
+  let desktopGeometry = null;
   let positionTries = 0;
 
   const getParentSize = () => {
@@ -113,9 +115,44 @@ function initConsoleWindow() {
 
   const hasMetrics = metrics => metrics.parentWidth && metrics.parentHeight && metrics.windowWidth && metrics.windowHeight;
 
+  const getSavedNumber = value => {
+    const number = Number.parseFloat(value);
+    return Number.isFinite(number) ? number : null;
+  };
+
+  const readDesktopGeometry = () => {
+    const parentRect = parent.getBoundingClientRect();
+    const rect = windowEl.getBoundingClientRect();
+    return {
+      left: getSavedNumber(windowEl.style.left) ?? rect.left - parentRect.left,
+      top: getSavedNumber(windowEl.style.top) ?? rect.top - parentRect.top,
+      width: getSavedNumber(windowEl.style.width) ?? windowEl.offsetWidth,
+      height: getSavedNumber(windowEl.style.height) ?? windowEl.offsetHeight,
+      userPositioned: windowEl.dataset.userPositioned === 'true' || Boolean(windowEl.style.width || windowEl.style.height)
+    };
+  };
+
+  const rememberDesktopGeometry = (force = false) => {
+    if (mode !== 'floating') return;
+    if (compactMedia.matches && !force) return;
+    desktopGeometry = readDesktopGeometry();
+  };
+
+  const clearGeometryStyles = () => {
+    windowEl.style.transform = '';
+    windowEl.style.inset = '';
+    windowEl.style.margin = '';
+    windowEl.style.left = '';
+    windowEl.style.top = '';
+    windowEl.style.width = '';
+    windowEl.style.height = '';
+    windowEl.style.willChange = '';
+  };
+
   const setPosition = (left, top, metrics = getMetrics()) => {
     windowEl.style.transform = 'none';
-    windowEl.style.inset = 'auto';
+    windowEl.style.right = 'auto';
+    windowEl.style.bottom = 'auto';
     windowEl.style.margin = '0';
     windowEl.style.left = `${Math.min(Math.max(0, left), metrics.maxLeft)}px`;
     windowEl.style.top = `${Math.min(Math.max(0, top), metrics.maxTop)}px`;
@@ -123,7 +160,7 @@ function initConsoleWindow() {
   };
 
   const centerPosition = () => {
-    if (!isAbsoluteWindow()) return true;
+    if (mode !== 'floating' || !isAbsoluteWindow()) return true;
     const metrics = getMetrics();
     if (!hasMetrics(metrics)) {
       if (positionTries < 8) {
@@ -134,11 +171,12 @@ function initConsoleWindow() {
     }
     positionTries = 0;
     setPosition(metrics.maxLeft / 2, metrics.maxTop / 2, metrics);
+    rememberDesktopGeometry();
     return true;
   };
 
   const materializeCurrentPosition = () => {
-    if (!isAbsoluteWindow()) return;
+    if (mode !== 'floating' || !isAbsoluteWindow()) return;
     if (windowEl.dataset.positioned === 'true') {
       setPosition(windowEl.offsetLeft, windowEl.offsetTop);
       return;
@@ -149,8 +187,20 @@ function initConsoleWindow() {
   };
 
   const clampPosition = () => {
+    if (mode !== 'floating') return;
     if (windowEl.dataset.userPositioned !== 'true') {
       centerPosition();
+      return;
+    }
+    if (desktopGeometry) {
+      const parentSize = getParentSize();
+      if (desktopGeometry.width) {
+        windowEl.style.width = `${Math.min(desktopGeometry.width, parentSize.width)}px`;
+      }
+      if (desktopGeometry.height) {
+        windowEl.style.height = `${Math.min(desktopGeometry.height, parentSize.height)}px`;
+      }
+      setPosition(desktopGeometry.left, desktopGeometry.top);
       return;
     }
     setPosition(windowEl.offsetLeft, windowEl.offsetTop);
@@ -158,6 +208,7 @@ function initConsoleWindow() {
 
   const scheduleClampPosition = () => {
     if (!document.contains(windowEl)) return;
+    if (mode !== 'floating') return;
     if (consoleClampRaf) return;
     consoleClampRaf = requestAnimationFrame(() => {
       consoleClampRaf = 0;
@@ -166,20 +217,61 @@ function initConsoleWindow() {
     });
   };
 
-  requestAnimationFrame(clampPosition);
+  const restoreDesktopGeometry = () => {
+    if (!desktopGeometry) {
+      centerPosition();
+      return;
+    }
+    const parentSize = getParentSize();
+    if (desktopGeometry.width) {
+      windowEl.style.width = `${Math.min(desktopGeometry.width, parentSize.width)}px`;
+    }
+    if (desktopGeometry.height) {
+      windowEl.style.height = `${Math.min(desktopGeometry.height, parentSize.height)}px`;
+    }
+    if (desktopGeometry.userPositioned) {
+      windowEl.dataset.userPositioned = 'true';
+      setPosition(desktopGeometry.left, desktopGeometry.top);
+      return;
+    }
+    delete windowEl.dataset.userPositioned;
+    centerPosition();
+  };
 
-  if (consoleResizeObserver) {
-    consoleResizeObserver.disconnect();
-    consoleResizeObserver = null;
-  }
+  const enterCompactMode = () => {
+    if (mode === 'floating') rememberDesktopGeometry(true);
+    mode = 'compact';
+    windowEl.dataset.mode = 'compact';
+    if (consoleClampRaf) {
+      cancelAnimationFrame(consoleClampRaf);
+      consoleClampRaf = 0;
+    }
+    clearGeometryStyles();
+  };
+
+  const enterFloatingMode = () => {
+    mode = 'floating';
+    windowEl.dataset.mode = 'floating';
+    clearGeometryStyles();
+    requestAnimationFrame(restoreDesktopGeometry);
+  };
+
+  const syncMode = () => {
+    const nextMode = compactMedia.matches ? 'compact' : 'floating';
+    if (nextMode === mode) {
+      if (mode === 'floating') scheduleClampPosition();
+      return;
+    }
+    if (nextMode === 'compact') {
+      enterCompactMode();
+      return;
+    }
+    enterFloatingMode();
+  };
+
   if (consoleClampRaf) {
     cancelAnimationFrame(consoleClampRaf);
     consoleClampRaf = 0;
-  }
-  if (window.ResizeObserver) {
-    consoleResizeObserver = new ResizeObserver(scheduleClampPosition);
-    consoleResizeObserver.observe(parent);
-    consoleResizeObserver.observe(windowEl);
   }
 
   if (consoleResizeHandler) {
@@ -189,14 +281,22 @@ function initConsoleWindow() {
   if (consolePageShowHandler) {
     window.removeEventListener('pageshow', consolePageShowHandler);
   }
-  consoleResizeHandler = scheduleClampPosition;
-  consolePageShowHandler = scheduleClampPosition;
+  consoleResizeHandler = syncMode;
+  consolePageShowHandler = syncMode;
   window.addEventListener('resize', consoleResizeHandler);
   window.visualViewport?.addEventListener('resize', consoleResizeHandler);
   window.addEventListener('pageshow', consolePageShowHandler);
+  if (compactMedia.addEventListener) {
+    compactMedia.addEventListener('change', syncMode);
+  } else {
+    compactMedia.addListener?.(syncMode);
+  }
+
+  syncMode();
 
   handle.addEventListener('pointerdown', e => {
     if (e.button !== 0) return;
+    if (mode !== 'floating' || !isAbsoluteWindow()) return;
     e.preventDefault();
     materializeCurrentPosition();
     windowEl.dataset.userPositioned = 'true';
@@ -249,6 +349,7 @@ function initConsoleWindow() {
       handle.removeEventListener('pointermove', onMove);
       handle.removeEventListener('pointerup', onUp);
       handle.removeEventListener('pointercancel', onUp);
+      desktopGeometry = readDesktopGeometry();
       clampPosition();
     };
 

@@ -43,6 +43,10 @@
       </div>
       <div class="panel-body">
         <div class="product-header">
+          <div class="product-intro">
+            <h2>Windows Configuration</h2>
+            <p>WinConfig is based on my personal research on several topics, which I began documenting around July 2024. It has transparent logs so users can see every change, including value name, data, type and if recursive the amount of modified keys, some may also show executed PS code. Each option has its own <a href="#documentation">documentation</a>, some may be more detailed whenever theres no public (trustworthy) documentation on them, some less, see below for details.</p>
+          </div>
           <div class="product-cta">
             <span class="price-label">Lifetime</span>
             <span class="product-price">9,99&nbsp;EUR</span>
@@ -56,59 +60,6 @@
               </form>
             </div>
           </div>
-          <div class="product-intro">
-            <h2>Windows Configuration</h2>
-            <p>WinConfig is based on my personal research on several topics, which I began documenting around July 2024.</p>
-          </div>
-          <div class="comparison-copy">
-            <h3>Noteable Windows Configuration Tool Features:</h3>
-            <ul>
-              <li>Transparent execution logs so users can review every action, these include the value, data, type and if given the amount of modified keys. Specific options will show the PS code that got executed.</li>
-              <li>Dynamic state detection instead of relying on cached registry values, this includes static/dynamic (pattern) and all used cmdlets (which are also saved in the registry but on uncommon ways).</li>
-              <li>Each option is backed up by <a href="#documentation">documentation</a>, instead of just general "optimize" prompts with an useless text.</li>
-              <li>Every control is available individually instead of being merged into large bundles.</li>
-              <li>Supports dark/light modes, custom color schemes, and layout preferences for search filters, rows, columns, and panel widths.</li>
-              <li>Export/import your entire configuration within a single click, so you can easily reapply everything on new installations.</li>
-            </ul>
-          </div>
-        </div>
-        <div class="comparison-table">
-          <table aria-label="Feature comparison">
-            <thead>
-              <tr>
-                <th scope="col">Feature</th>
-                <th scope="col">WinConfig</th>
-                <th scope="col">Typical tools</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Execution transparency</td>
-                <td><span class="status-pill positive">Displays each change</span></td>
-                <td><span class="status-pill neutral">Hidden</span></td>
-              </tr>
-              <tr>
-                <td>State detection</td>
-                <td><span class="status-pill positive">Dynamic</span></td>
-                <td><span class="status-pill neutral">Stored in registry</span></td>
-              </tr>
-              <tr>
-                <td>Documentation</td>
-                <td><span class="status-pill positive">Per option notes</span></td>
-                <td><span class="status-pill negative">None</span></td>
-              </tr>
-              <tr>
-                <td>Selection</td>
-                <td><span class="status-pill positive">Extensive</span></td>
-                <td><span class="status-pill neutral">Common</span></td>
-              </tr>
-              <tr>
-                <td>Customization control</td>
-                <td><span class="status-pill positive">Per change toggles</span></td>
-                <td><span class="status-pill negative">Bundled groups</span></td>
-              </tr>
-            </tbody>
-          </table>
         </div>
         <div class="product-preview-grid">
           <figure class="product-preview-card">
@@ -152,42 +103,42 @@
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/system/">
               <span class="doc-index">01</span>
               <h4>System</h4>
-              <p>Operating system adjustments for services, scheduling, storage, startup behavior...</p>
+              <p>Thread scheduling/behaviour (priorities), DWM, tasks...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/visibility/">
               <span class="doc-index">02</span>
               <h4>Visibility</h4>
-              <p>Customize visuals/interface behavior...</p>
+              <p>Visuals, wallpapers, UI behaviors...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/peripheral/">
               <span class="doc-index">03</span>
               <h4>Peripheral</h4>
-              <p>Change input, audio, Bluetooth, display devices... behaviors/states.</p>
+              <p>Input, audio, bluetooth... behaviors/states.</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/power/">
               <span class="doc-index">04</span>
               <h4>Power</h4>
-              <p>Control several different PM features...</p>
+              <p>Several different PM related features...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/privacy/">
               <span class="doc-index">05</span>
               <h4>Privacy</h4>
-              <p>Privacy configuration for telemetry, diagnostics, encryption, data sharing...</p>
+              <p>Privacy configuration for reducing connections to MS/other servers...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/network/">
               <span class="doc-index">06</span>
               <h4>Network</h4>
-              <p>Change network adapter settings including DNS, offloads, IM, probing... and all kind of other network related features.</p>
+              <p>Network adapter settings including DNS, offloads, IM, probing...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/security/">
               <span class="doc-index">07</span>
               <h4>Security</h4>
-              <p>Security configuration for Defender, firewall, mitigations, UAC, and update behavior.</p>
+              <p>Firewall default deny setup, Defender, WU, mitigations, UAC...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/nvidia/">
               <span class="doc-index">08</span>
               <h4>NVIDIA</h4>
-              <p>NVIDIA driver installation, NVCPL settings... and resource manager values.</p>
+              <p>NVIDIA driver installation, NVCPL settings...</p>
             </article>
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/misc/">
               <span class="doc-index">09</span>
@@ -202,7 +153,7 @@
             <article class="doc-card clickable-card" data-card-href="/docs/win-config/affinities/">
               <span class="doc-index">11</span>
               <h4>Affinities</h4>
-              <p>Configure MSI mode/message limit, IRQ settings (priority/policy), affinities.</p>
+              <p>MSI mode/message limit, IRQ settings (priority/policy), affinities.</p>
             </article>
           </div>
         </div>

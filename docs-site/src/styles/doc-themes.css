@@ -654,8 +654,8 @@ docs-theme-select[data-open='true'] .docs-theme-trigger::after {
 .mobile-preferences docs-theme-select .docs-theme-popover {
   inset-block-start: auto;
   inset-block-end: calc(100% + 0.25rem);
-  inset-inline-start: 0;
-  inset-inline-end: auto;
+  inset-inline-start: auto;
+  inset-inline-end: 0;
 }
 
 .docs-theme-panel {

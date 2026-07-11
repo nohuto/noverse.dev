@@ -16,7 +16,7 @@ const LIGHT_THEMES = new Set([
 ]);
 const BG_KEY = 'nv-bg';
 const DEFAULT_BG = 'dots';
-const BG_KEYS = ['clear', 'diamonds', 'noise', 'dots', 'grid', 'carbon', 'starfield'];
+const BG_KEYS = ['clear', 'diamonds', 'noise', 'dots', 'grid', 'starfield'];
 const BG_SET = new Set(BG_KEYS);
 const STARFIELD_STYLESHEET = 'main/data/starfield-stars.css';
 const KEYFRAMES_ICON_DARK = 'main/icons/dark/keyframes.svg';

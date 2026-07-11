@@ -55,6 +55,9 @@ let consoleTimestampTimer;
 let consoleFocusListener;
 let consoleResizeHandler;
 let consolePageShowHandler;
+let consolePointerUpHandler;
+let consoleModeMedia;
+let consoleModeChangeHandler;
 let consoleClampRaf = 0;
 let consoleAnimationCleanup = null;
 let bitmaskCleanup = null;
@@ -65,6 +68,8 @@ const ASCII_ART = [
   ' |\\  |  (   | \\ \\ /   __/  |   \\__ \\   __/',
   '_| \\_| \\___/   \\_/  \\___| _|   ____/ \\___|'
 ];
+
+const clampNumber = (value, min, max) => Math.min(Math.max(min, value), max);
 
 function stopConsoleAnimation() {
   if (!consoleAnimationCleanup) return;
@@ -84,6 +89,7 @@ function initConsoleWindow() {
   let mode = '';
   let desktopGeometry = null;
   let positionTries = 0;
+  let syncSizeRaf = 0;
 
   const getParentSize = () => {
     const rect = parent.getBoundingClientRect();
@@ -126,8 +132,8 @@ function initConsoleWindow() {
     return {
       left: getSavedNumber(windowEl.style.left) ?? rect.left - parentRect.left,
       top: getSavedNumber(windowEl.style.top) ?? rect.top - parentRect.top,
-      width: getSavedNumber(windowEl.style.width) ?? windowEl.offsetWidth,
-      height: getSavedNumber(windowEl.style.height) ?? windowEl.offsetHeight,
+      width: windowEl.offsetWidth,
+      height: windowEl.offsetHeight,
       userPositioned: windowEl.dataset.userPositioned === 'true' || Boolean(windowEl.style.width || windowEl.style.height)
     };
   };
@@ -146,7 +152,35 @@ function initConsoleWindow() {
     windowEl.style.top = '';
     windowEl.style.width = '';
     windowEl.style.height = '';
+    windowEl.style.maxWidth = '';
+    windowEl.style.maxHeight = '';
     windowEl.style.willChange = '';
+  };
+
+  const updateResizeLimits = () => {
+    if (mode !== 'floating') return;
+    const parentSize = getParentSize();
+    const left = getSavedNumber(windowEl.style.left) ?? windowEl.offsetLeft;
+    const top = getSavedNumber(windowEl.style.top) ?? windowEl.offsetTop;
+    windowEl.style.maxWidth = `${Math.max(0, parentSize.width - left)}px`;
+    windowEl.style.maxHeight = `${Math.max(0, parentSize.height - top)}px`;
+  };
+
+  const syncRenderedSize = () => {
+    if (mode !== 'floating') return;
+    if (!windowEl.style.width && !windowEl.style.height) return;
+    windowEl.style.width = `${windowEl.offsetWidth}px`;
+    windowEl.style.height = `${windowEl.offsetHeight}px`;
+    updateResizeLimits();
+    desktopGeometry = readDesktopGeometry();
+  };
+
+  const scheduleSyncRenderedSize = () => {
+    if (syncSizeRaf) return;
+    syncSizeRaf = requestAnimationFrame(() => {
+      syncSizeRaf = 0;
+      syncRenderedSize();
+    });
   };
 
   const setPosition = (left, top, metrics = getMetrics()) => {
@@ -154,8 +188,9 @@ function initConsoleWindow() {
     windowEl.style.right = 'auto';
     windowEl.style.bottom = 'auto';
     windowEl.style.margin = '0';
-    windowEl.style.left = `${Math.min(Math.max(0, left), metrics.maxLeft)}px`;
-    windowEl.style.top = `${Math.min(Math.max(0, top), metrics.maxTop)}px`;
+    windowEl.style.left = `${clampNumber(left, 0, metrics.maxLeft)}px`;
+    windowEl.style.top = `${clampNumber(top, 0, metrics.maxTop)}px`;
+    updateResizeLimits();
     windowEl.dataset.positioned = 'true';
   };
 
@@ -281,15 +316,29 @@ function initConsoleWindow() {
   if (consolePageShowHandler) {
     window.removeEventListener('pageshow', consolePageShowHandler);
   }
+  if (consolePointerUpHandler) {
+    window.removeEventListener('pointerup', consolePointerUpHandler);
+  }
+  if (consoleModeMedia && consoleModeChangeHandler) {
+    if (consoleModeMedia.removeEventListener) {
+      consoleModeMedia.removeEventListener('change', consoleModeChangeHandler);
+    } else {
+      consoleModeMedia.removeListener?.(consoleModeChangeHandler);
+    }
+  }
   consoleResizeHandler = syncMode;
   consolePageShowHandler = syncMode;
+  consolePointerUpHandler = scheduleSyncRenderedSize;
+  consoleModeMedia = compactMedia;
+  consoleModeChangeHandler = syncMode;
   window.addEventListener('resize', consoleResizeHandler);
   window.visualViewport?.addEventListener('resize', consoleResizeHandler);
   window.addEventListener('pageshow', consolePageShowHandler);
+  window.addEventListener('pointerup', consolePointerUpHandler);
   if (compactMedia.addEventListener) {
-    compactMedia.addEventListener('change', syncMode);
+    compactMedia.addEventListener('change', consoleModeChangeHandler);
   } else {
-    compactMedia.addListener?.(syncMode);
+    compactMedia.addListener?.(consoleModeChangeHandler);
   }
 
   syncMode();
@@ -319,8 +368,8 @@ function initConsoleWindow() {
       rafId = 0;
       const dx = pendingX - startX;
       const dy = pendingY - startY;
-      const nextLeft = Math.min(Math.max(0, startLeft + dx), maxLeft);
-      const nextTop = Math.min(Math.max(0, startTop + dy), maxTop);
+      const nextLeft = clampNumber(startLeft + dx, 0, maxLeft);
+      const nextTop = clampNumber(startTop + dy, 0, maxTop);
       lastLeft = nextLeft;
       lastTop = nextTop;
       windowEl.style.transform = `translate3d(${nextLeft - startLeft}px, ${nextTop - startTop}px, 0)`;
@@ -381,6 +430,17 @@ function initConsole() {
   const promptEl = consoleRoot.querySelector('.console-prompt');
   const timestampEl = document.getElementById('console-timestamp');
   const DOCS_ROOT_PATH = `${rootPath}/docs`;
+  const URL_PATTERN = /https?:\/\/[^\s<>"'`]+/i;
+  const CARET_HEIGHT_RATIO = 0.78;
+  const CARET_Y_OFFSET = -2;
+  let promptIndent = 0;
+  let measureState = {
+    width: 0,
+    font: '',
+    lineHeight: '',
+    lineHeightPx: 0,
+    promptIndent: -1
+  };
   const formatDisplayPath = path => {
     if (path === rootPath) return rootPath;
     if (path === DOCS_ROOT_PATH) return '~/docs';
@@ -397,6 +457,16 @@ function initConsole() {
     if (promptEl) {
       promptEl.textContent = `${promptUser}@${promptHost}:${formatDisplayPath(currentPath)}$`;
     }
+  };
+
+  const updatePromptIndent = () => {
+    if (!promptEl) return promptIndent;
+    const nextIndent = Math.ceil(promptEl.getBoundingClientRect().width + 8);
+    if (nextIndent !== promptIndent) {
+      promptIndent = nextIndent;
+      form.style.setProperty('--console-prompt-indent', `${promptIndent}px`);
+    }
+    return promptIndent;
   };
 
   const promptLabel = () => `${promptUser}@${promptHost}:${formatDisplayPath(currentPath)}$`;
@@ -420,14 +490,6 @@ function initConsole() {
     const parts = raw.trim().split(/\s+/).filter(Boolean);
     if (parts.length === 0) return '';
     const head = parts[0];
-    const firstMatch = (options, seed, sort = false) => {
-      const matches = options.filter(option => option.startsWith(seed));
-      if (!matches.length) return '';
-      if (sort) {
-        matches.sort((a, b) => a.localeCompare(b));
-      }
-      return matches[0] || '';
-    };
     if (head === 'cd') {
       const cdMatch = raw.match(/^cd\s+(.+)$/);
       if (!cdMatch) return '';
@@ -435,23 +497,27 @@ function initConsole() {
       if (!seed) return '';
       const useBackslash = seed.startsWith('.\\');
       const options = listDirs().map(option => useBackslash ? option.replace(/\//g, '\\') : option);
-      const match = firstMatch(options, seed);
+      const match = options.find(option => option.startsWith(seed));
       return match ? `cd ${match}` : '';
     }
     if ((head === 'theme' || head === 'bg') && (parts.length > 1 || hasTrailingSpace)) {
       const seed = parts.length > 1 ? parts.slice(1).join(' ') : '';
       const options = head === 'theme' ? listThemes() : listBackgrounds();
-      const match = firstMatch(options, seed);
+      const match = options.find(option => option.startsWith(seed));
       return match ? `${head} ${match}` : '';
     }
     if (parts.length > 1) return '';
-    const commandMatch = firstMatch(Object.keys(commands), head, true);
+    const commandMatch = commandNames.find(option => option.startsWith(head));
     if (commandMatch) return commandMatch;
-    return firstMatch(Object.keys(aliases), head, true);
+    return aliasNames.find(option => option.startsWith(head)) || '';
   };
 
-  const updateGhost = (value, pos, width) => {
+  const updateGhost = (value, pos, width, inputWidth) => {
     if (!value || pos !== value.length) {
+      ghost.textContent = '';
+      return;
+    }
+    if (width < 0 || width > inputWidth - promptIndent - 8) {
       ghost.textContent = '';
       return;
     }
@@ -460,23 +526,72 @@ function initConsole() {
       ghost.textContent = '';
       return;
     }
-    ghost.style.left = `${width}px`;
+    ghost.style.left = `${promptIndent + width}px`;
     ghost.textContent = completion.slice(value.length);
   };
 
+  const resizeInput = () => {
+    input.style.height = 'auto';
+    input.style.height = `${input.scrollHeight}px`;
+  };
+
+  const syncMeasureStyles = () => {
+    const inputStyle = getComputedStyle(input);
+    const width = input.clientWidth;
+    const font = inputStyle.font;
+    const lineHeight = inputStyle.lineHeight;
+    if (
+      width !== measureState.width ||
+      font !== measureState.font ||
+      lineHeight !== measureState.lineHeight ||
+      promptIndent !== measureState.promptIndent
+    ) {
+      measure.style.display = 'block';
+      measure.style.width = `${width}px`;
+      measure.style.font = font;
+      measure.style.lineHeight = lineHeight;
+      measure.style.whiteSpace = 'pre-wrap';
+      measure.style.overflowWrap = 'anywhere';
+      measure.style.textIndent = `${promptIndent}px`;
+      measureState = {
+        width,
+        font,
+        lineHeight,
+        lineHeightPx: Number.parseFloat(lineHeight) || input.offsetHeight,
+        promptIndent
+      };
+    }
+    return measureState;
+  };
+
+  const measureCaret = (value, pos) => {
+    const metrics = syncMeasureStyles();
+    measure.replaceChildren();
+    measure.append(document.createTextNode(value.slice(0, pos)));
+    const marker = document.createElement('span');
+    marker.textContent = '\u200b';
+    measure.append(marker);
+    const measureRect = measure.getBoundingClientRect();
+    const markerRect = marker.getBoundingClientRect();
+    return {
+      left: markerRect.left - measureRect.left,
+      top: markerRect.top - measureRect.top,
+      lineHeight: metrics.lineHeightPx,
+      inputWidth: metrics.width
+    };
+  };
+
   const updateCaret = () => {
+    updatePromptIndent();
+    resizeInput();
     const value = input.value;
     const pos = typeof input.selectionStart === 'number' ? input.selectionStart : value.length;
-    const head = value.slice(0, pos).replace(/ /g, '\u00a0');
-    measure.textContent = head;
-    const width = measure.getBoundingClientRect().width;
-    const caretOffset = 1;
-    const ghostOffset = 0;
-    const caretHeight = Math.round(input.offsetHeight * 0.8);
-    caret.style.left = `${width + caretOffset}px`;
-    caret.style.top = `${Math.round((input.offsetHeight - caretHeight) / 2)}px`;
+    const caretBox = measureCaret(value, pos);
+    const caretHeight = Math.round(caretBox.lineHeight * CARET_HEIGHT_RATIO);
+    caret.style.left = `${caretBox.left + 1}px`;
+    caret.style.top = `${Math.round(caretBox.top + (caretBox.lineHeight - caretHeight) / 2 + CARET_Y_OFFSET)}px`;
     caret.style.height = `${caretHeight}px`;
-    updateGhost(value, pos, width + ghostOffset);
+    updateGhost(value, pos, caretBox.left - promptIndent, caretBox.inputWidth);
   };
 
   const addLine = (text, className) => {
@@ -488,14 +603,13 @@ function initConsole() {
   };
 
   const addLineParts = (parts, className) => {
-    const urlPattern = /https?:\/\/[^\s<>"'`]+/i;
     const line = document.createElement('div');
     line.className = className ? `console-line ${className}` : 'console-line';
     parts.forEach(part => {
       const span = document.createElement('span');
       span.textContent = part.text;
       if (part.className) span.className = part.className;
-      if (urlPattern.test(part.text || '')) span.classList.add('console-url');
+      if (URL_PATTERN.test(part.text || '')) span.classList.add('console-url');
       line.appendChild(span);
     });
     lines.appendChild(line);
@@ -696,7 +810,7 @@ function initConsole() {
 
   const extractFirstUrl = text => {
     if (!text) return null;
-    const match = text.match(/https?:\/\/[^\s<>"'`]+/i);
+    const match = text.match(URL_PATTERN);
     return match ? match[0] : null;
   };
 
@@ -830,8 +944,8 @@ function initConsole() {
       if (layer.hidden) return;
       const maxLeft = Math.max(12, layer.clientWidth - dialog.offsetWidth - 12);
       const maxTop = Math.max(12, layer.clientHeight - dialog.offsetHeight - 12);
-      dialog.style.left = `${Math.min(Math.max(12, dialog.offsetLeft), maxLeft)}px`;
-      dialog.style.top = `${Math.min(Math.max(12, dialog.offsetTop), maxTop)}px`;
+      dialog.style.left = `${clampNumber(dialog.offsetLeft, 12, maxLeft)}px`;
+      dialog.style.top = `${clampNumber(dialog.offsetTop, 12, maxTop)}px`;
     };
 
     const center = () => {
@@ -905,12 +1019,14 @@ function initConsole() {
       handle.setPointerCapture(event.pointerId);
 
       const move = moveEvent => {
-        dialog.style.left = `${Math.min(Math.max(12, startLeft + moveEvent.clientX - startX), maxLeft)}px`;
-        dialog.style.top = `${Math.min(Math.max(12, startTop + moveEvent.clientY - startY), maxTop)}px`;
+        dialog.style.left = `${clampNumber(startLeft + moveEvent.clientX - startX, 12, maxLeft)}px`;
+        dialog.style.top = `${clampNumber(startTop + moveEvent.clientY - startY, 12, maxTop)}px`;
       };
       const stop = () => {
         dialog.dataset.positioned = 'true';
-        handle.releasePointerCapture(event.pointerId);
+        if (handle.hasPointerCapture(event.pointerId)) {
+          handle.releasePointerCapture(event.pointerId);
+        }
         handle.removeEventListener('pointermove', move);
         handle.removeEventListener('pointerup', stop);
         handle.removeEventListener('pointercancel', stop);
@@ -1279,6 +1395,8 @@ function initConsole() {
       });
     }
   };
+  const commandNames = Object.keys(commands).sort((a, b) => a.localeCompare(b));
+  const aliasNames = Object.keys(aliases).sort((a, b) => a.localeCompare(b));
 
   const runCommand = async raw => {
     const trimmed = raw.trim();
@@ -1324,6 +1442,11 @@ function initConsole() {
   });
 
   input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+      return;
+    }
     if (e.key === 'Tab' || e.key === 'ArrowRight') {
       if (e.key === 'ArrowRight') {
         const value = input.value;
@@ -1376,6 +1499,7 @@ function initConsole() {
   }
 
   updatePrompt();
+  updatePromptIndent();
   updateTimestamp();
   if (consoleTimestampTimer) {
     clearInterval(consoleTimestampTimer);

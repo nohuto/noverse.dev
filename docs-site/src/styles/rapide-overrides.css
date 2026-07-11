@@ -363,6 +363,7 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
 }
 
 .sidebar-pane {
+  --nv-sidebar-tree-font-size: var(--sl-text-sm);
   border-inline-end: 1px solid var(--sl-color-hairline-shade) !important;
 }
 
@@ -370,6 +371,7 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
   flex-direction: row !important;
   justify-content: space-between !important;
   gap: 0 !important;
+  font-size: var(--nv-sidebar-tree-font-size) !important;
   padding: 0.2em var(--sl-sidebar-item-padding-inline) !important;
 }
 
@@ -385,7 +387,7 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
 
 .sidebar-pane .large {
   color: var(--sl-color-gray-2) !important;
-  font-size: var(--sl-text-sm) !important;
+  font-size: var(--nv-sidebar-tree-font-size) !important;
   font-weight: inherit !important;
 }
 
@@ -396,6 +398,7 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
 .sidebar-pane a {
   border-radius: var(--nv-ui-radius);
   color: var(--sl-color-gray-2);
+  font-size: var(--nv-sidebar-tree-font-size) !important;
   padding: 0.3em var(--sl-sidebar-item-padding-inline) !important;
 }
 

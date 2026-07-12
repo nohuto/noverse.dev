@@ -2,7 +2,7 @@
 import project from 'virtual:starlight/project-context';
 
 const pagefindTranslations = {
-	placeholder: Astro.locals.t('search.label'),
+	placeholder: '',
 	...Object.fromEntries(
 		Object.entries(Astro.locals.t.all())
 			.filter(([key]) => key.startsWith('pagefind.'))
@@ -23,7 +23,6 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
 		aria-keyshortcuts="Control+K"
 	>
 		<span class="search-button-icon" aria-hidden="true"></span>
-		<span class="sl-hidden md:sl-block" aria-hidden="true">{Astro.locals.t('search.label')}</span>
 		<kbd class="sl-hidden md:sl-flex" style="display: none;">
 			<kbd>{Astro.locals.t('search.ctrlKey')}</kbd><kbd>K</kbd>
 		</kbd>
@@ -359,6 +358,10 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
 			color: var(--sl-color-white);
 			font-weight: 400;
 			width: calc(100% - var(--sl-search-cancel-space));
+		}
+
+		#starlight__search .pagefind-ui__search-input::placeholder {
+			color: transparent;
 		}
 
 		#starlight__search input:focus {

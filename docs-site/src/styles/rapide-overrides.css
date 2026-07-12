@@ -237,6 +237,26 @@ body::-webkit-scrollbar-thumb {
   display: block;
 }
 
+.sidebar-tree-search-icon {
+  position: absolute;
+  top: calc(50% + 1px);
+  left: 9px;
+  width: 13px;
+  height: 13px;
+  color: var(--sl-color-gray-3);
+  background-color: currentColor;
+  transform: translateY(-50%);
+  pointer-events: none;
+  -webkit-mask-image: url('/docs/icons/filter.svg');
+  mask-image: url('/docs/icons/filter.svg');
+  -webkit-mask-size: 100%;
+  mask-size: 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
 .sidebar-tree-search-input {
   width: 100%;
   border: 1px solid var(--sl-rapide-ui-border-color);
@@ -246,18 +266,18 @@ body::-webkit-scrollbar-thumb {
   font-size: 13px;
   height: 24px;
   line-height: 24px;
-  padding: 0 10px;
+  padding: 0 10px 0 29px;
   box-shadow: none;
-}
-
-.sidebar-tree-search-input::placeholder {
-  color: var(--sl-color-gray-3);
 }
 
 .sidebar-tree-search-input:focus {
   outline: none;
   border-color: var(--sl-color-accent);
   box-shadow: none;
+}
+
+.sidebar-tree-search-wrap:focus-within .sidebar-tree-search-icon {
+  color: var(--sl-color-accent-high);
 }
 
 .sidebar-tree-no-results {

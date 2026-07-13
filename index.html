@@ -94,6 +94,76 @@
             </div>
           </div>
         </div>
+        <div class="calc-layer" id="calc-layer" hidden>
+          <div class="calc-window" id="calc-window" role="dialog" aria-modal="true" aria-labelledby="calc-title">
+            <div class="calc-header" id="calc-drag">
+              <h2 id="calc-title">calculator</h2>
+              <button class="calc-close" id="calc-close" type="button" aria-label="Close calculator" title="Close">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M18 6 6 18M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="calc-body">
+              <div class="calc-main">
+                <div class="calc-display">
+                  <div class="calc-output" id="calc-output" aria-label="Calculator expression and result">
+                    <input id="calc-input" type="text" value="" autocomplete="off" spellcheck="false" aria-label="Calculator expression">
+                    <span class="calc-result" id="calc-result" aria-live="polite"></span>
+                  </div>
+                  <div class="calc-meta" id="calc-meta" aria-live="polite"></div>
+                </div>
+                <div class="calc-keypads">
+                  <div class="calc-tools" aria-label="Calculator functions">
+                    <button type="button" data-calc-value="^2"><span>x<sup>2</sup></span></button>
+                    <button type="button" data-calc-value="^">x<sup>y</sup></button>
+                    <button type="button" data-calc-value="abs(">abs</button>
+                    <button type="button" data-calc-value="sqrt(">sqrt</button>
+                    <button type="button" data-calc-value="log(">log</button>
+                    <button type="button" data-calc-value="ln(">ln</button>
+                    <button type="button" data-calc-value="sin(">sin</button>
+                    <button type="button" data-calc-value="cos(">cos</button>
+                    <button type="button" data-calc-value="tan(">tan</button>
+                    <button type="button" data-calc-value="pi">pi</button>
+                    <button type="button" data-calc-value="e">e</button>
+                    <button type="button" data-calc-value=",">,</button>
+                    <button type="button" data-calc-value="(">(</button>
+                    <button type="button" data-calc-value=")">)</button>
+                    <button type="button" data-calc-action="negate">+/-</button>
+                  </div>
+                  <div class="calc-grid" aria-label="Calculator keypad">
+                    <button type="button" data-calc-value="7" data-calc-key="number">7</button>
+                    <button type="button" data-calc-value="8" data-calc-key="number">8</button>
+                    <button type="button" data-calc-value="9" data-calc-key="number">9</button>
+                    <button type="button" data-calc-value="/" data-calc-key="operator">/</button>
+                    <button type="button" data-calc-value="4" data-calc-key="number">4</button>
+                    <button type="button" data-calc-value="5" data-calc-key="number">5</button>
+                    <button type="button" data-calc-value="6" data-calc-key="number">6</button>
+                    <button type="button" data-calc-value="*" data-calc-key="operator">*</button>
+                    <button type="button" data-calc-value="1" data-calc-key="number">1</button>
+                    <button type="button" data-calc-value="2" data-calc-key="number">2</button>
+                    <button type="button" data-calc-value="3" data-calc-key="number">3</button>
+                    <button type="button" data-calc-value="-" data-calc-key="operator">-</button>
+                    <button type="button" data-calc-value="0" data-calc-key="number">0</button>
+                    <button type="button" data-calc-value="." data-calc-key="number">.</button>
+                    <button type="button" data-calc-value="ans">ans</button>
+                    <button type="button" data-calc-value="+" data-calc-key="operator">+</button>
+                  </div>
+                  <div class="calc-actions" aria-label="Calculator actions">
+                    <button type="button" data-calc-value="!">!</button>
+                    <button type="button" data-calc-value="%">%</button>
+                    <button type="button" data-calc-action="move-left" aria-label="Move cursor left">&lt;</button>
+                    <button type="button" data-calc-action="move-right" aria-label="Move cursor right">&gt;</button>
+                    <button type="button" data-calc-action="clear">C</button>
+                    <button type="button" data-calc-action="clear-entry">CE</button>
+                    <button type="button" data-calc-action="backspace" class="calc-wide" aria-label="Backspace">BS</button>
+                    <button type="button" data-calc-action="evaluate" class="calc-enter" aria-label="Enter">Enter</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>

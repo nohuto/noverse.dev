@@ -61,6 +61,7 @@ let consoleModeChangeHandler;
 let consoleClampRaf = 0;
 let consoleAnimationCleanup = null;
 let bitmaskCleanup = null;
+let calcCleanup = null;
 
 const ASCII_ART = [
   '  \\  |                                    ',
@@ -434,6 +435,8 @@ function initConsole() {
   const CARET_HEIGHT_RATIO = 0.78;
   const CARET_Y_OFFSET = -2;
   let promptIndent = 0;
+  let promptMetricsDirty = true;
+  let caretRaf = 0;
   let measureState = {
     width: 0,
     font: '',
@@ -441,6 +444,16 @@ function initConsole() {
     lineHeightPx: 0,
     promptIndent: -1
   };
+  const measureText = document.createTextNode('');
+  const measureMarker = document.createElement('span');
+  measureMarker.textContent = '\u200b';
+  measure.append(measureText, measureMarker);
+
+  const invalidatePromptMetrics = () => {
+    promptMetricsDirty = true;
+    measureState.promptIndent = -1;
+  };
+
   const formatDisplayPath = path => {
     if (path === rootPath) return rootPath;
     if (path === DOCS_ROOT_PATH) return '~/docs';
@@ -456,16 +469,19 @@ function initConsole() {
   const updatePrompt = () => {
     if (promptEl) {
       promptEl.textContent = `${promptUser}@${promptHost}:${formatDisplayPath(currentPath)}$`;
+      invalidatePromptMetrics();
     }
   };
 
-  const updatePromptIndent = () => {
+  const updatePromptIndent = (force = false) => {
     if (!promptEl) return promptIndent;
+    if (!force && !promptMetricsDirty) return promptIndent;
     const nextIndent = Math.ceil(promptEl.getBoundingClientRect().width + 8);
     if (nextIndent !== promptIndent) {
       promptIndent = nextIndent;
       form.style.setProperty('--console-prompt-indent', `${promptIndent}px`);
     }
+    promptMetricsDirty = false;
     return promptIndent;
   };
 
@@ -566,13 +582,9 @@ function initConsole() {
 
   const measureCaret = (value, pos) => {
     const metrics = syncMeasureStyles();
-    measure.replaceChildren();
-    measure.append(document.createTextNode(value.slice(0, pos)));
-    const marker = document.createElement('span');
-    marker.textContent = '\u200b';
-    measure.append(marker);
+    measureText.nodeValue = value.slice(0, pos);
     const measureRect = measure.getBoundingClientRect();
-    const markerRect = marker.getBoundingClientRect();
+    const markerRect = measureMarker.getBoundingClientRect();
     return {
       left: markerRect.left - measureRect.left,
       top: markerRect.top - measureRect.top,
@@ -592,6 +604,14 @@ function initConsole() {
     caret.style.top = `${Math.round(caretBox.top + (caretBox.lineHeight - caretHeight) / 2 + CARET_Y_OFFSET)}px`;
     caret.style.height = `${caretHeight}px`;
     updateGhost(value, pos, caretBox.left - promptIndent, caretBox.inputWidth);
+  };
+
+  const scheduleCaretUpdate = () => {
+    if (caretRaf) return;
+    caretRaf = requestAnimationFrame(() => {
+      caretRaf = 0;
+      updateCaret();
+    });
   };
 
   const addLine = (text, className) => {
@@ -846,6 +866,108 @@ function initConsole() {
     });
   };
 
+  const initFloatingTool = ({ layer, dialog, handle, closeButton, hash, focusTarget }) => {
+    let restoreFocus = null;
+    const targetHash = `#${hash}`;
+    const isHashActive = () => location.hash.toLowerCase() === targetHash;
+    const syncHash = active => {
+      if (active === isHashActive()) return;
+      const nextHash = active ? targetHash : '';
+      history.replaceState(history.state, '', `${location.pathname}${location.search}${nextHash}`);
+    };
+    const clamp = () => {
+      if (layer.hidden) return;
+      const maxLeft = Math.max(12, layer.clientWidth - dialog.offsetWidth - 12);
+      const maxTop = Math.max(12, layer.clientHeight - dialog.offsetHeight - 12);
+      dialog.style.left = `${clampNumber(dialog.offsetLeft, 12, maxLeft)}px`;
+      dialog.style.top = `${clampNumber(dialog.offsetTop, 12, maxTop)}px`;
+    };
+    const center = () => {
+      dialog.style.left = `${Math.max(12, (layer.clientWidth - dialog.offsetWidth) / 2)}px`;
+      dialog.style.top = `${Math.max(12, (layer.clientHeight - dialog.offsetHeight) / 2)}px`;
+    };
+    const close = (syncUrl = true) => {
+      layer.hidden = true;
+      if (syncUrl) syncHash(false);
+      restoreFocus?.focus({ preventScroll: true });
+    };
+    const open = (syncUrl = true) => {
+      if (syncUrl) syncHash(true);
+      if (!layer.hidden) return;
+      restoreFocus = document.activeElement;
+      layer.hidden = false;
+      requestAnimationFrame(() => {
+        if (dialog.dataset.positioned !== 'true') center();
+        else clamp();
+        focusTarget?.()?.focus({ preventScroll: true });
+      });
+    };
+    const onLayerClick = event => {
+      if (event.target === layer) close();
+    };
+    const onKeyDown = event => {
+      if (event.key === 'Escape' && !layer.hidden) close();
+    };
+    const onHashChange = () => {
+      if (isHashActive()) open(false);
+      else if (!layer.hidden) close(false);
+    };
+    const onCloseClick = () => close();
+    const onDragStart = event => {
+      if (event.button !== 0 || event.target.closest('button')) return;
+      event.preventDefault();
+      const startX = event.clientX;
+      const startY = event.clientY;
+      const startLeft = dialog.offsetLeft;
+      const startTop = dialog.offsetTop;
+      const maxLeft = Math.max(12, layer.clientWidth - dialog.offsetWidth - 12);
+      const maxTop = Math.max(12, layer.clientHeight - dialog.offsetHeight - 12);
+      handle.setPointerCapture(event.pointerId);
+
+      const move = moveEvent => {
+        dialog.style.left = `${clampNumber(startLeft + moveEvent.clientX - startX, 12, maxLeft)}px`;
+        dialog.style.top = `${clampNumber(startTop + moveEvent.clientY - startY, 12, maxTop)}px`;
+      };
+      const stop = () => {
+        dialog.dataset.positioned = 'true';
+        if (handle.hasPointerCapture(event.pointerId)) {
+          handle.releasePointerCapture(event.pointerId);
+        }
+        handle.removeEventListener('pointermove', move);
+        handle.removeEventListener('pointerup', stop);
+        handle.removeEventListener('pointercancel', stop);
+      };
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('pointerup', stop);
+      handle.addEventListener('pointercancel', stop);
+    };
+
+    closeButton.addEventListener('click', onCloseClick);
+    layer.addEventListener('click', onLayerClick);
+    document.addEventListener('keydown', onKeyDown);
+    window.addEventListener('hashchange', onHashChange);
+    handle.addEventListener('pointerdown', onDragStart);
+
+    const resizeObserver = window.ResizeObserver ? new ResizeObserver(clamp) : null;
+    resizeObserver?.observe(dialog);
+    window.addEventListener('resize', clamp);
+    const directOpenFrame = requestAnimationFrame(onHashChange);
+    return {
+      open,
+      close,
+      cleanup: () => {
+        cancelAnimationFrame(directOpenFrame);
+        resizeObserver?.disconnect();
+        closeButton.removeEventListener('click', onCloseClick);
+        layer.removeEventListener('click', onLayerClick);
+        document.removeEventListener('keydown', onKeyDown);
+        window.removeEventListener('hashchange', onHashChange);
+        window.removeEventListener('resize', clamp);
+        handle.removeEventListener('pointerdown', onDragStart);
+      }
+    };
+  };
+
   const initBitmaskCalculator = () => {
     bitmaskCleanup?.();
     const layer = document.getElementById('bitmask-layer');
@@ -859,31 +981,31 @@ function initConsole() {
     if (!layer || !dialog || !handle || !closeButton || !field || !decInput || !hexInput || !binInput) return () => {};
 
     let value = 0n;
-    let restoreFocus = null;
     const maxValue = (1n << 32n) - 1n;
-    const isBitmaskHash = () => location.hash.toLowerCase() === '#bitmask';
-    const syncBitmaskHash = active => {
-      if (active === isBitmaskHash()) return;
-      const hash = active ? '#bitmask' : '';
-      history.replaceState(history.state, '', `${location.pathname}${location.search}${hash}`);
-    };
+    const bitControls = [];
+    const bitControlByButton = new WeakMap();
 
     for (let byte = 3; byte >= 0; byte -= 1) {
       const group = document.createElement('div');
       group.className = 'bitmask-byte';
       for (let offset = 7; offset >= 0; offset -= 1) {
         const bit = byte * 8 + offset;
+        const mask = 1n << BigInt(bit);
         const cell = document.createElement('div');
         const label = document.createElement('span');
         const button = document.createElement('button');
+        const strong = document.createElement('strong');
         cell.className = 'bitmask-bit-cell';
         label.className = 'bitmask-bit-index';
         label.textContent = String(bit);
         button.type = 'button';
         button.className = 'bitmask-bit';
-        button.dataset.bit = String(bit);
         button.setAttribute('aria-pressed', 'false');
-        button.innerHTML = '<strong>0</strong>';
+        strong.textContent = '0';
+        button.appendChild(strong);
+        const control = { button, strong, bit, mask };
+        bitControls.push(control);
+        bitControlByButton.set(button, control);
         cell.append(label, button);
         group.appendChild(cell);
       }
@@ -891,19 +1013,18 @@ function initConsole() {
     }
 
     const render = source => {
-      field.querySelectorAll('.bitmask-bit').forEach(button => {
-        const bit = BigInt(button.dataset.bit);
-        const active = (value & (1n << bit)) !== 0n;
+      bitControls.forEach(({ button, strong, bit, mask }) => {
+        const active = (value & mask) !== 0n;
+        const activeText = active ? '1' : '0';
         button.setAttribute('aria-pressed', String(active));
         button.setAttribute('aria-label', `Bit ${bit}: ${active ? 'on' : 'off'}`);
-        button.querySelector('strong').textContent = active ? '1' : '0';
+        if (strong.textContent !== activeText) strong.textContent = activeText;
       });
-      const values = new Map([
+      [
         [decInput, value.toString(10)],
         [hexInput, `0x${value.toString(16).toUpperCase().padStart(8, '0')}`],
         [binInput, value.toString(2).padStart(32, '0').match(/.{8}/g).join(' ')]
-      ]);
-      values.forEach((formatted, input) => {
+      ].forEach(([input, formatted]) => {
         if (input !== source) input.value = formatted;
         input.removeAttribute('aria-invalid');
       });
@@ -940,41 +1061,12 @@ function initConsole() {
       render(input);
     };
 
-    const clamp = () => {
-      if (layer.hidden) return;
-      const maxLeft = Math.max(12, layer.clientWidth - dialog.offsetWidth - 12);
-      const maxTop = Math.max(12, layer.clientHeight - dialog.offsetHeight - 12);
-      dialog.style.left = `${clampNumber(dialog.offsetLeft, 12, maxLeft)}px`;
-      dialog.style.top = `${clampNumber(dialog.offsetTop, 12, maxTop)}px`;
-    };
-
-    const center = () => {
-      dialog.style.left = `${Math.max(12, (layer.clientWidth - dialog.offsetWidth) / 2)}px`;
-      dialog.style.top = `${Math.max(12, (layer.clientHeight - dialog.offsetHeight) / 2)}px`;
-    };
-
-    const close = (syncUrl = true) => {
-      layer.hidden = true;
-      if (syncUrl) syncBitmaskHash(false);
-      restoreFocus?.focus({ preventScroll: true });
-    };
-
-    const open = (syncUrl = true) => {
-      if (syncUrl) syncBitmaskHash(true);
-      if (!layer.hidden) return;
-      restoreFocus = document.activeElement;
-      layer.hidden = false;
-      requestAnimationFrame(() => {
-        if (dialog.dataset.positioned !== 'true') center();
-        else clamp();
-        field.querySelector('.bitmask-bit')?.focus({ preventScroll: true });
-      });
-    };
-
     field.addEventListener('click', event => {
       const button = event.target.closest('.bitmask-bit');
       if (!button) return;
-      value ^= 1n << BigInt(button.dataset.bit);
+      const control = bitControlByButton.get(button);
+      if (!control) return;
+      value ^= control.mask;
       render();
     });
     [decInput, hexInput, binInput].forEach(input => {
@@ -994,64 +1086,403 @@ function initConsole() {
       if (action === 'invert') value ^= maxValue;
       render();
     });
-    closeButton.addEventListener('click', close);
-    layer.addEventListener('click', event => {
-      if (event.target === layer) close();
+    const tool = initFloatingTool({
+      layer,
+      dialog,
+      handle,
+      closeButton,
+      hash: 'bitmask',
+      focusTarget: () => bitControls[0]?.button
     });
-    const onKeyDown = event => {
-      if (event.key === 'Escape' && !layer.hidden) close();
-    };
-    const onHashChange = () => {
-      if (isBitmaskHash()) open(false);
-      else if (!layer.hidden) close(false);
-    };
-    document.addEventListener('keydown', onKeyDown);
-    window.addEventListener('hashchange', onHashChange);
-    handle.addEventListener('pointerdown', event => {
-      if (event.button !== 0 || event.target.closest('button')) return;
-      event.preventDefault();
-      const startX = event.clientX;
-      const startY = event.clientY;
-      const startLeft = dialog.offsetLeft;
-      const startTop = dialog.offsetTop;
-      const maxLeft = Math.max(12, layer.clientWidth - dialog.offsetWidth - 12);
-      const maxTop = Math.max(12, layer.clientHeight - dialog.offsetHeight - 12);
-      handle.setPointerCapture(event.pointerId);
-
-      const move = moveEvent => {
-        dialog.style.left = `${clampNumber(startLeft + moveEvent.clientX - startX, 12, maxLeft)}px`;
-        dialog.style.top = `${clampNumber(startTop + moveEvent.clientY - startY, 12, maxTop)}px`;
-      };
-      const stop = () => {
-        dialog.dataset.positioned = 'true';
-        if (handle.hasPointerCapture(event.pointerId)) {
-          handle.releasePointerCapture(event.pointerId);
-        }
-        handle.removeEventListener('pointermove', move);
-        handle.removeEventListener('pointerup', stop);
-        handle.removeEventListener('pointercancel', stop);
-      };
-      handle.addEventListener('pointermove', move);
-      handle.addEventListener('pointerup', stop);
-      handle.addEventListener('pointercancel', stop);
-    });
-
-    const resizeObserver = window.ResizeObserver ? new ResizeObserver(clamp) : null;
-    resizeObserver?.observe(dialog);
-    window.addEventListener('resize', clamp);
-    const directOpenFrame = requestAnimationFrame(onHashChange);
     bitmaskCleanup = () => {
-      cancelAnimationFrame(directOpenFrame);
-      resizeObserver?.disconnect();
-      document.removeEventListener('keydown', onKeyDown);
-      window.removeEventListener('hashchange', onHashChange);
-      window.removeEventListener('resize', clamp);
+      tool.cleanup();
     };
     render();
-    return open;
+    return tool.open;
+  };
+
+  const initCalculator = () => {
+    calcCleanup?.();
+    const layer = document.getElementById('calc-layer');
+    const dialog = document.getElementById('calc-window');
+    const handle = document.getElementById('calc-drag');
+    const closeButton = document.getElementById('calc-close');
+    const input = document.getElementById('calc-input');
+    const output = document.getElementById('calc-output');
+    const resultEl = document.getElementById('calc-result');
+    const meta = document.getElementById('calc-meta');
+    const keypads = dialog?.querySelector('.calc-keypads');
+    if (!layer || !dialog || !handle || !closeButton || !input || !output || !resultEl || !meta || !keypads) {
+      return () => {};
+    }
+
+    let lastAnswer = 0;
+    const constants = Object.freeze({
+      pi: Math.PI,
+      e: Math.E,
+      tau: Math.PI * 2
+    });
+    const functions = Object.freeze({
+      abs: Math.abs,
+      acos: Math.acos,
+      asin: Math.asin,
+      atan: Math.atan,
+      ceil: Math.ceil,
+      cos: Math.cos,
+      floor: Math.floor,
+      ln: Math.log,
+      log: Math.log10,
+      max: Math.max,
+      min: Math.min,
+      pow: Math.pow,
+      round: Math.round,
+      sin: Math.sin,
+      sqrt: Math.sqrt,
+      tan: Math.tan
+    });
+    const binaryOps = Object.freeze({
+      '+': { precedence: 1, assoc: 'left', fn: (a, b) => a + b },
+      '-': { precedence: 1, assoc: 'left', fn: (a, b) => a - b },
+      '*': { precedence: 2, assoc: 'left', fn: (a, b) => a * b },
+      '/': { precedence: 2, assoc: 'left', fn: (a, b) => {
+        if (b === 0) throw new Error('division by zero');
+        return a / b;
+      } },
+      '%': { precedence: 2, assoc: 'left', fn: (a, b) => {
+        if (b === 0) throw new Error('modulo by zero');
+        return a % b;
+      } },
+      '^': { precedence: 4, assoc: 'right', fn: (a, b) => a ** b }
+    });
+    const previewOps = new Set(['+', '*', '/', '%', '^', '!']);
+    const normalizers = Object.freeze({
+      '\u00f7': '/',
+      '\u2212': '-',
+      '\u221a': 'sqrt',
+      '\u03c0': 'pi'
+    });
+
+    const normalizeExpression = value => String(value || '')
+      .replace(/[\u00f7\u2212\u221a\u03c0]/g, char => normalizers[char] || char)
+      .replace(/\s+/g, '');
+
+    const factorial = value => {
+      if (!Number.isInteger(value) || value < 0 || value > 170) {
+        throw new Error('factorial supports integers from 0 to 170');
+      }
+      let result = 1;
+      for (let i = 2; i <= value; i += 1) result *= i;
+      return result;
+    };
+
+    const formatNumber = value => {
+      const number = Object.is(value, -0) ? 0 : value;
+      if (!Number.isFinite(number)) throw new Error('result is not finite');
+      const abs = Math.abs(number);
+      const text = abs >= 1e12 || (abs > 0 && abs < 1e-9)
+        ? number.toExponential(10)
+        : Number(number.toPrecision(14)).toString();
+      return text.replace(/(\.\d*?)0+(e|$)/, '$1$2').replace(/\.(e|$)/, '$1');
+    };
+
+    const updateMeta = value => {
+      if (!Number.isSafeInteger(value) || value < 0) {
+        meta.textContent = '';
+        return;
+      }
+      meta.textContent = `hex 0x${value.toString(16).toUpperCase()}  bin 0b${value.toString(2)}`;
+    };
+
+    const renderDisplay = (result = null) => {
+      let nextResult = result;
+      const raw = input.value.trim();
+      if (nextResult === null && raw && shouldPreviewExpression(raw)) {
+        try {
+          nextResult = formatNumber(evaluateExpression(raw));
+        } catch {
+          nextResult = '';
+        }
+      }
+      if (nextResult === null) nextResult = '';
+      resultEl.textContent = nextResult;
+      output.title = raw && nextResult ? `${raw} = ${nextResult}` : '';
+    };
+
+    const readNumber = (source, start) => {
+      if (source.startsWith('0x', start) || source.startsWith('0X', start)) {
+        let index = start + 2;
+        while (/[0-9a-f]/i.test(source[index] || '')) index += 1;
+        if (index === start + 2) throw new Error('invalid hex number');
+        return { value: Number.parseInt(source.slice(start + 2, index), 16), index };
+      }
+      if (source.startsWith('0b', start) || source.startsWith('0B', start)) {
+        let index = start + 2;
+        while (/[01]/.test(source[index] || '')) index += 1;
+        if (index === start + 2) throw new Error('invalid binary number');
+        return { value: Number.parseInt(source.slice(start + 2, index), 2), index };
+      }
+      const match = source.slice(start).match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?/i);
+      if (!match) throw new Error('invalid number');
+      return { value: Number(match[0]), index: start + match[0].length };
+    };
+
+    const tokenize = source => {
+      const rawTokens = [];
+      for (let index = 0; index < source.length;) {
+        const char = source[index];
+        if (/\d|\./.test(char)) {
+          const number = readNumber(source, index);
+          rawTokens.push({ type: 'number', value: number.value });
+          index = number.index;
+          continue;
+        }
+        if (/[a-z_]/i.test(char)) {
+          let end = index + 1;
+          while (/[a-z0-9_]/i.test(source[end] || '')) end += 1;
+          rawTokens.push({ type: 'name', value: source.slice(index, end).toLowerCase() });
+          index = end;
+          continue;
+        }
+        if ('+-*/%^!(),'.includes(char)) {
+          rawTokens.push({ type: char === '(' || char === ')' ? 'paren' : char === ',' ? 'comma' : 'op', value: char });
+          index += 1;
+          continue;
+        }
+        throw new Error(`unexpected token: ${char}`);
+      }
+      const tokens = [];
+      const endsValue = token => token && (token.type === 'number' || token.type === 'name' || token.value === ')' || token.value === '!');
+      const startsValue = token => token && (token.type === 'number' || token.type === 'name' || token.value === '(');
+      rawTokens.forEach(token => {
+        const previous = tokens[tokens.length - 1];
+        const isFunctionCall = previous?.type === 'name' && functions[previous.value] && token.value === '(';
+        if (endsValue(previous) && startsValue(token) && !isFunctionCall) {
+          tokens.push({ type: 'op', value: '*' });
+        }
+        tokens.push(token);
+      });
+      return tokens;
+    };
+
+    const shouldPreviewExpression = source => {
+      let tokens;
+      try {
+        tokens = tokenize(normalizeExpression(source));
+      } catch {
+        return false;
+      }
+      return tokens.some((token, index) => {
+        if (token.type === 'comma') return true;
+        if (token.type === 'op' && previewOps.has(token.value)) return true;
+        if (token.type === 'op' && token.value === '-' && index > 0) return true;
+        if (token.type === 'name' && functions[token.value] && tokens[index + 1]?.value === '(') return true;
+        return false;
+      });
+    };
+
+    const evaluateExpression = source => {
+      const tokens = tokenize(normalizeExpression(source));
+      let position = 0;
+      const peek = () => tokens[position];
+      const consume = () => tokens[position++];
+
+      const parseExpression = (minPrecedence = 0) => {
+        let left = parseUnary();
+        while (binaryOps[peek()?.value] && binaryOps[peek().value].precedence >= minPrecedence) {
+          const op = consume().value;
+          const { precedence, assoc, fn } = binaryOps[op];
+          const right = parseExpression(precedence + (assoc === 'left' ? 1 : 0));
+          left = fn(left, right);
+        }
+        return left;
+      };
+
+      const parseUnary = () => {
+        const token = peek();
+        if (token?.type === 'op' && token.value === '+') {
+          consume();
+          return parseUnary();
+        }
+        if (token?.type === 'op' && token.value === '-') {
+          consume();
+          return -parseExpression(3);
+        }
+        let value = parsePrimary();
+        while (peek()?.type === 'op' && peek().value === '!') {
+          consume();
+          value = factorial(value);
+        }
+        return value;
+      };
+
+      const readArguments = () => {
+        const args = [];
+        if (peek()?.value === ')') {
+          consume();
+          return args;
+        }
+        for (;;) {
+          args.push(parseExpression());
+          const next = peek();
+          if (next?.type === 'comma') {
+            consume();
+            continue;
+          }
+          if (next?.value !== ')') throw new Error('missing closing parenthesis');
+          consume();
+          return args;
+        }
+      };
+
+      const parsePrimary = () => {
+        const token = consume();
+        if (!token) throw new Error('empty expression');
+        if (token.type === 'number') return token.value;
+        if (token.type === 'name') {
+          if (token.value === 'ans') return lastAnswer;
+          if (constants[token.value] !== undefined) return constants[token.value];
+          const fn = functions[token.value];
+          if (!fn) throw new Error(`unknown function: ${token.value}`);
+          if (consume()?.value !== '(') throw new Error(`missing arguments for ${token.value}`);
+          return fn(...readArguments());
+        }
+        if (token.value === '(') {
+          const value = parseExpression();
+          if (consume()?.value !== ')') throw new Error('missing closing parenthesis');
+          return value;
+        }
+        throw new Error(`unexpected token: ${token.value}`);
+      };
+
+      const result = parseExpression();
+      if (position < tokens.length) throw new Error(`unexpected token: ${tokens[position].value}`);
+      if (!Number.isFinite(result)) throw new Error('result is not finite');
+      return result;
+    };
+
+    const setInput = value => {
+      input.value = value || '';
+      input.focus({ preventScroll: true });
+      input.setSelectionRange(input.value.length, input.value.length);
+      renderDisplay();
+    };
+
+    const evaluateCurrent = () => {
+      const raw = input.value.trim();
+      if (!raw) return 0;
+      const value = evaluateExpression(raw);
+      const formatted = formatNumber(value);
+      lastAnswer = value;
+      input.value = raw;
+      input.setSelectionRange(input.value.length, input.value.length);
+      renderDisplay(formatted);
+      updateMeta(value);
+      return value;
+    };
+
+    const showError = error => {
+      resultEl.textContent = '';
+      meta.textContent = error.message || 'invalid expression';
+      input.setAttribute('aria-invalid', 'true');
+    };
+
+    const insertText = text => {
+      input.removeAttribute('aria-invalid');
+      const current = input.value;
+      const start = input.selectionStart ?? current.length;
+      const end = input.selectionEnd ?? current.length;
+      input.value = `${current.slice(0, start)}${text}${current.slice(end)}`;
+      const nextPosition = start + text.length;
+      input.focus({ preventScroll: true });
+      input.setSelectionRange(nextPosition, nextPosition);
+      renderDisplay();
+    };
+
+    const handleAction = action => {
+      input.removeAttribute('aria-invalid');
+      if (action === 'clear' || action === 'clear-entry') {
+        meta.textContent = '';
+        setInput('');
+        return;
+      }
+      if (action === 'backspace') {
+        const start = input.selectionStart ?? input.value.length;
+        const end = input.selectionEnd ?? input.value.length;
+        const from = start === end ? Math.max(0, start - 1) : start;
+        input.value = `${input.value.slice(0, from)}${input.value.slice(end)}`;
+        input.focus({ preventScroll: true });
+        input.setSelectionRange(from, from);
+        renderDisplay();
+        return;
+      }
+      if (action === 'move-left' || action === 'move-right') {
+        const pos = input.selectionStart ?? input.value.length;
+        const next = clampNumber(pos + (action === 'move-left' ? -1 : 1), 0, input.value.length);
+        input.focus({ preventScroll: true });
+        input.setSelectionRange(next, next);
+        return;
+      }
+      if (action === 'negate') {
+        const raw = input.value.trim();
+        setInput(raw.startsWith('-(') && raw.endsWith(')') ? raw.slice(2, -1) : `-(${raw || 0})`);
+        return;
+      }
+      if (action === 'evaluate') {
+        try {
+          evaluateCurrent();
+        } catch (error) {
+          showError(error);
+        }
+      }
+    };
+
+    keypads.addEventListener('click', event => {
+      const button = event.target.closest('button');
+      if (!button) return;
+      if (button.dataset.calcValue !== undefined) {
+        insertText(button.dataset.calcValue);
+        return;
+      }
+      handleAction(button.dataset.calcAction);
+    });
+
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleAction('evaluate');
+        return;
+      }
+      if (event.key === 'Dead' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        event.preventDefault();
+        insertText('^');
+      }
+    });
+    input.addEventListener('input', () => {
+      input.removeAttribute('aria-invalid');
+      meta.textContent = '';
+      renderDisplay();
+    });
+    output.addEventListener('click', event => {
+      if (event.target.closest('.calc-result')) return;
+      if (event.target !== input) input.focus({ preventScroll: true });
+    });
+    const tool = initFloatingTool({
+      layer,
+      dialog,
+      handle,
+      closeButton,
+      hash: 'calc',
+      focusTarget: () => input
+    });
+    calcCleanup = () => {
+      tool.cleanup();
+    };
+    renderDisplay();
+    return tool.open;
   };
 
   const openBitmaskCalculator = initBitmaskCalculator();
+  const openCalculator = initCalculator();
 
   const normalizePath = input => (input || '').replace(/\\/g, '/').trim();
   const trimSlashes = value => (value || '').replace(/^\/+|\/+$/g, '');
@@ -1136,6 +1567,7 @@ function initConsole() {
     cpolicies: 'cd policies',
     cdocs: 'cd docs',
     cabout: 'about',
+    calculator: 'calc',
     quit: 'exit',
     '..': 'cd ..'
   });
@@ -1165,7 +1597,7 @@ function initConsole() {
     help: () => {
       addLine('commands:');
       const entries = [
-        ['help', 'show this help message'],
+        ['help', 'show this command list'],
         ['about', 'about me + links'],
         ['contact', 'email + discord'],
         ['product', 'winconfig information'],
@@ -1174,13 +1606,14 @@ function initConsole() {
         ['bindiff', 'list decompiled-pseudocode links (used by bin-diff section)'],
         ['policies', 'list ADMX parser links (used by policies section)'],
         ['bitmask', 'minimal (32 bit) bitmask calculator'],
+        ['calc', 'yet minimal scientific calculator'],
         ['ls', 'list available directories'],
-        ['cd <path>', 'change directory (./product, ./projects, ./bin-diff, ./policies, ./docs/<projectname>, ../)'],
+        ['cd <path>', 'change directory'],
         ['alias', 'list built-in aliases'],
-        ['bg', 'list background ids'],
-        ['bg <id>', 'set background'],
-        ['themes', 'list theme ids'],
-        ['theme <id>', 'set theme'],
+        ['bg', 'list background names'],
+        ['bg <name>', 'set background'],
+        ['themes', 'list theme names'],
+        ['theme <name>', 'set theme'],
         ['ascii', 'print the banner'],
         ['animation [x y]', 'some cool animation (x/y = pixels)'],
         ['clear', 'clear the terminal'],
@@ -1273,6 +1706,7 @@ function initConsole() {
       ]);
     },
     bitmask: openBitmaskCalculator,
+    calc: openCalculator,
     contact: () => {
       addLine('contact:');
       addKeyValueLines([
@@ -1432,13 +1866,13 @@ function initConsole() {
       consoleHistoryIndex = consoleHistory.length;
     }
     input.value = '';
-    updateCaret();
+    scheduleCaretUpdate();
     await runCommand(value);
     scrollToBottom();
   });
 
   ['input', 'keyup', 'click', 'focus'].forEach(eventName => {
-    input.addEventListener(eventName, updateCaret);
+    input.addEventListener(eventName, scheduleCaretUpdate);
   });
 
   input.addEventListener('keydown', e => {
@@ -1468,14 +1902,14 @@ function initConsole() {
       if (consoleHistory.length === 0) return;
       consoleHistoryIndex = Math.max(0, consoleHistoryIndex - 1);
       input.value = consoleHistory[consoleHistoryIndex] || '';
-      updateCaret();
+      scheduleCaretUpdate();
     }
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (consoleHistory.length === 0) return;
       consoleHistoryIndex = Math.min(consoleHistory.length, consoleHistoryIndex + 1);
       input.value = consoleHistory[consoleHistoryIndex] || '';
-      updateCaret();
+      scheduleCaretUpdate();
     }
   });
 

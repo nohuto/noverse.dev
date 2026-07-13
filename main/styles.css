@@ -558,12 +558,15 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-height: 100svh;
   position: relative;
 }
 
 body:has(main.main-terminal) {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100lvh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body::before {
@@ -817,6 +820,7 @@ main.main-terminal .terminal-shell {
   min-width: min(340px, calc(100vw - 24px));
   max-width: calc(100vw - 24px);
   max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
   overflow: hidden;
   resize: both;
   border: 1px solid var(--border-strong);
@@ -1205,7 +1209,7 @@ main.main-terminal .terminal-shell {
 
 @media (max-width: 580px) {
   .calc-window {
-    height: min(480px, calc(100vh - 24px));
+    height: auto;
   }
 
   .calc-body {
@@ -2367,6 +2371,9 @@ video {
 }
 
 footer {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: auto;
   padding: 10px 0 14px;
   border-top: 1px solid var(--border);
   background: var(--bg-alt);
@@ -2538,8 +2545,20 @@ footer {
 }
 
 @media (max-width: 720px) {
+  body:has(main.main-terminal) {
+    min-height: 100lvh;
+  }
+
   main.main-terminal {
+    flex: 1 0 auto;
+    min-height: auto;
+    overflow: visible;
     padding: 0;
+  }
+
+  main.main-terminal .terminal-shell {
+    flex: 1 0 auto;
+    overflow: visible;
   }
 
   .window-surface {
@@ -2581,7 +2600,8 @@ footer {
   }
 
   .calc-window {
-    height: min(520px, calc(100vh - 24px));
+    height: auto;
+    min-height: min(236px, calc(100dvh - 24px));
   }
 
   .footer-row {

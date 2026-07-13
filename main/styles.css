@@ -1013,6 +1013,7 @@ main.main-terminal .terminal-shell {
 }
 
 .calc-main {
+  container: calc / inline-size;
   min-width: 0;
   width: 100%;
   display: grid;
@@ -1099,49 +1100,54 @@ main.main-terminal .terminal-shell {
 }
 
 .calc-keypads {
+  --calc-key-gap: 4px;
+  --calc-group-gap: 14px;
+  --calc-key-size: 52px;
+  --calc-key-height: 30px;
+  --calc-key-font-size: 0.96rem;
   min-width: 0;
   display: grid;
-  grid-template-columns: max-content max-content max-content;
+  grid-template-columns: repeat(3, max-content);
   justify-content: center;
   align-content: start;
-  column-gap: 14px;
-  row-gap: 4px;
+  column-gap: var(--calc-group-gap);
+  row-gap: var(--calc-key-gap);
 }
 
 .calc-tools,
 .calc-grid,
 .calc-actions {
   display: grid;
-  grid-auto-rows: 30px;
-  gap: 4px;
+  grid-auto-rows: var(--calc-key-height);
+  gap: var(--calc-key-gap);
 }
 
 .calc-tools {
-  grid-template-columns: repeat(3, 52px);
+  grid-template-columns: repeat(3, var(--calc-key-size));
 }
 
 .calc-grid {
-  grid-template-columns: repeat(4, 52px);
+  grid-template-columns: repeat(4, var(--calc-key-size));
 }
 
 .calc-actions {
-  grid-template-columns: repeat(2, 52px);
+  grid-template-columns: repeat(2, var(--calc-key-size));
 }
 
 .calc-tools button,
 .calc-grid button,
 .calc-actions button {
-  width: 52px;
-  height: 30px;
-  min-width: 52px;
-  min-height: 30px;
+  width: var(--calc-key-size);
+  height: var(--calc-key-height);
+  min-width: 0;
+  min-height: 0;
   padding: 0 4px;
   border: 1px solid var(--border);
   background: color-mix(in srgb, var(--panel-alt) 82%, var(--bg));
   color: var(--text);
   cursor: pointer;
   line-height: 1;
-  font-size: 0.96rem;
+  font-size: var(--calc-key-font-size);
   text-align: center;
 }
 
@@ -1163,7 +1169,7 @@ main.main-terminal .terminal-shell {
 .calc-wide,
 .calc-enter {
   grid-column: 1 / -1;
-  width: 108px !important;
+  width: calc((2 * var(--calc-key-size)) + var(--calc-key-gap)) !important;
 }
 
 .calc-enter {
@@ -1187,15 +1193,19 @@ main.main-terminal .terminal-shell {
   color: var(--accent);
 }
 
+@container calc (max-width: 520px) {
+  .calc-keypads {
+    --calc-key-gap: clamp(2px, 1.1cqw, 4px);
+    --calc-group-gap: clamp(4px, 2.4cqw, 14px);
+    --calc-key-size: clamp(32px, calc((100cqw - (8 * var(--calc-key-gap)) - (2 * var(--calc-group-gap))) / 9), 52px);
+    --calc-key-height: clamp(26px, calc(var(--calc-key-size) * 0.58), 30px);
+    --calc-key-font-size: clamp(0.78rem, calc(var(--calc-key-size) * 0.185), 0.96rem);
+  }
+}
+
 @media (max-width: 580px) {
   .calc-window {
     height: min(480px, calc(100vh - 24px));
-  }
-
-  .calc-keypads {
-    grid-template-columns: max-content;
-    justify-content: center;
-    gap: 9px;
   }
 }
 

@@ -3,7 +3,7 @@ title: 'Priority Separation'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 2
 ---
 
 ```asm

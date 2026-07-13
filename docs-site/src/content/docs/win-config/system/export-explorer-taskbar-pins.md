@@ -3,7 +3,7 @@ title: 'Export Explorer/Taskbar Pins'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 31
+  order: 30
 ---
 
 Can be useful when creating your own image and trying to automate the installation and configuration part.

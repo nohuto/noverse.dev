@@ -1207,6 +1207,20 @@ main.main-terminal .terminal-shell {
   .calc-window {
     height: min(480px, calc(100vh - 24px));
   }
+
+  .calc-body {
+    padding: 8px 6px;
+  }
+
+  @container calc (max-width: 520px) {
+    .calc-keypads {
+      --calc-key-gap: clamp(1px, 0.8cqw, 3px);
+      --calc-group-gap: clamp(2px, 1.2cqw, 6px);
+      --calc-key-size: clamp(18px, calc((100cqw - (8 * var(--calc-key-gap)) - (2 * var(--calc-group-gap))) / 9), 52px);
+      --calc-key-height: clamp(20px, calc(var(--calc-key-size) * 0.58), 30px);
+      --calc-key-font-size: clamp(0.5rem, calc(var(--calc-key-size) * 0.19), 0.96rem);
+    }
+  }
 }
 
 @media (min-width: 1024px) {

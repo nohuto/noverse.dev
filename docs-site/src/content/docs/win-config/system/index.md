@@ -8,8 +8,8 @@ sidebar:
 ---
 
 - [MMCSS Values](/docs/win-config/system/mmcss-values/)
-- [Timer Expiration](/docs/win-config/system/timer-expiration/)
 - [Priority Separation](/docs/win-config/system/priority-separation/)
+- [Timer Expiration](/docs/win-config/system/timer-expiration/)
 - [DWM Values](/docs/win-config/system/dwm-values/)
 - [Kernel Values](/docs/win-config/system/kernel-values/)
 - [Game Mode](/docs/win-config/system/game-mode/)
@@ -35,6 +35,5 @@ sidebar:
 - [Display Scaling](/docs/win-config/system/display-scaling/)
 - [Hung Screen](/docs/win-config/system/disable-hung-screen/)
 - [Detailed Status Messages](/docs/win-config/system/detailed-status-messages/)
-- [Prefetch & Superfetch](/docs/win-config/system/prefetch-superfetch/)
 - [Autoruns](/docs/win-config/system/disable-autoruns/)
 - [Export Explorer/Taskbar Pins](/docs/win-config/system/export-explorer-taskbar-pins/)

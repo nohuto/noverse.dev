@@ -874,7 +874,10 @@ function initConsole() {
     };
     const center = () => {
       dialog.style.left = `${Math.max(12, (layer.clientWidth - dialog.offsetWidth) / 2)}px`;
-      dialog.style.top = `${Math.max(12, (layer.clientHeight - dialog.offsetHeight) / 2)}px`;
+      const freeY = layer.clientHeight - dialog.offsetHeight;
+      const centerY = freeY / 2;
+      const topBiased = layer.clientWidth <= 580 || dialog.offsetHeight > layer.clientHeight * 0.6;
+      dialog.style.top = `${Math.max(12, topBiased ? Math.min(centerY, 24) : centerY)}px`;
     };
     const close = (syncUrl = true) => {
       layer.hidden = true;

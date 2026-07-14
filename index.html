@@ -58,7 +58,7 @@
                   <span class="console-prompt">nohuto@noverse:~/terminal$</span>
                   <span class="console-edit">
                     <span class="console-measure" id="console-measure" aria-hidden="true"></span>
-                    <span class="console-ghost" id="console-ghost" aria-hidden="true"></span>
+                    <span class="console-preview" aria-hidden="true"><span class="console-preview-text" id="console-preview-text"></span><span class="console-suggestion" id="console-suggestion"></span></span>
                     <textarea id="console-command" name="command" rows="1" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Console command input"></textarea>
                     <button type="submit" class="sr-only">Run command</button>
                     <span class="console-block-cursor" id="console-cursor" aria-hidden="true"></span>
@@ -108,7 +108,7 @@
               <div class="calc-main">
                 <div class="calc-display">
                   <div class="calc-output" id="calc-output" aria-label="Calculator expression and result">
-                    <input id="calc-input" type="text" value="" autocomplete="off" spellcheck="false" aria-label="Calculator expression">
+                    <input id="calc-input" type="text" value="" inputmode="none" autocomplete="off" spellcheck="false" aria-label="Calculator expression">
                     <span class="calc-result" id="calc-result" aria-live="polite"></span>
                   </div>
                   <div class="calc-meta" id="calc-meta" aria-live="polite"></div>
@@ -155,8 +155,7 @@
                     <button type="button" data-calc-action="move-left" aria-label="Move cursor left">&lt;</button>
                     <button type="button" data-calc-action="move-right" aria-label="Move cursor right">&gt;</button>
                     <button type="button" data-calc-action="clear">C</button>
-                    <button type="button" data-calc-action="clear-entry">CE</button>
-                    <button type="button" data-calc-action="backspace" class="calc-wide" aria-label="Backspace">BS</button>
+                    <button type="button" data-calc-action="delete" aria-label="Delete">DEL</button>
                     <button type="button" data-calc-action="evaluate" class="calc-enter" aria-label="Enter">Enter</button>
                   </div>
                 </div>

@@ -820,7 +820,6 @@ main.main-terminal .terminal-shell {
   min-width: min(340px, calc(100vw - 24px));
   max-width: calc(100vw - 24px);
   max-height: calc(100vh - 24px);
-  max-height: calc(100dvh - 24px);
   overflow: hidden;
   resize: both;
   border: 1px solid var(--border-strong);
@@ -1170,7 +1169,6 @@ main.main-terminal .terminal-shell {
   color: color-mix(in srgb, var(--warning) 70%, var(--text));
 }
 
-.calc-wide,
 .calc-enter {
   grid-column: 1 / -1;
   width: calc((2 * var(--calc-key-size)) + var(--calc-key-gap)) !important;
@@ -1200,30 +1198,35 @@ main.main-terminal .terminal-shell {
 @container calc (max-width: 520px) {
   .calc-keypads {
     --calc-key-gap: clamp(2px, 1.1cqw, 4px);
-    --calc-group-gap: clamp(4px, 2.4cqw, 14px);
-    --calc-key-size: clamp(32px, calc((100cqw - (8 * var(--calc-key-gap)) - (2 * var(--calc-group-gap))) / 9), 52px);
+    --calc-group-gap: clamp(6px, 2.4cqw, 14px);
+    --calc-key-size: clamp(38px, calc((100cqw - (4 * var(--calc-key-gap)) - var(--calc-group-gap)) / 6), 52px);
     --calc-key-height: clamp(26px, calc(var(--calc-key-size) * 0.58), 30px);
-    --calc-key-font-size: clamp(0.78rem, calc(var(--calc-key-size) * 0.185), 0.96rem);
+    --calc-key-font-size: clamp(0.78rem, calc(var(--calc-key-size) * 0.18), 0.96rem);
+    grid-template-columns: repeat(2, max-content);
+  }
+
+  .calc-tools,
+  .calc-actions [data-calc-value="!"],
+  .calc-actions [data-calc-value="%"] {
+    display: none;
   }
 }
 
 @media (max-width: 580px) {
   .calc-window {
-    height: auto;
+    height: min(480px, calc(100vh - 24px));
   }
 
   .calc-body {
     padding: 8px 6px;
   }
 
-  @container calc (max-width: 520px) {
-    .calc-keypads {
-      --calc-key-gap: clamp(1px, 0.8cqw, 3px);
-      --calc-group-gap: clamp(2px, 1.2cqw, 6px);
-      --calc-key-size: clamp(18px, calc((100cqw - (8 * var(--calc-key-gap)) - (2 * var(--calc-group-gap))) / 9), 52px);
-      --calc-key-height: clamp(20px, calc(var(--calc-key-size) * 0.58), 30px);
-      --calc-key-font-size: clamp(0.5rem, calc(var(--calc-key-size) * 0.19), 0.96rem);
-    }
+  .calc-keypads {
+    --calc-key-gap: clamp(1px, 0.8cqw, 3px);
+    --calc-group-gap: clamp(4px, 1.6cqw, 8px);
+    --calc-key-size: clamp(32px, calc((100cqw - (4 * var(--calc-key-gap)) - var(--calc-group-gap)) / 6), 52px);
+    --calc-key-height: clamp(22px, calc(var(--calc-key-size) * 0.58), 30px);
+    --calc-key-font-size: clamp(0.68rem, calc(var(--calc-key-size) * 0.19), 0.96rem);
   }
 }
 
@@ -1821,23 +1824,34 @@ main.bindiff-main {
   align-items: flex-start;
 }
 
-.console-ghost {
+.console-preview,
+.console-measure {
+  display: block;
   position: absolute;
-  top: 1px;
+  top: 0;
   left: 0;
-  color: var(--muted);
-  white-space: pre;
+  width: 100%;
+  min-height: 1.5em;
   font: inherit;
   line-height: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  text-indent: var(--console-prompt-indent);
+}
+
+.console-preview {
+  color: var(--text);
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
 }
 
 .console-measure {
-  position: absolute;
   visibility: hidden;
-  white-space: pre;
-  font: inherit;
+  z-index: -1;
+}
+
+.console-suggestion {
+  color: var(--muted);
 }
 
 .console-input textarea {
@@ -1849,7 +1863,8 @@ main.bindiff-main {
   border-radius: 0;
   outline: none;
   padding: 0;
-  color: var(--text);
+  color: transparent;
+  -webkit-text-fill-color: transparent;
   font: inherit;
   caret-color: transparent;
   line-height: inherit;
@@ -2600,8 +2615,7 @@ footer {
   }
 
   .calc-window {
-    height: auto;
-    min-height: min(236px, calc(100dvh - 24px));
+    height: min(520px, calc(100vh - 24px));
   }
 
   .footer-row {

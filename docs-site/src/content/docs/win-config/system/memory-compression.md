@@ -3,7 +3,7 @@ title: 'Memory Compression'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 23
+  order: 10
 ---
 
 Memory compression stores infrequently accessed, private memory pages in compressed form so they occupy less physical memory, causing Windows to keep more data in RAM and reduce pagefile I/O. Whenever a process references a compressed page again, it gets decompressed which is normally faster than reading it from storage, although compression and decompression consume CPU time. 

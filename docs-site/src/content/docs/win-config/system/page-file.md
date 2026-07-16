@@ -3,7 +3,7 @@ title: 'Page File'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 13
+  order: 15
 ---
 
 Will be updated soon, date of commit `04.07.2026`.

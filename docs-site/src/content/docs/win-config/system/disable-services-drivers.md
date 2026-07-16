@@ -3,14 +3,14 @@ title: 'Services/Drivers'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 11
+  order: 10
 ---
 
 I personally recommend using only the main option. This includes disabling telemetry/tracking/diagnostics/location/certain drivers/services, etc. It is not necessary to disable more than this, as most other features won't start automatically anyway. You can use the suboptions if you want to disable services/drivers (e.g. *"Autoplay Service, Bluetooth Services, Camera Services, File/Printer Sharing Services, Printer Services, Store Services"*) for a **specific** reason (note that this may cause broken functionalities). Disabling/enabling features via other options (e.g WER, Windows Search, Clipboard) includes changing service/driver `Start` data/setting policies etc, instead of only changing services/drivers state, so again, rather leave the suboptions alone. Whenever you've a HDD, disable the `Disable SysMain` suboption.
 
 ## Service/Driver Table
 
-You can dump all kind of information (including information like type, required privileges, failure actions, triggers, thread/handle count, KM/UM time etc. which the normal `services.msc` or any other program won't show) using my [dumpServicesDrivers.ps1] script (which I also used for creating the tables below, see [services.txt]()/[drivers.txt]()), I've commented out some fields by default, edit the file if you want to see them.
+You can dump all kind of information (including information like type, required privileges, failure actions, triggers, thread/handle count, KM/UM time etc. which the normal `services.msc` or any other program won't show) using my [dumpServicesDrivers.ps1] script (which I also used for creating the tables below, see [services.txt](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers.txt](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt)), I've commented out some fields by default, edit the file if you want to see them.
 
 The suboptions probably overlap the documentation. If so, you can open the [page on my website](https://github.com/nohuto/win-config/blob/main/system/desc.md#disable-servicesdrivers) instead.
 

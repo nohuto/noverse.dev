@@ -19,9 +19,9 @@ open=Launch.exe
 icon=Launch.exe
 ```
 
-| Service | Description |
-| --- | --- |
-| `ShellHWDetection` | Provides notifications for AutoPlay hardware events. |
+| Name | Description | Type | Dependencies | Command Line |
+| --- | --- | --- | --- | --- |
+| `ShellHWDetection` | Provides notifications for AutoPlay hardware events. | Win32 Share Process (32) | RpcSs | C:\Windows\System32\svchost.exe -k netsvcs -p |
 
 ### SystemSettings Captures
 

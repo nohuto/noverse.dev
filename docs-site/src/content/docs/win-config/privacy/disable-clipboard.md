@@ -8,9 +8,9 @@ sidebar:
 
 If you copy or cut something it gets stored to your clipboard, see policies below for more details.
 
-| Service | Description |
-| --- | --- |
-| `cbdhsvc` | This user service is used for Clipboard scenarios |
+| Name | Description | Type | Dependencies | Command Line |
+| --- | --- | --- | --- | --- |
+| `cbdhsvc` | This user service is used for Clipboard scenarios | Win32 Share Process, User Service (96) | - | C:\Windows\system32\svchost.exe -k ClipboardSvcGroup -p |
 
 ## [Windows Policies](https://noverse.dev/policies)
 

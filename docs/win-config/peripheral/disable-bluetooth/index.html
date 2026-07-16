@@ -521,4 +521,55 @@ unicode: "ebdc"
 
 
 
-<table><thead><tr><th>Service/Driver</th><th>Description</th></tr></thead><tbody><tr><td><code dir="auto">BluetoothUserService_*</code></td><td>The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session.</td></tr><tr><td><code dir="auto">BTAGService</code></td><td>Service supporting the audio gateway role of the Bluetooth Handsfree Profile.</td></tr><tr><td><code dir="auto">BthA2dp</code></td><td>Microsoft Bluetooth A2dp driver</td></tr><tr><td><code dir="auto">BthAvctpSvc</code></td><td>This is Audio Video Control Transport Protocol service</td></tr><tr><td><code dir="auto">BthEnum</code></td><td>Bluetooth Enumerator Service</td></tr><tr><td><code dir="auto">BthHFEnum</code></td><td>Microsoft Bluetooth Hands-Free Profile driver</td></tr><tr><td><code dir="auto">BthLEEnum</code></td><td>Bluetooth Low Energy Driver</td></tr><tr><td><code dir="auto">BthMini</code></td><td>Bluetooth Radio Driver</td></tr><tr><td><code dir="auto">BTHMODEM</code></td><td>Bluetooth Modem Communications Driver</td></tr><tr><td><code dir="auto">BTHPORT</code></td><td>Bluetooth Port Driver</td></tr><tr><td><code dir="auto">bthserv</code></td><td>The Bluetooth service supports discovery and association of remote Bluetooth devices. Stopping or disabling this service may cause already installed Bluetooth devices to fail to operate properly and prevent new devices from being discovered or associated.</td></tr><tr><td><code dir="auto">BTHUSB</code></td><td>Bluetooth Radio USB Driver</td></tr><tr><td><code dir="auto">DeviceAssociationBrokerSvc</code></td><td>Enables apps to pair devices</td></tr><tr><td><code dir="auto">DeviceAssociationService</code></td><td>Enables pairing between the system and wired or wireless devices.</td></tr><tr><td><code dir="auto">Microsoft_Bluetooth_AvrcpTransport</code></td><td>Microsoft Bluetooth Avrcp Transport Driver</td></tr><tr><td><code dir="auto">RFCOMM</code></td><td>Bluetooth Device (RFCOMM Protocol TDI)</td></tr></tbody></table> </div> <footer class="sl-flex astro-3yyafb3n"> <div class="meta sl-flex astro-3yyafb3n">   </div> <div class="pagination-links print:hidden astro-tely5epz" dir="ltr"><a href="/docs/win-config/peripheral/disable-touch-tablet/" rel="prev" class="astro-tely5epz"><span class="link-label sl-flex astro-tely5epz"><svg aria-hidden="true" class="astro-tely5epz astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z"/></svg>Previous</span><span class="link-title astro-tely5epz">Touch &amp; Tablet</span></a><a href="/docs/win-config/peripheral/device-manager/" rel="next" class="astro-tely5epz"><span class="link-label sl-flex astro-tely5epz">Next<svg aria-hidden="true" class="astro-tely5epz astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg></span><span class="link-title astro-tely5epz">Device Manager</span></a></div>  </footer> </div> </div>  </main> </div> </div> </div> </div> </body></html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Name</th><th>Description</th><th>Type</th><th>Dependencies</th><th>Command Line</th></tr></thead><tbody><tr><td><code dir="auto">BluetoothUserService_*</code></td><td>The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session.</td><td>Win32 Share Process, User Service, User Service Instance (224)</td><td>-</td><td>C:\Windows\system32\svchost.exe -k BthAppGroup -p</td></tr><tr><td><code dir="auto">BTAGService</code></td><td>Service supporting the audio gateway role of the Bluetooth Handsfree Profile.</td><td>Win32 Share Process (32)</td><td>rpcss</td><td>C:\Windows\system32\svchost.exe -k LocalServiceNetworkRestricted</td></tr><tr><td><code dir="auto">BthA2dp</code></td><td>Microsoft Bluetooth A2dp driver</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\BthA2dp.sys</td></tr><tr><td><code dir="auto">BthAvctpSvc</code></td><td>This is Audio Video Control Transport Protocol service</td><td>Win32 Share Process (32)</td><td>rpcss</td><td>C:\Windows\system32\svchost.exe -k LocalService -p</td></tr><tr><td><code dir="auto">BthEnum</code></td><td>Bluetooth Enumerator Service</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\BthEnum.sys</td></tr><tr><td><code dir="auto">BthHFEnum</code></td><td>Microsoft Bluetooth Hands-Free Profile driver</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\bthhfenum.sys</td></tr><tr><td><code dir="auto">BthLEEnum</code></td><td>Bluetooth Low Energy Driver</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\Microsoft.Bluetooth.Legacy.LEEnumerator.sys</td></tr><tr><td><code dir="auto">BthMini</code></td><td>Bluetooth Radio Driver</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\BTHMINI.sys</td></tr><tr><td><code dir="auto">BTHMODEM</code></td><td>Bluetooth Modem Communications Driver</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\bthmodem.sys</td></tr><tr><td><code dir="auto">BTHPORT</code></td><td>Bluetooth Port Driver</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\BTHport.sys</td></tr><tr><td><code dir="auto">bthserv</code></td><td>The Bluetooth service supports discovery and association of remote Bluetooth devices. Stopping or disabling this service may cause already installed Bluetooth devices to fail to operate properly and prevent new devices from being discovered or associated.</td><td>Win32 Share Process (32)</td><td>-</td><td>C:\Windows\system32\svchost.exe -k LocalService -p</td></tr><tr><td><code dir="auto">BTHUSB</code></td><td>Bluetooth Radio USB Driver</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\BTHUSB.sys</td></tr><tr><td><code dir="auto">DeviceAssociationBrokerSvc</code></td><td>Enables apps to pair devices</td><td>Win32 Share Process, User Service (96)</td><td>RpcSs</td><td>C:\Windows\system32\svchost.exe -k DevicesFlow -p</td></tr><tr><td><code dir="auto">DeviceAssociationService</code></td><td>Enables pairing between the system and wired or wireless devices.</td><td>Win32 Share Process (32)</td><td>-</td><td>C:\Windows\system32\svchost.exe -k LocalSystemNetworkRestricted -p</td></tr><tr><td><code dir="auto">Microsoft_Bluetooth_AvrcpTransport</code></td><td>Microsoft Bluetooth Avrcp Transport Driver</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\Microsoft.Bluetooth.AvrcpTransport.sys</td></tr><tr><td><code dir="auto">RFCOMM</code></td><td>Bluetooth Device (RFCOMM Protocol TDI)</td><td>Kernel Driver (1)</td><td>-</td><td>\SystemRoot\System32\drivers\rfcomm.sys</td></tr></tbody></table> </div> <footer class="sl-flex astro-3yyafb3n"> <div class="meta sl-flex astro-3yyafb3n">   </div> <div class="pagination-links print:hidden astro-tely5epz" dir="ltr"><a href="/docs/win-config/peripheral/disable-touch-tablet/" rel="prev" class="astro-tely5epz"><span class="link-label sl-flex astro-tely5epz"><svg aria-hidden="true" class="astro-tely5epz astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z"/></svg>Previous</span><span class="link-title astro-tely5epz">Touch &amp; Tablet</span></a><a href="/docs/win-config/peripheral/device-manager/" rel="next" class="astro-tely5epz"><span class="link-label sl-flex astro-tely5epz">Next<svg aria-hidden="true" class="astro-tely5epz astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg></span><span class="link-title astro-tely5epz">Device Manager</span></a></div>  </footer> </div> </div>  </main> </div> </div> </div> </div> </body></html>

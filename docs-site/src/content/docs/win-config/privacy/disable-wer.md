@@ -34,10 +34,10 @@ sidebar:
 | `\Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate` | - | - |
 | `\Microsoft\Windows\Windows Error Reporting\QueueReporting` | Windows Error Reporting task to process queued reports. | `%windir%\system32\wermgr.exe -upload` |
 
-| Service | Description |
-| --- | --- |
-| `WerSvc` | Allows errors to be reported when programs stop working or responding and allows existing solutions to be delivered. Also allows logs to be generated for diagnostic and repair services. If this service is stopped, error reporting might not work correctly and results of diagnostic services and repairs might not be displayed. |
-| `wercplsupport` | This service provides support for viewing, sending and deletion of system-level problem reports for the Problem Reports control panel. |
+| Name | Description | Type | Dependencies | Command Line |
+| --- | --- | --- | --- | --- |
+| `WerSvc` | Allows errors to be reported when programs stop working or responding and allows existing solutions to be delivered. Also allows logs to be generated for diagnostic and repair services. If this service is stopped, error reporting might not work correctly and results of diagnostic services and repairs might not be displayed. | Win32 Own Process (16) | - | C:\Windows\System32\svchost.exe -k WerSvcGroup |
+| `wercplsupport` | This service provides support for viewing, sending and deletion of system-level problem reports for the Problem Reports control panel. | Win32 Share Process (32) | - | C:\Windows\System32\svchost.exe -k netsvcs -p |
 
 ## Suboptions
 

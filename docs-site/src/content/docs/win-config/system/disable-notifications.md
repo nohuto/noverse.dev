@@ -3,7 +3,7 @@ title: 'Notifications'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 14
+  order: 16
 ---
 
 The '*System Template*' won't disable all notifications, so e.g. critical Defender notifications will still be shown.

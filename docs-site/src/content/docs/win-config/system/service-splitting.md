@@ -3,7 +3,7 @@ title: 'Service Splitting'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 18
+  order: 20
 ---
 
 Prevents services hosted by `svchost.exe` from being split into separate host processes. This reduces the amount of `svchost.exe` instances, but also reduces service isolation, just be aware of what negative impact grouping has before chaning the option, the template therefore keeps the client default. If you've less than 3.5GB of RAM splitting is disabled by default.

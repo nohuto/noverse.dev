@@ -3,7 +3,7 @@ title: 'File System Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 16
+  order: 18
 ---
 
 Small documentation on several values the option applies, see links below for more details.

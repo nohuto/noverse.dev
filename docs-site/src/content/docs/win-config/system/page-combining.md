@@ -3,7 +3,7 @@ title: 'Page Combining'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 24
+  order: 11
 ---
 
 Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`.

@@ -6,11 +6,13 @@ sidebar:
   order: 23
 ---
 
-Memory compression stores infrequently accessed, private memory pages in compressed form so they occupy less physical memory, causing Windows to keep more data in RAM and reduce pagefile I/O. Whenever a process references a compressed page again, it gets decompressed which is normally faster than reading it from storage, although compression and decompression consume CPU time.
+Memory compression stores infrequently accessed, private memory pages in compressed form so they occupy less physical memory, causing Windows to keep more data in RAM and reduce pagefile I/O. Whenever a process references a compressed page again, it gets decompressed which is normally faster than reading it from storage, although compression and decompression consume CPU time. 
 
 Keep it enabled, unless you've to debug issues in relation to compression/decompression & it's activity.
 
-Compressed pages are stored in a dedicated (minimal) "Memory Compression" process managed by the Store Manager, which kind of consumes no resources, and its threads are waiting most of the time.
+Compressed pages are stored in a dedicated "Memory Compression" (`MemCompression`) process managed by the Store Manager. Note that `SysMain` includes config functions used by `MMAgent`, while the actual compression work is done by the kernel Store Manager, means for the MMAgent state to apply and report correctly, `SysMain` must be allowed to run (if not, `MemCompression` won't be created).
+
+On systems with enough free memory, it may stay almost unused even when it's enabled, as it becomes more relevant when active/cold private pages would otherwise have to be paged out. Means its just a processes which consumes no resources, and has inactive threads:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memory-compression.png?raw=true)
 
@@ -20,9 +22,19 @@ Example:
 3. The 17 MB saved is used for active apps
 4. When the data is needed again, it's decompressed back to 24 MB
 
-### Get-MMAgent
+### MMAgent
 
-See the current memory compression state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
+`Enable-MMAgent -MemoryCompression` calls the `PS_MMAgent` CIM provider in `sysmain.dll`, which goes to `MmaConfigure`, sets the memory compression admin bit in the Superfetch key, may set `SysMain` to automatic start and (re)starts `SysMain` so the component state can be applied.
+
+```c
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Superfetch"
+    AdminEnable & 0x200 // MemoryCompression requested enabled
+    AdminDisable & 0x200 // MemoryCompression requested disabled
+    StartedComponents & 0x200 // MemoryCompression started by SysMain
+```
+
+See the current memory compression state via ([MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps)):
+
 ```powershell
 Get-MMAgent
 
@@ -33,6 +45,79 @@ MemoryCompression            : True # Enabled
 OperationAPI                 : True
 PageCombining                : True
 PSComputerName               :
+```
+
+### WinDbg
+
+If memory compression was applied by `SysMain`, the process should exist:
+
+```c
+lkd> !process 0 0 MemCompression
+PROCESS ffff9c06c430e040
+    SessionId: none  Cid: 0654    Peb: 00000000  ParentCid: 0004
+    DirBase: 121450000  ObjectTable: ffffb20888e79c00  HandleCount:   0.
+    Image: MemCompression
+```
+
+That was run on a 32GB system with no memory pressure, which shows again that it practically does nothing in that relation.
+
+```c
+lkd> !process ffff9c06c430e040 1
+PROCESS ffff9c06c430e040
+    SessionId: none  Cid: 0654    Peb: 00000000  ParentCid: 0004
+    DirBase: 121450000  ObjectTable: ffffb20888e79c00  HandleCount:   0.
+    Image: MemCompression
+    VadRoot 0000000000000000 Vads 0 Clone 0 Private 5. Modified 0. Locked 0.
+    DeviceMap 0000000000000000
+    Token                             ffffb20888dd8040
+    ElapsedTime                       00:39:09.121
+    UserTime                          00:00:00.000
+    KernelTime                        00:00:00.000
+    QuotaPoolUsage[PagedPool]         4224
+    QuotaPoolUsage[NonPagedPool]      0
+    Working Set Sizes (now,min,max)  (5, 50, 345) (20KB, 200KB, 1380KB)
+    PeakWorkingSetSize                0
+    VirtualSize                       0 Mb
+    PeakVirtualSize                   0 Mb
+    PageFaultCount                    5
+    MemoryPriority                    BACKGROUND
+    BasePriority                      8
+    CommitCharge                      10
+```
+
+The threads show whether the compression process is idle or doing work:
+
+```c
+lkd> !process ffff9c06c430e040 4
+PROCESS ffff9c06c430e040
+    SessionId: none  Cid: 0654    Peb: 00000000  ParentCid: 0004
+    DirBase: 121450000  ObjectTable: ffffb20888e79c00  HandleCount:   0.
+    Image: MemCompression
+
+        THREAD ffff9c06c4327080  Cid 0654.0658  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c4326080  Cid 0654.065c  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c4321080  Cid 0654.0670  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c4320080  Cid 0654.0674  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c431e080  Cid 0654.067c  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c431d080  Cid 0654.0680  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c6e8e080  Cid 0654.11e4  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c708b0c0  Cid 0654.1008  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c495e080  Cid 0654.1e30  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c72cb080  Cid 0654.0758  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+```
+
+A thread can also show the SM (store manager) routine it is waiting in:
+
+```c
+lkd> !thread ffff9c06c4327080
+THREAD ffff9c06c4327080  Cid 0654.0658  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT: (WrKernel) KernelMode Non-Alertable
+    ffff9c06baff4530  NotificationEvent
+Owning Process            ffff9c06c430e040       Image:         MemCompression
+Wait Start TickCount      238            Ticks: 10642 (0:00:02:46.281)
+UserTime                  00:00:00.000
+KernelTime                00:00:00.000
+Win32 Start Address nt!SMKM_STORE_MGR<SM_TRAITS>::SmCompressCtxBalancerThread (0xfffff8031b3b5460)
+Priority 25  BasePriority 25  Priority Floor 25  IoPriority 2  PagePriority 5
 ```
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)

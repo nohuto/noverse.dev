@@ -436,6 +436,7 @@ function initConsole() {
   let promptIndent = 0;
   let promptMetricsDirty = true;
   let caretRaf = 0;
+  let pendingLineFragment = null;
   let measureState = {
     width: 0,
     font: '',
@@ -475,10 +476,10 @@ function initConsole() {
   const updatePromptIndent = (force = false) => {
     if (!promptEl) return promptIndent;
     if (!force && !promptMetricsDirty) return promptIndent;
-    const nextIndent = Math.ceil(promptEl.getBoundingClientRect().width + 8);
+    const nextIndent = `${promptEl.textContent.length + 1}ch`;
     if (nextIndent !== promptIndent) {
       promptIndent = nextIndent;
-      form.style.setProperty('--console-prompt-indent', `${promptIndent}px`);
+      form.style.setProperty('--console-prompt-indent', promptIndent);
     }
     promptMetricsDirty = false;
     return promptIndent;
@@ -542,6 +543,10 @@ function initConsole() {
   };
 
   const resizeInput = () => {
+    if (!input.value.includes('\n')) {
+      input.style.height = '';
+      return;
+    }
     input.style.height = 'auto';
     input.style.height = `${input.scrollHeight}px`;
   };
@@ -604,12 +609,37 @@ function initConsole() {
     });
   };
 
+  const appendConsoleLine = line => {
+    if (pendingLineFragment) {
+      pendingLineFragment.appendChild(line);
+      return;
+    }
+    lines.appendChild(line);
+    scrollToBottom();
+  };
+
+  const withLineBatch = callback => {
+    const previousFragment = pendingLineFragment;
+    const fragment = document.createDocumentFragment();
+    pendingLineFragment = fragment;
+    try {
+      callback();
+    } finally {
+      pendingLineFragment = previousFragment;
+      if (previousFragment) {
+        previousFragment.appendChild(fragment);
+      } else {
+        lines.appendChild(fragment);
+        scrollToBottom();
+      }
+    }
+  };
+
   const addLine = (text, className) => {
     const line = document.createElement('div');
     line.className = className ? `console-line ${className}` : 'console-line';
     line.textContent = text;
-    lines.appendChild(line);
-    scrollToBottom();
+    appendConsoleLine(line);
   };
 
   const addLineParts = (parts, className) => {
@@ -622,16 +652,14 @@ function initConsole() {
       if (URL_PATTERN.test(part.text || '')) span.classList.add('console-url');
       line.appendChild(span);
     });
-    lines.appendChild(line);
-    scrollToBottom();
+    appendConsoleLine(line);
   };
 
   const addNodeLine = (node, className) => {
     const line = document.createElement('div');
     line.className = className ? `console-line ${className}` : 'console-line';
     line.appendChild(node);
-    lines.appendChild(line);
-    scrollToBottom();
+    appendConsoleLine(line);
     return line;
   };
 
@@ -996,12 +1024,12 @@ function initConsole() {
   };
 
   const openBitmaskTool = createLazyTool(
-    '/main/terminal-bitmask.js',
+    '/main/min/terminal-bitmask.min.js',
     'NoverseBitmask',
     () => ({ initFloatingTool })
   );
   const openCalculatorTool = createLazyTool(
-    '/main/terminal-calc.js',
+    '/main/min/terminal-calc.min.js',
     'NoverseCalculator',
     () => ({ initFloatingTool, clampNumber })
   );
@@ -1462,15 +1490,19 @@ function initConsole() {
   }
   consoleTimestampTimer = setInterval(updateTimestamp, 60000);
 
-  input.focus();
-  updateCaret();
+  requestAnimationFrame(() => {
+    input.focus({ preventScroll: true });
+    scheduleCaretUpdate();
+  });
 
-  ASCII_ART.forEach(line => addLine(line, 'art'));
-  addLine(' ');
-  addLine('Welcome to the terminal, use Tab or Right Arrow for autocompletion (CTRL + mouse click opens links).', 'muted');
-  addLine('Use the top sections to navigate if the terminal feels unfamiliar.', 'muted');
-  addLine(' ');
-  commands.help();
+  withLineBatch(() => {
+    ASCII_ART.forEach(line => addLine(line, 'art'));
+    addLine(' ');
+    addLine('Welcome to the terminal, use Tab or Right Arrow for autocompletion (CTRL + mouse click opens links).', 'muted');
+    addLine('Use the top sections to navigate if the terminal feels unfamiliar.', 'muted');
+    addLine(' ');
+    commands.help();
+  });
   if (location.hash.toLowerCase() === '#bitmask') {
     openBitmaskTool();
   } else if (location.hash.toLowerCase() === '#calc') {

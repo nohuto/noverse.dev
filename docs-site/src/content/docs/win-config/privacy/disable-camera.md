@@ -8,10 +8,10 @@ sidebar:
 
 Disallows the use of a camera on your system, by denying access via `LetAppsAccessCamera`/`AllowCamera`/services (and app permission).
 
-| Service | Description |
-| --- | --- |
-| `FrameServer` | Enables multiple clients to access video frames from camera devices. |
-| `FrameServerMonitor` | Monitors the health and state for the Windows Camera Frame Server service. |
+| Name | Description | Type | Dependencies | Command Line |
+| --- | --- | --- | --- | --- |
+| `FrameServer` | Enables multiple clients to access video frames from camera devices. | Win32 Share Process (32) | rpcss | C:\Windows\System32\svchost.exe -k Camera |
+| `FrameServerMonitor` | Monitors the health and state for the Windows Camera Frame Server service. | Win32 Own Process (16) | rpcss | C:\Windows\System32\svchost.exe -k CameraMonitor |
 
 ## Suboption
 

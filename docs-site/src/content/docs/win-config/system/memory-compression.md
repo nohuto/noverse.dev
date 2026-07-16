@@ -15,6 +15,7 @@ Compressed pages are stored in a dedicated "Memory Compression" (`MemCompression
 On systems with enough free memory, it may stay almost unused even when it's enabled, as it becomes more relevant when active/cold private pages would otherwise have to be paged out. Means its just a processes which consumes no resources, and has inactive threads:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memory-compression.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/MemCompression.png?raw=true)
 
 Example:  
 1. System looks for cold/rarely used data in RAM
@@ -33,7 +34,9 @@ Example:
     StartedComponents & 0x200 // MemoryCompression started by SysMain
 ```
 
-`0x200` = bit `9`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data.
+`0x200` = bit `9`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data, example:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/StartedComponents.png?raw=true)
 
 See the current memory compression state via [MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps):
 

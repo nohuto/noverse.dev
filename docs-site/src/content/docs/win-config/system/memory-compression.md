@@ -33,7 +33,9 @@ Example:
     StartedComponents & 0x200 // MemoryCompression started by SysMain
 ```
 
-See the current memory compression state via ([MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps)):
+`0x200` = bit `9`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data.
+
+See the current memory compression state via [MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps):
 
 ```powershell
 Get-MMAgent
@@ -59,7 +61,7 @@ PROCESS ffff9c06c430e040
     Image: MemCompression
 ```
 
-That was run on a 32GB system with no memory pressure, which shows again that it practically does nothing in that relation.
+That command was run on a 32GB system (with no memory pressure), which shows again that it practically does nothing in that relation.
 
 ```c
 lkd> !process ffff9c06c430e040 1

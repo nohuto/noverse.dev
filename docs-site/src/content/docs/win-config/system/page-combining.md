@@ -31,7 +31,7 @@ lkd> dd nt!MmRegistryState+8 L1
 fffff803`1bd1d1c8  00000000
 ```
 
-### MMAgent
+### MMAgent Cmdlet
 
 `Enable-MMAgent -PageCombining` calls the `PS_MMAgent` CIM provider in `sysmain.dll`, which goes to `MmaConfigure`, sets the page combining admin bit in the Superfetch key, and relies on `SysMain` to apply the component state.
 

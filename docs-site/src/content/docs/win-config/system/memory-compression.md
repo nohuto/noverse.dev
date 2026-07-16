@@ -17,13 +17,15 @@ On systems with enough free memory, it may stay almost unused even when it's ena
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memory-compression.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/MemCompression.png?raw=true)
 
+See '[Thread Activity](https://noverse.dev/docs/windbg-notes/threads/examining-thread-activity/thread-activity/)' whenever you want to read a bit more about the column meanings.
+
 Example:  
 1. System looks for cold/rarely used data in RAM
 2. It compresses that data, e.g. 24 MB -> 7 MB
 3. The 17 MB saved is used for active apps
 4. When the data is needed again, it's decompressed back to 24 MB
 
-### MMAgent
+### MMAgent Cmdlet
 
 `Enable-MMAgent -MemoryCompression` calls the `PS_MMAgent` CIM provider in `sysmain.dll`, which goes to `MmaConfigure`, sets the memory compression admin bit in the Superfetch key, may set `SysMain` to automatic start and (re)starts `SysMain` so the component state can be applied.
 

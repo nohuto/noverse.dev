@@ -43,9 +43,9 @@ const FONT_SET = new Set(FONT_KEYS);
 const REPO_DESC_URL = 'main/data/repos.json';
 const SELECT_SEARCH_RENDER_LIMIT_DEFAULT = 300;
 const PAGE_FEATURES = Object.freeze([
-  { rootId: 'console', src: 'main/terminal.js', initName: 'initConsole' },
-  { rootId: 'policy-explorer', src: 'main/policies.js', styleHref: 'main/tools.css', initName: 'initPolicyExplorer', deferInit: true },
-  { rootId: 'bin-diff-app', src: 'main/bin-diff.js', styleHref: 'main/tools.css', initName: 'initBinDiff', deferInit: true }
+  { rootId: 'console', src: 'main/min/terminal.min.js', initName: 'initConsole', deferInit: true },
+  { rootId: 'policy-explorer', src: 'main/min/policies.min.js', styleHref: 'main/min/tools.min.css', initName: 'initPolicyExplorer', deferInit: true },
+  { rootId: 'bin-diff-app', src: 'main/min/bin-diff.min.js', styleHref: 'main/min/tools.min.css', initName: 'initBinDiff', deferInit: true }
 ]);
 const SYSTEM_THEME_QUERY = '(prefers-color-scheme: light)';
 
@@ -786,6 +786,7 @@ const loadPageFeatureStyles = root => Promise.all(PAGE_FEATURES
 async function initPageFeatures() {
   for (const feature of PAGE_FEATURES) {
     if (!document.getElementById(feature.rootId)) continue;
+    if (feature.deferInit) await afterNextPaint();
     if (feature.styleHref) {
       await loadPageFeatureStyle(feature.styleHref);
     }
@@ -796,7 +797,6 @@ async function initPageFeatures() {
     if (typeof initialize !== 'function') {
       throw new Error(`Page feature did not register ${feature.initName}`);
     }
-    if (feature.deferInit) await afterNextPaint();
     initialize();
   }
 }

@@ -11,7 +11,7 @@
     'main/vendor/diff2html.min.css'
   ];
   const BIN_DIFF_ASSET_SCRIPTS = [
-    'main/normalization.js',
+    'main/min/normalization.min.js',
     'main/vendor/highlight.common.min.js',
     'main/vendor/diff.min.js',
     'main/vendor/diff2html-ui-base.min.js'

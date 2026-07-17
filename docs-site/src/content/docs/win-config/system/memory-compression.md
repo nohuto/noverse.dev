@@ -66,7 +66,7 @@ PROCESS ffff9c06c430e040
     Image: MemCompression
 ```
 
-That command was run on a 32GB system (with no memory pressure), which shows again that it practically does nothing in that relation.
+That command was run on a 32GB RAM system (with no memory pressure), which shows again that it practically does nothing in that relation.
 
 ```c
 lkd> !process ffff9c06c430e040 1

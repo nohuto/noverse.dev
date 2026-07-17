@@ -11,7 +11,7 @@ Memory combining finds duplicate pages in RAM and replaces them with one shared 
 ```powershell
 $ .\memcombine64 # while having several similar apps opened
 Combining pages, please wait...
-Success. Total pages combined: 284535 # 284535 * 4096 = 1,165,455,360 bytes = 1165.46 MB = 1.1655
+Success. Total pages combined: 284535 # 284535 * 4096 = 1,165,455,360 bytes = 1165.46 MB = 1.1655 GB
 
 $ .\memcombine64
 Combining pages, please wait...

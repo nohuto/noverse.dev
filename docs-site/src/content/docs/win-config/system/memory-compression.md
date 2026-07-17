@@ -60,7 +60,7 @@ PROCESS ffff9c06c430e040
     Image: MemCompression
 ```
 
-On a 32GB RAM system without memory pressure, the process may exist but stay almost unused:
+On a 32GB RAM system without memory pressure, the process may exist but stay almost unused (different address as not executed in same session):
 
 ```c
 lkd> !process ffff9c06c430e040 1

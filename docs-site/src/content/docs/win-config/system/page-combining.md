@@ -9,12 +9,16 @@ sidebar:
 Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`. The purpose of this memory management feature is to save physical memory, but on modern systems with 32-64GB of RAM the impact of page combining is minimal (a page has a size of 4KB = 4096 byte):
 
 ```powershell
+$ .\memcombine64 # while having several similar apps opened
+Combining pages, please wait...
+Success. Total pages combined: 284535 # 284535 * 4096 = 1,165,455,360 bytes = 1165.46 MB = 1.1655
+
 $ .\memcombine64
 Combining pages, please wait...
 Success. Total pages combined: 29490 # 29490 * 4096 = 120,791,040 bytes = 120.79 MB = 0.120791 GB
 ```
 
-The amount of pages that can be combined is obviously not always same as it depends on how many identical private pages exist, but See '[MemCombineTest](https://noverse.dev/docs/win-config/system/page-combining/#memcombinetest)' for notes on what memcombine64 does.
+The amount of pages that can be combined is obviously not always same as it depends on how many identical private pages exist. See '[MemCombineTest](https://noverse.dev/docs/win-config/system/page-combining/#memcombinetest)' for notes on what memcombine64 does.
 
 There's no separate process for page combining (like `MemCompression`), SysMain requests the work and the kernel Memory Manager does the combine work.
 

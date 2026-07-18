@@ -190,8 +190,8 @@
   width: 12px;
   height: 12px;
   background: var(--muted);
-  mask: url("icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
-  -webkit-mask: url("icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
+  mask: url("/main/icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
+  -webkit-mask: url("/main/icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
 }
 
 #policy-view-trigger[aria-expanded="true"] .policy-view-chevron {
@@ -402,13 +402,13 @@ body.policy-resizing .policy-splitter::after {
 
 .policy-tree-chevron {
   background: var(--muted);
-  mask: url("icons/ui/chevron-right.svg") center / 14px 14px no-repeat;
-  -webkit-mask: url("icons/ui/chevron-right.svg") center / 14px 14px no-repeat;
+  mask: url("/main/icons/ui/chevron-right.svg") center / 14px 14px no-repeat;
+  -webkit-mask: url("/main/icons/ui/chevron-right.svg") center / 14px 14px no-repeat;
 }
 
 .policy-tree-chevron.is-open {
-  mask-image: url("icons/ui/chevron-down.svg");
-  -webkit-mask-image: url("icons/ui/chevron-down.svg");
+  mask-image: url("/main/icons/ui/chevron-down.svg");
+  -webkit-mask-image: url("/main/icons/ui/chevron-down.svg");
 }
 
 .policy-tree-item.is-active,
@@ -489,8 +489,8 @@ body.policy-resizing .policy-splitter::after {
   height: 12px;
   justify-self: end;
   background: var(--muted);
-  mask: url("icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
-  -webkit-mask: url("icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
+  mask: url("/main/icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
+  -webkit-mask: url("/main/icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
   vertical-align: -2px;
 }
 
@@ -817,8 +817,8 @@ body.policy-column-resizing * {
   justify-self: end;
   background: var(--muted);
   opacity: 0.82;
-  mask: url("icons/ui/copy.svg") center / 13px 13px no-repeat;
-  -webkit-mask: url("icons/ui/copy.svg") center / 13px 13px no-repeat;
+  mask: url("/main/icons/ui/copy.svg") center / 13px 13px no-repeat;
+  -webkit-mask: url("/main/icons/ui/copy.svg") center / 13px 13px no-repeat;
 }
 
 .policy-copy-button:hover .policy-copy-icon,

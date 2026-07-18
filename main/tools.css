@@ -74,16 +74,9 @@
   color: var(--muted);
 }
 
-.policy-search-field input,
 .policy-limit-controls input[type="number"] {
   height: 24px;
   font-size: 1rem;
-}
-
-.policy-search-field input {
-  background: var(--panel);
-  color: var(--text);
-  padding: 0 10px;
 }
 
 #policy-settings {

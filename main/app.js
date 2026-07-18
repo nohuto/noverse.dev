@@ -18,9 +18,8 @@ const BG_KEY = 'nv-bg';
 const DEFAULT_BG = 'dots';
 const BG_KEYS = ['clear', 'diamonds', 'noise', 'dots', 'grid', 'starfield'];
 const BG_SET = new Set(BG_KEYS);
+window.NV_BACKGROUND_KEYS = BG_KEYS;
 const STARFIELD_STYLESHEET = 'main/data/starfield-stars.css';
-const KEYFRAMES_ICON_DARK = 'main/icons/dark/keyframes.svg';
-const KEYFRAMES_ICON_LIGHT = 'main/icons/light/keyframes.svg';
 const ACTIVE_PAGE_PATH_KEY = 'nv-active-page-path';
 const NOT_FOUND_PATH_KEY = 'nv-not-found-path';
 const MAIN_PAGE_ROUTES = Object.freeze([
@@ -55,6 +54,8 @@ let selectUiListener;
 let selectUiKeyListener;
 let terminalExited = false;
 let siteErrorReturnFocus;
+let searchShortcutInput;
+let searchShortcutListener;
 const pageFeaturePromises = new Map();
 const pageFeatureStylePromises = new Map();
 
@@ -133,7 +134,6 @@ function syncPageChrome(pathname = location.pathname) {
       a.removeAttribute('aria-current');
     }
   });
-  updatePromptBar(pathname);
 }
 
 function applyTerminalExitState() {
@@ -151,25 +151,6 @@ function applyTerminalExitState() {
   });
   document.querySelectorAll('main.main-terminal, .terminal-shell, #console-window').forEach(node => {
     node.hidden = terminalExited;
-  });
-}
-
-function getPromptDirectory(pathname = location.pathname) {
-  const route = getMainPageRoute(pathname);
-  if (route) return route.slug;
-  const normalized = normalizePathname(pathname).replace(/^\/+/, '');
-  if (normalized === 'docs' || normalized.startsWith('docs/')) return 'docs';
-  return 'terminal';
-}
-
-function getPromptPath(pathname = location.pathname) {
-  return `:~/${getPromptDirectory(pathname)}`;
-}
-
-function updatePromptBar(pathname = location.pathname) {
-  const nextPath = getPromptPath(pathname);
-  document.querySelectorAll('.prompt-bar .prompt-path').forEach(node => {
-    node.textContent = nextPath;
   });
 }
 
@@ -214,6 +195,29 @@ function applyTheme(theme) {
     }
   }));
   return selected;
+}
+
+function syncThemeControls(theme = document.documentElement.getAttribute('data-theme-setting') || DEFAULT_THEME) {
+  const selected = normalizeTheme(theme || DEFAULT_THEME);
+  const applied = resolveTheme(selected);
+  const isLight = LIGHT_THEMES.has(applied);
+  const select = document.getElementById('theme-select');
+  if (select && hasSelectOption(select, selected)) {
+    select.value = selected;
+    const selectedOption = select.options[select.selectedIndex];
+    const label = select.closest('.select-ui')?.querySelector('.select-trigger-label');
+    if (label && selectedOption) label.textContent = selectedOption.textContent;
+    select.closest('.select-ui')?.querySelectorAll('.select-option').forEach(option => {
+      const active = option.dataset.value === selected;
+      option.classList.toggle('is-active', active);
+      option.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+  }
+  document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+    button.dataset.themeMode = isLight ? 'light' : 'dark';
+    button.setAttribute('aria-label', `Switch to ${isLight ? 'dark' : 'light'} theme`);
+    button.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+  });
 }
 
 function initSelectUI() {
@@ -269,19 +273,6 @@ function initSelectUI() {
     list.className = 'select-list';
     menu.appendChild(list);
     if (menuMeta) menu.appendChild(menuMeta);
-    const isAnimatedBgOption = option => select.id === 'bg-select' && option.dataset.animated === 'true';
-    const createAnimatedBadge = className => {
-      const icon = document.createElement('img');
-      icon.className = className;
-      icon.setAttribute('alt', '');
-      icon.setAttribute('aria-hidden', 'true');
-      icon.setAttribute('decoding', 'async');
-      icon.setAttribute('loading', 'lazy');
-      icon.setAttribute('src', KEYFRAMES_ICON_DARK);
-      icon.setAttribute('data-dark-src', KEYFRAMES_ICON_DARK);
-      icon.setAttribute('data-light-src', KEYFRAMES_ICON_LIGHT);
-      return icon;
-    };
 
     const optionSignature = () => Array.from(select.options).map(option => `${option.value}\u0000${option.disabled ? '1' : '0'}\u0000${option.textContent || ''}`).join('\u0001');
     let lastOptionSignature = '';
@@ -352,9 +343,6 @@ function initSelectUI() {
         labelSpan.className = 'select-option-label';
         labelSpan.textContent = option.textContent;
         btn.appendChild(labelSpan);
-        if (isAnimatedBgOption(option)) {
-          btn.appendChild(createAnimatedBadge('select-option-icon'));
-        }
         btn.dataset.value = option.value;
         btn.setAttribute('role', 'option');
         btn.setAttribute('aria-selected', option.selected ? 'true' : 'false');
@@ -486,24 +474,40 @@ function initSelectUI() {
 
 function initTheme() {
   const select = document.getElementById('theme-select');
-  if (!select) return;
 
   const stored = normalizeTheme(storageGet(THEME_KEY, document.documentElement.getAttribute('data-theme-setting') || DEFAULT_THEME));
-  const initial = hasSelectOption(select, stored) ? stored : DEFAULT_THEME;
+  const initial = select ? (hasSelectOption(select, stored) ? stored : DEFAULT_THEME) : stored || DEFAULT_THEME;
   applyTheme(initial);
-  select.value = initial;
+  syncThemeControls(initial);
 
-  select.addEventListener('change', () => {
-    const next = select.value || DEFAULT_THEME;
-    applyTheme(next);
-    storageSet(THEME_KEY, next);
+  if (select && select.dataset.themeReady !== 'true') {
+    select.dataset.themeReady = 'true';
+    select.addEventListener('change', () => {
+      const next = select.value || DEFAULT_THEME;
+      applyTheme(next);
+      storageSet(THEME_KEY, next);
+      syncThemeControls(next);
+    });
+  }
+
+  document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+    if (button.dataset.themeReady === 'true') return;
+    button.dataset.themeReady = 'true';
+    button.addEventListener('click', () => {
+      const current = resolveTheme(document.documentElement.getAttribute('data-theme-setting') || DEFAULT_THEME);
+      const next = LIGHT_THEMES.has(current) ? DEFAULT_THEME : THEME_LIGHT;
+      applyTheme(next);
+      storageSet(THEME_KEY, next);
+      syncThemeControls(next);
+    });
   });
 
   try {
     const media = window.matchMedia(SYSTEM_THEME_QUERY);
     const syncSystemTheme = () => {
-      if (select.value !== THEME_SYSTEM) return;
+      if ((document.documentElement.getAttribute('data-theme-setting') || '') !== THEME_SYSTEM) return;
       applyTheme(THEME_SYSTEM);
+      syncThemeControls(THEME_SYSTEM);
     };
     media.addEventListener('change', syncSystemTheme);
   } catch { }
@@ -518,20 +522,17 @@ function applyBackground(key) {
   return applied;
 }
 
-function initBackground() {
-  const select = document.getElementById('bg-select');
-  if (!select) return;
+window.NV_APPLY_BACKGROUND = key => {
+  const applied = applyBackground(key);
+  storageSet(BG_KEY, applied);
+  return applied;
+};
 
+function initBackground() {
   const stored = storageGet(BG_KEY, document.documentElement.getAttribute('data-bg') || DEFAULT_BG);
   const initial = BG_SET.has(stored) ? stored : DEFAULT_BG;
-  applyBackground(initial);
-  select.value = initial;
-
-  select.addEventListener('change', () => {
-    const next = select.value || DEFAULT_BG;
-    const applied = applyBackground(next);
-    storageSet(BG_KEY, applied);
-  });
+  const applied = applyBackground(initial);
+  storageSet(BG_KEY, applied);
 }
 
 function applyFont(key) {
@@ -833,17 +834,22 @@ async function loadPage(url, push = true) {
     window.stopConsoleAnimation?.();
     if (header && newHeader) header.replaceWith(newHeader);
     main.replaceWith(newMain);
+    if (push) {
+      history.pushState({ url: historyUrl }, '', historyUrl);
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
     document.title = newTitle;
     applyTerminalExitState();
     syncPageChrome(nextPathname);
+    initTheme();
     initRepoDescriptions();
     initClickableCards();
     initFiltering();
+    initSearchShortcut();
     initSelectUI();
     await afterNextPaint();
     await initPageFeatures();
 
-    if (push) history.pushState({ url: historyUrl }, '', historyUrl);
   } catch {
     location.href = historyUrl;
   }
@@ -886,11 +892,11 @@ async function getRepoDescription(repo) {
 }
 
 function initRepoDescriptions() {
-  const cards = document.querySelectorAll('.project-card[data-repo], .tool-card[data-repo]');
+  const cards = document.querySelectorAll('.project-card[data-repo]');
   if (!cards.length) return;
   cards.forEach(card => {
     const repo = card.getAttribute('data-repo');
-    const descEl = card.querySelector('.project-desc, .tool-desc');
+    const descEl = card.querySelector('.project-desc');
     if (!repo || !descEl) return;
     getRepoDescription(repo).then(desc => {
       descEl.textContent = desc;
@@ -921,45 +927,74 @@ function initClickableCards() {
 
 function initFiltering() {
   const searchInput = document.getElementById('project-search');
-  const tagButtons = Array.from(document.querySelectorAll('.tag-filter button'));
+  // const tagButtons = Array.from(document.querySelectorAll('.tag-filter button'));
   const cards = Array.from(document.querySelectorAll('.project-card'));
 
-  if (!searchInput || tagButtons.length === 0 || cards.length === 0) return;
+  if (!searchInput || cards.length === 0) return;
 
   const cardData = cards.map(card => {
     const title = (card.querySelector('.project-title')?.textContent || '').toLowerCase();
     const descEl = card.querySelector('.project-desc');
-    const tags = (card.dataset.tags || '')
-      .toLowerCase()
-      .split(',')
-      .map(tag => tag.trim())
-      .filter(Boolean);
-    return { card, title, descEl, tags };
+    // const tags = (card.dataset.tags || '')
+    //   .toLowerCase()
+    //   .split(',')
+    //   .map(tag => tag.trim())
+    //   .filter(Boolean);
+    return { card, title, descEl };
   });
 
   const applyFilter = () => {
     const search = searchInput.value.trim().toLowerCase();
-    const activeTags = tagButtons
-      .filter(btn => btn.classList.contains('active'))
-      .map(btn => (btn.dataset.tag || btn.textContent || '').toLowerCase());
+    // const activeTags = tagButtons
+    //   .filter(btn => btn.classList.contains('active'))
+    //   .map(btn => (btn.dataset.tag || btn.textContent || '').toLowerCase());
 
-    cardData.forEach(({ card, title, descEl, tags }) => {
+    cardData.forEach(({ card, title, descEl }) => {
       const desc = (descEl?.textContent || '').toLowerCase();
       const matchesSearch = !search || title.includes(search) || desc.includes(search);
-      const matchesTags = activeTags.length === 0 || activeTags.some(tag => tags.includes(tag));
+      // const matchesTags = activeTags.length === 0 || activeTags.some(tag => tags.includes(tag));
+      const matchesTags = true;
       card.style.display = matchesSearch && matchesTags ? '' : 'none';
     });
   };
 
   searchInput.addEventListener('input', applyFilter);
-  tagButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      btn.classList.toggle('active');
-      applyFilter();
-    });
-  });
+  // tagButtons.forEach(btn => {
+  //   btn.addEventListener('click', () => {
+  //     btn.classList.toggle('active');
+  //     applyFilter();
+  //   });
+  // });
 
   applyFilter();
+}
+
+function initSearchShortcut() {
+  const searchInput = document.querySelector('#project-search, #policy-search');
+  searchShortcutInput = searchInput instanceof HTMLElement ? searchInput : null;
+
+  const isApplePlatform = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
+  document.querySelectorAll('.nv-search-box').forEach(searchBox => {
+    const input = searchBox.querySelector('input');
+    const shortcut = searchBox.querySelector('.nv-search-shortcut');
+    if (!(input instanceof HTMLElement) || !(shortcut instanceof HTMLElement)) return;
+    const platformKey = shortcut.querySelector('kbd');
+    if (platformKey) platformKey.textContent = isApplePlatform ? '\u2318' : 'Ctrl';
+    input.setAttribute('aria-keyshortcuts', isApplePlatform ? 'Meta+K' : 'Control+K');
+    shortcut.style.display = '';
+  });
+
+  if (!searchShortcutInput || searchShortcutListener) return;
+
+  searchShortcutListener = event => {
+    const activeInput = searchShortcutInput;
+    if (!activeInput || !activeInput.isConnected) return;
+    if (event.key.toLowerCase() !== 'k' || !(event.ctrlKey || event.metaKey)) return;
+    event.preventDefault();
+    activeInput.focus({ preventScroll: true });
+    activeInput.select?.();
+  };
+  document.addEventListener('keydown', searchShortcutListener);
 }
 
 
@@ -976,6 +1011,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initRepoDescriptions();
   initClickableCards();
   initFiltering();
+  initSearchShortcut();
   initPageFeatures().catch(error => console.error(error));
   initClipboard();
   if (notFoundPath) showNotFoundError(notFoundPath);

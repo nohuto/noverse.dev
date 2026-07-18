@@ -22,10 +22,8 @@
       <span class="prompt-user">nohuto</span>
       <span class="prompt-sep">@</span>
       <span class="prompt-host">noverse</span>
-      <span class="prompt-path">:~/projects</span>
-      <span class="prompt-caret">$</span>
-      <span class="prompt-cmd">open</span>
     </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme"><span class="theme-toggle-icon" aria-hidden="true"></span></button>
     <nav class="nav-tabs" aria-label="Primary navigation">
       <a href="/">terminal</a>
       <a href="/product">product</a>
@@ -38,17 +36,19 @@
 
   <main id="main" class="no-center">
     <section class="content-box panel" data-title="projects">
-      <div class="panel-header">
-        <span class="panel-title">projects</span>
-      </div>
       <div class="panel-body">
         <h1 class="projects-heading">My Open Source Projects</h1>
         <div class="projects-divider"></div>
         <div class="project-filter">
           <div class="filter-row">
-            <input id="project-search" type="text" placeholder="type to filter" aria-label="Type to filter projects">
+            <div class="nv-search-box">
+              <span class="nv-search-icon" aria-hidden="true"></span>
+              <input id="project-search" type="text" aria-label="Search projects" aria-keyshortcuts="Control+K">
+              <kbd class="nv-search-shortcut" aria-hidden="true" style="display: none;"><kbd>Ctrl</kbd><kbd>K</kbd></kbd>
+            </div>
           </div>
 
+          <!--
           <div class="tag-filter" role="group" aria-label="Tag filters">
             <button type="button" data-tag="OS Config">OS Config</button>
             <button type="button" data-tag="NVIDIA">NVIDIA</button>
@@ -61,6 +61,7 @@
             <button type="button" data-tag="Fetch">Fetch</button>
             <button type="button" data-tag="Conversion">Conversion</button>
           </div>
+          -->
         </div>
         <div class="project-grid">
 
@@ -257,35 +258,10 @@
   <footer>
     <div class="footer-row">
       <div class="footer-left">
-        <div class="social">
-          <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-            <img decoding="async" src="main/icons/dark/github-icon.png" width="96" height="96" data-dark-src="main/icons/dark/github-icon.png" data-light-src="main/icons/light/github-icon.png" loading="lazy" alt="">
-          </a>
-          <!-- <a href="https://www.youtube.com/@5Noverse" target="_blank" rel="noopener noreferrer">
-            <img decoding="async" src="main/icons/dark/youtube-icon.png" width="96" height="96" data-dark-src="main/icons/dark/youtube-icon.png" data-light-src="main/icons/light/youtube-icon.png" loading="lazy" alt="">
-          </a> -->
-          <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard">
-            <img decoding="async" src="main/icons/dark/email-icon.svg" width="24" height="24" data-dark-src="main/icons/dark/email-icon.svg" data-light-src="main/icons/light/email-icon.svg" loading="lazy" alt="">
-          </button>
-          <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer" aria-label="Discord server">
-            <img decoding="async" src="main/icons/dark/discord-icon.png" width="100" height="100" data-dark-src="main/icons/dark/discord-icon.png" data-light-src="main/icons/light/discord-icon.png" loading="lazy" alt="">
-          </a>
-        </div>
         <div class="footer-copy">&copy; 2026 Nohuto</div>
       </div>
       <div class="footer-tools">
         <div class="footer-tools-row">
-          <div class="footer-control">
-            <label class="theme-label" for="bg-select">bg</label>
-            <select id="bg-select" name="background">
-              <option value="clear">Clear</option>
-              <option value="diamonds">Diamonds</option>
-              <option value="noise">Noise</option>
-              <option value="dots">Dots</option>
-              <option value="grid">Grid</option>
-              <option value="starfield" data-animated="true">Starfield</option>
-            </select>
-          </div>
           <div class="footer-control">
             <label class="theme-label" for="theme-select">theme</label>
             <select id="theme-select" name="theme">
@@ -320,6 +296,20 @@
             </select>
           </div>
         </div>
+      </div>
+      <div class="social">
+        <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+          <span class="social-icon social-icon-github" aria-hidden="true"></span>
+        </a>
+        <!-- <a href="https://www.youtube.com/@5Noverse" target="_blank" rel="noopener noreferrer">
+          <img decoding="async" src="main/icons/dark/youtube-icon.png" width="96" height="96" data-dark-src="main/icons/dark/youtube-icon.png" data-light-src="main/icons/light/youtube-icon.png" loading="lazy" alt="">
+        </a> -->
+        <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard">
+          <span class="social-icon social-icon-email" aria-hidden="true"></span>
+        </button>
+        <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer" aria-label="Discord server">
+          <span class="social-icon social-icon-discord" aria-hidden="true"></span>
+        </a>
       </div>
     </div>
   </footer>

@@ -28,9 +28,6 @@ const shouldRenderSearch =
       <span class="prompt-user">nohuto</span>
       <span class="prompt-sep">@</span>
       <span class="prompt-host">noverse</span>
-      <span class="prompt-path">:~/docs</span>
-      <span class="prompt-caret">$</span>
-      <span class="prompt-cmd">open</span>
     </a>
   </div>
   <div class="sl-flex print:hidden">
@@ -120,16 +117,7 @@ const shouldRenderSearch =
       color: var(--sl-color-accent);
     }
 
-    .prompt-path {
-      color: var(--sl-color-gray-2);
-    }
-
-    .prompt-caret {
-      color: var(--sl-color-green);
-    }
-
-    .prompt-sep,
-    .prompt-cmd {
+    .prompt-sep {
       color: var(--sl-color-text);
     }
 
@@ -138,21 +126,6 @@ const shouldRenderSearch =
     .prompt-line:focus-visible .prompt-user,
     .prompt-line:focus-visible .prompt-host {
       color: var(--sl-color-accent-high);
-    }
-
-    .prompt-line:hover .prompt-caret,
-    .prompt-line:focus-visible .prompt-caret {
-      color: var(--sl-color-green-high);
-    }
-
-    .prompt-line:hover .prompt-path,
-    .prompt-line:focus-visible .prompt-path {
-      color: var(--sl-color-gray-1);
-    }
-
-    .prompt-line:hover .prompt-cmd,
-    .prompt-line:focus-visible .prompt-cmd {
-      color: var(--sl-color-white);
     }
 
     .prompt-line:focus-visible {
@@ -214,14 +187,6 @@ const shouldRenderSearch =
     .docs-home-icon :global(svg) {
       fill: none;
       stroke: currentColor;
-    }
-
-    @media (max-width: 40rem) {
-      .prompt-path,
-      .prompt-caret,
-      .prompt-cmd {
-        display: none;
-      }
     }
 
     @media (min-width: 50rem) {

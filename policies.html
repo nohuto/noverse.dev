@@ -24,10 +24,8 @@
       <span class="prompt-user">nohuto</span>
       <span class="prompt-sep">@</span>
       <span class="prompt-host">noverse</span>
-      <span class="prompt-path">:~/policies</span>
-      <span class="prompt-caret">$</span>
-      <span class="prompt-cmd">open</span>
     </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme"><span class="theme-toggle-icon" aria-hidden="true"></span></button>
     <nav class="nav-tabs" aria-label="Primary navigation">
       <a href="/">terminal</a>
       <a href="/product">product</a>
@@ -40,9 +38,6 @@
 
   <main id="main" class="no-center policies-main">
     <section class="content-box panel policy-hide-detail" id="policy-explorer" data-title="policies" aria-busy="true">
-      <div class="panel-header">
-        <span class="panel-title">admx definitions</span>
-      </div>
       <div class="panel-body">
         <div class="policy-intro">
           <div class="policy-title-row">
@@ -55,7 +50,11 @@
         <div class="policy-toolbar">
           <div class="policy-search-field">
             <div class="policy-search-row">
-              <input id="policy-search" type="text" autocomplete="off" spellcheck="false" placeholder="search policy, registry path, value, explanation">
+              <div class="nv-search-box">
+                <span class="nv-search-icon" aria-hidden="true"></span>
+                <input id="policy-search" type="text" autocomplete="off" spellcheck="false" aria-label="Search policies" aria-keyshortcuts="Control+K">
+                <kbd class="nv-search-shortcut" aria-hidden="true" style="display: none;"><kbd>Ctrl</kbd><kbd>K</kbd></kbd>
+              </div>
               <button id="policy-settings" type="button" aria-label="Search settings" title="Search settings">
                 <svg class="bindiff-settings-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -210,35 +209,10 @@
   <footer>
     <div class="footer-row">
       <div class="footer-left">
-        <div class="social">
-          <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-            <img decoding="async" src="main/icons/dark/github-icon.png" width="96" height="96" data-dark-src="main/icons/dark/github-icon.png" data-light-src="main/icons/light/github-icon.png" loading="lazy" alt="">
-          </a>
-          <!-- <a href="https://www.youtube.com/@5Noverse" target="_blank" rel="noopener noreferrer">
-            <img decoding="async" src="main/icons/dark/youtube-icon.png" width="96" height="96" data-dark-src="main/icons/dark/youtube-icon.png" data-light-src="main/icons/light/youtube-icon.png" loading="lazy" alt="">
-          </a> -->
-          <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard">
-            <img decoding="async" src="main/icons/dark/email-icon.svg" width="24" height="24" data-dark-src="main/icons/dark/email-icon.svg" data-light-src="main/icons/light/email-icon.svg" loading="lazy" alt="">
-          </button>
-          <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer" aria-label="Discord server">
-            <img decoding="async" src="main/icons/dark/discord-icon.png" width="100" height="100" data-dark-src="main/icons/dark/discord-icon.png" data-light-src="main/icons/light/discord-icon.png" loading="lazy" alt="">
-          </a>
-        </div>
         <div class="footer-copy">&copy; 2026 Nohuto</div>
       </div>
       <div class="footer-tools">
         <div class="footer-tools-row">
-          <div class="footer-control">
-            <label class="theme-label" for="bg-select">bg</label>
-            <select id="bg-select" name="background">
-              <option value="clear">Clear</option>
-              <option value="diamonds">Diamonds</option>
-              <option value="noise">Noise</option>
-              <option value="dots">Dots</option>
-              <option value="grid">Grid</option>
-              <option value="starfield" data-animated="true">Starfield</option>
-            </select>
-          </div>
           <div class="footer-control">
             <label class="theme-label" for="theme-select">theme</label>
             <select id="theme-select" name="theme">
@@ -273,6 +247,20 @@
             </select>
           </div>
         </div>
+      </div>
+      <div class="social">
+        <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+          <span class="social-icon social-icon-github" aria-hidden="true"></span>
+        </a>
+        <!-- <a href="https://www.youtube.com/@5Noverse" target="_blank" rel="noopener noreferrer">
+          <img decoding="async" src="main/icons/dark/youtube-icon.png" width="96" height="96" data-dark-src="main/icons/dark/youtube-icon.png" data-light-src="main/icons/light/youtube-icon.png" loading="lazy" alt="">
+        </a> -->
+        <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard">
+          <span class="social-icon social-icon-email" aria-hidden="true"></span>
+        </button>
+        <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer" aria-label="Discord server">
+          <span class="social-icon social-icon-discord" aria-hidden="true"></span>
+        </a>
       </div>
     </div>
   </footer>

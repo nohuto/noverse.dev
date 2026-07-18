@@ -1,53 +1,6 @@
 /* Copyright (c) 2026 Nohuto */
 (function attachTerminal(global) {
   'use strict';
-const BIN_DIFF_RELEASE_LINKS = Object.freeze([
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-21H2',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-22H2',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/11-26H1',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1507',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1511',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1607',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1703',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1709',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1803',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1809',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1903',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/1909',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/2004',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/20H2',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/21H1',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/21H2',
-  'https://github.com/nohuto/decompiled-pseudocode/tree/main/22H2'
-]);
-const PROJECT_LIST = [
-  { title: 'Windows Configuration', repo: 'nohuto/win-config' },
-  { title: 'RegKit', repo: 'nohuto/regkit' },
-  { title: 'WinDbg Notes', repo: 'nohuto/windbg-notes' },
-  { title: 'Decompiled Pseudocode', repo: 'nohuto/decompiled-pseudocode' },
-  { title: 'AES CBC Encryption', repo: 'nohuto/aes-cbc' },
-  { title: 'Bitmask Calculator', repo: 'nohuto/bitmask-calc' },
-  { title: 'Blocklist Manager', repo: 'nohuto/blocklist-mgr' },
-  { title: 'Component Manager', repo: 'nohuto/comp-mgr' },
-  { title: 'App Guides', repo: 'nohuto/app-guides' },
-  { title: 'Game Tools', repo: 'nohuto/game-tools' },
-  { title: 'ADMX Parser', repo: 'nohuto/admx-parser' },
-  { title: 'PowerShell Minifier', repo: 'nohuto/minifier' },
-  { title: 'Void Obfuscation', repo: 'nohuto/void' },
-  { title: 'Base64 Encoding / Character Obfuscation', repo: 'nohuto/b64-char' },
-  { title: 'strings2 TUI', repo: 'nohuto/strings2-tui' },
-  { title: 'Base64 Reversal & Character Obfuscation', repo: 'nohuto/b64rev' },
-  { title: 'NVFetch', repo: 'nohuto/nvfetch' },
-  { title: 'PS12bat', repo: 'nohuto/ps12bat' },
-  { title: 'NVAPI CLI', repo: 'nohuto/nvapi-cli' },
-  { title: 'DISM WSIM', repo: 'nohuto/dism-wsim' },
-  { title: 'reg2bat', repo: 'nohuto/reg2bat' },
-  { title: 'PBO2 UV Guide', repo: 'nohuto/pbo2-uv' },
-  { title: 'GPU OC/UV Guide', repo: 'nohuto/gpu-oc-uv' }
-];
 
 let consoleHistory = [];
 let consoleHistoryIndex = -1;
@@ -67,6 +20,9 @@ const ASCII_ART = [
   ' |\\  |  (   | \\ \\ /   __/  |   \\__ \\   __/',
   '_| \\_| \\___/   \\_/  \\___| _|   ____/ \\___|'
 ];
+
+const GITHUB_URL = 'https://github.com/nohuto';
+const DISCORD_URL = 'https://discord.noverse.dev';
 
 const clampNumber = (value, min, max) => Math.min(Math.max(min, value), max);
 
@@ -448,6 +404,16 @@ function initConsole() {
   const measureMarker = document.createElement('span');
   measureMarker.textContent = '\u200b';
   measure.append(measureText, measureMarker);
+
+  const setInputActive = active => {
+    consoleRoot.dataset.inputActive = active ? 'true' : 'false';
+  };
+
+  const outputHasSelection = () => {
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed || !selection.toString()) return false;
+    return output.contains(selection.anchorNode) || output.contains(selection.focusNode);
+  };
 
   const invalidatePromptMetrics = () => {
     promptMetricsDirty = true;
@@ -1067,7 +1033,7 @@ function initConsole() {
 
   const listDirs = () => {
     if (currentPath === rootPath) {
-      return ['./product', './projects', './bin-diff', './policies', './docs'];
+      return ['product', 'projects', 'bin-diff', 'policies', 'docs'];
     }
     return ['..'];
   };
@@ -1110,7 +1076,6 @@ function initConsole() {
     dir: 'ls',
     ll: 'ls',
     la: 'ls',
-    terminal: 'cd terminal',
     cprod: 'cd product',
     cproj: 'cd projects',
     cbindiff: 'cd bin-diff',
@@ -1138,9 +1103,8 @@ function initConsole() {
   };
 
   const listBackgrounds = () => {
-    const select = document.getElementById('bg-select');
-    if (!select) return [];
-    return Array.from(select.options).map(option => option.value);
+    const keys = window.NV_BACKGROUND_KEYS;
+    return Array.isArray(keys) ? keys.slice() : [];
   };
 
   const commands = {
@@ -1150,24 +1114,16 @@ function initConsole() {
         ['help', 'show this command list'],
         ['about', 'about me + links'],
         ['contact', 'email + discord'],
-        ['product', 'winconfig information'],
-        ['projects', 'list projects with repo links'],
-        ['docs', 'documentation sections'],
-        ['bindiff', 'list decompiled-pseudocode links (used by bin-diff section)'],
-        ['policies', 'list ADMX parser links (used by policies section)'],
-        ['bitmask', 'minimal (32 bit) bitmask calculator'],
-        ['calc', 'yet minimal scientific calculator'],
-        ['ls', 'list available directories'],
-        ['cd <path>', 'change directory'],
-        ['alias', 'list built-in aliases'],
+        ['github', 'redirection to profile'],
+        ['discord', 'redirection to server'],
+        ['bitmask', '32 bit bitmask calculator'],
+        ['calc', 'scientific calculator'],
         ['bg', 'list background names'],
         ['bg <name>', 'set background'],
         ['themes', 'list theme names'],
         ['theme <name>', 'set theme'],
         ['ascii', 'print the banner'],
-        ['animation [x y]', 'some cool animation (x/y = pixels)'],
-        ['clear', 'clear the terminal'],
-        ['exit', 'exit (hide) terminal, reverted on site refresh']
+        ['animation [x y]', 'some cool animation (x,y = pixels)']
       ];
       const width = entries.reduce((max, [cmd]) => Math.max(max, cmd.length), 0);
       entries.forEach(([cmd, desc]) => {
@@ -1182,77 +1138,9 @@ function initConsole() {
       addKeyValueLines([
         ['name', 'nohuto (Discord: ".nohuto", 836853057235976232)'],
         ['proprietor', 'Noverse'],
-        ['github', 'https://github.com/nohuto'],
+        ['github', GITHUB_URL],
         /*['youtube', 'https://www.youtube.com/@5Noverse'],*/
-        ['discord', 'https://discord.noverse.dev']
-      ]);
-    },
-    product: () => {
-      addLine('product: winconfig');
-      addKeyValueLines([
-        ['price', '9.99 EUR (lifetime)'],
-        ['includes updates + discord role']
-      ]);
-      addLine('features:');
-      addIndentedLines([
-        'transparent execution logs',
-        'dynamic state detection',
-        'per-option documentation (cd ./docs/win-config)',
-        'extensive customization controls'
-      ]);
-      addLine('terms:');
-      addKeyValueLines([
-        ['data privacy', 'hardware identifiers only for licensing'],
-        ['usage', 'personal license only, no resale'],
-        ['refunds', 'only before registration/role assignment'],
-        ['license', 'hardware-bound']
-      ]);
-    },
-    docs: () => {
-      addLine('sections:');
-      addKeyValueLines([
-        ['overview', 'docs/'],
-        ['winconfig', 'docs/win-config/'],
-        ['system', 'docs/win-config/system/'],
-        ['visibility', 'docs/win-config/visibility/'],
-        ['peripheral', 'docs/win-config/peripheral/'],
-        ['power', 'docs/win-config/power/'],
-        ['privacy', 'docs/win-config/privacy/'],
-        ['network', 'docs/win-config/network/'],
-        ['security', 'docs/win-config/security/'],
-        ['nvidia', 'docs/win-config/nvidia/'],
-        ['misc', 'docs/win-config/misc/'],
-        ['policies', 'docs/win-config/policies/'],
-        ['affinities', 'docs/win-config/affinities/'],
-        ['regkit', 'docs/regkit/'],
-        ['app-guides', 'docs/app-guides/'],
-        ['windbg-notes', 'docs/windbg-notes/'],
-      ]);
-    },
-    bindiff: () => {
-      addLine('decompiled-pseudocode folders:');
-      const items = [{
-        release: 'repo',
-        link: 'https://github.com/nohuto/decompiled-pseudocode'
-      }].concat(BIN_DIFF_RELEASE_LINKS.map(link => ({
-        release: decodeURIComponent((link.split('/').pop() || '').trim()),
-        link
-      })));
-      const width = items.reduce((max, item) => Math.max(max, item.release.length), 0);
-      items.forEach(item => {
-        addLineParts([
-          { text: `  ${item.release.padEnd(width + 2)}` },
-          { text: item.link, className: 'console-comment' }
-        ]);
-      });
-    },
-    policies: () => {
-      addLine('admx-parser:');
-      addKeyValueLines([
-        ['repo', 'https://github.com/nohuto/admx-parser'],
-        ['policies.json', 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policies.json'],
-        ['policies.yaml', 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policies.yaml'],
-        ['policyCategories.json', 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policyCategories.json']
+        ['discord', DISCORD_URL]
       ]);
     },
     bitmask: openBitmaskTool,
@@ -1260,9 +1148,15 @@ function initConsole() {
     contact: () => {
       addLine('contact:');
       addKeyValueLines([
-        ['email', 'use the footer icon to copy'],
-        ['discord', 'https://discord.noverse.dev']
+        ['email', 'use the footer icon to copy it'],
+        ['discord', DISCORD_URL]
       ]);
+    },
+    github: () => {
+      location.href = GITHUB_URL;
+    },
+    discord: () => {
+      location.href = DISCORD_URL;
     },
     ascii: () => {
       ASCII_ART.forEach(line => addLine(line, 'art'));
@@ -1289,42 +1183,28 @@ function initConsole() {
       updatePrompt();
       navigateToPath(nextPath);
     },
-    alias: args => {
-      const raw = args.join(' ').trim();
-      if (raw) {
-        addLine('custom aliases are disabled, only preconfigured aliases are available.', 'muted');
-      }
-      addLine('aliases:', 'muted');
-      const entries = Object.entries(aliases);
-      const width = entries.reduce((max, [name]) => Math.max(max, name.length), 0);
-      entries.forEach(([name, value]) => {
-        addLineParts([
-          { text: `  ${name.padEnd(width + 2)}` },
-          { text: value, className: 'console-comment' }
-        ]);
-      });
-    },
     themes: () => {
       addLine('themes:', 'muted');
       addIndentedLines(listThemes());
     },
     bg: args => {
-      const select = document.getElementById('bg-select');
-      if (!select) return;
+      const backgrounds = listBackgrounds();
+      if (!backgrounds.length) return;
       if (!args.length) {
-        addLine(`current bg: ${select.value}`);
+        addLine(`current bg: ${document.documentElement.getAttribute('data-bg') || 'dots'}`);
         addLine('backgrounds:', 'muted');
-        addIndentedLines(listBackgrounds());
+        addIndentedLines(backgrounds);
         return;
       }
       const next = args.join(' ').trim();
-      if (!hasSelectOption(select, next)) {
+      if (!backgrounds.includes(next)) {
         addLine(`bg not found: ${next}`, 'muted');
         return;
       }
-      select.value = next;
-      select.dispatchEvent(new Event('change', { bubbles: true }));
-      addLine(`bg set: ${next}`);
+      const applied = typeof window.NV_APPLY_BACKGROUND === 'function'
+        ? window.NV_APPLY_BACKGROUND(next)
+        : next;
+      addLine(`bg set: ${applied}`);
     },
     theme: args => {
       const select = document.getElementById('theme-select');
@@ -1364,20 +1244,6 @@ function initConsole() {
       applyTerminalExitState();
       loadPage('/projects');
     },
-    projects: () => {
-      addLine('projects:');
-      const items = PROJECT_LIST.map(project => ({
-        title: project.title,
-        link: `https://github.com/${project.repo}`
-      }));
-      const width = items.reduce((max, item) => Math.max(max, item.title.length), 0);
-      items.forEach(item => {
-        addLineParts([
-          { text: `  ${item.title.padEnd(width + 2)}` },
-          { text: item.link, className: 'console-comment' }
-        ]);
-      });
-    }
   };
   const commandNames = Object.keys(commands).sort((a, b) => a.localeCompare(b));
   const aliasNames = Object.keys(aliases).sort((a, b) => a.localeCompare(b));
@@ -1424,6 +1290,13 @@ function initConsole() {
   ['input', 'keyup', 'click', 'focus'].forEach(eventName => {
     input.addEventListener(eventName, scheduleCaretUpdate);
   });
+  input.addEventListener('focus', () => {
+    setInputActive(true);
+    scheduleCaretUpdate();
+  });
+  input.addEventListener('blur', () => {
+    setInputActive(false);
+  });
 
   input.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -1463,8 +1336,15 @@ function initConsole() {
     }
   });
 
+  output.addEventListener('pointerdown', event => {
+    if (event.button !== 0) return;
+    input.blur();
+    setInputActive(false);
+  });
+
   output.addEventListener('click', event => {
     if (openConsoleUrlFromEvent(event)) return;
+    if (outputHasSelection()) return;
     input.focus();
   });
 
@@ -1492,14 +1372,14 @@ function initConsole() {
 
   requestAnimationFrame(() => {
     input.focus({ preventScroll: true });
+    setInputActive(true);
     scheduleCaretUpdate();
   });
 
   withLineBatch(() => {
     ASCII_ART.forEach(line => addLine(line, 'art'));
     addLine(' ');
-    addLine('Welcome to the terminal, use Tab or Right Arrow for autocompletion (CTRL + mouse click opens links).', 'muted');
-    addLine('Use the top sections to navigate if the terminal feels unfamiliar.', 'muted');
+    addLine('A yet minimal terminal for navigation, customization, and webtools. Use the top sections if it feels unfamiliar.', 'muted');
     addLine(' ');
     commands.help();
   });

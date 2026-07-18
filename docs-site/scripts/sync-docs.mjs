@@ -370,7 +370,7 @@ function normalizeGeneratedMarkdown(markdown) {
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g, '/docs/app-guides/')
-    .replace(/https:\/\/www\.noverse\.dev\/(product|projects|bin-diff|policies)\.html/g, 'https://www.noverse.dev/$1')
+    .replace(/https:\/\/www\.noverse\.dev\/(product|projects|diff|policies)\.html/g, 'https://www.noverse.dev/$1')
     .replace(/\]\(\((https?:\/\/[^)\s]+)\)\)/gi, ']($1)')
     .replace(/\[([^\]]+)\]\(\[([^\]]+)\]\(([^)]+)\)\)/g, '[$1]($3)');
 }

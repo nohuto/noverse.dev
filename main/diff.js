@@ -138,6 +138,7 @@
     const rightSelect = document.getElementById('diff-right-release');
     const moduleSelect = document.getElementById('diff-module');
     const nameSelect = document.getElementById('diff-name');
+    const nameLabel = document.querySelector('label[for="diff-name"]');
     const kindButtons = Array.from(document.querySelectorAll('#diff-kind-toggle button[data-kind]'));
     const displayButton = document.getElementById('diff-display');
     const runButton = document.getElementById('diff-run');
@@ -158,7 +159,7 @@
     const settingsDone = document.getElementById('diff-settings-done');
     const settingsReset = document.getElementById('diff-settings-reset');
 
-    if (!leftSelect || !rightSelect || !moduleSelect || !nameSelect || !kindButtons.length || !displayButton || !runButton || !viewTools || !viewButtons.length || !swapButton || !settingsButton || !maximizeButton || !output || !links || !leftLink || !rightLink || !settingsModal || !settingsDialog || !settingsHeader || !settingsBody || !settingsClose || !settingsDone || !settingsReset) return;
+    if (!leftSelect || !rightSelect || !moduleSelect || !nameSelect || !nameLabel || !kindButtons.length || !displayButton || !runButton || !viewTools || !viewButtons.length || !swapButton || !settingsButton || !maximizeButton || !output || !links || !leftLink || !rightLink || !settingsModal || !settingsDialog || !settingsHeader || !settingsBody || !settingsClose || !settingsDone || !settingsReset) return;
 
     let activeKind = 'type';
     let activeSource = null;
@@ -239,6 +240,9 @@
     const setKind = kind => {
       activeKind = SOURCE_ORDER.includes(kind) ? kind : 'type';
       activeSource = global.NVDiffSources[activeKind];
+      const nameText = activeKind === 'pseudocode' ? 'Function' : 'Type';
+      nameLabel.textContent = nameText;
+      nameSelect.closest('.select-ui')?.querySelector('.select-trigger')?.setAttribute('aria-label', nameText);
       kindButtons.forEach(button => {
         const active = button.dataset.kind === activeKind;
         button.classList.toggle('is-active', active);

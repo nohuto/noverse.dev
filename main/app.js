@@ -26,7 +26,7 @@ const MAIN_PAGE_ROUTES = Object.freeze([
   { slug: 'terminal', clean: '/', file: '/index.html' },
   { slug: 'product', clean: '/product', file: '/product.html' },
   { slug: 'projects', clean: '/projects', file: '/projects.html' },
-  { slug: 'bin-diff', clean: '/bin-diff', file: '/bin-diff.html' },
+  { slug: 'diff', clean: '/diff', file: '/diff.html' },
   { slug: 'policies', clean: '/policies', file: '/policies.html' }
 ]);
 const MAIN_PAGE_ROUTE_ALIASES = new Map();
@@ -44,7 +44,7 @@ const SELECT_SEARCH_RENDER_LIMIT_DEFAULT = 300;
 const PAGE_FEATURES = Object.freeze([
   { rootId: 'console', src: 'main/min/terminal.min.js', initName: 'initConsole', deferInit: true },
   { rootId: 'policy-explorer', src: 'main/min/policies.min.js', styleHref: 'main/min/tools.min.css', initName: 'initPolicyExplorer', deferInit: true },
-  { rootId: 'bin-diff-app', src: 'main/min/bin-diff.min.js', styleHref: 'main/min/tools.min.css', initName: 'initBinDiff', deferInit: true }
+  { rootId: 'diff-app', src: 'main/min/diff.min.js', styleHref: 'main/min/tools.min.css', initName: 'initDiff', deferInit: true }
 ]);
 const SYSTEM_THEME_QUERY = '(prefers-color-scheme: light)';
 
@@ -254,6 +254,8 @@ function initSelectUI() {
     let searchInput = null;
     let menuMeta = null;
     let menuMetaText = null;
+    let limitInput = null;
+    let unlimitedInput = null;
     if (isSearchable) {
       searchInput = document.createElement('input');
       searchInput.type = 'text';
@@ -267,6 +269,26 @@ function initSelectUI() {
       menuMetaText = document.createElement('span');
       menuMetaText.className = 'select-menu-meta-text';
       menuMeta.appendChild(menuMetaText);
+
+      const limitControls = document.createElement('div');
+      limitControls.className = 'select-limit-controls';
+      const limitLabel = document.createElement('label');
+      limitLabel.className = 'select-limit-label';
+      limitLabel.textContent = 'Limit';
+      limitInput = document.createElement('input');
+      limitInput.type = 'number';
+      limitInput.className = 'select-limit-input';
+      limitInput.min = '1';
+      limitInput.step = '1';
+      limitLabel.appendChild(limitInput);
+      const unlimitedLabel = document.createElement('label');
+      unlimitedLabel.className = 'select-limit-toggle';
+      unlimitedInput = document.createElement('input');
+      unlimitedInput.type = 'checkbox';
+      unlimitedLabel.appendChild(unlimitedInput);
+      unlimitedLabel.appendChild(document.createTextNode('Unlimited'));
+      limitControls.append(limitLabel, unlimitedLabel);
+      menuMeta.appendChild(limitControls);
     }
 
     const list = document.createElement('div');
@@ -286,6 +308,19 @@ function initSelectUI() {
       const parsed = Number.parseInt(raw, 10);
       if (!Number.isFinite(parsed) || parsed < 1) return SELECT_SEARCH_RENDER_LIMIT_DEFAULT;
       return parsed;
+    };
+
+    const syncLimitControls = () => {
+      if (!limitInput || !unlimitedInput) return;
+      const limit = getSearchRenderLimit();
+      const unlimited = !Number.isFinite(limit);
+      unlimitedInput.checked = unlimited;
+      limitInput.disabled = unlimited;
+      if (!unlimited) {
+        limitInput.value = String(limit);
+      } else if (!limitInput.value) {
+        limitInput.value = String(SELECT_SEARCH_RENDER_LIMIT_DEFAULT);
+      }
     };
 
     const escapeSearchRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -355,6 +390,7 @@ function initSelectUI() {
       list.appendChild(fragment);
 
       if (menuMetaText) {
+        syncLimitControls();
         if (!filteredOptions.length) {
           menuMetaText.textContent = 'No matches';
         } else if (isSearchable && filteredOptions.length > optionsToRender.length) {
@@ -364,6 +400,13 @@ function initSelectUI() {
         }
       }
       optionsDirty = false;
+    };
+
+    const setSearchRenderLimit = value => {
+      const parsed = Number.parseInt(String(value || ''), 10);
+      select.dataset.searchLimit = Number.isFinite(parsed) && parsed > 0 ? String(parsed) : String(SELECT_SEARCH_RENDER_LIMIT_DEFAULT);
+      buildOptions(searchValue);
+      updateActive();
     };
 
     const updateActive = () => {
@@ -446,6 +489,24 @@ function initSelectUI() {
         searchValue = searchInput.value;
         buildOptions(searchValue);
         updateActive();
+      });
+    }
+    if (limitInput && unlimitedInput) {
+      limitInput.addEventListener('input', () => {
+        if (unlimitedInput.checked || !limitInput.value) return;
+        setSearchRenderLimit(limitInput.value);
+      });
+      limitInput.addEventListener('change', () => {
+        if (!unlimitedInput.checked) setSearchRenderLimit(limitInput.value);
+      });
+      unlimitedInput.addEventListener('change', () => {
+        if (unlimitedInput.checked) {
+          select.dataset.searchLimit = 'all';
+          buildOptions(searchValue);
+          updateActive();
+          return;
+        }
+        setSearchRenderLimit(limitInput.value);
       });
     }
 

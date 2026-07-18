@@ -1025,7 +1025,7 @@ function initConsole() {
       return docsTail ? `${DOCS_ROOT_PATH}/${docsTail}` : DOCS_ROOT_PATH;
     }
 
-    if (segments.length === 1 && ['product', 'projects', 'bin-diff', 'policies'].includes(segments[0])) {
+    if (segments.length === 1 && ['product', 'projects', 'diff', 'policies'].includes(segments[0])) {
       return `${rootPath}/${segments[0]}`;
     }
     return null;
@@ -1033,7 +1033,7 @@ function initConsole() {
 
   const listDirs = () => {
     if (currentPath === rootPath) {
-      return ['product', 'projects', 'bin-diff', 'policies', 'docs'];
+      return ['product', 'projects', 'diff', 'policies', 'docs'];
     }
     return ['..'];
   };
@@ -1042,7 +1042,7 @@ function initConsole() {
     { slug: 'terminal', clean: '/' },
     { slug: 'product', clean: '/product' },
     { slug: 'projects', clean: '/projects' },
-    { slug: 'bin-diff', clean: '/bin-diff' },
+    { slug: 'diff', clean: '/diff' },
     { slug: 'policies', clean: '/policies' }
   ]).map(route => [route.slug, route.clean]));
 
@@ -1078,7 +1078,7 @@ function initConsole() {
     la: 'ls',
     cprod: 'cd product',
     cproj: 'cd projects',
-    cbindiff: 'cd bin-diff',
+    cdiff: 'cd diff',
     cpolicies: 'cd policies',
     cdocs: 'cd docs',
     cabout: 'about',

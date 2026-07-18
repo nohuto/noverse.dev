@@ -6,7 +6,7 @@
     { clean: '/', file: '/index.html' },
     { clean: '/product', file: '/product.html' },
     { clean: '/projects', file: '/projects.html' },
-    { clean: '/bin-diff', file: '/bin-diff.html' },
+    { clean: '/diff', file: '/diff.html' },
     { clean: '/policies', file: '/policies.html' }
   ];
   const routeAliases = new Map();

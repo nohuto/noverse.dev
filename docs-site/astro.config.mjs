@@ -132,7 +132,7 @@ export default defineConfig({
         starlightCodeblockFullscreen(),
         starlightImageZoom(),
         starlightLinksValidator({
-          exclude: ['https://www.noverse.dev/bin-diff'],
+          exclude: ['https://www.noverse.dev/diff'],
           failOnError: false,
           sameSitePolicy: 'validate',
         }),

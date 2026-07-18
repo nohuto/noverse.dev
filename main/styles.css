@@ -1464,13 +1464,6 @@ main {
   mask-image: var(--theme-sun-icon);
 }
 
-.theme-label {
-  font-size: 0.86rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
 select,
 input,
 button {
@@ -1563,6 +1556,12 @@ select option:active {
 
 .select-ui.open .select-trigger::after {
   transform: translateY(-50%) rotate(180deg);
+}
+
+.select-trigger:hover,
+.select-trigger:focus-visible,
+.select-ui.open .select-trigger {
+  border-color: var(--accent);
 }
 
 .select-menu {
@@ -2011,9 +2010,9 @@ video {
 .nv-search-box {
   position: relative;
   display: grid;
-  grid-template-columns: 18px minmax(0, 1fr) auto;
+  grid-template-columns: 29px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 7px;
+  gap: 0;
   width: 100%;
   height: 26px;
   border: 1px solid var(--border);
@@ -2554,7 +2553,7 @@ footer {
 }
 
 .footer-tools {
-  --footer-control-height: 24px;
+  --footer-select-height: 24px;
   grid-column: 3;
   grid-row: 1;
   display: flex;
@@ -2568,7 +2567,7 @@ footer {
 .footer-tools-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0;
   flex-wrap: nowrap;
   justify-content: flex-end;
 }
@@ -2580,16 +2579,10 @@ footer {
   letter-spacing: 0.14em;
 }
 
-.footer-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .footer-tools select,
 .footer-tools .select-ui,
 .footer-tools .select-trigger {
-  height: var(--footer-control-height);
+  height: var(--footer-select-height);
 }
 
 .footer-tools select,
@@ -2802,17 +2795,6 @@ footer {
   }
 
 
-}
-
-
-@media (max-width: 620px) {
-  .footer-tools .theme-label {
-    display: none;
-  }
-
-  .footer-control {
-    gap: 0;
-  }
 }
 
 

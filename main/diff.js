@@ -80,7 +80,7 @@
   const ensureSource = async kind => {
     const sourceKind = SOURCE_ORDER.includes(kind) ? kind : 'type';
     if (!global.NVDiffSources?.[sourceKind]) await ensureScript(DRIVER_SCRIPTS[sourceKind]);
-    if (!global.NVDiffSources?.[sourceKind]) throw new Error(`Diff source did not register: ${sourceKind}`);
+    if (!global.NVDiffSources?.[sourceKind]) throw new Error(`Source didnt register: ${sourceKind}`);
   };
 
   const ensureDiffAssets = async source => {
@@ -211,8 +211,8 @@
       root.classList.toggle('bindiff-maximized', next);
       document.body.classList.toggle('bindiff-maximized', next);
       maximizeButton.setAttribute('aria-pressed', next ? 'true' : 'false');
-      maximizeButton.setAttribute('aria-label', next ? 'Restore diff size' : 'Maximize diff');
-      maximizeButton.title = next ? 'Restore diff size' : 'Maximize diff';
+      maximizeButton.setAttribute('aria-label', next ? 'Restore size' : 'Maximize');
+      maximizeButton.title = next ? 'Restore size' : 'Maximize';
     };
 
     const setFontSize = (size, persist = true) => {

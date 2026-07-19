@@ -6,6 +6,7 @@
   const RAW_BASE = 'https://raw.githubusercontent.com/nohuto/type-layouts/main';
   const BLOB_BASE = 'https://github.com/nohuto/type-layouts/blob/main';
   const TREE_BASE = 'https://api.github.com/repos/nohuto/type-layouts/git/trees';
+  const MANIFEST_BASE = 'main/data/diff/type-layouts';
   const CACHE_KEY = 'nv-diff-type-name-cache-v1';
   const SETTINGS_KEY = 'nv-diff-type-settings-v1';
   const CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 7;
@@ -17,6 +18,7 @@
   const COLLATOR = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
   const entriesCache = new Map();
   const nameCache = new Map();
+  let manifestPromise;
 
   const encodePath = parts => parts.filter(Boolean).map(encodeURIComponent).join('/');
   const joinPath = parts => parts.filter(Boolean).join('/');
@@ -47,6 +49,46 @@
     return response.json();
   };
 
+  const fetchManifest = url => fetch(url, { cache: 'force-cache' })
+    .then(response => response.ok ? response.json() : null)
+    .catch(() => null);
+
+  const fetchManifestText = url => fetch(url, { cache: 'force-cache' })
+    .then(response => response.ok ? response.text() : null)
+    .catch(() => null);
+
+  const decodeNames = text => {
+    if (typeof text !== 'string') return null;
+    let previous = '';
+    return text.split('\n').filter(Boolean).map(row => {
+      const split = row.indexOf('\t');
+      const prefix = Number(row.slice(0, split));
+      const name = previous.slice(0, prefix) + row.slice(split + 1);
+      previous = name;
+      return name;
+    });
+  };
+
+  const manifest = () => {
+    manifestPromise ||= fetchManifest(`${MANIFEST_BASE}/index.json`).then(json => ({
+      releases: Array.isArray(json?.releases) ? json.releases : [],
+      modules: json?.modules && typeof json.modules === 'object' ? json.modules : {}
+    }));
+    return manifestPromise;
+  };
+
+  const manifestDirectories = async path => {
+    const data = await manifest();
+    if (path.length === 0) return data.releases;
+    if (path.length === 1) return Array.isArray(data.modules[path[0]]) ? data.modules[path[0]] : [];
+    return [];
+  };
+
+  const manifestNames = async path => {
+    if (path.length !== 2) return null;
+    return decodeNames(await fetchManifestText(`${MANIFEST_BASE}/names/${encodePath(path)}.txt`));
+  };
+
   const fetchEntries = path => {
     const key = joinPath(path);
     if (!entriesCache.has(key)) {
@@ -69,6 +111,9 @@
   };
 
   const listDirectories = async path => {
+    const manifestResult = await manifestDirectories(path);
+    if (manifestResult.length) return manifestResult.slice().sort((a, b) => COLLATOR.compare(a, b));
+
     const entries = await fetchEntries(path);
     return entries
       .filter(entry => entry?.type === 'dir' && typeof entry.name === 'string' && !entry.name.startsWith('.'))
@@ -119,6 +164,13 @@
     if (stored) {
       nameCache.set(key, stored);
       return fromNames(stored);
+    }
+
+    const manifestResult = await manifestNames(path);
+    if (manifestResult) {
+      nameCache.set(key, manifestResult);
+      saveNames(key, manifestResult);
+      return fromNames(manifestResult);
     }
 
     const parentEntries = await fetchEntries(path.slice(0, -1));

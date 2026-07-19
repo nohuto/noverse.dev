@@ -27,6 +27,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Refresh diff manifests
+        run: python main/scripts/update-diff-manifests.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout win-config
         uses: actions/checkout@v6
         with:
@@ -80,7 +85,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git status --porcelain | grep .; then
-            git add docs docs-site/src/content/docs main/data/repos.json main/data/media-cache.json main/media main/images
+            git add docs docs-site/src/content/docs main/data/repos.json main/data/diff main/data/media-cache.json main/media main/images
             git commit -m "update docs data"
             git push
           else

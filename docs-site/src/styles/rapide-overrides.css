@@ -169,7 +169,8 @@ html,
 body,
 #starlight__sidebar,
 .right-sidebar,
-.dropdown {
+.dropdown,
+.docs-theme-list {
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track) !important;
   scrollbar-width: thin !important;
 }
@@ -178,7 +179,8 @@ html::-webkit-scrollbar,
 body::-webkit-scrollbar,
 #starlight__sidebar::-webkit-scrollbar,
 .right-sidebar::-webkit-scrollbar,
-.dropdown::-webkit-scrollbar {
+.dropdown::-webkit-scrollbar,
+.docs-theme-list::-webkit-scrollbar {
   width: 12px;
   height: 12px;
 }
@@ -187,7 +189,8 @@ html::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track,
 #starlight__sidebar::-webkit-scrollbar-track,
 .right-sidebar::-webkit-scrollbar-track,
-.dropdown::-webkit-scrollbar-track {
+.dropdown::-webkit-scrollbar-track,
+.docs-theme-list::-webkit-scrollbar-track {
   background: var(--scrollbar-track);
   border-left: 1px solid var(--sl-color-hairline);
   border-top: 1px solid var(--sl-color-hairline);
@@ -197,7 +200,8 @@ html::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb,
 #starlight__sidebar::-webkit-scrollbar-thumb,
 .right-sidebar::-webkit-scrollbar-thumb,
-.dropdown::-webkit-scrollbar-thumb {
+.dropdown::-webkit-scrollbar-thumb,
+.docs-theme-list::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
   border: 1px solid var(--sl-color-hairline);
 }
@@ -206,7 +210,8 @@ html::-webkit-scrollbar-thumb:hover,
 body::-webkit-scrollbar-thumb:hover,
 #starlight__sidebar::-webkit-scrollbar-thumb:hover,
 .right-sidebar::-webkit-scrollbar-thumb:hover,
-.dropdown::-webkit-scrollbar-thumb:hover {
+.dropdown::-webkit-scrollbar-thumb:hover,
+.docs-theme-list::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover);
 }
 

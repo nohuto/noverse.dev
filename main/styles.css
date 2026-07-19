@@ -2060,22 +2060,26 @@ video {
 }
 
 .nv-search-shortcut {
-  display: inline-flex;
+  display: inline-grid;
+  grid-auto-flow: column;
+  place-items: center;
   align-items: center;
   gap: 0.25em;
   margin-right: 5px;
-  padding: 1px 6px 2px;
+  min-height: 16px;
+  padding: 0 6px;
   border: 1px solid var(--border);
   background: var(--bg-alt);
   color: var(--muted);
   font: inherit;
   font-size: 0.8rem;
-  line-height: 1.2;
+  line-height: 1;
   white-space: nowrap;
 }
 
 .nv-search-shortcut kbd {
   font: inherit;
+  line-height: 1;
 }
 
 /*.tag-filter {
@@ -2385,42 +2389,16 @@ video {
 }
 
 #documentation .doc-card {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
-  column-gap: 8px;
-  row-gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   align-items: start;
   padding: 10px 12px;
-}
-
-.doc-index {
-  color: var(--accent);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-}
-
-#documentation .doc-index {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: center;
-}
-
-#documentation .doc-card h4 {
-  grid-column: 2;
-  grid-row: 1;
-  align-self: center;
 }
 
 #documentation .doc-card h4,
 #documentation .doc-card p {
   margin: 0;
-}
-
-#documentation .doc-card p {
-  grid-column: 1 / -1;
-  grid-row: 2;
 }
 
 .legal-list {

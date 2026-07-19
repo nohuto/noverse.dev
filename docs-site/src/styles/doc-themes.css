@@ -680,18 +680,6 @@ docs-theme-select[data-open='true'] .docs-theme-trigger::after {
   scrollbar-gutter: stable;
 }
 
-.docs-theme-list::-webkit-scrollbar {
-  width: 2px;
-}
-
-.docs-theme-list::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-}
-
-.docs-theme-list::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-}
-
 .docs-theme-option {
   display: flex;
   align-items: center;

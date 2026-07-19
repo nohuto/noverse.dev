@@ -13,6 +13,10 @@
     'main/vendor/diff2html-ui-base.min.js'
   ];
   const SOURCE_ORDER = ['type', 'pseudocode'];
+  const FONT_SIZE_KEY = 'nv-diff-font-size';
+  const DEFAULT_FONT_SIZE = 12;
+  const MIN_FONT_SIZE = 9;
+  const MAX_FONT_SIZE = 18;
   const COLLATOR = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
   const assetPromises = new Map();
   let diffAssetsPromise;
@@ -129,6 +133,27 @@
     return lightThemes.has(document.documentElement.getAttribute('data-theme') || global.DEFAULT_THEME || 'gruvbox-dark') ? 'light' : 'dark';
   };
 
+  const storageGet = (key, fallback) => {
+    try {
+      return localStorage.getItem(key) || fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const storageSet = (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+    }
+  };
+
+  const clampFontSize = value => {
+    const parsed = Number.parseInt(value, 10);
+    if (!Number.isFinite(parsed)) return DEFAULT_FONT_SIZE;
+    return Math.min(Math.max(parsed, MIN_FONT_SIZE), MAX_FONT_SIZE);
+  };
+
   function initDiff() {
     const root = document.getElementById('diff-app');
     if (!root || root.dataset.ready === 'true') return;
@@ -143,6 +168,9 @@
     const displayButton = document.getElementById('diff-display');
     const runButton = document.getElementById('diff-run');
     const viewTools = document.getElementById('diff-view-tools');
+    const fontTools = document.getElementById('diff-font-tools');
+    const fontDecreaseButton = document.getElementById('diff-font-decrease');
+    const fontIncreaseButton = document.getElementById('diff-font-increase');
     const viewButtons = Array.from(document.querySelectorAll('#diff-view-mode .bindiff-view-button'));
     const swapButton = document.getElementById('diff-swap');
     const settingsButton = document.getElementById('diff-settings');
@@ -159,7 +187,7 @@
     const settingsDone = document.getElementById('diff-settings-done');
     const settingsReset = document.getElementById('diff-settings-reset');
 
-    if (!leftSelect || !rightSelect || !moduleSelect || !nameSelect || !nameLabel || !kindButtons.length || !displayButton || !runButton || !viewTools || !viewButtons.length || !swapButton || !settingsButton || !maximizeButton || !output || !links || !leftLink || !rightLink || !settingsModal || !settingsDialog || !settingsHeader || !settingsBody || !settingsClose || !settingsDone || !settingsReset) return;
+    if (!leftSelect || !rightSelect || !moduleSelect || !nameSelect || !nameLabel || !kindButtons.length || !displayButton || !runButton || !viewTools || !fontTools || !fontDecreaseButton || !fontIncreaseButton || !viewButtons.length || !swapButton || !settingsButton || !maximizeButton || !output || !links || !leftLink || !rightLink || !settingsModal || !settingsDialog || !settingsHeader || !settingsBody || !settingsClose || !settingsDone || !settingsReset) return;
 
     let activeKind = 'type';
     let activeSource = null;
@@ -167,6 +195,7 @@
     let rightFiles = new Map();
     let token = 0;
     let currentViewMode = 'side-by-side';
+    let currentFontSize = DEFAULT_FONT_SIZE;
     let isMaximized = false;
     let lastRender = null;
     const selectionMemory = new Map();
@@ -186,10 +215,20 @@
       maximizeButton.title = next ? 'Restore diff size' : 'Maximize diff';
     };
 
+    const setFontSize = (size, persist = true) => {
+      currentFontSize = clampFontSize(size);
+      output.style.setProperty('--bindiff-font-size', `${currentFontSize}px`);
+      fontDecreaseButton.disabled = currentFontSize <= MIN_FONT_SIZE;
+      fontIncreaseButton.disabled = currentFontSize >= MAX_FONT_SIZE;
+      if (persist) storageSet(FONT_SIZE_KEY, String(currentFontSize));
+    };
+
     const setResultUi = (visible, comparison = visible) => {
       [links, settingsButton, maximizeButton].forEach(node => {
         node.hidden = !visible;
       });
+      fontTools.hidden = !visible;
+      root.classList.toggle('bindiff-display-result', visible && !comparison);
       [viewTools, swapButton].forEach(node => {
         node.hidden = !comparison;
       });
@@ -258,6 +297,8 @@
         button.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
     };
+
+    setFontSize(storageGet(FONT_SIZE_KEY, getComputedStyle(output).getPropertyValue('--bindiff-font-size') || DEFAULT_FONT_SIZE), false);
 
     const setLinks = (leftFile, rightFile = null) => {
       leftLink.href = activeSource.blobUrl(leftSelect.value, moduleSelect.value, leftFile);
@@ -564,6 +605,8 @@
     });
     displayButton.addEventListener('click', runDisplay);
     runButton.addEventListener('click', runCompare);
+    fontDecreaseButton.addEventListener('click', () => setFontSize(currentFontSize - 1));
+    fontIncreaseButton.addEventListener('click', () => setFontSize(currentFontSize + 1));
     swapButton.addEventListener('click', () => {
       const previousLeft = leftSelect.value;
       leftSelect.value = rightSelect.value;

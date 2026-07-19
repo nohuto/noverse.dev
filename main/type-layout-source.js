@@ -2,10 +2,8 @@
 (function attachTypeLayoutDiffSource(global) {
   'use strict';
 
-  const API_BASE = 'https://api.github.com/repos/nohuto/type-layouts/contents';
   const RAW_BASE = 'https://raw.githubusercontent.com/nohuto/type-layouts/main';
   const BLOB_BASE = 'https://github.com/nohuto/type-layouts/blob/main';
-  const TREE_BASE = 'https://api.github.com/repos/nohuto/type-layouts/git/trees';
   const MANIFEST_BASE = 'main/data/diff/type-layouts';
   const CACHE_KEY = 'nv-diff-type-name-cache-v1';
   const SETTINGS_KEY = 'nv-diff-type-settings-v1';
@@ -16,7 +14,6 @@
   const DEFAULT_MODULE = 'ntdll';
   const SETTINGS_DEFAULTS = Object.freeze({ showDependencies: false, hideComments: false });
   const COLLATOR = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
-  const entriesCache = new Map();
   const nameCache = new Map();
   let manifestPromise;
 
@@ -38,15 +35,6 @@
       localStorage.setItem(key, value);
     } catch {
     }
-  };
-
-  const fetchJson = async url => {
-    const response = await fetch(url, {
-      cache: 'force-cache',
-      headers: { Accept: 'application/vnd.github+json' }
-    });
-    if (!response.ok) throw new Error(`GitHub request failed (${response.status})`);
-    return response.json();
   };
 
   const fetchManifest = url => fetch(url, { cache: 'force-cache' })
@@ -89,36 +77,9 @@
     return decodeNames(await fetchManifestText(`${MANIFEST_BASE}/names/${encodePath(path)}.txt`));
   };
 
-  const fetchEntries = path => {
-    const key = joinPath(path);
-    if (!entriesCache.has(key)) {
-      const suffix = encodePath(path);
-      const url = `${suffix ? `${API_BASE}/${suffix}` : API_BASE}?ref=main`;
-      entriesCache.set(key, fetchJson(url).then(json => Array.isArray(json) ? json : []));
-    }
-    return entriesCache.get(key);
-  };
-
-  const fetchTree = sha => {
-    const key = `tree:${sha}`;
-    if (!entriesCache.has(key)) {
-      entriesCache.set(key, fetchJson(`${TREE_BASE}/${sha}?recursive=1`).then(json => ({
-        truncated: Boolean(json?.truncated),
-        tree: Array.isArray(json?.tree) ? json.tree : []
-      })));
-    }
-    return entriesCache.get(key);
-  };
-
   const listDirectories = async path => {
     const manifestResult = await manifestDirectories(path);
-    if (manifestResult.length) return manifestResult.slice().sort((a, b) => COLLATOR.compare(a, b));
-
-    const entries = await fetchEntries(path);
-    return entries
-      .filter(entry => entry?.type === 'dir' && typeof entry.name === 'string' && !entry.name.startsWith('.'))
-      .map(entry => entry.name)
-      .sort((a, b) => COLLATOR.compare(a, b));
+    return manifestResult.slice().sort((a, b) => COLLATOR.compare(a, b));
   };
 
   const readNameStore = () => {
@@ -173,20 +134,7 @@
       return fromNames(manifestResult);
     }
 
-    const parentEntries = await fetchEntries(path.slice(0, -1));
-    const directory = parentEntries.find(entry => entry.type === 'dir' && entry.name === path[path.length - 1]);
-    if (!directory?.sha) throw new Error(`Unable to locate directory SHA for ${key}`);
-
-    const result = await fetchTree(directory.sha);
-    if (result.truncated) throw new Error(`Type tree for ${key} is truncated`);
-
-    const names = result.tree
-      .filter(entry => entry?.type === 'blob' && typeof entry.path === 'string' && !entry.path.includes('/') && entry.path.toLowerCase().endsWith('.cpp'))
-      .map(entry => entry.path)
-      .sort((a, b) => COLLATOR.compare(a, b));
-    nameCache.set(key, names);
-    saveNames(key, names);
-    return fromNames(names);
+    return [];
   };
 
   const readSettings = () => {

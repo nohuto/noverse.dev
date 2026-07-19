@@ -1,19 +1,33 @@
 /* Copyright (c) 2026 Nohuto */
 
+.policy-intro {
+  container-type: inline-size;
+}
+
 .policy-title-row {
   display: flex;
   align-items: baseline;
   gap: 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .policy-title-row .projects-heading {
+  flex: 0 0 auto;
   margin-bottom: 8px;
 }
 
 .policy-source-note {
+  flex: 0 0 auto;
   color: var(--muted);
   font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+@container (max-width: 35rem) {
+  .policy-source-note {
+    display: none;
+  }
 }
 
 #diff-app .panel-body {
@@ -1151,6 +1165,7 @@ body.policy-column-resizing * {
 }
 
 .bindiff-view-tools[hidden],
+.bindiff-font-tools[hidden],
 .bindiff-links[hidden],
 #diff-swap[hidden],
 #diff-settings[hidden],
@@ -1177,7 +1192,7 @@ body.policy-column-resizing * {
 .bindiff-frame-view-tools {
   position: absolute;
   top: 1px;
-  right: 92px;
+  right: 148px;
   z-index: 10;
 }
 
@@ -1198,6 +1213,48 @@ body.policy-column-resizing * {
 .bindiff-view-icon {
   width: 16px;
   height: 16px;
+  stroke-width: 1.7;
+}
+
+.bindiff-font-tools {
+  position: absolute;
+  top: 1px;
+  right: 92px;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 24px 24px;
+}
+
+#diff-app.bindiff-display-result .bindiff-font-tools {
+  right: 64px;
+}
+
+.bindiff-icon-button {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.bindiff-icon-button:hover:not(:disabled) {
+  color: var(--accent);
+}
+
+.bindiff-icon-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.bindiff-tool-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
   stroke-width: 1.7;
 }
 
@@ -1370,6 +1427,8 @@ body.policy-column-resizing * {
 }
 
 #policy-settings:focus,
+#diff-font-decrease:focus,
+#diff-font-increase:focus,
 #diff-swap:focus,
 #diff-settings:focus,
 #diff-maximize:focus,
@@ -1577,6 +1636,7 @@ body.policy-column-resizing * {
 }
 
 .bindiff-output {
+  --bindiff-font-size: 12px;
   width: 100%;
   max-width: none;
   min-height: 0;
@@ -1647,7 +1707,7 @@ body.policy-column-resizing * {
 .bindiff-output .d2h-file-name,
 .bindiff-output .d2h-file-stats {
   font-family: var(--font-family);
-  font-size: 13px !important;
+  font-size: var(--bindiff-font-size) !important;
 }
 
 .bindiff-output .d2h-file-header {
@@ -1670,7 +1730,7 @@ body.policy-column-resizing * {
   min-width: 100%;
   table-layout: auto;
   font-family: var(--font-family);
-  font-size: 13px !important;
+  font-size: var(--bindiff-font-size) !important;
 }
 
 .bindiff-output .d2h-code-line-ctn,
@@ -1678,7 +1738,7 @@ body.policy-column-resizing * {
 .bindiff-output .d2h-code-side-linenumber,
 .bindiff-output .line-num1,
 .bindiff-output .line-num2 {
-  font-size: 13px !important;
+  font-size: var(--bindiff-font-size) !important;
   font-family: var(--font-family) !important;
 }
 
@@ -2005,6 +2065,10 @@ body.bindiff-maximized > footer {
     width: min(100%, 28rem);
     max-width: 28rem;
     flex: 1 1 260px;
+  }
+
+  .bindiff-output {
+    --bindiff-font-size: 10px;
   }
 
   .policy-detail-grid {

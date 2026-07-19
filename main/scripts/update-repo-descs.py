@@ -2,7 +2,7 @@ import html, json, os, re, shutil, time, urllib.error, urllib.request
 from pathlib import Path
 
 R = Path(__file__).resolve().parents[1]
-A = R / 'terminal.js'
+P = R.parent / 'projects.html'
 O = R / 'data' / 'repos.json'
 MS = R / 'data' / 'media-sources.json'
 MC = R / 'data' / 'media-cache.json'
@@ -25,10 +25,41 @@ def ndesc(v, r):
     if not v:
         return ''
     t = html.unescape(str(v).strip())
+    t = t.split(' Contribute to ', 1)[0].strip()
     s = f' - {r}'
     if t.endswith(s):
         t = t[:-len(s)].rstrip()
-    return '' if t == f'Contribute to {r} development by creating an account on GitHub.' else t
+    return t
+
+
+def md_desc(v):
+    text = re.sub(r'<!--.*?-->', '', v, flags=re.S)
+    blocks = re.split(r'\n\s*\n', text)
+    for block in blocks:
+        lines = [line.strip() for line in block.splitlines()]
+        lines = [line for line in lines if line and not line.startswith('#') and not line.startswith('![')]
+        if not lines:
+            continue
+        text = ' '.join(lines)
+        text = re.sub(r'[`*_]', '', text)
+        text = re.sub(r'!\[([^\]]*)\]\([^)]+\)', r'\1', text)
+        text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
+        return html.unescape(text).strip()
+    return ''
+
+
+def fetch_readme(r):
+    for branch in ('main', 'master'):
+        try:
+            q = urllib.request.Request(f'https://raw.githubusercontent.com/{r}/{branch}/README.md', headers=H)
+            with urllib.request.urlopen(q, timeout=20) as x:
+                text = x.read().decode('utf-8', 'ignore')
+            desc = md_desc(text)
+            if desc:
+                return desc
+        except Exception:
+            pass
+    return ''
 
 
 def fetch(r):
@@ -50,16 +81,20 @@ def fetch(r):
         with urllib.request.urlopen(q, timeout=20) as x:
             t = x.read().decode('utf-8', 'ignore')
         m = re.search(r'<meta name="description" content="([^"]+)"', t)
-        return ndesc(m.group(1), r) if m else ''
+        desc = ndesc(m.group(1), r) if m else ''
+        return desc or fetch_readme(r)
     except Exception:
-        return ''
+        return fetch_readme(r)
 
 
 def upd_repos():
-    repos = re.findall(r"repo: '([^']+)'", A.read_text(encoding='utf-8'))
+    repos = list(dict.fromkeys(
+        re.findall(r'''data-repo=["']([^"']+)["']''', P.read_text(encoding='utf-8'))
+    ))
+    old = jload(O, {})
     out = {}
     for r in repos:
-        out[r] = fetch(r)
+        out[r] = fetch(r) or old.get(r, '')
         time.sleep(0.3)
     jsave(O, out)
 

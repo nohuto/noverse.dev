@@ -3,7 +3,7 @@ title: 'Bitlocker & EFS'
 description: 'Security option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 9
+  order: 10
 ---
 
 > "*BitLocker is a Windows security feature that provides encryption for entire volumes, addressing the threats of data theft or exposure from lost, stolen, or inappropriately decommissioned devices.*

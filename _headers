@@ -13,6 +13,12 @@
 /index.html
   Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; script-src-attr 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://cloudflareinsights.com; form-action 'self' https://www.paypal.com; frame-ancestors 'none'
 
+/terminal
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; script-src-attr 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://cloudflareinsights.com; form-action 'self' https://www.paypal.com; frame-ancestors 'none'
+
+/terminal.html
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; script-src-attr 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://cloudflareinsights.com; form-action 'self' https://www.paypal.com; frame-ancestors 'none'
+
 /product
   Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; script-src-attr 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://cloudflareinsights.com; form-action 'self' https://www.paypal.com; frame-ancestors 'none'
 

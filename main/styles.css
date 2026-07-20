@@ -1653,14 +1653,6 @@ select option:active {
   pointer-events: none;
 }
 
-.select-option-icon {
-  width: 13px;
-  height: 13px;
-  flex: 0 0 auto;
-  opacity: 0.88;
-  pointer-events: none;
-}
-
 .select-option.is-active {
   background: var(--accent);
   color: var(--accent-contrast);
@@ -1979,7 +1971,216 @@ video {
   max-width: 100%;
 }
 
-.projects-heading {
+main.home-main {
+  width: min(1040px, 100%);
+}
+
+.home-intro {
+  max-width: 760px;
+}
+
+.home-intro h1 {
+  margin: 0 0 12px;
+  font-size: 1.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.home-intro > p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.home-intro .home-contact {
+  margin-top: 8px;
+}
+
+.home-contact a,
+.home-email {
+  color: var(--accent);
+}
+
+.home-email {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.home-email:hover,
+.home-email:focus-visible {
+  text-decoration: underline;
+}
+
+.home-section {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border-strong);
+}
+
+.home-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.home-section-heading h2 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.home-section-heading a {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.home-section-heading a:hover,
+.home-section-heading a:focus-visible {
+  color: var(--accent);
+}
+
+.home-work-grid {
+  display: grid;
+  gap: 0 28px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.home-work-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+  padding: 9px 0 10px;
+}
+
+.home-work-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.home-work-title a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.home-work-title .home-work-docs {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.home-work-docs::before {
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+  content: '';
+  mask: url('/main/icons/ui/book-2.svg') center / contain no-repeat;
+}
+
+.home-work-item span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.home-work-item strong {
+  font-size: 0.98rem;
+}
+
+.home-work-title > a:hover strong,
+.home-work-title > a:focus-visible strong,
+.home-work-docs:hover,
+.home-work-docs:focus-visible {
+  color: var(--accent);
+}
+
+.commit-list {
+  border-top: 1px solid var(--border);
+}
+
+.commit-item {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.commit-repo,
+.commit-date {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.commit-date {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.commit-sha {
+  color: var(--text);
+}
+
+.commit-message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.88rem;
+}
+
+.commit-item:hover .commit-message,
+.commit-item:focus-visible .commit-message {
+  color: var(--accent);
+}
+
+.home-status {
+  margin: 0;
+  padding: 12px 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+@media (max-width: 720px) {
+  .home-work-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commit-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 12px;
+  }
+
+  .commit-message {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .commit-date {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-section {
+    margin-top: 22px;
+    padding-top: 18px;
+  }
+}
+
+.page-heading {
   font-size: 1.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1987,7 +2188,7 @@ video {
 }
 
 
-.projects-divider {
+.page-divider {
   width: 100%;
   height: 1px;
   background: var(--border-strong);
@@ -2163,16 +2364,6 @@ video {
   object-fit: cover;
   border-bottom: 1px solid var(--border);
   background: var(--bg-alt);
-}
-
-.project-media-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--muted);
-  font-size: 0.88rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
 }
 
 .project-body {
@@ -2371,16 +2562,6 @@ video {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.legal-link {
-  color: var(--accent);
-  text-decoration: none;
-  font-size: 0.92rem;
-}
-
-.legal-link:hover {
-  text-decoration: underline;
 }
 
 #documentation .doc-grid {

@@ -22,5 +22,5 @@
   "nohuto/reg2bat": "A simple CL tool that converts .reg to .bat",
   "nohuto/pbo2-uv": "Guide on how to set up PBO using curve optimizer.",
   "nohuto/gpu-oc-uv": "Guide on how to OC/UV your GPU via MSI Afterburner.",
-  "nohuto/noverse.dev": "Website code"
+  "nohuto/noverse.dev": "Website code, including some web tools."
 }

@@ -4,6 +4,7 @@
   const NOT_FOUND_PATH_KEY = 'nv-not-found-path';
   const MAIN_PAGE_ROUTES = [
     { clean: '/', file: '/index.html' },
+    { clean: '/terminal', file: '/terminal.html' },
     { clean: '/product', file: '/product.html' },
     { clean: '/projects', file: '/projects.html' },
     { clean: '/diff', file: '/diff.html' },

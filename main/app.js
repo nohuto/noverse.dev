@@ -23,7 +23,8 @@ const STARFIELD_STYLESHEET = 'main/data/starfield-stars.css';
 const ACTIVE_PAGE_PATH_KEY = 'nv-active-page-path';
 const NOT_FOUND_PATH_KEY = 'nv-not-found-path';
 const MAIN_PAGE_ROUTES = Object.freeze([
-  { slug: 'terminal', clean: '/', file: '/index.html' },
+  { slug: 'home', clean: '/', file: '/index.html' },
+  { slug: 'terminal', clean: '/terminal', file: '/terminal.html' },
   { slug: 'product', clean: '/product', file: '/product.html' },
   { slug: 'projects', clean: '/projects', file: '/projects.html' },
   { slug: 'diff', clean: '/diff', file: '/diff.html' },
@@ -42,6 +43,7 @@ const FONT_SET = new Set(FONT_KEYS);
 const REPO_DESC_URL = 'main/data/repos.json';
 const SELECT_SEARCH_RENDER_LIMIT_DEFAULT = 300;
 const PAGE_FEATURES = Object.freeze([
+  { rootId: 'home-commits', src: 'main/min/home.min.js', initName: 'initHome' },
   { rootId: 'console', src: 'main/min/terminal.min.js', initName: 'initConsole', deferInit: true },
   { rootId: 'policy-explorer', src: 'main/min/policies.min.js', styleHref: 'main/min/tools.min.css', initName: 'initPolicyExplorer', deferInit: true },
   { rootId: 'diff-app', src: 'main/min/diff.min.js', styleHref: 'main/min/tools.min.css', initName: 'initDiff', deferInit: true }
@@ -52,7 +54,6 @@ let toastTimer;
 let repoDescriptionsPromise;
 let selectUiListener;
 let selectUiKeyListener;
-let terminalExited = false;
 let siteErrorReturnFocus;
 let searchShortcutInput;
 let searchShortcutListener;
@@ -64,6 +65,11 @@ const EMAIL_BYTES = [121, 120, 127, 98, 99, 120, 87, 99, 98, 99, 118, 57, 126, 1
 
 const getEmailAddress = () =>
   EMAIL_BYTES.map(byte => String.fromCharCode(byte ^ EMAIL_KEY)).join('');
+
+function initEmailText() {
+  const target = document.querySelector('[data-email-text]');
+  if (target) target.textContent = getEmailAddress();
+}
 
 const afterNextPaint = () => new Promise(resolve => {
   requestAnimationFrame(() => requestAnimationFrame(resolve));
@@ -133,24 +139,6 @@ function syncPageChrome(pathname = location.pathname) {
     } else {
       a.removeAttribute('aria-current');
     }
-  });
-}
-
-function applyTerminalExitState() {
-  document.documentElement.toggleAttribute('data-terminal-exited', terminalExited);
-  document.querySelectorAll('.nav-tabs a[href="/"]').forEach(link => {
-    link.hidden = terminalExited;
-    link.style.display = terminalExited ? 'none' : '';
-    link.setAttribute('aria-hidden', terminalExited ? 'true' : 'false');
-    if (terminalExited) {
-      link.classList.remove('active');
-      link.removeAttribute('aria-current');
-    } else {
-      link.removeAttribute('aria-hidden');
-    }
-  });
-  document.querySelectorAll('main.main-terminal, .terminal-shell, #console-window').forEach(node => {
-    node.hidden = terminalExited;
   });
 }
 
@@ -900,9 +888,9 @@ async function loadPage(url, push = true) {
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     }
     document.title = newTitle;
-    applyTerminalExitState();
     syncPageChrome(nextPathname);
     initTheme();
+    initEmailText();
     initRepoDescriptions();
     initClickableCards();
     initFiltering();
@@ -953,7 +941,7 @@ async function getRepoDescription(repo) {
 }
 
 function initRepoDescriptions() {
-  const cards = document.querySelectorAll('.project-card[data-repo]');
+  const cards = document.querySelectorAll('.project-card[data-repo], .home-work-item[data-repo]');
   if (!cards.length) return;
   cards.forEach(card => {
     const repo = card.getAttribute('data-repo');
@@ -1057,15 +1045,12 @@ function initSearchShortcut() {
   };
   document.addEventListener('keydown', searchShortcutListener);
 }
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
   const notFoundPath = consumeNotFoundPath();
   rememberActivePage(location.pathname);
-  applyTerminalExitState();
   syncPageChrome(location.pathname);
   initTheme();
+  initEmailText();
   initBackground();
   initTypography();
   initSelectUI();

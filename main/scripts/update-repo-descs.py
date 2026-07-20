@@ -2,7 +2,7 @@ import html, json, os, re, shutil, time, urllib.error, urllib.request
 from pathlib import Path
 
 R = Path(__file__).resolve().parents[1]
-P = R.parent / 'projects.html'
+PAGES = (R.parent / 'projects.html', R.parent / 'index.html')
 O = R / 'data' / 'repos.json'
 MS = R / 'data' / 'media-sources.json'
 MC = R / 'data' / 'media-cache.json'
@@ -89,7 +89,7 @@ def fetch(r):
 
 def upd_repos():
     repos = list(dict.fromkeys(
-        re.findall(r'''data-repo=["']([^"']+)["']''', P.read_text(encoding='utf-8'))
+        re.findall(r'''data-repo=["']([^"']+)["']''', ''.join(p.read_text(encoding='utf-8') for p in PAGES))
     ))
     old = jload(O, {})
     out = {}

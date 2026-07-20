@@ -1025,7 +1025,7 @@ function initConsole() {
       return docsTail ? `${DOCS_ROOT_PATH}/${docsTail}` : DOCS_ROOT_PATH;
     }
 
-    if (segments.length === 1 && ['product', 'projects', 'diff', 'policies'].includes(segments[0])) {
+    if (segments.length === 1 && ['home', 'product', 'projects', 'diff', 'policies'].includes(segments[0])) {
       return `${rootPath}/${segments[0]}`;
     }
     return null;
@@ -1033,13 +1033,14 @@ function initConsole() {
 
   const listDirs = () => {
     if (currentPath === rootPath) {
-      return ['product', 'projects', 'diff', 'policies', 'docs'];
+      return ['home', 'product', 'projects', 'diff', 'policies', 'docs'];
     }
     return ['..'];
   };
 
   const NAV_MAP = Object.fromEntries((window.NV_MAIN_ROUTES || [
-    { slug: 'terminal', clean: '/' },
+    { slug: 'home', clean: '/' },
+    { slug: 'terminal', clean: '/terminal' },
     { slug: 'product', clean: '/product' },
     { slug: 'projects', clean: '/projects' },
     { slug: 'diff', clean: '/diff' },
@@ -1240,9 +1241,7 @@ function initConsole() {
     },
     exit: () => {
       stopConsoleAnimation();
-      terminalExited = true;
-      applyTerminalExitState();
-      loadPage('/projects');
+      loadPage('/');
     },
   };
   const commandNames = Object.keys(commands).sort((a, b) => a.localeCompare(b));

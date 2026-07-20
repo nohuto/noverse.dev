@@ -29,8 +29,6 @@ jobs:
 
       - name: Refresh diff manifests
         run: python main/scripts/update-diff-manifests.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout win-config
         uses: actions/checkout@v6

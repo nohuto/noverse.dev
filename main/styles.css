@@ -557,6 +557,7 @@ body {
 
 html {
   font-size: 13px;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -2002,6 +2003,8 @@ main.home-main {
 }
 
 .home-email {
+  display: inline-block;
+  width: 14ch;
   padding: 0;
   border: 0;
   background: transparent;
@@ -2108,6 +2111,10 @@ main.home-main {
   border-top: 1px solid var(--border);
 }
 
+#home-commits[aria-busy="true"] .commit-list {
+  min-height: 526px;
+}
+
 .commit-item {
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr) auto;
@@ -2170,6 +2177,10 @@ main.home-main {
   .commit-date {
     grid-column: 2;
     grid-row: 1;
+  }
+
+  #home-commits[aria-busy="true"] .commit-list {
+    min-height: 766px;
   }
 }
 

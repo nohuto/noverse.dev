@@ -2294,38 +2294,6 @@ main.home-main {
   line-height: 1;
 }
 
-/*.tag-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tag-filter button {
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text);
-  text-transform: uppercase;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  padding: 4px 8px;
-  cursor: pointer;
-}
-
-.tag-filter button.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-contrast);
-}
-
-.tag-filter button:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.tag-filter button.active:hover {
-  color: var(--accent-contrast);
-}*/
-
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -2339,6 +2307,10 @@ main.home-main {
   background: var(--panel-alt);
   content-visibility: auto;
   contain-intrinsic-size: 360px 520px;
+}
+
+.project-card[hidden] {
+  display: none;
 }
 
 .clickable-card {

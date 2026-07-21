@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Nohuto -->
+<html lang="en" data-theme-setting="gruvbox-dark" data-theme="gruvbox-dark" data-bg="dots" data-font="cascadia">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Windows Configuration product">
+  <title>Product</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="/main/images/nvlogo.png">
+  <link rel="stylesheet" href="main/min/styles.min.css">
+  <script src="main/min/bootstrap.min.js" defer></script>
+  <script src="main/min/app.min.js" defer></script>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <header class="prompt-bar">
+    <div class="prompt-line" role="group" aria-label="Terminal prompt">
+      <span class="prompt-user">nohuto</span>
+      <span class="prompt-sep">@</span>
+      <span class="prompt-host">noverse</span>
+    </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme"><span class="theme-toggle-icon" aria-hidden="true"></span></button>
+    <nav class="nav-tabs" aria-label="Primary navigation">
+      <a href="/">home</a>
+      <a href="/product" aria-current="page" class="active">product</a>
+      <a href="/projects">projects</a>
+      <a href="/diff">diff</a>
+      <a href="/policies">policies</a>
+      <a href="/docs/">docs</a>
+    </nav>
+  </header>
+
+  <main id="main" class="no-center product-main">
+    <section class="content-box panel product-page" id="product" data-title="product">
+      <div class="panel-body">
+        <div class="product-section product-overview">
+          <h1 class="page-heading">Windows Configuration</h1>
+          <div class="page-divider"></div>
+          <div class="product-header">
+            <div class="product-intro">
+              <p>WinConfig is based on my personal research on several topics, which I began documenting around July 2024. It has transparent logs so users can see every change, including value name, data, type and if recursive the amount of modified keys, some may also show executed PS code. Each option has its own <a href="/docs/win-config/">documentation</a>, some may be more detailed whenever theres no public (trustworthy) documentation on them, some less, see below for details.</p>
+            </div>
+            <div class="product-cta">
+              <span class="price-label">Lifetime</span>
+              <span class="product-price">9,99&nbsp;EUR</span>
+              <p class="pricing-note">Includes updates &amp; Discord role.</p>
+              <div class="purchase-actions">
+                <form class="paypal-form" action="https://www.paypal.com/ncp/payment/C4XUQMQZHS948" method="post" target="_blank" rel="noopener noreferrer">
+                  <button class="paypal-button" type="submit">
+                    <span>Buy via</span>
+                    <img decoding="async" class="paypal-button-logo" src="main/images/paypal-methods.svg" width="140" height="20" alt="" loading="lazy">
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="product-preview-grid">
+            <figure class="product-preview-card">
+              <a href="main/images/darkbluelogs.png" target="_blank" rel="noopener noreferrer" aria-label="Open dark mode blue logs preview">
+                <img decoding="async" src="main/images/darkbluelogs.png" width="1627" height="986" alt="" loading="lazy">
+              </a>
+            </figure>
+            <figure class="product-preview-card">
+              <a href="main/images/darkred.png" target="_blank" rel="noopener noreferrer" aria-label="Open dark mode red preview">
+                <img decoding="async" src="main/images/darkred.png" width="1627" height="986" alt="" loading="lazy">
+              </a>
+            </figure>
+            <figure class="product-preview-card">
+              <a href="main/images/lightblue.png" target="_blank" rel="noopener noreferrer" aria-label="Open light mode blue preview">
+                <img decoding="async" src="main/images/lightblue.png" width="1627" height="986" alt="" loading="lazy">
+              </a>
+            </figure>
+            <figure class="product-preview-card">
+              <a href="main/images/lightviolet.png" target="_blank" rel="noopener noreferrer" aria-label="Open light mode violet preview">
+                <img decoding="async" src="main/images/lightviolet.png" width="1627" height="986" alt="" loading="lazy">
+              </a>
+            </figure>
+          </div>
+        </div>
+        <div class="product-section product-documentation">
+        <div class="documentation-overview" id="documentation">
+          <div class="doc-header">
+            <h3>Detailed documentation for the tool, or for purely informational reasons.</h3>
+            <p>Each option has it's own somtimes detailed or less detailed documentation, containing explanations for specific changes or information for the topic itself.</p>
+          </div>
+          <div class="doc-grid">
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/system/">
+              <h4>System</h4>
+              <p>Thread scheduling/behaviour (priorities), DWM, tasks...</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/visibility/">
+              <h4>Visibility</h4>
+              <p>Visuals, wallpapers, UI behaviors...</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/peripheral/">
+              <h4>Peripheral</h4>
+              <p>Input, audio, bluetooth... behaviors/states.</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/power/">
+              <h4>Power</h4>
+              <p>Several different PM related features...</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/privacy/">
+              <h4>Privacy</h4>
+              <p>Privacy configuration for reducing connections to MS/other servers...</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/network/">
+              <h4>Network</h4>
+              <p>Network adapter settings including DNS, offloads, IM, probing...</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/security/">
+              <h4>Security</h4>
+              <p>Firewall default deny setup, Defender, WU, mitigations, UAC...</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/nvidia/">
+              <h4>NVIDIA</h4>
+              <p>NVIDIA driver installation, NVCPL settings...</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/misc/">
+              <h4>Misc</h4>
+              <p>Miscellaneous external app configuration/installation/patching, e.g. regkit/nvfetch.</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/policies/">
+              <h4>Policies</h4>
+              <p>A more detailed LGPE including keys, values and quick toggling, based on my admx-parser project.</p>
+            </article>
+            <article class="doc-card clickable-card" data-card-href="/docs/win-config/affinities/">
+              <h4>Affinities</h4>
+              <p>MSI mode/message limit, IRQ settings (priority/policy), affinities.</p>
+            </article>
+          </div>
+        </div>
+        </div>
+        <div class="product-section product-terms">
+        <div class="legal-section" id="terms">
+          <div class="doc-header">
+            <h3>Terms of Service</h3>
+          </div>
+          <div class="legal-list">
+            <article class="legal-item">
+              <h4>Data Privacy</h4>
+              <p>WinConfig uses three hardware identifiers for license registration and verification, SMBIOS UUID, baseboard serial, and CPU ID (with MAC address or device IDs as fallbacks). Saved login data is stored locally, I don't have access to your password.</p>
+            </article>
+            <article class="legal-item">
+              <h4>Usage &amp; Redistribution</h4>
+              <p>Licenses are for personal use only. Reselling, transferring, redistributing, or SRE of WinConfig is prohibited unless you receive explicit written permission from me (Nohuto). By purchasing or using WinConfig, you accept these terms.</p>
+            </article>
+            <article class="legal-item">
+              <h4>Refund Policy</h4>
+              <p>Refunds are available only if no registration has been made and no Discord role has been assigned. Include proof of purchase when submitting a refund request.</p>
+            </article>
+            <article class="legal-item">
+              <h4>License</h4>
+              <p>Each purchase grants one hardware bound license. Manual validation is required after checkout and can take several minutes or hours. Keys do not transfer across devices without re-registration.</p>
+            </article>
+            <article class="legal-item">
+              <h4>After Purchase</h4>
+              <p>To get access, you must either include your Discord ID in the purchase message or send me your transaction ID so I can assign the Discord role. The role isn't assigned automatically, so one of these is required. Once the role is assigned, you'll get access to a download link for the tool. After downloading, you must register via the tool, and then I'll validate your registration. Joining (or already being in) the Discord server is recommended for now so you receive updates, announcements, and support. Otherwise you may miss app updates (config updates would theoretically work as long as no new section/helper gets added).</p>
+            </article>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <footer>
+    <div class="footer-row">
+      <div class="footer-left">
+        <div class="footer-copy">&copy; 2026 Nohuto</div>
+      </div>
+      <div class="footer-tools">
+        <div class="footer-tools-row">
+          <select id="theme-select" name="theme" aria-label="Theme">
+              <option value="system">System</option>
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+              <option value="ayu-dark">Ayu Dark</option>
+              <option value="ayu-light">Ayu Light</option>
+              <option value="catppuccin-frappe">Catppuccin Frappe</option>
+              <option value="catppuccin-latte">Catppuccin Latte</option>
+              <option value="catppuccin-macchiato">Catppuccin Macchiato</option>
+              <option value="catppuccin-mocha">Catppuccin Mocha</option>
+              <option value="everforest-dark">Everforest Dark</option>
+              <option value="everforest-light">Everforest Light</option>
+              <option value="gray-black">Gray Black</option>
+              <option value="gruvbox-dark">Gruvbox Dark</option>
+              <option value="gruvbox-light">Gruvbox Light</option>
+              <option value="horizon">Horizon</option>
+              <option value="kanagawa-dragon">Kanagawa Dragon</option>
+              <option value="kanagawa-lotus">Kanagawa Lotus</option>
+              <option value="kanagawa-wave">Kanagawa Wave</option>
+              <option value="monokai">Monokai</option>
+              <option value="night-owl">Night Owl</option>
+              <option value="nord">Nord</option>
+              <option value="one-dark">One Dark</option>
+              <option value="one-light">One Light</option>
+              <option value="purple-black">Purple Black</option>
+              <option value="rose-pine">Rose Pine</option>
+              <option value="rose-pine-moon">Rose Pine Moon</option>
+              <option value="solarized-dark">Solarized Dark</option>
+              <option value="solarized-light">Solarized Light</option>
+          </select>
+        </div>
+      </div>
+      <div class="social">
+        <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+          <span class="social-icon social-icon-github" aria-hidden="true"></span>
+        </a>
+        <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard">
+          <span class="social-icon social-icon-email" aria-hidden="true"></span>
+        </button>
+        <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer" aria-label="Discord server">
+          <span class="social-icon social-icon-discord" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

@@ -1,11 +1,11 @@
 import json, os
 from pathlib import Path
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 OUT = Path(__file__).resolve().parents[1] / 'data' / 'commits.json'
-REPOS = ('win-config', 'windbg-notes', 'regkit', 'noverse.dev')
+OWNER = 'nohuto'
 LIMIT = 15
-
 
 def load_old():
     try:
@@ -13,32 +13,27 @@ def load_old():
     except Exception:
         return []
 
-
-def fetch(repo):
+def fetch():
     headers = {'Accept': 'application/vnd.github+json', 'User-Agent': 'noverse.dev-home'}
     if token := os.getenv('GITHUB_TOKEN'):
         headers['Authorization'] = f'Bearer {token}'
-    request = Request(f'https://api.github.com/repos/nohuto/{repo}/commits?per_page={LIMIT}', headers=headers)
+    query = urlencode({'q': f'author:{OWNER}', 'sort': 'committer-date', 'order': 'desc', 'per_page': LIMIT})
+    request = Request(f'https://api.github.com/search/commits?{query}', headers=headers)
     with urlopen(request, timeout=30) as response:
-        data = json.load(response)
+        items = json.load(response)['items']
     return [{
-        'repo': repo,
+        'repo': item['repository']['name'],
         'sha': item['sha'][:7],
         'message': item['commit']['message'].splitlines()[0],
         'date': item['commit']['committer']['date'],
         'url': item['html_url'],
-    } for item in data]
-
+    } for item in items if (item.get('author') or {}).get('login', '').lower() == OWNER]
 
 def main():
-    old = load_old()
-    commits = []
-    for repo in REPOS:
-        try:
-            commits.extend(fetch(repo))
-        except Exception:
-            commits.extend(item for item in old if item.get('repo') == repo)
-    commits.sort(key=lambda item: item['date'], reverse=True)
+    try:
+        commits = fetch()
+    except Exception:
+        commits = load_old()
     OUT.write_text(json.dumps(commits[:LIMIT], ensure_ascii=True, separators=(',', ':')), encoding='utf-8')
 
 

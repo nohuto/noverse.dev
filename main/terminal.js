@@ -1140,7 +1140,6 @@ function initConsole() {
         ['name', 'nohuto (Discord: ".nohuto", 836853057235976232)'],
         ['proprietor', 'Noverse'],
         ['github', GITHUB_URL],
-        /*['youtube', 'https://www.youtube.com/@5Noverse'],*/
         ['discord', DISCORD_URL]
       ]);
     },

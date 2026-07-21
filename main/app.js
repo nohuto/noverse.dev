@@ -23,17 +23,17 @@ const STARFIELD_STYLESHEET = 'main/data/starfield-stars.css';
 const ACTIVE_PAGE_PATH_KEY = 'nv-active-page-path';
 const NOT_FOUND_PATH_KEY = 'nv-not-found-path';
 const MAIN_PAGE_ROUTES = Object.freeze([
-  { slug: 'home', clean: '/', file: '/index.html' },
-  { slug: 'terminal', clean: '/terminal', file: '/terminal.html' },
-  { slug: 'product', clean: '/product', file: '/product.html' },
-  { slug: 'projects', clean: '/projects', file: '/projects.html' },
-  { slug: 'diff', clean: '/diff', file: '/diff.html' },
-  { slug: 'policies', clean: '/policies', file: '/policies.html' }
+  { slug: 'home', clean: '/' },
+  { slug: 'terminal', clean: '/terminal' },
+  { slug: 'product', clean: '/product' },
+  { slug: 'projects', clean: '/projects' },
+  { slug: 'diff', clean: '/diff' },
+  { slug: 'policies', clean: '/policies' }
 ]);
 const MAIN_PAGE_ROUTE_ALIASES = new Map();
 MAIN_PAGE_ROUTES.forEach(route => {
   MAIN_PAGE_ROUTE_ALIASES.set(route.clean, route);
-  MAIN_PAGE_ROUTE_ALIASES.set(route.file, route);
+  MAIN_PAGE_ROUTE_ALIASES.set(route.clean === '/' ? '/index.html' : `${route.clean}.html`, route);
 });
 window.NV_MAIN_ROUTES = MAIN_PAGE_ROUTES;
 const FONT_KEY = 'nv-font';
@@ -856,9 +856,7 @@ async function loadPage(url, push = true) {
   const main = document.querySelector('main');
   const requestedUrl = new URL(url, location.href);
   const route = getMainPageRoute(requestedUrl.pathname);
-  const fetchUrl = route
-    ? `${route.file}${requestedUrl.search}`
-    : `${requestedUrl.pathname}${requestedUrl.search}`;
+  const fetchUrl = `${route ? route.clean : requestedUrl.pathname}${requestedUrl.search}`;
   const historyUrl = route
     ? `${route.clean}${requestedUrl.search}${requestedUrl.hash}`
     : `${requestedUrl.pathname}${requestedUrl.search}${requestedUrl.hash}`;
@@ -976,7 +974,6 @@ function initClickableCards() {
 
 function initFiltering() {
   const searchInput = document.getElementById('project-search');
-  // const tagButtons = Array.from(document.querySelectorAll('.tag-filter button'));
   const cards = Array.from(document.querySelectorAll('.project-card'));
 
   if (!searchInput || cards.length === 0) return;
@@ -984,37 +981,19 @@ function initFiltering() {
   const cardData = cards.map(card => {
     const title = (card.querySelector('.project-title')?.textContent || '').toLowerCase();
     const descEl = card.querySelector('.project-desc');
-    // const tags = (card.dataset.tags || '')
-    //   .toLowerCase()
-    //   .split(',')
-    //   .map(tag => tag.trim())
-    //   .filter(Boolean);
     return { card, title, descEl };
   });
 
   const applyFilter = () => {
     const search = searchInput.value.trim().toLowerCase();
-    // const activeTags = tagButtons
-    //   .filter(btn => btn.classList.contains('active'))
-    //   .map(btn => (btn.dataset.tag || btn.textContent || '').toLowerCase());
 
     cardData.forEach(({ card, title, descEl }) => {
       const desc = (descEl?.textContent || '').toLowerCase();
-      const matchesSearch = !search || title.includes(search) || desc.includes(search);
-      // const matchesTags = activeTags.length === 0 || activeTags.some(tag => tags.includes(tag));
-      const matchesTags = true;
-      card.style.display = matchesSearch && matchesTags ? '' : 'none';
+      card.hidden = !!search && !title.includes(search) && !desc.includes(search);
     });
   };
 
   searchInput.addEventListener('input', applyFilter);
-  // tagButtons.forEach(btn => {
-  //   btn.addEventListener('click', () => {
-  //     btn.classList.toggle('active');
-  //     applyFilter();
-  //   });
-  // });
-
   applyFilter();
 }
 
@@ -1030,7 +1009,7 @@ function initSearchShortcut() {
     const platformKey = shortcut.querySelector('kbd');
     if (platformKey) platformKey.textContent = isApplePlatform ? '\u2318' : 'Ctrl';
     input.setAttribute('aria-keyshortcuts', isApplePlatform ? 'Meta+K' : 'Control+K');
-    shortcut.style.display = '';
+    shortcut.hidden = false;
   });
 
   if (!searchShortcutInput || searchShortcutListener) return;

@@ -56,10 +56,6 @@
     "path": "images/projects/game-tools-mrtui.png"
   },
   {
-    "url": "https://raw.githubusercontent.com/nohuto/admx-parser/main/images/admxparser-web.png",
-    "path": "images/projects/admxparser-web.png"
-  },
-  {
     "url": "https://raw.githubusercontent.com/nohuto/dism-wsim/main/images/web.png",
     "path": "images/projects/dism-wsim-web.png"
   },

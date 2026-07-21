@@ -1,5 +1,5 @@
 {
-  "nohuto/win-config": "Most complete/documented Windows configuration documentation/tool.",
+  "nohuto/win-config": "Documentation on several topics (detailed where undocumented).",
   "nohuto/regkit": "Reworked regedit including several new features & miscellaneous registry details.",
   "nohuto/windbg-notes": "Personal notes on several topics (for learning purposes).",
   "nohuto/decompiled-pseudocode": "Pseudocode of decompiled functions from several Windows builds.",

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Nohuto -->
+<html lang="en" data-theme-setting="gruvbox-dark" data-theme="gruvbox-dark" data-bg="dots" data-font="cascadia">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="My Open Source Projects">
+  <title>Projects</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="/main/images/nvlogo.png">
+  <link rel="stylesheet" href="main/min/styles.min.css">
+  <script src="main/min/bootstrap.min.js" defer></script>
+  <script src="main/min/app.min.js" defer></script>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <header class="prompt-bar">
+    <div class="prompt-line" role="group" aria-label="Terminal prompt">
+      <span class="prompt-user">nohuto</span>
+      <span class="prompt-sep">@</span>
+      <span class="prompt-host">noverse</span>
+    </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme"><span class="theme-toggle-icon" aria-hidden="true"></span></button>
+    <nav class="nav-tabs" aria-label="Primary navigation">
+      <a href="/">home</a>
+      <a href="/product">product</a>
+      <a href="/projects" class="active" aria-current="page">projects</a>
+      <a href="/diff">diff</a>
+      <a href="/policies">policies</a>
+      <a href="/docs/">docs</a>
+    </nav>
+  </header>
+
+  <main id="main" class="no-center">
+    <section class="content-box panel" data-title="projects">
+      <div class="panel-body">
+        <h1 class="page-heading">My Open Source Projects</h1>
+        <div class="page-divider"></div>
+        <div class="project-filter">
+          <div class="filter-row">
+            <div class="nv-search-box">
+              <span class="nv-search-icon" aria-hidden="true"></span>
+              <input id="project-search" type="text" aria-label="Search projects" aria-keyshortcuts="Control+K">
+              <kbd class="nv-search-shortcut" aria-hidden="true" hidden><kbd>Ctrl</kbd><kbd>K</kbd></kbd>
+            </div>
+          </div>
+        </div>
+        <div class="project-grid">
+
+          <article class="project-card clickable-card" data-repo="nohuto/win-config">
+            <img decoding="async" class="project-media-img" src="main/images/darkbluelogs.png" width="1627" height="986" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">Windows Configuration</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/regkit">
+            <img decoding="async" class="project-media-img" src="main/images/projects/regkit-ayu-dark.png" width="1794" height="1004" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">RegKit</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/windbg-notes">
+            <img decoding="async" class="project-media-img" src="main/images/projects/windbg-notes.png" width="1794" height="1004" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">WinDbg Notes</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-card-href="/terminal">
+            <img decoding="async" class="project-media-img" src="main/images/projects/terminal.png" width="2560" height="1303" alt="" loading="lazy">
+            <div class="project-body">
+              <h3 class="project-title">Terminal</h3>
+              <p class="project-desc">Attempt of creating a (realistic) terminal.</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-card-href="/terminal#calc">
+            <img decoding="async" class="project-media-img" src="main/images/projects/calc.png" width="1004" height="704" alt="" loading="lazy">
+            <div class="project-body">
+              <h3 class="project-title">Calculator</h3>
+              <p class="project-desc">Yet minimal scientific calculator.</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-card-href="/terminal#bitmask">
+            <img decoding="async" class="project-media-img" src="main/images/projects/bitmask.png" width="978" height="696" alt="" loading="lazy">
+            <div class="project-body">
+              <h3 class="project-title">Bitmask</h3>
+              <p class="project-desc">32 bit bitmask calculator.</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/decompiled-pseudocode">
+            <img decoding="async" class="project-media-img" src="main/images/projects/pseudocode-diff-KeInitializeClock.png" width="2560" height="1303" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">Decompiled Pseudocode</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/type-layouts">
+            <img decoding="async" class="project-media-img" src="main/images/projects/type-layouts.png" width="2560" height="1303" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">Type Layouts</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/aes-cbc">
+            <video class="project-media" src="main/media/projects/aes-cbc.mp4" width="2560" height="1440" controls preload="none" playsinline muted referrerpolicy="no-referrer"></video>
+            <div class="project-body">
+              <h3 class="project-title">AES CBC Encryption</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/bitmask-calc">
+            <video class="project-media" src="main/media/projects/bitmask-calc.mp4" width="2560" height="1440" controls preload="none" playsinline muted referrerpolicy="no-referrer"></video>
+            <div class="project-body">
+              <h3 class="project-title">Bitmask Calculator</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/blocklist-mgr">
+            <video class="project-media" src="main/media/projects/blocklist-mgr.mp4" width="2560" height="1440" controls preload="none" playsinline muted referrerpolicy="no-referrer"></video>
+            <div class="project-body">
+              <h3 class="project-title">Blocklist Manager</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/comp-mgr">
+            <video class="project-media" src="main/media/projects/comp-mgr.mp4" width="2560" height="1440" controls preload="none" playsinline muted referrerpolicy="no-referrer"></video>
+            <div class="project-body">
+              <h3 class="project-title">Component Manager</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/app-guides">
+            <img decoding="async" class="project-media-img" src="main/images/projects/app-guides.png" width="2560" height="1302" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">App Guides</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/game-tools">
+            <img decoding="async" class="project-media-img" src="main/images/projects/game-tools-mrtui.png" width="992" height="500" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">Game Tools</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/admx-parser">
+            <img decoding="async" class="project-media-img" src="main/images/projects/policies.png" width="2560" height="1305" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">ADMX Parser</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/minifier">
+            <video class="project-media" src="main/media/projects/minifier.mp4" width="2560" height="1440" controls preload="none" playsinline muted referrerpolicy="no-referrer"></video>
+            <div class="project-body">
+              <h3 class="project-title">PowerShell Minifier</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/void">
+            <video class="project-media" src="main/media/projects/void.mp4" width="2560" height="1440" controls preload="none" playsinline muted referrerpolicy="no-referrer"></video>
+            <div class="project-body">
+              <h3 class="project-title">Void Obfuscation</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/b64-char">
+            <video class="project-media" src="main/media/projects/b64-char.mp4" width="2560" height="1440" controls preload="none" playsinline muted referrerpolicy="no-referrer"></video>
+            <div class="project-body">
+              <h3 class="project-title">Base64 Encoding / Character Obfuscation</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+          
+          <article class="project-card clickable-card" data-repo="nohuto/strings2-tui">
+            <video class="project-media" src="main/media/projects/strings2-tui.mp4" width="2560" height="1440" controls preload="none" playsinline muted referrerpolicy="no-referrer"></video>
+            <div class="project-body">
+              <h3 class="project-title">strings2 TUI</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/b64rev">
+            <video class="project-media" src="main/media/projects/b64rev.mp4" width="2560" height="1440" controls preload="none" playsinline muted referrerpolicy="no-referrer"></video>
+            <div class="project-body">
+              <h3 class="project-title">Base64 Reversal &amp; Character Obfuscation</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/nvfetch">
+            <img decoding="async" class="project-media-img" src="main/images/projects/nvfetch-output.png" width="1074" height="882" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">NVFetch</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/ps12bat">
+            <img decoding="async" class="project-media-img" src="main/images/projects/ps12bat-pre.png" width="989" height="504" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">PS12bat</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/nvapi-cli">
+            <img decoding="async" class="project-media-img" src="main/images/projects/nvapi-cli.png" width="1592" height="991" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">NVAPI CLI</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/dism-wsim">
+            <img decoding="async" class="project-media-img" src="main/images/projects/dism-wsim-web.png" width="1802" height="1136" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">DISM WSIM</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/reg2bat">
+            <img decoding="async" class="project-media-img" src="main/images/projects/reg2bat.png" width="992" height="1090" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">reg2bat</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/pbo2-uv">
+            <img decoding="async" class="project-media-img" src="main/images/projects/pbo2-uv-pbotechow.png" width="1024" height="576" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">PBO2 UV Guide</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+
+          <article class="project-card clickable-card" data-repo="nohuto/gpu-oc-uv">
+            <img decoding="async" class="project-media-img" src="main/images/projects/gpu-oc-uv-oc.png" width="1543" height="543" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <div class="project-body">
+              <h3 class="project-title">GPU OC/UV Guide</h3>
+              <p class="project-desc">Fetching description...</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <footer>
+    <div class="footer-row">
+      <div class="footer-left">
+        <div class="footer-copy">&copy; 2026 Nohuto</div>
+      </div>
+      <div class="footer-tools">
+        <div class="footer-tools-row">
+          <select id="theme-select" name="theme" aria-label="Theme">
+              <option value="system">System</option>
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+              <option value="ayu-dark">Ayu Dark</option>
+              <option value="ayu-light">Ayu Light</option>
+              <option value="catppuccin-frappe">Catppuccin Frappe</option>
+              <option value="catppuccin-latte">Catppuccin Latte</option>
+              <option value="catppuccin-macchiato">Catppuccin Macchiato</option>
+              <option value="catppuccin-mocha">Catppuccin Mocha</option>
+              <option value="everforest-dark">Everforest Dark</option>
+              <option value="everforest-light">Everforest Light</option>
+              <option value="gray-black">Gray Black</option>
+              <option value="gruvbox-dark">Gruvbox Dark</option>
+              <option value="gruvbox-light">Gruvbox Light</option>
+              <option value="horizon">Horizon</option>
+              <option value="kanagawa-dragon">Kanagawa Dragon</option>
+              <option value="kanagawa-lotus">Kanagawa Lotus</option>
+              <option value="kanagawa-wave">Kanagawa Wave</option>
+              <option value="monokai">Monokai</option>
+              <option value="night-owl">Night Owl</option>
+              <option value="nord">Nord</option>
+              <option value="one-dark">One Dark</option>
+              <option value="one-light">One Light</option>
+              <option value="purple-black">Purple Black</option>
+              <option value="rose-pine">Rose Pine</option>
+              <option value="rose-pine-moon">Rose Pine Moon</option>
+              <option value="solarized-dark">Solarized Dark</option>
+              <option value="solarized-light">Solarized Light</option>
+          </select>
+        </div>
+      </div>
+      <div class="social">
+        <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+          <span class="social-icon social-icon-github" aria-hidden="true"></span>
+        </a>
+        <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard">
+          <span class="social-icon social-icon-email" aria-hidden="true"></span>
+        </button>
+        <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer" aria-label="Discord server">
+          <span class="social-icon social-icon-discord" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

@@ -8,8 +8,14 @@ class Handler(SimpleHTTPRequestHandler):
     def route(self):
         url = urlsplit(self.path)
         path = unquote(url.path)
-        if path != "/" and path.endswith("/") and Path(self.directory, path.strip("/") + ".html").is_file():
-            target = path.rstrip("/")
+        name = path.strip("/")
+        target = None
+        if name and "/" not in name:
+            if name.endswith(".html") and name != "404.html":
+                target = "/" if name == "index.html" else f"/{name[:-5]}"
+            elif path.endswith("/") and Path(self.directory, f"{name}.html").is_file():
+                target = path.rstrip("/")
+        if target is not None:
             if url.query:
                 target += "?" + url.query
             self.send_response(308)

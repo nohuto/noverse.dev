@@ -2,7 +2,7 @@ import html, json, os, re, shutil, time, urllib.error, urllib.request
 from pathlib import Path
 
 R = Path(__file__).resolve().parents[1]
-PAGES = (R.parent / 'projects.html', R.parent / 'index.html')
+PAGES = (R / 'html' / 'projects.html', R / 'html' / 'index.html')
 O = R / 'data' / 'repos.json'
 MS = R / 'data' / 'media-sources.json'
 MC = R / 'data' / 'media-cache.json'
@@ -15,11 +15,9 @@ def jload(p, d):
     except Exception:
         return d
 
-
 def jsave(p, d):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(d, indent=2, ensure_ascii=True), encoding='utf-8')
-
 
 def ndesc(v, r):
     if not v:
@@ -30,7 +28,6 @@ def ndesc(v, r):
     if t.endswith(s):
         t = t[:-len(s)].rstrip()
     return t
-
 
 def md_desc(v):
     text = re.sub(r'<!--.*?-->', '', v, flags=re.S)
@@ -47,7 +44,6 @@ def md_desc(v):
         return html.unescape(text).strip()
     return ''
 
-
 def fetch_readme(r):
     for branch in ('main', 'master'):
         try:
@@ -60,7 +56,6 @@ def fetch_readme(r):
         except Exception:
             pass
     return ''
-
 
 def fetch(r):
     hh = dict(H)
@@ -86,7 +81,6 @@ def fetch(r):
     except Exception:
         return fetch_readme(r)
 
-
 def upd_repos():
     repos = list(dict.fromkeys(
         re.findall(r'''data-repo=["']([^"']+)["']''', ''.join(p.read_text(encoding='utf-8') for p in PAGES))
@@ -97,7 +91,6 @@ def upd_repos():
         out[r] = fetch(r) or old.get(r, '')
         time.sleep(0.3)
     jsave(O, out)
-
 
 def pull(url, dst, cache):
     hh = dict(H)
@@ -126,7 +119,6 @@ def pull(url, dst, cache):
     except Exception:
         return
 
-
 def upd_media():
     src = jload(MS, [])
     if not src:
@@ -139,7 +131,6 @@ def upd_media():
             pull(u, p, cache)
             time.sleep(0.2)
     jsave(MC, cache)
-
 
 if __name__ == '__main__':
     upd_repos()

@@ -2,19 +2,15 @@
 (function attachPseudocodeDiffSource(global) {
   'use strict';
 
-  const RAW_BASE = 'https://raw.githubusercontent.com/nohuto/decompiled-pseudocode/main';
-  const BLOB_BASE = 'https://github.com/nohuto/decompiled-pseudocode/blob/main';
-  const MANIFEST_BASE = 'main/data/diff/decompiled-pseudocode';
-  const CACHE_KEY = 'nv-diff-pseudocode-name-cache-v1';
   const SETTINGS_KEY = 'nv-diff-pseudocode-settings-v1';
-  const CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 7;
-  const CACHE_MAX_ENTRIES = 6;
   const DEFAULT_LEFT_RELEASE = '11-23H2';
   const DEFAULT_RIGHT_RELEASE = '11-24H2';
   const DEFAULT_MODULE = 'ntoskrnl';
-  const COLLATOR = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
-  const nameCache = new Map();
-  let manifestPromise;
+  const source = global.createNVDiffManifestSource({
+    repository: 'nohuto/decompiled-pseudocode',
+    dataset: 'decompiled-pseudocode',
+    cacheKey: 'nv-diff-pseudocode-name-cache-v1'
+  });
 
   const normalizationDefaults = () => ({
     stripCrossReferenceMetadata: true,
@@ -27,9 +23,6 @@
     trimTrailingWhitespace: true,
     ...(global.Normalization?.DEFAULTS || {})
   });
-
-  const encodePath = parts => parts.filter(Boolean).map(encodeURIComponent).join('/');
-  const joinPath = parts => parts.filter(Boolean).join('/');
 
   const storageGet = (key, fallback) => {
     try {
@@ -44,106 +37,6 @@
       localStorage.setItem(key, value);
     } catch {
     }
-  };
-
-  const fetchManifest = url => fetch(url, { cache: 'force-cache' })
-    .then(response => response.ok ? response.json() : null)
-    .catch(() => null);
-
-  const fetchManifestText = url => fetch(url, { cache: 'force-cache' })
-    .then(response => response.ok ? response.text() : null)
-    .catch(() => null);
-
-  const decodeNames = text => {
-    if (typeof text !== 'string') return null;
-    let previous = '';
-    return text.split('\n').filter(Boolean).map(row => {
-      const split = row.indexOf('\t');
-      const prefix = Number(row.slice(0, split));
-      const name = previous.slice(0, prefix) + row.slice(split + 1);
-      previous = name;
-      return name;
-    });
-  };
-
-  const manifest = () => {
-    manifestPromise ||= fetchManifest(`${MANIFEST_BASE}/index.json`).then(json => ({
-      releases: Array.isArray(json?.releases) ? json.releases : [],
-      modules: json?.modules && typeof json.modules === 'object' ? json.modules : {}
-    }));
-    return manifestPromise;
-  };
-
-  const manifestDirectories = async path => {
-    const data = await manifest();
-    if (path.length === 0) return data.releases;
-    if (path.length === 1) return Array.isArray(data.modules[path[0]]) ? data.modules[path[0]] : [];
-    return [];
-  };
-
-  const manifestNames = async path => {
-    if (path.length !== 2) return null;
-    return decodeNames(await fetchManifestText(`${MANIFEST_BASE}/names/${encodePath(path)}.txt`));
-  };
-
-  const listDirectories = async path => {
-    const manifestResult = await manifestDirectories(path);
-    return manifestResult.slice().sort((a, b) => COLLATOR.compare(a, b));
-  };
-
-  const readNameStore = () => {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(CACHE_KEY) || '');
-      return parsed?.entries && typeof parsed.entries === 'object' ? parsed : { entries: {} };
-    } catch {
-      return { entries: {} };
-    }
-  };
-
-  const writeNameStore = store => {
-    const entries = Object.entries(store.entries || {})
-      .sort((left, right) => (right[1]?.ts || 0) - (left[1]?.ts || 0))
-      .slice(0, CACHE_MAX_ENTRIES);
-    storageSet(CACHE_KEY, JSON.stringify({ entries: Object.fromEntries(entries) }));
-  };
-
-  const loadNames = key => {
-    const entry = readNameStore().entries?.[key];
-    if (!entry || !Array.isArray(entry.names) || Date.now() - Number(entry.ts || 0) > CACHE_TTL_MS) return null;
-    return entry.names;
-  };
-
-  const saveNames = (key, names) => {
-    const store = readNameStore();
-    store.entries[key] = { ts: Date.now(), names };
-    writeNameStore(store);
-  };
-
-  const makeFile = (path, name) => ({
-    name,
-    fileName: name,
-    downloadUrl: `${RAW_BASE}/${encodePath([...path, name])}`
-  });
-
-  const listFiles = async path => {
-    const key = joinPath(path);
-    const fromNames = names => names.map(name => makeFile(path, name));
-    if (nameCache.has(key)) return fromNames(nameCache.get(key));
-
-    const stored = loadNames(key);
-    if (stored) {
-      nameCache.set(key, stored);
-      return fromNames(stored);
-    }
-
-    const manifestResult = await manifestNames(path);
-    if (manifestResult) {
-      nameCache.set(key, manifestResult);
-      saveNames(key, manifestResult);
-      return fromNames(manifestResult);
-    }
-
-    return [];
   };
 
   const readSettings = () => {
@@ -250,16 +143,11 @@
 
   global.NVDiffSources = global.NVDiffSources || {};
   global.NVDiffSources.pseudocode = {
+    ...source,
     defaultLeft: DEFAULT_LEFT_RELEASE,
     defaultRight: DEFAULT_RIGHT_RELEASE,
     defaultModule: DEFAULT_MODULE,
     extraScripts: ['main/min/normalization.min.js'],
-    listReleases: () => listDirectories([]),
-    listModules: release => listDirectories([release]),
-    listNames: (release, module) => listFiles([release, module]),
-    sourceUrl: file => file.downloadUrl,
-    blobUrl: (release, module, file) => `${BLOB_BASE}/${encodePath([release, module, file.fileName])}`,
-    fileLabel: (release, module, file) => `${release}/${module}/${file.fileName}`,
     preparePair,
     prepareSingle,
     renderSettings,

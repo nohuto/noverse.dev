@@ -4,6 +4,7 @@
 
   const DRIVER_SCRIPTS = Object.freeze({
     type: 'main/min/type-layout-source.min.js',
+    globals: 'main/min/globals-source.min.js',
     pseudocode: 'main/min/pseudocode-source.min.js'
   });
   const DIFF_STYLES = ['main/vendor/highlight-github-dark.min.css', 'main/vendor/diff2html.min.css'];
@@ -12,7 +13,9 @@
     'main/vendor/diff.min.js',
     'main/vendor/diff2html-ui-base.min.js'
   ];
-  const SOURCE_ORDER = ['type', 'pseudocode'];
+  const SOURCE_ORDER = ['type', 'globals', 'pseudocode'];
+  const NAME_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 7;
+  const NAME_CACHE_MAX_ENTRIES = 6;
   const FONT_SIZE_KEY = 'nv-diff-font-size';
   const DEFAULT_FONT_SIZE = 12;
   const MIN_FONT_SIZE = 9;
@@ -148,6 +151,91 @@
     }
   };
 
+  global.createNVDiffManifestSource = ({ repository, dataset, cacheKey, displayName = name => name }) => {
+    const rawBase = `https://raw.githubusercontent.com/${repository}/main`;
+    const blobBase = `https://github.com/${repository}/blob/main`;
+    const manifestBase = `main/data/diff/${dataset}`;
+    const nameCache = new Map();
+    let manifestPromise;
+    const encodePath = parts => parts.filter(Boolean).map(encodeURIComponent).join('/');
+    const pathKey = parts => parts.filter(Boolean).join('/');
+
+    const fetchJson = url => fetch(url, { cache: 'force-cache' })
+      .then(response => response.ok ? response.json() : null)
+      .catch(() => null);
+    const fetchText = url => fetch(url, { cache: 'force-cache' })
+      .then(response => response.ok ? response.text() : null)
+      .catch(() => null);
+    const decodeNames = text => {
+      if (typeof text !== 'string') return [];
+      let previous = '';
+      return text.split(/\r?\n/).filter(Boolean).map(row => {
+        const split = row.indexOf('\t');
+        const name = previous.slice(0, Number(row.slice(0, split))) + row.slice(split + 1);
+        previous = name;
+        return name;
+      });
+    };
+    const manifest = () => {
+      manifestPromise ||= fetchJson(`${manifestBase}/index.json`).then(json => ({
+        releases: Array.isArray(json?.releases) ? json.releases : [],
+        modules: json?.modules && typeof json.modules === 'object' ? json.modules : {}
+      }));
+      return manifestPromise;
+    };
+    const readStore = () => {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(cacheKey) || '');
+        return parsed?.entries && typeof parsed.entries === 'object' ? parsed : { entries: {} };
+      } catch {
+        return { entries: {} };
+      }
+    };
+    const writeStore = store => {
+      const entries = Object.entries(store.entries || {})
+        .sort((left, right) => (right[1]?.ts || 0) - (left[1]?.ts || 0))
+        .slice(0, NAME_CACHE_MAX_ENTRIES);
+      storageSet(cacheKey, JSON.stringify({ entries: Object.fromEntries(entries) }));
+    };
+    const cachedNames = key => {
+      const entry = readStore().entries?.[key];
+      return entry && Array.isArray(entry.names) && Date.now() - Number(entry.ts || 0) <= NAME_CACHE_TTL_MS
+        ? entry.names
+        : null;
+    };
+    const listNames = async (release, module) => {
+      const path = [release, module];
+      const key = pathKey(path);
+      let names = nameCache.get(key) || cachedNames(key);
+      if (!names) {
+        const text = await fetchText(`${manifestBase}/names/${encodePath(path)}.txt`);
+        if (typeof text !== 'string') return [];
+        names = decodeNames(text);
+        nameCache.set(key, names);
+        const store = readStore();
+        store.entries[key] = { ts: Date.now(), names };
+        writeStore(store);
+      }
+      return names.map(fileName => ({
+        name: displayName(fileName),
+        fileName,
+        downloadUrl: `${rawBase}/${encodePath([...path, fileName])}`
+      }));
+    };
+
+    return {
+      listReleases: async () => (await manifest()).releases.slice().sort((a, b) => COLLATOR.compare(a, b)),
+      listModules: async release => {
+        const modules = (await manifest()).modules[release];
+        return Array.isArray(modules) ? modules.slice().sort((a, b) => COLLATOR.compare(a, b)) : [];
+      },
+      listNames,
+      sourceUrl: file => file.downloadUrl,
+      blobUrl: (release, module, file) => `${blobBase}/${encodePath([release, module, file.fileName])}`,
+      fileLabel: (release, module, file) => `${release}/${module}/${file.fileName}`
+    };
+  };
+
   const clampFontSize = value => {
     const parsed = Number.parseInt(value, 10);
     if (!Number.isFinite(parsed)) return DEFAULT_FONT_SIZE;
@@ -245,7 +333,8 @@
 
     const readUrlState = () => {
       const params = new URLSearchParams(location.search);
-      const kind = params.get('kind') === 'pseudocode' ? 'pseudocode' : 'type';
+      const requestedKind = params.get('kind');
+      const kind = SOURCE_ORDER.includes(requestedKind) ? requestedKind : 'type';
       return {
         kind,
         left: params.get('left') || '',
@@ -279,7 +368,7 @@
     const setKind = kind => {
       activeKind = SOURCE_ORDER.includes(kind) ? kind : 'type';
       activeSource = global.NVDiffSources[activeKind];
-      const nameText = activeKind === 'pseudocode' ? 'Function' : 'Type';
+      const nameText = activeKind === 'pseudocode' ? 'Function' : activeKind === 'globals' ? 'Global' : 'Type';
       nameLabel.textContent = nameText;
       nameSelect.closest('.select-ui')?.querySelector('.select-trigger')?.setAttribute('aria-label', nameText);
       kindButtons.forEach(button => {

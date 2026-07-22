@@ -925,6 +925,10 @@ body.policy-column-resizing * {
   max-width: 980px;
 }
 
+main.bindiff-main {
+  overflow-x: clip;
+}
+
 #diff-app .bindiff-intro p {
   max-width: none;
 }
@@ -1014,7 +1018,7 @@ body.policy-column-resizing * {
 
 .diff-kind-toggle {
   display: grid;
-  grid-template-columns: max-content max-content;
+  grid-template-columns: repeat(3, max-content);
   height: 24px;
   border: 1px solid var(--border);
   background: var(--panel);

@@ -1,4 +1,4 @@
-import json, os, shutil, subprocess, tempfile
+import json, os, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
 R = Path(__file__).resolve().parents[1]
@@ -23,6 +23,15 @@ SOURCES = {
         ],
         'ext': '.c',
     },
+    'globals': {
+        'repo': 'nohuto/globals',
+        'env': 'GLOBALS_DIR',
+        'fallbacks': [
+            ROOT / 'sources' / 'globals',
+            ROOT.parent / 'globals',
+        ],
+        'ext': '.cpp',
+    },
 }
 
 
@@ -31,7 +40,7 @@ def find_dir(cfg):
     if os.getenv(cfg['env']):
         paths.append(Path(os.getenv(cfg['env'])))
     paths.extend(cfg['fallbacks'])
-    return next((p for p in paths if p.is_dir()), None)
+    return next((p for p in paths if p.is_dir() and next(p.glob(f'*/*/*{cfg["ext"]}'), None)), None)
 
 
 def dirs(path):
@@ -54,7 +63,7 @@ def save_names(path, names):
         rows.append(f'{prefix}\t{name[prefix:]}')
         previous = name
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text('\n'.join(rows), encoding='utf-8')
+    path.write_text('\n'.join(rows), encoding='utf-8', newline='\n')
 
 
 def build_local(base, src, cfg):
@@ -126,5 +135,9 @@ def build(name, cfg):
 
 
 if __name__ == '__main__':
-    for name, cfg in SOURCES.items():
-        build(name, cfg)
+    names = sys.argv[1:] or SOURCES
+    unknown = set(names) - SOURCES.keys()
+    if unknown:
+        raise SystemExit(f'Unknown source: {", ".join(sorted(unknown))}')
+    for name in names:
+        build(name, SOURCES[name])

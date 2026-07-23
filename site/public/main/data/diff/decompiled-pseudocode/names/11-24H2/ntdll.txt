@@ -521,14 +521,12 @@
 83	Fallback.c
 8	ModernWpp__private_IsEnabledDeviceUsageNoInline.c
 36	Fallback.c
-8	PackagedComElevationSupport__private_IsEnabledFallback.c
-54	NoReportingNoInline.c
+8	PackagedComElevationSupport_v2__private_IsEnabledFallback.c
+57	NoReportingNoInline.c
 8	Servicing_DisallowSharedLockImplicitUpgrade__private_IsEnabledFallback.c
 70	NoReportingNoInline.c
 18	LoaderSnapsBuffer__private_IsEnabledDeviceUsageNoInline.c
 54	Fallback.c
-18	OutOfBoundWriteAtom__private_IsEnabledDeviceUsageNoInline.c
-56	Fallback.c
 0	fill_window.c
 0	FindEmailAt.c
 4	LabelEnd.c
@@ -2234,6 +2232,7 @@
 4	wnerAcesPresent.c
 3	pAbFreeKernelEntry.c
 5	cquireDescriptorPseudoGlobalLockEx.c
+11	HeapListLock.c
 11	SRWLockExclusiveContended.c
 18	SharedContended.c
 6	tivateLowFragmentationHeap.c
@@ -2254,7 +2253,6 @@
 12	Heap.c
 16	Metadata.c
 16	RaiseException.c
-12	ListLookup.c
 12	NTHeapInternal.c
 12	SecondLevelDir.c
 12	Tags.c
@@ -2518,8 +2516,6 @@
 9	ngthWithoutLastPathElement.c
 8	FHContext.c
 8	ocaleDataKey.c
-9	wFragHeapMetadataSize.c
-18	Size.c
 7	MemoryFlag.c
 8	odifiedProcessCookie.c
 8	UIRedirectedFilePath.c
@@ -2630,7 +2626,6 @@
 10	HandleError.c
 10	LoggingStateSync.c
 10	Protect.c
-10	ReportCounters.c
 10	SetInterceptor.c
 10	ValidateProtection.c
 10	Walk.c
@@ -2896,8 +2891,7 @@
 15	tackTraceDatabase.c
 24	Log.c
 14	ThreadActivationContextStack.c
-14	UCRIndex.c
-15	serList.c
+14	UserList.c
 14	Wnf.c
 8	MuiCriticalSection.c
 8	ParameterBlock.c
@@ -3068,7 +3062,6 @@
 3	PosixBarrier.c
 3	pOwnerAcesPresent.c
 4	PageHeapStop.c
-5	erformHeapMaintenance.c
 5	laceActivationContextOnLiveList.c
 5	opulateContext.c
 12	LanguageConfigList.c
@@ -3104,6 +3097,7 @@
 37	DetailedInformation.c
 37	ManifestResourceName.c
 9	MemoryUsageHeap.c
+20	Information.c
 9	NlsSystemCodePages.c
 9	PhysicalMemoryPolicy.c
 10	rocessDebugInformationFromWow64.c
@@ -3133,6 +3127,7 @@
 12	StackTrace.c
 7	TziFormatToTzi.c
 6	leaseDescriptorPseudoGlobalLock.c
+11	HeapListLock.c
 6	moveInvertedFunctionTableEntry.c
 10	UCRBlock.c
 11	serSubFromNameSub.c
@@ -3248,8 +3243,7 @@
 10	OpSlots.c
 10	Prologue.c
 5	pcaseUnicodeStringPrivate.c
-6	dateHeapRates.c
-14	Watermarks.c
+6	dateHeapWatermarks.c
 10	TagEntry.c
 11	EBLanguage.c
 10	UCRIndexInsert.c

@@ -1274,7 +1274,6 @@
 7	VirtualMemory.c
 0	nullsub_1.c
 8	2.c
-8	3.c
 0	OpenGlobalizationUserSettingsKey.c
 32	_ForMua.c
 36	SingleUserModel.c

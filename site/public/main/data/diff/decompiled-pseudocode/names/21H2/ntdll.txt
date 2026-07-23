@@ -450,8 +450,6 @@
 37	Fallback.c
 8	3106716987__private_IsEnabledDeviceUsage.c
 37	Fallback.c
-9	280147768__private_IsEnabledDeviceUsage.c
-37	Fallback.c
 8	SearchPackagePaths__private_IsEnabledDeviceUsage.c
 45	Fallback.c
 1	indDirectoryEntry.c
@@ -1280,7 +1278,6 @@
 7	VirtualMemory.c
 0	nullsub_1.c
 8	2.c
-8	3.c
 0	OpenGlobalizationUserSettingsKey.c
 32	_ForMua.c
 36	SingleUserModel.c
@@ -3468,7 +3465,7 @@
 5	ul.c
 5	xlX.c
 6	q.c
-1	ub_1800CB3B0.c
+1	ub_1800CB370.c
 0	SwapSplayLinks.c
 2	itchedRtlGetVersion.c
 21	_WinBLUE.c

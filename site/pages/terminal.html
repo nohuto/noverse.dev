@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Nohuto -->
+<html lang="en" data-theme-setting="gruvbox-dark" data-theme="gruvbox-dark" data-bg="dots" data-font="cascadia">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive terminal">
+  <title>Terminal</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="/main/images/nvlogo.png">
+  <link rel="stylesheet" href="/main/min/site.min.css">
+  <link rel="stylesheet" href="/main/min/terminal.min.css">
+  <script src="/main/min/bootstrap.min.js" defer></script>
+  <script src="/main/min/site.min.js" defer></script>
+  <script src="/main/min/terminal.min.js" defer></script>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <header class="prompt-bar">
+    <div class="prompt-line" role="group" aria-label="Terminal prompt">
+      <span class="prompt-user">nohuto</span>
+      <span class="prompt-sep">@</span>
+      <span class="prompt-host">noverse</span>
+    </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme"><span class="theme-toggle-icon" aria-hidden="true"></span></button>
+    <nav class="nav-tabs" aria-label="Primary navigation">
+      <a href="/">home</a>
+      <a href="/product">product</a>
+      <a href="/projects">projects</a>
+      <a href="/diff">diff</a>
+      <a href="/policies">policies</a>
+      <a href="/docs/">docs</a>
+    </nav>
+  </header>
+
+  <main id="main" class="main-terminal">
+    <section class="terminal-shell" data-title="terminal">
+      <div class="window-surface">
+        <div class="console-window" id="console-window" role="region" aria-label="Terminal window">
+          <div class="console-window-header" id="console-drag">
+            <span class="console-window-title">
+              <svg class="console-window-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 7l5 5l-5 5"></path>
+                <path d="M12 19h7"></path>
+              </svg>
+              <span>terminal</span>
+            </span>
+          </div>
+          <div class="console-window-body">
+            <div class="console" id="console">
+              <div class="console-output" id="console-output" role="log" aria-live="polite" aria-relevant="additions">
+                <div class="console-lines" id="console-lines"></div>
+                <form class="console-input" id="console-form" autocomplete="off">
+                  <span class="console-prompt">nohuto@noverse:~/terminal$</span>
+                  <span class="console-edit">
+                    <span class="console-measure" id="console-measure" aria-hidden="true"></span>
+                    <span class="console-preview" aria-hidden="true"><span class="console-preview-text" id="console-preview-text"></span><span class="console-suggestion" id="console-suggestion"></span></span>
+                    <textarea id="console-command" name="command" rows="1" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Console command input"></textarea>
+                    <button type="submit" class="sr-only">Run command</button>
+                    <span class="console-block-cursor" id="console-cursor" aria-hidden="true"></span>
+                  </span>
+                  <span class="console-timestamp" id="console-timestamp" aria-hidden="true"></span>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bitmask-layer" id="bitmask-layer" hidden>
+          <div class="bitmask-window" id="bitmask-window" role="dialog" aria-modal="true" aria-labelledby="bitmask-title">
+            <div class="bitmask-header" id="bitmask-drag">
+              <h2 id="bitmask-title">bitmask</h2>
+              <button class="bitmask-close" id="bitmask-close" type="button" aria-label="Close bitmask calculator" title="Close">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M18 6 6 18M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="bitmask-body">
+              <div class="bitmask-field" id="bitmask-field" aria-label="32-bit field"></div>
+              <div class="bitmask-values" aria-live="polite">
+                <label><span>DEC</span><input id="bitmask-dec" type="text" value="0" inputmode="numeric" autocomplete="off" spellcheck="false"></label>
+                <label><span>HEX</span><input id="bitmask-hex" type="text" value="0x00000000" autocomplete="off" spellcheck="false"></label>
+                <label><span>BIN</span><input id="bitmask-bin" type="text" value="00000000 00000000 00000000 00000000" inputmode="numeric" autocomplete="off" spellcheck="false"></label>
+              </div>
+              <div class="bitmask-actions">
+                <button type="button" data-bitmask-action="invert">Invert</button>
+                <button type="button" data-bitmask-action="all">Set all</button>
+                <button type="button" data-bitmask-action="clear">Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="calc-layer" id="calc-layer" hidden>
+          <div class="calc-window" id="calc-window" role="dialog" aria-modal="true" aria-labelledby="calc-title">
+            <div class="calc-header" id="calc-drag">
+              <h2 id="calc-title">calculator</h2>
+              <button class="calc-close" id="calc-close" type="button" aria-label="Close calculator" title="Close">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M18 6 6 18M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="calc-body">
+              <div class="calc-main">
+                <div class="calc-display">
+                  <div class="calc-output" id="calc-output" aria-label="Calculator expression and result">
+                    <input id="calc-input" type="text" value="" inputmode="none" autocomplete="off" spellcheck="false" aria-label="Calculator expression">
+                    <span class="calc-result" id="calc-result" aria-live="polite"></span>
+                  </div>
+                  <div class="calc-meta" id="calc-meta" aria-live="polite"></div>
+                </div>
+                <div class="calc-keypads">
+                  <div class="calc-tools" aria-label="Calculator functions">
+                    <button type="button" data-calc-value="^2"><span>x<sup>2</sup></span></button>
+                    <button type="button" data-calc-value="^">x<sup>y</sup></button>
+                    <button type="button" data-calc-value="abs(">abs</button>
+                    <button type="button" data-calc-value="sqrt(">sqrt</button>
+                    <button type="button" data-calc-value="log(">log</button>
+                    <button type="button" data-calc-value="ln(">ln</button>
+                    <button type="button" data-calc-value="sin(">sin</button>
+                    <button type="button" data-calc-value="cos(">cos</button>
+                    <button type="button" data-calc-value="tan(">tan</button>
+                    <button type="button" data-calc-value="pi">pi</button>
+                    <button type="button" data-calc-value="e">e</button>
+                    <button type="button" data-calc-value=",">,</button>
+                    <button type="button" data-calc-value="(">(</button>
+                    <button type="button" data-calc-value=")">)</button>
+                    <button type="button" data-calc-action="negate">+/-</button>
+                  </div>
+                  <div class="calc-grid" aria-label="Calculator keypad">
+                    <button type="button" data-calc-value="7" data-calc-key="number">7</button>
+                    <button type="button" data-calc-value="8" data-calc-key="number">8</button>
+                    <button type="button" data-calc-value="9" data-calc-key="number">9</button>
+                    <button type="button" data-calc-value="/" data-calc-key="operator">/</button>
+                    <button type="button" data-calc-value="4" data-calc-key="number">4</button>
+                    <button type="button" data-calc-value="5" data-calc-key="number">5</button>
+                    <button type="button" data-calc-value="6" data-calc-key="number">6</button>
+                    <button type="button" data-calc-value="*" data-calc-key="operator">*</button>
+                    <button type="button" data-calc-value="1" data-calc-key="number">1</button>
+                    <button type="button" data-calc-value="2" data-calc-key="number">2</button>
+                    <button type="button" data-calc-value="3" data-calc-key="number">3</button>
+                    <button type="button" data-calc-value="-" data-calc-key="operator">-</button>
+                    <button type="button" data-calc-value="0" data-calc-key="number">0</button>
+                    <button type="button" data-calc-value="." data-calc-key="number">.</button>
+                    <button type="button" data-calc-value="ans">ans</button>
+                    <button type="button" data-calc-value="+" data-calc-key="operator">+</button>
+                  </div>
+                  <div class="calc-actions" aria-label="Calculator actions">
+                    <button type="button" data-calc-value="!">!</button>
+                    <button type="button" data-calc-value="%">%</button>
+                    <button type="button" data-calc-action="move-left" aria-label="Move cursor left">&lt;</button>
+                    <button type="button" data-calc-action="move-right" aria-label="Move cursor right">&gt;</button>
+                    <button type="button" data-calc-action="clear">C</button>
+                    <button type="button" data-calc-action="delete" aria-label="Delete">DEL</button>
+                    <button type="button" data-calc-action="evaluate" class="calc-enter" aria-label="Enter">Enter</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <footer>
+    <div class="footer-row">
+      <div class="footer-left">
+        <div class="footer-copy">&copy; 2026 Nohuto</div>
+      </div>
+      <div class="footer-tools">
+        <div class="footer-tools-row">
+          <select id="theme-select" name="theme" aria-label="Theme">
+              <option value="system">System</option>
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+              <option value="ayu-dark">Ayu Dark</option>
+              <option value="ayu-light">Ayu Light</option>
+              <option value="catppuccin-frappe">Catppuccin Frappe</option>
+              <option value="catppuccin-latte">Catppuccin Latte</option>
+              <option value="catppuccin-macchiato">Catppuccin Macchiato</option>
+              <option value="catppuccin-mocha">Catppuccin Mocha</option>
+              <option value="everforest-dark">Everforest Dark</option>
+              <option value="everforest-light">Everforest Light</option>
+              <option value="gray-black">Gray Black</option>
+              <option value="gruvbox-dark">Gruvbox Dark</option>
+              <option value="gruvbox-light">Gruvbox Light</option>
+              <option value="horizon">Horizon</option>
+              <option value="kanagawa-dragon">Kanagawa Dragon</option>
+              <option value="kanagawa-lotus">Kanagawa Lotus</option>
+              <option value="kanagawa-wave">Kanagawa Wave</option>
+              <option value="monokai">Monokai</option>
+              <option value="night-owl">Night Owl</option>
+              <option value="nord">Nord</option>
+              <option value="one-dark">One Dark</option>
+              <option value="one-light">One Light</option>
+              <option value="purple-black">Purple Black</option>
+              <option value="rose-pine">Rose Pine</option>
+              <option value="rose-pine-moon">Rose Pine Moon</option>
+              <option value="solarized-dark">Solarized Dark</option>
+              <option value="solarized-light">Solarized Light</option>
+          </select>
+        </div>
+      </div>
+      <div class="social">
+        <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+          <span class="social-icon social-icon-github" aria-hidden="true"></span>
+        </a>
+        <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard">
+          <span class="social-icon social-icon-email" aria-hidden="true"></span>
+        </button>
+        <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer" aria-label="Discord server">
+          <span class="social-icon social-icon-discord" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

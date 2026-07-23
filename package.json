@@ -1,0 +1,20 @@
+{
+  "name": "noverse.dev",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "docs"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:docs": "npm run build --workspace noverse-docs",
+    "preview": "node scripts/preview.mjs"
+  },
+  "engines": {
+    "node": "^20.19.1 || >=22.12.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.27.3",
+    "parse5": "7.3.0"
+  }
+}

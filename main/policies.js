@@ -568,7 +568,7 @@ function initPolicyExplorer() {
     elementSection.appendChild(createNode('h3', null, 'Registry Values'));
     const storageGroups = getPolicyStorageGroups(policy);
     if (!storageGroups.length) {
-      elementSection.appendChild(createNode('div', 'policy-muted', 'No ADMX elements exported for this policy.'));
+      elementSection.appendChild(createNode('div', 'policy-muted', 'No ADMX elements exported for this policy'));
     } else {
       const registryList = createNode('div', 'policy-registry-list');
       storageGroups.forEach(group => {
@@ -906,8 +906,8 @@ function initPolicyExplorer() {
     if (tableNote) {
       const shown = visible.length;
       tableNote.textContent = filtered.length > shown
-        ? `Showing ${shown} of ${filtered.length}.`
-        : filtered.length ? '' : 'No matching policies.';
+        ? `Showing ${shown} of ${filtered.length}`
+        : filtered.length ? '' : 'No matching policies';
     }
     if (activePolicy && paneState.detail) renderDetail(activePolicy);
   };
@@ -1460,7 +1460,7 @@ function initPolicyExplorer() {
       applyFilters();
     })
     .catch(error => {
-      if (tableNote) tableNote.textContent = error.message || 'Failed to load policy definitions.';
+      if (tableNote) tableNote.textContent = error.message || 'Failed to load policy definitions';
       renderTree();
       renderTable();
       renderDetail(null);

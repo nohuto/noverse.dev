@@ -3,6 +3,7 @@ import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import sharp from 'sharp';
 import { minifyHtml } from './minify-html.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -13,9 +14,34 @@ const styleDir = path.join(siteDir, 'styles');
 const publicDir = path.join(siteDir, 'public');
 const distDir = path.join(root, 'dist');
 const mainOutputDir = path.join(distDir, 'main');
+const responsiveImagePattern = /\/?(main\/images\/[^"'\s,]+)-(\d+)\.webp\s+\d+w/g;
 
 async function copyEntry(source, destination) {
   await cp(source, destination, { recursive: true });
+}
+
+async function buildResponsiveImages(pages) {
+  const variants = new Map();
+
+  pages.forEach(({ html }) => {
+    for (const match of html.matchAll(responsiveImagePattern)) {
+      const [, imagePath, width] = match;
+      const widths = variants.get(imagePath) || new Set();
+      widths.add(Number(width));
+      variants.set(imagePath, widths);
+    }
+  });
+
+  await Promise.all([...variants].flatMap(([imagePath, widths]) => (
+    [...widths].map(async (width) => {
+      const output = path.join(distDir, `${imagePath}-${width}.webp`);
+      await mkdir(path.dirname(output), { recursive: true });
+      await sharp(path.join(publicDir, `${imagePath}.png`))
+        .resize({ width, withoutEnlargement: true })
+        .webp({ quality: 80, effort: 4 })
+        .toFile(output);
+    })
+  )));
 }
 
 async function buildMainSite() {
@@ -48,10 +74,17 @@ async function buildMainSite() {
   const htmlEntries = (await readdir(htmlDir, { withFileTypes: true }))
     .filter((entry) => entry.isFile() && path.extname(entry.name) === '.html');
 
-  await Promise.all(htmlEntries.map(async (entry) => {
-    const html = minifyHtml(await readFile(path.join(htmlDir, entry.name), 'utf8'));
-    await writeFile(path.join(distDir, entry.name), html);
-  }));
+  const pages = await Promise.all(htmlEntries.map(async (entry) => ({
+    entry,
+    html: await readFile(path.join(htmlDir, entry.name), 'utf8'),
+  })));
+
+  await Promise.all([
+    buildResponsiveImages(pages),
+    ...pages.map(({ entry, html }) => (
+      writeFile(path.join(distDir, entry.name), minifyHtml(html))
+    )),
+  ]);
 }
 
 function buildDocs() {

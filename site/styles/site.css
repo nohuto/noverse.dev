@@ -1531,7 +1531,7 @@ main.home-main {
   align-items: start;
   padding: 10px 12px;
 }
-#documentation .doc-card h3,
+#documentation .doc-card h4,
 #documentation .doc-card p {
   margin: 0;
 }
@@ -1553,11 +1553,11 @@ main.home-main {
 .legal-list .legal-item:last-child {
   padding-bottom: 0;
 }
-.legal-item h3,
+.legal-item h4,
 .legal-item p {
   margin: 0;
 }
-.legal-item h3 {
+.legal-item h4 {
   line-height: 1.25;
 }
 .legal-item p {

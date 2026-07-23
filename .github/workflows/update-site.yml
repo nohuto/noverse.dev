@@ -1,0 +1,97 @@
+name: site-update
+
+on:
+  schedule:
+    - cron: '15 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout site repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Refresh repository data
+        run: python scripts/update-repo-descs.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Refresh homepage activity
+        run: python scripts/update-home-data.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Refresh diff manifests
+        run: python scripts/update-diff-manifests.py
+
+      - name: Checkout win-config
+        uses: actions/checkout@v6
+        with:
+          repository: nohuto/win-config
+          ref: main
+          path: sources/win-config
+
+      - name: Checkout regkit
+        uses: actions/checkout@v6
+        with:
+          repository: nohuto/regkit
+          ref: main
+          path: sources/regkit
+
+      - name: Checkout app-guides
+        uses: actions/checkout@v6
+        with:
+          repository: nohuto/app-guides
+          ref: main
+          path: sources/app-guides
+
+      - name: Checkout windbg-notes
+        uses: actions/checkout@v6
+        with:
+          repository: nohuto/windbg-notes
+          ref: main
+          path: sources/windbg-notes
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync documentation
+        run: npm run docs:sync --workspace noverse-docs
+        env:
+          WIN_CONFIG_REPO_URL: https://github.com/nohuto/win-config
+          REGKIT_REPO_URL: https://github.com/nohuto/regkit
+          APP_GUIDES_REPO_URL: https://github.com/nohuto/app-guides
+          WINDBG_NOTES_REPO_URL: https://github.com/nohuto/windbg-notes
+
+      - name: Build complete site
+        run: npm run build
+
+      - name: Commit generated site changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git status --porcelain | grep .; then
+            git add docs/src/content/docs site/public/main/data/repos.json site/public/main/data/commits.json site/public/main/data/diff site/public/main/data/media-cache.json site/public/main/media site/public/main/images
+            git commit -m "update docs data"
+            git push
+          else
+            echo "no changes to commit"
+          fi

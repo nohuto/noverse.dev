@@ -1,4 +1,0 @@
-Contact: https://noverse.dev/
-Expires: 2027-06-03T12:00:00Z
-Preferred-Languages: en
-Canonical: https://noverse.dev/.well-known/security.txt

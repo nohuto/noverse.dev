@@ -1,0 +1,763 @@
+/* Copyright (c) 2026 Nohuto */
+
+#diff-app .panel-body {
+  padding: 12px 14px 14px;
+}
+
+.bindiff-intro p {
+  max-width: 980px;
+}
+
+main.bindiff-main {
+  overflow-x: clip;
+}
+
+#diff-app .bindiff-intro p {
+  max-width: none;
+}
+
+.bindiff-controls {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.bindiff-grid {
+  display: grid;
+  grid-template-columns: minmax(112px, 9rem) minmax(112px, 9rem) minmax(128px, 12rem) minmax(260px, 28rem);
+  gap: 10px;
+  min-width: 0;
+}
+
+.diff-grid {
+  grid-template-columns: minmax(112px, 9rem) minmax(112px, 9rem) max-content minmax(128px, 12rem) minmax(260px, 28rem);
+}
+
+.bindiff-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bindiff-field>span,
+.bindiff-field>label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.bindiff-field input[type="text"],
+.bindiff-field select,
+.bindiff-field .select-trigger {
+  width: 100%;
+  height: 24px;
+  font-size: 1rem;
+}
+
+.bindiff-field .select-trigger {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.bindiff-field-compact input[type="text"],
+.bindiff-field-compact select,
+.bindiff-field-compact .select-trigger {
+  height: 24px;
+}
+
+.bindiff-field-compact .select-trigger {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.bindiff-field .select-ui {
+  min-width: 0;
+  width: 100%;
+}
+
+.bindiff-field .select-ui.is-searchable .select-menu {
+  min-width: 0;
+}
+
+.bindiff-field .select-search {
+  width: 100%;
+  margin: 0;
+  padding: 3px 10px;
+  height: 24px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.bindiff-field .select-option {
+  padding: 4px 10px;
+  font-size: 1rem;
+}
+
+.diff-kind-toggle {
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  height: 24px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.diff-kind-field {
+  align-self: end;
+  justify-content: flex-end;
+}
+
+.diff-kind-toggle button {
+  height: 22px;
+  padding: 0 12px;
+  border: 0;
+  border-right: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.diff-kind-toggle button:last-child {
+  border-right: 0;
+}
+
+.diff-kind-toggle button.is-active {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.bindiff-field .select-menu-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bindiff-field .select-menu-meta-text {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.bindiff-view-toggle {
+  display: grid;
+  grid-template-columns: auto auto;
+  border: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.bindiff-view-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bindiff-view-tools[hidden],
+.bindiff-font-tools[hidden],
+.bindiff-links[hidden],
+#diff-swap[hidden],
+#diff-settings[hidden],
+#diff-maximize[hidden],
+#diff-display[hidden] {
+  display: none;
+}
+
+.bindiff-view-button {
+  height: 24px;
+  min-width: 120px;
+  border: 0;
+  border-right: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1rem;
+  padding: 0 8px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.bindiff-frame-view-tools {
+  position: absolute;
+  top: 1px;
+  right: 148px;
+  z-index: 10;
+}
+
+.bindiff-frame-view-tools .bindiff-view-toggle {
+  border: 0;
+  background: transparent;
+}
+
+.bindiff-frame-view-tools .bindiff-view-button {
+  width: 24px;
+  min-width: 24px;
+  padding: 0;
+  border: 0;
+  display: grid;
+  place-items: center;
+}
+
+.bindiff-view-icon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.7;
+}
+
+.bindiff-font-tools {
+  position: absolute;
+  top: 1px;
+  right: 92px;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 24px 24px;
+}
+
+#diff-app.bindiff-display-result .bindiff-font-tools {
+  right: 64px;
+}
+
+.bindiff-icon-button {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.bindiff-icon-button:hover:not(:disabled) {
+  color: var(--accent);
+}
+
+.bindiff-icon-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.bindiff-tool-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  stroke-width: 1.7;
+}
+
+.bindiff-view-button:last-child {
+  border-right: 0;
+}
+
+.bindiff-view-button.is-active {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.bindiff-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+.bindiff-actions button {
+  height: 24px;
+  min-width: 112px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1rem;
+  padding: 0 12px;
+  white-space: nowrap;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#diff-display,
+#diff-run {
+  min-width: 92px;
+  padding: 0 8px;
+}
+
+.bindiff-actions button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.bindiff-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.bindiff-output-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: auto;
+  gap: 10px;
+  margin: 0;
+  min-width: max-content;
+}
+
+.bindiff-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.bindiff-links .link {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.bindiff-links .link:hover {
+  color: var(--accent);
+}
+
+.bindiff-output-frame {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+}
+
+#diff-settings {
+  position: absolute;
+  top: 1px;
+  right: 36px;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  z-index: 10;
+  padding: 0;
+  display: block;
+}
+
+#diff-swap {
+  position: absolute;
+  top: 1px;
+  right: 64px;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  z-index: 10;
+  padding: 0;
+  display: block;
+}
+
+#diff-swap:hover {
+  color: var(--accent);
+}
+
+#diff-settings:hover {
+  color: var(--accent);
+}
+
+#diff-maximize {
+  position: absolute;
+  top: 1px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  z-index: 10;
+  padding: 0;
+  display: block;
+}
+
+.bindiff-maximize-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  margin: auto;
+  stroke-width: 1.7;
+}
+
+#diff-maximize .icon-minimize {
+  display: none;
+}
+
+#diff-maximize[aria-pressed="true"] .icon-maximize {
+  display: none;
+}
+
+#diff-maximize[aria-pressed="true"] .icon-minimize {
+  display: block;
+}
+
+#diff-maximize:hover {
+  color: var(--accent);
+}
+
+.bindiff-output {
+  --bindiff-font-size: 12px;
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  padding: 0;
+  overflow-x: auto;
+}
+
+.bindiff-output .d2h-wrapper {
+  width: 100%;
+  max-width: none;
+  text-align: left;
+  margin: 0;
+  --d2h-bg-color: var(--panel-alt);
+  --d2h-border-color: var(--border);
+  --d2h-dim-color: var(--muted);
+  --d2h-line-border-color: color-mix(in srgb, var(--border) 80%, transparent);
+  --d2h-file-header-bg-color: var(--panel);
+  --d2h-file-header-border-color: var(--border);
+  --d2h-empty-placeholder-bg-color: color-mix(in srgb, var(--panel) 78%, var(--bg));
+  --d2h-empty-placeholder-border-color: var(--border);
+  --d2h-selected-color: color-mix(in srgb, var(--accent) 18%, transparent);
+  --d2h-ins-bg-color: color-mix(in srgb, var(--success) 20%, transparent);
+  --d2h-ins-border-color: color-mix(in srgb, var(--success) 50%, var(--border));
+  --d2h-ins-highlight-bg-color: color-mix(in srgb, var(--success) 35%, transparent);
+  --d2h-ins-label-color: color-mix(in srgb, var(--success) 78%, var(--text));
+  --d2h-del-bg-color: color-mix(in srgb, var(--danger) 20%, transparent);
+  --d2h-del-border-color: color-mix(in srgb, var(--danger) 50%, var(--border));
+  --d2h-del-highlight-bg-color: color-mix(in srgb, var(--danger) 35%, transparent);
+  --d2h-del-label-color: color-mix(in srgb, var(--danger) 78%, var(--text));
+  --d2h-change-del-color: color-mix(in srgb, var(--warning) 24%, transparent);
+  --d2h-change-ins-color: color-mix(in srgb, var(--success) 24%, transparent);
+  --d2h-info-bg-color: color-mix(in srgb, var(--accent) 14%, transparent);
+  --d2h-info-border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  --d2h-change-label-color: color-mix(in srgb, var(--warning) 78%, var(--text));
+  --d2h-moved-label-color: color-mix(in srgb, var(--accent) 78%, var(--text));
+  --d2h-dark-color: var(--text);
+  --d2h-dark-bg-color: var(--panel-alt);
+  --d2h-dark-border-color: var(--border);
+  --d2h-dark-dim-color: var(--muted);
+  --d2h-dark-line-border-color: color-mix(in srgb, var(--border) 80%, transparent);
+  --d2h-dark-file-header-bg-color: var(--panel);
+  --d2h-dark-file-header-border-color: var(--border);
+  --d2h-dark-empty-placeholder-bg-color: color-mix(in srgb, var(--panel) 78%, var(--bg));
+  --d2h-dark-empty-placeholder-border-color: var(--border);
+  --d2h-dark-selected-color: color-mix(in srgb, var(--accent) 18%, transparent);
+  --d2h-dark-ins-bg-color: color-mix(in srgb, var(--success) 20%, transparent);
+  --d2h-dark-ins-border-color: color-mix(in srgb, var(--success) 50%, var(--border));
+  --d2h-dark-ins-highlight-bg-color: color-mix(in srgb, var(--success) 35%, transparent);
+  --d2h-dark-ins-label-color: color-mix(in srgb, var(--success) 78%, var(--text));
+  --d2h-dark-del-bg-color: color-mix(in srgb, var(--danger) 20%, transparent);
+  --d2h-dark-del-border-color: color-mix(in srgb, var(--danger) 50%, var(--border));
+  --d2h-dark-del-highlight-bg-color: color-mix(in srgb, var(--danger) 35%, transparent);
+  --d2h-dark-del-label-color: color-mix(in srgb, var(--danger) 78%, var(--text));
+  --d2h-dark-change-del-color: color-mix(in srgb, var(--warning) 24%, transparent);
+  --d2h-dark-change-ins-color: color-mix(in srgb, var(--success) 24%, transparent);
+  --d2h-dark-info-bg-color: color-mix(in srgb, var(--accent) 14%, transparent);
+  --d2h-dark-info-border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  --d2h-dark-change-label-color: color-mix(in srgb, var(--warning) 78%, var(--text));
+  --d2h-dark-moved-label-color: color-mix(in srgb, var(--accent) 78%, var(--text));
+}
+
+.bindiff-output .d2h-file-name-wrapper .d2h-icon {
+  display: none !important;
+}
+
+.bindiff-output .d2h-file-header,
+.bindiff-output .d2h-file-name-wrapper,
+.bindiff-output .d2h-file-name,
+.bindiff-output .d2h-file-stats {
+  font-family: var(--font-family);
+  font-size: var(--bindiff-font-size) !important;
+}
+
+.bindiff-output .d2h-file-header {
+  min-height: 24px;
+  height: 24px;
+  padding: 0 10px;
+  align-items: center;
+}
+
+.bindiff-output .d2h-file-name {
+  color: var(--muted) !important;
+}
+
+.bindiff-output .d2h-tag {
+  display: none;
+}
+
+.bindiff-output .d2h-diff-table {
+  width: 100%;
+  min-width: 100%;
+  table-layout: auto;
+  font-family: var(--font-family);
+  font-size: var(--bindiff-font-size) !important;
+}
+
+.bindiff-output .d2h-code-line-ctn,
+.bindiff-output .d2h-code-linenumber,
+.bindiff-output .d2h-code-side-linenumber,
+.bindiff-output .line-num1,
+.bindiff-output .line-num2 {
+  font-size: var(--bindiff-font-size) !important;
+  font-family: var(--font-family) !important;
+}
+
+.bindiff-output .d2h-code-line-ctn {
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.bindiff-output.bindiff-single-source .d2h-code-linenumber {
+  width: 4em;
+}
+
+.bindiff-output.bindiff-single-source .line-num1 {
+  display: none;
+}
+
+.bindiff-output.bindiff-single-source .line-num2 {
+  float: none;
+  width: auto;
+  padding: 0 0.5em;
+}
+
+.bindiff-output.bindiff-single-source .d2h-code-line {
+  padding-left: 4.5em;
+  padding-right: 0.5em;
+  width: calc(100% - 5em);
+}
+
+.bindiff-output .d2h-file-wrapper {
+  width: 100%;
+  max-width: none;
+  overflow-x: auto;
+}
+
+.bindiff-output .d2h-files-diff {
+  display: flex;
+  width: 100%;
+  max-width: none;
+}
+
+.bindiff-output .d2h-file-side-diff {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  overflow-x: auto;
+}
+
+.bindiff-output .hljs {
+  color: var(--text);
+  background: transparent;
+}
+
+.bindiff-output .hljs-comment,
+.bindiff-output .hljs-quote {
+  color: color-mix(in srgb, var(--muted) 90%, var(--text));
+  font-style: italic;
+}
+
+.bindiff-output .hljs-keyword,
+.bindiff-output .hljs-meta .hljs-keyword,
+.bindiff-output .hljs-type {
+  color: color-mix(in srgb, var(--accent) 82%, var(--text));
+}
+
+.bindiff-output .hljs-title,
+.bindiff-output .hljs-title.function_,
+.bindiff-output .hljs-title.class_ {
+  color: color-mix(in srgb, var(--accent-2) 82%, var(--text));
+}
+
+.bindiff-output .hljs-string,
+.bindiff-output .hljs-meta .hljs-string,
+.bindiff-output .hljs-regexp {
+  color: color-mix(in srgb, var(--warning) 82%, var(--text));
+}
+
+.bindiff-output .hljs-number,
+.bindiff-output .hljs-literal,
+.bindiff-output .hljs-symbol,
+.bindiff-output .hljs-built_in {
+  color: color-mix(in srgb, var(--success) 80%, var(--text));
+}
+
+.bindiff-output .hljs-variable,
+.bindiff-output .hljs-attr,
+.bindiff-output .hljs-attribute,
+.bindiff-output .hljs-operator {
+  color: color-mix(in srgb, var(--accent) 68%, var(--text));
+}
+
+.bindiff-output .hljs-addition {
+  background: color-mix(in srgb, var(--success) 24%, transparent);
+  color: color-mix(in srgb, var(--success) 84%, var(--text));
+}
+
+.bindiff-output .hljs-deletion {
+  background: color-mix(in srgb, var(--danger) 24%, transparent);
+  color: color-mix(in srgb, var(--danger) 84%, var(--text));
+}
+
+.bindiff-output .d2h-code-line-ctn.bindiff-comment-line,
+.bindiff-output .d2h-code-line-ctn.bindiff-comment-line * {
+  color: color-mix(in srgb, var(--muted) 88%, var(--text)) !important;
+  font-style: italic;
+}
+
+body.bindiff-maximized > .prompt-bar,
+body.bindiff-maximized > footer {
+  display: none;
+}
+
+#diff-app.bindiff-maximized {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+}
+
+#diff-app.bindiff-maximized .panel-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+}
+
+#diff-app.bindiff-maximized .bindiff-intro,
+#diff-app.bindiff-maximized .bindiff-grid,
+#diff-app.bindiff-maximized .bindiff-actions {
+  display: none;
+}
+
+#diff-app.bindiff-maximized .bindiff-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+#diff-app.bindiff-maximized .bindiff-output-tools {
+  margin: 0;
+}
+
+#diff-app.bindiff-maximized .bindiff-output-frame {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+#diff-app.bindiff-maximized .bindiff-output {
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
+}
+
+#diff-app.bindiff-maximized .bindiff-links {
+  margin-top: 8px;
+}
+
+@media (max-width: 1100px) {
+  .bindiff-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .bindiff-output-tools {
+    justify-content: space-between;
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .bindiff-grid.diff-grid {
+    grid-template-columns: minmax(112px, 9rem) minmax(112px, 9rem) max-content minmax(128px, 12rem);
+  }
+
+  .diff-grid .diff-name-field {
+    grid-column: 1 / -1;
+    justify-self: start;
+    width: min(100%, 28rem);
+  }
+}
+
+@media (max-width: 960px) {
+  main.policies-main,
+  main.bindiff-main {
+    padding: 10px 8px 24px;
+  }
+
+  .bindiff-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .bindiff-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bindiff-grid.diff-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+  }
+
+  .diff-grid .diff-build-field {
+    width: min(100%, 9rem);
+    flex: 0 0 min(100%, 9rem);
+  }
+
+  .diff-grid .diff-module-field {
+    width: min(100%, 12rem);
+    flex: 0 0 min(100%, 12rem);
+  }
+
+  .diff-grid .diff-kind-field {
+    width: auto;
+    flex: 0 0 auto;
+  }
+
+  .diff-grid .diff-name-field {
+    width: min(100%, 28rem);
+    max-width: 28rem;
+    flex: 1 1 260px;
+  }
+
+  .diff-name-field .select-menu-meta {
+    display: grid;
+    gap: 6px;
+  }
+
+  .bindiff-output {
+    --bindiff-font-size: 11px;
+  }
+}
+
+main.bindiff-main:has(.select-ui.open) {
+  z-index: 3;
+}

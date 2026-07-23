@@ -9,6 +9,7 @@
   const afterNextPaint = () => new Promise(resolve => {
     requestAnimationFrame(() => requestAnimationFrame(resolve));
   });
+  const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 
   const loadPolicyData = () => {
     if (policyDataPromise) return policyDataPromise;
@@ -122,6 +123,8 @@ function initPolicyExplorer() {
   let selectedId = null;
   let selectedCategoryKey = '';
   let categoryMap = new Map();
+  let categoryTree = null;
+  let tableRenderId = 0;
   const expandedTreeNodes = new Set(['__admin__']);
   let rowLimit = 350;
   let unlimitedRows = false;
@@ -625,6 +628,9 @@ function initPolicyExplorer() {
   };
 
   const sortPolicies = rows => {
+    if (sortState.id === 'setting') {
+      return sortState.direction === 'asc' ? rows : rows.slice().reverse();
+    }
     const column = columns.find(item => item.id === sortState.id) || columns[0];
     const direction = sortState.direction === 'desc' ? -1 : 1;
     return rows.slice().sort((left, right) => {
@@ -712,6 +718,7 @@ function initPolicyExplorer() {
   };
 
   const getSearchFields = policy => {
+    if (searchOptions.registry || searchOptions.details) preparePolicySearchFields(policy);
     const fields = [];
     if (searchOptions.names) fields.push(...policy.searchFields.names);
     if (searchOptions.registry) fields.push(...policy.searchFields.registry);
@@ -871,44 +878,44 @@ function initPolicyExplorer() {
   const getEffectiveLimit = () => unlimitedRows ? filtered.length : Math.max(1, rowLimit);
 
   const renderTable = () => {
+    const renderId = ++tableRenderId;
     tableBody.replaceChildren();
+    if (tableNote) tableNote.textContent = '';
     const sorted = sortPolicies(filtered);
     const visible = sorted.slice(0, getEffectiveLimit());
     const activePolicy = policyById.get(selectedId);
-    const fragment = document.createDocumentFragment();
+    const columns = getVisibleColumns();
+    const appendRows = start => {
+      if (renderId !== tableRenderId) return;
+      const end = Math.min(start + 50, visible.length);
+      const fragment = document.createDocumentFragment();
 
-    visible.forEach(policy => {
-      const row = document.createElement('tr');
-      row.className = policy.id === selectedId ? 'is-active' : '';
-      row.tabIndex = 0;
-      row.dataset.id = policy.id;
-      getVisibleColumns().forEach(column => {
-        const cell = document.createElement('td');
-        cell.textContent = column.value(policy) || '';
-        cell.dataset.column = column.id;
-        row.appendChild(cell);
-      });
+      for (let index = start; index < end; index += 1) {
+        const policy = visible[index];
+        const row = document.createElement('tr');
+        row.className = policy.id === selectedId ? 'is-active' : '';
+        row.tabIndex = 0;
+        row.dataset.id = policy.id;
+        columns.forEach(column => {
+          const cell = document.createElement('td');
+          cell.textContent = column.value(policy) || '';
+          cell.dataset.column = column.id;
+          row.appendChild(cell);
+        });
+        fragment.appendChild(row);
+      }
 
-      const selectRow = () => {
-        selectPolicy(policy, { selectCategory: splitSearchTerms(searchInput.value).length > 0 });
-      };
-      row.addEventListener('click', selectRow);
-      row.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          selectRow();
-        }
-      });
-      fragment.appendChild(row);
-    });
+      tableBody.appendChild(fragment);
+      if (end < visible.length) {
+        setTimeout(() => appendRows(end), 0);
+      } else if (tableNote) {
+        tableNote.textContent = filtered.length > visible.length
+          ? `Showing ${visible.length} of ${filtered.length}`
+          : filtered.length ? '' : 'No matching policies';
+      }
+    };
 
-    tableBody.appendChild(fragment);
-    if (tableNote) {
-      const shown = visible.length;
-      tableNote.textContent = filtered.length > shown
-        ? `Showing ${shown} of ${filtered.length}`
-        : filtered.length ? '' : 'No matching policies';
-    }
+    appendRows(0);
     if (activePolicy && paneState.detail) renderDetail(activePolicy);
   };
 
@@ -1081,7 +1088,7 @@ function initPolicyExplorer() {
     if (expandedTreeNodes.has('__admin__')) {
       const adminLevel = createNode('div', 'policy-tree-level');
       adminLevel.style.setProperty('--policy-tree-depth', '1');
-      appendCategoryNodes(adminLevel, buildCategoryTree(), 1);
+      appendCategoryNodes(adminLevel, categoryTree || buildCategoryTree(), 1);
       adminLevel.appendChild(createTreeButton({ label: 'All Settings', count, depth: 1 }));
       parent.appendChild(adminLevel);
     }
@@ -1100,13 +1107,15 @@ function initPolicyExplorer() {
     clearPendingSearch();
     const terms = splitSearchTerms(searchInput.value);
 
-    filtered = policies.filter(policy => {
-      if ((!terms.length || searchOptions.currentPath) && !categoryMatches(policy, selectedCategoryKey)) return false;
-      if (!terms.length) return true;
-      return searchOptions.matchAny
-        ? terms.some(term => termMatchesPolicy(policy, term))
-        : terms.every(term => termMatchesPolicy(policy, term));
-    });
+    filtered = !terms.length && !selectedCategoryKey
+      ? policies
+      : policies.filter(policy => {
+        if ((!terms.length || searchOptions.currentPath) && !categoryMatches(policy, selectedCategoryKey)) return false;
+        if (!terms.length) return true;
+        return searchOptions.matchAny
+          ? terms.some(term => termMatchesPolicy(policy, term))
+          : terms.every(term => termMatchesPolicy(policy, term));
+      });
 
     if (selectedId && !filtered.some(policy => policy.id === selectedId)) {
       selectedId = null;
@@ -1120,19 +1129,6 @@ function initPolicyExplorer() {
   };
 
   const normalizePolicy = (policy, index) => {
-    const elements = Array.isArray(policy.Elements) ? policy.Elements : [];
-    const valueGroups = getPolicyValueGroups(policy);
-    const elementText = valueGroups.flatMap(group => [
-      group.valueName,
-      ...group.keyPaths,
-      ...group.meta.flatMap(item => [item.label, ...item.values]),
-      ...group.rows.flatMap(row => [row.type, row.registryType, row.text])
-    ]).join(' ');
-    const elementTypeText = elements.map(element => `${element.Type || ''} ${getElementRegistryType(element)}`).join(' ');
-    const keyText = [
-      ...(policy.KeyPath || []),
-      ...valueGroups.flatMap(group => group.keyPaths)
-    ].join(' ');
     const categoryPath = getCategoryPath(policy);
     const categoryDisplayPath = categoryPath.map(segment => segment.displayName || segment.name).join(' / ');
     const scope = getPolicyScope(policy);
@@ -1154,20 +1150,53 @@ function initPolicyExplorer() {
           policy.File,
           policy.NameSpace,
           scope
-        ],
-        registry: [
-          keyText,
-          policy.ValueName,
-          getPolicyValue(policy)
-        ],
-        details: [
-          policy.Supported,
-          policy.ExplainText,
-          elementText,
-          elementTypeText
         ]
       }
     };
+  };
+
+  const preparePolicySearchFields = policy => {
+    if (policy.searchFields.registry) return;
+    const elements = Array.isArray(policy.Elements) ? policy.Elements : [];
+    const valueGroups = getPolicyValueGroups(policy);
+    const keyText = [
+      ...(policy.KeyPath || []),
+      ...valueGroups.flatMap(group => group.keyPaths)
+    ].join(' ');
+    policy.searchFields.registry = [keyText, policy.ValueName, getPolicyValue(policy)];
+    policy.searchFields.details = [
+      policy.Supported,
+      policy.ExplainText,
+      valueGroups.flatMap(group => [
+        group.valueName,
+        ...group.keyPaths,
+        ...group.meta.flatMap(item => [item.label, ...item.values]),
+        ...group.rows.flatMap(row => [row.type, row.registryType, row.text])
+      ]).join(' '),
+      elements.map(element => `${element.Type || ''} ${getElementRegistryType(element)}`).join(' ')
+    ];
+  };
+
+  const warmPolicySearchFields = async () => {
+    for (let start = 0; start < policies.length; start += 50) {
+      policies.slice(start, start + 50).forEach(preparePolicySearchFields);
+      await yieldToMain();
+    }
+  };
+
+  const normalizePolicies = async data => {
+    const normalized = [];
+    for (let start = 0; start < data.length; start += 250) {
+      const end = Math.min(start + 250, data.length);
+      for (let index = start; index < end; index += 1) {
+        normalized.push(normalizePolicy(data[index], index));
+      }
+      await yieldToMain();
+    }
+    return normalized.sort((left, right) => collator.compare(
+      left.DisplayName || left.PolicyName || '',
+      right.DisplayName || right.PolicyName || ''
+    ));
   };
 
   const syncSearchSettingsUi = () => {
@@ -1282,6 +1311,19 @@ function initPolicyExplorer() {
   };
 
   searchInput.addEventListener('input', scheduleSearch);
+  tableBody.addEventListener('click', event => {
+    const row = event.target instanceof Element ? event.target.closest('tr[data-id]') : null;
+    const policy = row && tableBody.contains(row) ? policyById.get(row.dataset.id) : null;
+    if (policy) selectPolicy(policy, { selectCategory: splitSearchTerms(searchInput.value).length > 0 });
+  });
+  tableBody.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const row = event.target instanceof Element ? event.target.closest('tr[data-id]') : null;
+    const policy = row && tableBody.contains(row) ? policyById.get(row.dataset.id) : null;
+    if (!policy) return;
+    event.preventDefault();
+    selectPolicy(policy, { selectCategory: splitSearchTerms(searchInput.value).length > 0 });
+  });
   viewTrigger?.addEventListener('click', event => {
     event.preventDefault();
     closeColumnMenu();
@@ -1430,13 +1472,9 @@ function initPolicyExplorer() {
   setBusy(true);
   afterNextPaint()
     .then(() => Promise.all([loadPolicyData(), loadPolicyCategoryData()]))
-    .then(([data, categories]) => {
+    .then(async ([data, categories]) => {
       categoryMap = new Map(Object.entries(categories || {}));
-      policies = data.map(normalizePolicy).sort((left, right) => {
-        const leftName = left.DisplayName || left.PolicyName || '';
-        const rightName = right.DisplayName || right.PolicyName || '';
-        return leftName.localeCompare(rightName, undefined, { sensitivity: 'base' });
-      });
+      policies = await normalizePolicies(data);
       policyById = new Map(policies.map(policy => [policy.id, policy]));
       policyByShareId = new Map();
       policies.forEach(policy => {
@@ -1454,10 +1492,12 @@ function initPolicyExplorer() {
       } else if (new URLSearchParams(location.search).has(POLICY_QUERY_PARAM)) {
         updatePolicyUrl(null);
       }
+      categoryTree = buildCategoryTree();
       updatePaneLayout();
       renderTree();
       renderTableHeader();
       applyFilters();
+      void warmPolicySearchFields();
     })
     .catch(error => {
       if (tableNote) tableNote.textContent = error.message || 'Failed to load policy definitions';

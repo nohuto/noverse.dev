@@ -91,6 +91,10 @@
 .policy-limit-controls input[type="number"] {
   height: 24px;
   font-size: 1rem;
+  width: 74px;
+  padding: 0 6px;
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 #policy-settings {
@@ -112,13 +116,6 @@
   height: 24px;
   color: var(--muted);
   white-space: nowrap;
-}
-
-.policy-limit-controls input[type="number"] {
-  width: 74px;
-  padding: 0 6px;
-  appearance: textfield;
-  -moz-appearance: textfield;
 }
 
 .policy-limit-controls input[type="number"]::-webkit-inner-spin-button,
@@ -357,9 +354,6 @@ body.policy-resizing .policy-splitter::after {
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-}
-
-.policy-tree-placeholder {
   padding: 0 10px;
   line-height: 24px;
 }
@@ -781,9 +775,6 @@ body.policy-column-resizing * {
   min-height: 24px;
   padding: 3px 8px;
   overflow-wrap: anywhere;
-}
-
-.policy-copy-box {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 16px;
   gap: 8px;
@@ -2071,6 +2062,19 @@ body.bindiff-maximized > footer {
     flex: 1 1 260px;
   }
 
+  .diff-name-field .select-menu-meta {
+    display: grid;
+    gap: 6px;
+  }
+
+  .diff-name-field .select-limit-controls {
+    margin-left: 0;
+  }
+
+  .diff-name-field .select-limit-input {
+    width: 68px;
+  }
+
   .bindiff-output {
     --bindiff-font-size: 11px;
   }
@@ -2086,6 +2090,10 @@ body.bindiff-maximized > footer {
   .policy-table-panel {
     height: min(420px, 44vh);
   }
+}
+
+main.bindiff-main:has(.select-ui.open) {
+  z-index: 3;
 }
 
 @media (max-width: 380px) {

@@ -54,6 +54,7 @@ let toastTimer;
 let repoDescriptionsPromise;
 let selectUiListener;
 let selectUiKeyListener;
+let openSelectUI;
 let siteErrorReturnFocus;
 let searchShortcutInput;
 let searchShortcutListener;
@@ -121,12 +122,12 @@ const consumeNotFoundPath = () => {
 };
 
 const hasSelectOption = (select, value) => Array.from(select.options).some(option => option.value === value);
-const closeSelectUIs = except => {
-  document.querySelectorAll('.select-ui.open').forEach(wrapper => {
-    if (wrapper === except) return;
-    wrapper.classList.remove('open');
-    wrapper.querySelector('.select-trigger')?.setAttribute('aria-expanded', 'false');
-  });
+const closeSelectUIs = () => {
+  if (!openSelectUI) return;
+  openSelectUI.classList.remove('open', 'open-up');
+  openSelectUI.querySelector('.select-list')?.style.removeProperty('max-height');
+  openSelectUI.querySelector('.select-trigger')?.setAttribute('aria-expanded', 'false');
+  openSelectUI = null;
 };
 
 function syncPageChrome(pathname = location.pathname) {
@@ -193,9 +194,10 @@ function syncThemeControls(theme = document.documentElement.getAttribute('data-t
   if (select && hasSelectOption(select, selected)) {
     select.value = selected;
     const selectedOption = select.options[select.selectedIndex];
-    const label = select.closest('.select-ui')?.querySelector('.select-trigger-label');
+    const selectUI = select.closest('.select-ui');
+    const label = selectUI?.querySelector('.select-trigger-label');
     if (label && selectedOption) label.textContent = selectedOption.textContent;
-    select.closest('.select-ui')?.querySelectorAll('.select-option').forEach(option => {
+    selectUI?.querySelectorAll('.select-option').forEach(option => {
       const active = option.dataset.value === selected;
       option.classList.toggle('is-active', active);
       option.setAttribute('aria-selected', active ? 'true' : 'false');
@@ -224,6 +226,9 @@ function initSelectUI() {
     trigger.className = 'select-trigger';
     trigger.setAttribute('aria-haspopup', 'listbox');
     trigger.setAttribute('aria-expanded', 'false');
+    const triggerLabel = document.createElement('span');
+    triggerLabel.className = 'select-trigger-label';
+    trigger.appendChild(triggerLabel);
 
     const label = document.querySelector(`label[for="${select.id}"]`);
     if (label && label.textContent) {
@@ -284,8 +289,6 @@ function initSelectUI() {
     menu.appendChild(list);
     if (menuMeta) menu.appendChild(menuMeta);
 
-    const optionSignature = () => Array.from(select.options).map(option => `${option.value}\u0000${option.disabled ? '1' : '0'}\u0000${option.textContent || ''}`).join('\u0001');
-    let lastOptionSignature = '';
     let optionsDirty = true;
     const getSearchRenderLimit = () => {
       const raw = (select.dataset.searchLimit || '').trim().toLowerCase();
@@ -331,17 +334,17 @@ function initSelectUI() {
       if (!raw) return null;
 
       const terms = raw.split(/\s+/).filter(Boolean);
-      const checks = terms.map(term => {
-        if (!/[*?]/.test(term)) {
-          const literal = term.toLowerCase();
-          return text => (text || '').toLowerCase().includes(literal);
-        }
-        const wildcardPattern = wildcardToRegexPattern(term);
-        const expression = new RegExp(wildcardPattern, 'i');
-        return text => expression.test(text || '');
-      });
+      const checks = terms.map(term => /[*?]/.test(term)
+        ? new RegExp(wildcardToRegexPattern(term), 'i')
+        : term.toLowerCase());
 
-      return text => checks.every(check => check(text));
+      return text => {
+        const value = text || '';
+        const lowerValue = value.toLowerCase();
+        return checks.every(check => typeof check === 'string'
+          ? lowerValue.includes(check)
+          : check.test(value));
+      };
     };
 
     const buildOptions = (filterText = '') => {
@@ -400,11 +403,7 @@ function initSelectUI() {
     const updateActive = () => {
       const active = select.value;
       const selected = select.options[select.selectedIndex];
-      trigger.replaceChildren();
-      const labelSpan = document.createElement('span');
-      labelSpan.className = 'select-trigger-label';
-      labelSpan.textContent = selected ? selected.textContent : active;
-      trigger.appendChild(labelSpan);
+      triggerLabel.textContent = selected ? selected.textContent : active;
       list.querySelectorAll('.select-option').forEach(btn => {
         const isActive = btn.dataset.value === active;
         btn.classList.toggle('is-active', isActive);
@@ -418,26 +417,46 @@ function initSelectUI() {
         updateActive();
         return;
       }
-      if (isSearchable || optionsDirty) {
+      if (optionsDirty) {
         buildOptions(searchValue);
-        if (!isSearchable) lastOptionSignature = optionSignature();
-      } else {
-        const nextSignature = optionSignature();
-        if (nextSignature !== lastOptionSignature) {
-          buildOptions();
-          lastOptionSignature = nextSignature;
-        }
       }
       updateActive();
     };
 
+    const positionMenu = () => {
+      wrapper.classList.remove('open-up');
+      list.style.removeProperty('max-height');
+      const triggerRect = trigger.getBoundingClientRect();
+      const headerBottom = document.querySelector('.prompt-bar')?.getBoundingClientRect().bottom || 0;
+      const gap = 4;
+      const below = Math.max(0, innerHeight - triggerRect.bottom - gap - 8);
+      const above = Math.max(0, triggerRect.top - gap - Math.max(8, headerBottom));
+      const menuHeight = menu.offsetHeight;
+      const openUp = below < menuHeight && above > below;
+      const room = openUp ? above : below;
+      const chromeHeight = menuHeight - list.offsetHeight;
+      list.style.maxHeight = `${Math.min(240, Math.max(0, room - chromeHeight))}px`;
+      wrapper.classList.toggle('open-up', openUp);
+
+      const menuRect = menu.getBoundingClientRect();
+      const overflow = openUp
+        ? Math.max(8, headerBottom) - menuRect.top
+        : menuRect.bottom - (innerHeight - 8);
+      if (overflow > 0) {
+        list.style.maxHeight = `${Math.max(0, list.offsetHeight - Math.ceil(overflow))}px`;
+      }
+    };
+
     const toggleOpen = () => {
       const next = !wrapper.classList.contains('open');
-      closeSelectUIs(wrapper);
-      wrapper.classList.toggle('open', next);
-      trigger.setAttribute('aria-expanded', next ? 'true' : 'false');
-      if (next) syncMenuOptions();
-      if (next && searchInput) {
+      closeSelectUIs();
+      if (!next) return;
+      openSelectUI = wrapper;
+      wrapper.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+      syncMenuOptions();
+      positionMenu();
+      if (searchInput) {
         requestAnimationFrame(() => searchInput?.focus({ preventScroll: true }));
       }
     };
@@ -518,6 +537,8 @@ function initSelectUI() {
     };
     document.addEventListener('click', selectUiListener);
     document.addEventListener('keydown', selectUiKeyListener);
+    window.addEventListener('resize', closeSelectUIs);
+    window.addEventListener('scroll', closeSelectUIs, { passive: true });
   }
 }
 
@@ -878,6 +899,7 @@ async function loadPage(url, push = true) {
     const nextPathname = route ? route.clean : requestedUrl.pathname;
     rememberActivePage(nextPathname);
     await loadPageFeatureStyles(newMain);
+    closeSelectUIs();
     window.stopConsoleAnimation?.();
     if (header && newHeader) header.replaceWith(newHeader);
     main.replaceWith(newMain);

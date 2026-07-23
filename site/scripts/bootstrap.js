@@ -5,7 +5,7 @@
   const THEME_SYSTEM = 'system';
   const THEME_DARK = 'dark';
   const THEME_LIGHT = 'light';
-  const DEFAULT_THEME = 'gruvbox-dark';
+  const DEFAULT_THEME = 'kanagawa-wave';
   const DEFAULT_BG = 'dots';
   const FONT_KEY = 'nv-font';
 

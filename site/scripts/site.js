@@ -3,7 +3,8 @@ const THEME_KEY = 'nv-theme';
 const THEME_SYSTEM = 'system';
 const THEME_DARK = 'dark';
 const THEME_LIGHT = 'light';
-const DEFAULT_THEME = 'gruvbox-dark';
+const DEFAULT_THEME = 'kanagawa-wave';
+const DEFAULT_LIGHT_THEME = 'catppuccin-latte';
 const LIGHT_THEMES = new Set([
   THEME_LIGHT,
   'gruvbox-light',
@@ -501,7 +502,7 @@ function initTheme() {
     button.dataset.themeReady = 'true';
     button.addEventListener('click', () => {
       const current = resolveTheme(document.documentElement.getAttribute('data-theme-setting') || DEFAULT_THEME);
-      const next = LIGHT_THEMES.has(current) ? DEFAULT_THEME : THEME_LIGHT;
+      const next = LIGHT_THEMES.has(current) ? DEFAULT_THEME : DEFAULT_LIGHT_THEME;
       applyTheme(next);
       storageSet(THEME_KEY, next);
       syncThemeControls(next);

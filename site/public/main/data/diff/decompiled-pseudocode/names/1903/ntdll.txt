@@ -102,6 +102,7 @@
 3	l.c
 0	bsearch.c
 7	_s.c
+0	Callback.c
 0	ceil.c
 0	CompareFunction.c
 0	cos.c
@@ -136,7 +137,9 @@
 6	topDebugging.c
 5	WaitStateChange.c
 4	serBreakPoint.c
-0	EtwCheckCoverage.c
+0	EnableCallback.c
+2	umProc.c
+1	twCheckCoverage.c
 4	reateTraceInstanceId.c
 3	DeliverDataBlock.c
 3	EnumerateProcessRegGuids.c
@@ -179,6 +182,7 @@
 12	EventAndSourceAsync.c
 0	fabs.c
 1	loor.c
+0	InitFn.c
 0	isalnum.c
 4	pha.c
 2	cntrl.c
@@ -302,6 +306,7 @@
 3	move.c
 7	_s.c
 3	set.c
+0	NotificationFunction.c
 0	ntdll_8.c
 0	NtdllDefWindowProc_A.c
 19	W.c
@@ -313,7 +318,6 @@
 8	3.c
 8	4.c
 8	5.c
-8	6.c
 0	PfxFindPrefix.c
 3	Initialize.c
 5	sertPrefix.c
@@ -1615,7 +1619,6 @@
 10	73C.c
 10	8CC.c
 10	988.c
-10	A00.c
 10	B1C.c
 11	80.c
 11	F0.c
@@ -2240,7 +2243,6 @@
 10	EB4.c
 9	C0A8.c
 10	1B8.c
-10	370.c
 10	438.c
 11	5C.c
 10	640.c
@@ -2253,7 +2255,6 @@
 11	CC.c
 9	D01C.c
 10	1A8.c
-10	390.c
 10	494.c
 10	570.c
 10	678.c
@@ -2304,7 +2305,6 @@
 10	630.c
 10	740.c
 10	80C.c
-11	20.c
 11	80.c
 10	920.c
 10	B98.c
@@ -2400,8 +2400,7 @@
 10	680.c
 10	788.c
 10	8A8.c
-10	B70.c
-11	88.c
+10	B88.c
 10	C38.c
 10	EB0.c
 10	FFC.c

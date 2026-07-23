@@ -485,12 +485,12 @@
 12	EventAndSourceAsync.c
 17	Worker.c
 0	fabs.c
-0	Feature_2838281531__private_IsEnabledDeviceUsage.c
+0	Feature_2415126843__private_IsEnabledDeviceUsage.c
 37	Fallback.c
-8	378570040__private_IsEnabledDeviceUsage.c
-36	Fallback.c
-8	997142843__private_IsEnabledDeviceUsage.c
-36	Fallback.c
+9	838281531__private_IsEnabledDeviceUsage.c
+37	Fallback.c
+8	3213038904__private_IsEnabledDeviceUsage.c
+37	Fallback.c
 8	TreatDosDevicePathsAsNormalFiles__private_ReportDeviceUsage.c
 1	indDirectoryEntry.c
 4	EmailAt.c
@@ -1385,7 +1385,6 @@
 7	VirtualMemory.c
 0	nullsub_1.c
 8	2.c
-8	3.c
 0	OpenGlobalizationUserSettingsKey.c
 32	_ForMua.c
 36	SingleUserModel.c
@@ -3692,7 +3691,7 @@
 8	9F3E8.c
 8	CCDC6.c
 8	E4638.c
-7	111A38.c
+7	111A08.c
 0	SwapSplayLinks.c
 2	itchedRtlGetVersion.c
 21	_Current.c

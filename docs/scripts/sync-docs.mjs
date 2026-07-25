@@ -114,7 +114,7 @@ function main() {
 
   console.log(
     `[sync-docs] Generated ${entries.length} pages (` +
-      `${repoStats.join(', ')}, section indexes: ${sectionIndexPages}).`
+    `${repoStats.join(', ')}, section indexes: ${sectionIndexPages}).`
   );
 }
 
@@ -237,7 +237,7 @@ function refreshRepoCache(cacheDir) {
       stdio: 'pipe',
     });
     execFileSync('git', ['reset', '--hard', 'FETCH_HEAD'], { cwd: cacheDir, stdio: 'pipe' });
-  } catch {}
+  } catch { }
 }
 
 function generateReadmeOverview(repo, repoDir) {

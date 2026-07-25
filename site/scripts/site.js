@@ -169,7 +169,9 @@ function initSelectUI() {
 
     const label = document.querySelector(`label[for="${select.id}"]`);
     if (label && label.textContent) {
-      trigger.setAttribute('aria-label', label.textContent.trim());
+      label.id ||= `${select.id}-label`;
+      label.removeAttribute('for');
+      trigger.setAttribute('aria-labelledby', label.id);
     }
 
     const menu = document.createElement('div');

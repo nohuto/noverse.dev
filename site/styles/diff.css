@@ -481,16 +481,31 @@ main.bindiff-main {
 .bindiff-output .d2h-file-header,
 .bindiff-output .d2h-file-name-wrapper,
 .bindiff-output .d2h-file-name,
-.bindiff-output .d2h-file-stats {
-  font-family: var(--font-family);
+.bindiff-output .d2h-file-stats,
+.bindiff-output .d2h-diff-table,
+.bindiff-output .d2h-info,
+.bindiff-output .d2h-code-line,
+.bindiff-output .d2h-code-side-line,
+.bindiff-output .d2h-code-line-ctn,
+.bindiff-output .d2h-code-linenumber,
+.bindiff-output .d2h-code-side-linenumber,
+.bindiff-output .d2h-code-line-prefix,
+.bindiff-output .d2h-emptyplaceholder,
+.bindiff-output .line-num1,
+.bindiff-output .line-num2 {
   font-size: var(--bindiff-font-size) !important;
+  font-family: var(--font-family) !important;
 }
 
 .bindiff-output .d2h-file-header {
   min-height: 24px;
   height: 24px;
-  padding: 0 10px;
+  padding: 0 204px 0 10px;
   align-items: center;
+}
+
+#diff-app.bindiff-display-result .bindiff-output .d2h-file-header {
+  padding-right: 120px;
 }
 
 .bindiff-output .d2h-file-name {
@@ -505,17 +520,6 @@ main.bindiff-main {
   width: 100%;
   min-width: 100%;
   table-layout: auto;
-  font-family: var(--font-family);
-  font-size: var(--bindiff-font-size) !important;
-}
-
-.bindiff-output .d2h-code-line-ctn,
-.bindiff-output .d2h-code-linenumber,
-.bindiff-output .d2h-code-side-linenumber,
-.bindiff-output .line-num1,
-.bindiff-output .line-num2 {
-  font-size: var(--bindiff-font-size) !important;
-  font-family: var(--font-family) !important;
 }
 
 .bindiff-output .d2h-code-line-ctn {
@@ -753,9 +757,6 @@ body.bindiff-maximized > footer {
     gap: 6px;
   }
 
-  .bindiff-output {
-    --bindiff-font-size: 11px;
-  }
 }
 
 main.bindiff-main:has(.select-ui.open) {

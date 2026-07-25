@@ -282,7 +282,8 @@
     const rightSelect = document.getElementById('diff-right-release');
     const moduleSelect = document.getElementById('diff-module');
     const nameSelect = document.getElementById('diff-name');
-    const nameLabel = document.querySelector('label[for="diff-name"]');
+    const nameLabel = document.getElementById('diff-name-label')
+      || document.querySelector('label[for="diff-name"]');
     const kindButtons = Array.from(document.querySelectorAll('#diff-kind-toggle button[data-kind]'));
     const displayButton = document.getElementById('diff-display');
     const runButton = document.getElementById('diff-run');

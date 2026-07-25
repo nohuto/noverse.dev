@@ -514,7 +514,10 @@ body {
   min-height: 100%;
 }
 html {
+  background-color: var(--bg-alt);
   font-size: 13px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 body {
   background-color: var(--bg);
@@ -774,6 +777,10 @@ select {
   background-image: none;
   background-repeat: no-repeat;
   padding-right: 28px;
+}
+.footer-tools select:not(.select-native),
+select.select-enhanced:not(.select-native) {
+  visibility: hidden;
 }
 select.select-native {
   position: absolute;

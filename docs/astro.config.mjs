@@ -18,7 +18,7 @@ const expandedSidebarRepos = new Set(['win-config', 'windbg-notes', 'regkit']);
 const noverseDocsLabels = {
   name: 'noverse-docs-labels',
   hooks: {
-    'config:setup'() {},
+    'config:setup'() { },
     'i18n:setup'({ injectTranslations }) {
       injectTranslations({
         en: {

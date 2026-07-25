@@ -627,8 +627,8 @@ main.bindiff-main {
   font-style: italic;
 }
 
-body.bindiff-maximized > .prompt-bar,
-body.bindiff-maximized > footer {
+body.bindiff-maximized>.prompt-bar,
+body.bindiff-maximized>footer {
   display: none;
 }
 

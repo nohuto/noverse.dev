@@ -12,7 +12,7 @@ Causes hung apps to get automatically get terminated, making the 'Hung program' 
 
 ### Registry Values
 
-Windows Internals says that the default of `WaitToKillServiceTimeout` is `20000` ("*The SCM’s timeout value in milliseconds resides in the HKLM\SYSTEM\CurrentControlSet\Control\WaitToKillServiceTimeout registry value, and it defaults to 20 seconds.*"), while the value exists by default on W11 with the data of `5000`, when looking at the win32kbase driver it also shows a default of `5000`.
+Windows Internals says that the default of `WaitToKillServiceTimeout` is `20000` ("*The SCM's timeout value in milliseconds resides in the HKLM\SYSTEM\CurrentControlSet\Control\WaitToKillServiceTimeout registry value, and it defaults to 20 seconds.*"), while the value exists by default on W11 with the data of `5000`, when looking at the win32kbase driver it also shows a default of `5000`.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control";

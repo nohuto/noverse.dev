@@ -536,10 +536,8 @@ main.bindiff-main {
   display: none;
 }
 
-.bindiff-output.bindiff-single-source .line-num2 {
-  float: none;
-  width: auto;
-  padding: 0 0.5em;
+.bindiff-output.bindiff-single-source .d2h-info {
+  display: none;
 }
 
 .bindiff-output.bindiff-single-source .d2h-code-line {

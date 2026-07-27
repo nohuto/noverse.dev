@@ -556,14 +556,13 @@ body {
 }
 
 html {
-  background-color: var(--bg-alt);
   font-size: 13px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
 body {
-  background-color: var(--bg);
+  background-color: var(--bg-alt);
   color: var(--text);
   display: flex;
   flex-direction: column;
@@ -572,13 +571,22 @@ body {
   position: relative;
 }
 
-body::before {
+body::before,
+body::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
+}
+
+body::before {
+  z-index: 1;
   opacity: 0;
+}
+
+body::after {
+  background-color: var(--bg);
+  z-index: 0;
 }
 
 html[data-bg="diamonds"] body::before {

@@ -378,17 +378,17 @@
 
 :root[data-docs-theme='everforest-dark'],
 [data-docs-theme='everforest-dark'] ::backdrop {
-  --nv-doc-bg: #2d353b;
-  --nv-doc-bg-alt: #232a2e;
-  --nv-doc-panel: #343f44;
-  --nv-doc-panel-alt: #3d484d;
-  --nv-doc-border: #475258;
-  --nv-doc-border-strong: #4f585e;
-  --nv-doc-text: #d3c6aa;
-  --nv-doc-muted: #9da9a0;
+  --nv-doc-bg: #272e33;
+  --nv-doc-bg-alt: #171d1c;
+  --nv-doc-panel: #232a2e;
+  --nv-doc-panel-alt: #374145;
+  --nv-doc-border: #414b50;
+  --nv-doc-border-strong: #495156;
+  --nv-doc-text: #d8ded8;
+  --nv-doc-muted: #b7c2ba;
   --nv-doc-accent: #a7c080;
   --nv-doc-accent-2: #7fbbb3;
-  --nv-doc-accent-contrast: #2b3339;
+  --nv-doc-accent-contrast: #272e33;
   --nv-doc-success: #a7c080;
   --nv-doc-warning: #dbbc7f;
   --nv-doc-danger: #e67e80;
@@ -540,8 +540,8 @@
   --sl-color-text-accent: color-mix(in srgb, var(--nv-doc-accent) 62%, var(--nv-doc-text));
   --sl-color-text-invert: var(--nv-doc-accent-contrast);
   --sl-color-bg: var(--nv-doc-bg);
-  --sl-color-bg-nav: var(--nv-doc-panel);
-  --sl-color-bg-sidebar: var(--nv-doc-panel);
+  --sl-color-bg-nav: var(--nv-doc-bg-alt);
+  --sl-color-bg-sidebar: var(--nv-doc-bg-alt);
   --sl-color-bg-inline-code: var(--nv-doc-panel-alt);
   --sl-color-bg-accent: var(--nv-doc-accent);
   --sl-color-hairline-light: var(--nv-doc-border);
@@ -554,18 +554,12 @@
   --sl-shadow-lg: none;
 
   --sl-rapide-ui-bg-color: var(--nv-doc-panel);
-  --sl-rapide-ui-header-bg-color: color-mix(in srgb, var(--nv-doc-panel-alt) 92%, transparent);
+  --sl-rapide-ui-header-bg-color: var(--nv-doc-bg-alt);
   --sl-rapide-ui-border-color: var(--nv-doc-border);
   --sl-rapide-ec-marker-bg-color: color-mix(in srgb, var(--nv-doc-accent) 8%, var(--nv-doc-panel-alt));
   --sl-rapide-ec-marker-border-color: color-mix(in srgb, var(--nv-doc-accent) 30%, var(--nv-doc-border));
 
   --starlight-image-zoom-backdrop-bg: color-mix(in srgb, var(--nv-doc-bg) 92%, black);
-}
-
-:root[data-docs-theme='gruvbox-dark'],
-[data-docs-theme='gruvbox-dark'] ::backdrop {
-  --sl-color-bg-nav: var(--nv-doc-bg-alt);
-  --sl-color-bg-sidebar: var(--nv-doc-bg-alt);
 }
 
 html[data-theme='light'] {

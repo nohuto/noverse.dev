@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 Nohuto */
+/* Copyright (c) 2026 nohuto */
 const THEME_KEY = 'nv-theme';
 const THEME_SYSTEM = 'system';
 const THEME_DARK = 'dark';
 const THEME_LIGHT = 'light';
-const DEFAULT_THEME = 'kanagawa-wave';
+const DEFAULT_THEME = 'everforest-dark';
 const DEFAULT_LIGHT_THEME = 'catppuccin-latte';
 const LIGHT_THEMES = new Set([
   THEME_LIGHT,

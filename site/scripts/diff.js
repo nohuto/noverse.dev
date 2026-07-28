@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 Nohuto */
+/* Copyright (c) 2026 nohuto */
 (function attachDiff(global) {
   'use strict';
 
@@ -133,7 +133,7 @@
 
   const colorScheme = () => {
     const lightThemes = global.LIGHT_THEMES || new Set(['light', 'gruvbox-light', 'kanagawa-lotus', 'catppuccin-latte', 'solarized-light', 'one-light', 'ayu-light', 'everforest-light']);
-    return lightThemes.has(document.documentElement.getAttribute('data-theme') || global.DEFAULT_THEME || 'kanagawa-wave') ? 'light' : 'dark';
+    return lightThemes.has(document.documentElement.getAttribute('data-theme') || global.DEFAULT_THEME || 'everforest-dark') ? 'light' : 'dark';
   };
 
   const storageGet = (key, fallback) => {

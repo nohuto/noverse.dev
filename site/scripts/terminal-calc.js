@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 Nohuto */
+/* Copyright (c) 2026 nohuto */
 (function attachNoverseCalculator(global) {
   'use strict';
 

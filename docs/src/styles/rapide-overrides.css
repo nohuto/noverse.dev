@@ -1,7 +1,17 @@
+@font-face {
+  font-family: "Cascadia Code";
+  src: url("/main/fonts/CascadiaCode-2407.24.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: block;
+}
+
 :root,
 ::backdrop {
-  --sl-font: "Cascadia Mono", "Cascadia Code", Consolas, "SFMono-Regular", Menlo, Monaco, "Liberation Mono", monospace;
-  --sl-font-mono: "Cascadia Mono", "Cascadia Code", Consolas, "SFMono-Regular", Menlo, Monaco, "Liberation Mono", monospace;
+  --sl-font-system: "Cascadia Code";
+  --sl-font-system-mono: "Cascadia Code";
+  --__sl-font: "Cascadia Code";
+  --__sl-font-mono: "Cascadia Code";
   --nv-ui-radius: 0px;
   --nv-search-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0'/%3E%3Cpath d='M21 21l-6 -6'/%3E%3C/svg%3E");
   --sl-color-accent-low: #143448;
@@ -12,6 +22,11 @@
   --scrollbar-track: var(--sl-color-gray-6);
   --scrollbar-thumb: var(--sl-color-gray-4);
   --scrollbar-thumb-hover: var(--sl-color-accent-high);
+}
+
+body {
+  font-size: 15px;
+  font-weight: 350;
 }
 
 :root[data-theme='light'],
@@ -165,6 +180,10 @@ html:not([data-has-sidebar]) {
   --sl-badge-success-text: var(--sl-color-accent-high);
 }
 
+starlight-toc a {
+  font-size: var(--sl-text-2xs);
+}
+
 html,
 body,
 #starlight__sidebar,
@@ -268,7 +287,7 @@ body::-webkit-scrollbar-thumb {
   border-radius: var(--nv-ui-radius);
   background-color: color-mix(in srgb, var(--sl-rapide-ui-bg-color) 96%, var(--sl-color-bg));
   color: var(--sl-color-text);
-  font-size: 13px;
+  font-size: var(--sl-text-xs);
   height: 24px;
   line-height: 24px;
   padding: 0 10px 0 29px;
@@ -324,11 +343,23 @@ site-search button[data-open-modal]:is(:hover, :focus-visible) {
 }
 
 site-search button[data-open-modal] > kbd {
+  grid-auto-flow: column;
+  place-items: center;
+  gap: 0.25em;
+  min-height: 16px;
+  padding: 0 6px;
   border: 1px solid var(--sl-color-hairline);
   border-radius: var(--nv-ui-radius);
   background-color: color-mix(in srgb, var(--sl-color-bg) 90%, var(--sl-rapide-ui-bg-color));
   color: var(--sl-color-gray-3);
-  padding-inline: 0.3rem;
+  font-size: 10px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+site-search button[data-open-modal] > kbd kbd {
+  font: inherit;
+  line-height: 1;
 }
 
 site-search dialog #starlight__search {
@@ -348,11 +379,15 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
 }
 
 @media (min-width: 50rem) {
+  site-search button[data-open-modal] > kbd {
+    display: inline-grid;
+  }
+
   site-search button[data-open-modal] {
     justify-content: initial;
     min-width: 0;
-    min-height: 2rem;
-    height: 2rem;
+    min-height: 26px;
+    height: 26px;
     padding-inline: 0.65rem 0.45rem;
     border-color: var(--sl-rapide-ui-border-color);
     background-color: color-mix(in srgb, var(--sl-rapide-ui-bg-color) 96%, var(--sl-color-bg));
@@ -388,7 +423,7 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
 }
 
 .sidebar-pane {
-  --nv-sidebar-tree-font-size: var(--sl-text-sm);
+  --nv-sidebar-tree-font-size: 12.5px;
   border-inline-end: 1px solid var(--sl-color-hairline-shade) !important;
 }
 

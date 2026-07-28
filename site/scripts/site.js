@@ -3,7 +3,7 @@ const THEME_KEY = 'nv-theme';
 const THEME_SYSTEM = 'system';
 const THEME_DARK = 'dark';
 const THEME_LIGHT = 'light';
-const DEFAULT_THEME = 'kanagawa-wave';
+const DEFAULT_THEME = 'gruvbox-dark';
 const DEFAULT_LIGHT_THEME = 'catppuccin-latte';
 const LIGHT_THEMES = new Set([
   THEME_LIGHT,
@@ -29,11 +29,10 @@ const MAIN_PAGE_ROUTES = Object.freeze([
   { slug: 'diff', clean: '/diff' },
   { slug: 'policies', clean: '/policies' }
 ]);
+const ACTIVE_PAGE_KEY = 'nv-active-page-path';
+const NOT_FOUND_KEY = 'nv-not-found-path';
+const MAIN_PAGE_PATHS = new Set(MAIN_PAGE_ROUTES.map(route => route.clean));
 window.NV_MAIN_ROUTES = MAIN_PAGE_ROUTES;
-const FONT_KEY = 'nv-font';
-const DEFAULT_FONT = 'cascadia';
-const FONT_KEYS = ['cascadia'];
-const FONT_SET = new Set(FONT_KEYS);
 const REPO_DESC_URL = '/main/data/repos.json';
 const SELECT_SEARCH_RENDER_LIMIT_DEFAULT = 300;
 const SYSTEM_THEME_QUERY = '(prefers-color-scheme: light)';
@@ -43,6 +42,7 @@ let repoDescriptionsPromise;
 let selectUiListener;
 let selectUiKeyListener;
 let openSelectUI;
+let siteErrorReturnFocus;
 let searchShortcutInput;
 let searchShortcutListener;
 
@@ -69,6 +69,31 @@ const storageSet = (key, value) => {
   try {
     localStorage.setItem(key, value);
   } catch { }
+};
+
+const normalizeMainPagePath = pathname => {
+  let path = `/${String(pathname || '').replace(/^\/+|\/+$/g, '')}`.toLowerCase();
+  if (path === '/index.html') path = '/';
+  else if (path.endsWith('.html')) path = path.slice(0, -5);
+  return MAIN_PAGE_PATHS.has(path) ? path : null;
+};
+
+const rememberActivePage = pathname => {
+  const path = normalizeMainPagePath(pathname);
+  if (!path) return;
+  try {
+    sessionStorage.setItem(ACTIVE_PAGE_KEY, path);
+  } catch { }
+};
+
+const consumeNotFoundPath = () => {
+  try {
+    const path = sessionStorage.getItem(NOT_FOUND_KEY) || '';
+    sessionStorage.removeItem(NOT_FOUND_KEY);
+    return path;
+  } catch {
+    return '';
+  }
 };
 
 const hasSelectOption = (select, value) => Array.from(select.options).some(option => option.value === value);
@@ -555,18 +580,6 @@ function initBackground() {
   storageSet(BG_KEY, applied);
 }
 
-function applyFont(key) {
-  const applied = FONT_SET.has(key) ? key : DEFAULT_FONT;
-  document.documentElement.setAttribute('data-font', applied);
-  document.documentElement.style.removeProperty('--font-family');
-  return applied;
-}
-
-function initTypography() {
-  applyFont(DEFAULT_FONT);
-  storageSet(FONT_KEY, DEFAULT_FONT);
-}
-
 function showToast(message) {
   const toast = document.querySelector('.toast');
   if (!toast) return;
@@ -723,15 +736,111 @@ function initSearchShortcut() {
   document.addEventListener('keydown', searchShortcutListener);
 }
 
+function hideSiteError() {
+  const modal = document.getElementById('site-error-modal');
+  if (!modal) return;
+  modal.hidden = true;
+  if (siteErrorReturnFocus?.isConnected) siteErrorReturnFocus.focus();
+  siteErrorReturnFocus = null;
+}
+
+function createSiteErrorModal() {
+  const modal = document.createElement('div');
+  modal.className = 'settings-modal site-error-modal';
+  modal.id = 'site-error-modal';
+  modal.hidden = true;
+  modal.innerHTML = `
+    <section class="settings-dialog site-error-dialog" role="alertdialog" aria-modal="true" aria-labelledby="site-error-title" aria-describedby="site-error-message">
+      <header class="settings-header site-error-header">
+        <h2 id="site-error-title">404</h2>
+        <button class="settings-close" type="button" data-site-error-close aria-label="Close error message" title="Close error message">
+          <svg class="settings-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M18 6 6 18M6 6l12 12"></path>
+          </svg>
+        </button>
+      </header>
+      <div class="settings-body site-error-body">
+        <p id="site-error-message">The requested page could not be found.</p>
+        <code class="site-error-path"></code>
+      </div>
+    </section>`;
+
+  const dialog = modal.querySelector('.site-error-dialog');
+  const header = modal.querySelector('.site-error-header');
+  if (!(dialog instanceof HTMLElement) || !(header instanceof HTMLElement)) return modal;
+
+  const clampPosition = () => {
+    if (modal.hidden) return;
+    dialog.style.left = `${Math.min(Math.max(0, dialog.offsetLeft), Math.max(0, modal.clientWidth - dialog.offsetWidth))}px`;
+    dialog.style.top = `${Math.min(Math.max(0, dialog.offsetTop), Math.max(0, modal.clientHeight - dialog.offsetHeight))}px`;
+  };
+
+  header.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || event.target instanceof Element && event.target.closest('button')) return;
+    event.preventDefault();
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const startLeft = dialog.offsetLeft;
+    const startTop = dialog.offsetTop;
+    const maxLeft = Math.max(0, modal.clientWidth - dialog.offsetWidth);
+    const maxTop = Math.max(0, modal.clientHeight - dialog.offsetHeight);
+    header.setPointerCapture(event.pointerId);
+
+    const move = moveEvent => {
+      dialog.style.left = `${Math.min(Math.max(0, startLeft + moveEvent.clientX - startX), maxLeft)}px`;
+      dialog.style.top = `${Math.min(Math.max(0, startTop + moveEvent.clientY - startY), maxTop)}px`;
+    };
+    const stop = () => {
+      if (header.hasPointerCapture(event.pointerId)) header.releasePointerCapture(event.pointerId);
+      header.removeEventListener('pointermove', move);
+      header.removeEventListener('pointerup', stop);
+      header.removeEventListener('pointercancel', stop);
+    };
+    header.addEventListener('pointermove', move);
+    header.addEventListener('pointerup', stop);
+    header.addEventListener('pointercancel', stop);
+  });
+
+  window.addEventListener('resize', clampPosition);
+  modal.addEventListener('click', event => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (target === modal || target?.closest('[data-site-error-close]')) hideSiteError();
+  });
+  modal.addEventListener('keydown', event => {
+    if (event.key !== 'Escape') return;
+    event.preventDefault();
+    hideSiteError();
+  });
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function showNotFoundError(url) {
+  const modal = document.getElementById('site-error-modal') || createSiteErrorModal();
+  const requestedUrl = new URL(url, location.href);
+  const pathElement = modal.querySelector('.site-error-path');
+  if (pathElement) pathElement.textContent = `${requestedUrl.pathname}${requestedUrl.search}${requestedUrl.hash}`;
+  siteErrorReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  modal.hidden = false;
+  const dialog = modal.querySelector('.site-error-dialog');
+  if (dialog instanceof HTMLElement) {
+    dialog.style.left = `${Math.max(0, (modal.clientWidth - dialog.offsetWidth) / 2)}px`;
+    dialog.style.top = `${Math.max(0, (modal.clientHeight - dialog.offsetHeight) / 2)}px`;
+  }
+  modal.querySelector('[data-site-error-close]')?.focus();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  const notFoundPath = consumeNotFoundPath();
+  rememberActivePage(location.pathname);
   initTheme();
   initEmailText();
   initBackground();
-  initTypography();
   initSelectUI();
   initRepoDescriptions();
   initClickableCards();
   initFiltering();
   initSearchShortcut();
   initClipboard();
+  if (notFoundPath) showNotFoundError(notFoundPath);
 }, { once: true });

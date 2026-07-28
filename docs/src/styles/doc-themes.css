@@ -54,8 +54,8 @@
 
 :root[data-docs-theme='gray-black'],
 [data-docs-theme='gray-black'] ::backdrop {
-  --nv-doc-bg: #0d0d0d;
-  --nv-doc-bg-alt: #080808;
+  --nv-doc-bg: #080808;
+  --nv-doc-bg-alt: #0d0d0d;
   --nv-doc-panel: #151515;
   --nv-doc-panel-alt: #1d1d1d;
   --nv-doc-border: #303030;
@@ -126,8 +126,8 @@
 
 :root[data-docs-theme='nord'],
 [data-docs-theme='nord'] ::backdrop {
-  --nv-doc-bg: #2e3440;
-  --nv-doc-bg-alt: #242933;
+  --nv-doc-bg: #242933;
+  --nv-doc-bg-alt: #2e3440;
   --nv-doc-panel: #3b4252;
   --nv-doc-panel-alt: #434c5e;
   --nv-doc-border: #4c566a;
@@ -144,8 +144,8 @@
 
 :root[data-docs-theme='kanagawa-wave'],
 [data-docs-theme='kanagawa-wave'] ::backdrop {
-  --nv-doc-bg: #1f1f28;
-  --nv-doc-bg-alt: #16161d;
+  --nv-doc-bg: #16161d;
+  --nv-doc-bg-alt: #1f1f28;
   --nv-doc-panel: #2a2a37;
   --nv-doc-panel-alt: #363646;
   --nv-doc-border: #54546d;
@@ -162,8 +162,8 @@
 
 :root[data-docs-theme='kanagawa-dragon'],
 [data-docs-theme='kanagawa-dragon'] ::backdrop {
-  --nv-doc-bg: #181616;
-  --nv-doc-bg-alt: #12120f;
+  --nv-doc-bg: #12120f;
+  --nv-doc-bg-alt: #181616;
   --nv-doc-panel: #1d1c19;
   --nv-doc-panel-alt: #282727;
   --nv-doc-border: #393836;
@@ -198,8 +198,8 @@
 
 :root[data-docs-theme='catppuccin-mocha'],
 [data-docs-theme='catppuccin-mocha'] ::backdrop {
-  --nv-doc-bg: #1e1e2e;
-  --nv-doc-bg-alt: #181825;
+  --nv-doc-bg: #181825;
+  --nv-doc-bg-alt: #1e1e2e;
   --nv-doc-panel: #313244;
   --nv-doc-panel-alt: #45475a;
   --nv-doc-border: #585b70;
@@ -216,8 +216,8 @@
 
 :root[data-docs-theme='catppuccin-macchiato'],
 [data-docs-theme='catppuccin-macchiato'] ::backdrop {
-  --nv-doc-bg: #24273a;
-  --nv-doc-bg-alt: #1e2030;
+  --nv-doc-bg: #1e2030;
+  --nv-doc-bg-alt: #24273a;
   --nv-doc-panel: #363a4f;
   --nv-doc-panel-alt: #494d64;
   --nv-doc-border: #5b6078;
@@ -234,8 +234,8 @@
 
 :root[data-docs-theme='catppuccin-frappe'],
 [data-docs-theme='catppuccin-frappe'] ::backdrop {
-  --nv-doc-bg: #303446;
-  --nv-doc-bg-alt: #292c3c;
+  --nv-doc-bg: #292c3c;
+  --nv-doc-bg-alt: #303446;
   --nv-doc-panel: #414559;
   --nv-doc-panel-alt: #51576d;
   --nv-doc-border: #626880;
@@ -270,8 +270,8 @@
 
 :root[data-docs-theme='solarized-dark'],
 [data-docs-theme='solarized-dark'] ::backdrop {
-  --nv-doc-bg: #002b36;
-  --nv-doc-bg-alt: #01212b;
+  --nv-doc-bg: #01212b;
+  --nv-doc-bg-alt: #002b36;
   --nv-doc-panel: #073642;
   --nv-doc-panel-alt: #0a3c47;
   --nv-doc-border: #586e75;
@@ -306,8 +306,8 @@
 
 :root[data-docs-theme='one-dark'],
 [data-docs-theme='one-dark'] ::backdrop {
-  --nv-doc-bg: #282c34;
-  --nv-doc-bg-alt: #21252b;
+  --nv-doc-bg: #21252b;
+  --nv-doc-bg-alt: #282c34;
   --nv-doc-panel: #2f343f;
   --nv-doc-panel-alt: #3b404a;
   --nv-doc-border: #3e4451;
@@ -342,8 +342,8 @@
 
 :root[data-docs-theme='ayu-dark'],
 [data-docs-theme='ayu-dark'] ::backdrop {
-  --nv-doc-bg: #0f1419;
-  --nv-doc-bg-alt: #0b1014;
+  --nv-doc-bg: #0b1014;
+  --nv-doc-bg-alt: #0f1419;
   --nv-doc-panel: #151a21;
   --nv-doc-panel-alt: #1b222b;
   --nv-doc-border: #253340;
@@ -378,9 +378,9 @@
 
 :root[data-docs-theme='everforest-dark'],
 [data-docs-theme='everforest-dark'] ::backdrop {
-  --nv-doc-bg: #272e33;
-  --nv-doc-bg-alt: #171d1c;
-  --nv-doc-panel: #232a2e;
+  --nv-doc-bg: #171d1c;
+  --nv-doc-bg-alt: #232a2e;
+  --nv-doc-panel: #272e33;
   --nv-doc-panel-alt: #374145;
   --nv-doc-border: #414b50;
   --nv-doc-border-strong: #495156;
@@ -416,7 +416,7 @@
 [data-docs-theme='rose-pine'] ::backdrop {
   --nv-doc-bg: #191724;
   --nv-doc-bg-alt: #1f1d2e;
-  --nv-doc-panel: #1f1d2e;
+  --nv-doc-panel: #26233a;
   --nv-doc-panel-alt: #26233a;
   --nv-doc-border: #403d52;
   --nv-doc-border-strong: #524f67;
@@ -434,7 +434,7 @@
 [data-docs-theme='rose-pine-moon'] ::backdrop {
   --nv-doc-bg: #232136;
   --nv-doc-bg-alt: #2a273f;
-  --nv-doc-panel: #2a273f;
+  --nv-doc-panel: #393552;
   --nv-doc-panel-alt: #393552;
   --nv-doc-border: #44415a;
   --nv-doc-border-strong: #56526e;
@@ -450,8 +450,8 @@
 
 :root[data-docs-theme='monokai'],
 [data-docs-theme='monokai'] ::backdrop {
-  --nv-doc-bg: #272822;
-  --nv-doc-bg-alt: #1f201b;
+  --nv-doc-bg: #1f201b;
+  --nv-doc-bg-alt: #272822;
   --nv-doc-panel: #2d2e27;
   --nv-doc-panel-alt: #3a3b33;
   --nv-doc-border: #3e3d32;
@@ -468,8 +468,8 @@
 
 :root[data-docs-theme='horizon'],
 [data-docs-theme='horizon'] ::backdrop {
-  --nv-doc-bg: #1c1e26;
-  --nv-doc-bg-alt: #161821;
+  --nv-doc-bg: #161821;
+  --nv-doc-bg-alt: #1c1e26;
   --nv-doc-panel: #232530;
   --nv-doc-panel-alt: #2d2f3a;
   --nv-doc-border: #2e303e;
@@ -486,8 +486,8 @@
 
 :root[data-docs-theme='night-owl'],
 [data-docs-theme='night-owl'] ::backdrop {
-  --nv-doc-bg: #011627;
-  --nv-doc-bg-alt: #00121f;
+  --nv-doc-bg: #00121f;
+  --nv-doc-bg-alt: #011627;
   --nv-doc-panel: #0b253a;
   --nv-doc-panel-alt: #0e293f;
   --nv-doc-border: #1d3b53;
@@ -539,7 +539,7 @@
   --sl-color-text: var(--nv-doc-readable-text);
   --sl-color-text-accent: color-mix(in srgb, var(--nv-doc-accent) 62%, var(--nv-doc-text));
   --sl-color-text-invert: var(--nv-doc-accent-contrast);
-  --sl-color-bg: var(--nv-doc-bg);
+  --sl-color-bg: var(--nv-doc-panel);
   --sl-color-bg-nav: var(--nv-doc-bg-alt);
   --sl-color-bg-sidebar: var(--nv-doc-bg-alt);
   --sl-color-bg-inline-code: var(--nv-doc-panel-alt);

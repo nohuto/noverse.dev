@@ -142,6 +142,18 @@ export default defineConfig({
       description:
         'Docs from win-config, regkit, app-guides, and windbg-notes.',
       favicon: '/logo.png',
+      head: [
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'preload',
+            href: '/main/fonts/CascadiaCode-2407.24.woff2',
+            as: 'font',
+            type: 'font/woff2',
+            crossorigin: true,
+          },
+        },
+      ],
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/nohuto' },
         { icon: 'discord', label: 'Discord', href: 'https://discord.noverse.dev' },
@@ -176,4 +188,3 @@ export default defineConfig({
     }),
   ],
 });
-

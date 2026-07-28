@@ -1,4 +1,12 @@
 /* Copyright (c) 2026 nohuto */
+@font-face {
+  font-family: "Cascadia Code";
+  src: url("/main/fonts/CascadiaCode-2407.24.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: block;
+}
+
 :root {
   --bg: #0e0e0e;
   --bg-alt: #131313;
@@ -15,7 +23,8 @@
   --warning: #e4c07a;
   --danger: #ff6b6b;
   --starfield-dot: color-mix(in srgb, var(--text) 90%, transparent);
-  --font-family: "Cascadia Mono", "Cascadia Code", Consolas, "SFMono-Regular", Menlo, Monaco, "Liberation Mono", monospace;
+  --font-family: "Cascadia Code";
+  --ui-font-size: 12px;
   --scrollbar-track: var(--bg-alt);
   --scrollbar-thumb: var(--border-strong);
   --scrollbar-thumb-hover: var(--accent);
@@ -88,8 +97,8 @@
 }
 
 [data-theme="gray-black"] {
-  --bg: #0d0d0d;
-  --bg-alt: #080808;
+  --bg: #080808;
+  --bg-alt: #0d0d0d;
   --panel: #151515;
   --panel-alt: #1d1d1d;
   --border: #303030;
@@ -139,8 +148,8 @@
 }
 
 [data-theme="nord"] {
-  --bg: #2e3440;
-  --bg-alt: #242933;
+  --bg: #242933;
+  --bg-alt: #2e3440;
   --panel: #3b4252;
   --panel-alt: #434c5e;
   --border: #4c566a;
@@ -156,8 +165,8 @@
 }
 
 [data-theme="kanagawa-wave"] {
-  --bg: #1f1f28;
-  --bg-alt: #16161d;
+  --bg: #16161d;
+  --bg-alt: #1f1f28;
   --panel: #2a2a37;
   --panel-alt: #363646;
   --border: #54546d;
@@ -173,8 +182,8 @@
 }
 
 [data-theme="kanagawa-dragon"] {
-  --bg: #181616;
-  --bg-alt: #12120f;
+  --bg: #12120f;
+  --bg-alt: #181616;
   --panel: #1d1c19;
   --panel-alt: #282727;
   --border: #393836;
@@ -207,8 +216,8 @@
 }
 
 [data-theme="catppuccin-mocha"] {
-  --bg: #1e1e2e;
-  --bg-alt: #181825;
+  --bg: #181825;
+  --bg-alt: #1e1e2e;
   --panel: #313244;
   --panel-alt: #45475a;
   --border: #585b70;
@@ -224,8 +233,8 @@
 }
 
 [data-theme="catppuccin-macchiato"] {
-  --bg: #24273a;
-  --bg-alt: #1e2030;
+  --bg: #1e2030;
+  --bg-alt: #24273a;
   --panel: #363a4f;
   --panel-alt: #494d64;
   --border: #5b6078;
@@ -241,8 +250,8 @@
 }
 
 [data-theme="catppuccin-frappe"] {
-  --bg: #303446;
-  --bg-alt: #292c3c;
+  --bg: #292c3c;
+  --bg-alt: #303446;
   --panel: #414559;
   --panel-alt: #51576d;
   --border: #626880;
@@ -275,8 +284,8 @@
 }
 
 [data-theme="solarized-dark"] {
-  --bg: #002b36;
-  --bg-alt: #01212b;
+  --bg: #01212b;
+  --bg-alt: #002b36;
   --panel: #073642;
   --panel-alt: #0a3c47;
   --border: #586e75;
@@ -309,8 +318,8 @@
 }
 
 [data-theme="one-dark"] {
-  --bg: #282c34;
-  --bg-alt: #21252b;
+  --bg: #21252b;
+  --bg-alt: #282c34;
   --panel: #2f343f;
   --panel-alt: #3b404a;
   --border: #3e4451;
@@ -343,8 +352,8 @@
 }
 
 [data-theme="ayu-dark"] {
-  --bg: #0f1419;
-  --bg-alt: #0b1014;
+  --bg: #0b1014;
+  --bg-alt: #0f1419;
   --panel: #151a21;
   --panel-alt: #1b222b;
   --border: #253340;
@@ -377,9 +386,9 @@
 }
 
 [data-theme="everforest-dark"] {
-  --bg: #272e33;
-  --bg-alt: #171d1c;
-  --panel: #232a2e;
+  --bg: #171d1c;
+  --bg-alt: #232a2e;
+  --panel: #272e33;
   --panel-alt: #374145;
   --border: #414b50;
   --border-strong: #495156;
@@ -413,7 +422,7 @@
 [data-theme="rose-pine"] {
   --bg: #191724;
   --bg-alt: #1f1d2e;
-  --panel: #1f1d2e;
+  --panel: #26233a;
   --panel-alt: #26233a;
   --border: #403d52;
   --border-strong: #524f67;
@@ -430,7 +439,7 @@
 [data-theme="rose-pine-moon"] {
   --bg: #232136;
   --bg-alt: #2a273f;
-  --panel: #2a273f;
+  --panel: #393552;
   --panel-alt: #393552;
   --border: #44415a;
   --border-strong: #56526e;
@@ -445,8 +454,8 @@
 }
 
 [data-theme="monokai"] {
-  --bg: #272822;
-  --bg-alt: #1f201b;
+  --bg: #1f201b;
+  --bg-alt: #272822;
   --panel: #2d2e27;
   --panel-alt: #3a3b33;
   --border: #3e3d32;
@@ -462,8 +471,8 @@
 }
 
 [data-theme="horizon"] {
-  --bg: #1c1e26;
-  --bg-alt: #161821;
+  --bg: #161821;
+  --bg-alt: #1c1e26;
   --panel: #232530;
   --panel-alt: #2d2f3a;
   --border: #2e303e;
@@ -479,8 +488,8 @@
 }
 
 [data-theme="night-owl"] {
-  --bg: #011627;
-  --bg-alt: #00121f;
+  --bg: #00121f;
+  --bg-alt: #011627;
   --panel: #0b253a;
   --panel-alt: #0e293f;
   --border: #1d3b53;
@@ -498,6 +507,7 @@
 * {
   box-sizing: border-box;
   font-family: var(--font-family);
+  font-weight: 350;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   scrollbar-width: thin;
 }
@@ -729,6 +739,7 @@ main {
   padding: 10px 16px;
   background: var(--bg-alt);
   border-bottom: 1px solid var(--border);
+  font-size: var(--ui-font-size);
 }
 
 .prompt-line {
@@ -736,7 +747,7 @@ main {
   align-items: center;
   flex-wrap: nowrap;
   gap: 2px;
-  font-size: 1rem;
+  font-size: 1em;
   text-transform: lowercase;
   letter-spacing: 0.02em;
 }
@@ -767,7 +778,7 @@ main {
   background: transparent;
   color: var(--muted);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1em;
   text-transform: lowercase;
   letter-spacing: 0.02em;
   line-height: normal;
@@ -852,6 +863,7 @@ button {
 
 select {
   min-width: 190px;
+  font-size: var(--ui-font-size);
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -898,11 +910,12 @@ select option:active {
   position: relative;
   width: 100%;
   min-width: 0;
-  text-align: left;
-  padding-right: 28px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  padding: 2px 28px 2px 10px;
+  font-size: var(--ui-font-size);
+  text-align: left;
 }
 
 .select-trigger-label {
@@ -912,7 +925,7 @@ select option:active {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: 1.3;
+  line-height: 1;
   pointer-events: none;
 }
 
@@ -957,6 +970,7 @@ select option:active {
   background: var(--panel);
   border: 1px solid var(--border);
   display: none;
+  font-size: var(--ui-font-size);
   z-index: 30;
 }
 
@@ -972,7 +986,6 @@ select option:active {
 
 .footer-tools .select-option {
   padding: 4px 10px;
-  font-size: 1rem;
 }
 
 .select-ui.is-searchable .select-menu {
@@ -986,13 +999,14 @@ select option:active {
   border: 1px solid var(--border);
   background: var(--panel-alt);
   color: var(--text);
+  font-size: 1em;
 }
 
 .select-menu-meta {
   padding: 5px 10px;
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: 0.78em;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -1126,7 +1140,6 @@ main.bindiff-main {
   margin: 0;
   overflow: hidden;
   background: transparent;
-  font-family: "Press Start 2P", var(--font-family);
   font-size: 10px;
   line-height: 1;
 }
@@ -1163,10 +1176,6 @@ video {
 
 main.home-main {
   width: min(1040px, 100%);
-}
-
-.home-intro {
-  max-width: 760px;
 }
 
 .home-intro h1 {
@@ -1289,6 +1298,7 @@ main.home-main {
 
 .home-work-item strong {
   font-size: 0.98rem;
+  font-weight: 600;
 }
 
 .home-work-title>a:hover strong,
@@ -1859,6 +1869,7 @@ footer {
   padding: 0;
   border-top: 1px solid var(--border);
   background: var(--bg-alt);
+  font-size: var(--ui-font-size);
 }
 
 .footer-row {
@@ -1903,7 +1914,7 @@ footer {
 
 .footer-copy {
   color: var(--muted);
-  font-size: 0.81rem;
+  font-size: 0.81em;
   text-transform: uppercase;
   letter-spacing: 0.14em;
 }
@@ -1924,11 +1935,6 @@ footer {
   padding: 2px 28px 2px 10px;
   line-height: normal;
   background-position: calc(100% - 16px) 48%, calc(100% - 10px) 48%;
-}
-
-.footer-tools .select-trigger {
-  align-items: center;
-  padding: 2px 28px 2px 10px;
 }
 
 .toast {
@@ -2270,7 +2276,8 @@ footer {
 }
 
 #diff-settings-close,
-#policy-settings-close {
+#policy-settings-close,
+.settings-close {
   height: 20px;
   width: 20px;
   min-width: 20px;
@@ -2285,7 +2292,8 @@ footer {
 }
 
 #diff-settings-close:hover,
-#policy-settings-close:hover {
+#policy-settings-close:hover,
+.settings-close:hover {
   color: var(--accent);
 }
 
@@ -2294,6 +2302,25 @@ footer {
   height: 14px;
   display: block;
   stroke-width: 1.9;
+}
+
+.site-error-modal {
+  z-index: 200;
+}
+
+.settings-body.site-error-body {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.site-error-body p {
+  margin: 0;
+}
+
+.site-error-path {
+  overflow-wrap: anywhere;
+  color: var(--muted);
 }
 
 .settings-body {

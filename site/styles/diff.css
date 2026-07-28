@@ -53,27 +53,23 @@ main.bindiff-main {
 }
 
 .bindiff-field input[type="text"],
-.bindiff-field select,
-.bindiff-field .select-trigger {
+.bindiff-field select {
   width: 100%;
   height: 24px;
+}
+
+.bindiff-field input[type="text"] {
   font-size: 1rem;
 }
 
+.bindiff-field select,
 .bindiff-field .select-trigger {
-  padding-top: 2px;
-  padding-bottom: 2px;
+  font-size: var(--ui-font-size);
 }
 
-.bindiff-field-compact input[type="text"],
-.bindiff-field-compact select,
-.bindiff-field-compact .select-trigger {
+.bindiff-field .select-trigger {
+  width: 100%;
   height: 24px;
-}
-
-.bindiff-field-compact .select-trigger {
-  padding-top: 2px;
-  padding-bottom: 2px;
 }
 
 .bindiff-field .select-ui {
@@ -96,7 +92,6 @@ main.bindiff-main {
 
 .bindiff-field .select-option {
   padding: 4px 10px;
-  font-size: 1rem;
 }
 
 .diff-kind-toggle {

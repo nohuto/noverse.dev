@@ -66,8 +66,11 @@ async function closestNotFound(pathname) {
 }
 
 function sendFile(response, file, status = 200, method = 'GET') {
+  const cacheControl = path.basename(file) === 'CascadiaCode-2407.24.woff2'
+    ? 'public, max-age=31556952, immutable'
+    : 'no-store';
   response.writeHead(status, {
-    'Cache-Control': 'no-store',
+    'Cache-Control': cacheControl,
     'Content-Type': mimeTypes.get(path.extname(file).toLowerCase()) || 'application/octet-stream',
   });
   if (method === 'HEAD') {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 Nohuto */
+/* Copyright (c) 2026 nohuto */
 :root {
   --bg: #0e0e0e;
   --bg-alt: #131313;
@@ -377,17 +377,17 @@
 }
 
 [data-theme="everforest-dark"] {
-  --bg: #2d353b;
-  --bg-alt: #232a2e;
-  --panel: #343f44;
-  --panel-alt: #3d484d;
-  --border: #475258;
-  --border-strong: #4f585e;
-  --text: #d3c6aa;
-  --muted: #9da9a0;
+  --bg: #272e33;
+  --bg-alt: #171d1c;
+  --panel: #232a2e;
+  --panel-alt: #374145;
+  --border: #414b50;
+  --border-strong: #495156;
+  --text: #d8ded8;
+  --muted: #b7c2ba;
   --accent: #a7c080;
   --accent-2: #7fbbb3;
-  --accent-contrast: #2b3339;
+  --accent-contrast: #272e33;
   --success: #a7c080;
   --warning: #dbbc7f;
   --danger: #e67e80;
@@ -1199,6 +1199,8 @@ main.home-main {
   background: transparent;
   font: inherit;
   cursor: pointer;
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 .home-email:hover,

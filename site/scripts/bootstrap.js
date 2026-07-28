@@ -5,9 +5,8 @@
   const THEME_SYSTEM = 'system';
   const THEME_DARK = 'dark';
   const THEME_LIGHT = 'light';
-  const DEFAULT_THEME = 'kanagawa-wave';
+  const DEFAULT_THEME = 'gruvbox-dark';
   const DEFAULT_BG = 'dots';
-  const FONT_KEY = 'nv-font';
 
   const THEME_OPTIONS = new Set([
     'system',
@@ -48,10 +47,6 @@
     'grid',
     'starfield'
   ]);
-  const FONT_OPTIONS = new Set([
-    'cascadia'
-  ]);
-
   const safeGet = key => {
     try {
       return localStorage.getItem(key);
@@ -88,7 +83,6 @@
   try {
     setTheme(safeGet(THEME_KEY) || DEFAULT_THEME);
     setAttrIfValid('data-bg', safeGet(BG_KEY) || DEFAULT_BG, BG_OPTIONS, DEFAULT_BG);
-    setAttrIfValid('data-font', safeGet(FONT_KEY), FONT_OPTIONS);
   } catch {
   }
 })();

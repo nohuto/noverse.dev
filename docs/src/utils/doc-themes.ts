@@ -42,7 +42,7 @@ export const docsLightThemeIds = docsThemes
   .map((theme) => theme.id);
 
 export const docsDefaultThemes = {
-  dark: 'everforest-dark',
+  dark: 'kanagawa-wave',
   light: 'catppuccin-latte',
 } as const;
 

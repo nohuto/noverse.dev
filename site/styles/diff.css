@@ -46,7 +46,7 @@ main.bindiff-main {
 
 .bindiff-field>span,
 .bindiff-field>label {
-  font-size: 0.78rem;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--muted);
@@ -56,10 +56,6 @@ main.bindiff-main {
 .bindiff-field select {
   width: 100%;
   height: 24px;
-}
-
-.bindiff-field input[type="text"] {
-  font-size: 1rem;
 }
 
 .bindiff-field select,
@@ -114,7 +110,7 @@ main.bindiff-main {
   border-right: 1px solid var(--border);
   background: transparent;
   color: var(--text);
-  font-size: 1rem;
+  font-size: var(--ui-font-size);
   line-height: 1;
   cursor: pointer;
 }
@@ -172,7 +168,7 @@ main.bindiff-main {
   color: var(--text);
   text-transform: none;
   letter-spacing: 0;
-  font-size: 1rem;
+  font-size: var(--ui-font-size);
   padding: 0 8px;
   white-space: nowrap;
   cursor: pointer;
@@ -271,7 +267,7 @@ main.bindiff-main {
   color: var(--text);
   text-transform: none;
   letter-spacing: 0;
-  font-size: 1rem;
+  font-size: var(--ui-font-size);
   padding: 0 12px;
   white-space: nowrap;
   line-height: 1;
@@ -313,7 +309,7 @@ main.bindiff-main {
 }
 
 .bindiff-links .link {
-  font-size: 0.78rem;
+  font-size: 10px;
   font-style: italic;
   color: var(--muted);
 }

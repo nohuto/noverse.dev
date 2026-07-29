@@ -25,7 +25,7 @@
 }
 
 body {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 350;
 }
 
@@ -181,7 +181,7 @@ html:not([data-has-sidebar]) {
 }
 
 starlight-toc a {
-  font-size: var(--sl-text-2xs);
+  font-size: 12.5px;
 }
 
 html,
@@ -423,7 +423,7 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
 }
 
 .sidebar-pane {
-  --nv-sidebar-tree-font-size: 13.5px;
+  --nv-sidebar-tree-font-size: 13px;
   border-inline-end: 1px solid var(--sl-color-hairline-shade) !important;
 }
 

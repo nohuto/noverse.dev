@@ -423,7 +423,7 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
 }
 
 .sidebar-pane {
-  --nv-sidebar-tree-font-size: 12.5px;
+  --nv-sidebar-tree-font-size: 13.5px;
   border-inline-end: 1px solid var(--sl-color-hairline-shade) !important;
 }
 

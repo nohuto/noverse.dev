@@ -6,7 +6,7 @@ sidebar:
   order: 2
 ---
 
-The *xHCI Interrupter Moderation Register* sets the minimum time between interrupt messages from one xHCI Interrupter, note that each interrupter has its own [register set](https://noverse.dev/docs/win-config/power/xhci-imod/#registers) (including the IMOD interval).
+The *xHCI Interrupter Moderation Register* sets the minimum time between interrupt messages from one xHCI Interrupter, note that each interrupter has its own [register set](https://noverse.dev/docs/win-config/power/xhci-imod/#registers) (including IMODI/IMODC).
 
 > "*Interrupt Moderation allows multiple events to be processed in the context of a single Interrupt Service Request (ISR), rather than generating an ISR for each event.*
 >
@@ -30,6 +30,21 @@ Usually, clearing `IP` (interrupt pending) loads `IMODC` from `IMODI`, `IMODC` t
 > Intel, [eXtensible Host Controller Interface for Universal Serial Bus](https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf)
 
 Whenever `IP` is cleared, hardware loads `IMODC = IMODI` and counts down to zero and stays there until another interrupt reloads it. This causes for example the first event after an idle to be immediate, and an event that arrives while the counter is running to get the IMOD wait time. With the interval of 50 us (Windows default), an event 10 us after the previous interrupt would wait about 40 us, an event 80 us after the previous interrupt wouldn't wait, means:
+
+```powershell
+$ .\nv-imod --no-write
+[~] xHCI controller at PCI 02:00.0
+    xHCI 1.10, register base 0x00000000FC700000
+    Runtime base 0x00000000FC701000, 8 implemented, 8 initialized
+[-] Interrupter 0: IMODI=200, IMODC=0 at 0x00000000FC701024 # IMODI = 200 ticks = 50 us
+[-] Interrupter 1: IMODI=200, IMODC=0 at 0x00000000FC701044
+[-] Interrupter 2: IMODI=200, IMODC=0 at 0x00000000FC701064
+[-] Interrupter 3: IMODI=200, IMODC=0 at 0x00000000FC701084
+[-] Interrupter 4: IMODI=200, IMODC=0 at 0x00000000FC7010A4
+[-] Interrupter 5: IMODI=200, IMODC=0 at 0x00000000FC7010C4
+[-] Interrupter 6: IMODI=200, IMODC=0 at 0x00000000FC7010E4
+[-] Interrupter 7: IMODI=200, IMODC=0 at 0x00000000FC701104
+```
 
 | State | Result |
 | --- | --- |
@@ -98,7 +113,7 @@ USB mouse & keyboards normally use interrupt IN endpoints, so a 1000 Hz endpoint
 >
 > — Microsoft, [USB_ENDPOINT_DESCRIPTOR structure](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/usbspec/ns-usbspec-_usb_endpoint_descriptor#members)
 
-So IMOD usually has no effect on the polling interval here, as the 50 us counter is usually already at zero, see '[Light Load](https://noverse.dev/docs/win-config/power/xhci-imod/#light-load)' example.
+So IMOD usually adds no interrupt notification wait in relation to the polling interval here, as the 50 us counter is usually already at zero whenever the next service chance happens, see '[Light Load](https://noverse.dev/docs/win-config/power/xhci-imod/#light-load)' example, therefore I would generally keep IMOD at its default value and move your USB devices onto different xHCI controllers, so they can't use the same interrupters.
 
 | Rate | Polling Interval | Isolated endpoint with 50 us IMOD |
 | --- | ---: | --- |
@@ -145,7 +160,7 @@ Software Supported Capabilities
 lkd> !usb3kd.xhci_registers 0xffff85824c5bfe90
 Runtime Registers
 -----------------
-    dt USBXHCI!_RUNTIME_REGISTERS 0xffffde81645004c0
+    dt USBXHCI!_RUNTIME_REGISTERS 0xffffde81645004c0 // controller register base + RTSOFF
     dt -ba8 USBXHCI!_INTERRUPTER_REGISTER_SET 0xffffde81645004e0 // interrupter 0 starts at runtimeBase + 0x20
 ```
 
@@ -176,7 +191,7 @@ lkd> dt -ba8 USBXHCI!_INTERRUPTER_REGISTER_SET 0xffffde81645004e0
 And all eight IMOD registers on this controller have the same value:
 
 ```c
-lkd> dd 0xffffde81645004e4 L1 // interrupter 0 IMOD
+lkd> dd 0xffffde81645004e4 L1 // RuntimeBase + 0x24 + 0x20 * 0 (interrupter 0 IMOD)
 ffffde81`645004e4  000000c8 // IMODI & IMODC
 lkd> dd 0xffffde8164500504 L1 // interrupter 1 IMOD
 ffffde81`64500504  000000c8
@@ -219,7 +234,7 @@ lkd> !usb3kd.xhci_deviceslots 0xffff85824c45dec0 3 verbose
     Speed: Full PortPathDepth: 1 PortPath: [ 5 ] DeviceAddress: 3 // full speed = period is measured in units of 1 millisecond frames
 
     [3] : dt USBXHCI!_ENDPOINT_DATA 0xffff8582a4bdea60 dt USBXHCI!_ENDPOINT_CONTEXT32 0xffff85824f7fe060 ES_RUNNING
-        EndpointType_InterruptIn Address: 0x81 PacketSize: 64 Interval: 1 // Interval = bInterval
+        EndpointType_InterruptIn Address: 0x81 PacketSize: 64 Interval: 1
         [1] dt USBXHCI!_BULK_TRANSFER_DATA 0xffff85824f96cc20
             [0] dt USBXHCI!_BULK_STAGE_DATA 0xffff85824f96ccb0 !xhci_transfertrbs 0xffff85824f96cd10
 
@@ -238,7 +253,7 @@ USB_ENDPOINT_DESCRIPTOR:
 ```
 
 ```c
-lkd> !usb3kd.xhci_transfertrbs 0xffff85824f96cd10
+lkd> !usb3kd.xhci_transfertrbs 0xffff85824f96cd10 // // _BULK_STAGE_DATA.TrbRange at 0xffff85824f96ccb0 + 0x60
     [  0] NORMAL       0x0000000631175d40 CycleBit 1 IOC 0 CH 1 BEI 0 InterrupterTarget 1 TransferLength    13 TDSize  0
     [  1] EVENT_DATA   0x0000000631175d50 CycleBit 1 IOC 1 CH 0 BEI 0 InterrupterTarget 1 Data 0xffff85824f96ccb3 TotalBytes 13
 ```
@@ -251,9 +266,10 @@ lkd> !usb3kd.xhci_deviceslots 0xffff85824c5bfe90 2 verbose
     [3] EndpointType_InterruptIn Address: 0x81 PacketSize: 8 Interval: 1 // bInterval = 1
         PendingTransferList:
         [0] dt USBXHCI!_BULK_TRANSFER_DATA 0xffff85824f8c6890
+            [0] dt USBXHCI!_BULK_STAGE_DATA 0xffff85824f8c6920 !xhci_transfertrbs 0xffff85824f8c6980
         [1] dt USBXHCI!_BULK_TRANSFER_DATA 0xffff85824f702890
 
-lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980
+lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980 // _BULK_STAGE_DATA.TrbRange at 0xffff85824f8c6920 + 0x60
     [  0] NORMAL       0x000000010da40ec0 CycleBit 1 IOC 0 CH 1 BEI 0 InterrupterTarget 1 TransferLength     8 TDSize  0
     [  1] EVENT_DATA   0x000000010da40ed0 CycleBit 1 IOC 1 CH 0 BEI 0 InterrupterTarget 1 Data 0xffff85824f8c6923 TotalBytes 8
 ```

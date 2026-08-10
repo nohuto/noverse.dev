@@ -3,37 +3,21 @@ title: 'NVCPL Settings'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 2
 ---
 
 `Minimal` = Uses the configurations while turning off features like G-SYNC, Antialiasing, Sharpening, Ambient Occlusion, NIS, Ansel etc.  
 `Compatible` = Uses the same configurations but keeps those features enabled/app-controlled
 
-The following includes details of how the panel sets the changes and more, a lot of it is for informational purposes only.
+The sections below include details of how the nvcpl sets the changes and more, a lot of it is for informational purposes only.
 
-- 3D Settings
-  - [Adjust image settings with preview](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--adjust-image-settings-with-preview)
-  - [Manage 3D settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--manage-3d-settings)
-  - [Configure Surround, PhysX](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--configure-surround-physx)
-- Display
-  - Change resolution
-  - [Adjust desktop color settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#display--adjust-desktop-color-settings)
-  - [Rotate display](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#display--rotate-display)
-  - [View HDCP status](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#view-hdcp-status)
-  - Set up digital audio
-  - [Adjust desktop size and position](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#display--adjust-desktop-size-and-position)
-  - Set up multiple displays
-- Developer
-  - [Manage GPU Performance Counters](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#developer--manage-gpu-performance-counters)
-- Video
-  - [Adjust video color settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#video--adjust-video-color-settings)
-  - [Adjust video image settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#video--adjust-video-image-settings)
+## 3D Settings
 
-## 3D Settings > Adjust image settings with preview
+### Adjust image settings with preview
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl1.png?raw=true)
 
-## 3D Settings > Manage 3D settings
+### Manage 3D settings
 
 Note that many settings like '*Triple buffering*', '*OpenGL Rendering GPU*', '*Threaded optimization*', '*Vulkan/OpenGL present method*' etc. are used OpenGL/old DX games only, and e.g. '*Virtual Reality pre-rendered frames*' for VR applications.
 
@@ -42,7 +26,7 @@ Note that many settings like '*Triple buffering*', '*OpenGL Rendering GPU*', '*T
 - [Noverse-Compatible](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NV-Compatible.nip)
 - [`d3dreg` Output](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3doutput.txt) - [List](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3dlist.cpp)
 
-## 3D Settings > Configure Surround, PhysX
+### Configure Surround, PhysX
 
 Select your GPU if supported (unless the physics workload of your game which uses PhysX is small, auto detect is usually the same as GPU anyway).
 
@@ -53,24 +37,32 @@ Note that NVIDIA PhysX is used by some old titles like *Borderlands 2* (2012)/*A
 I'm unsure how the `physxGpuId` gets set, but it's not the same for everyone .It gets read in the NVAPI key and is a `REG_BINARY` type. If `CPU` is selected, it zeros itself (`00 00 00 00`), if `Auto` (supported)/`GPU` it changes the ID. `nvapi.h` includes some notes.
 
 `Auto-select`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\NvCplPhysxAuto    Type: REG_DWORD, Length: 4, Data: 1
 ```
+
 `GPU`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\NvCplPhysxAuto    Type: REG_DWORD, Length: 4, Data: 0
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\NVAPI\physxGpuId    Type: REG_BINARY, Length: 4, Data: 00 07 00 00
 ```
+
 `CPU`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\NvCplPhysxAuto    Type: REG_DWORD, Length: 4, Data: 0
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\NVAPI\physxGpuId    Type: REG_BINARY, Length: 4, Data: 00 00 00 00
 ```
+
 - [nvidia/assets | physx-nvapi.h](https://github.com/nohuto/win-config/blob/main/nvidia/assets/physx-nvapi.h)
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl2.png?raw=true)
 
-## Display > Adjust desktop color settings 
+## Display
+
+### Adjust desktop color settings 
 
 Increase `Digital vibrance` up to a level you prefer.
 
@@ -176,27 +168,30 @@ sin(0) = 0  = 0x00000000 hex
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl3.png?raw=true)
 
-## Display > Rotate display
+## Rotate display
 
 You've to edit the `Rotation` value to change the orientation, `DefaultSettings.Orientation` gets reset to the `Rotation` state if changing it. The IDs will obviously not be the same for you.
 
 ```powershell
 "dwm.exe","RegSetValue","HKLM\System\CurrentControlSet\Control\UnitedVideo\CONTROL\VIDEO\{0096AEE5-861E-11F0-896E-806E6F6E6963}\0000\DefaultSettings.Orientation","Type: REG_DWORD, Length: 4, Data: 0"
 ```
-`0` = Landscape
-`1` = Portrait
-`2` = Landscape (flipped)
-`3` = Portrait (flipped)
+
+- `0` = Landscape
+- `1` = Portrait
+- `2` = Landscape (flipped)
+- `3` = Portrait (flipped)
 
 ```powershell
 "svchost.exe","RegSetValue","HKLM\System\CurrentControlSet\Control\GraphicsDrivers\Configuration\MSI3CB01222_2E_07E4_FF^28BF11A4ED9F56277B96046CA0884335\00\00\Rotation","Type: REG_DWORD, Length: 4, Data: 1"
 ```
-`1` = Landscape
-`2` = Portrait
-`3` = Landscape (flipped)
-`4` = Portrait (flipped)
+
+- `1` = Landscape
+- `2` = Portrait
+- `3` = Landscape (flipped)
+- `4` = Portrait (flipped)
 
 `Landscape`:
+
 ```json
 "HKLM\\System\\CurrentControlSet\\Control\\UnitedVideo\\CONTROL\\VIDEO\\{0096AEE5-861E-11F0-896E-806E6F6E6963}\\0000": {
   "DefaultSettings.Orientation": { "Type": "REG_DWORD", "Data": 0 }
@@ -206,8 +201,7 @@ You've to edit the `Rotation` value to change the orientation, `DefaultSettings.
 }
 ```
 
-
-## Display > View HDCP status
+## View HDCP status
 
 > "*High-bandwidth Digital Content Protection (HDCP) is a copy-protection technology that prevents copying of digital audio and video content across DisplayPort, Digital Visual Interface (DVI), or High-Definition Multimedia Interface (HDMI) connections.*"
 >
@@ -239,7 +233,7 @@ Whether your display supports HDCP you can practically make it unsupported using
 }
 ```
 
-## Display > Adjust desktop size and position
+## Adjust desktop size and position
 
 Whenever you use your native resolution use `No scaling`, the two options below don't matter then, as no scaling happens anyway.
 
@@ -251,7 +245,9 @@ Whenever you use your native resolution use `No scaling`, the two options below 
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl4.png?raw=true)
 
-## Developer > Manage GPU Performance Counters
+## Developer
+
+### Manage GPU Performance Counters
 
 > "*GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs.*"
 >
@@ -286,16 +282,21 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl5.png?raw=true)
 
-## Video > Adjust video color settings
+## Video
+
+### Adjust video color settings
 
 Personal preference.
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
+
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl6.png?raw=true)
 
-## Video > Adjust video image settings
+### Adjust video image settings
+
 ```json
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\0000": {
   "_User_Global_VAL_SuperResolution": { "Type": "REG_DWORD", "Data": 0 }
@@ -303,29 +304,35 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 ```
 
 `On` & `Auto`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_Global_VAL_SuperResolution    Type: REG_DWORD, Length: 4, Data: 5
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_Global_DAT_SuperResolution    Type: REG_BINARY, Length: 128, Data: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_Global_XEN_SuperResolution    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
-`Off` = `_User_Global_VAL_SuperResolution` - `0`  
+
+`Off` = `_User_Global_VAL_SuperResolution` - `0`
+
 Quality:
+
 `Auto` = `_User_Global_VAL_SuperResolution` - `5`  
 `1` = `_User_Global_VAL_SuperResolution` - `1`  
 `2` = `_User_Global_VAL_SuperResolution` - `2`  
 `3` = `_User_Global_VAL_SuperResolution` - `3`  
 `4` = `_User_Global_VAL_SuperResolution` - `4`  
+
 A system restart is required to see the changes in nvcpl.
 
----
-
-### Noise Reduction
+#### Noise Reduction
 
 Path (Change `XXXX` to the correct key name):
+
 ```powershell
 HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\XXXX
 ```
+
 `Use the video player setting`:
+
 ```powershell
 _User_SUB0_DFP1_XALG_Noise_Reduce    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 _User_SUB0_DFP1_XEN_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 0
@@ -333,7 +340,9 @@ _User_SUB0_DFP1_VAL_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 0
 _User_SUB0_DFP1_XALG_Cadence    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 _User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
+
 `Use NVIDIA setting`:
+
 ```powershell
 _User_SUB0_DFP1_XALG_Noise_Reduce    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 _User_SUB0_DFP1_VAL_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 5
@@ -341,6 +350,7 @@ _User_SUB0_DFP1_XEN_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 2147483649
 _User_SUB0_DFP1_XALG_Cadence    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 _User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
+
 `_User_SUB0_DFP1_VAL_Noise_Reduce` controls the percentage, e.g. `5%` = `5 Dec` until `49%`. Nvcpl skips `50%`, which means that everything above `50` is `X - 1`, range `0-99`.
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl7.png?raw=true)
@@ -350,6 +360,7 @@ _User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
 Miscellaneous notes:
 
 `_User_SUB0_DFP1_VAL_Edge_Enhance`, `_User_SUB0_DFP1_VAL_Edge_Enhance`, `_User_SUB0_DFP1_XEN_Edge_Enhance`? = `Edge enhancment` (`Adjust video image settings` - `0`):
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_VAL_Edge_Enhance    Type: REG_DWORD, Length: 4, Data: 0
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Edge_Enhance    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
@@ -359,11 +370,14 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 `ScalingConfig` = `Scaling Mode`, `Perform Scaling on`, `Override the scaling mode...` (includes all settings?)
 
 Dynamic range `Full`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
+
 Dynamic range `Limited`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 01 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649

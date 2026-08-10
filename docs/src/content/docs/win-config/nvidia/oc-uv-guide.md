@@ -32,11 +32,13 @@ You need to pay attention to the performance limit during overclocking, as you s
 ![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/hwinfo-powerlimit.png?raw=true)
 
 ### MSI Afterburner
+
 Download [MSI Afterburner](https://www.msi.com/Landing/afterburner/graphics-cards) and set a custom fan curve, which could look like the one in the image below (make sure the speed is not too low, as this would affect your results). You can use the preconfigured [cfg file](https://github.com/nohuto/gpu-oc-uv/blob/main/assets/MSIAfterburner.cfg) or skip it.
 
 ![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/fancurve.png?raw=true)
 
 If you don't want MSI afterburner running in the background all time, set a static curve and load a profile on system start:
+
 ```powershell
 schtasks /create /sc ONSTART /tn "MSIAfterburnerProfile" /tr "powershell.exe -NoProfile -Command \"Set-Location 'C:\Program Files (x86)\MSI Afterburner'; .\MSIAfterburner.exe /profile1\"" /rl HIGHEST /delay 0000:20
 ```
@@ -71,7 +73,6 @@ Go into the 3D Adaptive tab and use the following settings:
 
 ![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/occt.png?raw=true)
 
-
 ## Overclocking
 
 Your goal is to find a specific voltage and clock frequency that don't reach the performance limit (downclock) and don't cause a crash. Raising the clock frequency alone isn't really desirable, as you'll be throttling performance most of the time (reaching the performance limit), so you should limit it to a specific voltage.
@@ -82,13 +83,11 @@ Your goal is to find a specific voltage and clock frequency that don't reach the
 - Hitting the power limit = downclocking
 - Your clock and effective clock shouldn't have a big difference
 
-
 **Kepler, Maxwell, Pascal** GPU architecture uses `12.5 MHz` steps
 > GTX 600, GTX 700, GTX Titan, GTX 750, GTX 900, Titan X, GTX 10 Series
+
 **Turing, Ampere, Ada Lovelace** GPU architecture uses `15 MHz` steps
 > RTX 20 Series, RTX 30 Series, RTX 40 Series, RTX 50 Series
-
----
 
 ### Increasing the core clock & finding the voltage
 
@@ -108,12 +107,9 @@ How your result could look like:
 
 ![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/oc.png?raw=true)
 
-
 ## Undervolting
 
 As mentioned at the beginning, undervolting limits the voltage for the GPU, resulting in lower voltage, wattage, and temperature.
-
----
 
 ### Limiting the voltage
 
@@ -126,12 +122,9 @@ As mentioned at the beginning, undervolting limits the voltage for the GPU, resu
 
 5. Safe the settings to a profile
 
-
 ## Memory Overclock
 
 Make sure to use a stable core clock speed. Always save the benchmark results before overclocking, as you will usually stop the memory overclocking caused by worse results rather than crashing. You should also test for artifacts that occur when memory overclocking is unstable (GPU artifacts are visual distortions, glitches, flickering textures, colored pixels, or screen tearing). Most graphics cards can achieve high memory overclocking, so you can start with stress tests at `250–500 MHz`.
-
----
 
 ### Increasing the memory clock
 
@@ -143,7 +136,6 @@ Make sure to use a stable core clock speed. Always save the benchmark results be
   - Stress test it, if stable increase it by `5-10MHz`, if not go down by `50` and increase it by `5-10MHz`
 6. Safe your stable memory clock to a profile
 7. Test the stability of your memory clock via [memtest vulkan](https://github.com/GpuZelenograd/memtest_vulkan/releases), let it run for `~30-60min`
-
 
 ## Final Test
 

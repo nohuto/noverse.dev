@@ -3,7 +3,7 @@ title: 'Debloated Driver'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 3
 ---
 
 Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NVIDIA-Tool.ps1).

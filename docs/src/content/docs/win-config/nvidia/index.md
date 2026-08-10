@@ -8,9 +8,9 @@ sidebar:
 ---
 
 - [Bitmask Calculator](/docs/win-config/nvidia/bitmask-calculator/)
+- [NVCPL Settings](/docs/win-config/nvidia/nvcpl-settings/)
 - [Debloated Driver](/docs/win-config/nvidia/debloated-driver/)
 - [NvAPI CLI](/docs/win-config/nvidia/nvapi-cli/)
-- [NVCPL Settings](/docs/win-config/nvidia/nvcpl-settings/)
 - [Temporary NVCPL](/docs/win-config/nvidia/temporary-nvcpl/)
 - [Hide Tray Icon](/docs/win-config/nvidia/hide-tray-icon/)
 - [DLSS Indicator](/docs/win-config/nvidia/disable-dlss-indicator/)

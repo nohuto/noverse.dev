@@ -20,6 +20,7 @@ Other miscellaneous values I found:
 ```
 
 Hides the icon from the context menu (2nd one is probably related to optimus, first controls NVCPL):
+
 ```json
 "HKCU\\Software\\NVIDIA Corporation\\Global\\NvCplApi\\Policies": {
   "ContextUIPolicy": { "Type": "REG_DWORD", "Data": 0 }
@@ -31,6 +32,7 @@ Hides the icon from the context menu (2nd one is probably related to optimus, fi
   "ShowContextMenu": { "Type": "REG_DWORD", "Data": 0 }
 }
 ```
+
 Only the first value gets used.
 
 - [nvidia/assets | HideManufacturer.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/trayicon-HideManufacturer.c)

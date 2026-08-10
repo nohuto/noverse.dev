@@ -9,8 +9,6 @@ sidebar:
 Enabled = `1024`  
 Disabled = `0`
 
----
-
 ### From NVIDIA Documentations
 
 `turn-dlss-indicator-off`

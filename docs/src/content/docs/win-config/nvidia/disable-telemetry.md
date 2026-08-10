@@ -19,6 +19,7 @@ Installing a [debloated driver](https://noverse.dev/docs/win-config/nvidia/deblo
 These three values are often applied in reference to "NVIDIA Telemetry", but since these seem to be outdated (they don't exist - test it yourself via [strings2-tui](https://github.com/nohuto/strings2-tui)) they won't get applied.
 
 Miscellaneous code snippets for `OptInOrOutPreference` & `SendTelemetryData`:
+
 ```cpp
 VIDEO_TELEMETRY_OPTIN_OPTOUT_REGPATH        L"Software\\NVIDIA Corporation\\NVControlPanel2\\Client"
 OPTIN_OUT_KEY                               L"OptInOrOutPreference"

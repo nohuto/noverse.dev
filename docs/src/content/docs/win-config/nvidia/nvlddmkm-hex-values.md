@@ -35,6 +35,7 @@ WKS_SCANOUT_COMPOSITION_CONTROL_DEFAULT                        0x00000003
 ## 0x11112256 (WKS_POST_PROCESSING_ENGINE_CONTROL)
 
 NV private interface to adjust the behavior of the post processing engine (`D3DOGL_WksPostProcessingEngineControl`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_BITFIELDS.
+
 ```c
 0x00000000 // No specific adjustments for the post processing engine are selected
 0x00000001 // If bit is set, post processing engine operations are executed on desktop compositor owned fullscreen buffers.
@@ -77,7 +78,9 @@ WKS_POST_PROCESSING_ENGINE_CONTROL_DEFAULT                     0x00000033
 ```
 
 ## 0x112493bd (WKS_STEREO_DONGLE_SUPPORT)
+
 Control of the stereo dongle (`D3DOGL_EnableStereoDongleSupport`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0 // Disable stereo dongle support
 1 // Enable stereo dongle using stereo signal from GPU (default)
@@ -96,6 +99,7 @@ WKS_STEREO_DONGLE_SUPPORT_DEFAULT                              WKS_STEREO_DONGLE
 ## 0x11333333 (WKS_STEREO_SWAP_MODE)
 
 `D3DOGL_33333333`? Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0x0 // Application Control (default)
 0x1 // Per Eye
@@ -119,6 +123,7 @@ WKS_STEREO_SWAP_MODE_DEFAULT                                   WKS_STEREO_SWAP_M
 ## 0x1194f158 (VRR_MODE)
 
 `D3DOGL_73314098`? Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0x0 // Disable G-Sync
 0x1 // Enable G-SYNC in fullscreen mode only (default)
@@ -137,6 +142,7 @@ VRR_MODE_DEFAULT                                               VRR_MODE_FULLSCRE
 ## 0x11aa9e99 (WKS_STEREO_SUPPORT)
 
 Support of the stereo API for workstations (`D3DOGL_EnableStereoSupport`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0 // Disable API stereo support (default)
 1 // Enable API stereo support
@@ -153,6 +159,7 @@ WKS_STEREO_SUPPORT_DEFAULT                                     WKS_STEREO_SUPPOR
 ## 0x11ae435c (WKS_API_STEREO_EYES_EXCHANGE)
 
 Swaps image for the left eye with image for the right eye (`D3DOGL_APIStereoEyesExchange`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0 // Stereo eyes exchange off (default)
 1 // Stereo eyes exchange on
@@ -169,6 +176,7 @@ WKS_API_STEREO_EYES_EXCHANGE_DEFAULT                           WKS_API_STEREO_EY
 ## 0x11d9dc84 (WKS_FEATURE_SUPPORT_CONTROL)
 
 NV private interface to enable/disable workstation features (`D3DOGL_WorkstationFeatureControl`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_BITFIELDS.
+
 ```c
 0x00000000 // No workstation features controled by this key enabled yet
 0x00000001 // Enable wks stereo for native dx11 Win8 stereo
@@ -227,6 +235,7 @@ WKS_FEATURE_SUPPORT_CONTROL_DEFAULT                            0x00086143
 ## 0x11e91a61 (WKS_API_STEREO_MODE)
 
 Display mode to use when stereo is enabled (`D3DOGL_APIStereoMode`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0 // Active stereo mode frame interleaved shutter glasses via DDC adapter shutter glasses // ELSA Revelator (default)
 1 // Passive stereo mode vertical interlaced
@@ -289,6 +298,7 @@ WKS_API_STEREO_MODE_DEFAULT                                    WKS_API_STEREO_MO
 ## 0x11fbdf11 (WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW)
 
 Number of Sources we can extend on Single GPU (`D3DOGL_0xfbdf11`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0x1 // One Source per GPU
 0x2 // Two Sources per GPU

@@ -3,7 +3,7 @@ title: 'NvAPI CLI'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 4
 ---
 
 This will download the app to your downloads folder, read full documentation for each group [here](https://noverse.dev/docs/nvapi-cli/sections/overview/).

@@ -7,8 +7,8 @@ sidebar:
   order: 4
 ---
 
-- [Power Plan](/docs/win-config/power/power-plan/)
 - [xHCI IMOD](/docs/win-config/power/xhci-imod/)
+- [Power Plan](/docs/win-config/power/power-plan/)
 - [Timer Coalescing](/docs/win-config/power/disable-timer-coalescing/)
 - [PnP Device Values](/docs/win-config/power/pnp-device-values/)
 - [Power Values](/docs/win-config/power/power-values/)

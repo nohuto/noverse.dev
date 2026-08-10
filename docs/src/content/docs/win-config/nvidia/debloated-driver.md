@@ -10,8 +10,8 @@ Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/b
 
 ### Main Menu
 
-`1` - Debloat driver (includes optional DDU clean uninstall)  
-`2` - Install driver directly  
+- `1` - Debloat driver (includes optional DDU clean uninstall)
+- `2` - Install driver directly  
 
 ### Driver Debloat Option
 

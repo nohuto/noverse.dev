@@ -46,45 +46,51 @@ Get the lower bit range (`25:24` -> `24`), shift the dec or hex x times to the l
 Example using `RMGC6Parameters` (disabling all):
 
 ```json
-"Name":  "RMGC6Parameters",
-"Elements": [
-  {
-      "Field":  "SLEEP_AWARE_CALLBACK",
-      "Bits":  "1:0",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLED", "Value":  "1" },
-                      { "Name":  "ENABLED", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "DEFERRED_PMU_CALLBACK",
-      "Bits":  "3:2",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLED", "Value":  "1" },
-                      { "Name":  "ENABLED", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "PMU_HANDLE_MODESET",
-      "Bits":  "5:4",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLED", "Value":  "1" },
-                      { "Name":  "ENABLED", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "BSOD_MODESET",
-      "Bits":  "7:6",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLED", "Value":  "1" },
-                      { "Name":  "ENABLED", "Value":  "3" }
-                  ]
-  }
-]
+{
+  "Name": "RMGC6Parameters",
+  "Comment": [
+    "Type DWORD",
+    "This regkey controls individual latency optimization features for GC6."
+  ],
+  "Elements": [
+    {
+      "Field": "SLEEP_AWARE_CALLBACK",
+      "Bits": "1:0",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLED", "Value": "1" },
+        { "Name": "ENABLED", "Value": "3" }
+      ]
+    },
+    {
+      "Field": "DEFERRED_PMU_CALLBACK",
+      "Bits": "3:2",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLED", "Value": "1" },
+        { "Name": "ENABLED", "Value": "3" }
+      ]
+    },
+    {
+      "Field": "PMU_HANDLE_MODESET",
+      "Bits": "5:4",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLED", "Value": "1" },
+        { "Name": "ENABLED", "Value": "3" }
+      ]
+    },
+    {
+      "Field": "BSOD_MODESET",
+      "Bits": "7:6",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLED", "Value": "1" },
+        { "Name": "ENABLED", "Value": "3" }
+      ]
+    }
+  ]
+},
 ```
 
 1. `-shl` using the lower bit range value
@@ -109,15 +115,24 @@ Output of `85`, which is the result.
 Different common scenario would be `DisableDynamicPstate`:
 
 ```json
-"Name":  "DisableDynamicPstate",
-"Comment":  [
-     "1 = Disable dynamic P-State/adaptive clocking",
-     "0 = Do not disable dynamic P-State/adaptive clocking (default)",
- ],
-"Elements":  [
-      { "Name":  "DISABLE", "Value":  "0" },
-      { "Name":  "ENABLE", "Value":  "1" }
+{
+  "Name": "DisableDynamicPstate",
+  "Comment": [
+    "Type Dword",
+    "1 = Disable dynamic P-State/adaptive clocking",
+    "0 = Do not disable dynamic P-State/adaptive clocking (default)"
+  ],
+  "Elements": [
+    {
+      "Name": "DISABLE",
+      "Value": "0"
+    },
+    {
+      "Name": "ENABLE",
+      "Value": "1"
+    }
   ]
+},
 ```
 
 The comment shows `1` = `Enabled`, `0` = `Disabled`, means bit 0 gets switched here.
@@ -125,36 +140,68 @@ The comment shows `1` = `Enabled`, `0` = `Disabled`, means bit 0 gets switched h
 Test yourself with the following example:
 
 ```json
-"Name":  "RMClkSlowDown",
-"Elements":  [
-  {
-      "Field":  "NV",
-      "Bits":  "23:22",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLE", "Value":  "1" },
-                      { "Name":  "ENABLE", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "HOST",
-      "Bits":  "25:24",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLE", "Value":  "1" },
-                      { "Name":  "ENABLE", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "IDLE_PSTATE",
-      "Bits":  "27:26",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLE", "Value":  "1" },
-                      { "Name":  "ENABLE", "Value":  "3" }
-                  ]
-  }
-]
+{
+  "Name": "RMClkSlowDown",
+  "Comment": [
+    "Type DWORD",
+    "Each clock down feature uses 2 bits. This is used as a stand alone regKey",
+    "For each 2 bits, the following convention holds",
+    "0 : Keep the vbios default",
+    "1 : Disable feature",
+    "3 : Enable feature",
+    "Note:  In general, for most of these features, only the disable function",
+    "should be used.  The enable function should only be used on special",
+    "occasions, such as during bringup when the corresponding property is",
+    "disabled by default, and the vbios is known to have the feature enabled and",
+    "slowdown factors and various other required settings set correctly.",
+    "Thermal Slowdown feature enablement/Disablement has been deprecated since",
+    "a) MODs does not use this regkey anymore",
+    "NV2080_CTRL_THERMAL_SYSTEM_GET_SLOWDOWN_STATE_OPCODE is used by MODS currently",
+    "b) We cannot enable/Disable OVERT event via regkey from gm20x onwards",
+    "c) Pascal and onwards, we donot support ALERT_X since we have introduced generic",
+    "Therm events"
+  ],
+  "Elements": [
+    {
+      "Field": "THERMAL_RESERVED",
+      "Bits": "17:0",
+      "Options": []
+    },
+    {
+      "Field": "DEPRECATED",
+      "Bits": "19:18",
+      "Options": []
+    },
+    {
+      "Field": "NV",
+      "Bits": "23:22",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLE", "Value": "1" },
+        { "Name": "ENABLE", "Value": "3" }
+      ]
+    },
+    {
+      "Field": "HOST",
+      "Bits": "25:24",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLE", "Value": "1" },
+        { "Name": "ENABLE", "Value": "3" }
+      ],
+      "Comment": "deprecated"
+    },
+    {
+      "Field": "IDLE_PSTATE",
+      "Bits": "27:26",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLE", "Value": "1" },
+        { "Name": "ENABLE", "Value": "3" }
+      ]
+    }
+  ]
+},
 ```
 
 Try to disable all of them.

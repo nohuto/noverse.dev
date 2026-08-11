@@ -47,7 +47,7 @@ let searchShortcutInput;
 let searchShortcutListener;
 
 const EMAIL_KEY = 23;
-const EMAIL_BYTES = [122, 118, 126, 123, 87, 121, 120, 97, 114, 101, 100, 114, 57, 115, 114, 97];
+const EMAIL_BYTES = [116, 120, 121, 99, 118, 116, 99, 87, 121, 120, 97, 114, 101, 100, 114, 57, 115, 114, 97];
 
 const getEmailAddress = () =>
   EMAIL_BYTES.map(byte => String.fromCharCode(byte ^ EMAIL_KEY)).join('');

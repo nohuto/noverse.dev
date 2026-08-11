@@ -379,7 +379,6 @@ body.policy-resizing .policy-splitter::after {
   border: 0;
   background: transparent;
   color: var(--text);
-  font-size: 12.5px;
   text-align: left;
   cursor: pointer;
 }
@@ -454,6 +453,12 @@ body.policy-resizing .policy-splitter::after {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+#policy-search,
+.policy-tree-item,
+.policy-table td {
+  font-size: 12px;
 }
 
 .policy-table th {

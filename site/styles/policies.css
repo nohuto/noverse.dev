@@ -731,8 +731,11 @@ body.policy-column-resizing * {
   white-space: nowrap;
 }
 
-.policy-copy-text {
+.policy-copy-text,
+.policy-data-label,
+.policy-data-value {
   min-width: 0;
+  font-size: var(--font-size-control);
   overflow-wrap: anywhere;
 }
 
@@ -806,10 +809,10 @@ body.policy-column-resizing * {
 
 .policy-data-label,
 .policy-data-value {
-  min-width: 0;
-  overflow-wrap: anywhere;
+  display: flex;
+  align-items: center;
   min-height: 24px;
-  padding: 3px 8px;
+  padding: 0 8px;
   border: 1px solid var(--border);
   background: var(--panel-alt);
 }
@@ -821,7 +824,8 @@ body.policy-column-resizing * {
 .policy-data-value {
   color: var(--text);
   justify-self: end;
-  text-align: right;
+  justify-content: center;
+  text-align: center;
   user-select: text;
   min-width: 52px;
 }
@@ -838,10 +842,6 @@ body.policy-column-resizing * {
 
   .policy-data-row {
     grid-template-columns: minmax(0, 1fr) minmax(48px, auto);
-  }
-
-  .policy-data-value {
-    text-align: left;
   }
 }
 

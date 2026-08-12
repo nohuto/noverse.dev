@@ -951,6 +951,15 @@
       applyFilters();
     };
 
+    const toggleTreeNode = nodeKey => {
+      if (expandedTreeNodes.has(nodeKey)) {
+        expandedTreeNodes.delete(nodeKey);
+      } else {
+        expandedTreeNodes.add(nodeKey);
+      }
+      renderTree();
+    };
+
     const createTreeButton = ({ label, count, categoryKey = '', depth = 0, nodeKey = '', selectionKey = '', hasChildren = false }) => {
       const button = document.createElement('button');
       const treeNodeKey = nodeKey || categoryKey;
@@ -964,18 +973,14 @@
       button.style.setProperty('--policy-tree-depth', String(depth));
       button.setAttribute('role', 'treeitem');
       if (hasChildren) {
+        button.setAttribute('aria-expanded', String(expanded));
         const chevron = createNode('span', 'policy-tree-chevron');
         chevron.setAttribute('aria-hidden', 'true');
         chevron.classList.toggle('is-open', expanded);
         chevron.addEventListener('click', event => {
           event.preventDefault();
           event.stopPropagation();
-          if (expandedTreeNodes.has(treeNodeKey)) {
-            expandedTreeNodes.delete(treeNodeKey);
-          } else {
-            expandedTreeNodes.add(treeNodeKey);
-          }
-          renderTree();
+          toggleTreeNode(treeNodeKey);
         });
         button.appendChild(chevron);
       } else {
@@ -984,6 +989,12 @@
       button.appendChild(createNode('span', 'policy-tree-label', label));
       button.appendChild(createNode('span', 'policy-tree-count', String(count)));
       button.addEventListener('click', () => selectTreeNode(categoryKey));
+      if (hasChildren) {
+        button.addEventListener('dblclick', event => {
+          event.preventDefault();
+          toggleTreeNode(treeNodeKey);
+        });
+      }
       return button;
     };
 
@@ -1430,7 +1441,7 @@
     });
     limitInput?.addEventListener('input', () => {
       const parsed = Number.parseInt(limitInput.value, 10);
-      rowLimit = Number.isFinite(parsed) ? Math.min(5000, Math.max(25, parsed)) : defaultRowLimit;
+      rowLimit = Number.isFinite(parsed) ? Math.min(5000, Math.max(1, parsed)) : defaultRowLimit;
       renderTable();
     });
     unlimitedInput?.addEventListener('change', () => {

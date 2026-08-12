@@ -92,7 +92,6 @@
     const tableBody = root.querySelector('#policy-table-body');
     const tableNote = root.querySelector('#policy-table-note');
     const columnMenu = root.querySelector('#policy-column-menu');
-    const detailScopeEl = root.querySelector('#policy-detail-scope');
     const detailBody = root.querySelector('#policy-detail-body');
     const settingsButton = root.querySelector('#policy-settings');
     const settingsModal = root.querySelector('#policy-settings-modal');
@@ -434,11 +433,11 @@
 
     const columns = [
       { id: 'setting', label: 'Name', width: 420, minWidth: 180, value: policy => policy.DisplayName || policy.PolicyName || '' },
+      { id: 'value', label: 'Value', width: 160, minWidth: 90, value: policy => getPolicyValue(policy) },
       { id: 'scope', label: 'Scope', width: 90, minWidth: 58, value: policy => policy.scope || '' },
       { id: 'supported', label: 'Supported On', width: 240, minWidth: 150, value: policy => policy.Supported || '' },
       { id: 'policy', label: 'Policy', width: 220, minWidth: 140, value: policy => policy.PolicyName || '' },
       { id: 'category', label: 'Category', width: 260, minWidth: 150, value: policy => policy.categoryDisplayPath || getCategoryDisplayPath(policy) },
-      { id: 'value', label: 'Value', width: 160, minWidth: 90, value: policy => getPolicyValue(policy) },
       { id: 'registry', label: 'Registry', width: 360, minWidth: 180, value: policy => getPrimaryPath(policy) },
       { id: 'admx', label: 'ADMX', width: 150, minWidth: 90, value: policy => policy.File || '' }
     ];
@@ -460,11 +459,12 @@
 
     const createCopyBox = (className, text, label = 'Copy', successMessage = 'Copied', prefixText = '') => {
       const box = createNode('div', className);
+      const labelNode = createNode('span', 'policy-copy-text', text || '');
+      box.appendChild(labelNode);
       if (prefixText) {
         box.classList.add('has-prefix');
         box.appendChild(createNode('span', 'policy-copy-prefix', prefixText));
       }
-      const labelNode = createNode('span', 'policy-copy-text', text || '');
       const button = createNode('button', 'policy-copy-button');
       button.type = 'button';
       button.title = label;
@@ -473,7 +473,7 @@
       iconNode.setAttribute('aria-hidden', 'true');
       button.appendChild(iconNode);
       button.addEventListener('click', () => copyPolicyText(text || '', successMessage));
-      box.append(labelNode, button);
+      box.appendChild(button);
       return box;
     };
     const createPolicyValueTitle = (entry, typeText) => {
@@ -482,10 +482,10 @@
       }
 
       const title = createNode('div', 'policy-value-title');
+      title.appendChild(createNode('span', 'policy-copy-text', entry.valueName));
       if (typeText) {
         title.appendChild(createNode('span', 'policy-copy-prefix', typeText));
       }
-      title.appendChild(createNode('span', 'policy-copy-text', entry.valueName));
       return title;
     };
 
@@ -534,7 +534,6 @@
 
     const renderDetail = policy => {
       detailBody.replaceChildren();
-      if (detailScopeEl) detailScopeEl.textContent = policy?.scope || 'none';
       if (!policy || !paneState.detail) {
         return;
       }

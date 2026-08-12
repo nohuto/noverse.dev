@@ -25,6 +25,9 @@
   --nv-search-icon: url("/main/icons/ui/search.svg");
   --nv-home-icon: url("/main/icons/ui/home.svg");
   --nv-repo-icon: url("/main/icons/ui/repo.svg");
+  --nv-github-icon: url("/main/icons/ui/github-logo.svg");
+  --nv-discord-icon: url("/main/icons/ui/discord.svg");
+  --nv-header-icon-size: 0.9375rem;
   --nv-x-icon: url("/main/icons/ui/x.svg");
   --sl-color-accent-low: #143448;
   --sl-color-accent: #4792c1;
@@ -39,6 +42,31 @@
 body {
   font-size: var(--sl-text-body);
   font-weight: 350;
+}
+
+.social-icons svg {
+  font-size: var(--nv-header-icon-size);
+}
+
+.social-icons a[href="https://github.com/nohuto"] {
+  --nv-social-icon: var(--nv-github-icon);
+}
+
+.social-icons a[href="https://discord.noverse.dev"] {
+  --nv-social-icon: var(--nv-discord-icon);
+}
+
+.social-icons a:is([href="https://github.com/nohuto"], [href="https://discord.noverse.dev"]) svg {
+  display: none;
+}
+
+.social-icons a:is([href="https://github.com/nohuto"], [href="https://discord.noverse.dev"])::before {
+  content: "";
+  width: var(--nv-header-icon-size);
+  height: var(--nv-header-icon-size);
+  background-color: currentColor;
+  -webkit-mask: var(--nv-social-icon) center / contain no-repeat;
+  mask: var(--nv-social-icon) center / contain no-repeat;
 }
 
 starlight-menu-button > button {

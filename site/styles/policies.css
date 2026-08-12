@@ -35,8 +35,8 @@
 }
 
 #policy-explorer {
-  --policy-tree-width: 17rem;
-  --policy-detail-width: 42rem;
+  --policy-tree-width: 3fr;
+  --policy-detail-width: 7fr;
 }
 
 .policy-toolbar {
@@ -167,7 +167,7 @@
 }
 
 .policy-pane-header {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
 }
 
 .policy-pane-header,
@@ -179,22 +179,22 @@
 .policy-layout {
   display: grid;
   grid-template-columns:
-    minmax(180px, var(--policy-tree-width, 17rem)) 8px minmax(460px, 1fr) 8px minmax(360px, var(--policy-detail-width, 38rem));
+    minmax(180px, var(--policy-tree-width)) 8px minmax(460px, 10fr) 8px minmax(360px, var(--policy-detail-width));
   gap: 0;
   height: calc(100vh - 172px);
   min-height: 0;
 }
 
 #policy-explorer.policy-hide-detail .policy-layout {
-  grid-template-columns: minmax(180px, var(--policy-tree-width, 17rem)) 8px minmax(460px, 1fr);
+  grid-template-columns: minmax(180px, var(--policy-tree-width)) 8px minmax(460px, 17fr);
 }
 
 #policy-explorer.policy-hide-tree .policy-layout {
-  grid-template-columns: minmax(460px, 1fr) 8px minmax(360px, var(--policy-detail-width, 38rem));
+  grid-template-columns: minmax(460px, 10fr) 8px minmax(360px, var(--policy-detail-width));
 }
 
 #policy-explorer.policy-hide-table .policy-layout {
-  grid-template-columns: minmax(180px, var(--policy-tree-width, 17rem)) 8px minmax(300px, 1fr);
+  grid-template-columns: minmax(180px, var(--policy-tree-width)) 8px minmax(300px, var(--policy-detail-width));
 }
 
 #policy-explorer.policy-hide-tree.policy-hide-detail .policy-layout,
@@ -386,11 +386,11 @@ body.policy-resizing .policy-splitter::after {
 }
 
 .policy-tree-item {
-  font-size: var(--font-size-body);
+  font-size: var(--font-size-control);
 }
 
 .policy-table td {
-  font-size: var(--font-size-body);
+  font-size: var(--font-size-control);
 }
 
 .policy-table th {
@@ -401,7 +401,7 @@ body.policy-resizing .policy-splitter::after {
   padding-right: 18px;
   background: var(--panel-alt);
   color: var(--muted);
-  font-size: 0.65rem;
+  font-size: 0.625rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   user-select: none;
@@ -492,7 +492,7 @@ body.policy-column-resizing * {
   padding: 6px 10px;
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
 }
 
 .policy-column-menu {
@@ -568,6 +568,7 @@ body.policy-column-resizing * {
 
 .policy-detail-body {
   padding: 12px;
+  color: var(--text);
 }
 
 .policy-detail-heading {
@@ -584,26 +585,29 @@ body.policy-column-resizing * {
 
 .policy-detail-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 4px;
   margin-bottom: 12px;
 }
 
 .policy-detail-field {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
   min-width: 0;
 }
 
 .policy-field-label {
-  display: block;
+  flex: 0 0 auto;
   color: var(--muted);
   font-size: var(--font-size-control);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom: 3px;
+}
+
+.policy-field-label::after {
+  content: ":";
 }
 
 .policy-field-value {
-  display: block;
+  min-width: 0;
   overflow-wrap: anywhere;
   color: var(--text);
 }
@@ -611,6 +615,7 @@ body.policy-column-resizing * {
 .policy-explain {
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  color: var(--muted);
   padding: 10px 0;
   margin: 8px 0 12px;
   white-space: pre-line;
@@ -625,6 +630,7 @@ body.policy-column-resizing * {
 .policy-section h3 {
   margin: 0;
   font-size: 0.6875rem;
+  font-weight: 350;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -720,12 +726,16 @@ body.policy-column-resizing * {
 }
 
 .policy-copy-box.has-prefix {
-  grid-template-columns: auto minmax(0, 1fr) 16px;
+  grid-template-columns: minmax(0, max-content) auto 1fr 16px;
+}
+
+.policy-copy-box.has-prefix .policy-copy-button {
+  grid-column: 4;
 }
 
 .policy-copy-prefix {
   color: var(--muted);
-  font-size: var(--font-size-control);
+  font-size: 0.625rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   white-space: nowrap;
@@ -786,7 +796,7 @@ body.policy-column-resizing * {
   min-height: 0;
   padding: 0 8px;
   color: var(--muted);
-  font-size: var(--font-size-control);
+  font-size: 0.625rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
@@ -797,6 +807,8 @@ body.policy-column-resizing * {
   padding: 0;
   border: 0;
   background: transparent;
+  color: var(--muted);
+  font-size: inherit;
 }
 
 .policy-data-row-single {
@@ -848,7 +860,7 @@ body.policy-column-resizing * {
 @media (max-width: 1280px) {
   .policy-layout {
     grid-template-columns:
-      minmax(170px, var(--policy-tree-width, 13rem)) 8px minmax(360px, 1fr) 8px minmax(320px, var(--policy-detail-width, 34rem));
+      minmax(170px, var(--policy-tree-width)) 8px minmax(360px, 10fr) 8px minmax(320px, var(--policy-detail-width));
     grid-template-rows: none;
     height: calc(100vh - 172px);
     min-height: 0;
@@ -929,11 +941,6 @@ body.policy-column-resizing * {
 }
 
 @media (max-width: 720px) {
-
-  .policy-detail-grid {
-    grid-template-columns: 1fr;
-  }
-
   .policy-tree-panel {
     height: min(320px, 32vh);
   }

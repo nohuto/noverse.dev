@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <!-- Copyright (c) 2026 nohuto -->
-<html lang="en" data-theme-setting="gruvbox-dark" data-theme="gruvbox-dark" data-bg="dots">
+<html lang="en" data-theme-setting="kanagawa-wave" data-theme="kanagawa-wave" data-bg="dots">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Group Policy Explorer">
-  <title>Policies</title>
-  <link rel="icon" type="image/png" sizes="64x64" href="/main/images/nvlogo.png">
+  <title>Policies - Noverse</title>
   <link rel="preload" href="/main/fonts/CascadiaCode-2407.24.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/main/min/site.min.css">
   <link rel="stylesheet" href="/main/min/policies.min.css">
@@ -109,9 +108,9 @@
                 <thead>
                   <tr id="policy-table-head">
                     <th scope="col" data-column="setting" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Name</span></span></th>
+                    <th scope="col" data-column="value" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Value</span></span></th>
                     <th scope="col" data-column="scope" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Scope</span></span></th>
                     <th scope="col" data-column="supported" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Supported On</span></span></th>
-                    <th scope="col" data-column="value" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Value</span></span></th>
                   </tr>
                 </thead>
                 <tbody id="policy-table-body"></tbody>
@@ -125,7 +124,6 @@
           <section class="policy-detail-panel" id="policy-detail" aria-label="Policy detail" hidden>
             <div class="policy-pane-header">
               <span>Details</span>
-              <span id="policy-detail-scope">none</span>
             </div>
             <div class="policy-detail-body" id="policy-detail-body"></div>
           </section>

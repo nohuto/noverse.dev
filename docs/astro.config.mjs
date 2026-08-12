@@ -139,9 +139,9 @@ export default defineConfig({
         }),
       ],
       title: 'Noverse Docs',
+      titleDelimiter: '-',
       description:
         'Docs from win-config, regkit, app-guides, and windbg-notes.',
-      favicon: '/logo.png',
       head: [
         {
           tag: 'link',

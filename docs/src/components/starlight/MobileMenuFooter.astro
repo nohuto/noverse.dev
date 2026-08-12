@@ -2,8 +2,6 @@
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
-import homeIconSvg from '../../assets/home.svg?raw';
-import repoIconSvg from '../../assets/repo.svg?raw';
 import { getActiveRepo } from '../../utils/active-repo';
 
 const { id, sidebar } = Astro.locals.starlightRoute;
@@ -18,14 +16,14 @@ const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
     {
       hasActiveRepo && (
         <a class="mobile-repo-link" href={repoHref} target="_blank" rel="noopener noreferrer" aria-label={`Open ${activeRepo} repository`}>
-          <span aria-hidden="true" class="mobile-repo-icon" set:html={repoIconSvg}></span>
+          <span aria-hidden="true" class="mobile-repo-icon"></span>
         </a>
       )
     }
     <div class="social-icons">
       <SocialIcons />
       <a class="docs-home-link" href="/" aria-label="Go to homepage">
-        <span aria-hidden="true" class="docs-home-icon" set:html={homeIconSvg}></span>
+        <span aria-hidden="true" class="docs-home-icon"></span>
       </a>
     </div>
   </div>
@@ -96,15 +94,16 @@ const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
       height: 1em;
     }
 
-    .docs-home-icon :global(svg),
-    .mobile-repo-icon :global(svg) {
-      display: block;
-      width: 1em;
-      height: 1em;
+    .mobile-repo-icon {
+      background-color: currentColor;
+      -webkit-mask: var(--nv-repo-icon) center / contain no-repeat;
+      mask: var(--nv-repo-icon) center / contain no-repeat;
     }
 
-    .mobile-repo-icon :global(svg) {
-      fill: currentColor;
+    .docs-home-icon {
+      background-color: currentColor;
+      -webkit-mask: var(--nv-home-icon) center / contain no-repeat;
+      mask: var(--nv-home-icon) center / contain no-repeat;
     }
   }
 </style>

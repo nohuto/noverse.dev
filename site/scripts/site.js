@@ -754,9 +754,7 @@ function createSiteErrorModal() {
       <header class="settings-header site-error-header">
         <h2 id="site-error-title">404</h2>
         <button class="settings-close" type="button" data-site-error-close aria-label="Close error message" title="Close error message">
-          <svg class="settings-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <path d="M18 6 6 18M6 6l12 12"></path>
-          </svg>
+          <span class="settings-close-icon" aria-hidden="true"></span>
         </button>
       </header>
       <div class="settings-body site-error-body">

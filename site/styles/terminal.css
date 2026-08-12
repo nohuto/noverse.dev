@@ -70,7 +70,7 @@ main.main-terminal .terminal-shell {
   background: var(--panel-alt);
   border-bottom: 1px solid var(--border);
   text-transform: uppercase;
-  font-size: 10px;
+  font-size: 0.6875rem;
   letter-spacing: 0.18em;
   cursor: move;
   user-select: none;
@@ -165,7 +165,7 @@ main.main-terminal .terminal-shell {
 .calc-header h2 {
   margin: 0;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 0.6875rem;
   font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -190,14 +190,14 @@ main.main-terminal .terminal-shell {
   color: var(--accent);
 }
 
-.bitmask-close svg,
-.calc-close svg {
+.bitmask-close .close-icon,
+.calc-close .close-icon {
   width: 14px;
   height: 14px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.9;
-  stroke-linecap: round;
+  display: block;
+  background-color: currentColor;
+  -webkit-mask: url("/main/icons/ui/x.svg") center / contain no-repeat;
+  mask: url("/main/icons/ui/x.svg") center / contain no-repeat;
 }
 
 .bitmask-body {
@@ -232,7 +232,7 @@ main.main-terminal .terminal-shell {
 
 .bitmask-bit-index {
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--font-size-control);
   line-height: 1;
 }
 
@@ -248,7 +248,7 @@ main.main-terminal .terminal-shell {
 }
 
 .bitmask-bit strong {
-  font-size: 11px;
+  font-size: var(--font-size-control);
   font-weight: 400;
   line-height: 1;
 }
@@ -341,7 +341,7 @@ main.main-terminal .terminal-shell {
 .calc-meta {
   min-height: 16px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 0.8125rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -361,7 +361,7 @@ main.main-terminal .terminal-shell {
   color: var(--text);
   cursor: text;
   text-align: left;
-  font-size: 14px;
+  font-size: var(--font-size-body);
   line-height: 28px;
 }
 
@@ -375,7 +375,7 @@ main.main-terminal .terminal-shell {
   appearance: none;
   background: transparent;
   color: var(--text);
-  font-size: 14px;
+  font-size: var(--font-size-body);
   line-height: 28px;
   text-align: left;
   outline: none;
@@ -402,7 +402,7 @@ main.main-terminal .terminal-shell {
   white-space: nowrap;
   color: var(--text);
   text-align: right;
-  font-size: 14px;
+  font-size: var(--font-size-body);
 }
 
 .calc-output:has(#calc-input[aria-invalid="true"]) {
@@ -414,7 +414,7 @@ main.main-terminal .terminal-shell {
   --calc-group-gap: 14px;
   --calc-key-size: 52px;
   --calc-key-height: 30px;
-  --calc-key-font-size: 12px;
+  --calc-key-font-size: 0.8125rem;
   min-width: 0;
   display: grid;
   grid-template-columns: repeat(3, max-content);
@@ -505,7 +505,6 @@ main.main-terminal .terminal-shell {
     --calc-group-gap: clamp(6px, 2.4cqw, 14px);
     --calc-key-size: clamp(38px, calc((100cqw - (4 * var(--calc-key-gap)) - var(--calc-group-gap)) / 6), 52px);
     --calc-key-height: clamp(26px, calc(var(--calc-key-size) * 0.58), 30px);
-    --calc-key-font-size: clamp(10px, calc(var(--calc-key-size) * 0.18), 12px);
     grid-template-columns: repeat(2, max-content);
   }
 
@@ -531,7 +530,6 @@ main.main-terminal .terminal-shell {
     --calc-group-gap: clamp(4px, 1.6cqw, 8px);
     --calc-key-size: clamp(32px, calc((100cqw - (4 * var(--calc-key-gap)) - var(--calc-group-gap)) / 6), 52px);
     --calc-key-height: clamp(22px, calc(var(--calc-key-size) * 0.58), 30px);
-    --calc-key-font-size: clamp(9px, calc(var(--calc-key-size) * 0.19), 12px);
   }
 }
 
@@ -729,7 +727,7 @@ main.main-terminal .terminal-shell {
   grid-column: 2;
   grid-row: 1;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
   white-space: nowrap;
   line-height: 1.75;
 }

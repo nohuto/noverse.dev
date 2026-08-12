@@ -20,7 +20,7 @@
 .policy-source-note {
   flex: 0 0 auto;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
   white-space: nowrap;
 }
 
@@ -41,14 +41,13 @@
 
 .policy-toolbar {
   display: grid;
-  grid-template-columns: minmax(220px, 470px) auto auto;
+  grid-template-columns: minmax(220px, 470px) auto;
   gap: 10px;
   align-items: end;
   margin-bottom: 10px;
 }
 
 .policy-search-field,
-.policy-limit-controls,
 .policy-view-dropdown,
 .policy-column-dropdown {
   display: flex;
@@ -77,21 +76,6 @@
   display: block;
 }
 
-.policy-limit-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--muted);
-}
-
-.policy-limit-controls input[type="number"] {
-  height: 24px;
-  width: 74px;
-  padding: 0 6px;
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
 #policy-settings {
   width: 24px;
   height: 24px;
@@ -104,67 +88,6 @@
 
 #policy-settings:hover {
   color: var(--accent);
-}
-
-.policy-limit-controls {
-  align-self: end;
-  height: 24px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-.policy-limit-controls input[type="number"]::-webkit-inner-spin-button,
-.policy-limit-controls input[type="number"]::-webkit-outer-spin-button {
-  appearance: none;
-  margin: 0;
-}
-
-.policy-limit-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-}
-
-.policy-limit-toggle input[type="checkbox"] {
-  width: 12px;
-  height: 12px;
-  min-width: 12px;
-  min-height: 12px;
-  max-width: 12px;
-  max-height: 12px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  border: 1px solid var(--border);
-  background: var(--panel-alt);
-  margin: 0;
-  position: relative;
-  display: inline-block;
-  flex: 0 0 auto;
-  padding: 0;
-  line-height: 0;
-  font: inherit;
-}
-
-.policy-limit-toggle input[type="checkbox"]:checked {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.policy-limit-toggle input[type="checkbox"]:checked::after {
-  content: "";
-  position: absolute;
-  left: 3px;
-  top: 0;
-  width: 4px;
-  height: 7px;
-  border-right: 1px solid var(--accent-contrast);
-  border-bottom: 1px solid var(--accent-contrast);
-  transform: rotate(45deg);
 }
 
 .policy-view-dropdown,
@@ -189,7 +112,7 @@
   border: 1px solid var(--border);
   background: var(--panel);
   color: var(--text);
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
   cursor: pointer;
 }
 
@@ -217,7 +140,7 @@
   min-width: 128px;
   border: 1px solid var(--border-strong);
   background: var(--panel);
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
   padding: 0;
 }
 
@@ -243,9 +166,12 @@
   color: var(--muted);
 }
 
+.policy-pane-header {
+  font-size: 0.6875rem;
+}
+
 .policy-pane-header,
 .policy-table-note {
-  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -344,7 +270,7 @@ body.policy-resizing .policy-splitter::after {
 
 .policy-tree-placeholder {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-size-navigation);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 0 10px;
@@ -430,7 +356,7 @@ body.policy-resizing .policy-splitter::after {
 
 .policy-tree-count {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .policy-table-wrap {
@@ -455,10 +381,16 @@ body.policy-resizing .policy-splitter::after {
   white-space: nowrap;
 }
 
-#policy-search,
-.policy-tree-item,
+#policy-search {
+  font-size: var(--font-size-body);
+}
+
+.policy-tree-item {
+  font-size: var(--font-size-body);
+}
+
 .policy-table td {
-  font-size: 12px;
+  font-size: var(--font-size-body);
 }
 
 .policy-table th {
@@ -469,7 +401,7 @@ body.policy-resizing .policy-splitter::after {
   padding-right: 18px;
   background: var(--panel-alt);
   color: var(--muted);
-  font-size: 10px;
+  font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   user-select: none;
@@ -560,6 +492,7 @@ body.policy-column-resizing * {
   padding: 6px 10px;
   border-top: 1px solid var(--border);
   color: var(--muted);
+  font-size: 0.6875rem;
 }
 
 .policy-column-menu {
@@ -568,7 +501,7 @@ body.policy-column-resizing * {
   min-width: 150px;
   border: 1px solid var(--border-strong);
   background: var(--panel);
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
   padding: 0;
 }
 
@@ -645,7 +578,7 @@ body.policy-column-resizing * {
 
 .policy-detail-heading h2 {
   margin: 0;
-  font-size: 15px;
+  font-size: 0.875rem;
   line-height: 1.35;
 }
 
@@ -663,7 +596,7 @@ body.policy-column-resizing * {
 .policy-field-label {
   display: block;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--font-size-control);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   margin-bottom: 3px;
@@ -691,7 +624,7 @@ body.policy-column-resizing * {
 
 .policy-section h3 {
   margin: 0;
-  font-size: 11px;
+  font-size: 0.6875rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -755,7 +688,7 @@ body.policy-column-resizing * {
 
 .policy-value-attrs {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-size-control);
   overflow-wrap: anywhere;
 }
 
@@ -765,7 +698,7 @@ body.policy-column-resizing * {
   align-items: start;
   gap: 10px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-size-control);
   text-align: right;
 }
 
@@ -792,7 +725,7 @@ body.policy-column-resizing * {
 
 .policy-copy-prefix {
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--font-size-control);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   white-space: nowrap;
@@ -850,7 +783,7 @@ body.policy-column-resizing * {
   min-height: 0;
   padding: 0 8px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--font-size-control);
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
@@ -939,11 +872,6 @@ body.policy-column-resizing * {
     grid-column: 1 / -1;
   }
 
-  .policy-limit-controls {
-    min-width: 0;
-    overflow: hidden;
-  }
-
   .policy-toolbar-actions {
     justify-self: end;
   }
@@ -1019,23 +947,6 @@ body.policy-column-resizing * {
   .policy-toolbar {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 6px;
-  }
-
-  .policy-limit-controls {
-    gap: 5px;
-  }
-
-  .policy-limit-label,
-  .policy-limit-toggle {
-    letter-spacing: 0.07em;
-  }
-
-  .policy-limit-controls input[type="number"] {
-    width: 56px;
-  }
-
-  .policy-limit-toggle {
-    gap: 4px;
   }
 
   .policy-view-dropdown,

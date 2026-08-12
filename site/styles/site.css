@@ -24,15 +24,18 @@
   --danger: #ff6b6b;
   --starfield-dot: color-mix(in srgb, var(--text) 90%, transparent);
   --font-family: "Cascadia Code";
-  --ui-font-size: 12px;
+  --font-size-navigation: 0.78125rem;
+  --font-size-control: 0.75rem;
+  --font-size-body: 0.78125rem;
+  --font-size-heading-1: 1.25rem;
   --scrollbar-track: var(--bg-alt);
   --scrollbar-thumb: var(--border-strong);
   --scrollbar-thumb-hover: var(--accent);
-  --search-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 18a8 8 0 1 1 0 -16a8 8 0 0 1 0 16Z'/%3E%3Cpath d='M21 21l-5.2 -5.2'/%3E%3C/svg%3E");
+  --search-icon: url("/main/icons/ui/search.svg");
   --select-chevron-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6 -6'/%3E%3C/svg%3E");
-  --social-github-icon: url("/main/icons/dark/github-icon.png");
-  --social-email-icon: url("/main/icons/dark/email-icon.svg");
-  --social-discord-icon: url("/main/icons/dark/discord-icon.png");
+  --social-github-icon: url("/main/icons/ui/github-logo.svg");
+  --social-email-icon: url("/main/icons/ui/mail.svg");
+  --social-discord-icon: url("/main/icons/ui/discord.svg");
   --theme-sun-icon: url("/main/icons/ui/sun.svg");
   --theme-moon-icon: url("/main/icons/ui/moon.svg");
 }
@@ -566,7 +569,6 @@ body {
 }
 
 html {
-  font-size: 13px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -576,7 +578,7 @@ body {
   color: var(--text);
   display: flex;
   flex-direction: column;
-  font-size: 12.5px;
+  font-size: var(--font-size-body);
   min-height: 100vh;
   min-height: 100svh;
   position: relative;
@@ -740,7 +742,7 @@ main {
   padding: 10px 16px;
   background: var(--bg-alt);
   border-bottom: 1px solid var(--border);
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
 }
 
 .prompt-line {
@@ -748,7 +750,6 @@ main {
   align-items: center;
   flex-wrap: nowrap;
   gap: 2px;
-  font-size: 1em;
   text-transform: lowercase;
   letter-spacing: 0.02em;
 }
@@ -779,7 +780,6 @@ main {
   background: transparent;
   color: var(--muted);
   text-decoration: none;
-  font-size: 1em;
   text-transform: lowercase;
   letter-spacing: 0.02em;
   line-height: normal;
@@ -862,16 +862,16 @@ button {
 }
 
 input {
-  font-size: 12.5px;
+  font-size: var(--font-size-control);
 }
 
 button {
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
 }
 
 select {
   min-width: 190px;
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -922,7 +922,7 @@ select option:active {
   align-items: center;
   justify-content: flex-start;
   padding: 2px 28px 2px 10px;
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
   text-align: left;
 }
 
@@ -978,7 +978,7 @@ select option:active {
   background: var(--panel);
   border: 1px solid var(--border);
   display: none;
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
   z-index: 30;
 }
 
@@ -1007,14 +1007,14 @@ select option:active {
   border: 1px solid var(--border);
   background: var(--panel-alt);
   color: var(--text);
-  font-size: 1em;
+  font-size: var(--font-size-control);
 }
 
 .select-menu-meta {
   padding: 5px 10px;
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: 0.78em;
+  font-size: var(--font-size-control);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -1148,7 +1148,7 @@ main.bindiff-main {
   margin: 0;
   overflow: hidden;
   background: transparent;
-  font-size: 10px;
+  font-size: var(--font-size-navigation);
   line-height: 1;
 }
 
@@ -1188,7 +1188,7 @@ main.home-main {
 
 .home-intro h1 {
   margin: 0 0 12px;
-  font-size: 22px;
+  font-size: var(--font-size-heading-1);
   text-transform: uppercase;
   letter-spacing: 0;
 }
@@ -1242,7 +1242,7 @@ main.home-main {
 .home-section-heading h2 {
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0;
@@ -1250,7 +1250,7 @@ main.home-main {
 
 .home-section-heading a {
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-size-control);
 }
 
 .home-section-heading a:hover,
@@ -1295,7 +1295,8 @@ main.home-main {
   height: 14px;
   background: currentColor;
   content: '';
-  mask: url('/main/icons/ui/book-2.svg') center / contain no-repeat;
+  -webkit-mask: url('/main/icons/ui/repo.svg') center / contain no-repeat;
+  mask: url('/main/icons/ui/repo.svg') center / contain no-repeat;
 }
 
 .home-work-item span {
@@ -1304,7 +1305,7 @@ main.home-main {
 }
 
 .home-work-item strong {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
 }
 
@@ -1335,9 +1336,10 @@ main.home-main {
 }
 
 .commit-repo,
+.commit-sha,
 .commit-date {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .commit-date {
@@ -1352,7 +1354,7 @@ main.home-main {
 .commit-message {
   min-width: 0;
   overflow-wrap: anywhere;
-  font-size: 12px;
+  font-size: var(--font-size-control);
 }
 
 .commit-item:hover .commit-message,
@@ -1399,7 +1401,7 @@ main.home-main {
 }
 
 .page-heading {
-  font-size: 22px;
+  font-size: var(--font-size-heading-1);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 8px;
@@ -1477,6 +1479,14 @@ main.home-main {
   box-shadow: none;
 }
 
+#project-search {
+  font-size: var(--font-size-body);
+}
+
+.project-filter + .sr-only {
+  font-size: 1.5rem;
+}
+
 .nv-search-shortcut {
   display: inline-grid;
   grid-auto-flow: column;
@@ -1490,7 +1500,7 @@ main.home-main {
   background: var(--bg-alt);
   color: var(--muted);
   font: inherit;
-  font-size: 10px;
+  font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
 }
@@ -1565,7 +1575,7 @@ main.home-main {
 
 .project-title {
   margin: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .project-desc {
@@ -1591,20 +1601,20 @@ main.home-main {
 .price-label {
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  font-size: 10px;
+  font-size: 0.6875rem;
   color: var(--muted);
   margin: 0 0 10px;
 }
 
 .product-price {
-  font-size: 19px;
+  font-size: 1.125rem;
   color: var(--text);
   font-weight: 600;
 }
 
 .pricing-note {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .product-cta {
@@ -1637,6 +1647,7 @@ main.home-main {
   color: var(--accent-contrast);
   border: 1px solid var(--accent);
   font-weight: 600;
+  font-size: var(--font-size-body);
   cursor: pointer;
   padding: 6px 14px;
   width: 100%;
@@ -1736,7 +1747,7 @@ main.home-main {
 }
 
 .doc-header h3 {
-  font-size: 15px;
+  font-size: 0.875rem;
 }
 
 .doc-grid,
@@ -1813,7 +1824,7 @@ main.home-main {
 .social {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 7px;
   justify-content: center;
   grid-column: 2;
   grid-row: 1;
@@ -1849,14 +1860,12 @@ main.home-main {
 }
 
 .social-icon {
-  width: 16px;
-  height: 16px;
+  width: 13px;
+  height: 13px;
   display: block;
   background-color: currentColor;
   -webkit-mask: var(--social-icon) center / contain no-repeat;
   mask: var(--social-icon) center / contain no-repeat;
-  filter:
-    drop-shadow(0.45px 0 0 currentColor) drop-shadow(-0.45px 0 0 currentColor) drop-shadow(0 0.45px 0 currentColor) drop-shadow(0 -0.45px 0 currentColor);
 }
 
 .social-icon-github {
@@ -1878,7 +1887,7 @@ footer {
   padding: 0;
   border-top: 1px solid var(--border);
   background: var(--bg-alt);
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
 }
 
 .footer-row {
@@ -1923,8 +1932,8 @@ footer {
 
 .footer-copy {
   color: var(--muted);
-  font-size: 10px;
-  text-transform: uppercase;
+  font-size: 0.6875rem;
+  text-transform: lowercase;
   letter-spacing: 0.14em;
 }
 
@@ -1957,7 +1966,7 @@ footer {
   opacity: 0;
   pointer-events: none;
   z-index: 20;
-  font-size: 12px;
+  font-size: 0.6875rem;
 }
 
 .toast.show {
@@ -2070,6 +2079,10 @@ footer {
 }
 
 @media (max-width: 520px) {
+  .footer-copy {
+    font-size: 0.625rem;
+  }
+
   .theme-toggle {
     display: inline-flex;
   }
@@ -2138,7 +2151,7 @@ footer {
   align-items: center;
   gap: 6px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--font-size-control);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   cursor: pointer;
@@ -2148,7 +2161,7 @@ footer {
   width: 78px;
   height: 22px;
   padding: 2px 6px;
-  font-size: 10px;
+  font-size: var(--font-size-control);
   appearance: textfield;
   -moz-appearance: textfield;
 }
@@ -2223,7 +2236,17 @@ footer {
   height: 16px;
   display: block;
   margin: auto;
+}
+
+.bindiff-swap-icon {
   stroke-width: 1.7;
+}
+
+.settings-icon,
+.settings-close-icon {
+  background-color: currentColor;
+  -webkit-mask: url("/main/icons/ui/gear.svg") center / contain no-repeat;
+  mask: url("/main/icons/ui/gear.svg") center / contain no-repeat;
 }
 
 #policy-settings:focus,
@@ -2277,7 +2300,7 @@ footer {
 
 .settings-header h2 {
   margin: 0;
-  font-size: 10px;
+  font-size: var(--font-size-control);
   text-transform: uppercase;
   letter-spacing: 0.18em;
   color: var(--muted);
@@ -2310,7 +2333,8 @@ footer {
   width: 14px;
   height: 14px;
   display: block;
-  stroke-width: 1.9;
+  -webkit-mask-image: url("/main/icons/ui/x.svg");
+  mask-image: url("/main/icons/ui/x.svg");
 }
 
 .site-error-modal {
@@ -2346,7 +2370,7 @@ footer {
   min-height: 28px;
   color: var(--text);
   cursor: pointer;
-  font-size: 12.5px;
+  font-size: var(--font-size-control);
   padding: 2px 0;
 }
 

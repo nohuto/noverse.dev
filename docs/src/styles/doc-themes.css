@@ -591,7 +591,7 @@ docs-theme-select {
   color: var(--sl-color-text);
   box-shadow: none;
   font: inherit;
-  font-size: var(--sl-text-2xs);
+  font-size: 0.75rem;
   line-height: 1.1;
   letter-spacing: 0;
   cursor: pointer;
@@ -684,7 +684,7 @@ docs-theme-select[data-open='true'] .docs-theme-trigger::after {
   background: transparent;
   color: var(--sl-color-text);
   font: inherit;
-  font-size: var(--sl-text-2xs);
+  font-size: 0.75rem;
   line-height: 1.1;
   text-align: left;
   white-space: nowrap;

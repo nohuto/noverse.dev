@@ -17,9 +17,9 @@
   const NAME_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 7;
   const NAME_CACHE_MAX_ENTRIES = 6;
   const FONT_SIZE_KEY = 'nv-diff-font-size';
-  const DEFAULT_FONT_SIZE = 12;
-  const MIN_FONT_SIZE = 9;
-  const MAX_FONT_SIZE = 18;
+  const DEFAULT_FONT_SIZE = 12.5;
+  const MIN_FONT_SIZE = 8.5;
+  const MAX_FONT_SIZE = 17.5;
   const COLLATOR = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
   const assetPromises = new Map();
   let diffAssetsPromise;
@@ -268,9 +268,10 @@
   };
 
   const clampFontSize = value => {
-    const parsed = Number.parseInt(value, 10);
+    const parsed = Number.parseFloat(value);
     if (!Number.isFinite(parsed)) return DEFAULT_FONT_SIZE;
-    return Math.min(Math.max(parsed, MIN_FONT_SIZE), MAX_FONT_SIZE);
+    const clamped = Math.min(Math.max(parsed, MIN_FONT_SIZE), MAX_FONT_SIZE);
+    return Math.round(clamped - MIN_FONT_SIZE) + MIN_FONT_SIZE;
   };
 
   function initDiff() {
@@ -337,7 +338,7 @@
 
     const setFontSize = (size, persist = true) => {
       currentFontSize = clampFontSize(size);
-      output.style.setProperty('--bindiff-font-size', `${currentFontSize}px`);
+      output.style.setProperty('--bindiff-font-size', `${currentFontSize / 16}rem`);
       fontDecreaseButton.disabled = currentFontSize <= MIN_FONT_SIZE;
       fontIncreaseButton.disabled = currentFontSize >= MAX_FONT_SIZE;
       if (persist) storageSet(FONT_SIZE_KEY, String(currentFontSize));
@@ -419,7 +420,7 @@
       });
     };
 
-    setFontSize(storageGet(FONT_SIZE_KEY, getComputedStyle(output).getPropertyValue('--bindiff-font-size') || DEFAULT_FONT_SIZE), false);
+    setFontSize(storageGet(FONT_SIZE_KEY, DEFAULT_FONT_SIZE), false);
 
     const setLinks = (leftFile, rightFile = null) => {
       leftLink.href = activeSource.blobUrl(leftSelect.value, moduleSelect.value, leftFile);

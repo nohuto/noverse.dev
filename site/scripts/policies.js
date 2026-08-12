@@ -126,7 +126,8 @@
     let categoryTree = null;
     let tableRenderId = 0;
     const expandedTreeNodes = new Set(['__admin__']);
-    let rowLimit = 350;
+    const defaultRowLimit = 350;
+    let rowLimit = defaultRowLimit;
     let unlimitedRows = false;
     const defaultSearchDelayMs = 200;
     let searchDelayMs = defaultSearchDelayMs;
@@ -1199,11 +1200,16 @@
       ));
     };
 
-    const syncSearchSettingsUi = () => {
+    const syncSettingsUi = () => {
       Object.entries(searchOptionInputs).forEach(([key, input]) => {
         if (input) input.checked = Boolean(searchOptions[key]);
       });
       if (searchDelayInput) searchDelayInput.value = String(searchDelayMs);
+      if (limitInput) {
+        limitInput.value = String(rowLimit);
+        limitInput.disabled = unlimitedRows;
+      }
+      if (unlimitedInput) unlimitedInput.checked = unlimitedRows;
     };
 
     const applySearchSettingsFromUi = () => {
@@ -1344,8 +1350,10 @@
     settingsDoneButton?.addEventListener('click', closeSettingsModal);
     settingsResetButton?.addEventListener('click', () => {
       Object.assign(searchOptions, defaultSearchOptions);
+      rowLimit = defaultRowLimit;
+      unlimitedRows = false;
       searchDelayMs = defaultSearchDelayMs;
-      syncSearchSettingsUi();
+      syncSettingsUi();
       applyFilters();
     });
     Object.values(searchOptionInputs).forEach(input => {
@@ -1422,7 +1430,7 @@
     });
     limitInput?.addEventListener('input', () => {
       const parsed = Number.parseInt(limitInput.value, 10);
-      rowLimit = Number.isFinite(parsed) ? Math.min(5000, Math.max(1, parsed)) : 350;
+      rowLimit = Number.isFinite(parsed) ? Math.min(5000, Math.max(25, parsed)) : defaultRowLimit;
       renderTable();
     });
     unlimitedInput?.addEventListener('change', () => {
@@ -1467,7 +1475,7 @@
       new ResizeObserver(() => requestAnimationFrame(applyTableColumnWidths)).observe(tableWrap);
     }
 
-    syncSearchSettingsUi();
+    syncSettingsUi();
     updatePaneLayout();
     setBusy(true);
     afterNextPaint()

@@ -176,6 +176,7 @@ export default defineConfig({
       expressiveCode: {
         styleOverrides: {
           borderRadius: 'var(--nv-ui-radius)',
+          codeFontSize: '0.8125rem',
           frames: {
             editorTabBorderRadius: 'var(--nv-ui-radius)',
           },

@@ -28,14 +28,17 @@ main.bindiff-main {
 }
 
 .bindiff-grid {
+  --diff-build-width: 7.3125rem;
+  --diff-module-width: 9.75rem;
+  --diff-name-width: 22.75rem;
   display: grid;
-  grid-template-columns: minmax(112px, 9rem) minmax(112px, 9rem) minmax(128px, 12rem) minmax(260px, 28rem);
+  grid-template-columns: minmax(112px, var(--diff-build-width)) minmax(112px, var(--diff-build-width)) minmax(128px, var(--diff-module-width)) minmax(260px, var(--diff-name-width));
   gap: 10px;
   min-width: 0;
 }
 
 .diff-grid {
-  grid-template-columns: minmax(112px, 9rem) minmax(112px, 9rem) max-content minmax(128px, 12rem) minmax(260px, 28rem);
+  grid-template-columns: minmax(112px, var(--diff-build-width)) minmax(112px, var(--diff-build-width)) max-content minmax(128px, var(--diff-module-width)) minmax(260px, var(--diff-name-width));
 }
 
 .bindiff-field {
@@ -46,7 +49,7 @@ main.bindiff-main {
 
 .bindiff-field>span,
 .bindiff-field>label {
-  font-size: 10px;
+  font-size: 0.625rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--muted);
@@ -60,7 +63,7 @@ main.bindiff-main {
 
 .bindiff-field select,
 .bindiff-field .select-trigger {
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
 }
 
 .bindiff-field .select-trigger {
@@ -110,7 +113,7 @@ main.bindiff-main {
   border-right: 1px solid var(--border);
   background: transparent;
   color: var(--text);
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
   line-height: 1;
   cursor: pointer;
 }
@@ -168,7 +171,7 @@ main.bindiff-main {
   color: var(--text);
   text-transform: none;
   letter-spacing: 0;
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
   padding: 0 8px;
   white-space: nowrap;
   cursor: pointer;
@@ -267,7 +270,7 @@ main.bindiff-main {
   color: var(--text);
   text-transform: none;
   letter-spacing: 0;
-  font-size: var(--ui-font-size);
+  font-size: var(--font-size-control);
   padding: 0 12px;
   white-space: nowrap;
   line-height: 1;
@@ -309,7 +312,7 @@ main.bindiff-main {
 }
 
 .bindiff-links .link {
-  font-size: 10px;
+  font-size: 0.6875rem;
   font-style: italic;
   color: var(--muted);
 }
@@ -403,7 +406,7 @@ main.bindiff-main {
 }
 
 .bindiff-output {
-  --bindiff-font-size: 12px;
+  --bindiff-font-size: var(--font-size-body);
   width: 100%;
   max-width: none;
   min-height: 0;
@@ -688,13 +691,13 @@ body.bindiff-maximized>footer {
 
 @media (max-width: 1200px) {
   .bindiff-grid.diff-grid {
-    grid-template-columns: minmax(112px, 9rem) minmax(112px, 9rem) max-content minmax(128px, 12rem);
+    grid-template-columns: minmax(112px, var(--diff-build-width)) minmax(112px, var(--diff-build-width)) max-content minmax(128px, var(--diff-module-width));
   }
 
   .diff-grid .diff-name-field {
     grid-column: 1 / -1;
     justify-self: start;
-    width: min(100%, 28rem);
+    width: min(100%, var(--diff-name-width));
   }
 }
 
@@ -721,13 +724,13 @@ body.bindiff-maximized>footer {
   }
 
   .diff-grid .diff-build-field {
-    width: min(100%, 9rem);
-    flex: 0 0 min(100%, 9rem);
+    width: min(100%, var(--diff-build-width));
+    flex: 0 0 min(100%, var(--diff-build-width));
   }
 
   .diff-grid .diff-module-field {
-    width: min(100%, 12rem);
-    flex: 0 0 min(100%, 12rem);
+    width: min(100%, var(--diff-module-width));
+    flex: 0 0 min(100%, var(--diff-module-width));
   }
 
   .diff-grid .diff-kind-field {
@@ -736,8 +739,8 @@ body.bindiff-maximized>footer {
   }
 
   .diff-grid .diff-name-field {
-    width: min(100%, 28rem);
-    max-width: 28rem;
+    width: min(100%, var(--diff-name-width));
+    max-width: var(--diff-name-width);
     flex: 1 1 260px;
   }
 

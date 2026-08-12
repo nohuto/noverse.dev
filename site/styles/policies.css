@@ -615,7 +615,7 @@ body.policy-column-resizing * {
 .policy-explain {
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  color: var(--muted);
+  color: var(--text);
   padding: 10px 0;
   margin: 8px 0 12px;
   white-space: pre-line;

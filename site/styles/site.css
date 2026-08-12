@@ -1195,7 +1195,7 @@ main.home-main {
 
 .home-intro>p {
   margin: 0;
-  color: var(--muted);
+  color: var(--text);
   line-height: 1.65;
 }
 
@@ -1295,8 +1295,8 @@ main.home-main {
   height: 14px;
   background: currentColor;
   content: '';
-  -webkit-mask: url('/main/icons/ui/repo.svg') center / contain no-repeat;
-  mask: url('/main/icons/ui/repo.svg') center / contain no-repeat;
+  -webkit-mask: url('/main/icons/ui/book-bookmark.svg') center / contain no-repeat;
+  mask: url('/main/icons/ui/book-bookmark.svg') center / contain no-repeat;
 }
 
 .home-work-item span {
@@ -1594,6 +1594,11 @@ main.home-main {
   min-width: 0;
 }
 
+.product-intro>p,
+#documentation>.doc-header>p {
+  color: var(--text);
+}
+
 .product-intro> :last-child {
   margin-bottom: 0;
 }
@@ -1817,7 +1822,7 @@ main.home-main {
 }
 
 .legal-item p {
-  color: var(--muted);
+  color: var(--text);
   line-height: 1.45;
 }
 

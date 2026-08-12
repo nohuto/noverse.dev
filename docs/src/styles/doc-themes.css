@@ -704,9 +704,38 @@ docs-theme-select[data-open='true'] .docs-theme-trigger::after {
   color: var(--sl-color-text-invert);
 }
 
-*,
-*::before,
-*::after {
-  animation: none !important;
-  scroll-behavior: auto !important;
+html {
+  scroll-behavior: smooth;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):not([tabindex='-1']) {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+:where(a, button, summary):active {
+  transform: translateY(1px);
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

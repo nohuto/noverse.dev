@@ -484,8 +484,7 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
 
 .scroll-to-top-button.keyboard-focus {
   color: var(--sl-color-accent-high) !important;
-  outline: 2px solid color-mix(in srgb, var(--sl-color-accent) 55%, transparent) !important;
-  outline-offset: 0.2rem !important;
+  outline: none !important;
 }
 
 .scroll-to-top-button svg:not(.scroll-progress-ring) {

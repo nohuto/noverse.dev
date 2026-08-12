@@ -95,6 +95,14 @@ main.bindiff-main {
   padding: 4px 10px;
 }
 
+.diff-name-field .select-search,
+.diff-name-field .select-menu-meta,
+.diff-name-field .select-limit-label,
+.diff-name-field .select-limit-toggle,
+.diff-name-field .select-limit-input {
+  font-size: 0.625rem;
+}
+
 .diff-kind-toggle {
   display: grid;
   grid-template-columns: repeat(3, max-content);

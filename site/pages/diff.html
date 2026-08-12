@@ -7,34 +7,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Compare decompiled pseudocode, type layouts, and globals">
   <title>Diff - Noverse</title>
-  <link rel="preload" href="/main/fonts/CascadiaCode-2407.24.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/main/min/site.min.css">
+  <!-- include:site-head -->
   <link rel="stylesheet" href="/main/min/diff.min.css">
-  <script src="/main/min/bootstrap.min.js" defer></script>
-  <script src="/main/min/site.min.js" defer></script>
   <script src="/main/min/diff.min.js" defer></script>
 </head>
 
 <body>
-  <div class="stars" aria-hidden="true"></div>
-  <div class="overlay" aria-hidden="true"></div>
-
-  <header class="prompt-bar">
-    <div class="prompt-line" role="group" aria-label="Terminal prompt">
-      <span class="prompt-user">nohuto</span>
-      <span class="prompt-sep">@</span>
-      <span class="prompt-host">noverse</span>
-    </div>
-    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme"><span class="theme-toggle-icon" aria-hidden="true"></span></button>
-    <nav class="nav-tabs" aria-label="Primary navigation">
-      <a href="/">home</a>
-      <a href="/product">product</a>
-      <a href="/projects">projects</a>
-      <a href="/diff" aria-current="page" class="active">diff</a>
-      <a href="/policies">policies</a>
-      <a href="/docs/">docs</a>
-    </nav>
-  </header>
+  <!-- include:site-header -->
 
   <main id="main" class="no-center bindiff-main">
     <section class="content-box panel" id="diff-app" data-title="diff" aria-busy="true">
@@ -202,22 +181,9 @@
           <div id="diff-output" class="bindiff-output" aria-live="off"></div>
         </div>
 
-        <div class="settings-modal" id="diff-settings-modal" hidden>
-          <div class="settings-dialog" id="diff-settings-dialog" role="dialog" aria-modal="true" aria-labelledby="diff-settings-title">
-            <div class="settings-header" id="diff-settings-header">
-              <h2 id="diff-settings-title">Settings</h2>
-              <button id="diff-settings-close" type="button" aria-label="Close settings" title="Close settings">
-                <span class="settings-close-icon" aria-hidden="true"></span>
-                <span class="sr-only">Close settings</span>
-              </button>
-            </div>
+        <!-- component:settings-dialog-start:diff -->
             <div class="settings-body" id="diff-settings-body"></div>
-            <div class="settings-footer">
-              <button id="diff-settings-reset" type="button">Reset</button>
-              <button id="diff-settings-done" type="button">Close</button>
-            </div>
-          </div>
-        </div>
+        <!-- component:settings-dialog-end:diff -->
 
         <div class="bindiff-links" id="diff-links" hidden>
           <a id="diff-left-link" class="link" href="#" target="_blank" rel="noopener noreferrer">Left source</a>
@@ -227,60 +193,7 @@
     </section>
   </main>
 
-  <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
-
-  <footer>
-    <div class="footer-row">
-      <div class="footer-left">
-        <div class="footer-copy">&copy; 2026 nohuto</div>
-      </div>
-      <div class="footer-tools">
-        <div class="footer-tools-row">
-          <select id="theme-select" name="theme" aria-label="Theme">
-              <option value="system">System</option>
-              <option value="dark">Dark</option>
-              <option value="light">Light</option>
-              <option value="ayu-dark">Ayu Dark</option>
-              <option value="ayu-light">Ayu Light</option>
-              <option value="catppuccin-frappe">Catppuccin Frappe</option>
-              <option value="catppuccin-latte">Catppuccin Latte</option>
-              <option value="catppuccin-macchiato">Catppuccin Macchiato</option>
-              <option value="catppuccin-mocha">Catppuccin Mocha</option>
-              <option value="everforest-dark">Everforest Dark</option>
-              <option value="everforest-light">Everforest Light</option>
-              <option value="gray-black">Gray Black</option>
-              <option value="gruvbox-dark">Gruvbox Dark</option>
-              <option value="gruvbox-light">Gruvbox Light</option>
-              <option value="horizon">Horizon</option>
-              <option value="kanagawa-dragon">Kanagawa Dragon</option>
-              <option value="kanagawa-lotus">Kanagawa Lotus</option>
-              <option value="kanagawa-wave">Kanagawa Wave</option>
-              <option value="monokai">Monokai</option>
-              <option value="night-owl">Night Owl</option>
-              <option value="nord">Nord</option>
-              <option value="one-dark">One Dark</option>
-              <option value="one-light">One Light</option>
-              <option value="purple-black">Purple Black</option>
-              <option value="rose-pine">Rose Pine</option>
-              <option value="rose-pine-moon">Rose Pine Moon</option>
-              <option value="solarized-dark">Solarized Dark</option>
-              <option value="solarized-light">Solarized Light</option>
-          </select>
-        </div>
-      </div>
-      <div class="social">
-        <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-          <span class="social-icon social-icon-github" aria-hidden="true"></span>
-        </a>
-        <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard">
-          <span class="social-icon social-icon-email" aria-hidden="true"></span>
-        </button>
-        <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer" aria-label="Discord server">
-          <span class="social-icon social-icon-discord" aria-hidden="true"></span>
-        </a>
-      </div>
-    </div>
-  </footer>
+  <!-- include:site-footer -->
 </body>
 
 </html>

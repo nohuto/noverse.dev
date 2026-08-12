@@ -320,6 +320,11 @@
     let isMaximized = false;
     let lastRender = null;
     const selectionMemory = new Map();
+    const settingsDialogManager = window.NV_CREATE_DRAGGABLE_DIALOG_MANAGER?.({
+      layer: settingsModal,
+      dialog: settingsDialog,
+      handle: settingsHeader
+    });
 
     const setBusy = busy => {
       root.setAttribute('aria-busy', busy ? 'true' : 'false');
@@ -649,47 +654,19 @@
       activeSource.renderSettings(settingsBody, rerender);
     };
 
-    const centerSettings = () => {
-      settingsDialog.style.left = `${Math.max(0, (settingsModal.clientWidth - settingsDialog.offsetWidth) / 2)}px`;
-      settingsDialog.style.top = `${Math.max(0, (settingsModal.clientHeight - settingsDialog.offsetHeight) / 2)}px`;
-      settingsDialog.dataset.positioned = 'true';
-    };
-
     const openSettings = () => {
       populateSettings();
-      settingsModal.hidden = false;
       document.body.classList.add('settings-open');
-      requestAnimationFrame(centerSettings);
+      settingsDialogManager?.open({
+        initialFocus: settingsClose,
+        recenter: true
+      });
     };
 
     const closeSettings = () => {
-      settingsModal.hidden = true;
       document.body.classList.remove('settings-open');
+      settingsDialogManager?.close();
     };
-
-    settingsHeader.addEventListener('pointerdown', event => {
-      if (event.button !== 0 || settingsModal.hidden || event.target.closest('button')) return;
-      event.preventDefault();
-      if (settingsDialog.dataset.positioned !== 'true') centerSettings();
-      const startX = event.clientX;
-      const startY = event.clientY;
-      const startLeft = settingsDialog.offsetLeft;
-      const startTop = settingsDialog.offsetTop;
-      const maxLeft = Math.max(0, settingsModal.clientWidth - settingsDialog.offsetWidth);
-      const maxTop = Math.max(0, settingsModal.clientHeight - settingsDialog.offsetHeight);
-      settingsHeader.setPointerCapture(event.pointerId);
-      const onMove = moveEvent => {
-        settingsDialog.style.left = `${Math.min(Math.max(0, startLeft + moveEvent.clientX - startX), maxLeft)}px`;
-        settingsDialog.style.top = `${Math.min(Math.max(0, startTop + moveEvent.clientY - startY), maxTop)}px`;
-      };
-      const onUp = () => {
-        settingsHeader.releasePointerCapture(event.pointerId);
-        settingsHeader.removeEventListener('pointermove', onMove);
-        settingsHeader.removeEventListener('pointerup', onUp);
-      };
-      settingsHeader.addEventListener('pointermove', onMove);
-      settingsHeader.addEventListener('pointerup', onUp);
-    });
 
     kindButtons.forEach(button => {
       button.addEventListener('click', async () => {
@@ -755,10 +732,6 @@
     });
     maximizeButton.addEventListener('click', () => {
       if (lastRender) setMaximized(!isMaximized);
-    });
-    window.addEventListener('resize', () => {
-      if (settingsModal.hidden) return;
-      centerSettings();
     });
     document.addEventListener('keydown', event => {
       if (event.key !== 'Escape') return;

@@ -4,36 +4,70 @@
 
   const POLICY_DATA_URL = 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policies.json';
   const POLICY_CATEGORY_DATA_URL = 'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policyCategories.json';
-  let policyDataPromise;
-  let policyCategoryDataPromise;
+  const POLICY_WORKER_URL = '/main/min/policies-worker.min.js';
+  let policyPayloadPromise;
   const afterNextPaint = () => new Promise(resolve => {
     requestAnimationFrame(() => requestAnimationFrame(resolve));
   });
   const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
+  const yieldUntilIdle = () => new Promise(resolve => {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(resolve, { timeout: 300 });
+      return;
+    }
+    setTimeout(resolve, 16);
+  });
 
-  const loadPolicyData = () => {
-    if (policyDataPromise) return policyDataPromise;
-    policyDataPromise = fetch(POLICY_DATA_URL, { cache: 'force-cache' })
-      .then(async response => {
-        if (!response.ok) throw new Error(`Policy data request failed (${response.status})`);
-        const json = await response.json();
-        return Array.isArray(json) ? json : [];
-      });
-    return policyDataPromise;
+  const loadPolicyPayloadOnMainThread = async () => {
+    const [policyResponse, categoryResponse] = await Promise.all([
+      fetch(POLICY_DATA_URL, { cache: 'force-cache' }),
+      fetch(POLICY_CATEGORY_DATA_URL, { cache: 'force-cache' }),
+    ]);
+    if (!policyResponse.ok) throw new Error(`Policy data request failed (${policyResponse.status})`);
+    if (!categoryResponse.ok) console.warn(`Policy category data request failed (${categoryResponse.status})`);
+    const [data, categoryJson] = await Promise.all([
+      policyResponse.json(),
+      categoryResponse.ok ? categoryResponse.json() : Promise.resolve({}),
+    ]);
+    return {
+      data: Array.isArray(data) ? data : [],
+      categories: categoryJson?.categories && typeof categoryJson.categories === 'object'
+        ? categoryJson.categories
+        : {},
+    };
   };
 
-  const loadPolicyCategoryData = () => {
-    if (policyCategoryDataPromise) return policyCategoryDataPromise;
-    policyCategoryDataPromise = fetch(POLICY_CATEGORY_DATA_URL, { cache: 'force-cache' })
-      .then(async response => {
-        if (!response.ok) {
-          console.warn(`Policy category data request failed (${response.status})`);
-          return {};
+  const loadPolicyPayload = () => {
+    if (policyPayloadPromise) return policyPayloadPromise;
+    if (typeof Worker === 'undefined') {
+      policyPayloadPromise = loadPolicyPayloadOnMainThread();
+      return policyPayloadPromise;
+    }
+
+    policyPayloadPromise = new Promise((resolve, reject) => {
+      const worker = new Worker(POLICY_WORKER_URL);
+      worker.addEventListener('message', event => {
+        if (event.data?.type === 'loaded') {
+          worker.terminate();
+          if (event.data.categoryWarning) console.warn(event.data.categoryWarning);
+          performance.mark('nv-policies:worker-profile', { detail: event.data.profile });
+          resolve(event.data);
+        } else if (event.data?.type === 'error') {
+          worker.terminate();
+          reject(new Error(event.data.message));
         }
-        const json = await response.json();
-        return json?.categories && typeof json.categories === 'object' ? json.categories : {};
+      }, { once: true });
+      worker.addEventListener('error', () => {
+        worker.terminate();
+        loadPolicyPayloadOnMainThread().then(resolve, reject);
+      }, { once: true });
+      worker.postMessage({
+        type: 'load',
+        policyUrl: POLICY_DATA_URL,
+        categoryUrl: POLICY_CATEGORY_DATA_URL,
       });
-    return policyCategoryDataPromise;
+    });
+    return policyPayloadPromise;
   };
 
   const getPolicyScope = policy => {
@@ -131,6 +165,12 @@
     const defaultSearchDelayMs = 200;
     let searchDelayMs = defaultSearchDelayMs;
     let searchDelayTimer = 0;
+    let tableFocusId = null;
+    const settingsDialogManager = window.NV_CREATE_DRAGGABLE_DIALOG_MANAGER?.({
+      layer: settingsModal,
+      dialog: settingsDialog,
+      handle: settingsHeader
+    });
     const paneState = {
       tree: true,
       table: true,
@@ -717,29 +757,28 @@
       return terms;
     };
 
-    const getSearchFields = policy => {
+    const getSearchFields = (policy, lowercase = false) => {
       if (searchOptions.registry || searchOptions.details) preparePolicySearchFields(policy);
+      const source = lowercase ? policy.searchFieldsLower : policy.searchFields;
       const fields = [];
-      if (searchOptions.names) fields.push(...policy.searchFields.names);
-      if (searchOptions.registry) fields.push(...policy.searchFields.registry);
-      if (searchOptions.details) fields.push(...policy.searchFields.details);
-      return fields
-        .filter(value => value !== null && value !== undefined && value !== '')
-        .map(value => String(value));
+      if (searchOptions.names) fields.push(...source.names);
+      if (searchOptions.registry) fields.push(...source.registry);
+      if (searchOptions.details) fields.push(...source.details);
+      return fields;
     };
 
-    const termMatchesPolicy = (policy, term) => {
-      const fields = getSearchFields(policy);
+    const compileSearchTerm = term => {
+      if (searchOptions.wildcards) return { regex: wildcardToRegExp(term) };
+      return { value: searchOptions.caseSensitive ? term : term.toLowerCase() };
+    };
+
+    const termMatchesPolicy = (policy, matcher) => {
+      const fields = getSearchFields(policy, !searchOptions.caseSensitive && !matcher.regex);
       if (!fields.length) return false;
-      if (searchOptions.wildcards) {
-        const regex = wildcardToRegExp(term);
-        return fields.some(field => regex.test(field));
-      }
-      const needle = searchOptions.caseSensitive ? term : term.toLowerCase();
-      return fields.some(field => {
-        const haystack = searchOptions.caseSensitive ? field : field.toLowerCase();
-        return searchOptions.whole ? haystack === needle : haystack.includes(needle);
-      });
+      if (matcher.regex) return fields.some(field => matcher.regex.test(field));
+      return searchOptions.whole
+        ? fields.some(field => field === matcher.value)
+        : fields.some(field => field.includes(matcher.value));
     };
 
     const applyTableColumnWidths = () => {
@@ -879,12 +918,20 @@
 
     const renderTable = () => {
       const renderId = ++tableRenderId;
+      const previouslyFocusedRow = document.activeElement instanceof Element
+        ? document.activeElement.closest('tr[data-id]')
+        : null;
+      let restoreTableFocus = Boolean(previouslyFocusedRow && tableBody.contains(previouslyFocusedRow));
+      if (restoreTableFocus) tableFocusId = previouslyFocusedRow.dataset.id || tableFocusId;
       tableBody.replaceChildren();
       if (tableNote) tableNote.textContent = '';
       const sorted = sortPolicies(filtered);
       const visible = sorted.slice(0, getEffectiveLimit());
       const activePolicy = policyById.get(selectedId);
       const columns = getVisibleColumns();
+      if (!visible.some(policy => policy.id === tableFocusId)) {
+        tableFocusId = visible.find(policy => policy.id === selectedId)?.id || visible[0]?.id || null;
+      }
       const appendRows = start => {
         if (renderId !== tableRenderId) return;
         const end = Math.min(start + 50, visible.length);
@@ -894,7 +941,7 @@
           const policy = visible[index];
           const row = document.createElement('tr');
           row.className = policy.id === selectedId ? 'is-active' : '';
-          row.tabIndex = 0;
+          row.tabIndex = policy.id === tableFocusId ? 0 : -1;
           row.dataset.id = policy.id;
           columns.forEach(column => {
             const cell = document.createElement('td');
@@ -906,6 +953,14 @@
         }
 
         tableBody.appendChild(fragment);
+        if (restoreTableFocus) {
+          const focusRow = Array.from(tableBody.querySelectorAll('tr[data-id]'))
+            .find(row => row.dataset.id === tableFocusId);
+          if (focusRow instanceof HTMLElement) {
+            focusRow.focus({ preventScroll: true });
+            restoreTableFocus = false;
+          }
+        }
         if (end < visible.length) {
           setTimeout(() => appendRows(end), 0);
         } else if (tableNote) {
@@ -928,6 +983,7 @@
       if (!policy) return;
       const { updateUrl = true, selectCategory = false } = options;
       selectedId = policy.id;
+      tableFocusId = policy.id;
       paneState.detail = true;
       if (selectCategory) {
         selectedCategoryKey = policy.categoryPathKey || '';
@@ -950,13 +1006,24 @@
       applyFilters();
     };
 
-    const toggleTreeNode = nodeKey => {
+    const focusTreeNode = nodeKey => {
+      const item = Array.from(treeEl.querySelectorAll('.policy-tree-item'))
+        .find(candidate => candidate.dataset.nodeKey === nodeKey);
+      if (!(item instanceof HTMLElement)) return;
+      treeEl.querySelectorAll('.policy-tree-item').forEach(candidate => {
+        candidate.tabIndex = candidate === item ? 0 : -1;
+      });
+      item.focus({ preventScroll: true });
+    };
+
+    const toggleTreeNode = (nodeKey, restoreFocus = false) => {
       if (expandedTreeNodes.has(nodeKey)) {
         expandedTreeNodes.delete(nodeKey);
       } else {
         expandedTreeNodes.add(nodeKey);
       }
       renderTree();
+      if (restoreFocus) requestAnimationFrame(() => focusTreeNode(nodeKey));
     };
 
     const createTreeButton = ({ label, count, categoryKey = '', depth = 0, nodeKey = '', selectionKey = '', hasChildren = false }) => {
@@ -969,6 +1036,8 @@
       button.dataset.categoryKey = categoryKey;
       button.dataset.selectionKey = treeSelectionKey;
       button.dataset.nodeKey = treeNodeKey;
+      button.dataset.depth = String(depth);
+      button.tabIndex = -1;
       button.style.setProperty('--policy-tree-depth', String(depth));
       button.setAttribute('role', 'treeitem');
       if (hasChildren) {
@@ -999,7 +1068,9 @@
 
     const updateTreeActive = () => {
       const activeKey = getTreeSelectionKey();
-      treeEl.querySelectorAll('.policy-tree-item').forEach(item => {
+      const items = Array.from(treeEl.querySelectorAll('.policy-tree-item'));
+      let activeItem = null;
+      items.forEach(item => {
         const selectionKey = item.dataset.selectionKey || '';
         const categoryKey = item.dataset.categoryKey || '';
         const isActive = selectionKey === activeKey;
@@ -1011,6 +1082,11 @@
         item.classList.toggle('is-active', isActive);
         item.classList.toggle('is-active-path', isActivePath);
         item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        if (isActive && !activeItem) activeItem = item;
+      });
+      const tabStop = activeItem || items[0];
+      items.forEach(item => {
+        item.tabIndex = item === tabStop ? 0 : -1;
       });
     };
 
@@ -1079,6 +1155,7 @@
           }));
           if (expandedTreeNodes.has(nodeKey)) {
             const childLevel = createNode('div', 'policy-tree-level');
+            childLevel.setAttribute('role', 'group');
             childLevel.style.setProperty('--policy-tree-depth', String(depth + 1));
             appendCategoryNodes(childLevel, child, depth + 1);
             parent.appendChild(childLevel);
@@ -1098,6 +1175,7 @@
       }));
       if (expandedTreeNodes.has('__admin__')) {
         const adminLevel = createNode('div', 'policy-tree-level');
+        adminLevel.setAttribute('role', 'group');
         adminLevel.style.setProperty('--policy-tree-depth', '1');
         appendCategoryNodes(adminLevel, categoryTree || buildCategoryTree(), 1);
         adminLevel.appendChild(createTreeButton({ label: 'All Settings', count, depth: 1 }));
@@ -1116,7 +1194,7 @@
 
     const applyFilters = () => {
       clearPendingSearch();
-      const terms = splitSearchTerms(searchInput.value);
+      const terms = splitSearchTerms(searchInput.value).map(compileSearchTerm);
 
       filtered = !terms.length && !selectedCategoryKey
         ? policies
@@ -1144,6 +1222,15 @@
       const categoryDisplayPath = categoryPath.map(segment => segment.displayName || segment.name).join(' / ');
       const scope = getPolicyScope(policy);
       const shareId = getPolicyShareId(policy);
+      const nameFields = [
+        policy.DisplayName,
+        policy.PolicyName,
+        getCategory(policy),
+        categoryDisplayPath,
+        policy.File,
+        policy.NameSpace,
+        scope
+      ].filter(value => value !== null && value !== undefined && value !== '').map(String);
       return {
         ...policy,
         id: `policy-${index}`,
@@ -1153,16 +1240,11 @@
         categoryPathKey: makeCategoryKey(categoryPath),
         categoryDisplayPath,
         searchFields: {
-          names: [
-            policy.DisplayName,
-            policy.PolicyName,
-            getCategory(policy),
-            categoryDisplayPath,
-            policy.File,
-            policy.NameSpace,
-            scope
-          ]
-        }
+          names: nameFields
+        },
+        searchFieldsLower: {
+          names: nameFields.map(value => value.toLowerCase())
+        },
       };
     };
 
@@ -1174,7 +1256,8 @@
         ...(policy.KeyPath || []),
         ...valueGroups.flatMap(group => group.keyPaths)
       ].join(' ');
-      policy.searchFields.registry = [keyText, policy.ValueName, getPolicyValue(policy)];
+      policy.searchFields.registry = [keyText, policy.ValueName, getPolicyValue(policy)]
+        .filter(value => value !== null && value !== undefined && value !== '').map(String);
       policy.searchFields.details = [
         policy.Supported,
         policy.ExplainText,
@@ -1185,14 +1268,18 @@
           ...group.rows.flatMap(row => [row.type, row.registryType, row.text])
         ]).join(' '),
         elements.map(element => `${element.Type || ''} ${getElementRegistryType(element)}`).join(' ')
-      ];
+      ].filter(value => value !== null && value !== undefined && value !== '').map(String);
+      policy.searchFieldsLower.registry = policy.searchFields.registry.map(value => value.toLowerCase());
+      policy.searchFieldsLower.details = policy.searchFields.details.map(value => value.toLowerCase());
     };
 
     const warmPolicySearchFields = async () => {
       for (let start = 0; start < policies.length; start += 50) {
+        await yieldUntilIdle();
         policies.slice(start, start + 50).forEach(preparePolicySearchFields);
-        await yieldToMain();
       }
+      performance.mark('nv-policies:search-ready');
+      performance.measure('nv-policies:search-index', 'nv-policies:interactive', 'nv-policies:search-ready');
     };
 
     const normalizePolicies = async data => {
@@ -1234,42 +1321,15 @@
       applyFilters();
     };
 
-    const clampSettingsDialogPosition = () => {
-      if (!settingsModal || !settingsDialog || settingsModal.hidden) return;
-      const width = settingsDialog.offsetWidth;
-      const height = settingsDialog.offsetHeight;
-      const maxLeft = Math.max(0, settingsModal.clientWidth - width);
-      const maxTop = Math.max(0, settingsModal.clientHeight - height);
-      const left = Math.min(Math.max(0, settingsDialog.offsetLeft), maxLeft);
-      const top = Math.min(Math.max(0, settingsDialog.offsetTop), maxTop);
-      settingsDialog.style.left = `${left}px`;
-      settingsDialog.style.top = `${top}px`;
-    };
-
-    const centerSettingsDialog = () => {
-      if (!settingsModal || !settingsDialog) return;
-      const width = settingsDialog.offsetWidth;
-      const height = settingsDialog.offsetHeight;
-      settingsDialog.style.left = `${Math.max(0, (settingsModal.clientWidth - width) / 2)}px`;
-      settingsDialog.style.top = `${Math.max(0, (settingsModal.clientHeight - height) / 2)}px`;
-      settingsDialog.dataset.positioned = 'true';
-    };
-
     const openSettingsModal = () => {
-      if (!settingsModal || !settingsDialog) return;
-      settingsModal.hidden = false;
+      if (!settingsDialogManager) return;
       document.body.classList.add('settings-open');
-      if (settingsDialog.dataset.positioned !== 'true') {
-        requestAnimationFrame(centerSettingsDialog);
-      } else {
-        requestAnimationFrame(clampSettingsDialogPosition);
-      }
+      settingsDialogManager.open({ initialFocus: settingsCloseButton });
     };
 
     const closeSettingsModal = () => {
-      if (!settingsModal) return;
-      settingsModal.hidden = true;
       document.body.classList.remove('settings-open');
+      settingsDialogManager?.close();
     };
 
     const startPaneResize = (splitter, event) => {
@@ -1327,17 +1387,80 @@
     };
 
     searchInput.addEventListener('input', scheduleSearch);
+    treeEl.addEventListener('keydown', event => {
+      const current = event.target instanceof Element ? event.target.closest('.policy-tree-item') : null;
+      if (!(current instanceof HTMLElement) || !treeEl.contains(current)) return;
+      const items = Array.from(treeEl.querySelectorAll('.policy-tree-item'));
+      const index = items.indexOf(current);
+      if (index < 0) return;
+
+      let target = null;
+      if (event.key === 'ArrowDown') target = items[index + 1] || items[0];
+      else if (event.key === 'ArrowUp') target = items[index - 1] || items[items.length - 1];
+      else if (event.key === 'Home') target = items[0];
+      else if (event.key === 'End') target = items[items.length - 1];
+      else if (event.key === 'ArrowRight') {
+        if (current.getAttribute('aria-expanded') === 'false') {
+          event.preventDefault();
+          toggleTreeNode(current.dataset.nodeKey, true);
+          return;
+        }
+        if (current.getAttribute('aria-expanded') === 'true') {
+          const next = items[index + 1];
+          if (next && Number(next.dataset.depth) > Number(current.dataset.depth)) target = next;
+        }
+      } else if (event.key === 'ArrowLeft') {
+        if (current.getAttribute('aria-expanded') === 'true') {
+          event.preventDefault();
+          toggleTreeNode(current.dataset.nodeKey, true);
+          return;
+        }
+        const currentDepth = Number(current.dataset.depth);
+        for (let itemIndex = index - 1; itemIndex >= 0; itemIndex -= 1) {
+          if (Number(items[itemIndex].dataset.depth) < currentDepth) {
+            target = items[itemIndex];
+            break;
+          }
+        }
+      }
+
+      if (!(target instanceof HTMLElement)) return;
+      event.preventDefault();
+      items.forEach(item => { item.tabIndex = item === target ? 0 : -1; });
+      target.focus({ preventScroll: true });
+    });
     tableBody.addEventListener('click', event => {
       const row = event.target instanceof Element ? event.target.closest('tr[data-id]') : null;
       const policy = row && tableBody.contains(row) ? policyById.get(row.dataset.id) : null;
-      if (policy) selectPolicy(policy, { selectCategory: splitSearchTerms(searchInput.value).length > 0 });
+      if (policy) {
+        tableFocusId = policy.id;
+        selectPolicy(policy, { selectCategory: splitSearchTerms(searchInput.value).length > 0 });
+      }
     });
     tableBody.addEventListener('keydown', event => {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
       const row = event.target instanceof Element ? event.target.closest('tr[data-id]') : null;
-      const policy = row && tableBody.contains(row) ? policyById.get(row.dataset.id) : null;
+      if (!(row instanceof HTMLElement) || !tableBody.contains(row)) return;
+      const rows = Array.from(tableBody.querySelectorAll('tr[data-id]'));
+      const index = rows.indexOf(row);
+      let target = null;
+      if (event.key === 'ArrowDown') target = rows[index + 1] || rows[0];
+      else if (event.key === 'ArrowUp') target = rows[index - 1] || rows[rows.length - 1];
+      else if (event.key === 'Home') target = rows[0];
+      else if (event.key === 'End') target = rows[rows.length - 1];
+
+      if (target instanceof HTMLElement) {
+        event.preventDefault();
+        rows.forEach(candidate => { candidate.tabIndex = candidate === target ? 0 : -1; });
+        tableFocusId = target.dataset.id || null;
+        target.focus({ preventScroll: true });
+        return;
+      }
+
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      const policy = policyById.get(row.dataset.id);
       if (!policy) return;
       event.preventDefault();
+      tableFocusId = policy.id;
       selectPolicy(policy, { selectCategory: splitSearchTerms(searchInput.value).length > 0 });
     });
     viewTrigger?.addEventListener('click', event => {
@@ -1378,62 +1501,6 @@
     });
     settingsModal?.addEventListener('click', event => {
       if (event.target === settingsModal) closeSettingsModal();
-    });
-    settingsHeader?.addEventListener('pointerdown', event => {
-      if (event.button !== 0 || !settingsModal || !settingsDialog || settingsModal.hidden) return;
-      if (event.target instanceof Element && event.target.closest('button')) return;
-      event.preventDefault();
-      if (settingsDialog.dataset.positioned !== 'true') centerSettingsDialog();
-
-      const startX = event.clientX;
-      const startY = event.clientY;
-      const startLeft = settingsDialog.offsetLeft;
-      const startTop = settingsDialog.offsetTop;
-      const width = settingsDialog.offsetWidth;
-      const height = settingsDialog.offsetHeight;
-      const maxLeft = Math.max(0, settingsModal.clientWidth - width);
-      const maxTop = Math.max(0, settingsModal.clientHeight - height);
-      let rafId = 0;
-      let pendingX = startX;
-      let pendingY = startY;
-      let lastLeft = startLeft;
-      let lastTop = startTop;
-
-      settingsHeader.setPointerCapture(event.pointerId);
-      settingsDialog.style.willChange = 'transform';
-
-      const paintDrag = () => {
-        rafId = 0;
-        const dx = pendingX - startX;
-        const dy = pendingY - startY;
-        lastLeft = Math.min(Math.max(0, startLeft + dx), maxLeft);
-        lastTop = Math.min(Math.max(0, startTop + dy), maxTop);
-        settingsDialog.style.transform = `translate3d(${lastLeft - startLeft}px, ${lastTop - startTop}px, 0)`;
-      };
-
-      const onMove = moveEvent => {
-        pendingX = moveEvent.clientX;
-        pendingY = moveEvent.clientY;
-        if (!rafId) rafId = requestAnimationFrame(paintDrag);
-      };
-
-      const onUp = () => {
-        if (rafId) {
-          cancelAnimationFrame(rafId);
-          paintDrag();
-        }
-        settingsDialog.style.transform = 'none';
-        settingsDialog.style.left = `${lastLeft}px`;
-        settingsDialog.style.top = `${lastTop}px`;
-        settingsDialog.style.willChange = '';
-        settingsDialog.dataset.positioned = 'true';
-        settingsHeader.releasePointerCapture(event.pointerId);
-        settingsHeader.removeEventListener('pointermove', onMove);
-        settingsHeader.removeEventListener('pointerup', onUp);
-      };
-
-      settingsHeader.addEventListener('pointermove', onMove);
-      settingsHeader.addEventListener('pointerup', onUp);
     });
     splitters.forEach(splitter => {
       splitter.addEventListener('pointerdown', event => startPaneResize(splitter, event));
@@ -1478,7 +1545,6 @@
       closeSettingsModal();
     });
     window.addEventListener('resize', () => {
-      clampSettingsDialogPosition();
       applyTableColumnWidths();
     });
     if (typeof ResizeObserver !== 'undefined' && tableWrap) {
@@ -1488,11 +1554,16 @@
     syncSettingsUi();
     updatePaneLayout();
     setBusy(true);
+    performance.mark('nv-policies:start');
     afterNextPaint()
-      .then(() => Promise.all([loadPolicyData(), loadPolicyCategoryData()]))
-      .then(async ([data, categories]) => {
+      .then(loadPolicyPayload)
+      .then(async ({ data, categories }) => {
+        performance.mark('nv-policies:data-ready');
+        performance.measure('nv-policies:data-load', 'nv-policies:start', 'nv-policies:data-ready');
         categoryMap = new Map(Object.entries(categories || {}));
         policies = await normalizePolicies(data);
+        performance.mark('nv-policies:normalized');
+        performance.measure('nv-policies:normalize', 'nv-policies:data-ready', 'nv-policies:normalized');
         policyById = new Map(policies.map(policy => [policy.id, policy]));
         policyByShareId = new Map();
         policies.forEach(policy => {
@@ -1515,6 +1586,9 @@
         renderTree();
         renderTableHeader();
         applyFilters();
+        performance.mark('nv-policies:interactive');
+        performance.measure('nv-policies:first-render', 'nv-policies:normalized', 'nv-policies:interactive');
+        performance.measure('nv-policies:total', 'nv-policies:start', 'nv-policies:interactive');
         void warmPolicySearchFields();
       })
       .catch(error => {

@@ -851,7 +851,13 @@
     };
 
     const initFloatingTool = ({ layer, dialog, handle, closeButton, hash, focusTarget }) => {
-      let restoreFocus = null;
+      const dialogManager = window.NV_CREATE_DRAGGABLE_DIALOG_MANAGER?.({
+        layer,
+        dialog,
+        handle,
+        margin: 12,
+        topBiased: true
+      });
       const targetHash = `#${hash}`;
       const isHashActive = () => location.hash.toLowerCase() === targetHash;
       const syncHash = active => {
@@ -859,35 +865,14 @@
         const nextHash = active ? targetHash : '';
         history.replaceState(history.state, '', `${location.pathname}${location.search}${nextHash}`);
       };
-      const clamp = () => {
-        if (layer.hidden) return;
-        const maxLeft = Math.max(12, layer.clientWidth - dialog.offsetWidth - 12);
-        const maxTop = Math.max(12, layer.clientHeight - dialog.offsetHeight - 12);
-        dialog.style.left = `${clampNumber(dialog.offsetLeft, 12, maxLeft)}px`;
-        dialog.style.top = `${clampNumber(dialog.offsetTop, 12, maxTop)}px`;
-      };
-      const center = () => {
-        dialog.style.left = `${Math.max(12, (layer.clientWidth - dialog.offsetWidth) / 2)}px`;
-        const freeY = layer.clientHeight - dialog.offsetHeight;
-        const centerY = freeY / 2;
-        const topBiased = layer.clientWidth <= 580 || dialog.offsetHeight > layer.clientHeight * 0.6;
-        dialog.style.top = `${Math.max(12, topBiased ? Math.min(centerY, 24) : centerY)}px`;
-      };
       const close = (syncUrl = true) => {
-        layer.hidden = true;
         if (syncUrl) syncHash(false);
-        restoreFocus?.focus({ preventScroll: true });
+        dialogManager?.close();
       };
       const open = (syncUrl = true) => {
         if (syncUrl) syncHash(true);
         if (!layer.hidden) return;
-        restoreFocus = document.activeElement;
-        layer.hidden = false;
-        requestAnimationFrame(() => {
-          if (dialog.dataset.positioned !== 'true') center();
-          else clamp();
-          focusTarget?.()?.focus({ preventScroll: true });
-        });
+        dialogManager?.open({ initialFocus: focusTarget?.() });
       };
       const onLayerClick = event => {
         if (event.target === layer) close();
@@ -900,57 +885,21 @@
         else if (!layer.hidden) close(false);
       };
       const onCloseClick = () => close();
-      const onDragStart = event => {
-        if (event.button !== 0 || event.target.closest('button')) return;
-        event.preventDefault();
-        const startX = event.clientX;
-        const startY = event.clientY;
-        const startLeft = dialog.offsetLeft;
-        const startTop = dialog.offsetTop;
-        const maxLeft = Math.max(12, layer.clientWidth - dialog.offsetWidth - 12);
-        const maxTop = Math.max(12, layer.clientHeight - dialog.offsetHeight - 12);
-        handle.setPointerCapture(event.pointerId);
-
-        const move = moveEvent => {
-          dialog.style.left = `${clampNumber(startLeft + moveEvent.clientX - startX, 12, maxLeft)}px`;
-          dialog.style.top = `${clampNumber(startTop + moveEvent.clientY - startY, 12, maxTop)}px`;
-        };
-        const stop = () => {
-          dialog.dataset.positioned = 'true';
-          if (handle.hasPointerCapture(event.pointerId)) {
-            handle.releasePointerCapture(event.pointerId);
-          }
-          handle.removeEventListener('pointermove', move);
-          handle.removeEventListener('pointerup', stop);
-          handle.removeEventListener('pointercancel', stop);
-        };
-        handle.addEventListener('pointermove', move);
-        handle.addEventListener('pointerup', stop);
-        handle.addEventListener('pointercancel', stop);
-      };
-
       closeButton.addEventListener('click', onCloseClick);
       layer.addEventListener('click', onLayerClick);
       document.addEventListener('keydown', onKeyDown);
       window.addEventListener('hashchange', onHashChange);
-      handle.addEventListener('pointerdown', onDragStart);
-
-      const resizeObserver = window.ResizeObserver ? new ResizeObserver(clamp) : null;
-      resizeObserver?.observe(dialog);
-      window.addEventListener('resize', clamp);
       const directOpenFrame = requestAnimationFrame(onHashChange);
       return {
         open,
         close,
         cleanup: () => {
           cancelAnimationFrame(directOpenFrame);
-          resizeObserver?.disconnect();
           closeButton.removeEventListener('click', onCloseClick);
           layer.removeEventListener('click', onLayerClick);
           document.removeEventListener('keydown', onKeyDown);
           window.removeEventListener('hashchange', onHashChange);
-          window.removeEventListener('resize', clamp);
-          handle.removeEventListener('pointerdown', onDragStart);
+          dialogManager?.destroy();
         }
       };
     };
@@ -1000,6 +949,12 @@
       () => ({ initFloatingTool, clampNumber })
     );
 
+    const mainRoutes = Array.isArray(window.NV_MAIN_ROUTES) ? window.NV_MAIN_ROUTES : [];
+    const NAV_MAP = Object.fromEntries(mainRoutes.map(route => [route.slug, route.clean]));
+    const rootDirectories = [
+      ...mainRoutes.filter(route => route.slug !== 'terminal').map(route => route.slug),
+      'docs'
+    ];
     const normalizePath = input => (input || '').replace(/\\/g, '/').trim();
     const trimSlashes = value => (value || '').replace(/^\/+|\/+$/g, '');
 
@@ -1025,7 +980,7 @@
         return docsTail ? `${DOCS_ROOT_PATH}/${docsTail}` : DOCS_ROOT_PATH;
       }
 
-      if (segments.length === 1 && ['home', 'product', 'projects', 'diff', 'policies'].includes(segments[0])) {
+      if (segments.length === 1 && rootDirectories.includes(segments[0])) {
         return `${rootPath}/${segments[0]}`;
       }
       return null;
@@ -1033,19 +988,10 @@
 
     const listDirs = () => {
       if (currentPath === rootPath) {
-        return ['home', 'product', 'projects', 'diff', 'policies', 'docs'];
+        return rootDirectories;
       }
       return ['..'];
     };
-
-    const NAV_MAP = Object.fromEntries((window.NV_MAIN_ROUTES || [
-      { slug: 'home', clean: '/' },
-      { slug: 'terminal', clean: '/terminal' },
-      { slug: 'product', clean: '/product' },
-      { slug: 'projects', clean: '/projects' },
-      { slug: 'diff', clean: '/diff' },
-      { slug: 'policies', clean: '/policies' }
-    ]).map(route => [route.slug, route.clean]));
 
     const navigateToPath = nextPath => {
       if (nextPath === DOCS_ROOT_PATH || nextPath.startsWith(`${DOCS_ROOT_PATH}/`)) {

@@ -916,7 +916,6 @@
   };
 
   global.Normalization = Object.freeze({
-    DEFAULTS,
     normalize,
     preparePair
   });

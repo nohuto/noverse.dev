@@ -42,7 +42,7 @@ let repoDescriptionsPromise;
 let selectUiListener;
 let selectUiKeyListener;
 let openSelectUI;
-let siteErrorReturnFocus;
+let siteErrorDialogManager;
 let searchShortcutInput;
 let searchShortcutListener;
 
@@ -97,13 +97,178 @@ const consumeNotFoundPath = () => {
 };
 
 const hasSelectOption = (select, value) => Array.from(select.options).some(option => option.value === value);
-const closeSelectUIs = () => {
+const closeSelectUIs = (restoreFocus = false) => {
   if (!openSelectUI) return;
+  const trigger = openSelectUI.querySelector('.select-trigger');
   openSelectUI.classList.remove('open', 'open-up');
   openSelectUI.querySelector('.select-list')?.style.removeProperty('max-height');
-  openSelectUI.querySelector('.select-trigger')?.setAttribute('aria-expanded', 'false');
+  trigger?.setAttribute('aria-expanded', 'false');
   openSelectUI = null;
+  if (restoreFocus && trigger instanceof HTMLElement) trigger.focus({ preventScroll: true });
 };
+
+const focusableSelector = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])'
+].join(',');
+
+function createModalFocusManager(container) {
+  if (!(container instanceof HTMLElement)) return null;
+  let returnFocus = null;
+  let active = false;
+
+  const focusableElements = () => Array.from(container.querySelectorAll(focusableSelector))
+    .filter(element => (
+      element instanceof HTMLElement
+      && !element.closest('[hidden]')
+      && element.getClientRects().length > 0
+      && getComputedStyle(element).visibility !== 'hidden'
+    ));
+
+  const trapFocus = event => {
+    if (!active || event.key !== 'Tab') return;
+    const elements = focusableElements();
+    if (!elements.length) {
+      event.preventDefault();
+      return;
+    }
+    const first = elements[0];
+    const last = elements[elements.length - 1];
+    const current = document.activeElement;
+    if (event.shiftKey && (current === first || !container.contains(current))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (current === last || !container.contains(current))) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  return {
+    open(initialFocus) {
+      if (!active) {
+        returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        container.addEventListener('keydown', trapFocus);
+        active = true;
+      }
+      requestAnimationFrame(() => {
+        const target = initialFocus instanceof HTMLElement ? initialFocus : focusableElements()[0];
+        target?.focus({ preventScroll: true });
+      });
+    },
+    close() {
+      if (!active) return;
+      container.removeEventListener('keydown', trapFocus);
+      active = false;
+      if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+      returnFocus = null;
+    }
+  };
+}
+
+function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBiased = false }) {
+  if (!(layer instanceof HTMLElement) || !(dialog instanceof HTMLElement) || !(handle instanceof HTMLElement)) return null;
+  const focusManager = createModalFocusManager(layer);
+  const inset = Math.max(0, Number(margin) || 0);
+
+  const bounds = () => ({
+    maxLeft: Math.max(inset, layer.clientWidth - dialog.offsetWidth - inset),
+    maxTop: Math.max(inset, layer.clientHeight - dialog.offsetHeight - inset)
+  });
+  const clamp = () => {
+    if (layer.hidden) return;
+    const { maxLeft, maxTop } = bounds();
+    dialog.style.left = `${Math.min(Math.max(inset, dialog.offsetLeft), maxLeft)}px`;
+    dialog.style.top = `${Math.min(Math.max(inset, dialog.offsetTop), maxTop)}px`;
+  };
+  const center = () => {
+    const freeY = layer.clientHeight - dialog.offsetHeight;
+    const centerY = freeY / 2;
+    const biasToTop = topBiased && (layer.clientWidth <= 580 || dialog.offsetHeight > layer.clientHeight * 0.6);
+    dialog.style.left = `${Math.max(inset, (layer.clientWidth - dialog.offsetWidth) / 2)}px`;
+    dialog.style.top = `${Math.max(inset, biasToTop ? Math.min(centerY, inset * 2) : centerY)}px`;
+    dialog.dataset.positioned = 'true';
+  };
+  const onDragStart = event => {
+    if (event.button !== 0 || layer.hidden || event.target instanceof Element && event.target.closest('button')) return;
+    event.preventDefault();
+    if (dialog.dataset.positioned !== 'true') center();
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const startLeft = dialog.offsetLeft;
+    const startTop = dialog.offsetTop;
+    const { maxLeft, maxTop } = bounds();
+    let frame = 0;
+    let pendingX = startX;
+    let pendingY = startY;
+    let lastLeft = startLeft;
+    let lastTop = startTop;
+    handle.setPointerCapture(event.pointerId);
+    dialog.style.willChange = 'transform';
+
+    const paint = () => {
+      frame = 0;
+      lastLeft = Math.min(Math.max(inset, startLeft + pendingX - startX), maxLeft);
+      lastTop = Math.min(Math.max(inset, startTop + pendingY - startY), maxTop);
+      dialog.style.transform = `translate3d(${lastLeft - startLeft}px, ${lastTop - startTop}px, 0)`;
+    };
+    const move = moveEvent => {
+      pendingX = moveEvent.clientX;
+      pendingY = moveEvent.clientY;
+      if (!frame) frame = requestAnimationFrame(paint);
+    };
+    const stop = () => {
+      if (frame) {
+        cancelAnimationFrame(frame);
+        paint();
+      }
+      dialog.style.transform = 'none';
+      dialog.style.left = `${lastLeft}px`;
+      dialog.style.top = `${lastTop}px`;
+      dialog.style.willChange = '';
+      dialog.dataset.positioned = 'true';
+      if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+      handle.removeEventListener('pointermove', move);
+      handle.removeEventListener('pointerup', stop);
+      handle.removeEventListener('pointercancel', stop);
+    };
+    handle.addEventListener('pointermove', move);
+    handle.addEventListener('pointerup', stop);
+    handle.addEventListener('pointercancel', stop);
+  };
+
+  handle.addEventListener('pointerdown', onDragStart);
+  window.addEventListener('resize', clamp);
+  const resizeObserver = window.ResizeObserver ? new ResizeObserver(clamp) : null;
+  resizeObserver?.observe(dialog);
+
+  return {
+    open({ initialFocus, recenter = false } = {}) {
+      layer.hidden = false;
+      requestAnimationFrame(() => {
+        if (recenter || dialog.dataset.positioned !== 'true') center();
+        else clamp();
+        focusManager?.open(initialFocus);
+      });
+    },
+    close() {
+      layer.hidden = true;
+      focusManager?.close();
+    },
+    destroy() {
+      resizeObserver?.disconnect();
+      window.removeEventListener('resize', clamp);
+      handle.removeEventListener('pointerdown', onDragStart);
+      focusManager?.close();
+    }
+  };
+}
+
+window.NV_CREATE_DRAGGABLE_DIALOG_MANAGER = createDraggableDialogManager;
 
 function updateIconTheme(theme) {
   const applied = resolveTheme(theme || document.documentElement.getAttribute('data-theme') || DEFAULT_THEME);
@@ -201,7 +366,6 @@ function initSelectUI() {
 
     const menu = document.createElement('div');
     menu.className = 'select-menu';
-    menu.setAttribute('role', 'listbox');
     const isSearchable = select.dataset.searchable === 'true';
     if (isSearchable) {
       wrapper.classList.add('is-searchable');
@@ -250,6 +414,10 @@ function initSelectUI() {
 
     const list = document.createElement('div');
     list.className = 'select-list';
+    list.id = `${select.id || `select-${Math.random().toString(36).slice(2)}`}-listbox`;
+    list.setAttribute('role', 'listbox');
+    list.setAttribute('aria-label', label?.textContent?.trim() || select.getAttribute('aria-label') || 'Options');
+    trigger.setAttribute('aria-controls', list.id);
     menu.appendChild(list);
     if (menuMeta) menu.appendChild(menuMeta);
 
@@ -411,7 +579,17 @@ function initSelectUI() {
       }
     };
 
-    const toggleOpen = () => {
+    const focusListOption = target => {
+      const options = Array.from(list.querySelectorAll('.select-option:not(:disabled)'));
+      if (!options.length) return;
+      const activeIndex = options.findIndex(option => option.classList.contains('is-active'));
+      const index = target === 'last'
+        ? options.length - 1
+        : target === 'active' && activeIndex >= 0 ? activeIndex : 0;
+      options[index]?.focus({ preventScroll: true });
+    };
+
+    const toggleOpen = (focusTarget = 'active') => {
       const next = !wrapper.classList.contains('open');
       closeSelectUIs();
       if (!next) return;
@@ -422,6 +600,8 @@ function initSelectUI() {
       positionMenu();
       if (searchInput) {
         requestAnimationFrame(() => searchInput?.focus({ preventScroll: true }));
+      } else {
+        requestAnimationFrame(() => focusListOption(focusTarget));
       }
     };
 
@@ -451,9 +631,41 @@ function initSelectUI() {
       if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown' || event.key === 'ArrowUp') {
         event.preventDefault();
         if (!wrapper.classList.contains('open')) {
-          toggleOpen();
+          toggleOpen(event.key === 'ArrowUp' ? 'last' : 'active');
         }
       }
+    });
+    list.addEventListener('keydown', event => {
+      const options = Array.from(list.querySelectorAll('.select-option:not(:disabled)'));
+      const current = event.target instanceof Element ? event.target.closest('.select-option') : null;
+      const index = options.indexOf(current);
+      let nextIndex = -1;
+      if (event.key === 'ArrowDown') nextIndex = index < 0 ? 0 : (index + 1) % options.length;
+      else if (event.key === 'ArrowUp') nextIndex = index < 0 ? options.length - 1 : (index - 1 + options.length) % options.length;
+      else if (event.key === 'Home') nextIndex = 0;
+      else if (event.key === 'End') nextIndex = options.length - 1;
+      else if (event.key === 'Escape') {
+        event.preventDefault();
+        closeSelectUIs(true);
+        return;
+      } else if (event.key === 'Tab') {
+        closeSelectUIs();
+        return;
+      }
+      if (nextIndex < 0 || !options.length) return;
+      event.preventDefault();
+      options[nextIndex]?.focus({ preventScroll: true });
+    });
+    menu.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeSelectUIs(true);
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      requestAnimationFrame(() => {
+        if (!wrapper.contains(document.activeElement)) closeSelectUIs();
+      });
     });
     if (searchInput) {
       searchInput.addEventListener('input', () => {
@@ -497,7 +709,7 @@ function initSelectUI() {
       if (!e.target.closest('.select-ui')) closeSelectUIs();
     };
     selectUiKeyListener = e => {
-      if (e.key === 'Escape') closeSelectUIs();
+      if (e.key === 'Escape') closeSelectUIs(true);
     };
     document.addEventListener('click', selectUiListener);
     document.addEventListener('keydown', selectUiKeyListener);
@@ -658,53 +870,42 @@ function initRepoDescriptions() {
     if (!repo || !descEl) return;
     getRepoDescription(repo).then(desc => {
       descEl.textContent = desc;
+      descEl.dispatchEvent(new CustomEvent('nv:repo-description', { bubbles: true }));
     });
-  });
-}
-
-function initClickableCards() {
-  const cards = document.querySelectorAll('.clickable-card');
-
-  cards.forEach(card => {
-    if (!(card instanceof HTMLElement) || card.dataset.cardReady === 'true') return;
-    const href = card.dataset.cardHref || (card.dataset.repo ? `https://github.com/${card.dataset.repo}` : '');
-    if (!href) return;
-
-    const title = card.querySelector('h3, h4')?.textContent?.trim() || 'card';
-    const link = document.createElement('a');
-    link.className = 'clickable-card-link';
-    link.href = href;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.setAttribute('aria-label', `Open ${title}`);
-
-    card.dataset.cardReady = 'true';
-    card.appendChild(link);
   });
 }
 
 function initFiltering() {
   const searchInput = document.getElementById('project-search');
   const cards = Array.from(document.querySelectorAll('.project-card'));
+  const emptyState = document.getElementById('project-empty');
 
   if (!searchInput || cards.length === 0) return;
 
   const cardData = cards.map(card => {
     const title = (card.querySelector('.project-title')?.textContent || '').toLowerCase();
+    const repo = (card.getAttribute('data-repo') || '').toLowerCase();
     const descEl = card.querySelector('.project-desc');
-    return { card, title, descEl };
+    return { card, title, repo, descEl };
   });
 
   const applyFilter = () => {
     const search = searchInput.value.trim().toLowerCase();
+    let visibleCount = 0;
 
-    cardData.forEach(({ card, title, descEl }) => {
+    cardData.forEach(({ card, title, repo, descEl }) => {
       const desc = (descEl?.textContent || '').toLowerCase();
-      card.hidden = !!search && !title.includes(search) && !desc.includes(search);
+      card.hidden = !!search
+        && !title.includes(search)
+        && !repo.includes(search)
+        && !desc.includes(search);
+      if (!card.hidden) visibleCount += 1;
     });
+    if (emptyState) emptyState.hidden = visibleCount > 0;
   };
 
   searchInput.addEventListener('input', applyFilter);
+  document.querySelector('.project-grid')?.addEventListener('nv:repo-description', applyFilter);
   applyFilter();
 }
 
@@ -739,9 +940,7 @@ function initSearchShortcut() {
 function hideSiteError() {
   const modal = document.getElementById('site-error-modal');
   if (!modal) return;
-  modal.hidden = true;
-  if (siteErrorReturnFocus?.isConnected) siteErrorReturnFocus.focus();
-  siteErrorReturnFocus = null;
+  siteErrorDialogManager?.close();
 }
 
 function createSiteErrorModal() {
@@ -767,39 +966,7 @@ function createSiteErrorModal() {
   const header = modal.querySelector('.site-error-header');
   if (!(dialog instanceof HTMLElement) || !(header instanceof HTMLElement)) return modal;
 
-  const clampPosition = () => {
-    if (modal.hidden) return;
-    dialog.style.left = `${Math.min(Math.max(0, dialog.offsetLeft), Math.max(0, modal.clientWidth - dialog.offsetWidth))}px`;
-    dialog.style.top = `${Math.min(Math.max(0, dialog.offsetTop), Math.max(0, modal.clientHeight - dialog.offsetHeight))}px`;
-  };
-
-  header.addEventListener('pointerdown', event => {
-    if (event.button !== 0 || event.target instanceof Element && event.target.closest('button')) return;
-    event.preventDefault();
-    const startX = event.clientX;
-    const startY = event.clientY;
-    const startLeft = dialog.offsetLeft;
-    const startTop = dialog.offsetTop;
-    const maxLeft = Math.max(0, modal.clientWidth - dialog.offsetWidth);
-    const maxTop = Math.max(0, modal.clientHeight - dialog.offsetHeight);
-    header.setPointerCapture(event.pointerId);
-
-    const move = moveEvent => {
-      dialog.style.left = `${Math.min(Math.max(0, startLeft + moveEvent.clientX - startX), maxLeft)}px`;
-      dialog.style.top = `${Math.min(Math.max(0, startTop + moveEvent.clientY - startY), maxTop)}px`;
-    };
-    const stop = () => {
-      if (header.hasPointerCapture(event.pointerId)) header.releasePointerCapture(event.pointerId);
-      header.removeEventListener('pointermove', move);
-      header.removeEventListener('pointerup', stop);
-      header.removeEventListener('pointercancel', stop);
-    };
-    header.addEventListener('pointermove', move);
-    header.addEventListener('pointerup', stop);
-    header.addEventListener('pointercancel', stop);
-  });
-
-  window.addEventListener('resize', clampPosition);
+  siteErrorDialogManager = createDraggableDialogManager({ layer: modal, dialog, handle: header });
   modal.addEventListener('click', event => {
     const target = event.target instanceof Element ? event.target : null;
     if (target === modal || target?.closest('[data-site-error-close]')) hideSiteError();
@@ -818,14 +985,10 @@ function showNotFoundError(url) {
   const requestedUrl = new URL(url, location.href);
   const pathElement = modal.querySelector('.site-error-path');
   if (pathElement) pathElement.textContent = `${requestedUrl.pathname}${requestedUrl.search}${requestedUrl.hash}`;
-  siteErrorReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-  modal.hidden = false;
-  const dialog = modal.querySelector('.site-error-dialog');
-  if (dialog instanceof HTMLElement) {
-    dialog.style.left = `${Math.max(0, (modal.clientWidth - dialog.offsetWidth) / 2)}px`;
-    dialog.style.top = `${Math.max(0, (modal.clientHeight - dialog.offsetHeight) / 2)}px`;
-  }
-  modal.querySelector('[data-site-error-close]')?.focus();
+  siteErrorDialogManager?.open({
+    initialFocus: modal.querySelector('[data-site-error-close]'),
+    recenter: true
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -836,7 +999,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackground();
   initSelectUI();
   initRepoDescriptions();
-  initClickableCards();
   initFiltering();
   initSearchShortcut();
   initClipboard();

@@ -4,10 +4,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 PUBLIC = SITE / 'public' / 'main'
-PAGES = (SITE / 'pages' / 'projects.html', SITE / 'pages' / 'index.html')
+PROJECTS = SITE / 'data' / 'projects.json'
 O = PUBLIC / 'data' / 'repos.json'
-MS = PUBLIC / 'data' / 'media-sources.json'
-MC = PUBLIC / 'data' / 'media-cache.json'
+MS = SITE / 'data' / 'media-sources.json'
+MC = SITE / 'data' / 'media-cache.json'
 H = {'User-Agent': 'Mozilla/5.0'}
 
 def jload(p, d):
@@ -83,8 +83,10 @@ def fetch(r):
         return fetch_readme(r)
 
 def upd_repos():
+    projects = jload(PROJECTS, [])
     repos = list(dict.fromkeys(
-        re.findall(r'''data-repo=["']([^"']+)["']''', ''.join(p.read_text(encoding='utf-8') for p in PAGES))
+        project.get('repo') for project in projects
+        if isinstance(project, dict) and project.get('repo')
     ))
     old = jload(O, {})
     out = {}

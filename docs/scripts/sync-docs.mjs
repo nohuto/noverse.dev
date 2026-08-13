@@ -35,6 +35,8 @@ const REPOSITORIES = [
       'threads/thread-internals/thread-addresses.md',
       'threads/examining-thread-activity/thread-activity.md',
       'threads/thread-scheduling/thread-states.md',
+      'threads/thread-scheduling/priority-levels.md',
+      'threads/thread-scheduling/context-switching.md',
       'system-mechanisms/processor-execution-model/processor-control-region.md',
       'system-mechanisms/trap-dispatching/interrupt-dispatching.md',
       'system-mechanisms/trap-dispatching/interrupt-request-levels.md',

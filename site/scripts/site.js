@@ -208,8 +208,9 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
       return;
     }
     const { minLeft, minTop, maxLeft, maxTop } = bounds();
-    dialog.style.left = `${Math.min(Math.max(minLeft, dialog.offsetLeft), maxLeft)}px`;
-    dialog.style.top = `${Math.min(Math.max(minTop, dialog.offsetTop), maxTop)}px`;
+    const rect = dialog.getBoundingClientRect();
+    dialog.style.left = `${Math.min(Math.max(minLeft, rect.left), maxLeft)}px`;
+    dialog.style.top = `${Math.min(Math.max(minTop, rect.top), maxTop)}px`;
   };
   const center = () => {
     const view = viewport();
@@ -230,8 +231,9 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
     if (dialog.dataset.positioned !== 'true') center();
     const startX = event.clientX;
     const startY = event.clientY;
-    const startLeft = dialog.offsetLeft;
-    const startTop = dialog.offsetTop;
+    const startRect = dialog.getBoundingClientRect();
+    const startLeft = startRect.left;
+    const startTop = startRect.top;
     const { minLeft, minTop, maxLeft, maxTop } = bounds();
     let frame = 0;
     let pendingX = startX;

@@ -1324,7 +1324,10 @@
     const openSettingsModal = () => {
       if (!settingsDialogManager) return;
       document.body.classList.add('settings-open');
-      settingsDialogManager.open({ initialFocus: settingsCloseButton });
+      settingsDialogManager.open({
+        initialFocus: settingsCloseButton,
+        recenter: true
+      });
     };
 
     const closeSettingsModal = () => {

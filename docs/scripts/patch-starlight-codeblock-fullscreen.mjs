@@ -21,4 +21,4 @@ if (!exportLinePattern.test(source)) {
 
 const patched = source.replace(exportLinePattern, '\n');
 writeFileSync(targetFile, patched, 'utf8');
-console.log('[postinstall] Applied starlight-codeblock-fullscreen export patch.');
+console.log('[postinstall] Applied starlight-codeblock-fullscreen export patch');

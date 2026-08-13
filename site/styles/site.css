@@ -2430,7 +2430,7 @@ footer {
 }
 
 .settings-dialog {
-  position: absolute;
+  position: fixed;
   width: min(460px, calc(100vw - 24px));
   border: 1px solid var(--border);
   background: var(--panel);

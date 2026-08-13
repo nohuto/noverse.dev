@@ -273,5 +273,3 @@ await rm(distDir, { recursive: true, force: true });
 await mkdir(distDir, { recursive: true });
 await buildMainSite();
 await buildDocs();
-
-console.log(`Built deployment output: ${distDir}`);

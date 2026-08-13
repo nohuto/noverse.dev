@@ -1,0 +1,15 @@
+0	__report_gsfailure.c
+2	security_check_cookie.c
+11	init_cookie.c
+22	_ex.c
+1	guard_check_icall_nop.c
+7	dispatch_icall_nop.c
+7	xfg_dispatch_icall_nop.c
+0	main.c
+0	NtProcessStartup.c
+16	_AfterSecurityCookieInitialized.c
+2	TerminateProcess_0.c
+0	RtlCaptureContext_0.c
+3	LookupFunctionEntry_0.c
+3	UnhandledExceptionFilter_0.c
+3	VirtualUnwind_0.c

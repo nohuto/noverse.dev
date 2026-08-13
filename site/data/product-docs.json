@@ -6,8 +6,8 @@
   { "title": "Privacy", "href": "/docs/win-config/privacy/", "description": "Privacy configuration for reducing connections to MS/other servers..." },
   { "title": "Network", "href": "/docs/win-config/network/", "description": "Network adapter settings including DNS, offloads, IM, probing..." },
   { "title": "Security", "href": "/docs/win-config/security/", "description": "Firewall default deny setup, Defender, WU, mitigations, UAC..." },
-  { "title": "NVIDIA", "href": "/docs/win-config/nvidia/", "description": "NVIDIA driver installation, NVCPL settings..." },
+  { "title": "NVIDIA", "href": "/docs/win-config/nvidia/", "description": "Driver installation, NVCPL settings..." },
   { "title": "Misc", "href": "/docs/win-config/misc/", "description": "Miscellaneous external app configuration/installation/patching, e.g. regkit/nvfetch." },
-  { "title": "Policies", "href": "/docs/win-config/policies/", "description": "A more detailed LGPE including keys, values and quick toggling, based on my admx-parser project." },
+  { "title": "Policies", "href": "/docs/win-config/policies/", "description": "A more detailed GPE including keys, values and quick toggling, based on my admx-parser project." },
   { "title": "Affinities", "href": "/docs/win-config/affinities/", "description": "MSI mode/message limit, IRQ settings (priority/policy), affinities." }
 ]

@@ -7,7 +7,7 @@
 .bindiff-intro p {
   max-width: 980px;
   margin-bottom: 16px;
-  color: var(--text);
+  color: var(--muted);
 }
 
 main.bindiff-main {

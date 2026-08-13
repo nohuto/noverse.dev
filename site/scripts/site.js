@@ -3,7 +3,7 @@ const THEME_KEY = 'nv-theme';
 const THEME_SYSTEM = 'system';
 const THEME_DARK = 'dark';
 const THEME_LIGHT = 'light';
-const DEFAULT_THEME = 'kanagawa-wave';
+const DEFAULT_THEME = 'gruvbox-dark';
 const DEFAULT_LIGHT_THEME = 'catppuccin-latte';
 const LIGHT_THEMES = new Set([
   THEME_LIGHT,
@@ -175,22 +175,53 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
   const focusManager = createModalFocusManager(layer);
   const inset = Math.max(0, Number(margin) || 0);
 
-  const bounds = () => ({
-    maxLeft: Math.max(inset, layer.clientWidth - dialog.offsetWidth - inset),
-    maxTop: Math.max(inset, layer.clientHeight - dialog.offsetHeight - inset)
-  });
+  const viewport = () => {
+    const visualViewport = window.visualViewport;
+    return {
+      left: visualViewport?.offsetLeft || 0,
+      top: visualViewport?.offsetTop || 0,
+      width: visualViewport?.width || document.documentElement.clientWidth || window.innerWidth,
+      height: visualViewport?.height || document.documentElement.clientHeight || window.innerHeight
+    };
+  };
+  const minimumTop = view => {
+    const siteHeader = document.querySelector('.prompt-bar');
+    const headerBottom = siteHeader instanceof HTMLElement
+      ? Math.ceil(siteHeader.getBoundingClientRect().bottom)
+      : view.top;
+    return Math.max(view.top + inset, headerBottom);
+  };
+  const bounds = () => {
+    const view = viewport();
+    const minTop = minimumTop(view);
+    return {
+      minLeft: view.left + inset,
+      minTop,
+      maxLeft: Math.max(view.left + inset, view.left + view.width - dialog.offsetWidth - inset),
+      maxTop: Math.max(minTop, view.top + view.height - dialog.offsetHeight - inset)
+    };
+  };
   const clamp = () => {
     if (layer.hidden) return;
-    const { maxLeft, maxTop } = bounds();
-    dialog.style.left = `${Math.min(Math.max(inset, dialog.offsetLeft), maxLeft)}px`;
-    dialog.style.top = `${Math.min(Math.max(inset, dialog.offsetTop), maxTop)}px`;
+    if (dialog.dataset.positioned !== 'true') {
+      center();
+      return;
+    }
+    const { minLeft, minTop, maxLeft, maxTop } = bounds();
+    dialog.style.left = `${Math.min(Math.max(minLeft, dialog.offsetLeft), maxLeft)}px`;
+    dialog.style.top = `${Math.min(Math.max(minTop, dialog.offsetTop), maxTop)}px`;
   };
   const center = () => {
-    const freeY = layer.clientHeight - dialog.offsetHeight;
+    const view = viewport();
+    const freeY = view.height - dialog.offsetHeight;
     const centerY = freeY / 2;
-    const biasToTop = topBiased && (layer.clientWidth <= 580 || dialog.offsetHeight > layer.clientHeight * 0.6);
-    dialog.style.left = `${Math.max(inset, (layer.clientWidth - dialog.offsetWidth) / 2)}px`;
-    dialog.style.top = `${Math.max(inset, biasToTop ? Math.min(centerY, inset * 2) : centerY)}px`;
+    const biasToTop = topBiased && (view.width <= 580 || dialog.offsetHeight > view.height * 0.6);
+    const { minLeft, minTop, maxLeft, maxTop } = bounds();
+    const centeredLeft = view.left + (view.width - dialog.offsetWidth) / 2;
+    const centeredTop = view.top + (biasToTop ? Math.min(centerY, inset * 2) : centerY);
+    dialog.style.transform = 'none';
+    dialog.style.left = `${Math.min(Math.max(minLeft, centeredLeft), maxLeft)}px`;
+    dialog.style.top = `${Math.min(Math.max(minTop, centeredTop), maxTop)}px`;
     dialog.dataset.positioned = 'true';
   };
   const onDragStart = event => {
@@ -201,7 +232,7 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
     const startY = event.clientY;
     const startLeft = dialog.offsetLeft;
     const startTop = dialog.offsetTop;
-    const { maxLeft, maxTop } = bounds();
+    const { minLeft, minTop, maxLeft, maxTop } = bounds();
     let frame = 0;
     let pendingX = startX;
     let pendingY = startY;
@@ -212,8 +243,8 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
 
     const paint = () => {
       frame = 0;
-      lastLeft = Math.min(Math.max(inset, startLeft + pendingX - startX), maxLeft);
-      lastTop = Math.min(Math.max(inset, startTop + pendingY - startY), maxTop);
+      lastLeft = Math.min(Math.max(minLeft, startLeft + pendingX - startX), maxLeft);
+      lastTop = Math.min(Math.max(minTop, startTop + pendingY - startY), maxTop);
       dialog.style.transform = `translate3d(${lastLeft - startLeft}px, ${lastTop - startTop}px, 0)`;
     };
     const move = moveEvent => {
@@ -243,6 +274,8 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
 
   handle.addEventListener('pointerdown', onDragStart);
   window.addEventListener('resize', clamp);
+  window.visualViewport?.addEventListener('resize', clamp);
+  window.visualViewport?.addEventListener('scroll', clamp);
   const resizeObserver = window.ResizeObserver ? new ResizeObserver(clamp) : null;
   resizeObserver?.observe(dialog);
 
@@ -262,6 +295,8 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
     destroy() {
       resizeObserver?.disconnect();
       window.removeEventListener('resize', clamp);
+      window.visualViewport?.removeEventListener('resize', clamp);
+      window.visualViewport?.removeEventListener('scroll', clamp);
       handle.removeEventListener('pointerdown', onDragStart);
       focusManager?.close();
     }

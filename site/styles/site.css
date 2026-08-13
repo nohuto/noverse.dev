@@ -1148,8 +1148,7 @@ main.no-center {
 }
 
 .panel-body {
-  --panel-pad-x: 22px;
-  padding: 20px var(--panel-pad-x);
+  padding: 16px 18px;
 }
 
 main.product-main {
@@ -1227,7 +1226,7 @@ main.home-main {
 
 .home-intro>p {
   margin: 0;
-  color: var(--text);
+  color: var(--muted);
   line-height: 1.65;
 }
 
@@ -1258,17 +1257,22 @@ main.home-main {
 }
 
 .home-section {
-  margin-top: 28px;
-  padding-top: 22px;
-  border-top: 1px solid var(--border-strong);
+  margin-top: 20px;
 }
 
 .home-section-heading {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 14px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.home-section-heading::before,
+.home-section-heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-strong);
 }
 
 .home-section-heading h2 {
@@ -1338,13 +1342,9 @@ main.home-main {
   color: var(--accent);
 }
 
-.commit-list {
-  border-top: 1px solid var(--border);
-}
-
 .commit-skeleton-row {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr) 76px;
+  grid-template-columns: 210px minmax(0, 1fr) 76px;
   gap: 14px;
   align-items: center;
   min-height: 36px;
@@ -1393,7 +1393,7 @@ main.home-main {
 
 .commit-item {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr) auto;
+  grid-template-columns: 210px minmax(0, 1fr) auto;
   gap: 14px;
   align-items: baseline;
   padding: 10px 0;
@@ -1467,13 +1467,6 @@ main.home-main {
   .commit-skeleton-message {
     grid-column: 1 / -1;
     grid-row: 2;
-  }
-}
-
-@media (max-width: 480px) {
-  .home-section {
-    margin-top: 22px;
-    padding-top: 18px;
   }
 }
 
@@ -1686,7 +1679,7 @@ main.home-main {
 
 .product-intro>p,
 #documentation>.doc-header>p {
-  color: var(--text);
+  color: var(--muted);
 }
 
 .product-intro> :last-child {
@@ -1801,31 +1794,31 @@ main.home-main {
 
 .product-section {
   position: relative;
-  padding: 20px 22px;
+  padding: 16px 18px;
 }
 
 .product-section+.product-section {
-  padding-top: 21px;
+  padding-top: 17px;
 }
 
 .product-section+.product-section::before {
   content: "";
   position: absolute;
   top: 0;
-  left: 22px;
-  right: 22px;
+  left: 18px;
+  right: 18px;
   height: 1px;
   background: var(--border);
 }
 
 #product .product-header {
-  padding: 20px 22px;
+  padding: 16px 18px;
 }
 
 #product .product-preview-grid {
   margin: 0;
   width: 100%;
-  padding: 0 22px 20px;
+  padding: 0 18px 16px;
 }
 
 #product .product-section .product-header,
@@ -1841,38 +1834,36 @@ main.home-main {
   padding-bottom: 0;
 }
 
-.doc-header h2 {
-  font-size: 0.875rem;
+.doc-header p {
+  margin: 0;
+  line-height: 1.55;
 }
 
-.doc-grid,
-.legal-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-top: 18px;
+.documentation-overview,
+.legal-section {
+  width: 100%;
 }
 
-.doc-card {
-  border: 1px solid var(--border);
-  background: var(--panel-alt);
-  padding: 14px;
+.doc-grid {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-#documentation .doc-grid {
+  flex-wrap: wrap;
   gap: 10px;
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
 #documentation .doc-card {
   display: flex;
+  flex: 1 1 320px;
   flex-direction: column;
   gap: 4px;
-  align-items: start;
-  padding: 10px 12px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  background: var(--panel-alt);
+}
+
+#documentation .doc-card:hover,
+#documentation .doc-card:focus-within {
+  border-color: var(--accent);
 }
 
 #documentation .doc-card h3,
@@ -1881,28 +1872,81 @@ main.home-main {
 }
 
 #documentation .doc-card h3 {
-  font-size: 0.8125rem;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+#documentation .doc-card p {
+  color: var(--muted);
+  line-height: 1.45;
 }
 
 .legal-list {
-  grid-template-columns: 1fr;
-  gap: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 40px;
   margin-top: 0;
 }
 
+#product .product-terms {
+  padding-top: 0;
+}
+
+#product .product-documentation {
+  padding-top: 0;
+  padding-bottom: 20px;
+}
+
+#product .product-overview {
+  padding-bottom: 20px;
+}
+
+#product .product-terms::before,
+#product .product-documentation::before {
+  content: none;
+}
+
+.product-divider-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.product-divider-heading::before,
+.product-divider-heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.documentation-heading {
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.documentation-heading,
+.legal-heading {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 .legal-item {
-  display: grid;
-  gap: 10px;
-  padding: 12px 0;
+  padding: 16px 0 18px;
   border-top: 1px solid var(--border);
 }
 
-.legal-list .legal-item:first-child {
+.legal-list .legal-item:nth-child(-n + 2) {
   border-top: 0;
   padding-top: 0;
 }
 
 .legal-list .legal-item:last-child {
+  grid-column: 1 / -1;
   padding-bottom: 0;
 }
 
@@ -1912,13 +1956,19 @@ main.home-main {
 }
 
 .legal-item h3 {
-  font-size: 0.875rem;
+  margin-bottom: 8px;
+  font-size: 13px;
   line-height: 1.25;
 }
 
 .legal-item p {
-  color: var(--text);
-  line-height: 1.45;
+  max-width: 78ch;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.legal-list .legal-item:last-child p {
+  max-width: none;
 }
 
 .social {
@@ -2115,6 +2165,20 @@ footer {
     margin: 0 auto;
   }
 
+  #documentation .doc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .legal-list {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-list .legal-item:nth-child(2) {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
 }
 
 @media (max-width: 960px) {
@@ -2208,11 +2272,6 @@ footer {
 }
 
 @media (max-width: 600px) {
-  .panel-body {
-    --panel-pad-x: 16px;
-    padding: 16px var(--panel-pad-x);
-  }
-
   select {
     min-width: 160px;
   }
@@ -2375,9 +2434,9 @@ footer {
   width: min(460px, calc(100vw - 24px));
   border: 1px solid var(--border);
   background: var(--panel);
-  left: 0;
-  top: 0;
-  transform: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .settings-header {

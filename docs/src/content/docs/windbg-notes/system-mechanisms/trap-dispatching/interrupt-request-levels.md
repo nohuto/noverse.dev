@@ -3,7 +3,7 @@ title: 'Interrupt Request Levels'
 description: 'Generated from windbg-notes file: system-mechanisms/trap-dispatching/interrupt-request-levels.md.'
 editUrl: false
 sidebar:
-  order: 12
+  order: 14
 ---
 
 Interrupt request levels (IRQLs) are basically an interrupt source priority and a per processor priority state. Each interrupt source has such an IRQL, and each processor also has a current IRQL, which defines what source can interrupt that processor. I won't add `!irql` (displays `DebuggerSavedIRQL` of KPRCB) as the output within a debugger of it is meaningless.

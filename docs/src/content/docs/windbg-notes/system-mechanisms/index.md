@@ -4,7 +4,7 @@ description: 'Auto-generated overview for System Mechanisms.'
 editUrl: false
 sidebar:
   hidden: true
-  order: 10
+  order: 12
 ---
 
 - [Processor Execution Model](/docs/windbg-notes/system-mechanisms/processor-execution-model/)

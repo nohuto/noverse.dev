@@ -3,7 +3,7 @@ title: 'Deferred Procedure Calls'
 description: 'Generated from windbg-notes file: system-mechanisms/software-interrupts/deferred-procedure-calls.md.'
 editUrl: false
 sidebar:
-  order: 13
+  order: 15
 ---
 
 An ordinary DPC runs at `DISPATCH_LEVEL` IRQL, and can interrupt every thread regardless of its priority.

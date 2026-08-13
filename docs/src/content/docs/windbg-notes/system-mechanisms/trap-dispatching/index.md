@@ -4,7 +4,7 @@ description: 'Auto-generated overview for Trap Dispatching.'
 editUrl: false
 sidebar:
   hidden: true
-  order: 11
+  order: 13
 ---
 
 - [Interrupt Dispatching](/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-dispatching/)

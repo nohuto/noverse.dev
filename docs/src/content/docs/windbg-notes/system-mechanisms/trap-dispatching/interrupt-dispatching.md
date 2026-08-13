@@ -3,7 +3,7 @@ title: 'Interrupt Dispatching'
 description: 'Generated from windbg-notes file: system-mechanisms/trap-dispatching/interrupt-dispatching.md.'
 editUrl: false
 sidebar:
-  order: 11
+  order: 13
 ---
 
 An interrupt is an asynchronous event (can occur at any time) that causes a processor to stop its current execution so an event can be handled. Hardware interrupts can come from devices (printers, keyboards, network cards etc.)/timers/other processors.

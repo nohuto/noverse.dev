@@ -3,7 +3,7 @@ title: 'Processor Control Region'
 description: 'Generated from windbg-notes file: system-mechanisms/processor-execution-model/processor-control-region.md.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 12
 ---
 
 Each processor has a kernel processor control region (`_KPCR`), which includes processor specific data (see structure below), and an embedded kernel processor control block (`_KPRCB`). The PRCB structure is private to the kernel and stores scheduling, DPC, accounting and other states for one processor.

@@ -6,7 +6,7 @@
   const THEME_DARK = 'dark';
   const THEME_LIGHT = 'light';
   const DEFAULT_THEME = 'gruvbox-dark';
-  const DEFAULT_BG = 'dots';
+  const DEFAULT_BG = 'crosshatch';
 
   const THEME_OPTIONS = new Set([
     'system',
@@ -41,6 +41,7 @@
 
   const BG_OPTIONS = new Set([
     'clear',
+    'crosshatch',
     'diamonds',
     'noise',
     'dots',

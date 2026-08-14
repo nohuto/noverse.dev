@@ -6,7 +6,7 @@
   "nohuto/type-layouts": "Type layouts from some modules of different builds.",
   "nohuto/globals": "Extracted globals (including symbol name, RVA, PE section, type, storage size, init value).",
   "nohuto/aes-cbc": "PowerShell encryption using AES CBC - 256 bit encryption key.",
-  "nohuto/bitmask-calc": "Bitmask calculator uses official NVIDIA definitions to edit and apply registry values with bitfield mapping.",
+  "nohuto/bitmask-calc": "Bitmask calculator uses official NVIDIA definitions to edit and apply registry values.",
   "nohuto/blocklist-mgr": "GUI that lets you easily select one or more blocklists (hosts or URLs, e.g., for UBO).",
   "nohuto/comp-mgr": "Manage components (packages, optional features, capabilities) easily within a single tool.",
   "nohuto/app-guides": "App (Desktop/iOS) configurations for privacy/security & general recommendations.",

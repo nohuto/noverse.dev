@@ -544,7 +544,7 @@
 
     const measureCaret = (value, pos) => {
       const metrics = syncMeasureStyles();
-      measureText.nodeValue = value.slice(0, pos);
+      measureText.nodeValue = value.slice(0, pos) || '\u200b';
       const measureRect = measure.getBoundingClientRect();
       const markerRect = measureMarker.getBoundingClientRect();
       return {
@@ -1137,7 +1137,7 @@
         const backgrounds = listBackgrounds();
         if (!backgrounds.length) return;
         if (!args.length) {
-          addLine(`current bg: ${document.documentElement.getAttribute('data-bg') || 'dots'}`);
+          addLine(`current bg: ${document.documentElement.getAttribute('data-bg') || 'crosshatch'}`);
           addLine('backgrounds:', 'muted');
           addIndentedLines(backgrounds);
           return;
@@ -1319,6 +1319,13 @@
       setInputActive(true);
       scheduleCaretUpdate();
     });
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        invalidatePromptMetrics();
+        scheduleCaretUpdate();
+      });
+    }
 
     withLineBatch(() => {
       ASCII_ART.forEach(line => addLine(line, 'art'));

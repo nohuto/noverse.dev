@@ -16,8 +16,8 @@ const LIGHT_THEMES = new Set([
   'everforest-light'
 ]);
 const BG_KEY = 'nv-bg';
-const DEFAULT_BG = 'dots';
-const BG_KEYS = ['clear', 'diamonds', 'noise', 'dots', 'grid', 'starfield'];
+const DEFAULT_BG = 'crosshatch';
+const BG_KEYS = ['clear', 'crosshatch', 'diamonds', 'noise', 'dots', 'grid', 'starfield'];
 const BG_SET = new Set(BG_KEYS);
 window.NV_BACKGROUND_KEYS = BG_KEYS;
 const STARFIELD_STYLESHEET = '/main/data/starfield-stars.css';

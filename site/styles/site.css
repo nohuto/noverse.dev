@@ -656,6 +656,39 @@ html[data-bg="clear"] body::before {
   opacity: 0;
 }
 
+html[data-bg="crosshatch"] body::before {
+  opacity: 1;
+  background-image:
+    repeating-linear-gradient(22.5deg,
+      transparent 0,
+      transparent 2px,
+      color-mix(in srgb, var(--text) 3%, transparent) 2px,
+      color-mix(in srgb, var(--text) 3%, transparent) 3px,
+      transparent 3px,
+      transparent 8px),
+    repeating-linear-gradient(67.5deg,
+      transparent 0,
+      transparent 2px,
+      color-mix(in srgb, var(--text) 2.5%, transparent) 2px,
+      color-mix(in srgb, var(--text) 2.5%, transparent) 3px,
+      transparent 3px,
+      transparent 8px),
+    repeating-linear-gradient(112.5deg,
+      transparent 0,
+      transparent 2px,
+      color-mix(in srgb, var(--text) 2%, transparent) 2px,
+      color-mix(in srgb, var(--text) 2%, transparent) 3px,
+      transparent 3px,
+      transparent 8px),
+    repeating-linear-gradient(157.5deg,
+      transparent 0,
+      transparent 2px,
+      color-mix(in srgb, var(--text) 1.5%, transparent) 2px,
+      color-mix(in srgb, var(--text) 1.5%, transparent) 3px,
+      transparent 3px,
+      transparent 8px);
+}
+
 html[data-bg="dots"] body::before {
   opacity: 1;
   background-image:
@@ -812,10 +845,9 @@ main {
   bottom: 0;
   height: 1px;
   background: currentColor;
-  opacity: 0;
-  transform: scaleX(0.55);
-  transform-origin: center;
-  transition: opacity 180ms ease, transform 180ms ease;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 120ms ease-out;
 }
 
 .nav-tabs a[hidden] {
@@ -827,13 +859,13 @@ main {
   color: color-mix(in srgb, var(--muted) 58%, var(--text));
 }
 
-.nav-tabs a.active {
-  color: var(--accent);
+.nav-tabs a:hover::after,
+.nav-tabs a:focus-visible::after {
+  transform: scaleX(1);
 }
 
-.nav-tabs a.active::after {
-  opacity: 1;
-  transform: scaleX(1);
+.nav-tabs a.active {
+  color: var(--accent);
 }
 
 .theme-toggle {
@@ -1219,7 +1251,7 @@ main.home-main {
 
 .home-intro h1 {
   margin: 0 0 12px;
-  font-size: var(--font-size-heading-1);
+  font-size: 18px;
   text-transform: uppercase;
   letter-spacing: 0;
 }
@@ -1251,6 +1283,8 @@ main.home-main {
   user-select: text;
 }
 
+.home-contact a:hover,
+.home-contact a:focus-visible,
 .home-email:hover,
 .home-email:focus-visible {
   text-decoration: underline;
@@ -1278,7 +1312,7 @@ main.home-main {
 .home-section-heading h2 {
   margin: 0;
   color: var(--muted);
-  font-size: 0.8125rem;
+  font-size: 12.5px;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0;
@@ -1923,14 +1957,14 @@ main.home-main {
 }
 
 .documentation-heading {
-  font-weight: 400;
   letter-spacing: 0;
 }
 
 .documentation-heading,
 .legal-heading {
   color: var(--text);
-  font-size: 13px;
+  font-size: 12.5px;
+  font-weight: 400;
   line-height: 1.2;
   text-transform: uppercase;
 }
@@ -2649,20 +2683,5 @@ body.settings-open {
 
   .diff-name-field .select-limit-input {
     width: 68px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
   }
 }

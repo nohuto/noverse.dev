@@ -25,7 +25,7 @@ At a high level, imagine thread *A* switching from `Running` to `Ready`/`Waiting
 
 The steps depend on why *A* stopped (and the processor architecture), but the important ones are:
 
-1. Dispatcher selects the highest priority ready thread
+1. Dispatcher selects the highest priority ready thread for that processor
 2. Old thread is placed into its next scheduler state (preempted/quantum ended threads usually remain runnable, so they return to a ready queue of their priority, while blocking threads enter `Waiting` state)
 3. New thread becomes the standby thread selected for that processor
 4. Kernel saves state of the old thread to resume it later & restores the new threads state
@@ -90,7 +90,7 @@ IDA wasn't able to decompile `SwapContext`, so I've to use the disassembly inste
  */
 ```
 
-One important note is that when both threads belong to the same process, their user address space is already the same, but when they're from different processes, the switch must also use the new processs address space context. This can use more TLB (translation lookaside buffer)/cache, so depending on that a context switch might be more expensive.
+One important note is that when both threads belong to the same process, their user address space is already the same, but when they're from different processes, the switch must also use the new processs address space context. This can cause higher TLB (translation lookaside buffer) costs & reduce cache locality, so depending on that a context switch might be more expensive.
 
 ## CS Counters
 
@@ -133,7 +133,7 @@ You can see two different columns named `Context switches` & `Context switches d
 ![](https://github.com/nohuto/windbg-notes/blob/main/images/si-context-switches-process.png?raw=true)
 ![](https://github.com/nohuto/windbg-notes/blob/main/images/si-context-switches-thread.png?raw=true)
 
-- `Context switches` = cumulative context switch value currently stored for the process
+- `Context switches` = cumulative context switch value currently stored for the process/thread
 - `Context switches delta` = increase since previous refresh
 
 I've set both CPUStress threads to use the same CPU & be on the same priority, so they've to switch, this is equivalent to the single CPU example in '[Thread States, PerfMon Example](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/#perfmon-example)':
@@ -142,7 +142,7 @@ I've set both CPUStress threads to use the same CPU & be on the same priority, s
 
 ## CPUStress Example
 
-CPUStress uses two threads, both use `THREAD_PRIORITY_TIME_CRITICAL` (priority `15`, see '[Relative Thread Priority](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/priority-levels/#relative-thread-priority)') as described under [Relative Thread Priority](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/priority-levels/#relative-thread-priority), and both are forced to run on processor 11 (affinity). As only one thread can execute on that logical processor at a time, they're switching between `Running`/`Ready` (see image above).
+CPUStress uses two threads, both use `THREAD_PRIORITY_TIME_CRITICAL` (priority `15`, see '[Relative Thread Priority](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/priority-levels/#relative-thread-priority)') as described under [Relative Thread Priority](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/priority-levels/#relative-thread-priority), and both are forced to run on processor 5 (affinity). As only one thread can execute on that logical processor at a time, they're switching between `Running`/`Ready` (see image above).
 
 ![](https://github.com/nohuto/windbg-notes/blob/main/images/CPUStress-context-switches.png?raw=true)
 
@@ -158,16 +158,6 @@ PROCESS ffffe2814f8c6080
         THREAD ffffe2814d8de080  Cid 0f60.1870  Teb: 00000024211a3000 Win32Thread: 0000000000000000 RUNNING on processor 5 // TID 6256
         THREAD ffffe2814f3ce080  Cid 0f60.26d4  Teb: 00000024211a5000 Win32Thread: 0000000000000000 READY on processor 5 // TID 9940
 
-lkd> dt nt!_KAFFINITY_EX ffffe2814d8de080 Count Size Bitmap
-   +0x000 Count  : 6
-   +0x002 Size   : 0x88
-   +0x008 Bitmap : [1] 0xffffe281`4d8de088
-   
-lkd> dt nt!_KAFFINITY_EX ffffe2814f3ce080 Count Size Bitmap
-   +0x000 Count  : 6
-   +0x002 Size   : 0x88
-   +0x008 Bitmap : [1] 0xffffe281`4f3ce088
-
 lkd> dt nt!_KTHREAD ffffe2814d8de080 ContextSwitches State Priority BasePriority NextProcessor
    +0x0c3 Priority        : 8 ''
    +0x154 ContextSwitches : 0x5e5
@@ -181,6 +171,26 @@ lkd> dt nt!_KTHREAD ffffe2814f3ce080 ContextSwitches State Priority BasePriority
    +0x184 State           : 0x1 '' // Ready
    +0x218 NextProcessor   : 5
    +0x233 BasePriority    : 8 ''
+
+// from a different process so addresses are different
+
+lkd> dt nt!_KTHREAD ffffe28227f13580 Affinity UserAffinity // first CPUStress thread
+   +0x228 UserAffinity : 0xffffe282`27f13ea0 _KAFFINITY_EX
+   +0x240 Affinity     : 0xffffe282`27f13e90 _KAFFINITY_EX
+
+lkd> dt nt!_KTHREAD ffffe281e8978080 Affinity UserAffinity // second
+   +0x228 UserAffinity : 0xffffe281`e89789a0 _KAFFINITY_EX
+   +0x240 Affinity     : 0xffffe281`e8978990 _KAFFINITY_EX
+
+lkd> dt nt!_KAFFINITY_EX ffffe28227f13e90 Count Size Bitmap
+   +0x000 Count  : 1
+   +0x002 Size   : 1
+   +0x008 Bitmap : [1] 0x20 // bit 5
+
+lkd> dt nt!_KAFFINITY_EX ffffe281e8978990 Count Size Bitmap
+   +0x000 Count  : 1
+   +0x002 Size   : 1
+   +0x008 Bitmap : [1] 0x20 // bit 5
 ```
 
 ## CS Reasons

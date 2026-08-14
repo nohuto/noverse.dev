@@ -847,7 +847,7 @@ main {
   background: currentColor;
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 120ms ease-out;
+  transition: transform 100ms ease-out;
 }
 
 .nav-tabs a[hidden] {

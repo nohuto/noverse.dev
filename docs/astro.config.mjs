@@ -142,7 +142,16 @@ export default defineConfig({
       titleDelimiter: '-',
       description:
         'Docs from win-config, regkit, app-guides, and windbg-notes.',
+      favicon: '/favicon.png',
       head: [
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'apple-touch-icon',
+            href: '/apple-touch-icon.png',
+            sizes: '180x180',
+          },
+        },
         {
           tag: 'link',
           attrs: {

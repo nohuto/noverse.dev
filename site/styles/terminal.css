@@ -780,7 +780,7 @@ main.main-terminal .terminal-shell {
     min-height: 0;
     height: auto;
     overflow: hidden;
-    padding: 12px;
+    padding: 12px 0;
   }
 
   .console-window {
@@ -795,6 +795,7 @@ main.main-terminal .terminal-shell {
     min-height: 0;
     max-width: none;
     max-height: none;
+    border-inline: 0;
     resize: none;
   }
 

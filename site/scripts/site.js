@@ -20,7 +20,6 @@ const DEFAULT_BG = 'crosshatch';
 const BG_KEYS = ['clear', 'crosshatch', 'diamonds', 'noise', 'dots', 'grid', 'starfield'];
 const BG_SET = new Set(BG_KEYS);
 window.NV_BACKGROUND_KEYS = BG_KEYS;
-const STARFIELD_STYLESHEET = '/main/data/starfield-stars.css';
 const MAIN_PAGE_ROUTES = Object.freeze([
   { slug: 'home', clean: '/' },
   { slug: 'terminal', clean: '/terminal' },
@@ -796,23 +795,9 @@ function initTheme() {
   } catch { }
 }
 
-function ensureStylesheet(href) {
-  const loaded = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
-    .some(link => link.getAttribute('href') === href);
-  if (loaded) return;
-
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = href;
-  document.head.appendChild(link);
-}
-
 function applyBackground(key) {
   const applied = BG_SET.has(key) ? key : DEFAULT_BG;
   document.documentElement.setAttribute('data-bg', applied);
-  if (applied === 'starfield') {
-    ensureStylesheet(STARFIELD_STYLESHEET);
-  }
   return applied;
 }
 

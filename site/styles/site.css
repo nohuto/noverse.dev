@@ -1,4 +1,6 @@
 /* Copyright (c) 2026 nohuto */
+@import url("/main/data/starfield-stars.css");
+
 @font-face {
   font-family: "Cascadia Code";
   src: url("/main/fonts/CascadiaCode-2407.24.woff2") format("woff2");
@@ -722,19 +724,14 @@ html[data-bg="grid"] body::before {
   background-size: 24px 24px, 24px 24px;
 }
 
-html[data-bg="starfield"] body {
-  perspective: 340px;
-}
-
 .stars {
   display: none;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   width: 2px;
   height: 2px;
   pointer-events: none;
-  z-index: 0;
 }
 
 html[data-bg="starfield"] .stars {
@@ -770,8 +767,14 @@ html[data-bg="starfield"] .stars::after {
 .overlay {
   position: fixed;
   inset: 0;
+  overflow: hidden;
   pointer-events: none;
   z-index: 1;
+}
+
+html[data-bg="starfield"] .overlay {
+  perspective: 340px;
+  perspective-origin: 50% 50%;
 }
 
 header,
@@ -2194,9 +2197,9 @@ footer {
   }
 
   .product-cta {
-    width: 260px;
-    max-width: 260px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
   }
 
   #documentation .doc-grid {
@@ -2237,6 +2240,14 @@ footer {
 }
 
 @media (max-width: 720px) {
+
+  main:not(.main-terminal) {
+    padding-inline: 0;
+  }
+
+  main:not(.main-terminal)>.content-box {
+    border-inline: 0;
+  }
 
   .footer-row {
     min-height: 43px;

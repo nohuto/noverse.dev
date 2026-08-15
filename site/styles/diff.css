@@ -722,6 +722,10 @@ body.bindiff-maximized>footer {
 }
 
 @media (max-width: 720px) {
+  main.bindiff-main {
+    padding-inline: 0;
+  }
+
   .bindiff-grid {
     grid-template-columns: 1fr;
   }

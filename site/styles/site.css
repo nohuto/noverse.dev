@@ -1635,17 +1635,18 @@ main.home-main {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   gap: 16px;
 }
 
 .project-card {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   border: 1px solid var(--border);
   background: var(--panel-alt);
   content-visibility: auto;
-  contain-intrinsic-size: 360px 520px;
+  contain-intrinsic-block-size: 520px;
 }
 
 .project-card[hidden] {
@@ -1761,7 +1762,7 @@ main.home-main {
 .product-cta {
   width: 260px;
   max-width: 260px;
-  text-align: left;
+  text-align: center;
   padding: 10px 12px;
   background: var(--panel);
   margin: 0;
@@ -1770,13 +1771,13 @@ main.home-main {
 .purchase-actions {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
 }
 
 .paypal-form {
-  display: grid;
-  justify-items: stretch;
-  gap: 12px;
+  display: flex;
+  justify-content: center;
 }
 
 .paypal-button {
@@ -1791,7 +1792,7 @@ main.home-main {
   font-size: var(--font-size-body);
   cursor: pointer;
   padding: 6px 14px;
-  width: 100%;
+  width: fit-content;
 }
 
 .paypal-button:hover {

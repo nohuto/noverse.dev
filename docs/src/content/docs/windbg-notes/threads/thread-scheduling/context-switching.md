@@ -61,7 +61,7 @@ lkd> dt nt!_KPRCB CurrentThread NextThread IdleThread KeContextSwitches ffffb901
 
 Each colored block below represents an interval in which a thread was scheduled on a logical processor, and the borders between them are CS events (`Reason`). When looking at [SwapContext](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/context-switching/#swapcontext) we can see that before/after the ETW timestamp several things (saved old thread state, switched kernel stacks, restores new thread state...) already happened, means the CS time of a thread may not be completely included in its thread duration block. 
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/MXA-CS.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/MXA-CS.png?raw=true" alt="" width="2560" height="1400">
 
 ## CS Functions
 

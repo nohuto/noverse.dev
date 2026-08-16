@@ -1,0 +1,45 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro';
+---
+
+<Default />
+
+<script>
+  let correction = 0;
+
+  function getFragmentTarget() {
+    if (location.hash.length < 2) return null;
+    const fragment = location.hash.slice(1);
+    try {
+      return document.getElementById(decodeURIComponent(fragment));
+    } catch {
+      return document.getElementById(fragment);
+    }
+  }
+
+  async function alignInitialFragment() {
+    const target = getFragmentTarget();
+    if (!target) return;
+
+    const currentCorrection = ++correction;
+    const hash = location.hash;
+    await document.fonts?.ready;
+    if (currentCorrection !== correction || location.hash !== hash || !target.isConnected) return;
+
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    if (currentCorrection !== correction || location.hash !== hash || !target.isConnected) return;
+
+    target.scrollIntoView({ block: 'start', inline: 'nearest' });
+  }
+
+  const initializeFragmentAlignment = () => void alignInitialFragment();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeFragmentAlignment, { once: true });
+  } else {
+    initializeFragmentAlignment();
+  }
+
+  document.addEventListener('astro:page-load', initializeFragmentAlignment);
+</script>

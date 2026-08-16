@@ -98,6 +98,7 @@ const KNOWN_REMOTE_IMAGE_DIMENSIONS = new Map([
   ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/occt.png?raw=true', { width: 1521, height: 750 }],
   ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/oc.png?raw=true', { width: 1543, height: 543 }],
   ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/uv-curve.png?raw=true', { width: 766, height: 529 }],
+  ['https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif', { width: 640, height: 359 }],
 ]);
 const MOVED_IMAGE_URLS = new Map([
   ['https://github.com/nohuto/regkit/blob/main/images/guide/images.png', 'https://github.com/nohuto/regkit/blob/main/guides/images/pmsave.png?raw=true'],
@@ -435,8 +436,8 @@ async function addImageDimensions(repoDirs) {
   }
 
   if (unresolvedUrls.length > 0) {
-    console.warn(
-      `[sync-docs] Could not determine dimensions for ${unresolvedUrls.length} image URL(s):\n` +
+    throw new Error(
+      `[sync-docs] Missing intrinsic dimensions for ${unresolvedUrls.length} image URL(s):\n` +
       unresolvedUrls.map((url) => `  - ${url}`).join('\n')
     );
   }

@@ -173,6 +173,7 @@ export default defineConfig({
       },
       routeMiddleware: './src/route-data.ts',
       components: {
+        Head: './src/components/starlight/Head.astro',
         Header: './src/components/starlight/Header.astro',
         PageTitle: './src/components/starlight/PageTitle.astro',
         Search: './src/components/starlight/Search.astro',

@@ -22,7 +22,7 @@ Hides the snap assist flyout that would appear after hovering over the maximize/
 
 Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse.
 
-![](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
+<img src="https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif" alt="" width="640" height="359">
 
 #### SystemSettings Captures
 

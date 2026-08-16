@@ -18,11 +18,11 @@ Use it on W11, unless you like the new menu. This works via causing COM to not l
 
 ### Default
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/classiconb.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/classiconb.png?raw=true" alt="" width="468" height="430">
 
 ### Old
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/classicona.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/classicona.png?raw=true" alt="" width="348" height="306">
 
 ## 'New' Context Menu
 
@@ -30,5 +30,5 @@ Instead of creating a `.txt` file, then renaming it to e.g. `.bat` / `.ps1`, you
 
 `Remove 'Add to Favorites' Option`, `Remove 'Share' Option`, `Remove 'Send to' Option`, `Remove 'bmp'/'zip' Options` don't have a revert yet.
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/newcontext1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/newcontext2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/newcontext1.png?raw=true" alt="" width="634" height="103">
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/newcontext2.png?raw=true" alt="" width="403" height="284">

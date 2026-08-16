@@ -381,6 +381,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 .sidebar-docs-copyright {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
   flex-shrink: 0;
   margin: auto 0 0;
   padding-top: 0.75rem;
@@ -388,6 +391,15 @@ body::-webkit-scrollbar-thumb {
   color: var(--sl-color-gray-3);
   font-size: 0.6875rem;
   line-height: 1.35;
+}
+
+.sidebar-docs-copyright .copyright-icon {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  background-color: currentColor;
+  -webkit-mask: url('/main/icons/ui/copyright.svg') center / contain no-repeat;
+  mask: url('/main/icons/ui/copyright.svg') center / contain no-repeat;
 }
 
 @media (max-width: 50rem) {

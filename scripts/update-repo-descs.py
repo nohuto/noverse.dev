@@ -5,7 +5,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 PUBLIC = SITE / 'public' / 'main'
 PROJECTS = SITE / 'data' / 'projects.json'
-O = PUBLIC / 'data' / 'repos.json'
 MS = SITE / 'data' / 'media-sources.json'
 MC = SITE / 'data' / 'media-cache.json'
 H = {'User-Agent': 'Mozilla/5.0'}
@@ -19,6 +18,10 @@ def jload(p, d):
 def jsave(p, d):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(d, indent=2, ensure_ascii=True), encoding='utf-8')
+
+def save_projects(projects):
+    rows = (f'  {json.dumps(project, ensure_ascii=True)}' for project in projects)
+    PROJECTS.write_text('[\n' + ',\n'.join(rows) + '\n]\n', encoding='utf-8')
 
 def ndesc(v, r):
     if not v:
@@ -84,16 +87,35 @@ def fetch(r):
 
 def upd_repos():
     projects = jload(PROJECTS, [])
-    repos = list(dict.fromkeys(
-        project.get('repo') for project in projects
-        if isinstance(project, dict) and project.get('repo')
-    ))
-    old = jload(O, {})
-    out = {}
-    for r in repos:
-        out[r] = fetch(r) or old.get(r, '')
+    if not isinstance(projects, list):
+        raise RuntimeError(f'{PROJECTS} must contain a JSON array')
+    descriptions = {}
+    missing = []
+    for project in projects:
+        if not isinstance(project, dict) or not project.get('repo'):
+            continue
+        repo = project['repo']
+        description = fetch(repo)
+        if description:
+            descriptions[repo] = description
+        else:
+            missing.append(repo)
         time.sleep(0.3)
-    jsave(O, out)
+
+    if missing:
+        raise RuntimeError(f'Could not resolve descriptions for: {", ".join(missing)}')
+
+    for project in projects:
+        if not isinstance(project, dict):
+            continue
+        description = descriptions.get(project.get('repo'), '')
+        if not description:
+            continue
+        project['description'] = description
+        if isinstance(project.get('home'), dict):
+            project['home']['description'] = description
+
+    save_projects(projects)
 
 def pull(url, dst, cache):
     hh = dict(H)

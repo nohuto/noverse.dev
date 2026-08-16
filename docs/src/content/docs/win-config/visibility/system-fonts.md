@@ -20,8 +20,8 @@ List all available font families on your system with the `Open` option, or via `
 Add-Type -AssemblyName System.Drawing;[System.Drawing.FontFamily]::Families | % {$_.Name}
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/font1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/font2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/font1.png?raw=true" alt="" width="1360" height="1116">
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/font2.png?raw=true" alt="" width="835" height="28">
 
 ### Manually Adding Custom Fonts
 

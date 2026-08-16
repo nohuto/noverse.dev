@@ -54,7 +54,7 @@ For example here you can ignore the lines with `127.0.0.1` LocalAddress, means t
 @{ DisplayName = 'Mullvad Browser'; Direction = 'Outbound'; Action = 'Allow'; Program = '..\mullvadbrowser.exe'; Protocol = 'TCP'; RemotePort = @('443') }
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/security/images/mullvadWF.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/security/images/mullvadWF.png?raw=true" alt="" width="824" height="402">
 
 Second example, as before you can ignore `127.0.0.1` LocalAddress while setting up outbound rules:
 
@@ -63,7 +63,7 @@ Second example, as before you can ignore `127.0.0.1` LocalAddress while setting 
 @{ DisplayName = 'Overwatch UDP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'UDP' }
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/security/images/overwatchWF.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/security/images/overwatchWF.png?raw=true" alt="" width="1416" height="800">
 
 Most apps will work fine with `443` + `TCP`, games often need specific TCP RemotePorts (and obviously UDP). Spotify uses UDP once on startup, means if only allowing TCP for it, then the startup will be slower.
 

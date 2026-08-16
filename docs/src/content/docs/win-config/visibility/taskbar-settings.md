@@ -163,7 +163,7 @@ Removes the search box, moves the taskbar to the left, removes badges, disables 
 
 ### Hide Language Bar
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/languagebar.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/languagebar.png?raw=true" alt="" width="330" height="60">
 
 #### Text Services and Input Languages Captures
 
@@ -210,7 +210,7 @@ HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 0
 
 "*Uses more power*" (in relation to laptops).
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/clock.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/clock.png?raw=true" alt="" width="81" height="40">
 
 ## [Windows Policies](https://noverse.dev/policies)
 

@@ -150,4 +150,4 @@ For general playback, `44.1` kHz or `48` kHz with `16` or `24` bit depth is norm
 
 ### 8 Bit / 16 Bit
 
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/samplerate.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/peripheral/images/samplerate.png?raw=true" alt="" width="1500" height="498">

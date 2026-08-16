@@ -57,11 +57,11 @@ An event below in the figures = Event TRB written to an Event Ring, for a mouse/
 
 ### Interrupt Throttle Flow
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/imod-flow.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/imod-flow.png?raw=true" alt="" width="744" height="770">
 
 ### Heavy Load
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/heavy-load-imod.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/heavy-load-imod.png?raw=true" alt="" width="809" height="391">
 
 > "*Under heavy load conditions (Figure 4-23), Interrupt Pending Enable (IPE) is asserted almost constantly, so if IPE = '1' when the IMODC counts down to '0' and the Event Handler is not busy (EHB = '0'), an interrupt is generated immediately, i.e. Interrupt Pending (IP) is set to '1'. When IP is asserted, the IMODC is reloaded with the IMODI and the IMODC begins counting down again.*
 >
@@ -71,7 +71,7 @@ An event below in the figures = Event TRB written to an Event Ring, for a mouse/
 
 ### Light Load
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/light-load-imod.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/light-load-imod.png?raw=true" alt="" width="866" height="399">
 
 > "*Under light load conditions (Figure 4-24) it is desirable to fire off interrupts with minimum latency. In this case, when the IMODC counts down to '0' and no interrupts are pending (IPE = '0'), the IMODC is not reloaded with the IMODI but stays at '0'. Thus, the next assertion of Interrupt Pending Enable will trigger an interrupt immediately. Triggering the interrupt will also cause the IMODC to be reloaded with the IMODI and begin counting down again.*
 >
@@ -85,7 +85,7 @@ An event below in the figures = Event TRB written to an Event Ring, for a mouse/
 
 Not complete yet.
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/usb-driver-stack.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/usb-driver-stack.png?raw=true" alt="" width="675" height="862">
 
 [`Interrupter_PrepareInterrupter`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/USBXHCI/Interrupter_PrepareInterrupter.c) gets the register set at `RuntimeBase + 0x20 + 0x20 * InterrupterId`, [`Interrupter_InterruptEnable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/USBXHCI/Interrupter_InterruptEnable.c) then writes decimal `200` to `IMOD` (low half of `0x000000C8` sets `IMODI = 200`, the high writes `IMODC` to zero) and enables `IMAN.IE`, W10 1507 - W11 26H1 all use `200`.
 
@@ -314,7 +314,7 @@ Examples:
 
 ## [Registers](https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/interrupter-register-set.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/interrupter-register-set.png?raw=true" alt="" width="776" height="243">
 
 ### IMOD
 
@@ -349,7 +349,7 @@ Host Controller Structural Parameters 2.
 | 26 | **Scratchpad Restore (SPR).** Default = implementation dependent. If Max Scratchpad Buffers is greater than `0`, this field indicates whether the xHC uses the Scratchpad Buffers during Save and Restore State operations. A value of `1` requires the Scratchpad Buffer contents to remain intact across power events. A value of `0` allows the buffers to be freed and reallocated between power events. This field shall be `0` when Max Scratchpad Buffers is `0`. Refer to section 4.23.2. |
 | 31:27 | **Max Scratchpad Buffers (Max Scratchpad Bufs Lo).** Default = implementation dependent. This field contains the low-order 5 bits of the number of Scratchpad Buffers that system software shall reserve for the xHC. The combined valid range is 0 to 1023. Refer to section 4.20. |
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/HCSPARAMS2-structure.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/HCSPARAMS2-structure.png?raw=true" alt="" width="822" height="78">
 
 ### RTSOFF
 
@@ -360,7 +360,7 @@ Runtime Register Space Offset Register.
 | 4:0 | Rsvd. |
 | 31:5 | Runtime Register Space Offset - RO. Default = implementation dependent. This field defines the 32-byte offset of the xHCI Runtime Registers from the Base. i.e. Runtime Register Base Address = Base + Runtime Register Set Offset.<br><br>Note: Normally the Runtime Register Space is 32-byte aligned, however if virtualization is supported by the xHC (either through IOV or VTIO) then it shall be PAGESIZE aligned. e.g. If the PAGESIZE = 4K and the Runtime Register Space is positioned at a 1 page offset from the Base, then this register shall report 0000 1000h. |
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/RTSOFF-structure.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/RTSOFF-structure.png?raw=true" alt="" width="550" height="51">
 
 ### USBCMD
 

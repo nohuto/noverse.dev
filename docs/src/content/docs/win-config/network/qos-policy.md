@@ -10,11 +10,11 @@ sidebar:
 >
 > — Microsoft, [Policy-based QoS](https://learn.microsoft.com/en-us/windows-server/networking/technologies/qos/qos-policy-top)
 
-![](https://github.com/nohuto/win-config/blob/main/network/images/qosvalues.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/network/images/qosvalues.png?raw=true" alt="" width="511" height="512">
 
 - [nexus1000v_qos/qos_6dscp_val.pdf](https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus1000/sw/4_0/qos/configuration/guide/nexus1000v_qos/qos_6dscp_val.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/network/images/qosexplanation.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/network/images/qosexplanation.png?raw=true" alt="" width="621" height="822">
 
 ## Policy-based QoS (LGPE) Capture
 

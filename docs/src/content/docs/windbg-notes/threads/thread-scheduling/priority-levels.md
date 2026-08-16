@@ -10,7 +10,7 @@ sidebar:
 
 Every thread has a (numeric) scheduling priority from `0` (lowest) up to `31` (highest). When a processor must choose the next thread, it selects a ready thread at the highest available priority (ready threads at the same priority are usually scheduled in round robin order, means that when a thread exhausts its quantum, its moved to the end of its priorities ready queue and the next thread gets a turn, as shown in [WrQuantumEnd](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/#wrquantumend)). Also note that threads run at `PASSIVE_LEVEL`, while code running at `DISPATCH_LEVEL` (see [IRQLs](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels/)) or above prevents normal thread dispatch on that processor no matter what priority it has.
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/thread-priority-levels.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/thread-priority-levels.png?raw=true" alt="" width="277" height="263">
 
 - `0` = reserved for the memory managers zero page thread(s) ([`MiZeroNodePages`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/MiZeroNodePages.c)), which runs when no other thread needs the processor (thread inside '*System*' process):
 
@@ -67,7 +67,7 @@ Most application/service threads use the variable range, normally starting at pr
 
 As written at the beginning, a process doesn't run and doesn't compete with other processes for a processor, its priority class is used as the starting base priority for its threads.
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/si-process-prio.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/si-process-prio.png?raw=true" alt="" width="1473" height="849">
 
 | Process priority class | `_EPROCESS.PriorityClass` | Process base priority |
 | --- | ---: | ---: |
@@ -122,7 +122,7 @@ Each thread has a relative priority within its process class, ordinary values ar
 
 Whenever threads use `Time critical`/`Idle` and the process base priority gets changed, these threads keep their thread base priority anyway.
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/api-thread-priorities.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/api-thread-priorities.png?raw=true" alt="" width="838" height="447">
 
 > "*A typical strategy is to use THREAD_PRIORITY_ABOVE_NORMAL or THREAD_PRIORITY_HIGHEST for the process's input thread, to ensure that the application is responsive to the user. Background threads, particularly those that are processor intensive, can be set to THREAD_PRIORITY_BELOW_NORMAL or THREAD_PRIORITY_LOWEST, to ensure that they can be preempted when necessary. However, if you have a thread waiting for another thread with a lower priority to complete some task, be sure to block the execution of the waiting high-priority thread.*"
 >
@@ -138,7 +138,7 @@ Whenever threads use `Time critical`/`Idle` and the process base priority gets c
 | `THREAD_PRIORITY_LOWEST` (`-2`) | `22` | `11` | `8` | `6` | `4` | `2` |
 | `THREAD_PRIORITY_IDLE` | `16` | `1` | `1` | `1` | `1` | `1` |
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/si-thread-prio.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/si-thread-prio.png?raw=true" alt="" width="1251" height="633">
 
 - `Base priority` = `_KPROCESS.BasePriority` + relative priority (excluding `THREAD_PRIORITY_IDLE`/`THREAD_PRIORITY_TIME_CRITICAL`)
 - `Priority (symbolic)` = shows the relative thread setting (can be a name or number)
@@ -148,7 +148,7 @@ Whenever threads use `Time critical`/`Idle` and the process base priority gets c
 
 Use `!process <PID> 4` to get the `_ETHREAD` addresses, in the example below I've set CPUStress to have four (excluding GUI thread) threads with different priorities:
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/CPUStress-prio-levels.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/CPUStress-prio-levels.png?raw=true" alt="" width="950" height="284">
 
 ```c
 lkd> !process 27f0 4

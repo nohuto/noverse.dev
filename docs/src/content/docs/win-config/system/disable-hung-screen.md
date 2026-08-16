@@ -8,7 +8,7 @@ sidebar:
 
 Causes hung apps to get automatically get terminated, making the 'Hung program' screen to not show up. It's recommended to leave the timeouts at their default, see 'Windows Internals' section below for more details on each value.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/hung-program.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/hung-program.png?raw=true" alt="" width="682" height="532">
 
 ### Registry Values
 
@@ -26,6 +26,6 @@ Windows Internals says that the default of `WaitToKillServiceTimeout` is `20000`
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown3.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/shutdown1.png?raw=true" alt="" width="1711" height="1054">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/shutdown2.png?raw=true" alt="" width="1781" height="1095">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/shutdown3.png?raw=true" alt="" width="1781" height="1092">

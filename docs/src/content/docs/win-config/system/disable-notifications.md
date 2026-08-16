@@ -13,7 +13,7 @@ The '*System Template*' won't disable all notifications, so e.g. critical Defend
 | Option | Description |
 | ---- | ---- |
 | Main | Disables all kind of notifications completely. |
-| Disable Low Disk Space Checks | Disables the `Low Disk Space` notification. ![](https://github.com/nohuto/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true) |
+| Disable Low Disk Space Checks | Disables the `Low Disk Space` notification. <img src="https://github.com/nohuto/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true" alt="" width="429" height="196"> |
 | Hide all Windows Security notifications | Disables all notifications via the `DisableNotifications`  policy (this probably overrides all other security notifications below). |
 | Hide non-critical Windows Security notifications | Disables non-critical/enhanced notifications via the Windows Security and Microsoft Defender Antivirus `DisableEnhancedNotifications` policies. |
 | Disable Enhanced Phishing Protection warnings | Disables the Enhanced Phishing Protection warning prompts for malicious sites, password reuse, and unsafe apps. |

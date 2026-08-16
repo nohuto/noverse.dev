@@ -10,8 +10,8 @@ When you copy, move, or delete a file or folder, a progress dialog appears. You 
 
 ### EnthusiastMode Disabled
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/filetransfer0.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/filetransfer0.png?raw=true" alt="" width="515" height="221">
 
 ### EnthusiastMode Enabled
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/filetransfer1.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/filetransfer1.png?raw=true" alt="" width="516" height="339">

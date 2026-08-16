@@ -10,8 +10,8 @@ See [DWM, `BackdropBlurCachingThrottleMs`](https://noverse.dev/docs/win-config/s
 
 ### Transparency Enabled
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/transpa1.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/transpa1.png?raw=true" alt="" width="1382" height="821">
 
 ### Transparency Disabled
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/transpa2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/transpa2.png?raw=true" alt="" width="1378" height="839">

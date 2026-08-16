@@ -18,7 +18,7 @@ Changing it to Segment Heap for a game won't impact FPS, rather read '[W10 Segme
 
 [`heapType.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/heapType.ps1) is a small GUI for the values (read everything below/above before using it):
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/heapType.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/heapType.png?raw=true" alt="" width="1116" height="643">
 
 ## heap_dump
 
@@ -217,7 +217,7 @@ Some notes:
   - [`RtlpHpHeapCreate`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpHeapCreate.c) causes an extra segment heap here
 - enabling bit `4` & `6` together causes a heap query error
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/RtlpHpStackTraceEnable.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/RtlpHpStackTraceEnable.png?raw=true" alt="" width="1096" height="844">
 
 | Bit | Meaning |
 | --- | --- |
@@ -239,19 +239,19 @@ You can see wether a program uses 'Segment Heap' or 'NT Heap' via for example [S
 
 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `4`:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/ntheap.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/ntheap.png?raw=true" alt="" width="1803" height="499">
 
 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `8`:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/segmentheap.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/segmentheap.png?raw=true" alt="" width="1679" height="492">
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment4.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment5.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/segment1.png?raw=true" alt="" width="2758" height="1668">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/segment2.png?raw=true" alt="" width="2716" height="1678">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/segment3.png?raw=true" alt="" width="2670" height="1664">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/segment4.png?raw=true" alt="" width="2720" height="1678">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/segment5.png?raw=true" alt="" width="2690" height="1668">
 
 ## Desktop Heap Logging
 

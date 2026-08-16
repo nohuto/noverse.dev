@@ -10,203 +10,203 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ### Asia
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Asia.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Asia.png?raw=true" alt="" width="2560" height="1440">
 
 ### Austria
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Austria.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Austria.png?raw=true" alt="" width="2559" height="1390">
 
 ### Beach
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Beach.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Beach.png?raw=true" alt="" width="2560" height="1440">
 
 ### Blue Flowers
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Blue-Flowers.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Blue-Flowers.png?raw=true" alt="" width="2559" height="1391">
 
 ### Bones
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Bones.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Bones.png?raw=true" alt="" width="2560" height="1440">
 
 ### Castle
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Castle.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Castle.png?raw=true" alt="" width="2559" height="1439">
 
 ### Cat
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cat.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cat.png?raw=true" alt="" width="2560" height="1440">
 
 ### City
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/City.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/City.png?raw=true" alt="" width="2560" height="1440">
 
 ### Cloudy Village
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cloudy-Village.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cloudy-Village.png?raw=true" alt="" width="3840" height="2160">
 
 ### Dark Sunset
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dark-Sunset.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dark-Sunset.png?raw=true" alt="" width="2560" height="1440">
 
 ### Dry Landscape
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dry-Landscape.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dry-Landscape.png?raw=true" alt="" width="2560" height="1440">
 
 ### Earth Gruvbox
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Earth-Gruvbox.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Earth-Gruvbox.png?raw=true" alt="" width="2560" height="1080">
 
 ### Fall
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/fall.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/fall.png?raw=true" alt="" width="2560" height="1440">
 
 ### Field Sunset
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset.png?raw=true" alt="" width="2560" height="1440">
 
 ### Field Sunset 2
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset-2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset-2.png?raw=true" alt="" width="3840" height="2160">
 
 ### Fishing Frogs
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Fishing-Frogs.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Fishing-Frogs.png?raw=true" alt="" width="2560" height="1440">
 
 ### Flowers
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers.png?raw=true" alt="" width="2559" height="1439">
 
 ### Flowers Sunset
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers-Sunset.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers-Sunset.png?raw=true" alt="" width="2560" height="1440">
 
 ### Forst Clouds
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Forst-Clouds.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Forst-Clouds.png?raw=true" alt="" width="3840" height="2160">
 
 ### Girl Clouds
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Girl-Clouds.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Girl-Clouds.png?raw=true" alt="" width="4500" height="2200">
 
 ### Golden Hour
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Golden-Hour.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Golden-Hour.png?raw=true" alt="" width="2560" height="1440">
 
 ### Heaven
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Heaven.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Heaven.png?raw=true" alt="" width="2560" height="1440">
 
 ### Lake
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Lake.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Lake.png?raw=true" alt="" width="2559" height="1439">
 
 ### Mac
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mac.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mac.png?raw=true" alt="" width="2560" height="1440">
 
 ### Magic Forest
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Magic-Forest.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Magic-Forest.png?raw=true" alt="" width="2560" height="1440">
 
 ### Man Landscape
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Man-Landscape.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Man-Landscape.png?raw=true" alt="" width="2560" height="1440">
 
 ### Meadow Sunset
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Meadow-Sunset.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Meadow-Sunset.png?raw=true" alt="" width="2560" height="1440">
 
 ### Moon
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon.png?raw=true" alt="" width="2559" height="1439">
 
 ### Moon Castle
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Castle.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Castle.png?raw=true" alt="" width="2559" height="1439">
 
 ### Moon Rose
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Rose.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Rose.png?raw=true" alt="" width="2560" height="1440">
 
 ### Mountains
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mountains.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mountains.png?raw=true" alt="" width="2560" height="1440">
 
 ### Plants Room
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Plants-Room.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Plants-Room.png?raw=true" alt="" width="2559" height="1390">
 
 ### Pokemon
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Pokemon.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Pokemon.png?raw=true" alt="" width="2559" height="1439">
 
 ### Rain
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Rain.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Rain.png?raw=true" alt="" width="2559" height="1439">
 
 ### Relax Landscape
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Relax-Landscape.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Relax-Landscape.png?raw=true" alt="" width="2560" height="1440">
 
 ### Sea
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea.png?raw=true" alt="" width="2560" height="1440">
 
 ### Sea Art
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Art.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Art.png?raw=true" alt="" width="3840" height="2160">
 
 ### Sea Road
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Road.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Road.png?raw=true" alt="" width="2556" height="1593">
 
 ### Shop
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Shop.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Shop.png?raw=true" alt="" width="2560" height="1440">
 
 ### Stars
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars.png?raw=true" alt="" width="2559" height="1390">
 
 ### Stars Lake 1
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-1.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-1.png?raw=true" alt="" width="2560" height="1440">
 
 ### Stars Lake 2
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-2.png?raw=true" alt="" width="2560" height="1440">
 
 ### Stars Lake 3
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-3.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-3.png?raw=true" alt="" width="2560" height="1440">
 
 ### Sunset
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sunset.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sunset.png?raw=true" alt="" width="2560" height="1440">
 
 ### Village
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Village.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Village.png?raw=true" alt="" width="2559" height="1391">
 
 ### Violet Night
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Violet-Night.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Violet-Night.png?raw=true" alt="" width="3840" height="2160">
 
 ### Witcher Landscape
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Witcher-Landscape.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Witcher-Landscape.png?raw=true" alt="" width="2560" height="1440">
 
 ### Workplace
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Workplace.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Workplace.png?raw=true" alt="" width="2560" height="1440">
 
 ### World
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/World.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/World.png?raw=true" alt="" width="2560" height="1440">
 
 ### Zelda
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true" alt="" width="2560" height="1440">
 
 ## JPEG Reduction
 

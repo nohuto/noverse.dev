@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 import {
   CATEGORY_LABELS,
   WIN_CONFIG_CATEGORIES,
@@ -84,12 +85,33 @@ const REPOSITORIES = [
 ];
 
 const DOC_REPO_ORDER = REPOSITORIES.map((repo) => repo.name);
+const MARKDOWN_IMAGE_RE = /!\[([^\]\r\n]*)\]\((https?:\/\/[^\s)\r\n]+)\)/gi;
+const IMAGE_METADATA_CONCURRENCY = 12;
+const IMAGE_FETCH_TIMEOUT_MS = 15_000;
+const KNOWN_REMOTE_IMAGE_DIMENSIONS = new Map([
+  ['https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-wired.jpg?raw=true', { width: 24, height: 24 }],
+  ['https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-wireless.jpg?raw=true', { width: 24, height: 24 }],
+  ['https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-no-internet.jpg?raw=true', { width: 24, height: 24 }],
+  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/hwinfo-powerlimit.png?raw=true', { width: 664, height: 134 }],
+  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/fancurve.png?raw=true', { width: 1141, height: 753 }],
+  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/MSIAfterburner-limits.png?raw=true', { width: 784, height: 540 }],
+  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/occt.png?raw=true', { width: 1521, height: 750 }],
+  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/oc.png?raw=true', { width: 1543, height: 543 }],
+  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/uv-curve.png?raw=true', { width: 766, height: 529 }],
+]);
+const MOVED_IMAGE_URLS = new Map([
+  ['https://github.com/nohuto/regkit/blob/main/images/guide/images.png', 'https://github.com/nohuto/regkit/blob/main/guides/images/pmsave.png?raw=true'],
+  ['https://github.com/nohuto/regkit/blob/main/guide/images/WPRUI.png?raw=true', 'https://github.com/nohuto/regkit/blob/main/guides/images/WPRUI.png?raw=true'],
+  ['https://github.com/nohuto/regkit/blob/main/guide/images/WPA.png?raw=true', 'https://github.com/nohuto/regkit/blob/main/guides/images/WPA.png?raw=true'],
+  ['https://github.com/nohuto/win-config/blob/main/system/images/cameraosd.png?raw=true', 'https://github.com/nohuto/win-config/blob/main/security/images/cameraosd.png?raw=true'],
+  ['https://github.com/nohuto/windbg-notes/blob/main/assets/irql-levels.png?raw=true', 'https://github.com/nohuto/windbg-notes/blob/main/images/irql-levels.png?raw=true'],
+]);
 
 const entries = [];
 
-main();
+await main();
 
-function main() {
+async function main() {
   const repoDirs = new Map(REPOSITORIES.map((repo) => {
     const repoDir = resolveRepoDirectory(repo.name, repo.url);
     assertDirectory(repoDir, repo.name);
@@ -111,12 +133,13 @@ function main() {
   });
   const sectionIndexPages = generateSectionIndexes();
 
-  normalizeGeneratedEntries();
+  const imageStats = await normalizeGeneratedEntries(repoDirs);
   writeEntries();
 
   console.log(
     `[sync-docs] Generated ${entries.length} pages (` +
-    `${repoStats.join(', ')}, section indexes: ${sectionIndexPages}).`
+    `${repoStats.join(', ')}, section indexes: ${sectionIndexPages}, ` +
+    `dimensioned images: ${imageStats.dimensioned}/${imageStats.total}).`
   );
 }
 
@@ -356,10 +379,186 @@ function generateSectionIndexes() {
   return generated;
 }
 
-function normalizeGeneratedEntries() {
+async function normalizeGeneratedEntries(repoDirs) {
   for (const entry of entries) {
-    entry.body = rewriteRepoMentions(normalizeGeneratedMarkdown(entry.body));
+    entry.body = rewriteMovedImageUrls(
+      rewriteRepoMentions(normalizeGeneratedMarkdown(entry.body))
+    );
   }
+
+  return addImageDimensions(repoDirs);
+}
+
+function rewriteMovedImageUrls(markdown) {
+  for (const [oldUrl, currentUrl] of MOVED_IMAGE_URLS) {
+    markdown = markdown.replaceAll(oldUrl, currentUrl);
+  }
+
+  return markdown;
+}
+
+async function addImageDimensions(repoDirs) {
+  const imageUrls = new Set();
+
+  for (const entry of entries) {
+    for (const match of entry.body.matchAll(MARKDOWN_IMAGE_RE)) {
+      imageUrls.add(match[2]);
+    }
+  }
+
+  const sourceRepos = mapGithubRepositories(repoDirs);
+  const dimensionsByUrl = new Map();
+  const unresolvedUrls = [];
+
+  await mapWithConcurrency([...imageUrls], IMAGE_METADATA_CONCURRENCY, async (imageUrl) => {
+    const dimensions = await readImageDimensions(imageUrl, sourceRepos);
+    if (dimensions) {
+      dimensionsByUrl.set(imageUrl, dimensions);
+    } else {
+      unresolvedUrls.push(imageUrl);
+    }
+  });
+
+  let total = 0;
+  let dimensioned = 0;
+
+  for (const entry of entries) {
+    entry.body = entry.body.replace(MARKDOWN_IMAGE_RE, (match, alt, imageUrl) => {
+      total += 1;
+      const dimensions = dimensionsByUrl.get(imageUrl);
+      if (!dimensions) return match;
+
+      dimensioned += 1;
+      return `<img src="${escapeHtmlAttribute(imageUrl)}" alt="${escapeHtmlAttribute(alt)}" ` +
+        `width="${dimensions.width}" height="${dimensions.height}">`;
+    });
+  }
+
+  if (unresolvedUrls.length > 0) {
+    console.warn(
+      `[sync-docs] Could not determine dimensions for ${unresolvedUrls.length} image URL(s):\n` +
+      unresolvedUrls.map((url) => `  - ${url}`).join('\n')
+    );
+  }
+
+  return { total, dimensioned };
+}
+
+function mapGithubRepositories(repoDirs) {
+  const sourceRepos = new Map();
+
+  for (const repo of REPOSITORIES) {
+    try {
+      const repoUrl = new URL(repo.url);
+      if (repoUrl.hostname.toLowerCase() !== 'github.com') continue;
+
+      const [owner, name] = repoUrl.pathname.split('/').filter(Boolean);
+      if (!owner || !name) continue;
+
+      sourceRepos.set(`${owner}/${name.replace(/\.git$/i, '')}`.toLowerCase(), repoDirs.get(repo.name));
+    } catch { }
+  }
+
+  return sourceRepos;
+}
+
+async function readImageDimensions(imageUrl, sourceRepos) {
+  const localPath = resolveLocalGithubImage(imageUrl, sourceRepos);
+  const knownDimensions = KNOWN_REMOTE_IMAGE_DIMENSIONS.get(imageUrl) || null;
+
+  try {
+    if (localPath) return normalizeImageDimensions(await sharp(localPath).metadata());
+
+    const response = await fetch(toRawImageUrl(imageUrl), {
+      headers: { 'User-Agent': 'noverse-docs-sync' },
+      redirect: 'follow',
+      signal: AbortSignal.timeout(IMAGE_FETCH_TIMEOUT_MS),
+    });
+    if (!response.ok) return knownDimensions;
+
+    const image = Buffer.from(await response.arrayBuffer());
+    return normalizeImageDimensions(await sharp(image).metadata()) || knownDimensions;
+  } catch {
+    return knownDimensions;
+  }
+}
+
+function resolveLocalGithubImage(imageUrl, sourceRepos) {
+  try {
+    const url = new URL(imageUrl);
+    const hostname = url.hostname.toLowerCase();
+    const parts = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+    let owner;
+    let repo;
+    let imageParts;
+
+    if (hostname === 'github.com' && parts[2] === 'blob' && parts.length >= 5) {
+      [owner, repo] = parts;
+      imageParts = parts.slice(4);
+    } else if (hostname === 'raw.githubusercontent.com' && parts.length >= 4) {
+      [owner, repo] = parts;
+      imageParts = parts.slice(3);
+    } else {
+      return null;
+    }
+
+    const repoDir = sourceRepos.get(`${owner}/${repo}`.toLowerCase());
+    if (!repoDir) return null;
+
+    const imagePath = path.resolve(repoDir, ...imageParts);
+    const relativePath = path.relative(repoDir, imagePath);
+    if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) return null;
+    if (!fs.existsSync(imagePath) || !fs.statSync(imagePath).isFile()) return null;
+
+    return imagePath;
+  } catch {
+    return null;
+  }
+}
+
+function toRawImageUrl(imageUrl) {
+  try {
+    const url = new URL(imageUrl);
+    const parts = url.pathname.split('/').filter(Boolean);
+    if (url.hostname.toLowerCase() !== 'github.com' || parts[2] !== 'blob' || parts.length < 5) {
+      return imageUrl;
+    }
+
+    const [owner, repo, , ref, ...imageParts] = parts;
+    return `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/${imageParts.join('/')}`;
+  } catch {
+    return imageUrl;
+  }
+}
+
+function normalizeImageDimensions(metadata) {
+  if (!Number.isInteger(metadata.width) || !Number.isInteger(metadata.height)) return null;
+
+  const rotated = metadata.orientation >= 5 && metadata.orientation <= 8;
+  return rotated
+    ? { width: metadata.height, height: metadata.width }
+    : { width: metadata.width, height: metadata.height };
+}
+
+async function mapWithConcurrency(items, concurrency, callback) {
+  let nextIndex = 0;
+  const workers = Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+    while (nextIndex < items.length) {
+      const item = items[nextIndex];
+      nextIndex += 1;
+      await callback(item);
+    }
+  });
+
+  await Promise.all(workers);
+}
+
+function escapeHtmlAttribute(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function rewriteRepoMentions(markdown) {

@@ -56,7 +56,7 @@ SubscribedContent-88000326Enabled	TRACE	(value not set)		Yes (23H2)
 >
 > — Microsoft, [Configure Windows spotlight](https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11)
 
-![](https://github.com/nohuto/win-config/blob/main/privacy/images/lockscreen-spotlight.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/privacy/images/lockscreen-spotlight.png?raw=true" alt="" width="1152" height="768">
 
 ## [Windows Policies](https://noverse.dev/policies)
 

@@ -23,7 +23,7 @@ CiSchedulerInLazyMode = 0;
 KeSetActualBasePriorityThread(CurrentThread, 27LL); // scheduler thread priority
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/mmcssprio.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/mmcssprio.png?raw=true" alt="" width="2560" height="1400">
 
 You can practically also see the priority of `CiSchedulerThread` using WinDbg:
 
@@ -136,7 +136,7 @@ fffff801`3aee82f8  0000000a // 10
 
 `NetworkThrottlingIndex` = maximum number of received [`NET_BUFFER_LIST`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/nbl/ns-nbl-net_buffer_list) structures (NBLs) that MMCSS can ask NDIS to allow a miniport to indicate in one receive DPC (runs after network interrupt), to reduce the processing time it spends at `DISPATCH_LEVEL`. Note that DPCs run at `DISPATCH_LEVEL` (higher than threads, means long DPCs harm performance, by blocking threads, see [interrupt-request-levels](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels/)).
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/irql-levels.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/irql-levels.png?raw=true" alt="" width="439" height="310">
 
 Miniport drivers use [`NdisMIndicateReceiveNetBufferLists`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/NdisMIndicateReceiveNetBufferLists.c) to indicate received network data, its [`NetBufferList` argument](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ndis/nf-ndis-ndismindicatereceivenetbufferlists) points to a linked list of NBLs, and `NumberOfNetBufferLists` gives the number of NBLs in that list. Each [NBL contains a linked list of `NET_BUFFER` structures](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/net-buffer-list-structure) & each [`NET_BUFFER`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/nbl/ns-nbl-net_buffer) represents one network packet, with its data stored in buffers.
 
@@ -236,7 +236,7 @@ v2 = ZwDeviceIoControlFile(CiNdisDeviceHandle, 0LL, 0LL, 0LL, &IoStatusBlock, 0x
 
 Using the [`CTL_CODE`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes) layout, `0x170040` would mean ([FILE_DEVICE_PHYSICAL_NETCARD](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/specifying-device-types), [METHOD_BUFFERED](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/buffer-descriptions-for-i-o-control-codes), [FILE_ANY_ACCESS](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes#guidance-for-setting-the-access-bits)):
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/ioctl-bit-layout.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/ioctl-bit-layout.png?raw=true" alt="" width="1095" height="139">
 
 ```c
 // IOCTL hex = 0x00170040
@@ -404,7 +404,7 @@ During the boosted duration, scheduled MMCSS threads run at their task priority 
 
 `CiSystemResponsiveness` is also used later by [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) when checking idle/starvation state, so the value affects more than just the initial boosted/exhausted split.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true" alt="" width="2560" height="1399">
 
 ```c
 // CiConfigInitialize
@@ -476,7 +476,7 @@ boosted duration = 50000 - (50000 * 30 / 100) = 35000
 
 You can see that split (when `NoLazyMode` is 1) in `Scheduler_Sleep` via `Realtime` (boosted)/`SleepResponsiveness` (exhausted) reasons:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/SchedulerPeriod.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/SchedulerPeriod.png?raw=true" alt="" width="992" height="465">
 
 ### Calculation Examples
 
@@ -575,7 +575,7 @@ For `DeepSleep`, `0xFFFFFFFF` is a kind of placeholder written into the `Schedul
 
 This can be seen in `Scheduler_Sleep` (usually `IdleDetectionCycles - 1`, as `IdleDetectionLazy` is only logged on the pass where `CiProcessorIdleHistoryBits` first reaches the full mask):
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/IdleDetectionCycles.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/IdleDetectionCycles.png?raw=true" alt="" width="2048" height="1117">
 
 ```c
 // CiConfigInitialize
@@ -591,7 +591,7 @@ CiSchedulerIdleCycleBitMask = (1 << CiSchedulerIdleDetectionCycles) - 1;
 
 Sleep duration used when MMCSS is in lazy mode. This is used for `IdleDetectionLazy` (or `SleepRealtimeLazy`):
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/LazyModeTimeout.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/LazyModeTimeout.png?raw=true" alt="" width="2048" height="1117">
 
 ```c
 // CiConfigInitialize
@@ -699,7 +699,7 @@ Task keys are read only if `SystemResponsiveness != 100` as already shown above.
 
 You can see in `Thread_SetChars` (or `Thread_Join`) which task a thread registered with. I didn't see any app registering with other tasks than `Audio`/`Pro Audio` yet.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/Thread_SetChars.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/Thread_SetChars.png?raw=true" alt="" width="2067" height="676">
 
 ### [Task Values](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
 
@@ -830,7 +830,7 @@ Example using `Scheduling Category = High` and `Priority = 6` (this would normal
 
 `-2` and `-1` have the same boosted priority as *High category* is clamped to `23`.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/relativeprios.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/relativeprios.png?raw=true" alt="" width="2560" height="1400">
 
 ### Scheduling Category / Priority
 
@@ -841,4 +841,4 @@ Example using `Scheduling Category = High` and `Priority = 6` (this would normal
 | Purple | `Medium` | `5` | `4-20` |
 | Yellow | `High` | `1` | `1-24` |
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/categories.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/categories.png?raw=true" alt="" width="2560" height="1400">

@@ -36,4 +36,4 @@ NV_REG_CPL_DEVTOOLS_VISIBLE       "NvDevToolsVisible"
 },
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcploptions.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcploptions.png?raw=true" alt="" width="753" height="217">

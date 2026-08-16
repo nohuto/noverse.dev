@@ -12,11 +12,11 @@ sidebar:
 
 Here we can see the state transitions of a single thread when having different activity levels (Low = 25%, Busy = 75%, Maximum = 100%):
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/perfmon-activity.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/perfmon-activity.png?raw=true" alt="" width="1058" height="773">
 
 Here I've set the affinity of both threads to the same CPU, causing them to switch between running/ready (as only one can run at a time) all the time (thats also how it would look like when you've a single processor system):
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/perfmon-2-threads.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/perfmon-2-threads.png?raw=true" alt="" width="1058" height="773">
 
 ### _KTHREAD_STATE
 
@@ -26,7 +26,7 @@ The state shows the threads scheduler state, the wait reason shows why a waiting
 >
 > — Windows Internals, [E7, P1: 'Thread states'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/thread-states.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/thread-states.png?raw=true" alt="" width="819" height="462">
 
 ```c
 lkd> dt nt!_KTHREAD_STATE
@@ -60,7 +60,7 @@ lkd> dt nt!_KTHREAD ffffd88863435080 State
 
 The wait reason is useful whenever a thread is waiting (comments were taken from [ntdoc](https://ntdoc.m417z.com/kwait_reason)). It's possible to see CS reasons via e.g. MXA (note that the list below is the kernels wait reason enum stored in `_KTHREAD.WaitReason`, several of them are used as CS reason):
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd.png?raw=true" alt="" width="2560" height="1400">
 
 See ['*Context Switching, CS Reasons*'](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/context-switching/#cs-reasons) for details on some reasons.
 

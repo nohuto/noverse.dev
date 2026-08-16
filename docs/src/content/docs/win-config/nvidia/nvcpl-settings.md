@@ -35,7 +35,7 @@ void    CAppSettingsBasic::mapApiRes()
 }
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl1.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl1.png?raw=true" alt="" width="957" height="700">
 
 ### Manage 3D settings
 
@@ -146,7 +146,7 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services
 
 - [nvidia/assets | physx-nvapi.h](https://github.com/nohuto/win-config/blob/main/nvidia/assets/physx-nvapi.h)
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl2.png?raw=true" alt="" width="956" height="699">
 
 ## Display
 
@@ -177,7 +177,7 @@ HKCU\Software\NVIDIA Corporation\Global\NVTweak\Devices\1364265386-0\Color
 
 Controls the `Digital vibrance`, decimal value = percentage. `MONITOR` depends on your monitor.
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/saturation.jpg?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/saturation.jpg?raw=true" alt="" width="659" height="721">
 
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITOR : HueRegistryKey
@@ -255,7 +255,7 @@ sin(0) = 0  = 0x00000000 hex
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITORXXXXX_XX_XXXX_XX : ScalingConfig
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl3.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl3.png?raw=true" alt="" width="956" height="699">
 
 ## Rotate display
 
@@ -331,8 +331,8 @@ Seems to work via `NVCPLAPI_SETTING_HDCP_GET_STATUS_INFO`/`NVCPLAPI_SETTING_HDCP
 
 Whether your display supports HDCP you can practically make it unsupported using the value (can be edited using [bitmask-calc](https://github.com/nohuto/bitmask-calc)) shown below, causing:
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/hdcp-supported.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/hdcp-unsupported.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/hdcp-supported.png?raw=true" alt="" width="960" height="711">
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/hdcp-unsupported.png?raw=true" alt="" width="960" height="692">
 
 ```json
 {
@@ -367,7 +367,7 @@ Whenever you use your native resolution use `No scaling`, the two options below 
 
 `ScalingConfig` = `Scaling Mode`, `Perform Scaling on`, `Override the scaling mode...` (includes all settings?)
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl4.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl4.png?raw=true" alt="" width="955" height="700">
 
 ## Developer
 
@@ -410,7 +410,7 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 - Restrict access to the GPU performance counters to admin users only = `1`  
 - Allow access to the GPU performance counters to all users = `0`
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl5.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl5.png?raw=true" alt="" width="960" height="708">
 
 ## Video
 
@@ -423,7 +423,7 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl6.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl6.png?raw=true" alt="" width="958" height="699">
 
 ### Adjust video image settings
 
@@ -483,7 +483,7 @@ _User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
 
 `_User_SUB0_DFP1_VAL_Noise_Reduce` controls the percentage, e.g. `5%` = `5 Dec` until `49%`. Nvcpl skips `50%`, which means that everything above `50` is `X - 1`, range `0-99`.
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl7.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl7.png?raw=true" alt="" width="957" height="700">
 
 ---
 

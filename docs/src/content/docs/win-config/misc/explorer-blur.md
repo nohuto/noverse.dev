@@ -8,7 +8,7 @@ sidebar:
 
 Installs [ExplorerBlurMica](https://github.com/Maplespe/ExplorerBlurMica), which adds a background blur/acrylic/mica effect effect to the explorer:
 
-![](https://github.com/nohuto/win-config/blob/main/misc/images/explorerblur.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/misc/images/explorerblur.png?raw=true" alt="" width="1226" height="846">
 
 ## Configuration
 

@@ -370,11 +370,11 @@ Note that this doesn't show default states, instead it shows several options and
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit4.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit5.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/bcdedit1.png?raw=true" alt="" width="1784" height="1101">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/bcdedit2.png?raw=true" alt="" width="1782" height="1097">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/bcdedit3.png?raw=true" alt="" width="1780" height="1091">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/bcdedit4.png?raw=true" alt="" width="1777" height="1093">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/bcdedit5.png?raw=true" alt="" width="885" height="1094">
 
 ## Pseudocode Notes
 
@@ -539,11 +539,11 @@ HalpInterruptSetMsiOverride(v10);
 
 `custom:16000067 true` disables the Windows logo while booting:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/logo.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/logo.png?raw=true" alt="" width="1026" height="854">
 
 `custom:16000069 true` disables the loading circle while booting:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/load.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/load.png?raw=true" alt="" width="1026" height="854">
 
 ## Default Entries
 

@@ -676,7 +676,7 @@ The `EnableSuperfetch` value has no effect whenever this service is disabled, `E
 
 ## [Windows Internals](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/services1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/services2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/services3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/services4.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/services1.png?raw=true" alt="" width="1418" height="876">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/services2.png?raw=true" alt="" width="1418" height="876">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/services3.png?raw=true" alt="" width="1418" height="876">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/services4.png?raw=true" alt="" width="1418" height="876">

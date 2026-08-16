@@ -8,7 +8,7 @@ sidebar:
 
 The main option leaves window snapping enabled, while disabling the snap bar/snap flyout/ snap group etc., for a "minimal" version of it. You can configure window snapping behaviour via the suboptions, if you don't like the main option.
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/window-snapping.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/window-snapping.png?raw=true" alt="" width="2560" height="1400">
 
 ## Suboptions
 
@@ -16,7 +16,7 @@ The main option leaves window snapping enabled, while disabling the snap bar/sna
 
 Hides the snap assist flyout that would appear after hovering over the maximize/restore down icon:
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/snapflyout.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/snapflyout.png?raw=true" alt="" width="1204" height="599">
 
 ### Window Shake
 

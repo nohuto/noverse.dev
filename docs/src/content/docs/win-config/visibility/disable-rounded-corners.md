@@ -16,11 +16,11 @@ mov rax, 0; ret // result = 0
 
 ### Rounded Corners
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/rounded.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/rounded.png?raw=true" alt="" width="1006" height="523">
 
 ### Angular Corners
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/angular.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/angular.png?raw=true" alt="" width="1007" height="522">
 
 ## [GetEffectiveCornerStyle](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-GetEffectiveCornerStyle%40CTopLevelWindow%40%40AEAA-AW4CORNER_STYLE%40%40XZ.c)
 

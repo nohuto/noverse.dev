@@ -29,13 +29,13 @@ Install [HWiNFO](https://www.hwinfo.com/download/) to monitor all kinds of infor
 
 You need to pay attention to the performance limit during overclocking, as you should not constantly reach it (display `Yes`):
 
-![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/hwinfo-powerlimit.png?raw=true)
+<img src="https://github.com/nohuto/gpu-oc-uv/blob/main/images/hwinfo-powerlimit.png?raw=true" alt="" width="664" height="134">
 
 ### MSI Afterburner
 
 Download [MSI Afterburner](https://www.msi.com/Landing/afterburner/graphics-cards) and set a custom fan curve, which could look like the one in the image below (make sure the speed is not too low, as this would affect your results). You can use the preconfigured [cfg file](https://github.com/nohuto/gpu-oc-uv/blob/main/assets/MSIAfterburner.cfg) or skip it.
 
-![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/fancurve.png?raw=true)
+<img src="https://github.com/nohuto/gpu-oc-uv/blob/main/images/fancurve.png?raw=true" alt="" width="1141" height="753">
 
 If you don't want MSI afterburner running in the background all time, set a static curve and load a profile on system start:
 
@@ -53,7 +53,7 @@ schtasks /create /sc ONSTART /tn "MSIAfterburnerProfile" /tr "powershell.exe -No
 
 Set the `Power Limit` and `Temp. Limit` options to the maximum value and change the priority to power limit. Also, disable the automatic start option for now to prevent a loop if something goes wrong.
 
-![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/MSIAfterburner-limits.png?raw=true)
+<img src="https://github.com/nohuto/gpu-oc-uv/blob/main/images/MSIAfterburner-limits.png?raw=true" alt="" width="784" height="540">
 
 ---
 
@@ -71,7 +71,7 @@ Use the highest preset that doesn't exceed your VRAM limit to test your core clo
 
 Go into the 3D Adaptive tab and use the following settings:
 
-![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/occt.png?raw=true)
+<img src="https://github.com/nohuto/gpu-oc-uv/blob/main/images/occt.png?raw=true" alt="" width="1521" height="750">
 
 ## Overclocking
 
@@ -105,7 +105,7 @@ Your goal is to find a specific voltage and clock frequency that don't reach the
 
 How your result could look like:
 
-![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/oc.png?raw=true)
+<img src="https://github.com/nohuto/gpu-oc-uv/blob/main/images/oc.png?raw=true" alt="" width="1543" height="543">
 
 ## Undervolting
 
@@ -118,7 +118,7 @@ As mentioned at the beginning, undervolting limits the voltage for the GPU, resu
 3. Press `CTRL`, then highlight the curve from the right to the selected point (`906`)
 4. Select your point (`906`) and drag it down, so the last point is below the first point (e.g. `900`), example:
 
-![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/uv-curve.png?raw=true)
+<img src="https://github.com/nohuto/gpu-oc-uv/blob/main/images/uv-curve.png?raw=true" alt="" width="766" height="529">
 
 5. Safe the settings to a profile
 

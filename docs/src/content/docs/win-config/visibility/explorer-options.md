@@ -8,7 +8,7 @@ sidebar:
 
 It changes every setting which is shown in the `Folder Options` window, and more explorer related things. Some are personal preference, see suboptions below for customization, and configurations that aren't made in the main option.
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/explorer.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/explorer.png?raw=true" alt="" width="1199" height="691">
 
 ## Explorer Captures
 

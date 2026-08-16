@@ -59,8 +59,8 @@ Values below are based on `RegGetValueW`/`SHRegGetDWORD`/`SHRegGetUSDWORDW` xref
 
 ### Light Theme
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme1.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme1.png?raw=true" alt="" width="1418" height="826">
 
 ### Dark Theme
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme2.png?raw=true" alt="" width="1378" height="839">

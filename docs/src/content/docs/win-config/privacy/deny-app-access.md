@@ -20,7 +20,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Capabilit
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\picturesLibrary\Value	Type: REG_SZ, Length: 10, Data: Deny
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/privacy/images/appaccess.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/privacy/images/appaccess.png?raw=true" alt="" width="948" height="1325">
 
 ## [Windows Policies](https://noverse.dev/policies)
 

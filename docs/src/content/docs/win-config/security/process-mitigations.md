@@ -121,7 +121,7 @@ In [Exploit Protection](https://learn.microsoft.com/en-us/defender-endpoint/cust
 
 #### [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/fth.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/fth.png?raw=true" alt="" width="2642" height="1658">
 
 [YouTube Video](https://www.youtube.com/watch?v=4SvNNXAwoqE).
 

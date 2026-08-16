@@ -1238,8 +1238,31 @@ a {
   text-decoration: none;
 }
 
-a.link:hover {
-  text-decoration: underline;
+a.link,
+.home-email {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+a.link::after,
+.home-email::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0.08em;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+a.link:hover::after,
+a.link:focus-visible::after,
+.home-email:hover::after,
+.home-email:focus-visible::after {
+  opacity: 1;
 }
 
 img,
@@ -1284,13 +1307,6 @@ main.home-main {
   cursor: pointer;
   -webkit-user-select: text;
   user-select: text;
-}
-
-.home-contact a:hover,
-.home-contact a:focus-visible,
-.home-email:hover,
-.home-email:focus-visible {
-  text-decoration: underline;
 }
 
 .home-section {
@@ -2118,10 +2134,22 @@ footer {
 }
 
 .footer-copy {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
   color: var(--muted);
   font-size: 0.6875rem;
   text-transform: lowercase;
   letter-spacing: 0.14em;
+}
+
+.copyright-icon {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  background-color: currentColor;
+  -webkit-mask: url("/main/icons/ui/copyright.svg") center / contain no-repeat;
+  mask: url("/main/icons/ui/copyright.svg") center / contain no-repeat;
 }
 
 .footer-tools select,

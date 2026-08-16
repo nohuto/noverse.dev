@@ -8,7 +8,7 @@ sidebar:
 
 Used to be my personal [`neofetch`](https://github.com/dylanaraps/neofetch)/[`fastfetch`](https://github.com/fastfetch-cli/fastfetch) replacement with more details. Some arguments will probably also get added like `ids`, so it doesn't display the serial numbers and miscellaneous HWIDs by default.
 
-![](https://github.com/nohuto/win-config/blob/main/misc/images/nvfetch.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/misc/images/nvfetch.png?raw=true" alt="" width="1074" height="882">
 
 > https://github.com/nohuto/nvfetch
 

@@ -86,7 +86,7 @@ The **authoritative nameserver** tells the resolver the IP address, from the [A 
 
 Step 9 is the HTTP request from the browser to the IP from the resolver & step 10 returns the web page (mostly HTML data). 
 
-![](https://github.com/nohuto/win-config/blob/main/network/images/dnslookup.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/network/images/dnslookup.png?raw=true" alt="" width="5667" height="2834">
 
 Some additional info about HTTP request methods you may want to know:  
 `GET` & `POST` HTTP request methods are the most common ones. `GET` request awaits data (read a web page), `POST` request means that the user is sending data. There more [request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods), but I won't add them here. You're able to turn off `GET` requests in the DDG search engine settings, to hide search queries in the request body (queries aren't visible in browser history or logs), which is why I added this info. You can see request in the network tab (`F12`).

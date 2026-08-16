@@ -897,7 +897,7 @@ lkd> dt nt!_KPRCB ffffd981f4fb2180 ThreadDpcEnable
 >
 > — Microsoft, [Introduction to threaded DPCs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
 
-![](https://github.com/nohuto/windbg-notes/blob/main/assets/irql-levels.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/irql-levels.png?raw=true" alt="" width="439" height="310">
 
 [`KiInitializeProcessor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiInitializeProcessor.c) initializes per processor threaded DPC:
 
@@ -964,8 +964,8 @@ lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4f
 
 #### [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable1.png?raw=true" alt="" width="1781" height="1093">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable2.png?raw=true" alt="" width="1781" height="1094">
 
 ## RegistryMachin_* Keys
 

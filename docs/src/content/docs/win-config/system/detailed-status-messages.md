@@ -28,11 +28,11 @@ As the value name already says (`DisplayParameters`) it will just show additiona
 
 #### Enabled
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/detailed-bsod.jpg?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/detailed-bsod.jpg?raw=true" alt="" width="2527" height="1992">
 
 #### Disabled
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/default-bsod.jpg?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/default-bsod.jpg?raw=true" alt="" width="2474" height="1829">
 
 Enabling the options includes setting [`AutoReboot`](https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options) to `0`, to prevent auto restarting.
 
@@ -40,7 +40,7 @@ Enabling the options includes setting [`AutoReboot`](https://learn.microsoft.com
 
 Hides the smiley which is shown on the BsOD screen:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/BSOD-smiley.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/BSOD-smiley.png?raw=true" alt="" width="500" height="375">
 
 ## [Windows Policies](https://noverse.dev/policies)
 

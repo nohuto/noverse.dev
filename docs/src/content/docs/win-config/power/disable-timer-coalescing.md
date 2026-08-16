@@ -267,4 +267,4 @@ The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepI
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/coalesc.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/coalesc.png?raw=true" alt="" width="1414" height="874">

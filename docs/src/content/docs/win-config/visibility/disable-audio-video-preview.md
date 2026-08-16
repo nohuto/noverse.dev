@@ -18,8 +18,8 @@ Disables the preview function for (extensions):
 
 ### Enabled
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreon.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreon.png?raw=true" alt="" width="1024" height="505">
 
 ### Disabled
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreonoff.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreonoff.png?raw=true" alt="" width="1024" height="502">

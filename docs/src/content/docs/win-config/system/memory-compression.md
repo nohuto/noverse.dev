@@ -14,8 +14,8 @@ Compressed pages are stored in a dedicated "Memory Compression" (`MemCompression
 
 On systems with enough free memory, it may stay **almost** unused even when it's enabled, as it becomes more relevant when active/cold private pages would otherwise have to be paged out. Means its just a processes which consumes no resources, and has inactive threads:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/memory-compression.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/MemCompression.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/memory-compression.png?raw=true" alt="" width="1295" height="336">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/MemCompression.png?raw=true" alt="" width="807" height="833">
 
 See '[Thread Activity](https://noverse.dev/docs/windbg-notes/threads/examining-thread-activity/thread-activity/)' whenever you want to read a bit more about the column meanings.
 
@@ -32,7 +32,7 @@ See '[Thread Activity](https://noverse.dev/docs/windbg-notes/threads/examining-t
 
 `0x200` = bit `9`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data, example:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/StartedComponents.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/StartedComponents.png?raw=true" alt="" width="910" height="220">
 
 See the current memory compression state via [MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps):
 
@@ -151,6 +151,6 @@ Priority 25  BasePriority 25  Priority Floor 25  IoPriority 2  PagePriority 5
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/memcompress3.png?raw=true" alt="" width="1418" height="864">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true" alt="" width="1418" height="864">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true" alt="" width="1418" height="865">

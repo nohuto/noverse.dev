@@ -44,4 +44,4 @@ Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`
 }
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/oem.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/oem.png?raw=true" alt="" width="929" height="205">

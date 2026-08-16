@@ -603,7 +603,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
 
 With [GPU preemption](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/gpu-preemption) the video scheduler can interrupt the context executing on a GPU engine, run another context, and later resume the interrupted work (context here = GPU command stream & execution state). The scheduler requests such an interrupt using a preemption packet, the [black packet](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/gpu-hardware-queue#types-of-dma-packets) is a such a preemption packet:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/gpu-preemption.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/gpu-preemption.png?raw=true" alt="" width="693" height="89">
 
 [`VidSchiReadGlobalConfiguration`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dxgmms2/VidSchiReadGlobalConfiguration.c) stores any nonzero data as bit `0`:
 

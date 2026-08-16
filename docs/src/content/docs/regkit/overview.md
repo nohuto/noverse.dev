@@ -49,19 +49,19 @@ It includes built in presets and a theme editor to customize colors, presets can
 
 #### Ayu Dark
 
-![](https://github.com/nohuto/regkit/blob/main/assets/images/ayu-dark.png?raw=true)
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/ayu-dark.png?raw=true" alt="" width="1794" height="1004">
 
 #### Catppuccin Latte
 
-![](https://github.com/nohuto/regkit/blob/main/assets/images/catppuccin-latte.png?raw=true)
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/catppuccin-latte.png?raw=true" alt="" width="1794" height="1004">
 
 #### Everforest Dark
 
-![](https://github.com/nohuto/regkit/blob/main/assets/images/everforest-dark.png?raw=true)
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/everforest-dark.png?raw=true" alt="" width="1794" height="1004">
 
 #### Kanagawa Dragon
 
-![](https://github.com/nohuto/regkit/blob/main/assets/images/kanagawa-dragon.png?raw=true)
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/kanagawa-dragon.png?raw=true" alt="" width="1794" height="1004">
 
 ## Icon Sets
 
@@ -316,7 +316,7 @@ Notes:
 
 Low level view of the REGISTRY ([*](https://projectzero.google/2024/10/the-windows-registry-adventure-4-hives.html)):
 
-![](https://github.com/nohuto/regkit/blob/main/assets/images/REGISTRYview.png?raw=true)
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/REGISTRYview.png?raw=true" alt="" width="670" height="789">
 
 ### Hives and on-disk files
 

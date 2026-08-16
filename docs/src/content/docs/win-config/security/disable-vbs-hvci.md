@@ -35,10 +35,10 @@ Set-VMSecurity -VMName <VMName> -VirtualizationBasedSecurityOptOut $true
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards4.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards1.png?raw=true" alt="" width="1418" height="864">
+<img src="https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards2.png?raw=true" alt="" width="1418" height="864">
+<img src="https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards3.png?raw=true" alt="" width="1418" height="864">
+<img src="https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards4.png?raw=true" alt="" width="1418" height="864">
 
 ## [Windows Policies](https://noverse.dev/policies)
 

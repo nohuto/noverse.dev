@@ -17,7 +17,7 @@ Energy estimation accounts for estimated power usage, components report modeled 
 
 - [power/assets | PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/energyesti.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/energyesti.png?raw=true" alt="" width="607" height="384">
 
 ## Suboption
 

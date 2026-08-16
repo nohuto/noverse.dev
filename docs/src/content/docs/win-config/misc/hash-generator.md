@@ -12,7 +12,7 @@ sidebar:
 >
 > — Microsoft, [Get-FileHash](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7.5)
 
-![](https://github.com/nohuto/win-config/blob/main/misc/images/hashgen.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/misc/images/hashgen.png?raw=true" alt="" width="1605" height="695">
 
 ## Algorithms
 

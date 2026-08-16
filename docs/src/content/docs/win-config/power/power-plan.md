@@ -246,4 +246,4 @@ a1841308-3541-4fab-bc81-f71556f20b4a // SCHEME_MAX (Power saver)
 
 Adds a `Import` option when right clicking on `.pow` files.
 
-![](https://github.com/nohuto/win-config/blob/main/power/images/powcontextmenu.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/power/images/powcontextmenu.png?raw=true" alt="" width="462" height="410">

@@ -8,7 +8,7 @@ sidebar:
 
 WMPlayer (Windows Media Player) sends player usage data by default, if using the "Recommended ". This option turns off the `Diagnistics and Feedback` option, use the suboptions for further configuration.
 
-![](https://github.com/nohuto/win-config/blob/main/privacy/images/wmplayer.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/privacy/images/wmplayer.png?raw=true" alt="" width="591" height="472">
 
 Note: I gathered all registry values via the legacy WMPlayer.
 

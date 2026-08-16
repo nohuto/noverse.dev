@@ -16,7 +16,7 @@ Start with configuring the filter (`CTRL` + `L`):
 
 You can disable the other activity monitoring:
 
-![](https://github.com/nohuto/regkit/blob/main/guides/images/monitoring.png)
+<img src="https://github.com/nohuto/regkit/blob/main/guides/images/monitoring.png" alt="" width="453" height="69">
 
 If you want to trace all `Reg...` activity, which would use:
 ```c
@@ -46,7 +46,7 @@ Now you'll see all kind of registry activity, what you want to look for is the p
 
 Save the content using `.csv`, afterwards you can remove specific parts of the file, if you want to.
 
-![](https://github.com/nohuto/regkit/blob/main/images/guide/images.png)
+<img src="https://github.com/nohuto/regkit/blob/main/guides/images/pmsave.png?raw=true" alt="" width="462" height="387">
 
 `CTRL` + `H` (Regular expression):  
 `"Reg\w*"` - Removes the operations  

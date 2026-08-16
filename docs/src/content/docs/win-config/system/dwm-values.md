@@ -16,7 +16,7 @@ Use [PresentMon](https://github.com/GameTechDev/PresentMon/releases) without pro
 
 Simple way to imagine DWM composition:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/dwm-composition.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/dwm-composition.png?raw=true" alt="" width="607" height="386">
 
 ### [Buffers, Surfaces, Presents](https://github.com/nohuto/win32/blob/docs/desktop-src/comp_swapchain/comp-swapchain.md#diagram-of-buffers-surfaces-and-presents)
 
@@ -27,13 +27,13 @@ Simple way to imagine DWM composition:
 
 Means the app renders into buffers, presents one of those buffers, the surface is what DWM/presentation system can place into the desktop composition.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/buffers-surfaces-and-presents.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/buffers-surfaces-and-presents.png?raw=true" alt="" width="720" height="282">
 
 #### DXGI Flip Model Swapchain
 
 Another different example including more params, see '[Swap Chain Parameters](https://www.intel.com/content/www/us/en/developer/articles/code-sample/sample-application-for-direct3d-12-flip-model-swap-chains.html)' for details on the parameters.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/intel-presentation.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/intel-presentation.png?raw=true" alt="" width="1430" height="838">
 
 ### Direct Scanout
 
@@ -440,7 +440,7 @@ retstr->g = 1.0;
 
 Example (screenshot APIs don't capture the overlay color which is why I've used my phone):
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/debugcolor.jpg?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/debugcolor.jpg?raw=true" alt="" width="3802" height="2160">
 
 ### [RenderThreadTimeoutMilliseconds](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/_dynamic_initializer_for__CCommonRegistryData--RenderThreadTimeoutMilliseconds__.c)
 
@@ -448,7 +448,7 @@ It looks like a diagnostic threshold only, which controls when DWM may write the
 
 The related thread gets created by [`CConnection::StartCompositionThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-StartCompositionThread@CConnection@@AEAAJH@Z.c), which sets it's description to `DWM Compositor Thread`. The time is from the end of the previous [`CPartitionVerticalBlankScheduler::WaitForWork`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-WaitForWork@CPartitionVerticalBlankScheduler@@AEAAXXZ.c) call to the start of the next one.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/compositor-thread.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/compositor-thread.png?raw=true" alt="" width="1012" height="123">
 
 ```c
 // CPartitionVerticalBlankScheduler::WaitForWork

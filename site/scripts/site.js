@@ -32,12 +32,10 @@ const ACTIVE_PAGE_KEY = 'nv-active-page-path';
 const NOT_FOUND_KEY = 'nv-not-found-path';
 const MAIN_PAGE_PATHS = new Set(MAIN_PAGE_ROUTES.map(route => route.clean));
 window.NV_MAIN_ROUTES = MAIN_PAGE_ROUTES;
-const REPO_DESC_URL = '/main/data/repos.json';
 const SELECT_SEARCH_RENDER_LIMIT_DEFAULT = 300;
 const SYSTEM_THEME_QUERY = '(prefers-color-scheme: light)';
 
 let toastTimer;
-let repoDescriptionsPromise;
 let selectUiListener;
 let selectUiKeyListener;
 let openSelectUI;
@@ -868,35 +866,6 @@ function initClipboard() {
   });
 }
 
-const loadRepoDescriptions = () => {
-  if (repoDescriptionsPromise) return repoDescriptionsPromise;
-  repoDescriptionsPromise = fetch(REPO_DESC_URL, { cache: 'force-cache' })
-    .then(res => (res.ok ? res.json() : {}))
-    .catch(() => ({}));
-  return repoDescriptionsPromise;
-};
-
-async function getRepoDescription(repo) {
-  if (!repo || !repo.includes('/')) return 'No description yet.';
-  const data = await loadRepoDescriptions();
-  const desc = Object.prototype.hasOwnProperty.call(data, repo) ? data[repo] : '';
-  return desc && desc.trim() ? desc.trim() : 'No description yet.';
-}
-
-function initRepoDescriptions() {
-  const cards = document.querySelectorAll('.project-card[data-repo], .home-work-item[data-repo]');
-  if (!cards.length) return;
-  cards.forEach(card => {
-    const repo = card.getAttribute('data-repo');
-    const descEl = card.querySelector('.project-desc');
-    if (!repo || !descEl) return;
-    getRepoDescription(repo).then(desc => {
-      descEl.textContent = desc;
-      descEl.dispatchEvent(new CustomEvent('nv:repo-description', { bubbles: true }));
-    });
-  });
-}
-
 function initFiltering() {
   const searchInput = document.getElementById('project-search');
   const cards = Array.from(document.querySelectorAll('.project-card'));
@@ -927,7 +896,6 @@ function initFiltering() {
   };
 
   searchInput.addEventListener('input', applyFilter);
-  document.querySelector('.project-grid')?.addEventListener('nv:repo-description', applyFilter);
   applyFilter();
 }
 
@@ -1020,7 +988,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initEmailText();
   initBackground();
   initSelectUI();
-  initRepoDescriptions();
   initFiltering();
   initSearchShortcut();
   initClipboard();

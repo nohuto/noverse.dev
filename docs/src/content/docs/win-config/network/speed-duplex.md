@@ -11,7 +11,7 @@ Duplex = nature of the communication:
 - Half-duplex: data can either be sent or received, but not both at the same time
 - Full-duplex: data transmission occurs in both directions at once
 
-![](https://github.com/nohuto/win-config/blob/main/network/images/duplex.jpg?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/network/images/duplex.jpg?raw=true" alt="" width="1410" height="944">
 
 You should always use `Full-duplex`, `Half-duplex` was used in older networks with hubs. In auto negotiation, both devices announce their capabilities for speed and duplex.
 

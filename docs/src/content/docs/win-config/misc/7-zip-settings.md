@@ -8,8 +8,8 @@ sidebar:
 
 7-Zip minimal context menu settings (if cascaded context menu enabled):
 
-![](https://github.com/nohuto/win-config/blob/main/misc/images/7z-folder.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/misc/images/7z-archive.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/misc/images/7z-folder.png?raw=true" alt="" width="1000" height="579">
+<img src="https://github.com/nohuto/win-config/blob/main/misc/images/7z-archive.png?raw=true" alt="" width="1000" height="579">
 
 All *context menu items* are getting handled via `ContextMenu` (`HKCU\Software\7-Zip\Options`).
 

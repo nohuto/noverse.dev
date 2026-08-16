@@ -12,7 +12,7 @@ Windows search provides content indexing, property caching, and search results f
 
 [Search indexing](https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview) builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/searchindex.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/searchindex.png?raw=true" alt="" width="362" height="472">
 
 ## Suboptions
 
@@ -35,11 +35,11 @@ Windows search provides content indexing, property caching, and search results f
 | [Disable Web Results in Search](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
 | Disable Search Highlights | If enabled: "See content suggestions in the search boxi and in search home". |
 | Disable Web Search | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
-| Hide Most Used Apps | ![](https://github.com/nohuto/win-config/blob/main/system/images/mostused.jpg?raw=true) |
+| Hide Most Used Apps | <img src="https://github.com/nohuto/win-config/blob/main/system/images/mostused.jpg?raw=true" alt="" width="500" height="547"> |
 | Hide Recently Added Apps | |
 | Hide Frequently Used Apps | |
 | Hide New App Notifications | |
-| Start Layout | ![](https://github.com/nohuto/win-config/blob/main/system/images/start-layout.png?raw=true) |
+| Start Layout | <img src="https://github.com/nohuto/win-config/blob/main/system/images/start-layout.png?raw=true" alt="" width="1046" height="322"> |
 
 ## Miscellaneous Notes
 

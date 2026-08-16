@@ -8,7 +8,7 @@ sidebar:
 
 [HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) (*Hardware-accelerated GPU scheduling*) changes who handles high frequency GPU scheduling work, classic WDDM uses a high priority CPU scheduler thread, HAGS offloads much of that scheduling/context switch work to a GPU scheduling processor. Note that `TEAS` in the dropdown = `TreatExperimentalAsStable`.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/HwQueue.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/HwQueue.png?raw=true" alt="" width="1914" height="1124">
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers";

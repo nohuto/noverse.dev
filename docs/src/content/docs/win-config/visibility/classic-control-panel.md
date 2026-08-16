@@ -10,11 +10,11 @@ sidebar:
 
 ### Icon View
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/panel0.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/panel0.png?raw=true" alt="" width="784" height="632">
 
 ### Category View
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/panel1.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/panel1.png?raw=true" alt="" width="784" height="632">
 
 ## [Windows Policies](https://noverse.dev/policies)
 

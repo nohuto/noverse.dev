@@ -11,7 +11,7 @@ Windows adds a hidden tag called [`Zone.Identifier`](https://www.cyberengage.org
 gi * -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/security/images/downblocking.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/security/images/downblocking.png?raw=true" alt="" width="530" height="181">
 
 ## ZoneID Data
 

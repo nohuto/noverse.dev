@@ -22,7 +22,7 @@ Some common reasons for a CS are:
 
 At a high level, imagine thread *A* switching from `Running` to `Ready`/`Waiting`/`Terminated` while thread *B* switches from `Ready` to `Standby` to `Running` (see '[*Thread States*](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/)' for more details on state transitions).
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/thread-states.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/thread-states.png?raw=true" alt="" width="819" height="462">
 
 The steps depend on why *A* stopped (and the processor architecture), but the important ones are:
 
@@ -119,7 +119,7 @@ I've tried to create an readable function based on 23H2 assembly & WRK, this is 
 
 - [SwapContext.c](https://github.com/nohuto/windbg-notes/blob/main/assets/SwapContext.c)
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/ida-error.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/ida-error.png?raw=true" alt="" width="368" height="177">
 
 ## What is switched
 
@@ -230,21 +230,21 @@ lkd> dt nt!_KTHREAD ffffe2814d8de080 ContextSwitches
 
 You can see two different columns named `Context switches` & `Context switches delta` (per process or per thread).
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/si-context-switches-process.png?raw=true)
-![](https://github.com/nohuto/windbg-notes/blob/main/images/si-context-switches-thread.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/si-context-switches-process.png?raw=true" alt="" width="1473" height="849">
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/si-context-switches-thread.png?raw=true" alt="" width="1542" height="633">
 
 - `Context switches` = cumulative context switch value currently stored for the process/thread
 - `Context switches delta` = increase since previous refresh
 
 I've set both CPUStress threads to use the same CPU & be on the same priority, so they've to switch, this is equivalent to the single CPU example in '[Thread States, PerfMon Example](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/#perfmon-example)':
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/perfmon-2-threads.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/perfmon-2-threads.png?raw=true" alt="" width="1058" height="773">
 
 ## CPUStress Example
 
 CPUStress uses two threads, both use `THREAD_PRIORITY_TIME_CRITICAL` (priority `15`, see '[Relative Thread Priority](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/priority-levels/#relative-thread-priority)') as described under [Relative Thread Priority](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/priority-levels/#relative-thread-priority), and both are forced to run on processor 5 (affinity). As only one thread can execute on that logical processor at a time, they're switching between `Running`/`Ready` (see image above).
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/CPUStress-context-switches.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/CPUStress-context-switches.png?raw=true" alt="" width="876" height="423">
 
 ```c
 lkd> !process F60 4
@@ -297,7 +297,7 @@ lkd> dt nt!_KAFFINITY_EX ffffe281e8978990 Count Size Bitmap
 
 See [_KWAIT_REASON](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/#_kwait_reason) for more wait reasons, as written in that section, not all fields in the type are CS reasons.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd.png?raw=true" alt="" width="2560" height="1400">
 
 Note that MXA shows `OldThreadWaitReason` values from CSwitch events.
 
@@ -305,7 +305,7 @@ Note that MXA shows `OldThreadWaitReason` values from CSwitch events.
 
 A lower priority thread here gets preempted caused by, for example a higher priority thread becoming ready to run (wait completes, priority increased). Note that threads running in UM can preempt threads running in KM. Example of a thread with priority 16 getting preepmted from a thread with priority 18 which got ready, causing the lower priority thread to get sorted into the top of the r eady queue here. When the higher priority threads finished running, the lower priority thread can finish its quantum.
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/WrPreempted.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/WrPreempted.png?raw=true" alt="" width="392" height="300">
 
 ### WrQuantumEnd
 
@@ -353,7 +353,7 @@ result = KiSwapContext(v72, NextThread, v103);
 
 Note that `KiUpdateRunTime` also seems to request the same function for preferred heterogeneous processor changes (`KiCheckPreferredHeteroProcessor`), means `WrQuantumEnd` doesn't always (but usually) mean `CycleTime >= QuantumTarget`.
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/WrQuantumEnd.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/WrQuantumEnd.png?raw=true" alt="" width="523" height="275">
 
 ### WrTerminated
 

@@ -39,4 +39,4 @@ Anything written as "- *text*" behind the linked name equals the source where th
 
 ### Font Smoothing
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/visual1.jpg?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/visual1.jpg?raw=true" alt="" width="560" height="370">

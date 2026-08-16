@@ -10,7 +10,7 @@ Minimize, maximize, taskbar animations / first sign-in animations etc.
 
 First sign-in animation:
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/animation.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/animation.png?raw=true" alt="" width="1280" height="720">
 
 ## [Windows Policies](https://noverse.dev/policies)
 

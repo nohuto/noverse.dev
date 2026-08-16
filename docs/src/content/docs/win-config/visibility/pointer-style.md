@@ -20,13 +20,13 @@ If you want a full custom cursor pack instead of Windows built in white, black, 
 
 | Name | Preview |
 | --- | --- |
-| Custom colors + dark/light/invert | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/defaults.png?raw=true) |
-| [Simplify Dot](https://vsthemes.org/en/cursors/static/47356-simplify-dot-2.html) (Dark/Light) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/simplify-dot.webp?raw=true) |
-| [Colloid Dark](https://vsthemes.org/en/cursors/black/68372-colloid-dark.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-dark.webp?raw=true) |
-| [Colloid Light](https://vsthemes.org/en/cursors/white/68371-colloid-light.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-light.webp?raw=true) |
-| [Monolith](https://vsthemes.org/en/cursors/black/70650-monolith.html) (Dark/Light) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/monolith.webp?raw=true) |
-| [Capitaine](https://vsthemes.org/en/cursors/black/27320-capitaine.html) (Dark, White, Gruvbox, Gruvbox White, Nord, Nord White, Palenight, Palenight White) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/capitaine.webp?raw=true) |
-| [Skyrim](https://vsthemes.org/en/cursors/games/45588-the-elder-scrolls-5-skyrim.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/skyrim.webp?raw=true) |
+| Custom colors + dark/light/invert | <img src="https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/defaults.png?raw=true" alt="" width="1000" height="389"> |
+| [Simplify Dot](https://vsthemes.org/en/cursors/static/47356-simplify-dot-2.html) (Dark/Light) | <img src="https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/simplify-dot.webp?raw=true" alt="" width="1024" height="678"> |
+| [Colloid Dark](https://vsthemes.org/en/cursors/black/68372-colloid-dark.html) | <img src="https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-dark.webp?raw=true" alt="" width="1024" height="576"> |
+| [Colloid Light](https://vsthemes.org/en/cursors/white/68371-colloid-light.html) | <img src="https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-light.webp?raw=true" alt="" width="1024" height="576"> |
+| [Monolith](https://vsthemes.org/en/cursors/black/70650-monolith.html) (Dark/Light) | <img src="https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/monolith.webp?raw=true" alt="" width="1024" height="576"> |
+| [Capitaine](https://vsthemes.org/en/cursors/black/27320-capitaine.html) (Dark, White, Gruvbox, Gruvbox White, Nord, Nord White, Palenight, Palenight White) | <img src="https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/capitaine.webp?raw=true" alt="" width="916" height="360"> |
+| [Skyrim](https://vsthemes.org/en/cursors/games/45588-the-elder-scrolls-5-skyrim.html) | <img src="https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/skyrim.webp?raw=true" alt="" width="500" height="281"> |
 
 ### Pointer Style Captures
 

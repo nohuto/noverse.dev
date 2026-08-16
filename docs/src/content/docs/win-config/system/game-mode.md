@@ -510,7 +510,7 @@ Get-CimInstance Win32_PerfRawData_PerfProc_Thread | Where-Object { $_.IDThread -
 
 I've done it using Overwatch, both times I switched the state between FG/BG:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/gamemodeprioboost.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/gamemodeprioboost.png?raw=true" alt="" width="2219" height="708">
 
 One of my testers replicated it on 25H2 and it doesn't seem to exist there (FG boost works when game mode is enabled). I'll very likely look more into that soon, as the cause of this is probably that Game Mode messes with the FG state means that the windowing system doesn't see the game as FG anymore.
 

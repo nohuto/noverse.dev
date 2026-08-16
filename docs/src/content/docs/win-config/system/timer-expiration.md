@@ -89,10 +89,10 @@ lkd> dx -r2 ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->TimerTable.TableState
 >
 > — Windows Internals, [E7, P2: 'Processor selection'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/ser1-timer.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/ser1-clock.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/ser2-timer.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/ser2-clock.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/ser1-timer.png?raw=true" alt="" width="2560" height="1398">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/ser1-clock.png?raw=true" alt="" width="2560" height="1398">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/ser2-timer.png?raw=true" alt="" width="2560" height="1401">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/ser2-clock.png?raw=true" alt="" width="2560" height="1398">
 
 To read the current value, use:
 
@@ -152,7 +152,7 @@ return KiProcessorBlock[0] + 15360; // serialized table
 
 The timer table stores queued timers until their due time (left = serialized):
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/timerqueue.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/timerqueue.png?raw=true" alt="" width="714" height="266">
 
 *Windows Internals [Table 8-10](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)*
 
@@ -225,8 +225,8 @@ Total Timers: 301, Maximum List: 6
 
 `KiClockTimerOwner` moving between CPUs can happen through dynamic tick clock idle/resume. With dynamic tick enabled, it can stop using the periodic clock tick while the system is idle and set the clock timer for the next required due time instead, without it, it keeps using the periodic clock tick (this doesn't mean that `KiClockTimerOwner` changes). Clock owner selection also works a bit different on 23H2 when compared to 25H2, since everything below is based on 23H2 this might not be valid for all W11 builds.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/a-6-clock.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/a-6-timer.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/a-6-clock.png?raw=true" alt="" width="2560" height="1400">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/a-6-timer.png?raw=true" alt="" width="2560" height="1401">
 
 You can use WinDbg to see the current clock owner CPU:
 
@@ -240,7 +240,7 @@ lkd> dx ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockOwner
 ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockOwner : 0x0 [Type: unsigned char]
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/dyntick.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/dyntick.png?raw=true" alt="" width="1608" height="1111">
 
 [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KePrepareClockTimerForIdle.c) is that idle part:
 
@@ -585,7 +585,7 @@ lkd> dt nt!_KTIMER_TABLE_ENTRY
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/timerexpiration1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/timerexpiration2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/timerexpiration3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/timerexpiration4.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/timerexpiration1.png?raw=true" alt="" width="1781" height="1095">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/timerexpiration2.png?raw=true" alt="" width="1782" height="1095">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/timerexpiration3.png?raw=true" alt="" width="1781" height="1096">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/timerexpiration4.png?raw=true" alt="" width="1779" height="1095">

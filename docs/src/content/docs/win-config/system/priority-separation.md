@@ -103,9 +103,9 @@ SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\P
 
 #### Default Bitmasks
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/0x2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/0x26.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/0x18.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/0x2.png?raw=true" alt="" width="910" height="220">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/0x26.png?raw=true" alt="" width="909" height="222">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/0x18.png?raw=true" alt="" width="910" height="219">
 
 To see whenever your current build is a client/server, use:
 
@@ -173,21 +173,21 @@ fffff802`4711d31c  00000000
 
 Both PerfMon captures aren't the same as the ones shown in MXA, I've also noticed that the GUI thread doesn't seem to be impacted from it. As written above, the scheduler applies the boost of `PsPrioritySeparation` again, if its still in FG (CPUSTRES was in FG all the time here).
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/force-decay.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/force-cpustres.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/force-decay.png?raw=true" alt="" width="2560" height="1400">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/force-cpustres.png?raw=true" alt="" width="876" height="423">
 
 ---
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/force-decay-perfmon.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/force-decay-perfmon.png?raw=true" alt="" width="986" height="708">
 
 ##### Don't Force Decay
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/dont-force-decay.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/dont-force-cpustres.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/dont-force-decay.png?raw=true" alt="" width="2560" height="1400">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/dont-force-cpustres.png?raw=true" alt="" width="876" height="399">
 
 ---
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/dont-force-decay-perfmon.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/dont-force-decay-perfmon.png?raw=true" alt="" width="1183" height="778">
 
 ### Watching the FG Priority Boost
 
@@ -197,18 +197,18 @@ I'll use WPR below to capture the boost, if you're not familiar with WPA/MXA, yo
 2. Start [CPUSTRES](https://learn.microsoft.com/en-us/sysinternals/downloads/cpustres) and set worker thread 1 to `Busy`
 3. Open WPRUI, select: ('Light' includes `CSwitch`, `ReadyThread`, `ThreadPriority`)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/wpr-win32prio.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/wpr-win32prio.png?raw=true" alt="" width="666" height="523">
 
 4. Move CPUSTRES between FG/BG several times
 5. Stop the capture
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/0-sep.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/1-sep.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/2-sep.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/0-sep.png?raw=true" alt="" width="2560" height="1400">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/1-sep.png?raw=true" alt="" width="2560" height="1400">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/2-sep.png?raw=true" alt="" width="2560" height="1400">
 
 #### PerfMon Example
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/perfmon-PsPrioritySeparation.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/perfmon-PsPrioritySeparation.png?raw=true" alt="" width="979" height="1124">
 
 #### WrQuantumEnd CS
 
@@ -216,7 +216,7 @@ You can also see if a [context switch](https://noverse.dev/docs/windbg-notes/thr
 
 See '[Thread States](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/)' for more details on the topic & a example on how [`WrQuantumEnd`](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/#wrquantumend) works, and when the `WrQuantumEnd` reason is used (beside `CycleTime >= QuantumTarget`).
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd.png?raw=true" alt="" width="2560" height="1400">
 
 #### _KTHREAD Priority
 
@@ -271,7 +271,7 @@ If you're using a priority boost via `PsPrioritySeparation` while having game mo
 
 Note that I've done that test on 23H2, and it *seems* to be fixed on 25H2 (haven't tried it on my own yet).
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/gamemodeprioboost.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/gamemodeprioboost.png?raw=true" alt="" width="2219" height="708">
 
 ## Quantum
 

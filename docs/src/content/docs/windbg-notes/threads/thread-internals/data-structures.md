@@ -19,7 +19,7 @@ dt nt!_KTHREAD <thread address> QuantumReset QuantumTarget
 
 ## _ETHREAD Structure
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/ETHREAD.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/ETHREAD.png?raw=true" alt="" width="754" height="502">
 
 ```c
 lkd> dt nt!_ETHREAD
@@ -158,7 +158,7 @@ lkd> dt nt!_ETHREAD
 
 ## _KTHREAD Structure
 
-![](https://github.com/nohuto/windbg-notes/blob/main/images/KTHREAD.png?raw=true)
+<img src="https://github.com/nohuto/windbg-notes/blob/main/images/KTHREAD.png?raw=true" alt="" width="789" height="526">
 
 ```c
 lkd> dt nt!_KTHREAD

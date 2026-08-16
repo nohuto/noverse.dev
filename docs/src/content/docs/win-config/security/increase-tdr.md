@@ -14,7 +14,7 @@ Disabling TDR removes a valuable layer of protection, so it is generally recomme
 >
 > — Microsoft, [WDDM support for timeout detection and recovery (TDR)](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/timeout-detection-and-recovery)
 
-![](https://github.com/nohuto/win-config/blob/main/security/images/tdr-process.jpg?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/security/images/tdr-process.jpg?raw=true" alt="" width="448" height="243">
 
 ### [Registry Values](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/display/tdr-registry-keys.md)
 

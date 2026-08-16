@@ -18,7 +18,7 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 
 By adding them, you'll have to click `OK` every time you boot/log in:
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/legalnotice.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/legalnotice.png?raw=true" alt="" width="1265" height="1301">
 
 ### Accounts Captures
 

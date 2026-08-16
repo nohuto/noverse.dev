@@ -53,4 +53,4 @@ Get the current amount of `svchost.exe` process instances via:
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting2.png?raw=true" alt="" width="2734" height="1688">

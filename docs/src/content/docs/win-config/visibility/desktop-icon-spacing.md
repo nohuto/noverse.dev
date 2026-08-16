@@ -29,11 +29,11 @@ I created a small [tool](https://github.com/nohuto/win-config/blob/main/visibili
 
 ### `75px`
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/iconspacing75.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/iconspacing75.png?raw=true" alt="" width="119" height="111">
 
 ### `100px`
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/iconspacing100.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/iconspacing100.png?raw=true" alt="" width="140" height="116">
 
 ---
 

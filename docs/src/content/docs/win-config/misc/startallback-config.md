@@ -15,7 +15,7 @@ Disable Windows search via [`System > Disable Windows Search`](https://github.co
 
 All `StartAllBackCfg.exe` settings, which I currently use:
 
-![](https://github.com/nohuto/win-config/blob/main/misc/images/startallback.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/misc/images/startallback.png?raw=true" alt="" width="2560" height="1440">
 
 All values `StartAllBack` reads that are located in `HKCU\Software\StartIsBack` (after clicking on `Properties`):
 ```powershell

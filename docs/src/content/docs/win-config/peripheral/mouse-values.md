@@ -224,7 +224,7 @@ cmake --build .\build --config Release
 
 #### Result
 
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/RawMouseThrottleForced.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/peripheral/images/RawMouseThrottleForced.png?raw=true" alt="" width="1986" height="506">
 
 ## Miscellaneous Values
 

@@ -13,7 +13,7 @@ sidebar:
 > — Microsoft, [Spatial Sound for app developers for Windows, Xbox, and Hololens 2](https://learn.microsoft.com/en-us/windows/win32/coreaudio/spatial-sound)
 
 
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true" alt="" width="1920" height="1080">
 
 ### Registry Values
 
@@ -40,7 +40,7 @@ See '[Audio Values](https://noverse.dev/docs/win-config/peripheral/audio-values/
 
 Disabling spatial sound via these values would gray out the option in the device properites, but Windows itself doesn't disable/enable it via them.
 
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatialsystemsettings.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/peripheral/images/spatialsystemsettings.png?raw=true" alt="" width="1053" height="514">
 
 - [BlockSpatialAudioRegistryGates](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/BlockSpatialAudioRegistryGates.c)
 - [IsSpatialComboEndpointDeterminationDisabled](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/IsSpatialComboEndpointDeterminationDisabled.c)
@@ -51,7 +51,7 @@ Disabling spatial sound via these values would gray out the option in the device
 
 Mono combines left and right audio channels into one, stereo uses two channels.
 
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/mono-stereo.jpg?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/peripheral/images/mono-stereo.jpg?raw=true" alt="" width="500" height="372">
 
 ### SystemSettings Capture
 

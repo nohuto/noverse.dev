@@ -10,7 +10,7 @@ sidebar:
 >
 > — Microsoft, [NoPhysicalCameraLED](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-coremmres-nophysicalcameraled)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/cameraosd.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/security/images/cameraosd.png?raw=true" alt="" width="760" height="289">
 
 | Data | Description |
 | :---: | --- |

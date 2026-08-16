@@ -10,8 +10,8 @@ Removes the `- Shortcut` text, hides the shortcut & compression arrows. Works by
 
 ### Before
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/shortcutbefore.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/shortcutbefore.png?raw=true" alt="" width="202" height="153">
 
 ### After
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/shortcutafter.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/shortcutafter.png?raw=true" alt="" width="211" height="176">

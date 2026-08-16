@@ -8,7 +8,7 @@ sidebar:
 
 Changes the size of text, apps, and other items. Note that on laptops the default display scaling might not be `100%`. You can set a custom scaling size via `System > Display > Custom scaling`:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/displayscaling.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/displayscaling.png?raw=true" alt="" width="1374" height="673">
 
 ### SystemSettings Captures
 

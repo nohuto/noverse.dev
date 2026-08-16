@@ -8,12 +8,12 @@ sidebar:
 
 Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/copy-on-write-before.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/copy-on-write-after.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/copy-on-write-before.png?raw=true" alt="" width="621" height="334">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/copy-on-write-after.png?raw=true" alt="" width="619" height="335">
 
 The purpose of this memory management feature is to save physical memory, but on modern systems with 32-64GB of RAM the impact of page combining is often minimal (a page has a size of 4KB = 4096 byte).
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/page-sizes.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/page-sizes.png?raw=true" alt="" width="778" height="170">
 
 ```powershell
 $ .\memcombine64 # while having several similar apps opened
@@ -73,7 +73,7 @@ fffff803`1bd1d1c8  00000000
 
 `0x100` = bit `8`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data, example:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/StartedComponents.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/StartedComponents.png?raw=true" alt="" width="910" height="220">
 
 See the requested page combining state via [MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps):
 
@@ -99,21 +99,21 @@ Start by downloading the [Windows Internals tools](https://github.com/zodiacon/W
 2. Open VMMap as admin and select the PID shown by `MemCombineTest` 
 3. Take first VMMap screenshot of the process address space and note the two private buffers
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/MemCombineTest1.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/MemCombineTest1.png?raw=true" alt="" width="1642" height="1187">
 
 4. Run `MemCombine64.exe` as admin
 5. Refresh VMMap and compare the private/shared working set
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/MemCombineTest2.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/MemCombineTest2.png?raw=true" alt="" width="1642" height="1187">
 
 6. Press a key in `MemCombineTest.exe` to modify one byte in the first buffer
 7. Refresh VMMap again, the modified page should become private again cause of `copy-on-write`
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/MemCombineTest3.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/MemCombineTest3.png?raw=true" alt="" width="1642" height="1187">
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb4.png?raw=true)
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/pagecomb1.png?raw=true" alt="" width="1418" height="864">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/pagecomb2.png?raw=true" alt="" width="1418" height="864">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/pagecomb3.png?raw=true" alt="" width="1418" height="864">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/pagecomb4.png?raw=true" alt="" width="1418" height="864">

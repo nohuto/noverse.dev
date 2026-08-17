@@ -1,9 +1,9 @@
 ---
-title: 'SMB Configuration'
+title: 'SMB'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 3
 ---
 
 SMB uses a client-side remote file system driver (LANMan Redirector) and a server-side remote FSD (`Srv2.sys`). Client settings under `LanmanWorkstation` and server settings under `LanmanServer` govern how those components negotiate and handle SMB traffic.

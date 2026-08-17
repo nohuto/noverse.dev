@@ -8,8 +8,8 @@ sidebar:
 ---
 
 - [Encrypted DNS](/docs/win-config/network/encrypted-dns/)
-- [SMB Configuration](/docs/win-config/network/smb-configuration/)
 - [Network Offloads](/docs/win-config/network/enable-network-offloads/)
+- [SMB](/docs/win-config/network/smb/)
 - [Network Discovery](/docs/win-config/network/disable-network-discovery/)
 - [NDIS Poll Mode](/docs/win-config/network/ndis-poll-mode/)
 - [Congestion Provider](/docs/win-config/network/congestion-provider/)

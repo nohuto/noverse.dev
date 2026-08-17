@@ -3,7 +3,7 @@ title: 'Network Offloads'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 2
 ---
 
 Since all topics below are well documented by MS, I won't add much details. Click on the title links for more information on each topic. Note that the main option disables PM protocol offloads, all other offload features are used.

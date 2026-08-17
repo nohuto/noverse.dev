@@ -38,6 +38,7 @@
   --social-github-icon: url("/main/icons/ui/github-logo.svg");
   --social-email-icon: url("/main/icons/ui/mail.svg");
   --social-discord-icon: url("/main/icons/ui/discord.svg");
+  --social-key-icon: url("/main/icons/ui/key.svg");
   --theme-sun-icon: url("/main/icons/ui/sun.svg");
   --theme-moon-icon: url("/main/icons/ui/moon.svg");
 }
@@ -2084,6 +2085,10 @@ main.home-main {
   --social-icon: var(--social-discord-icon);
 }
 
+.social-icon-key {
+  --social-icon: var(--social-key-icon);
+}
+
 footer {
   flex: 0 0 auto;
   width: 100%;
@@ -2316,7 +2321,7 @@ footer {
 
 }
 
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   .footer-copy {
     font-size: 0.625rem;
   }

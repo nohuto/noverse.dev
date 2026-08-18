@@ -6,12 +6,32 @@
   font-display: block;
 }
 
+/* @font-face {
+  font-family: "UbuntuMono Nerd Font Mono";
+  src: url("/main/fonts/UbuntuMonoNerdFontMono-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+} */
+
+/* @font-face {
+  font-family: "UbuntuMono Nerd Font Mono";
+  src: url("/main/fonts/UbuntuMonoNerdFontMono-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+} */
+
 :root,
 ::backdrop {
   --sl-font-system: "Cascadia Code";
   --sl-font-system-mono: "Cascadia Code";
   --__sl-font: "Cascadia Code";
   --__sl-font-mono: "Cascadia Code";
+  /* --sl-font-system: "UbuntuMono Nerd Font Mono"; */
+  /* --sl-font-system-mono: "UbuntuMono Nerd Font Mono"; */
+  /* --__sl-font: "UbuntuMono Nerd Font Mono"; */
+  /* --__sl-font-mono: "UbuntuMono Nerd Font Mono"; */
   --sl-text-body: 0.8125rem;
   --sl-text-code: 0.8125rem;
   --sl-text-code-sm: 0.8125rem;

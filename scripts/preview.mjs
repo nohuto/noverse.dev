@@ -17,6 +17,7 @@ const mimeTypes = new Map([
   ['.png', 'image/png'],
   ['.svg', 'image/svg+xml; charset=utf-8'],
   ['.txt', 'text/plain; charset=utf-8'],
+  ['.ttf', 'font/ttf'],
   ['.webp', 'image/webp'],
   ['.woff', 'font/woff'],
   ['.woff2', 'font/woff2'],
@@ -66,7 +67,11 @@ async function closestNotFound(pathname) {
 }
 
 function sendFile(response, file, status = 200, method = 'GET') {
-  const cacheControl = path.basename(file) === 'CascadiaCode-2407.24.woff2'
+  const cacheControl = [
+    'CascadiaCode-2407.24.woff2',
+    // 'UbuntuMonoNerdFontMono-Regular.ttf',
+    // 'UbuntuMonoNerdFontMono-Bold.ttf',
+  ].includes(path.basename(file))
     ? 'public, max-age=31556952, immutable'
     : 'no-store';
   response.writeHead(status, {

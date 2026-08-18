@@ -96,15 +96,6 @@ function renderHomeProjects(projects) {
     }).join('\n');
 }
 
-function renderProductDocs(items) {
-  return items.map((item) => `
-            <article class="doc-card clickable-card" data-card-href="${escapeHtml(item.href)}">
-              <h3>${escapeHtml(item.title)}</h3>
-              <p>${escapeHtml(item.description)}</p>
-              <a class="clickable-card-link" href="${escapeHtml(item.href)}" aria-label="Open ${escapeHtml(item.title)} documentation"></a>
-            </article>`).join('\n');
-}
-
 function renderCommitSkeleton() {
   return `<div class="commit-skeleton" aria-hidden="true">${Array.from({ length: 15 }, () => `
               <div class="commit-skeleton-row">
@@ -139,15 +130,14 @@ function renderSettingsDialogEnd(prefix) {
 }
 
 async function loadPageSources() {
-  const [partialEntries, projects, productDocs] = await Promise.all([
+  const [partialEntries, projects] = await Promise.all([
     readdir(partialDir, { withFileTypes: true }),
     readFile(path.join(dataDir, 'projects.json'), 'utf8').then(JSON.parse),
-    readFile(path.join(dataDir, 'product-docs.json'), 'utf8').then(JSON.parse),
   ]);
   const partials = new Map(await Promise.all(partialEntries
     .filter((entry) => entry.isFile() && path.extname(entry.name) === '.html')
     .map(async (entry) => [path.basename(entry.name, '.html'), await readFile(path.join(partialDir, entry.name), 'utf8')])));
-  return { partials, projects, productDocs };
+  return { partials, projects };
 }
 
 function expandPage(html, pageName, sources) {
@@ -164,7 +154,6 @@ function expandPage(html, pageName, sources) {
     .join('\n          '));
   expanded = expanded.replace('<!-- component:project-cards -->', renderProjectCards(sources.projects));
   expanded = expanded.replace('<!-- component:home-projects -->', renderHomeProjects(sources.projects));
-  expanded = expanded.replace('<!-- component:product-docs -->', renderProductDocs(sources.productDocs));
   expanded = expanded.replace('<!-- component:commit-skeleton -->', renderCommitSkeleton());
   expanded = expanded.replace(/<!-- component:settings-dialog-start:([\w-]+) -->/g, (_, prefix) => renderSettingsDialogStart(prefix));
   expanded = expanded.replace(/<!-- component:settings-dialog-end:([\w-]+) -->/g, (_, prefix) => renderSettingsDialogEnd(prefix));

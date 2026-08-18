@@ -162,6 +162,16 @@ export default defineConfig({
             crossorigin: true,
           },
         },
+        /* {
+          tag: 'link',
+          attrs: {
+            rel: 'preload',
+            href: '/main/fonts/UbuntuMonoNerdFontMono-Regular.ttf',
+            as: 'font',
+            type: 'font/ttf',
+            crossorigin: true,
+          },
+        }, */
       ],
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/nohuto' },

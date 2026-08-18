@@ -9,6 +9,22 @@
   font-display: block;
 }
 
+/* @font-face {
+  font-family: "UbuntuMono Nerd Font Mono";
+  src: url("/main/fonts/UbuntuMonoNerdFontMono-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+} */
+
+/* @font-face {
+  font-family: "UbuntuMono Nerd Font Mono";
+  src: url("/main/fonts/UbuntuMonoNerdFontMono-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+} */
+
 :root {
   --bg: #0e0e0e;
   --bg-alt: #131313;
@@ -26,6 +42,7 @@
   --danger: #ff6b6b;
   --starfield-dot: color-mix(in srgb, var(--text) 90%, transparent);
   --font-family: "Cascadia Code";
+  /* --font-family: "UbuntuMono Nerd Font Mono"; */
   --font-size-navigation: 0.78125rem;
   --font-size-control: 0.75rem;
   --font-size-body: 0.78125rem;
@@ -1636,7 +1653,7 @@ main.home-main {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, max(340px, calc((100% - 16px) / 2))), 1fr));
   gap: 16px;
 }
 
@@ -1732,8 +1749,7 @@ main.home-main {
   min-width: 0;
 }
 
-.product-intro>p,
-#documentation>.doc-header>p {
+.product-intro>p {
   color: var(--muted);
 }
 
@@ -1848,22 +1864,7 @@ main.home-main {
 }
 
 .product-section {
-  position: relative;
   padding: 16px 18px;
-}
-
-.product-section+.product-section {
-  padding-top: 17px;
-}
-
-.product-section+.product-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 18px;
-  right: 18px;
-  height: 1px;
-  background: var(--border);
 }
 
 #product .product-header {
@@ -1889,51 +1890,8 @@ main.home-main {
   padding-bottom: 0;
 }
 
-.doc-header p {
-  margin: 0;
-  line-height: 1.55;
-}
-
-.documentation-overview,
 .legal-section {
   width: 100%;
-}
-
-.doc-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-#documentation .doc-card {
-  display: flex;
-  flex: 1 1 320px;
-  flex-direction: column;
-  gap: 4px;
-  padding: 9px 10px;
-  border: 1px solid var(--border);
-  background: var(--panel-alt);
-}
-
-#documentation .doc-card:hover,
-#documentation .doc-card:focus-within {
-  border-color: var(--accent);
-}
-
-#documentation .doc-card h3,
-#documentation .doc-card p {
-  margin: 0;
-}
-
-#documentation .doc-card h3 {
-  font-size: 12.5px;
-  line-height: 1.35;
-}
-
-#documentation .doc-card p {
-  color: var(--muted);
-  line-height: 1.45;
 }
 
 .legal-list {
@@ -1947,18 +1905,8 @@ main.home-main {
   padding-top: 0;
 }
 
-#product .product-documentation {
-  padding-top: 0;
-  padding-bottom: 20px;
-}
-
 #product .product-overview {
   padding-bottom: 20px;
-}
-
-#product .product-terms::before,
-#product .product-documentation::before {
-  content: none;
 }
 
 .product-divider-heading {
@@ -1977,13 +1925,8 @@ main.home-main {
   background: var(--border);
 }
 
-.documentation-heading {
-  letter-spacing: 0;
-}
-
-.documentation-heading,
 .legal-heading {
-  color: var(--text);
+  color: var(--muted);
   font-size: 12.5px;
   font-weight: 400;
   line-height: 1.2;
@@ -2234,11 +2177,6 @@ footer {
     width: 100%;
     max-width: none;
     margin: 0;
-  }
-
-  #documentation .doc-grid {
-    display: grid;
-    grid-template-columns: 1fr;
   }
 
   .legal-list {

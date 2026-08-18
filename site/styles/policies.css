@@ -234,7 +234,7 @@
 }
 
 .policy-splitter:hover::after,
-body.policy-resizing .policy-splitter::after {
+.policy-splitter.is-resizing::after {
   background: var(--accent);
 }
 

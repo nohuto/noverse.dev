@@ -1339,34 +1339,38 @@
       if (event.button !== 0) return;
       const type = splitter.dataset.policySplitter;
       const treePanel = root.querySelector('.policy-tree-panel');
-      if (!type || !tablePanel || !treePanel || !detailPanel) return;
+      if (!['tree', 'detail'].includes(type) || !tablePanel || !treePanel || !detailPanel) return;
       event.preventDefault();
 
-      const layoutRect = splitter.parentElement.getBoundingClientRect();
       const startX = event.clientX;
-      const startTreeWidth = treePanel.getBoundingClientRect().width;
-      const startDetailWidth = detailPanel.getBoundingClientRect().width;
-      const minTree = 180;
-      const minDetail = 300;
-      const minTable = 460;
-      const maxTree = Math.max(minTree, layoutRect.width - (paneState.table ? minTable : 0) - (paneState.detail ? minDetail : 0));
-      const maxDetail = Math.max(minDetail, layoutRect.width - minTable - (paneState.tree ? minTree : 0));
+      const widths = {
+        tree: treePanel.getBoundingClientRect().width,
+        table: tablePanel.getBoundingClientRect().width,
+        detail: detailPanel.getBoundingClientRect().width
+      };
+      const isTree = type === 'tree';
+      const adjacentPane = isTree && !paneState.table ? 'detail' : 'table';
+      const minWidth = isTree ? 180 : 300;
+      const adjacentMinWidth = adjacentPane === 'table' ? 460 : 300;
+      const startWidth = widths[type];
+      const maxWidth = Math.max(minWidth, startWidth + widths[adjacentPane] - adjacentMinWidth);
+      const property = `--policy-${type}-width`;
+      const direction = isTree ? 1 : -1;
       let rafId = 0;
       let pendingX = startX;
 
+      if (paneState.tree && paneState.table && paneState.detail) {
+        const fixedPane = isTree ? 'detail' : 'tree';
+        root.style.setProperty(`--policy-${fixedPane}-width`, `${widths[fixedPane]}px`);
+      }
+
       splitter.setPointerCapture(event.pointerId);
-      document.body.classList.add('policy-resizing');
+      splitter.classList.add('is-resizing');
 
       const paint = () => {
         rafId = 0;
-        const delta = pendingX - startX;
-        if (type === 'tree') {
-          const nextWidth = Math.min(Math.max(minTree, startTreeWidth + delta), maxTree);
-          root.style.setProperty('--policy-tree-width', `${nextWidth}px`);
-        } else {
-          const nextWidth = Math.min(Math.max(minDetail, startDetailWidth - delta), maxDetail);
-          root.style.setProperty('--policy-detail-width', `${nextWidth}px`);
-        }
+        const nextWidth = Math.min(Math.max(minWidth, startWidth + ((pendingX - startX) * direction)), maxWidth);
+        root.style.setProperty(property, `${nextWidth}px`);
       };
 
       const onMove = moveEvent => {
@@ -1379,14 +1383,16 @@
           cancelAnimationFrame(rafId);
           paint();
         }
-        document.body.classList.remove('policy-resizing');
-        splitter.releasePointerCapture(event.pointerId);
+        splitter.classList.remove('is-resizing');
+        if (splitter.hasPointerCapture(event.pointerId)) splitter.releasePointerCapture(event.pointerId);
         splitter.removeEventListener('pointermove', onMove);
         splitter.removeEventListener('pointerup', onUp);
+        splitter.removeEventListener('pointercancel', onUp);
       };
 
       splitter.addEventListener('pointermove', onMove);
       splitter.addEventListener('pointerup', onUp);
+      splitter.addEventListener('pointercancel', onUp);
     };
 
     searchInput.addEventListener('input', scheduleSearch);

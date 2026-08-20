@@ -225,7 +225,7 @@ Total Timers: 301, Maximum List: 6
 
 `KiClockTimerOwner` moving between CPUs can happen through dynamic tick clock idle/resume. With dynamic tick enabled, it can stop using the periodic clock tick while the system is idle and set the clock timer for the next required due time instead, without it, it keeps using the periodic clock tick (this doesn't mean that `KiClockTimerOwner` changes). Clock owner selection also works a bit different on 23H2 when compared to 25H2, since everything below is based on 23H2 this might not be valid for all W11 builds.
 
-Also see '[Priority Separation, Dynamic Tick](https://noverse.dev/docs/win-config/system/priority-separation/#dynamic-tick)', which shows that disabling dynamic tick seems to cause quantum ends to not work properly anymore.
+Also see '[Priority Separation, KiUpdateRunTime Quantum Expiration](https://noverse.dev/docs/win-config/system/priority-separation/#kiupdateruntime-quantum-expiration)', which shows why `disabledynamictick` can stop the clock interrupts used to check quantum expiration.
 
 <img src="https://github.com/nohuto/win-config/blob/main/system/images/a-6-clock.png?raw=true" alt="" width="2560" height="1400">
 <img src="https://github.com/nohuto/win-config/blob/main/system/images/a-6-timer.png?raw=true" alt="" width="2560" height="1401">

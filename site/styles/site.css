@@ -2008,8 +2008,8 @@ main.home-main {
 }
 
 .social-icon {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
   display: block;
   background-color: currentColor;
   -webkit-mask: var(--social-icon) center / contain no-repeat;

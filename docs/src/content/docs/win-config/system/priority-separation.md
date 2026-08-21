@@ -3,7 +3,7 @@ title: 'Priority Separation'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 1
 ---
 
 ```asm
@@ -309,6 +309,8 @@ SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\P
 ```
 
 #### Duration Captures
+
+Same setup as in '[KiUpdateRunTime, Captures](https://noverse.dev/docs/win-config/system/priority-separation/#captures)', to cause threads to exhaust their quantum.
 
 ##### 6/18 QU, 23H2
 
@@ -946,7 +948,7 @@ Means with the `clock interval / 18` unit, the table now is:
 
 #### [QoS](https://learn.microsoft.com/en-us/windows/win32/procthread/quality-of-service) Quantum Override (`BamQosLevel`)
 
-Note that this is currently an interpretation as I haven't spend much time on that yet.
+See '[Duration Captures, 6/18 QU, 25H2](https://noverse.dev/docs/win-config/system/priority-separation/#618-qu-25h2)' for a capture showing that threads use their `BamQosLevel` to get the QU, instead of the 6 (BG)/18 (FG) QU.
 
 `BamQosLevel` doesn't use the `PspVariableQuantums`/`PspFixedQuantums` tables, these're still getting filled by the threads stored `QuantumReset`. When `ShortThreadQuantum` and variable quantums are used, [`KiQueryQuantumReset`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiQueryQuantumReset.c) (exists since 24H2) can instead return a QoS reset (fixed quantums set `KiVariableQuantumEnabled` to `0` and won't use that override). `_KTHREAD.BamQosLevel` is at `0x204`, which is the `a1 + 516` byte read below.
 

@@ -7,8 +7,8 @@ sidebar:
   order: 1
 ---
 
-- [MMCSS Values](/docs/win-config/system/mmcss-values/)
 - [Priority Separation](/docs/win-config/system/priority-separation/)
+- [MMCSS Values](/docs/win-config/system/mmcss-values/)
 - [Timer Expiration](/docs/win-config/system/timer-expiration/)
 - [DWM Values](/docs/win-config/system/dwm-values/)
 - [Kernel Values](/docs/win-config/system/kernel-values/)

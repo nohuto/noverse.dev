@@ -3,7 +3,7 @@ title: 'MMCSS Values'
 description: 'System option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 1
+  order: 2
 ---
 
 Everything below is based on the 11-23H2 mmcss driver pseudocode (see [diff](https://noverse.dev/diff?kind=pseudocode&left=11-23H2&right=11-25H2&module=mmcss&name=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds)/ WPR (`Microsoft-Windows-MMCSS` provider).

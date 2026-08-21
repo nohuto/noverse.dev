@@ -137,7 +137,7 @@ Before the processor enters idle, 23H2 uses [`KePrepareNonClockOwnerForIdle`](ht
 
 With per CPU clock tick scheduling disabled, `KiUpdateRunTime` doesn't program `KClockTimerQuantumEnd` & the clock owner uses [`KiForwardTick`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiForwardTick.c) to send ticks to the other processors instead, so their quantum checks don't depend on that per CPU timer being rearmed. See the '[Per CPU Clock Tick Scheduling Disabled](https://noverse.dev/docs/win-config/system/priority-separation/#per-cpu-clock-tick-scheduling-disabled)' capture.
 
-You can see whether per CPU scheduling is used via  ([Timer Expiration, EnablePerCpuClockTickScheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) for more details):
+You can see whether per CPU scheduling is used via ([Timer Expiration, EnablePerCpuClockTickScheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) for more details):
 
 ```c
 lkd> db nt!KiDynamicTickDisableReason L1
@@ -307,6 +307,24 @@ SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\P
 // Programs
 SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\PriorityControl\Win32PrioritySeparation	Type: REG_DWORD, Length: 4, Data: 38 // 0x26
 ```
+
+#### Duration Captures
+
+##### 6/18 QU, 23H2
+
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-23H2.png?raw=true" alt="" width="2560" height="1400">
+
+##### 18 QU, 23H2
+
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/ps-18-23H2.png?raw=true" alt="" width="2560" height="1400">
+
+##### 6/18 QU, 25H2
+
+As shown in the '[QoS Quantum Override (BamQosLevel)](https://noverse.dev/docs/win-config/system/priority-separation/#qos-quantum-override-bamqoslevel)', whenever using the variable table on 24H2+, the threads get their QU from the BamQosField.
+
+This capture also proofs that, as it uses `31.250ms` all the time (FG/BG).
+
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-25H2.png?raw=true" alt="" width="2560" height="1400">
 
 #### Default Bitmasks
 

@@ -252,11 +252,11 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ObTraceProcessName" = 0; // ObpTraceProcessNameBuffer / ObpTraceProcessNameLength
     "ObUnsecureGlobalNames" = 6619246; // ObpUnsecureGlobalNamesBuffer / ObpUnsecureGlobalNamesLength
     "PassiveWatchdogTimeout" = 300; // KiPassiveWatchdogTimeout
-    "PerfIsoEnabled" = 0; // KiPerfIsoEnabled
+    "PerfIsoEnabled" = 0; // KiPerfIsoEnabled, cache isolation aware processor placement for threads whose scheduling group KSCB has RankBias set, range 0-64dec
     "PoCleanShutdownFlags" = 0; // PopShutdownCleanly
     "PowerOffFrozenProcessors" = 1; // KiPowerOffFrozenProcessors, seems unused (but initialized), was probably used to "power off" processors that are frozen (see windbg !frozen)
     "ReadyTimeTicks" = 6; // KiNormalPriorityBoostReadyTimeTicks
-    "RebalanceMinPriority" = 1; // KiRebalanceMinPriority
+    "RebalanceMinPriority" = 1; // KiRebalanceMinPriority, minimum _KTHREAD.Priority at which KiQueueReadyThread checks IdleNonParkedCpuSet and may continue through KiEnterDeferredReadyState/KiDeferredReadyThread for processor selection (default uses all threads (prio 1-31) excluding zero page thread)
     "ReservedCpuSets" = 0; // KiReservedCpuSets
     "ScanLatencyTicks" = 7; // KiNormalPriorityBoostScanLatencyTicks
     "SchedulerAssistThreadFlagOverride" = 0; // KiSchedulerAssistThreadFlagOverride

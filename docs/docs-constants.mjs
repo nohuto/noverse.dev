@@ -56,7 +56,7 @@ export function getDirectoryLabel(directory) {
   return toTitleCase(segment);
 }
 
-function toTitleCase(value) {
+export function toTitleCase(value) {
   return value
     .split(/[-_\s]+/)
     .filter(Boolean)

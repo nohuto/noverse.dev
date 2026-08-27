@@ -56,44 +56,41 @@ const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.st
 </script>
 
 <style>
-  @layer starlight.core {
-    .mobile-preferences {
-      position: relative;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      align-items: center;
-      border-top: 1px solid var(--sl-color-gray-6);
-      column-gap: 0.75rem;
-      row-gap: 0.625rem;
-      padding: 0.5rem 0;
-    }
+  .mobile-preferences {
+    position: relative;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    border-top: 1px solid var(--sl-color-gray-6);
+    column-gap: 0.75rem;
+    row-gap: 0.625rem;
+    padding: 0.5rem 0;
+  }
 
-    .mobile-links {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      min-width: 0;
-      margin-inline-end: auto;
-    }
+  .mobile-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+    margin-inline-end: auto;
+  }
 
-    .mobile-icon-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 1.75rem;
-      min-height: 1.75rem;
-      padding: 0.25rem;
-      margin: 0;
-      border: 0;
-      background: transparent;
-      color: var(--sl-color-gray-2);
-      text-decoration: none;
-    }
+  .mobile-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.75rem;
+    min-height: 1.75rem;
+    padding: 0.25rem;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+  }
 
-    .mobile-icon-link:hover,
-    .mobile-icon-link:focus-visible {
-      color: var(--sl-color-accent-high);
-      outline: none;
-    }
+  .mobile-icon-link:is(:hover, :focus-visible, :active) {
+    color: var(--sl-color-accent-high);
+    outline: none;
   }
 </style>

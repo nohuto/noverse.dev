@@ -1,0 +1,280 @@
+---
+import ViewModeTableOfContents from 'starlight-view-modes/components/TableOfContents.astro';
+
+interface TocItem {
+  children: TocItem[];
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+const { toc } = Astro.locals.starlightRoute;
+
+function flattenToc(items: TocItem[]): TocItem[] {
+  return items.flatMap((item) => [item, ...flattenToc(item.children)]);
+}
+
+const items = toc ? flattenToc(toc.items as TocItem[]) : [];
+const entries = items.map((heading, index) => {
+  const indent = heading.depth - toc!.minHeadingLevel;
+  const previousIndent = index > 0 ? items[index - 1].depth - toc!.minHeadingLevel : indent;
+  const delta = indent - previousIndent;
+
+  return {
+    heading,
+    indent,
+    connector:
+      delta === 0
+        ? null
+        : { start: Math.min(indent, previousIndent), span: Math.abs(delta), descends: delta > 0 },
+  };
+});
+---
+
+{
+  toc && (
+    <starlight-toc data-nv-toc data-min-h={toc.minHeadingLevel} data-max-h={toc.maxHeadingLevel}>
+      <nav class="nv-toc-nav" aria-labelledby="starlight__on-this-page">
+        <h2 id="starlight__on-this-page">{Astro.locals.t('tableOfContents.onThisPage')}</h2>
+        <svg class="nv-toc-rail" aria-hidden="true" fill="none">
+          <path class="nv-toc-active-path" data-nv-toc-active-path vector-effect="non-scaling-stroke" />
+        </svg>
+        <ul class="nv-toc-list">
+          {entries.map(({ heading, indent, connector }) => (
+            <li>
+              {connector && (
+                <svg
+                  aria-hidden="true"
+                  class="nv-toc-connector"
+                  style={`--nv-toc-x: ${connector.start}; --nv-toc-w: ${connector.span};`}
+                  viewBox="0 0 1 1"
+                  preserveAspectRatio="none"
+                  fill="none"
+                >
+                  <path
+                    vector-effect="non-scaling-stroke"
+                    d={connector.descends ? 'M 0 0 C 0 0.5, 1 0.5, 1 1' : 'M 1 0 C 1 0.5, 0 0.5, 0 1'}
+                  />
+                </svg>
+              )}
+              <a class="nv-toc-link" href={`#${heading.slug}`} style={`--nv-toc-indent: ${indent};`}>
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </starlight-toc>
+  )
+}
+
+<ViewModeTableOfContents />
+
+<script>
+  const NS = 'http://www.w3.org/2000/svg';
+
+  for (const root of document.querySelectorAll('[data-nv-toc]')) {
+    const nav = root.querySelector<HTMLElement>('.nv-toc-nav');
+    const activePath = root.querySelector<SVGPathElement>('[data-nv-toc-active-path]');
+    const links = [...root.querySelectorAll<HTMLElement>('.nv-toc-link')];
+    if (!nav || !activePath || links.length === 0) continue;
+
+    const indexOf = new Map(links.map((link, index) => [link, index] as const));
+    const ruler = document.createElementNS(NS, 'path');
+    const curveLength = (d: string) => {
+      ruler.setAttribute('d', d);
+      return ruler.getTotalLength();
+    };
+
+    let segments: { start: number; length: number }[] = [];
+    let totalLength = 0;
+    let currentIndex = -1;
+    let hasApplied = false;
+    let builtWidth = -1;
+    let observedWidth = -1;
+    let frame = 0;
+
+    const buildRail = () => {
+      const navRect = nav.getBoundingClientRect();
+      const boxes = links.map((link) => {
+        const rect = link.getBoundingClientRect();
+        return {
+          x: rect.left - navRect.left + 0.5,
+          top: rect.top - navRect.top,
+          bottom: rect.bottom - navRect.top,
+        };
+      });
+
+      const parts: string[] = [];
+      const next: { start: number; length: number }[] = [];
+      let cumulative = 0;
+
+      for (let index = 0; index < boxes.length; index += 1) {
+        const box = boxes[index]!;
+
+        if (index === 0) {
+          parts.push(`M ${box.x} ${box.top} `);
+        } else {
+          const previous = boxes[index - 1]!;
+          const dx = box.x - previous.x;
+          const dy = box.top - previous.bottom;
+
+          if (Math.abs(dx) < 0.5) {
+            parts.push(`L ${box.x} ${box.top} `);
+            cumulative += Math.hypot(dx, dy);
+          } else {
+            const midY = previous.bottom + dy / 2;
+            const curve = `C ${previous.x} ${midY}, ${box.x} ${midY}, ${box.x} ${box.top} `;
+            parts.push(curve);
+            cumulative += curveLength(`M ${previous.x} ${previous.bottom} ${curve}`);
+          }
+        }
+
+        const start = cumulative;
+        parts.push(`L ${box.x} ${box.bottom} `);
+        cumulative += box.bottom - box.top;
+        next.push({ start, length: cumulative - start });
+      }
+
+      activePath.setAttribute('d', parts.join(''));
+      segments = next;
+      totalLength = cumulative;
+      builtWidth = navRect.width;
+    };
+
+    const applyActive = (index: number, instant: boolean) => {
+      const segment = segments[index];
+      if (!segment) return;
+
+      if (instant) activePath.dataset.instant = 'true';
+      activePath.style.strokeDasharray = `${segment.length} ${totalLength + 1}`;
+      activePath.style.strokeDashoffset = `${-segment.start}`;
+      activePath.dataset.ready = 'true';
+
+      if (instant) requestAnimationFrame(() => delete activePath.dataset.instant);
+    };
+
+    const setActive = (index: number, instant: boolean) => {
+      if (index < 0 || index === currentIndex) return;
+      currentIndex = index;
+      applyActive(index, instant);
+      hasApplied = true;
+    };
+
+    new MutationObserver((records) => {
+      for (const record of records) {
+        const link = record.target as HTMLElement;
+        if (link.getAttribute('aria-current') !== 'true') continue;
+        const index = indexOf.get(link);
+        if (index !== undefined) setActive(index, !hasApplied);
+        return;
+      }
+    }).observe(root, {
+      attributes: true,
+      attributeFilter: ['aria-current'],
+      subtree: true,
+    });
+
+    new ResizeObserver((entries) => {
+      const entry = entries[entries.length - 1]!;
+      observedWidth = entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
+      if (frame || observedWidth === builtWidth) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        if (observedWidth === builtWidth) return;
+        buildRail();
+        if (currentIndex >= 0) applyActive(currentIndex, true);
+      });
+    }).observe(nav);
+
+    buildRail();
+    setActive(links.findIndex((link) => link.getAttribute('aria-current') === 'true'), true);
+  }
+</script>
+
+<style>
+  .nv-toc-nav {
+    --nv-toc-line: color-mix(in srgb, var(--sl-color-gray-4) 58%, transparent);
+    --nv-toc-rail-offset: 0.5px;
+    position: relative;
+  }
+
+  .nv-toc-rail {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .nv-toc-active-path {
+    opacity: 0;
+    stroke: var(--sl-color-text-accent);
+    stroke-width: 1;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+    transition:
+      stroke-dasharray 300ms cubic-bezier(0.32, 0.72, 0, 1),
+      stroke-dashoffset 300ms cubic-bezier(0.32, 0.72, 0, 1),
+      opacity 150ms ease-out;
+  }
+
+  .nv-toc-active-path[data-ready='true'] {
+    opacity: 1;
+  }
+
+  .nv-toc-active-path[data-instant='true'] {
+    transition: opacity 150ms ease-out;
+  }
+
+  .nv-toc-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nv-toc-list li {
+    margin: 0;
+  }
+
+  .nv-toc-link {
+    display: block;
+    margin-inline-start: calc(var(--nv-toc-indent) * 1rem - 1px);
+    border-inline-start: 1px solid var(--nv-toc-line);
+    border-radius: 0;
+    padding: 0.3rem 0.5rem 0.3rem 1.25rem;
+    color: var(--sl-color-gray-3);
+    font-size: 0.78125rem;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+    transition: color 150ms ease-out;
+  }
+
+  .nv-toc-link:hover {
+    color: var(--sl-color-white);
+  }
+
+  .nv-toc-link[aria-current='true'] {
+    color: var(--sl-color-text-accent);
+  }
+
+  .nv-toc-connector {
+    display: block;
+    height: 0.5rem;
+    margin-inline-start: calc(var(--nv-toc-x) * 1rem - var(--nv-toc-rail-offset));
+    width: calc(var(--nv-toc-w) * 1rem);
+    overflow: visible;
+    stroke: var(--nv-toc-line);
+    stroke-width: 1;
+    stroke-linecap: butt;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nv-toc-active-path {
+      transition: opacity 150ms ease-out;
+    }
+  }
+</style>

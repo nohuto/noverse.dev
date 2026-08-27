@@ -80,7 +80,6 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
 			const dialog = this.querySelector('dialog')!;
 			const dialogFrame = this.querySelector('.dialog-frame')!;
 
-			/** Close the modal if a user clicks on a link or outside of the modal. */
 			const onClick = (event: MouseEvent) => {
 				const isLink = 'href' in (event.target || {});
 				if (
@@ -95,7 +94,7 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
 			const openModal = (event?: MouseEvent) => {
 				dialog.showModal();
 				document.body.toggleAttribute('data-search-modal-open', true);
-				this.querySelector('input')?.focus();
+				void loadPagefind().then(() => this.querySelector('input')?.focus());
 				event?.stopPropagation();
 				window.addEventListener('click', onClick);
 			};
@@ -103,6 +102,8 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
 			const closeModal = () => dialog.close();
 
 			openBtn.addEventListener('click', openModal);
+			openBtn.addEventListener('pointerenter', () => void loadPagefind(), { once: true });
+			openBtn.addEventListener('focus', () => void loadPagefind(), { once: true });
 			openBtn.disabled = false;
 			closeBtn.addEventListener('click', closeModal);
 
@@ -111,7 +112,6 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
 				window.removeEventListener('click', onClick);
 			});
 
-			// Listen for `ctrl + k` and `cmd + k` keyboard shortcuts.
 			window.addEventListener('keydown', (e) => {
 				if ((e.metaKey === true || e.ctrlKey === true) && e.key === 'k') {
 					dialog.open ? closeModal() : openModal();
@@ -150,10 +150,11 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
 				}
 			};
 
-			const initPagefind = () => {
-				if (import.meta.env.DEV) return;
-				const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
-				onIdle(async () => {
+			let pagefindReady: Promise<void> | undefined;
+
+			const loadPagefind = () => {
+				if (import.meta.env.DEV) return Promise.resolve();
+				pagefindReady ??= (async () => {
 					// @ts-expect-error Missing types for @pagefind/default-ui package.
 					const { PagefindUI } = await import('@pagefind/default-ui');
 					new PagefindUI({
@@ -171,14 +172,9 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
 							return result;
 						},
 					});
-				});
+				})();
+				return pagefindReady;
 			};
-
-			if (document.readyState === 'loading') {
-				window.addEventListener('DOMContentLoaded', initPagefind, { once: true });
-			} else {
-				initPagefind();
-			}
 		}
 	}
 	if (!customElements.get('site-search')) {

@@ -1,0 +1,29 @@
+---
+import discord from '../../../../site/public/main/icons/ui/discord.svg?raw';
+import github from '../../../../site/public/main/icons/ui/github-logo.svg?raw';
+import home from '../../../../site/public/main/icons/ui/home.svg?raw';
+import repo from '../../../../site/public/main/icons/ui/repo.svg?raw';
+import telescope from '../../../../site/public/main/icons/ui/telescope.svg?raw';
+import zen from '../../../../site/public/main/icons/ui/zen.svg?raw';
+import zenExit from '../../../../site/public/main/icons/ui/zen-exit.svg?raw';
+
+const icons = { discord, github, home, repo, telescope, zen, 'zen-exit': zenExit };
+
+interface Props {
+  name: keyof typeof icons;
+}
+
+const { name } = Astro.props;
+const svg = icons[name].replace('<svg', '<svg aria-hidden="true" class="nv-header-icon"');
+---
+
+<Fragment set:html={svg} />
+
+<style is:global>
+  .nv-header-icon {
+    display: block;
+    flex: none;
+    width: var(--nv-header-icon-size);
+    height: var(--nv-header-icon-size);
+  }
+</style>

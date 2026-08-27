@@ -981,6 +981,37 @@ function showNotFoundError(url) {
   });
 }
 
+function initPageNavShortcut() {
+  const paths = Array.from(document.querySelectorAll('.nav-tabs a'))
+    .map(link => link.getAttribute('href') || '')
+    .filter(Boolean)
+    .map(href => normalizeMainPagePath(href) || href);
+  const index = paths.indexOf(normalizeMainPagePath(location.pathname));
+  if (paths.length < 2 || index < 0) return;
+
+  const isApple = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
+  const guarded = 'input, select, textarea, [contenteditable=""], [contenteditable="true"], [role="tree"], [role="grid"]';
+
+  document.addEventListener('keydown', event => {
+    if (event.repeat || event.altKey || event.shiftKey) return;
+    const primaryKey = isApple ? event.metaKey : event.ctrlKey;
+    const otherPrimaryKey = isApple ? event.ctrlKey : event.metaKey;
+    if (!primaryKey || otherPrimaryKey) return;
+
+    const step = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
+    if (!step) return;
+
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest(guarded)) return;
+    if (document.querySelector('dialog[open], .settings-modal:not([hidden])')) return;
+
+    const next = paths[index + step];
+    if (!next) return;
+    event.preventDefault();
+    location.assign(next);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const notFoundPath = consumeNotFoundPath();
   rememberActivePage(location.pathname);
@@ -990,6 +1021,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSelectUI();
   initFiltering();
   initSearchShortcut();
+  initPageNavShortcut();
   initClipboard();
   if (notFoundPath) showNotFoundError(notFoundPath);
 }, { once: true });

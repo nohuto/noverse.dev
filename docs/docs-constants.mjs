@@ -26,7 +26,7 @@ export const CATEGORY_LABELS = {
   visibility: 'Visibility',
 };
 
-export const DIRECTORY_LABEL_OVERRIDES = {
+const DIRECTORY_LABEL_OVERRIDES = {
   'windbg-notes/windbg-init': 'WinDbg Init',
   'windbg-notes/threads/thread-internals': 'Thread Internals',
   'windbg-notes/threads/examining-thread-activity': 'Examining Thread Activity',
@@ -56,7 +56,7 @@ export function getDirectoryLabel(directory) {
   return toTitleCase(segment);
 }
 
-export function toTitleCase(value) {
+function toTitleCase(value) {
   return value
     .split(/[-_\s]+/)
     .filter(Boolean)

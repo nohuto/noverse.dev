@@ -3,9 +3,11 @@ import config from 'virtual:starlight/user-config';
 
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import Search from 'virtual:starlight/components/Search';
-import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import { getActiveRepo } from '../../utils/active-repo';
+import { getZenTarget } from '../../utils/zen-mode';
+import HeaderIcon from './HeaderIcon.astro';
+import KeyboardShortcuts from './KeyboardShortcuts.astro';
 
 const { id, sidebar } = Astro.locals.starlightRoute;
 
@@ -13,9 +15,8 @@ const activeRepo = getActiveRepo(id, sidebar);
 const hasActiveRepo = Boolean(activeRepo && !['index', '404'].includes(activeRepo));
 const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
 
-/**
- * Render the `Search` component if Pagefind is enabled or the default search component has been overridden.
- */
+const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.starlightViewModes.modes);
+
 const shouldRenderSearch =
   config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
 ---
@@ -32,19 +33,38 @@ const shouldRenderSearch =
     {shouldRenderSearch && <Search />}
   </div>
   <div class="sl-hidden md:sl-flex print:hidden right-group">
+    <KeyboardShortcuts zenHref={zenTarget?.href} />
     {
-      hasActiveRepo && (
-        <a class="header-shortcut" href={repoHref} target="_blank" rel="noopener noreferrer" aria-label={`Open ${activeRepo} repository`}>
-          <span aria-hidden="true" class="header-shortcut-icon"></span>
+      zenTarget && (
+        <a
+          class="header-icon-link zen-link"
+          href={zenTarget.href}
+          aria-label={Astro.locals.t(zenTarget.switchToText)}
+          aria-keyshortcuts="Control+Shift+X"
+          data-nv-tip="Ctrl+Shift+X"
+          data-zen-toggle
+        >
+          <HeaderIcon name={inZenMode ? 'zen-exit' : 'zen'} />
         </a>
       )
     }
-    <div class="sl-flex social-icons">
-      <SocialIcons />
-      <a class="docs-home-link" href="/" aria-label="Go to homepage">
-        <span aria-hidden="true" class="docs-home-icon"></span>
-      </a>
-    </div>
+    {
+      hasActiveRepo && (
+        <a class="header-icon-link repo-link" href={repoHref} target="_blank" rel="noopener noreferrer" aria-label={`Open ${activeRepo} repository`}>
+          <HeaderIcon name="repo" />
+        </a>
+      )
+    }
+    <a class="header-icon-link external-link" href="https://github.com/nohuto" rel="me" aria-label="GitHub">
+      <HeaderIcon name="github" />
+    </a>
+    <a class="header-icon-link external-link" href="https://discord.noverse.dev" rel="me" aria-label="Discord">
+      <HeaderIcon name="discord" />
+    </a>
+    <a class="header-icon-link home-link" href="/" aria-label="Go to homepage">
+      <HeaderIcon name="home" />
+    </a>
+    <span class="header-divider" aria-hidden="true"></span>
     <ThemeSelect />
     <LanguageSelect />
   </div>
@@ -79,20 +99,15 @@ const shouldRenderSearch =
       min-width: 0;
     }
 
-    .right-group,
-    .social-icons {
-      align-items: center;
-      gap: 1rem;
-    }
-
     .right-group {
-      gap: 0;
+      --nv-header-control-gap: 0.75rem;
+      align-items: center;
+      gap: var(--nv-header-control-gap);
       padding-inline-end: 0.5rem;
     }
 
-    .right-group > :global(docs-theme-select),
-    .right-group > :global(starlight-lang-select) {
-      margin-inline-start: 0.45rem;
+    .right-group > :global(telescope-search) {
+      display: inline-flex;
     }
 
     .prompt-line {
@@ -130,59 +145,28 @@ const shouldRenderSearch =
       outline: none;
     }
 
-    .header-shortcut,
-    .docs-home-link {
+    .header-icon-link {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      width: var(--nv-header-icon-size);
+      height: var(--nv-header-control-height);
       color: var(--sl-color-gray-2);
       line-height: 0;
       text-decoration: none;
     }
 
-    .header-shortcut {
-      margin-inline-end: 1rem;
-    }
-
-    .header-shortcut:hover,
-    .header-shortcut:focus-visible,
-    .docs-home-link:hover,
-    .docs-home-link:focus-visible {
+    .header-icon-link:is(:hover, :focus-visible) {
       color: var(--sl-color-accent-high);
       outline: none;
     }
 
-    .social-icons::after {
-      content: '';
-      inline-size: 0;
-      height: 2rem;
-      border-inline-end: 1px solid var(--sl-color-gray-5);
-      margin-inline-end: 0.45rem;
+    .header-divider {
+      flex: none;
+      width: 1px;
+      height: var(--nv-header-control-height);
+      background-color: var(--sl-color-gray-5);
     }
-
-    .social-icons::before {
-      content: none;
-    }
-
-    .header-shortcut-icon,
-    .docs-home-icon {
-      display: block;
-      width: var(--nv-header-icon-size);
-      height: var(--nv-header-icon-size);
-    }
-
-    .header-shortcut-icon {
-      background-color: currentColor;
-      -webkit-mask: var(--nv-repo-icon) center / contain no-repeat;
-      mask: var(--nv-repo-icon) center / contain no-repeat;
-    }
-
-    .docs-home-icon {
-      background-color: currentColor;
-      -webkit-mask: var(--nv-home-icon) center / contain no-repeat;
-      mask: var(--nv-home-icon) center / contain no-repeat;
-    }
-
     @media (min-width: 50rem) {
       :global(:root[data-has-sidebar]) {
         --__sidebar-pad: calc(2 * var(--sl-nav-pad-x));
@@ -211,4 +195,3 @@ const shouldRenderSearch =
     }
   }
 </style>
-

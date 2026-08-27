@@ -1,0 +1,137 @@
+---
+interface Props {
+  zenHref?: string | undefined;
+}
+
+const { zenHref } = Astro.props;
+
+const { pagination } = Astro.locals.starlightRoute;
+
+const trimSlash = (value: string) => value.replace(/\/+$/, '');
+const isDocsRoot = trimSlash(Astro.url.pathname) === trimSlash(import.meta.env.BASE_URL);
+
+const prevHref = pagination.prev?.href ?? (isDocsRoot ? '/policies' : undefined);
+---
+
+<keyboard-shortcuts
+  data-zen-href={zenHref}
+  data-prev-href={prevHref}
+  data-next-href={pagination.next?.href}></keyboard-shortcuts>
+
+<script>
+  class KeyboardShortcuts extends HTMLElement {
+    #controller = new AbortController();
+
+    connectedCallback() {
+      const signal = this.#controller.signal;
+      const isApple = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
+      const { zenHref, prevHref, nextHref } = this.dataset;
+
+      const isTyping = (event: KeyboardEvent) => {
+        const target = (event.composedPath()[0] ?? event.target) as HTMLElement | null;
+        if (!target) return false;
+        return /^(?:input|select|textarea)$/i.test(target.nodeName) || target.isContentEditable;
+      };
+
+      const navigate = (href: string | undefined) => {
+        if (href) window.location.assign(href);
+      };
+
+      document.addEventListener('keydown', (event) => {
+        if (event.repeat || isTyping(event)) return;
+        if (document.querySelector('dialog[open]')) return;
+
+        const primaryKey = isApple ? event.metaKey : event.ctrlKey;
+        const otherPrimaryKey = isApple ? event.ctrlKey : event.metaKey;
+        if (!primaryKey || otherPrimaryKey || event.altKey) return;
+
+        const key = event.key.toLowerCase();
+
+        if (event.shiftKey) {
+          if (key === 'x') {
+            if (!zenHref) return;
+            event.preventDefault();
+            navigate(zenHref);
+            return;
+          }
+          if (key !== 'f') return;
+          const filter = document.getElementById('sidebar-tree-search');
+          if (!(filter instanceof HTMLInputElement) || filter.getClientRects().length === 0) return;
+          event.preventDefault();
+          filter.focus();
+          filter.select();
+          return;
+        }
+
+        if (key === 'arrowleft' && prevHref) {
+          event.preventDefault();
+          navigate(prevHref);
+        } else if (key === 'arrowright' && nextHref) {
+          event.preventDefault();
+          navigate(nextHref);
+        }
+      }, { signal });
+
+      if (prevHref || nextHref) this.#enableSwipeNavigation(navigate, prevHref, nextHref);
+    }
+
+    #enableSwipeNavigation(
+      navigate: (href: string | undefined) => void,
+      prevHref: string | undefined,
+      nextHref: string | undefined
+    ) {
+      const signal = this.#controller.signal;
+      const minDistance = 75;
+      let startX = 0;
+      let startY = 0;
+      let tracking = false;
+
+      const scrollsHorizontally = (target: EventTarget | null) => {
+        let node = target instanceof Element ? target : null;
+        while (node && node !== document.body) {
+          if (node.scrollWidth > node.clientWidth + 1) {
+            const overflow = getComputedStyle(node).overflowX;
+            if (overflow === 'auto' || overflow === 'scroll') return true;
+          }
+          node = node.parentElement;
+        }
+        return false;
+      };
+
+      document.addEventListener('touchstart', (event) => {
+        if (event.touches.length !== 1 || scrollsHorizontally(event.target)) {
+          tracking = false;
+          return;
+        }
+        tracking = true;
+        startX = event.touches[0]!.screenX;
+        startY = event.touches[0]!.screenY;
+      }, { passive: true, signal });
+
+      document.addEventListener('touchend', (event) => {
+        if (!tracking) return;
+        tracking = false;
+        const touch = event.changedTouches[0];
+        if (!touch) return;
+        const dx = touch.screenX - startX;
+        const dy = touch.screenY - startY;
+        if (Math.abs(dx) < minDistance || Math.abs(dx) <= Math.abs(dy)) return;
+        navigate(dx < 0 ? nextHref : prevHref);
+      }, { passive: true, signal });
+    }
+
+    disconnectedCallback() {
+      this.#controller.abort();
+    }
+  }
+
+  if (!customElements.get('keyboard-shortcuts')) {
+    customElements.define('keyboard-shortcuts', KeyboardShortcuts);
+  }
+</script>
+
+<style>
+  keyboard-shortcuts {
+    display: contents;
+  }
+</style>

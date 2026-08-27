@@ -1,9 +1,12 @@
 ---
 import Default from '@astrojs/starlight/components/PageTitle.astro';
-import ViewModeSwitcher from 'starlight-view-modes/components/ViewModeSwitcher.astro';
+import { getZenTarget } from '../../utils/zen-mode';
+import HeaderIcon from './HeaderIcon.astro';
 
 const { entry } = Astro.locals.starlightRoute;
 const isTemplateSplash = entry.data.template === 'splash';
+
+const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.starlightViewModes.modes);
 ---
 
 {
@@ -12,9 +15,19 @@ const isTemplateSplash = entry.data.template === 'splash';
   ) : (
     <div class="docs-page-title-row">
       <Default />
-      <div class="docs-page-title-switcher">
-        <ViewModeSwitcher type="social-links" />
-      </div>
+      {zenTarget && (
+        <div class="docs-page-title-switcher">
+          <a
+            class="docs-page-title-zen"
+            href={zenTarget.href}
+            aria-label={Astro.locals.t(zenTarget.switchToText)}
+            aria-keyshortcuts="Control+Shift+X"
+            data-nv-tip="Ctrl+Shift+X"
+          >
+            <HeaderIcon name={inZenMode ? 'zen-exit' : 'zen'} />
+          </a>
+        </div>
+      )}
     </div>
   )
 }
@@ -29,6 +42,20 @@ const isTemplateSplash = entry.data.template === 'splash';
     align-items: center;
     justify-content: flex-end;
     margin-top: 0.35rem;
+  }
+
+  .docs-page-title-zen {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sl-color-gray-2);
+    line-height: 0;
+    text-decoration: none;
+  }
+
+  .docs-page-title-zen:is(:hover, :focus-visible) {
+    color: var(--sl-color-accent-high);
+    outline: none;
   }
 
   body:has(.starlight-view-modes-zen-mode-no-header):has(.starlight-view-modes-zen-mode-no-table-of-contents) .docs-page-title-row {

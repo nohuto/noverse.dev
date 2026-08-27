@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightTelescope from 'starlight-telescope';
 import starlightThemeRapide from 'starlight-theme-rapide';
 import starlightScrollToTop from 'starlight-scroll-to-top';
 import starlightCodeblockFullscreen from 'starlight-codeblock-fullscreen';
@@ -114,9 +115,26 @@ export default defineConfig({
     starlight({
       plugins: [
         noverseDocsLabels,
+        starlightTelescope({
+          theme: {
+            overlayBackground: 'var(--sl-color-backdrop-overlay)',
+            modalBackground: 'var(--sl-color-bg-nav)',
+            modalBackgroundAlt: 'var(--sl-color-bg)',
+            accentColor: 'var(--sl-color-accent)',
+            accentHover: 'color-mix(in srgb, var(--sl-color-accent) 10%, transparent)',
+            accentSelected: 'color-mix(in srgb, var(--sl-color-accent) 18%, transparent)',
+            textPrimary: 'var(--sl-color-white)',
+            textSecondary: 'var(--sl-color-gray-3)',
+            border: 'var(--sl-color-hairline-light)',
+            borderActive: 'var(--sl-color-gray-5)',
+            pinColor: 'var(--sl-color-purple)',
+            tagColor: 'var(--sl-color-green)',
+          },
+        }),
         starlightThemeRapide(),
         starlightViewModes({
           zenModeSettings: {
+            keyboardShortcut: 'Ctrl+Alt+Shift+Z',
             displayOptions: {
               showHeader: false,
               showSidebar: false,
@@ -188,6 +206,7 @@ export default defineConfig({
         PageTitle: './src/components/starlight/PageTitle.astro',
         Search: './src/components/starlight/Search.astro',
         Sidebar: './src/components/starlight/Sidebar.astro',
+        TableOfContents: './src/components/starlight/TableOfContents.astro',
         MobileMenuFooter: './src/components/starlight/MobileMenuFooter.astro',
         ThemeProvider: './src/components/starlight/ThemeProvider.astro',
         ThemeSelect: './src/components/starlight/ThemeSelect.astro',

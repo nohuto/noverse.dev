@@ -43,11 +43,8 @@
   --sl-text-h6: 0.9375rem;
   --nv-ui-radius: 0px;
   --nv-search-icon: url("/main/icons/ui/search.svg");
-  --nv-home-icon: url("/main/icons/ui/home.svg");
-  --nv-repo-icon: url("/main/icons/ui/repo.svg");
-  --nv-github-icon: url("/main/icons/ui/github-logo.svg");
-  --nv-discord-icon: url("/main/icons/ui/discord.svg");
-  --nv-header-icon-size: 1rem;
+  --nv-header-icon-size: 17px;
+  --nv-header-control-height: 26px;
   --nv-x-icon: url("/main/icons/ui/x.svg");
   --sl-color-accent-low: #143448;
   --sl-color-accent: #4792c1;
@@ -57,36 +54,94 @@
   --scrollbar-track: var(--sl-color-gray-6);
   --scrollbar-thumb: var(--sl-color-gray-4);
   --scrollbar-thumb-hover: var(--sl-color-accent-high);
+  --telescope-accent-high: var(--sl-color-accent-high) !important;
+  --telescope-accent-low: var(--sl-color-accent-low) !important;
+}
+
+.right-group {
+  gap: var(--nv-header-control-gap);
+}
+
+.telescope__trigger-btn,
+.telescope__modal,
+.telescope__close-button,
+.telescope__tab,
+.telescope__tag,
+.telescope__pin-button,
+.telescope__modal kbd,
+.telescope__highlight,
+.telescope__clear-btn {
+  border-radius: var(--nv-ui-radius) !important;
+}
+
+.telescope__results::-webkit-scrollbar-thumb,
+.telescope__section::-webkit-scrollbar-thumb {
+  border-radius: var(--nv-ui-radius);
+}
+
+.telescope__trigger-btn {
+  align-items: center;
+  justify-content: center;
+  gap: 0 !important;
+  width: var(--nv-header-icon-size);
+  height: var(--nv-header-control-height);
+  padding: 0 !important;
+  background: transparent !important;
+  color: var(--sl-color-gray-2) !important;
+}
+
+.telescope__trigger-btn > svg {
+  flex: 0 0 auto;
+  width: var(--nv-header-icon-size);
+  height: var(--nv-header-icon-size);
+  fill: transparent;
+  stroke: transparent;
+  background-color: currentColor;
+  -webkit-mask: url('/main/icons/ui/telescope.svg') center / contain no-repeat;
+  mask: url('/main/icons/ui/telescope.svg') center / contain no-repeat;
+}
+
+.telescope__shortcut {
+  display: none !important;
+}
+
+.telescope__trigger-btn:is(:hover, :focus-visible) {
+  background: transparent !important;
+  color: var(--sl-color-accent-high) !important;
+  outline: none !important;
+}
+
+.telescope__close-button,
+.telescope__close-button:hover {
+  background: transparent !important;
+}
+
+.telescope__close-button {
+  color: var(--sl-color-gray-2) !important;
+}
+
+.telescope__close-button:hover,
+.telescope__close-button:focus-visible {
+  color: var(--sl-color-accent-high) !important;
+}
+
+.telescope__close-button:focus-visible {
+  outline: none !important;
+}
+
+.telescope__close-button svg {
+  width: var(--nv-header-icon-size);
+  height: var(--nv-header-icon-size);
+  fill: transparent;
+  stroke: transparent;
+  background-color: currentColor;
+  -webkit-mask: var(--nv-x-icon) center / contain no-repeat;
+  mask: var(--nv-x-icon) center / contain no-repeat;
 }
 
 body {
   font-size: var(--sl-text-body);
   font-weight: 350;
-}
-
-.social-icons svg {
-  font-size: var(--nv-header-icon-size);
-}
-
-.social-icons a[href="https://github.com/nohuto"] {
-  --nv-social-icon: var(--nv-github-icon);
-}
-
-.social-icons a[href="https://discord.noverse.dev"] {
-  --nv-social-icon: var(--nv-discord-icon);
-}
-
-.social-icons a:is([href="https://github.com/nohuto"], [href="https://discord.noverse.dev"]) svg {
-  display: none;
-}
-
-.social-icons a:is([href="https://github.com/nohuto"], [href="https://discord.noverse.dev"])::before {
-  content: "";
-  width: var(--nv-header-icon-size);
-  height: var(--nv-header-icon-size);
-  background-color: currentColor;
-  -webkit-mask: var(--nv-social-icon) center / contain no-repeat;
-  mask: var(--nv-social-icon) center / contain no-repeat;
 }
 
 starlight-menu-button > button {
@@ -319,6 +374,14 @@ body::-webkit-scrollbar-thumb:hover,
   background: var(--scrollbar-thumb-hover);
 }
 
+.right-sidebar {
+  scrollbar-width: none !important;
+}
+
+.right-sidebar::-webkit-scrollbar {
+  display: none;
+}
+
 body::-webkit-scrollbar {
   width: 1px;
   height: 1px;
@@ -346,9 +409,17 @@ body::-webkit-scrollbar-thumb {
   display: block;
 }
 
+.sidebar-tree-shortcut {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
 .sidebar-tree-search-icon {
   position: absolute;
-  top: calc(50% + 1px);
+  top: 50%;
   left: 9px;
   width: 13px;
   height: 13px;
@@ -373,9 +444,9 @@ body::-webkit-scrollbar-thumb {
   background-color: color-mix(in srgb, var(--sl-rapide-ui-bg-color) 96%, var(--sl-color-bg));
   color: var(--sl-color-text);
   font-size: 0.78125rem;
-  height: 24px;
-  line-height: 24px;
-  padding: 0 10px 0 29px;
+  height: var(--nv-header-control-height);
+  line-height: var(--nv-header-control-height);
+  padding: 0 88px 0 29px;
   box-shadow: none;
 }
 
@@ -423,6 +494,10 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width: 50rem) {
+  .sidebar-tree-search-input {
+    padding-inline-end: 10px;
+  }
+
   .sidebar-docs-copyright {
     font-size: 0.625rem;
   }
@@ -445,24 +520,32 @@ site-search button[data-open-modal]:is(:hover, :focus-visible) {
   color: var(--sl-color-accent-high);
 }
 
-site-search button[data-open-modal] > kbd {
-  grid-auto-flow: column;
-  place-items: center;
-  gap: 0.25em;
+site-search button[data-open-modal] > kbd,
+.sidebar-tree-shortcut {
+  display: none;
+  align-items: center;
+  gap: 0.3em;
   min-height: 16px;
-  padding: 0 6px;
+  padding: 0 5px;
   border: 1px solid var(--sl-color-hairline);
   border-radius: var(--nv-ui-radius);
   background-color: color-mix(in srgb, var(--sl-color-bg) 90%, var(--sl-rapide-ui-bg-color));
   color: var(--sl-color-gray-3);
-  font-size: 0.6875rem;
-  line-height: 1;
+  font: 0.6875rem/1 var(--__sl-font-mono);
   white-space: nowrap;
 }
 
-site-search button[data-open-modal] > kbd kbd {
+site-search button[data-open-modal] > kbd kbd,
+.sidebar-tree-shortcut kbd {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
   font: inherit;
-  line-height: 1;
+}
+
+.starlight-view-modes-table-of-contents-container kbd:has(kbd) {
+  display: none !important;
 }
 
 site-search dialog #starlight__search {
@@ -471,26 +554,17 @@ site-search dialog #starlight__search {
   --pagefind-ui-image-border-radius: var(--nv-ui-radius);
 }
 
-html .starlight-view-modes-social-link-a {
-  color: var(--sl-color-gray-2);
-}
-
-html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
-  color: var(--sl-color-accent-high);
-  opacity: 1;
-  outline: none;
-}
-
 @media (min-width: 50rem) {
-  site-search button[data-open-modal] > kbd {
-    display: inline-grid;
+  site-search button[data-open-modal] > kbd,
+  .sidebar-tree-shortcut {
+    display: inline-flex;
   }
 
   site-search button[data-open-modal] {
     justify-content: initial;
     min-width: 0;
-    min-height: 26px;
-    height: 26px;
+    min-height: var(--nv-header-control-height);
+    height: var(--nv-header-control-height);
     padding-inline: 0.65rem 0.45rem;
     border-color: var(--sl-rapide-ui-border-color);
     background-color: color-mix(in srgb, var(--sl-rapide-ui-bg-color) 96%, var(--sl-color-bg));
@@ -630,5 +704,42 @@ html .starlight-view-modes-social-link-a:is(:hover, :focus-visible) {
 @media (min-width: 50rem) {
   .sidebar-pane .top-level > li + li {
     margin-top: 0.5rem !important;
+  }
+}
+
+@media (hover: hover) {
+  .header-icon-link[data-nv-tip],
+  .telescope__trigger-btn {
+    position: relative;
+  }
+
+  .header-icon-link[data-nv-tip]::after,
+  .telescope__trigger-btn::after {
+    content: attr(data-nv-tip);
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    z-index: 30;
+    translate: -50% 0;
+    padding: 0.25rem 0.4rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: var(--nv-ui-radius);
+    background-color: var(--sl-color-bg-nav);
+    color: var(--sl-color-gray-2);
+    font: 0.6875rem/1 var(--__sl-font-mono);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease-out;
+  }
+
+  .telescope__trigger-btn::after {
+    content: 'Ctrl+/';
+  }
+
+  .header-icon-link[data-nv-tip]:is(:hover, :focus-visible)::after,
+  .telescope__trigger-btn:is(:hover, :focus-visible)::after {
+    opacity: 1;
+    transition-delay: 300ms;
   }
 }

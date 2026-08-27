@@ -1,35 +1,59 @@
 ---
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
-import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import { getActiveRepo } from '../../utils/active-repo';
+import { getZenTarget } from '../../utils/zen-mode';
+import HeaderIcon from './HeaderIcon.astro';
 
 const { id, sidebar } = Astro.locals.starlightRoute;
 
 const activeRepo = getActiveRepo(id, sidebar);
 const hasActiveRepo = Boolean(activeRepo && !['index', '404'].includes(activeRepo));
 const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
+
+const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.starlightViewModes.modes);
 ---
 
 <div class="mobile-preferences sl-flex">
   <div class="mobile-links">
+    <button type="button" class="mobile-icon-link" aria-label="Open Telescope Search" data-mobile-telescope>
+      <HeaderIcon name="telescope" />
+    </button>
     {
-      hasActiveRepo && (
-        <a class="mobile-repo-link" href={repoHref} target="_blank" rel="noopener noreferrer" aria-label={`Open ${activeRepo} repository`}>
-          <span aria-hidden="true" class="mobile-repo-icon"></span>
+      zenTarget && (
+        <a class="mobile-icon-link" href={zenTarget.href} aria-label={Astro.locals.t(zenTarget.switchToText)}>
+          <HeaderIcon name={inZenMode ? 'zen-exit' : 'zen'} />
         </a>
       )
     }
-    <div class="social-icons">
-      <SocialIcons />
-      <a class="docs-home-link" href="/" aria-label="Go to homepage">
-        <span aria-hidden="true" class="docs-home-icon"></span>
-      </a>
-    </div>
+    {
+      hasActiveRepo && (
+        <a class="mobile-icon-link" href={repoHref} target="_blank" rel="noopener noreferrer" aria-label={`Open ${activeRepo} repository`}>
+          <HeaderIcon name="repo" />
+        </a>
+      )
+    }
+    <a class="mobile-icon-link" href="https://github.com/nohuto" rel="me" aria-label="GitHub">
+      <HeaderIcon name="github" />
+    </a>
+    <a class="mobile-icon-link" href="https://discord.noverse.dev" rel="me" aria-label="Discord">
+      <HeaderIcon name="discord" />
+    </a>
+    <a class="mobile-icon-link" href="/" aria-label="Go to homepage">
+      <HeaderIcon name="home" />
+    </a>
   </div>
   <ThemeSelect />
   <LanguageSelect />
 </div>
+
+<script>
+  document.addEventListener('click', (event) => {
+    const trigger = (event.target as Element | null)?.closest('[data-mobile-telescope]');
+    if (!trigger) return;
+    document.querySelector<HTMLButtonElement>('telescope-search button')?.click();
+  });
+</script>
 
 <style>
   @layer starlight.core {
@@ -52,20 +76,7 @@ const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
       margin-inline-end: auto;
     }
 
-    .social-icons {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      padding-block: 0;
-    }
-
-    .social-icons:empty {
-      display: none;
-    }
-
-    .social-icons :global(a),
-    .docs-home-link,
-    .mobile-repo-link {
+    .mobile-icon-link {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -73,37 +84,16 @@ const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
       min-height: 1.75rem;
       padding: 0.25rem;
       margin: 0;
+      border: 0;
+      background: transparent;
       color: var(--sl-color-gray-2);
       text-decoration: none;
     }
 
-    .social-icons :global(a:hover),
-    .social-icons :global(a:focus-visible),
-    .docs-home-link:hover,
-    .docs-home-link:focus-visible,
-    .mobile-repo-link:hover,
-    .mobile-repo-link:focus-visible {
+    .mobile-icon-link:hover,
+    .mobile-icon-link:focus-visible {
       color: var(--sl-color-accent-high);
       outline: none;
-    }
-
-    .docs-home-icon,
-    .mobile-repo-icon {
-      display: block;
-      width: var(--nv-header-icon-size);
-      height: var(--nv-header-icon-size);
-    }
-
-    .mobile-repo-icon {
-      background-color: currentColor;
-      -webkit-mask: var(--nv-repo-icon) center / contain no-repeat;
-      mask: var(--nv-repo-icon) center / contain no-repeat;
-    }
-
-    .docs-home-icon {
-      background-color: currentColor;
-      -webkit-mask: var(--nv-home-icon) center / contain no-repeat;
-      mask: var(--nv-home-icon) center / contain no-repeat;
     }
   }
 </style>

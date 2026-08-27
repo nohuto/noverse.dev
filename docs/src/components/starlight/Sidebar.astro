@@ -79,9 +79,12 @@ function isSectionsGroup(entry) {
       autocomplete="off"
       spellcheck="false"
     />
+    <kbd class="sidebar-tree-shortcut" aria-hidden="true">
+      <kbd data-sidebar-primary-key>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd>
+    </kbd>
   </label>
   <p id="sidebar-tree-no-results" class="sidebar-tree-no-results sl-hidden">
-    No results found in this navigation tree.
+    No matching section(s)
   </p>
 </div>
 
@@ -104,6 +107,11 @@ function isSectionsGroup(entry) {
       if (!searchInput || !noResultsMessage || !sidebarTree) return;
       if (searchInput.dataset.bound === 'true') return;
       searchInput.dataset.bound = 'true';
+
+      const primaryKey = document.querySelector('[data-sidebar-primary-key]');
+      if (primaryKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+        primaryKey.textContent = '⌘';
+      }
 
       const detailsElements = Array.from(sidebarTree.querySelectorAll('details'));
       const items = Array.from(sidebarTree.querySelectorAll('li'));

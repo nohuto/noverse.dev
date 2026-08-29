@@ -27,5 +27,5 @@
   {"repo": "nohuto/reg2bat", "title": "reg2bat", "image": "/main/images/projects/reg2bat", "width": 640, "height": 703, "description": "A simple CL tool that converts .reg to .bat"},
   {"repo": "nohuto/pbo2-uv", "title": "PBO2 UV Guide", "image": "/main/images/projects/pbo2-uv-pbotechow", "width": 640, "height": 360, "description": "Guide on how to set up PBO using curve optimizer."},
   {"repo": "nohuto/gpu-oc-uv", "title": "GPU OC/UV Guide", "image": "/main/images/projects/gpu-oc-uv-oc", "width": 640, "height": 225, "description": "Guide on how to OC/UV your GPU via MSI Afterburner."},
-  {"repo": "nohuto/noverse.dev", "title": "noverse.dev", "projects": false, "home": {"name": "noverse.dev", "docs": "https://github.com/nohuto/noverse.dev", "docsLabel": "noverse.dev repository", "docsTitle": "Repository", "description": "Website code, including some web tools.", "external": true, "order": 4}, "description": "Website code, including some web tools."}
+  {"repo": "nohuto/noverse.dev", "title": "noverse.dev", "projects": false, "home": {"name": "noverse.dev", "docs": "https://github.com/nohuto/noverse.dev", "docsLabel": "noverse.dev repository", "docsTitle": "Repository", "description": "Website code, including some web tools & docs.", "external": true, "order": 4}, "description": "Website code, including some web tools & docs."}
 ]

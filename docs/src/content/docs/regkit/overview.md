@@ -10,7 +10,7 @@ RegKit is a native Windows Registry editor written in C++ using the Win32 API an
 
 ## Differences to Default RegEdit
 
-RegKit adds functionality that standard regedit doesn't support/expose:
+RegKit adds functionality that standard regedit doesn't support:
 
 - A real REGISTRY root view in addition to standard hives
 - [Theme modes](https://github.com/nohuto/regkit#theme-presets) (System/Light/Dark) and custom theme presets (edit colors, import/export `.rktheme`)
@@ -41,6 +41,34 @@ RegKit adds functionality that standard regedit doesn't support/expose:
 - `.reg` / hive file/folder drag and drop support
 - Read only mode
 - Miscellaneous common functionalities
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl+N` | Open local registry tab |
+| `Ctrl+R` | Connect to remote registry |
+| `Ctrl+O` | Open offline registry |
+| `Ctrl+S` | Save current editable tab |
+| `Ctrl+E` | Export |
+| `Ctrl+F` | Find |
+| `Ctrl+H` | Replace |
+| `Ctrl+G` | Go to a registry path |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / redo |
+| `Ctrl+C` / `Ctrl+V` | Copy / paste registry items |
+| `Ctrl+X` / `Delete` | Delete selected registry items |
+| `Ctrl+A` | Select all in the focused list or text field |
+| `Ctrl+Shift+C` | Copy current key name |
+| `F2` | Rename selected key or value |
+| `F5` | Refresh |
+| `Alt+Left` / `Alt+Right` | Navigate back / forward |
+| `Alt+Up` | Navigate to parent key |
+| `Ctrl+L` / `Alt+D` | Focus address bar |
+| `Ctrl+Shift+V` | Paste into address bar and navigate |
+| `Tab` | Switch between key tree & value list |
+| `Shift+F10` / `Menu` | Open context menu for focused item |
+| `F10` | Activate menu bar |
+| `Alt+F4` | Close RegKit |
 
 ## Command Line
 
@@ -189,7 +217,7 @@ Default presets are `.reg` exports that fill the value list's `Default` column w
 These are the exact builds for each file:
 
 | Release | Edition | Architecture | Build |
-| --- | --- | --- | --- | --- |
+| --- | --- | --- | --- |
 | [Windows XP SP1]() | Pro x64 Edition | x64 | `5.2.3790.1830` |
 | [Windows Vista RTM](https://github.com/nohuto/regkit/tree/main/assets/defaults/WVista%20Business%20x64%20-%206.0.6000.16386) | Business | x64 | `6.0.6000.16386` |
 | [Windows 7 RTM](https://github.com/nohuto/regkit/tree/main/assets/defaults/W7%20Professional%20x64%20-%206.1.7600.16385) | Pro | x64 | `6.1.7600.16385` |

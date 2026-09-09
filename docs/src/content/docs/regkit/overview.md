@@ -6,7 +6,7 @@ sidebar:
   order: 1
 ---
 
-RegKit is a native Windows Registry editor written in C++ using the Win32 API and common controls for performance reasons. Based on its features, customization options, and the fact that it's FOSS, it's the best alternative to regedit.
+RegKit is a native Windows Registry editor written in C++ using the Win32 API and common controls for performance reasons. Based on its features, customization options, and the fact that it's FOSS, it's the best alternative to regedit. It currently supports Windows Vista through Windows 11 (32bit & 64bit versions).
 
 ## Differences to Default RegEdit
 
@@ -44,31 +44,90 @@ RegKit adds functionality that standard regedit doesn't support:
 
 ## Keyboard Shortcuts
 
+### Files & Registries
+
 | Shortcut | Action |
 | --- | --- |
 | `Ctrl+N` | Open local registry tab |
 | `Ctrl+R` | Connect to remote registry |
 | `Ctrl+O` | Open offline registry |
+| `Ctrl+Shift+O` | Open `.reg` file |
 | `Ctrl+S` | Save current editable tab |
 | `Ctrl+E` | Export |
-| `Ctrl+F` | Find |
-| `Ctrl+H` | Replace |
-| `Ctrl+G` | Go to a registry path |
-| `Ctrl+Z` / `Ctrl+Y` | Undo / redo |
-| `Ctrl+C` / `Ctrl+V` | Copy / paste registry items |
-| `Ctrl+X` / `Delete` | Delete selected registry items |
-| `Ctrl+A` | Select all in the focused list or text field |
-| `Ctrl+Shift+C` | Copy current key name |
-| `F2` | Rename selected key or value |
-| `F5` | Refresh |
-| `Alt+Left` / `Alt+Right` | Navigate back / forward |
+
+### Windows/Tabs
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl+Shift+N` | Open new RegKit window |
+| `Ctrl+W` | Close current tab |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Next/previous tab |
+| `Ctrl+1` - `Ctrl+9` | Select tab by position |
+| `Alt+F4` | Close RegKit |
+
+### Navigation
+
+| Shortcut | Action |
+| --- | --- |
+| `Alt+Left` / `Alt+Right` | Navigate back/forward |
 | `Alt+Up` | Navigate to parent key |
+| `Backspace` | Navigate back (outside text fields) |
+| `Ctrl+G` | Go to a registry path |
 | `Ctrl+L` / `Alt+D` | Focus address bar |
 | `Ctrl+Shift+V` | Paste into address bar and navigate |
+| `Ctrl+K` | Show and focus filter bar |
+| `F6` / `Shift+F6` | Cycle forward/backward through the visible panes |
 | `Tab` | Switch between key tree & value list |
-| `Shift+F10` / `Menu` | Open context menu for focused item |
+| `F5` | Refresh |
+
+### Editing
+
+| Shortcut | Action |
+| --- | --- |
+| `F7` | New key |
+| `F2` | Rename selected key or value |
+| `Delete` | Delete selected registry items |
+| `Ctrl+C` / `Ctrl+V` | Copy / paste registry items |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / redo |
+| `Ctrl+A` | Select all in the focused list or text field |
+| `Ctrl+Shift+C` | Copy current key name |
+| `Alt+Enter` | Permissions for the selected key |
+
+### View
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl+Shift+H` | Show or hide History pane |
 | `F10` | Activate menu bar |
-| `Alt+F4` | Close RegKit |
+| `Alt+F` / `Alt+E` / `Alt+V`... | Open matching menu (F = File, A = Favorites) |
+| `Shift+F10` / `Menu` | Open context menu for focused item |
+| `F1` | Open help |
+
+### Find & Replace
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl+F` | Find |
+| `Ctrl+H` | Replace |
+| `Enter` | Start search / replace |
+| `Escape` | Close window |
+| `Ctrl+Shift+G` | Open selected result in a new tab |
+| `Enter` (results list) | Open selected result |
+
+### Filter Bar
+
+| Shortcut | Action |
+| --- | --- |
+| `Escape` | Clear filter |
+| `Enter` / `Down` | Move to value list |
+
+### Value Editor
+
+| Shortcut | Action |
+| --- | --- |
+| `Enter` | Confirm |
+| `Ctrl+Enter` | Insert a line break in multi line fields |
+| `Escape` | Cancel |
 
 ## Command Line
 

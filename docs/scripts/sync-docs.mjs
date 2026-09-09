@@ -50,7 +50,13 @@ const REPOSITORIES = [
     url: repoUrl('REGKIT_REPO_URL', 'https://github.com/nohuto/regkit'),
     readmeOverview: true,
     sidebarOrderStart: 2,
-    files: ['guides/procmon.md', 'guides/wpr-wpa.md'],
+    files: ['docs/registry-fundamentals.md', 'docs/capture-table.md', 'docs/procmon.md', 'docs/wpr-wpa.md'],
+    outputPathOverrides: {
+      'docs/registry-fundamentals.md': 'registry-internals/registry-fundamentals',
+      'docs/capture-table.md': 'registry-internals/capture-table',
+      'docs/procmon.md': 'guides/procmon',
+      'docs/wpr-wpa.md': 'guides/wpr-wpa',
+    },
   },
   {
     name: 'app-guides',
@@ -101,9 +107,9 @@ const KNOWN_REMOTE_IMAGE_DIMENSIONS = new Map([
   ['https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif', { width: 640, height: 359 }],
 ]);
 const MOVED_IMAGE_URLS = new Map([
-  ['https://github.com/nohuto/regkit/blob/main/images/guide/images.png', 'https://github.com/nohuto/regkit/blob/main/guides/images/pmsave.png?raw=true'],
-  ['https://github.com/nohuto/regkit/blob/main/guide/images/WPRUI.png?raw=true', 'https://github.com/nohuto/regkit/blob/main/guides/images/WPRUI.png?raw=true'],
-  ['https://github.com/nohuto/regkit/blob/main/guide/images/WPA.png?raw=true', 'https://github.com/nohuto/regkit/blob/main/guides/images/WPA.png?raw=true'],
+  ['https://github.com/nohuto/regkit/blob/main/images/guide/images.png', 'https://github.com/nohuto/regkit/blob/main/docs/images/pmsave.png?raw=true'],
+  ['https://github.com/nohuto/regkit/blob/main/guide/images/WPRUI.png?raw=true', 'https://github.com/nohuto/regkit/blob/main/docs/images/WPRUI.png?raw=true'],
+  ['https://github.com/nohuto/regkit/blob/main/guide/images/WPA.png?raw=true', 'https://github.com/nohuto/regkit/blob/main/docs/images/WPA.png?raw=true'],
   ['https://github.com/nohuto/win-config/blob/main/system/images/cameraosd.png?raw=true', 'https://github.com/nohuto/win-config/blob/main/security/images/cameraosd.png?raw=true'],
   ['https://github.com/nohuto/windbg-notes/blob/main/assets/irql-levels.png?raw=true', 'https://github.com/nohuto/windbg-notes/blob/main/images/irql-levels.png?raw=true'],
 ]);
@@ -273,7 +279,7 @@ function generateReadmeOverview(repo, repoDir) {
   const raw = readText(readmePath);
   const titleMatch = raw.match(/^#\s+(.+)$/m);
   const readmeTitle = titleMatch ? titleMatch[1].trim() : toTitleCase(repo.name);
-  const body = stripFirstH1(raw).trim();
+  const body = rewriteRelativeMarkdownLinks(stripFirstH1(raw).trim(), repo, 'README.md');
 
   if (!body) {
     return 0;
@@ -307,8 +313,8 @@ function generateMarkdownFiles(repo, repoDir) {
     const title = titleOverrides[sourcePath.toLowerCase()] || (titleMatch
       ? titleMatch[1].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim()
       : toTitleCase(path.posix.basename(sourcePath, '.md')));
-    const body = rewriteRelativeMarkdownLinks(stripFirstH1(raw).trim(), repo.name, sourcePath);
-    const outputPath = markdownOutputPath(sourcePath);
+    const body = rewriteRelativeMarkdownLinks(stripFirstH1(raw).trim(), repo, sourcePath);
+    const outputPath = sourceOutputPath(repo, sourcePath);
     const displaySourcePath = sourcePath.includes('/') ? sourcePath : `./${sourcePath}`;
 
     addEntry({
@@ -324,11 +330,17 @@ function generateMarkdownFiles(repo, repoDir) {
   return repo.files.length;
 }
 
-function rewriteRelativeMarkdownLinks(markdown, repoName, sourcePath) {
+function rewriteRelativeMarkdownLinks(markdown, repo, sourcePath) {
   return markdown.replace(/\]\((?![a-z]+:|\/|#)([^)\s]+\.md)(#[^)]*)?\)/gi, (_, target, hash = '') => {
     const resolvedPath = path.posix.normalize(path.posix.join(path.posix.dirname(sourcePath), target));
-    return `](/docs/${repoName}/${markdownOutputPath(resolvedPath)}/${hash})`;
+    return `](/docs/${repo.name}/${sourceOutputPath(repo, resolvedPath)}/${hash})`;
   });
+}
+
+function sourceOutputPath(repo, sourcePath) {
+  const normalized = sourcePath.toLowerCase();
+  if (repo.readmeOverview && normalized === 'readme.md') return 'overview';
+  return repo.outputPathOverrides?.[normalized] || markdownOutputPath(sourcePath);
 }
 
 function markdownOutputPath(sourcePath) {
@@ -572,6 +584,9 @@ function normalizeGeneratedMarkdown(markdown) {
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
     .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g, '/docs/app-guides/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/overview\/#registry-fundamentals/g, '/docs/regkit/registry-internals/registry-fundamentals/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/(?:guides\/)?procmon\/?/g, '/docs/regkit/guides/procmon/')
+    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/(?:guides\/)?wpr-wpa\/?/g, '/docs/regkit/guides/wpr-wpa/')
     .replace(/https:\/\/www\.noverse\.dev\/(product|projects|diff|policies)\.html/g, 'https://www.noverse.dev/$1')
     .replace(/\]\(\((https?:\/\/[^)\s]+)\)\)/gi, ']($1)')
     .replace(/\[([^\]]+)\]\(\[([^\]]+)\]\(([^)]+)\)\)/g, '[$1]($3)');

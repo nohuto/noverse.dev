@@ -1,9 +1,9 @@
 ---
 title: 'Boot Registry Activity'
-description: 'Generated from regkit file: guides/wpr-wpa.md.'
+description: 'Generated from regkit file: docs/wpr-wpa.md.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 5
 ---
 
 Short guide on how to create a boot registry activity trace and how to format it so regkit can use it. Requirement is the [Windows Performance Toolkit](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-recorder) which you can get from [ADK](https://go.microsoft.com/fwlink/?linkid=2337875), or install it via `winget install Microsoft.WindowsADK`, but this will install more than the Performance Toolkit.
@@ -32,7 +32,7 @@ Memory mode: Records logging data to circular buffers in memory, it's typically 
 
 Number of iterations = `1`.
 
-<img src="https://github.com/nohuto/regkit/blob/main/guides/images/WPRUI.png?raw=true" alt="" width="666" height="523">
+<img src="https://github.com/nohuto/regkit/blob/main/docs/images/WPRUI.png?raw=true" alt="" width="666" height="523">
 
 ## Analyzing the Event Trace Log (ETL)
 
@@ -42,6 +42,6 @@ Filter the operations to `QueryValue` by either right clicking on the operation 
 
 Move the `Entire Key (Base+Remainder)` column to the far left so it doesn't export the same queried values but from different processes. Press `CTRL+A` to select the entire data table, right click on any row in the `Entire Key (Base+Remainder)` column, `Copy Other` - `Copy Column Selection`.
 
-<img src="https://github.com/nohuto/regkit/blob/main/guides/images/WPA.png?raw=true" alt="" width="2560" height="1408">
+<img src="https://github.com/nohuto/regkit/blob/main/docs/images/WPA.png?raw=true" alt="" width="2560" height="1408">
 
 Create a new `.txt` file anywhere, paste the content into it (preferably use notepad++ here for performance reasons), `Edit` - `Line Operations` - `Sort Lines Lexicographically Ascending` & `Remove Empty Lines`. You can now use the `.txt` via RegKit.

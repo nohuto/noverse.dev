@@ -10,7 +10,7 @@ Small documentation on several values the option applies, see links below for mo
 
 ### Registry Values
 
-This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) for all values that get read on boot ([boot capture guide](https://noverse.dev/docs/regkit/guides/wpr-wpa/)).
+This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) for all values that get read on boot ([boot capture guide](/docs/regkit/guides/wpr-wpa/)).
 
 | Value | Description |
 | ----- | ------------ |

@@ -4,8 +4,8 @@ description: 'Auto-generated overview for Guides.'
 editUrl: false
 sidebar:
   hidden: true
-  order: 2
+  order: 4
 ---
 
-- [Tracing Program Registry Activity](/docs/regkit/guides/procmon/)
+- [Capturing Registry Activity](/docs/regkit/guides/procmon/)
 - [Boot Registry Activity](/docs/regkit/guides/wpr-wpa/)

@@ -8,4 +8,5 @@ sidebar:
 ---
 
 - [Overview](/docs/regkit/overview/)
+- [Registry Internals](/docs/regkit/registry-internals/)
 - [Guides](/docs/regkit/guides/)

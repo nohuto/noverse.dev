@@ -8,7 +8,7 @@ sidebar:
 
 ## Registry Values
 
-Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dxgkrnl)/[`dxgmms2.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dxgmms2) of 23H2/25H2 as they differ at some point, see [records/Graphics-Drivers.txt](https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt) for values that get read on boot ([boot capture guide](https://noverse.dev/docs/regkit/guides/wpr-wpa/)). Unless written otherwise, `REG_DWORD` ones accept the full range (`0-4294967295`), same for `REG_QWORD` (`0-18446744073709551615`).
+Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dxgkrnl)/[`dxgmms2.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dxgmms2) of 23H2/25H2 as they differ at some point, see [records/Graphics-Drivers.txt](https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt) for values that get read on boot ([boot capture guide](/docs/regkit/guides/wpr-wpa/)). Unless written otherwise, `REG_DWORD` ones accept the full range (`0-4294967295`), same for `REG_QWORD` (`0-18446744073709551615`).
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers"

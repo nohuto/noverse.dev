@@ -1,12 +1,12 @@
 ---
-title: 'Tracing Program Registry Activity'
-description: 'Generated from regkit file: guides/procmon.md.'
+title: 'Capturing Registry Activity'
+description: 'Generated from regkit file: docs/procmon.md.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 4
 ---
 
-Requirements are [process monitor](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon) and the program you want to trace. I'll trace the activity of the game `The Last Of Us Part II`.
+Requirements are [process monitor](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon) and the program you want to capture. I'll capture the activity of the game `The Last Of Us Part II`.
 
 Start with configuring the filter (`CTRL` + `L`):  
 `Process Name` `contains` `tlou`  
@@ -16,9 +16,9 @@ Start with configuring the filter (`CTRL` + `L`):
 
 You can disable the other activity monitoring:
 
-<img src="https://github.com/nohuto/regkit/blob/main/guides/images/monitoring.png" alt="" width="453" height="69">
+<img src="https://github.com/nohuto/regkit/blob/main/docs/images/monitoring.png?raw=true" alt="" width="453" height="69">
 
-If you want to trace all `Reg...` activity, which would use:
+If you want to capture all `Reg...` activity, which would use:
 ```c
 RegCloseKey
 RegCreateKey
@@ -46,13 +46,13 @@ Now you'll see all kind of registry activity, what you want to look for is the p
 
 Save the content using `.csv`, afterwards you can remove specific parts of the file, if you want to.
 
-<img src="https://github.com/nohuto/regkit/blob/main/guides/images/pmsave.png?raw=true" alt="" width="462" height="387">
+<img src="https://github.com/nohuto/regkit/blob/main/docs/images/pmsave.png?raw=true" alt="" width="462" height="387">
 
 `CTRL` + `H` (Regular expression):  
 `"Reg\w*"` - Removes the operations  
 `"process.exe"` - Replace `process`  
 
-The result should look similar to: [TLOU2.txt](https://github.com/nohuto/regkit/blob/main/assets/records/TLOU2.txt)/[StartAllBack.txt](https://github.com/nohuto/regkit/blob/main/assets/records/StartAllBack.txt)/[Lighshot](https://github.com/nohuto/regkit/blob/main/assets/records/Lighshot.txt). This can be used to trace specific program/path registry activity, there's obviously much more you can do with procmon.
+The result should look similar to: [TLOU2.txt](https://github.com/nohuto/regkit/blob/main/assets/records/TLOU2.txt)/[StartAllBack.txt](https://github.com/nohuto/regkit/blob/main/assets/records/StartAllBack.txt)/[Lighshot](https://github.com/nohuto/regkit/blob/main/assets/records/Lighshot.txt). This can be used to capture specific program/path registry activity, there's obviously much more you can do with procmon.
 
 Operations which can be used:
 ```

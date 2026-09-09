@@ -91,11 +91,14 @@ function createSidebarRepoEntry(repoName) {
       ...collapsedIfNeeded(repoName),
       items: [
         { label: 'Overview', slug: 'regkit/overview' },
-        {
-          label: 'Guides',
-          collapsed: true,
-          autogenerate: { directory: 'regkit/guides', collapsed: true },
-        },
+        createSidebarGroup('regkit/registry-internals', [
+          { label: 'Registry Fundamentals', slug: 'regkit/registry-internals/registry-fundamentals' },
+          { label: 'Capture Table', slug: 'regkit/registry-internals/capture-table' },
+        ]),
+        createSidebarGroup('regkit/guides', [
+          { label: 'Capturing Registry Activity', slug: 'regkit/guides/procmon' },
+          { label: 'Boot Registry Activity', slug: 'regkit/guides/wpr-wpa' },
+        ]),
       ],
     };
   }

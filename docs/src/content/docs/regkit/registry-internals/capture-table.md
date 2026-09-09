@@ -18,6 +18,8 @@ Most activities were captured during boot, there are some others such as `Steam.
 
 ## Specific Keys
 
+### Boost Trace
+
 | File | Path(s) |
 | --- | --- |
 | [ACPI.txt](https://github.com/nohuto/regkit/blob/main/assets/records/ACPI.txt) | `HKLM\SYSTEM\ControlSet001\Services\ACPI`<br>`HKLM\SYSTEM\ControlSet001\Services\acpiex`<br>`HKLM\SYSTEM\ControlSet001\Services\AcpiDev`<br>`HKLM\SYSTEM\ControlSet001\Services\acpipagr`<br>`HKLM\SYSTEM\ControlSet001\Services\AcpiPmi`<br>`HKLM\SYSTEM\ControlSet001\Services\acpitime` |
@@ -45,7 +47,6 @@ Most activities were captured during boot, there are some others such as `Steam.
 | [Intel.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Intel.txt) | `HKLM\Software\Intel` |
 | [Internet-Settings.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Internet-Settings.txt) | `\Software\Microsoft\Windows\CurrentVersion\Internet Settings` |
 | [LanmanServer.txt](https://github.com/nohuto/regkit/blob/main/assets/records/LanmanServer.txt) | `HKLM\SYSTEM\ControlSet001\Services\LanmanServer` |
-| [Lighshot.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Lighshot.txt) | `HKCU\Software\SkillBrains\Lightshot` |
 | [Lsa.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Lsa.txt) | `HKLM\SYSTEM\ControlSet001\Control\Lsa` |
 | [MultiMedia.txt](https://github.com/nohuto/regkit/blob/main/assets/records/MultiMedia.txt) | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\MultiMedia` |
 | [NDIS-Parameters.txt](https://github.com/nohuto/regkit/blob/main/assets/records/NDIS-Parameters.txt) | `HKLM\SYSTEM\ControlSet001\Services\NDIS\Parameters` |
@@ -62,10 +63,7 @@ Most activities were captured during boot, there are some others such as `Steam.
 | [Policies.txt](https://github.com/nohuto/regkit/blob/main/assets/records/CV-Policies.txt) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies` |
 | [Power.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Power.txt) | `HKLM\SYSTEM\ControlSet001\Control\Power` |
 | [Session-Manager.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Session-Manager.txt) | `HKLM\SYSTEM\ControlSet001\Control\Session Manager`<br>`HKLM\SYSTEM\ControlSet001\Control\Session Manager\Memory Management`<br>`HKLM\SYSTEM\ControlSet001\Control\Session Manager\Power`<br>`HKLM\SYSTEM\ControlSet001\Control\Session Manager\Quota System` |
-| [StartAllBack.txt](https://github.com/nohuto/regkit/blob/main/assets/records/StartAllBack.txt) | `HKCU\Software\StartIsBack` |
-| [Steam.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Steam.txt) | `HKCU\Software\Valve\Steam` |
 | [StorPort.txt](https://github.com/nohuto/regkit/blob/main/assets/records/StorPort.txt) | `HKLM\SYSTEM\ControlSet001\Control\StorPort` |
-| [TLOU2.txt](https://github.com/nohuto/regkit/blob/main/assets/records/TLOU2.txt) | `HKCU\Software\Naughty Dog` |
 | [Tcpip-Parameters.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Tcpip-Parameters.txt) | `HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters` |
 | [Terminal-Server.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Terminal-Server.txt) | `HKLM\SYSTEM\ControlSet001\Control\Terminal Server` |
 | [USB-Flags.txt](https://github.com/nohuto/regkit/blob/main/assets/records/USB-Flags.txt) | `HKLM\SYSTEM\ControlSet001\Control\usbflags` |
@@ -86,3 +84,12 @@ Most activities were captured during boot, there are some others such as `Steam.
 | [stornvme.txt](https://github.com/nohuto/regkit/blob/main/assets/records/stornvme.txt) | `HKLM\SYSTEM\ControlSet001\Services\stornvme\Parameters` |
 | [usbhub.txt](https://github.com/nohuto/regkit/blob/main/assets/records/usbhub.txt) | `HKLM\SYSTEM\ControlSet001\Services\usbhub` |
 | [wbem.txt](https://github.com/nohuto/regkit/blob/main/assets/records/wbem.txt) | `HKLM\SOFTWARE\Microsoft\wbem` |
+
+### Runtime Trace
+
+| File | Path(s) |
+| --- | --- |
+| [StartAllBack.txt](https://github.com/nohuto/regkit/blob/main/assets/records/StartAllBack.txt) | `HKCU\Software\StartIsBack` |
+| [Steam.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Steam.txt) | `HKCU\Software\Valve\Steam` |
+| [TLOU2.txt](https://github.com/nohuto/regkit/blob/main/assets/records/TLOU2.txt) | `HKCU\Software\Naughty Dog` |
+| [Lighshot.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Lighshot.txt) | `HKCU\Software\SkillBrains\Lightshot` |

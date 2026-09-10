@@ -179,23 +179,23 @@ It includes built in presets and a theme editor to customize colors, presets can
 
 #### Default Dark
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-dark.png?raw=true" alt="" width="1726" height="952">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-dark.png?raw=true" alt="" width="1648" height="1055">
 
 #### Default Light
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light.png?raw=true" alt="" width="1726" height="952">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light.png?raw=true" alt="" width="1648" height="1055">
 
 ##### W7 Light
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light-w7.png?raw=true" alt="" width="1530" height="891">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light-w7.png?raw=true" alt="" width="1490" height="970">
 
-#### Ayu Dark
+#### Gruvbox Dark
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/ayu-dark.png?raw=true" alt="" width="1726" height="952">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/gruvbox-dark.png?raw=true" alt="" width="1648" height="1055">
 
-#### Kanagawa Dragon
+#### Kanagawa Wave
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/kanagawa-dragon.png?raw=true" alt="" width="1726" height="952">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/kanagawa-wave.png?raw=true" alt="" width="1648" height="1055">
 
 ## Icon Sets
 

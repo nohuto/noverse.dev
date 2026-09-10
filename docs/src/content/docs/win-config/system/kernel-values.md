@@ -256,7 +256,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "PoCleanShutdownFlags" = 0; // PopShutdownCleanly
     "PowerOffFrozenProcessors" = 1; // KiPowerOffFrozenProcessors, seems unused (but initialized), was probably used to "power off" processors that are frozen (see windbg !frozen)
     "ReadyTimeTicks" = 6; // KiNormalPriorityBoostReadyTimeTicks
-    "RebalanceMinPriority" = 1; // if _KTHREAD.Priority >= KiRebalanceMinPriority (or the current _KPRCB is soft parked), its scheduling group has CPU time available & _KTHREAD.Affinity allows an idle CPU in _KSCHEDULER_SUBNODE.IdleNonParkedCpuSet, KiQueueReadyThread continues through KiEnterDeferredReadyState/KiDeferredReadyThread/KiDeferredReadySingleThread for processor selection 
+    "RebalanceMinPriority" = 1; // if _KTHREAD.Priority >= KiRebalanceMinPriority (or current _KPRCB.IdleState has 0x08 set, means that processor is soft parked), its scheduling group has CPU time available & _KTHREAD.Affinity allows an idle CPU in _KSCHEDULER_SUBNODE.IdleNonParkedCpuSet, KiQueueReadyThread continues through KiEnterDeferredReadyState/KiDeferredReadyThread/KiDeferredReadySingleThread for processor selection 
                                 // otherwise KiAddThreadToReadyQueue uses the current CPU
                                 // default uses all threads (prio 1-31) excluding zero page thread
     "ReservedCpuSets" = 0; // KiReservedCpuSets

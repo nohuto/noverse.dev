@@ -167,18 +167,58 @@ function createModalFocusManager(container) {
   };
 }
 
-function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBiased = false }) {
+function createDraggableDialogManager({ layer, dialog, handle, resizeHandle = null, margin = 0, topBiased = false }) {
   if (!(layer instanceof HTMLElement) || !(dialog instanceof HTMLElement) || !(handle instanceof HTMLElement)) return null;
   const focusManager = createModalFocusManager(layer);
+  const resizer = resizeHandle instanceof HTMLElement ? resizeHandle : null;
   const inset = Math.max(0, Number(margin) || 0);
+  const clampValue = (value, min, max) => Math.min(Math.max(min, value), max);
+  let resizing = false;
+
+  const trackPointer = (target, startEvent, move, finish) => {
+    let frame = 0;
+    let currentEvent = startEvent;
+    const paint = () => {
+      frame = 0;
+      move(currentEvent);
+    };
+    const onMove = event => {
+      currentEvent = event;
+      if (!frame) frame = requestAnimationFrame(paint);
+    };
+    const stop = () => {
+      if (frame) {
+        cancelAnimationFrame(frame);
+        paint();
+      }
+      if (target.hasPointerCapture(startEvent.pointerId)) target.releasePointerCapture(startEvent.pointerId);
+      target.removeEventListener('pointermove', onMove);
+      target.removeEventListener('pointerup', stop);
+      target.removeEventListener('pointercancel', stop);
+      finish();
+    };
+    target.setPointerCapture(startEvent.pointerId);
+    target.addEventListener('pointermove', onMove);
+    target.addEventListener('pointerup', stop);
+    target.addEventListener('pointercancel', stop);
+  };
 
   const viewport = () => {
     const visualViewport = window.visualViewport;
+    const viewportLeft = visualViewport?.offsetLeft || 0;
+    const viewportTop = visualViewport?.offsetTop || 0;
+    const viewportWidth = visualViewport?.width || document.documentElement.clientWidth || window.innerWidth;
+    const viewportHeight = visualViewport?.height || document.documentElement.clientHeight || window.innerHeight;
+    const layerRect = layer.getBoundingClientRect();
+    const left = Math.max(viewportLeft, layerRect.left);
+    const top = Math.max(viewportTop, layerRect.top);
+    const right = Math.min(viewportLeft + viewportWidth, layerRect.right);
+    const bottom = Math.min(viewportTop + viewportHeight, layerRect.bottom);
     return {
-      left: visualViewport?.offsetLeft || 0,
-      top: visualViewport?.offsetTop || 0,
-      width: visualViewport?.width || document.documentElement.clientWidth || window.innerWidth,
-      height: visualViewport?.height || document.documentElement.clientHeight || window.innerHeight
+      left,
+      top,
+      width: Math.max(0, right - left),
+      height: Math.max(0, bottom - top)
     };
   };
   const minimumTop = view => {
@@ -198,6 +238,14 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
       maxTop: Math.max(minTop, view.top + view.height - dialog.offsetHeight - inset)
     };
   };
+  const position = (left, top) => {
+    const offsetParent = dialog.offsetParent;
+    const origin = offsetParent instanceof HTMLElement
+      ? offsetParent.getBoundingClientRect()
+      : { left: 0, top: 0 };
+    dialog.style.left = `${left - origin.left}px`;
+    dialog.style.top = `${top - origin.top}px`;
+  };
   const clamp = () => {
     if (layer.hidden) return;
     if (dialog.dataset.positioned !== 'true') {
@@ -206,8 +254,10 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
     }
     const { minLeft, minTop, maxLeft, maxTop } = bounds();
     const rect = dialog.getBoundingClientRect();
-    dialog.style.left = `${Math.min(Math.max(minLeft, rect.left), maxLeft)}px`;
-    dialog.style.top = `${Math.min(Math.max(minTop, rect.top), maxTop)}px`;
+    position(
+      clampValue(rect.left, minLeft, maxLeft),
+      clampValue(rect.top, minTop, maxTop)
+    );
   };
   const center = () => {
     const view = viewport();
@@ -218,8 +268,10 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
     const centeredLeft = view.left + (view.width - dialog.offsetWidth) / 2;
     const centeredTop = view.top + (biasToTop ? Math.min(centerY, inset * 2) : centerY);
     dialog.style.transform = 'none';
-    dialog.style.left = `${Math.min(Math.max(minLeft, centeredLeft), maxLeft)}px`;
-    dialog.style.top = `${Math.min(Math.max(minTop, centeredTop), maxTop)}px`;
+    position(
+      clampValue(centeredLeft, minLeft, maxLeft),
+      clampValue(centeredTop, minTop, maxTop)
+    );
     dialog.dataset.positioned = 'true';
   };
   const onDragStart = event => {
@@ -232,50 +284,61 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
     const startLeft = startRect.left;
     const startTop = startRect.top;
     const { minLeft, minTop, maxLeft, maxTop } = bounds();
-    let frame = 0;
-    let pendingX = startX;
-    let pendingY = startY;
     let lastLeft = startLeft;
     let lastTop = startTop;
-    handle.setPointerCapture(event.pointerId);
     dialog.style.willChange = 'transform';
 
-    const paint = () => {
-      frame = 0;
-      lastLeft = Math.min(Math.max(minLeft, startLeft + pendingX - startX), maxLeft);
-      lastTop = Math.min(Math.max(minTop, startTop + pendingY - startY), maxTop);
+    trackPointer(handle, event, current => {
+      lastLeft = clampValue(startLeft + current.clientX - startX, minLeft, maxLeft);
+      lastTop = clampValue(startTop + current.clientY - startY, minTop, maxTop);
       dialog.style.transform = `translate3d(${lastLeft - startLeft}px, ${lastTop - startTop}px, 0)`;
-    };
-    const move = moveEvent => {
-      pendingX = moveEvent.clientX;
-      pendingY = moveEvent.clientY;
-      if (!frame) frame = requestAnimationFrame(paint);
-    };
-    const stop = () => {
-      if (frame) {
-        cancelAnimationFrame(frame);
-        paint();
-      }
+    }, () => {
       dialog.style.transform = 'none';
-      dialog.style.left = `${lastLeft}px`;
-      dialog.style.top = `${lastTop}px`;
+      position(lastLeft, lastTop);
       dialog.style.willChange = '';
       dialog.dataset.positioned = 'true';
-      if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
-      handle.removeEventListener('pointermove', move);
-      handle.removeEventListener('pointerup', stop);
-      handle.removeEventListener('pointercancel', stop);
-    };
-    handle.addEventListener('pointermove', move);
-    handle.addEventListener('pointerup', stop);
-    handle.addEventListener('pointercancel', stop);
+    });
+  };
+
+  const onResizeStart = event => {
+    if (!resizer || event.button !== 0 || layer.hidden) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (dialog.dataset.positioned !== 'true') center();
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const startRect = dialog.getBoundingClientRect();
+    const styles = getComputedStyle(dialog);
+    const minWidth = Number.parseFloat(styles.minWidth) || 0;
+    const minHeight = Number.parseFloat(styles.minHeight) || 0;
+    const view = viewport();
+    const maxWidth = view.left + view.width - inset - startRect.left;
+    const maxHeight = view.top + view.height - inset - startRect.top;
+    resizing = true;
+    dialog.style.willChange = 'width, height';
+
+    trackPointer(resizer, event, current => {
+      const width = clampValue(startRect.width + current.clientX - startX, minWidth, maxWidth);
+      const height = clampValue(startRect.height + current.clientY - startY, minHeight, maxHeight);
+      dialog.style.width = `${width}px`;
+      dialog.style.height = `${height}px`;
+    }, () => {
+      dialog.style.willChange = '';
+      resizing = false;
+      clamp();
+    });
   };
 
   handle.addEventListener('pointerdown', onDragStart);
+  resizer?.addEventListener('pointerdown', onResizeStart);
   window.addEventListener('resize', clamp);
   window.visualViewport?.addEventListener('resize', clamp);
   window.visualViewport?.addEventListener('scroll', clamp);
-  const resizeObserver = window.ResizeObserver ? new ResizeObserver(clamp) : null;
+  const resizeObserver = window.ResizeObserver
+    ? new ResizeObserver(() => {
+      if (!resizing) clamp();
+    })
+    : null;
   resizeObserver?.observe(dialog);
 
   return {
@@ -297,6 +360,7 @@ function createDraggableDialogManager({ layer, dialog, handle, margin = 0, topBi
       window.visualViewport?.removeEventListener('resize', clamp);
       window.visualViewport?.removeEventListener('scroll', clamp);
       handle.removeEventListener('pointerdown', onDragStart);
+      resizer?.removeEventListener('pointerdown', onResizeStart);
       focusManager?.close();
     }
   };

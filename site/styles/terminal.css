@@ -129,11 +129,36 @@ main.main-terminal .terminal-shell {
   max-width: calc(100vw - 24px);
   max-height: calc(100vh - 24px);
   overflow: hidden;
-  resize: both;
+  resize: none;
   border: 1px solid var(--border-strong);
   background: var(--panel);
   display: flex;
   flex-direction: column;
+}
+
+.tool-resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+  touch-action: none;
+}
+
+.tool-resize-handle::after {
+  content: "";
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  width: 8px;
+  height: 8px;
+  background: repeating-linear-gradient(135deg,
+      #494949 0 1px,
+      transparent 1px 2px);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  pointer-events: none;
 }
 
 .bitmask-window {

@@ -855,6 +855,7 @@
         layer,
         dialog,
         handle,
+        resizeHandle: dialog.querySelector('.tool-resize-handle'),
         margin: 12,
         topBiased: true
       });

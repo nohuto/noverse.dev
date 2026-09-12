@@ -6,7 +6,7 @@ sidebar:
   order: 2
 ---
 
-## Standard hives & REGISTRY Comparison
+## Root keys & REGISTRY Comparison
 
 RegEdit shows five common root keys `HKEY_LOCAL_MACHINE`, `HKEY_USERS`, `HKEY_CURRENT_USER`, `HKEY_CLASSES_ROOT`, and `HKEY_CURRENT_CONFIG`. Internally, all registry keys are rooted at a single object named `\REGISTRY` in the Object Manager namespace, native APIs (`NtOpenKey`/`ZwOpenKey`) can access paths under `\REGISTRY` directly (excluding `\A\`). The registry actually exposes nine root keys (including performance and local settings roots) but most tools only show the common five.
 
@@ -14,7 +14,7 @@ You can query the REGISTRY key using WinDbg `!reg q \REGISTRY`.
 
 ## REGISTRY only Keys
 
-Keys that exist in the real REGISTRY view but are not reachable from standard hives:
+Keys that exist in the real REGISTRY view but are not reachable from the root keys:
 
 - `\REGISTRY\A` - [application hive namespace](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/filtering-registry-operations-on-application-hives)
 - `\REGISTRY\WC` - Windows Containers / silos, used by modern registry virtualization and differencing hives

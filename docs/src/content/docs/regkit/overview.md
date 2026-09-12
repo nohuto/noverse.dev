@@ -14,7 +14,7 @@ Note that native RegEdit can't run alongside RegKit, as RegKit uses `RegEdit_Reg
 
 RegKit adds functionality that standard regedit doesn't support:
 
-- A real REGISTRY root view in addition to standard hives
+- A real REGISTRY root view in addition to the root keys
 - [Theme modes](https://noverse.dev/docs/regkit/overview/#theme-presets) (System/Light/Dark) and custom theme presets (edit colors, import/export `.rktheme`)
 - Custom font support
 - Custom [icon support](https://noverse.dev/docs/regkit/overview/#icon-sets) (has 4 sets installed by default)
@@ -22,14 +22,14 @@ RegKit adds functionality that standard regedit doesn't support:
 - Hive backed key detection using hivelist key & open Hive File (opens the backing hive file)
 - [Trace presets](https://noverse.dev/docs/regkit/overview/#trace-menu) (23H2/24H2/25H2 - see below), used for "Read on boot" column
 - Default presets, this shows default data from new installations
-- Extra hives toggle, exposes additional predefined keys that RegEdit typically doesn't show, such as `HKEY_PERFORMANCE_DATA` (live performance counter data produced on demand, not stored in a hive file) and related keys like `HKEY_PERFORMANCE_TEXT`/`HKEY_PERFORMANCE_NLSTEXT` for e.g. counter name strings (read more [here](https://learn.microsoft.com/en-us/windows/win32/perfctrs/using-the-registry-functions-to-consume-counter-data))
+- Extra root keys toggle, exposes additional predefined keys that RegEdit typically doesn't show, such as `HKEY_PERFORMANCE_DATA` (live performance counter data produced on demand, not stored in a hive file) and related keys like `HKEY_PERFORMANCE_TEXT`/`HKEY_PERFORMANCE_NLSTEXT` for e.g. counter name strings (read more [here](https://learn.microsoft.com/en-us/windows/win32/perfctrs/using-the-registry-functions-to-consume-counter-data))
 - Run with [SYSTEM/TI rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation)
 - Favorites import/export
 - Comment column for values with import/export support
 - Loading/unloading hives
 - Local/remote/offline registry
 - Undo/redo, copy/paste (entire keys), replace, performant 'Find'
-- Find can search Standard Hives, the real REGISTRY root, and Trace values independently
+- Find can search Root Keys, the real REGISTRY root, and Trace values independently
 - Address bar accepts multiple registry path formats (abbreviated HK*, full root, regedit address bar, `.reg` header, PowerShell drive/provider, escaped)
 - Copy Key Path As menu for the same formats (to copy/paste into the address bar)
 - Copy Value Name / Copy Value Data from value context menus
@@ -262,7 +262,7 @@ Keys displayed as simulated are virtual entries created from trace files when a 
 
 There are three trace files which are quite similar, `23H2`/`24H2`/`25H2`. I've done all of them on new installations. Trace loading supports multiple active traces at once and shows "Read on boot" as `Yes (<traceName>, ...)`.
 
-The trace key menu shows the kernel paths as they appear in the trace (for example `REGISTRY\\MACHINE\\...`), but trace data is also shown in the standard hives. Registry symbolic links (the `SymbolicLinkValue` targets) are also resolved so trace values show up under linked keys (including `CurrentControlSet` and other link keys). It can also [simulate missing keys](https://noverse.dev/docs/regkit/overview/#simulated-key-icon) for trace only data (optional "Simulated Keys" view toggle), you can either use traces for informational purposes or modify them.
+The trace key menu shows the kernel paths as they appear in the trace (for example `REGISTRY\\MACHINE\\...`), but trace data is also shown under the root keys. Registry symbolic links (the `SymbolicLinkValue` targets) are also resolved so trace values show up under linked keys (including `CurrentControlSet` and other link keys). It can also [simulate missing keys](https://noverse.dev/docs/regkit/overview/#simulated-key-icon) for trace only data (optional "Simulated Keys" view toggle), you can either use traces for informational purposes or modify them.
 
 Note that WPR doesn't pass the type/data so you'll have to find that out on your own.
 

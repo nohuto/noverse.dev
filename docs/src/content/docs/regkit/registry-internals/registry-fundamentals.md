@@ -8,20 +8,20 @@ sidebar:
 
 ## Standard hives & REGISTRY Comparison
 
-RegEdit shows five common hives `HKEY_LOCAL_MACHINE`, `HKEY_USERS`, `HKEY_CURRENT_USER`, `HKEY_CLASSES_ROOT`, and `HKEY_CURRENT_CONFIG`. Internally, all registry keys are rooted at a single object named `\REGISTRY` in the Object Manager namespace, native APIs (`NtOpenKey`/`ZwOpenKey`) can access paths under `\REGISTRY` directly. The registry actually exposes nine root keys (including performance and local settings roots) but most tools only show the common five.
+RegEdit shows five common root keys `HKEY_LOCAL_MACHINE`, `HKEY_USERS`, `HKEY_CURRENT_USER`, `HKEY_CLASSES_ROOT`, and `HKEY_CURRENT_CONFIG`. Internally, all registry keys are rooted at a single object named `\REGISTRY` in the Object Manager namespace, native APIs (`NtOpenKey`/`ZwOpenKey`) can access paths under `\REGISTRY` directly (excluding `\A\`). The registry actually exposes nine root keys (including performance and local settings roots) but most tools only show the common five.
 
-You can query the REGISTRY key using WinDbg `!reg query \REGISTRY`.
+You can query the REGISTRY key using WinDbg `!reg q \REGISTRY`.
 
 ## REGISTRY only Keys
 
 Keys that exist in the real REGISTRY view but are not reachable from standard hives:
 
-- `\REGISTRY\A` - private keys used by some processes, including UWP apps
+- `\REGISTRY\A` - [application hive namespace](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/filtering-registry-operations-on-application-hives)
 - `\REGISTRY\WC` - Windows Containers / silos, used by modern registry virtualization and differencing hives
 
 ## Keys, values, naming
 
-The registry is a database that looks a lot like a filesystem, keys are like directories, values are like files, and a key can contain both subkeys and values. Values are typed, have a name, and live under a key. Each key also has one unnamed value, displayed as `(Default)`.
+The registry is a database that looks a lot like a filesystem, keys are like directories, values are like files, and a key can contain both subkeys and values. Values are typed, have a name, and live under a key. Each key *can* also have one unnamed value, displayed as `(Default)`, which not always exist.
 
 ## Registry value types
 
@@ -36,35 +36,76 @@ Some values are stored with extra flag bits in the upper 16 bits (e.g. `0x20000`
 | `REG_MULTI_SZ` | Array of Unicode NULL terminated strings |
 | `REG_EXPAND_SZ` | Variable length Unicode string with embedded environment variables |
 | `REG_BINARY` | Arbitrary length binary data |
-| `REG_DWORD` | 32 bit number |
-| `REG_QWORD` | 64 bit number |
+| `REG_DWORD` (alias `REG_DWORD_LITTLE_ENDIAN`) | 32 bit number |
+| `REG_QWORD` (alias `REG_QWORD_LITTLE_ENDIAN`) | 64 bit number |
 | `REG_DWORD_BIG_ENDIAN` | 32 bit number, high byte first |
 | `REG_LINK` | Unicode symbolic link |
 | `REG_RESOURCE_LIST` | Hardware resource description |
 | `REG_FULL_RESOURCE_DESCRIPTOR` | Hardware resource description |
 | `REG_RESOURCE_REQUIREMENTS_LIST` | Resource requirements |
 
+```c
+// winnt.h
+//
+// Predefined Value Types.
+//
+
+#define REG_NONE                    ( 0ul ) // No value type
+#define REG_SZ                      ( 1ul ) // Unicode nul terminated string
+#define REG_EXPAND_SZ               ( 2ul ) // Unicode nul terminated string
+                                            // (with environment variable references)
+#define REG_BINARY                  ( 3ul ) // Free form binary
+#define REG_DWORD                   ( 4ul ) // 32-bit number
+#define REG_DWORD_LITTLE_ENDIAN     ( 4ul ) // 32-bit number (same as REG_DWORD)
+#define REG_DWORD_BIG_ENDIAN        ( 5ul ) // 32-bit number
+#define REG_LINK                    ( 6ul ) // Symbolic Link (unicode)
+#define REG_MULTI_SZ                ( 7ul ) // Multiple Unicode strings
+#define REG_RESOURCE_LIST           ( 8ul ) // Resource list in the resource map
+#define REG_FULL_RESOURCE_DESCRIPTOR ( 9ul ) // Resource list in the hardware description
+#define REG_RESOURCE_REQUIREMENTS_LIST ( 10ul )
+#define REG_QWORD                   ( 11ul ) // 64-bit number
+#define REG_QWORD_LITTLE_ENDIAN     ( 11ul ) // 64-bit number (same as REG_QWORD)
+```
+
 ## Root keys and logical structure
 
-There are nine root keys, their names start with `HKEY` as they represent handles (H) to keys (KEY), some are links or merged views.
+There are nine [root keys](https://learn.microsoft.com/en-us/windows/win32/sysinfo/predefined-keys), their names start with `HKEY` as they represent handles (H) to keys (KEY), some are links or merged views.
 
 | Root key | Abbreviation | Description | Link |
 | --- | --- | --- | --- |
-| `HKEY_CURRENT_USER` | `HKCU` | Per-user preferences (current logged-on user) | `HKEY_USERS\<SID>` (SID of current logged-on user) |
-| `HKEY_CURRENT_USER_LOCAL_SETTINGS` | `HKCULS` | Per-user settings local to the machine | `HKCU\Software\Classes\Local Settings` |
+| `HKEY_CURRENT_USER` | `HKCU` | Per user preferences (current logged on user) | `HKEY_USERS\<SID>` (SID of current logged on user) |
+| `HKEY_CURRENT_USER_LOCAL_SETTINGS` | `HKCULS` | Per user settings local to the machine | `HKCU\Software\Classes\Local Settings` |
 | `HKEY_USERS` | `HKU` | All loaded user profiles (including `.DEFAULT` for the system account) | - |
 | `HKEY_CLASSES_ROOT` | `HKCR` | "Stores file association and Component Object Model (COM) object registration information" | Merged view of `HKLM\SOFTWARE\Classes` and `HKEY_USERS\<SID>\SOFTWARE\Classes` |
-| `HKEY_LOCAL_MACHINE` | `HKLM` | Machine-wide configuration (BCD, COMPONENTS, HARDWARE, SAM, SECURITY, SOFTWARE, SYSTEM) | - |
+| `HKEY_LOCAL_MACHINE` | `HKLM` | Machine wide configuration (BCD, COMPONENTS, HARDWARE, SAM, SECURITY, SOFTWARE, SYSTEM) | - |
 | `HKEY_CURRENT_CONFIG` | `HKCC` | Stores some information about the current hardware profile (deprecated, "Hardware profiles are no longer supported in Windows, but the key still exists to support legacy applications that might depend on its presence.") | `HKLM\SYSTEM\CurrentControlSet\Hardware Profiles\Current` (legacy, Yosifovich shows `Hardware\Profiles\Current`, but that's a typo in his blog) |
 | `HKEY_PERFORMANCE_DATA` | `HKPD` | Live performance counter data, available only via APIs | - |
 | `HKEY_PERFORMANCE_TEXT` | `HKPT` | Performance counter names/descriptions in US English | - |
 | `HKEY_PERFORMANCE_NLSTEXT` | `HKPNT` | Performance counter names/descriptions in the OS language | - |
 
 Notes:
-- `HKEY_CURRENT_USER` maps to the logged on user hive (`Ntuser.dat`) and is created per user at logon
-- `HKEY_CLASSES_ROOT` also contains UAC VirtualStore data, it isn't a simple link
-- `HKEY_PERFORMANCE_*` keys aren't stored in hive files and aren't visible in Regedit, they're provided by Perflib through registry APIs like `RegQueryValueEx`
-- SYSTEM = `S-1-5-18`, LocalService = `S-1-5-19`, NetworkService = `S-1-5-20`
+- SYSTEM = `S-1-5-18`
+- LocalService = `S-1-5-19`
+- NetworkService = `S-1-5-20`
+
+```c
+// winreg.h
+//
+// Reserved Key Handles.
+//
+
+#define HKEY_CLASSES_ROOT                   (( HKEY ) (ULONG_PTR)((LONG)0x80000000) )
+#define HKEY_CURRENT_USER                   (( HKEY ) (ULONG_PTR)((LONG)0x80000001) )
+#define HKEY_LOCAL_MACHINE                  (( HKEY ) (ULONG_PTR)((LONG)0x80000002) )
+#define HKEY_USERS                          (( HKEY ) (ULONG_PTR)((LONG)0x80000003) )
+#define HKEY_PERFORMANCE_DATA               (( HKEY ) (ULONG_PTR)((LONG)0x80000004) )
+#define HKEY_PERFORMANCE_TEXT               (( HKEY ) (ULONG_PTR)((LONG)0x80000050) )
+#define HKEY_PERFORMANCE_NLSTEXT            (( HKEY ) (ULONG_PTR)((LONG)0x80000060) )
+#if(WINVER >= 0x0400)
+#define HKEY_CURRENT_CONFIG                 (( HKEY ) (ULONG_PTR)((LONG)0x80000005) )
+#define HKEY_DYN_DATA                       (( HKEY ) (ULONG_PTR)((LONG)0x80000006) )
+#define HKEY_CURRENT_USER_LOCAL_SETTINGS    (( HKEY ) (ULONG_PTR)((LONG)0x80000007) )
+```
 
 Low level view of the REGISTRY ([*](https://projectzero.google/2024/10/the-windows-registry-adventure-4-hives.html)):
 

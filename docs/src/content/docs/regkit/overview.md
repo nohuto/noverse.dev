@@ -246,8 +246,9 @@ RegKit displays keys as symbolic links when the registry reports a link (done by
 
 Examples:
 - `HKLM\SYSTEM\CurrentControlSet` -> `HKLM\SYSTEM\ControlSet00x`
-- `HKEY_CURRENT_USER` -> `HKEY_USERS\<CurrentUserSID>`
 - `HKEY_CURRENT_CONFIG` -> `HKLM\SYSTEM\CurrentControlSet\Hardware Profiles\Current`
+- `HKU\S-1-5-18` -> `HKU\.DEFAULT`
+- `HKLM\SOFTWARE\Wow6432Node\Classes` -> `HKLM\SOFTWARE\Classes\Wow6432Node`
 
 ### Database Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/database.ico?raw=true" width="16" height="16">
 
@@ -291,6 +292,7 @@ These are the exact builds for each file:
 | [Windows 11 23H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/W11%2023H2%20Home%20x64%20-%2010.0.22631.6060) | Home | x64 | `10.0.22631.6060` |
 | [Windows 11 24H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/W11%2024H2%20Home%20x64%20-%2010.0.26100.9168) | Home | x64 | `10.0.26100.9168` |
 | [Windows 11 25H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/W11%2025H2%20Home%20x64%20-%2010.0.26200.8037) | Home | x64 | `10.0.26200.8037` |
+| [Windows 11 26H1](https://github.com/nohuto/regkit/tree/main/assets/defaults/W11%2026H1%20Home%20x64%20-%2010.0.28000.2704) | Home | x64 | `10.0.28000.2704` |
 
 ## Rights and Elevation
 

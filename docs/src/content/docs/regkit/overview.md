@@ -14,7 +14,7 @@ Note that native RegEdit can't run alongside RegKit, as RegKit uses `RegEdit_Reg
 
 RegKit adds functionality that standard regedit doesn't support:
 
-- A real REGISTRY root view in addition to the root keys
+- A real REGISTRY root view in addition to the standard root keys
 - [Theme modes](https://noverse.dev/docs/regkit/overview/#theme-presets) (System/Light/Dark) and custom theme presets (edit colors, import/export `.rktheme`)
 - Custom font support
 - Custom [icon support](https://noverse.dev/docs/regkit/overview/#icon-sets) (has 4 sets installed by default)
@@ -23,7 +23,7 @@ RegKit adds functionality that standard regedit doesn't support:
 - [Trace presets](https://noverse.dev/docs/regkit/overview/#trace-menu) (23H2/24H2/25H2 - see below), used for "Read on boot" column
 - Default presets, this shows default data from new installations
 - Extra root keys toggle, exposes additional predefined keys that RegEdit typically doesn't show, such as `HKEY_PERFORMANCE_DATA` (live performance counter data produced on demand, not stored in a hive file) and related keys like `HKEY_PERFORMANCE_TEXT`/`HKEY_PERFORMANCE_NLSTEXT` for e.g. counter name strings (read more [here](https://learn.microsoft.com/en-us/windows/win32/perfctrs/using-the-registry-functions-to-consume-counter-data))
-- Run with [SYSTEM/TI rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation)
+- Switch between with [User/Admin/SYSTEM/TI rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation)
 - Favorites import/export
 - Comment column for values with import/export support
 - Loading/unloading hives
@@ -39,7 +39,7 @@ RegKit adds functionality that standard regedit doesn't support:
 - History view
 - Option to save/forget previous key tree state
 - Simulated keys toggle (from traces)
-- Compare Registries (compare two registry sources or `.reg` files and see differences)
+- Compare Registries
 - `.reg` / hive file/folder drag and drop support
 - Read only mode
 - Miscellaneous common functionalities
@@ -167,6 +167,9 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 | --- | --- |
 | `regkit <key>` | Open the window at that key |
 | `regkit --goto <key>` | The same, in explicit form |
+| `regkit --edit-reg file.reg` | Open a `.reg` file in a tab |
+| `regkit --install-edit-context-menu` | Add the `Edit with RegKit` context menu entry |
+| `regkit --uninstall-edit-context-menu` | Remove `Edit with RegKit` context menu entry |
 | `regkit --restart-system` | Relaunch under the SYSTEM account |
 | `regkit --restart-ti` | Relaunch under TrustedInstaller |
 | `regkit --help` | Print usage text |
@@ -280,7 +283,6 @@ These are the exact builds for each file:
 
 | Release | Edition | Architecture | Build |
 | --- | --- | --- | --- |
-| [Windows XP SP1]() | Pro x64 Edition | x64 | `5.2.3790.1830` |
 | [Windows Vista RTM](https://github.com/nohuto/regkit/tree/main/assets/defaults/WVista%20Business%20x64%20-%206.0.6000.16386) | Business | x64 | `6.0.6000.16386` |
 | [Windows 7 RTM](https://github.com/nohuto/regkit/tree/main/assets/defaults/W7%20Professional%20x64%20-%206.1.7600.16385) | Pro | x64 | `6.1.7600.16385` |
 | [Windows 8](https://github.com/nohuto/regkit/tree/main/assets/defaults/W8%20Pro%20x64%20-%206.2.9200.16384) | Pro | x64 | `6.2.9200.16384` |

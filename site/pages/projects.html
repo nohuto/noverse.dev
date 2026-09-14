@@ -27,10 +27,28 @@
             </div>
           </div>
         </div>
-        <h2 class="sr-only">Project list</h2>
-        <div class="project-grid">
-          <!-- component:project-cards -->
-        </div>
+        <section class="project-group" aria-labelledby="project-list-title">
+          <h2 class="sr-only" id="project-list-title">Project list</h2>
+          <div class="project-grid">
+            <!-- component:project-cards:main -->
+          </div>
+        </section>
+        <section class="project-group project-section" aria-labelledby="powershell-projects-title">
+          <div class="section-heading">
+            <h2 id="powershell-projects-title">PS obfuscation / minification / conversion</h2>
+          </div>
+          <div class="project-grid">
+            <!-- component:project-cards:powershell -->
+          </div>
+        </section>
+        <section class="project-group project-section" aria-labelledby="archive-projects-title">
+          <div class="section-heading">
+            <h2 id="archive-projects-title">Archive</h2>
+          </div>
+          <div class="project-grid">
+            <!-- component:project-cards:archive -->
+          </div>
+        </section>
         <p class="project-empty" id="project-empty" hidden>No matching project(s)</p>
       </div>
     </section>

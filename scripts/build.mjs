@@ -58,8 +58,10 @@ function renderProjectMedia(project) {
   return `<img decoding="async" class="project-media-img" src="${source}-640.webp" srcset="${source}-480.webp 480w, ${source}-640.webp 640w, ${source}-960.webp 960w" sizes="(max-width: 700px) calc(100vw - 48px), (max-width: 1100px) 50vw, 430px" width="${project.width}" height="${project.height}" alt=""${priority}${referrer}>`;
 }
 
-function renderProjectCards(projects) {
-  return projects.filter((project) => project.projects !== false).map((project) => {
+function renderProjectCards(projects, section) {
+  return projects.filter((project) => (
+    project.projects !== false && (project.section || 'main') === section
+  )).map((project) => {
     const href = project.href || `https://github.com/${project.repo}`;
     const external = /^https?:\/\//.test(href);
     const data = project.repo
@@ -152,7 +154,9 @@ function expandPage(html, pageName, sources) {
   expanded = expanded.replace('{{theme-options}}', themeOptions
     .map(([value, label]) => `<option value="${value}">${label}</option>`)
     .join('\n          '));
-  expanded = expanded.replace('<!-- component:project-cards -->', renderProjectCards(sources.projects));
+  expanded = expanded.replace(/<!-- component:project-cards:(\w+) -->/g, (_, section) => (
+    renderProjectCards(sources.projects, section)
+  ));
   expanded = expanded.replace('<!-- component:home-projects -->', renderHomeProjects(sources.projects));
   expanded = expanded.replace('<!-- component:commit-skeleton -->', renderCommitSkeleton());
   expanded = expanded.replace(/<!-- component:settings-dialog-start:([\w-]+) -->/g, (_, prefix) => renderSettingsDialogStart(prefix));

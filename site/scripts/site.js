@@ -933,6 +933,7 @@ function initClipboard() {
 function initFiltering() {
   const searchInput = document.getElementById('project-search');
   const cards = Array.from(document.querySelectorAll('.project-card'));
+  const groups = Array.from(document.querySelectorAll('.project-group'));
   const emptyState = document.getElementById('project-empty');
 
   if (!searchInput || cards.length === 0) return;
@@ -955,6 +956,9 @@ function initFiltering() {
         && !repo.includes(search)
         && !desc.includes(search);
       if (!card.hidden) visibleCount += 1;
+    });
+    groups.forEach(group => {
+      group.hidden = !group.querySelector('.project-card:not([hidden])');
     });
     if (emptyState) emptyState.hidden = visibleCount > 0;
   };

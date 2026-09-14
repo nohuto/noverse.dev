@@ -1331,22 +1331,22 @@ main.home-main {
   margin-top: 20px;
 }
 
-.home-section-heading {
+.section-heading {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 20px;
 }
 
-.home-section-heading::before,
-.home-section-heading::after {
+.section-heading::before,
+.section-heading::after {
   content: "";
   flex: 1;
   height: 1px;
   background: var(--border-strong);
 }
 
-.home-section-heading h2 {
+.section-heading h2 {
   margin: 0;
   color: var(--muted);
   font-size: 12.5px;
@@ -1624,10 +1624,6 @@ main.home-main {
   font-size: var(--font-size-body);
 }
 
-.project-filter + .sr-only {
-  font-size: 1.5rem;
-}
-
 .nv-search-shortcut {
   display: inline-grid;
   grid-auto-flow: column;
@@ -1655,6 +1651,14 @@ main.home-main {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, max(340px, calc((100% - 16px) / 2))), 1fr));
   gap: 16px;
+}
+
+.project-section {
+  margin-top: 24px;
+}
+
+.project-section .section-heading {
+  margin-bottom: 20px;
 }
 
 .project-card {

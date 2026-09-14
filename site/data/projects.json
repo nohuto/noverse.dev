@@ -16,7 +16,6 @@
   {"repo": "nohuto/minifier", "title": "PowerShell Minifier", "video": "minifier", "description": "Removes unnecessary content (extra spaces...), formatting, replaces cmdlets/parameters/operators with their alias to create a \"minified\" version of the script."},
   {"repo": "nohuto/void", "title": "Void Obfuscation", "video": "void", "description": "PowerShell obfuscation using binary & whitespaces, resulting in a empty looking file."},
   {"repo": "nohuto/b64-char", "title": "Base64 Encoding / Character Obfuscation", "video": "b64-char", "description": "Takes a single string as input and converts it to a character array."},
-  {"repo": "nohuto/strings2-tui", "title": "strings2 TUI", "video": "strings2-tui", "description": "An improved string extraction tool, including a TUI."},
   {"repo": "nohuto/b64rev", "title": "Base64 Reversal & Character Obfuscation", "video": "b64rev", "description": "Encodes with B64, reverts them & builds the decoding part."},
   {"repo": "nohuto/nvfetch", "title": "NVFetch", "image": "/main/images/projects/nvfetch-output", "width": 640, "height": 526, "description": "CL OS/HW information tool."},
   {"repo": "nohuto/ps12bat", "title": "PS12bat", "image": "/main/images/projects/ps12bat-pre", "width": 640, "height": 326, "description": "Converts .ps1 code to a standalone .bat file using B64."},

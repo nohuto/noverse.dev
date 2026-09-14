@@ -24,10 +24,6 @@
     "path": "media/projects/b64rev.mp4"
   },
   {
-    "url": "https://raw.githubusercontent.com/nohuto/strings2-tui/master/media/strings2-tui.mp4",
-    "path": "media/projects/strings2-tui.mp4"
-  },
-  {
     "url": "https://raw.githubusercontent.com/nohuto/nvfetch/main/images/output.png",
     "path": "images/projects/nvfetch-output.png"
   },

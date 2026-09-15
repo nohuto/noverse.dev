@@ -26,6 +26,8 @@ RegKit adds functionality that standard regedit doesn't support:
 - Switch between with [User/Admin/SYSTEM/TI rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation)
 - Favorites import/export
 - Comment column for values with import/export support
+- Decoding values (B64, hex...), interpeting values as FILETIME, SYSTEMTIME, GUID, SID, security descriptor, IPv4/IPv6...
+- [Edit Bits](https://noverse.dev/docs/regkit/overview/#bit-definitions), a bit editor for DWORD, big endian DWORD, QWORD and REG_BINARY values, with reusable JSON definitions that name each bit
 - Loading/unloading hives
 - Local/remote/offline registry
 - Undo/redo, copy/paste (entire keys), replace, performant 'Find'
@@ -175,6 +177,73 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 | `regkit --restart-system` | Relaunch under the SYSTEM account |
 | `regkit --restart-ti` | Relaunch under TrustedInstaller |
 | `regkit --help` | Print usage text |
+
+## Bit Definitions
+
+This is experimental at the moment.
+
+RegKit has currently three files for [ShellState](https://github.com/nohuto/regkit/blob/main/assets/bitfields/ShellState.regkit-bitfield.json) ([explorer-options/#shellstate](https://noverse.dev/docs/win-config/visibility/explorer-options/#shellstate)), [UserPreferencesMask](https://github.com/nohuto/regkit/blob/main/assets/bitfields/UserPreferencesMask.regkit-bitfield.json) ([minimal-visual-effects/#userpreferencesmask](https://noverse.dev/docs/win-config/visibility/minimal-visual-effects/#userpreferencesmask)) & [NVIDIA RM values](https://github.com/nohuto/regkit/blob/main/assets/bitfields/NVIDIA.regkit-bitfield.json) (previously [bitmask-calc](https://github.com/nohuto/bitmask-calc) which is now archived), see [`nvvalues.txt`](https://github.com/nohuto/bitmask-calc) for a list of all values.
+
+### JSON Format
+
+See the json files mentioned above for more examples.
+
+```json
+{
+  "format": "regkit-bitfield",
+  "name": "Example definitions",
+  "comment": "Comment about the file",
+  "definitions": [
+    {
+      "name": "Example value flags",
+      "value_name": "ExampleValue",
+      "key_paths": [ "\\Software\\Example" ],
+      "bit_width": 32,
+      "byte_offset": 0,
+      "comment": "Explanation of the value",
+      "fields": [
+        {
+          "name": "Name",
+          "bits": [0, 1],
+          "meaning": "Explanation of e.g. what each bit state do",
+          "states": [
+            { "value": 0, "name": "Off" },
+            { "value": 2, "name": "On", "meaning": "On if both bits are set" }
+          ]
+        },
+        {
+          "name": "Another name",
+          "bits": [4, 5, 6],
+          "meaning": "Explanation of what the bitfield does"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### Members
+
+| Member | | Required | Meaning |
+| --- | --- | --- | --- |
+| `format` | file | yes | Always `regkit-bitfield` |
+| `name` | file | no | Shown in the `Bit Definitions` submenu |
+| `comment` | file | no | Comment about the file itself |
+| `definitions` | file | yes | One entry per described value |
+| `name` | definition | no | Shown in the definition list. Falls back to `value_name` |
+| `value_name` | definition | yes | Registry value name (empty = unnamed default value) |
+| `bit_width` | definition | yes | `8`, `16`, `32`, `64` |
+| `key_paths` | definition | no | Key path parts, empty matches any path |
+| `byte_offset` | definition | no | First byte of window inside `REG_BINARY` value (default `0`) |
+| `comment` | definition | no | Shown above the bit list |
+| `fields` | definition | no | Described bits |
+| `name` | field | yes | Shown in the field column |
+| `bits` | field | yes | Bit numbers |
+| `meaning` | field | no | Shown in the meaning column |
+| `states` | field | no | Names for the values that field can use |
+| `value` | state | yes | The fields own number (e.g. bits `[4, 5, 6]` = states `0`-`7`) |
+| `name` | state | yes | Shown beside the value |
+| `meaning` | state | no | Replaces field meaning while that state is active |
 
 ## Theme Presets
 

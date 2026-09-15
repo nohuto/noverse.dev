@@ -31,7 +31,6 @@ RegKit adds functionality that standard regedit doesn't support:
 - Loading/unloading hives
 - Local/remote/offline registry
 - Undo/redo, copy/paste (entire keys), replace, performant 'Find'
-- Find can search Root Keys, the real REGISTRY root, and Trace values independently
 - Address bar accepts multiple registry path formats (abbreviated HK*, full root, regedit address bar, `.reg` header, `reg:` link, PowerShell drive/provider, escaped)
 - Copy Key Path As menu for the same formats (to copy/paste into the address bar)
 - Copy Value Name / Copy Value Data from value context menus
@@ -182,7 +181,7 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 
 This is experimental at the moment.
 
-RegKit has currently three files for [ShellState](https://github.com/nohuto/regkit/blob/main/assets/bitfields/ShellState.regkit-bitfield.json) ([explorer-options/#shellstate](https://noverse.dev/docs/win-config/visibility/explorer-options/#shellstate)), [UserPreferencesMask](https://github.com/nohuto/regkit/blob/main/assets/bitfields/UserPreferencesMask.regkit-bitfield.json) ([minimal-visual-effects/#userpreferencesmask](https://noverse.dev/docs/win-config/visibility/minimal-visual-effects/#userpreferencesmask)) & [NVIDIA RM values](https://github.com/nohuto/regkit/blob/main/assets/bitfields/NVIDIA.regkit-bitfield.json) (previously [bitmask-calc](https://github.com/nohuto/bitmask-calc) which is now archived), see [`nvvalues.txt`](https://github.com/nohuto/bitmask-calc) for a list of all values.
+RegKit has currently three files for [ShellState](https://github.com/nohuto/regkit/blob/main/assets/bitfields/ShellState.regkit-bitfield.json) ([explorer-options/#shellstate](https://noverse.dev/docs/win-config/visibility/explorer-options/#shellstate)), [UserPreferencesMask](https://github.com/nohuto/regkit/blob/main/assets/bitfields/UserPreferencesMask.regkit-bitfield.json) ([minimal-visual-effects/#userpreferencesmask](https://noverse.dev/docs/win-config/visibility/minimal-visual-effects/#userpreferencesmask)) & [NVIDIA RM values](https://github.com/nohuto/regkit/blob/main/assets/bitfields/NVIDIA.regkit-bitfield.json) (previously [bitmask-calc](https://github.com/nohuto/bitmask-calc) which is now archived), see [`nvvalues.txt`](https://github.com/nohuto/bitmask-calc/blob/main/nvvalues.txt) for a list of all values.
 
 ### JSON Format
 
@@ -369,12 +368,12 @@ These are the exact builds for each file:
 
 ## Rights and Elevation
 
-RegKit can relaunch itself under different security contexts as many registry areas are protected by ACLs and/or owned by TI (TrustedInstaller). Some keys are owned by TI, and only that SID has write permissions (SYSTEM may be read only). If a key is readable but writes fail with access denied, check the owner and ACLs, if the owner is TI, use the TI mode, if it is SYSTEM, use SYSTEM. Use the '*Options*' menu to restart with higher rights or to make the app always relaunch with them on startup.
+RegKit can relaunch itself under different security contexts as many registry areas are protected by ACLs and/or owned by TI (TrustedInstaller). Some keys are owned by TI, and only that SID has write permissions (SYSTEM may be read only). If a key is readable but writes fail with access denied, check the owner and ACLs, if the owner is TI, use the TI mode, if it is SYSTEM, use SYSTEM. Use `Options > Run As` to restart with higher rights or to make the app always relaunch with them on startup.
 
 These levels can bypass protections, use them only when you understand the possible impact.
 
 - Restart as Admin: uses UAC elevation for a standard elevated token
 - Restart as SYSTEM: uses an elevated process to duplicate a SYSTEM token, then creates a new RegKit process in the active session
-- Restart as TI: uses SYSTEM to start/query the TI service, duplicates its token, then launches RegKit with that token
+- Restart as TrustedInstaller: uses SYSTEM to start/query the TI service, duplicates its token, then launches RegKit with that token
 
 SYSTEM rights are for example needed for reading keys such as `HKLM\SAM\SAM`, `HKLM\SECURITY\Policy`, TI rights are for example needed to write in keys like `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing`.

@@ -12,7 +12,7 @@ Note that native RegEdit can't run alongside RegKit, as RegKit uses `RegEdit_Reg
 
 ## Differences to Native RegEdit
 
-RegKit adds functionality that standard regedit doesn't support:
+RegKit adds functionality that native regedit doesn't support:
 
 - A real REGISTRY root view in addition to the standard root keys
 - [Theme modes](https://noverse.dev/docs/regkit/overview/#theme-presets) (System/Light/Dark) and custom theme presets (edit colors, import/export `.rktheme`)

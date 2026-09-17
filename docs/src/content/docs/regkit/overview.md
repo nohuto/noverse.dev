@@ -8,7 +8,7 @@ sidebar:
 
 RegKit is a native Windows Registry editor written in C++ using the Win32 API and common controls for performance reasons. Based on its features, customization options, and the fact that it's FOSS, it's the best alternative to regedit. It currently supports Windows Vista through Windows 11 (32bit & 64bit versions).
 
-Note that native RegEdit can't run alongside RegKit, as RegKit uses `RegEdit_RegEdit` window class (required for jump support), which causes Regedit to see this window as an existing instance and exits instead of opening another one.
+Note that native RegEdit can't run alongside RegKit, as RegKit uses `RegEdit_RegEdit` window class (required for jump support), which causes RegEdit to see this window as an existing instance and exits instead of opening another one.
 
 ## Differences to Native RegEdit
 
@@ -171,8 +171,8 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 | `regkit --edit-reg file.reg` | Open a `.reg` file in a tab |
 | `regkit --install-edit-context-menu` | Add the `Edit with RegKit` context menu entry |
 | `regkit --uninstall-edit-context-menu` | Remove `Edit with RegKit` context menu entry |
-| `regkit --install-regedit-replacement` | Replace Regedit with this RegKit executable |
-| `regkit --uninstall-regedit-replacement` | Remove this RegKit executable's Regedit replacement |
+| `regkit --install-regedit-replacement` | Replace RegEdit with this RegKit executable |
+| `regkit --uninstall-regedit-replacement` | Remove this RegKit executable's RegEdit replacement |
 | `regkit --restart-system` | Relaunch under the SYSTEM account |
 | `regkit --restart-ti` | Relaunch under TrustedInstaller |
 | `regkit --help` | Print usage text |

@@ -6,44 +6,233 @@ sidebar:
   order: 1
 ---
 
-RegKit is a native Windows Registry editor written in C++ using the Win32 API and common controls for performance reasons. Based on its features, customization options, and the fact that it's FOSS, it's the best alternative to regedit. It currently supports Windows Vista through Windows 11 (32bit & 64bit versions).
-
-Note that native RegEdit can't run alongside RegKit, as RegKit uses `RegEdit_RegEdit` window class (required for jump support), which causes RegEdit to see this window as an existing instance and exits instead of opening another one.
+RegKit is a feature rich registry editor replacement, which includes several improvements & additions compared to the native RegEdit. It currently supports Windows Vista through Windows 11 (32bit & 64bit versions). Note that native RegEdit can't run alongside RegKit, as RegKit uses `RegEdit_RegEdit` window class (required for jump support), which causes RegEdit to see this window as an existing instance and exits instead of opening another one.
 
 ## Differences to Native RegEdit
 
-RegKit adds functionality that native regedit doesn't support:
+RegKit adds functionality that native RegEdit doesn't support:
 
-- A real REGISTRY root view in addition to the standard root keys
-- [Theme modes](https://noverse.dev/docs/regkit/overview/#theme-presets) (System/Light/Dark) and custom theme presets (edit colors, import/export `.rktheme`)
+- A `REGISTRY` root view in addition to the standard root keys, see [`\REGISTRY`](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#root-keys--registry)
+- [Theme modes](https://noverse.dev/docs/regkit/overview/#theme-presets) (System/Light/Dark) and custom theme presets (edit colors, import/export `.rktheme` files)
 - Custom font support
-- Custom [icon support](https://noverse.dev/docs/regkit/overview/#icon-sets) (has 4 sets installed by default)
-- Symbolic link detection (`SymbolicLinkValue` value with the link target)
-- Hive backed key detection using hivelist key & open Hive File (opens the backing hive file)
-- [Trace presets](https://noverse.dev/docs/regkit/overview/#trace-menu) (23H2/24H2/25H2 - see below), used for "Read on boot" column
-- Default presets, this shows default data from new installations
-- Extra root keys toggle, exposes additional predefined keys that RegEdit typically doesn't show, such as `HKEY_PERFORMANCE_DATA` (live performance counter data produced on demand, not stored in a hive file) and related keys like `HKEY_PERFORMANCE_TEXT`/`HKEY_PERFORMANCE_NLSTEXT` for e.g. counter name strings (read more [here](https://learn.microsoft.com/en-us/windows/win32/perfctrs/using-the-registry-functions-to-consume-counter-data))
-- Switch between with [User/Admin/SYSTEM/TI rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation)
+- Custom [icon sets](https://noverse.dev/docs/regkit/overview/#icon-sets), with four sets included by default
+- [Symbolic link](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#symbolic-links) detection, including the link target
+- [Loaded hive root](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#loaded-hives) detection and an *Open Hive File* command for the backing file
+- [Trace presets](https://noverse.dev/docs/regkit/overview/#trace-menu) for 23H2, 24H2, 25H2, which fill the `Read on boot` column
+- Default presets from Windows installations, which fill the `Default` column
+- An extra root keys toggle for [predefined keys](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#predefined-keys) that RegEdit doesn't show
+- Switching between [User, Admin, SYSTEM, and TrustedInstaller rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation)
 - Favorites import/export
 - Comment column for values with import/export support
-- Decoding values (B64, hex...), interpeting values as FILETIME, SYSTEMTIME, GUID, SID, security descriptor, IPv4/IPv6...
+- Decoding values (B64, hex...), interpeting values as `FILETIME`, `SYSTEMTIME`, GUID, SID, security descriptor, IPv4/IPv6...
 - [Edit Bits](https://noverse.dev/docs/regkit/overview/#bit-definitions), a bit editor for DWORD, big endian DWORD, QWORD and REG_BINARY values, with reusable JSON definitions that name each bit
 - Loading/unloading hives
-- Local/remote/offline registry
-- Undo/redo, copy/paste (entire keys), replace, performant 'Find'
-- Address bar accepts multiple registry path formats (abbreviated HK*, full root, regedit address bar, `.reg` header, `reg:` link, PowerShell drive/provider, escaped)
+- Local, remote, offline registries
+- Undo/redo, copy/paste, replace
+- Performant 'Find' with several options (e.g. '*Skip symbolic links*')
+- PCRE2 regular expressions for Find/Replace, see [pcre2syntax](https://pcre2project.github.io/pcre2/doc/pcre2syntax/) & [pcre2pattern](https://pcre2project.github.io/pcre2/doc/pcre2pattern/)
+- Address bar accepts multiple registry path formats (abbreviated HK*, full root, RegEdit address bar, `.reg` header, `reg:` link, PowerShell drive/provider, escaped)
 - Copy Key Path As menu for the same formats (to copy/paste into the address bar)
 - Copy Value Name / Copy Value Data from value context menus
 - Tab control
-- Tab session restore (Save Tabs / Clear Tabs on Exit), including cached Find results
-- Filter bar (value list filter)
+- Tab session restore with *Save Tabs* and *Clear Tabs on Exit*, including cached Find results
+- Filter bar for the value list
 - History view
 - Option to save/forget previous key tree state
-- Simulated keys toggle (from traces)
+- Simulated keys from traces
 - Compare Registries
-- `.reg` / hive file/folder drag and drop support
+- Drag and drop support for `.reg` files, hive files, folders
 - Read only mode
 - Miscellaneous common functionalities
+
+## Theme Presets
+
+It includes built in presets and a theme editor to customize colors, presets can also be saved, exported/imported as `.rktheme` files.
+
+### Examples
+
+#### Default Dark
+
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-dark.png?raw=true" alt="" width="1648" height="1055">
+
+#### Default Light
+
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light.png?raw=true" alt="" width="1648" height="1055">
+
+#### W7 Light
+
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light-w7.png?raw=true" alt="" width="1490" height="970">
+
+#### Gruvbox Dark
+
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/gruvbox-dark.png?raw=true" alt="" width="1648" height="1055">
+
+#### Kanagawa Wave
+
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/kanagawa-wave.png?raw=true" alt="" width="1648" height="1055">
+
+## Icon Sets
+
+Use `Options > Icons` to switch between the built-in sets:
+
+- Phosphor + RegEdit (default)
+- Phosphor
+- Lucide
+- Material Symbols
+
+You can set your own ico set via `%LOCALAPPDATA%\Noverse\RegKit\icons` (use naming of icons listed below). If `icons\dark` and `icons\light` exist, regkit uses them for dark/light modes, if not it will use the root `icons` folder for both modes.
+
+### Previews
+
+| Icon | Phosphor | Lucide | Material Symbols |
+| --- | --- | --- | --- |
+| `back` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/back.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/back.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/back.ico?raw=true" width="16" height="16"> |
+| `binary` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/binary.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/binary.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/binary.ico?raw=true" width="16" height="16"> |
+| `copy` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/copy.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/copy.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/copy.ico?raw=true" width="16" height="16"> |
+| `database` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/database.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/database.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/database.ico?raw=true" width="16" height="16"> |
+| `delete` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/delete.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/delete.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/delete.ico?raw=true" width="16" height="16"> |
+| `export` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/export.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/export.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/export.ico?raw=true" width="16" height="16"> |
+| `folder` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/folder.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/folder.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/folder.ico?raw=true" width="16" height="16"> |
+| `folder-sim` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/folder-sim.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/folder-sim.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/folder-sim.ico?raw=true" width="16" height="16"> |
+| `forward` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/forward.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/forward.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/forward.ico?raw=true" width="16" height="16"> |
+| `local-registry` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/local-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/local-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/local-registry.ico?raw=true" width="16" height="16"> |
+| `offline-registry` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/offline-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/offline-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/offline-registry.ico?raw=true" width="16" height="16"> |
+| `paste` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/paste.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/paste.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/paste.ico?raw=true" width="16" height="16"> |
+| `redo` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/redo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/redo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/redo.ico?raw=true" width="16" height="16"> |
+| `refresh` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/refresh.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/refresh.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/refresh.ico?raw=true" width="16" height="16"> |
+| `remote-registry` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/remote-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/remote-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/remote-registry.ico?raw=true" width="16" height="16"> |
+| `replace` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/replace.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/replace.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/replace.ico?raw=true" width="16" height="16"> |
+| `search` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/search.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/search.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/search.ico?raw=true" width="16" height="16"> |
+| `symlink` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/symlink.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/symlink.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/symlink.ico?raw=true" width="16" height="16"> |
+| `text` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/text.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/text.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/text.ico?raw=true" width="16" height="16"> |
+| `undo` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/undo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/undo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/undo.ico?raw=true" width="16" height="16"> |
+| `up` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/up.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/up.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/up.ico?raw=true" width="16" height="16"> |
+
+## Icon Meanings
+
+### Symlink Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/symlink.ico?raw=true" width="16" height="16">
+
+See [registry-fundamentals#symbolic-links](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#symbolic-links).
+
+### Database Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/database.ico?raw=true" width="16" height="16">
+
+The '*Open Hive File*' command opens the backing file.
+
+See [registry-fundamentals#loaded-hives](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#loaded-hives).
+
+### Simulated Key Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/folder-sim.ico?raw=true" width="16" height="16">
+
+Keys displayed as simulated are virtual entries created from trace files when a key exists in a trace but not in the actual hive view. They're displayed with the *folder-sim* icon so you can differ them from real keys. Creating or modifying a value in a simulated key will create the key path on demand.
+
+## Bit Definitions
+
+RegKit has currently three files for [ShellState](https://github.com/nohuto/regkit/blob/main/assets/bitfields/ShellState.regkit-bitfield.json) ([explorer-options/#shellstate](https://noverse.dev/docs/win-config/visibility/explorer-options/#shellstate)), [UserPreferencesMask](https://github.com/nohuto/regkit/blob/main/assets/bitfields/UserPreferencesMask.regkit-bitfield.json) ([minimal-visual-effects/#userpreferencesmask](https://noverse.dev/docs/win-config/visibility/minimal-visual-effects/#userpreferencesmask)) & [NVIDIA RM values](https://github.com/nohuto/regkit/blob/main/assets/bitfields/NVIDIA.regkit-bitfield.json) (previously [bitmask-calc](https://github.com/nohuto/bitmask-calc) which is now archived), see [`nvvalues.txt`](https://github.com/nohuto/bitmask-calc/blob/main/nvvalues.txt) for a list of all values.
+
+### JSON Format
+
+See the JSON files above for complete examples.
+
+```json
+{
+  "format": "regkit-bitfield",
+  "name": "Example definitions",
+  "comment": "Comment about the file",
+  "definitions": [
+    {
+      "name": "Example value flags",
+      "value_name": "ExampleValue",
+      "key_paths": [ "\\Software\\Example" ],
+      "bit_width": 32,
+      "byte_offset": 0,
+      "comment": "Explanation of the value",
+      "fields": [
+        {
+          "name": "Name",
+          "bits": [0, 1],
+          "meaning": "Explanation of what the field does",
+          "states": [
+            { "value": 0, "name": "Off" },
+            { "value": 2, "name": "On", "meaning": "On if both bits are set" }
+          ]
+        },
+        {
+          "name": "Another name",
+          "bits": [4, 5, 6],
+          "meaning": "Explanation of what the bitfield does"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### Members
+
+| Member | | Required | Meaning |
+| --- | --- | --- | --- |
+| `format` | file | yes | Always `regkit-bitfield` |
+| `name` | file | no | Shown in the `Bit Definitions` submenu |
+| `comment` | file | no | Comment about the file itself |
+| `definitions` | file | yes | One entry per described value |
+| `name` | definition | no | Shown in the definition list. Falls back to `value_name` |
+| `value_name` | definition | yes | Registry value name (empty = unnamed default value) |
+| `bit_width` | definition | yes | `8`, `16`, `32`, `64` |
+| `key_paths` | definition | no | Key path parts, empty matches any path |
+| `byte_offset` | definition | no | First byte of window inside `REG_BINARY` value (default `0`) |
+| `comment` | definition | no | Shown above the bit list |
+| `fields` | definition | no | Described bits |
+| `name` | field | yes | Shown in the field column |
+| `bits` | field | yes | Bit numbers |
+| `meaning` | field | no | Shown in the meaning column |
+| `states` | field | no | Names for the values that field can use |
+| `value` | state | yes | The field's own number (e.g. bits `[4, 5, 6]` = states `0`-`7`) |
+| `name` | state | yes | Shown beside the value |
+| `meaning` | state | no | Replaces field meaning while that state is active |
+
+## Trace Menu
+
+There are three trace files which are quite similar, `23H2`/`24H2`/`25H2`. I've done all of them on new installations. Trace loading supports multiple active traces at once and shows "Read on boot" as `Yes (<traceName>, ...)`.
+
+The trace key menu shows the kernel paths as they appear in the trace (for example `REGISTRY\\MACHINE\\...`), but trace data is also shown under the root keys. Registry symbolic links (the `SymbolicLinkValue` targets) are also resolved so trace values show up under linked keys (including `CurrentControlSet` and other link keys). It can also [simulate missing keys](https://noverse.dev/docs/regkit/overview/#simulated-key-icon-) for trace only data (optional "Simulated Keys" view toggle), you can either use traces for informational purposes or modify them.
+
+It's recommended that you create your own trace, as the templates are based on my system and IDs such as those for the disk won't be correct for your system. Follow the [Boot Registry Activity](/docs/regkit/guides/wpr-wpa/) guide to create a trace which regkit can use.
+
+Loading traces affects startup time and memory consumption, therefore, it's recommended to either load only one trace or none at all if you don't use them frequently (loading a trace takes only a few seconds, so it's better to load it when needed than to keep it active all the time).
+
+## Default Menu
+
+Default presets are `.reg` exports that fill the value list's `Default` column with data from installation images. If a value is included in the registry but not in the loaded defaults, it'll be displayed as `(Missing)`. Currently all (beside two 25H2 exports were directly read from the hive files of images)
+
+`HKLM-SYSTEM-IMAGE.reg` for example is from `Windows\System32\config\SYSTEM`, `HKCU-DEFAULT-IMAGE.reg` from `Users\Default\NTUSER.DAT`, which is the template used when a user profile is created. 
+
+These are the exact builds for each file:
+
+| Release | Edition | Architecture | Build |
+| --- | --- | --- | --- |
+| [Windows Vista RTM](https://github.com/nohuto/regkit/tree/main/assets/defaults/6.0-WVista%20Business%20x64%20-%206.0.6000.16386) | Business | x64 | `6.0.6000.16386` |
+| [Windows 7 RTM](https://github.com/nohuto/regkit/tree/main/assets/defaults/6.1-W7%20Professional%20x64%20-%206.1.7600.16385) | Pro | x64 | `6.1.7600.16385` |
+| [Windows 8](https://github.com/nohuto/regkit/tree/main/assets/defaults/6.2-W8%20Pro%20x64%20-%206.2.9200.16384) | Pro | x64 | `6.2.9200.16384` |
+| [Windows 8.1](https://github.com/nohuto/regkit/tree/main/assets/defaults/6.3-W8.1%20Pro%20x64%20-%206.3.9600.16384) | Pro | x64 | `6.3.9600.16384` |
+| [Windows 10 21H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W10%2021H2%20Home%20x64%20-%2010.0.19044.3086) | Home | x64 | `10.0.19044.3086` |
+| [Windows 10 22H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W10%2022H2%20Home%20x64%20-%2010.0.19045.6456) | Home | x64 | `10.0.19045.6456` |
+| [Windows 11 21H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2021H2%20Home%20x64%20-%2010.0.22000.978) | Home | x64 | `10.0.22000.978` |
+| [Windows 11 22H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2022H2%20Home%20x64%20-%2010.0.22621.963) | Home | x64 | `10.0.22621.963` |
+| [Windows 11 23H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2023H2%20Home%20x64%20-%2010.0.22631.6060) | Home | x64 | `10.0.22631.6060` |
+| [Windows 11 24H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2024H2%20Home%20x64%20-%2010.0.26100.9168) | Home | x64 | `10.0.26100.9168` |
+| [Windows 11 25H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2025H2%20Home%20x64%20-%2010.0.26200.8037) | Home | x64 | `10.0.26200.8037` |
+| [Windows 11 26H1](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2026H1%20Home%20x64%20-%2010.0.28000.2704) | Home | x64 | `10.0.28000.2704` |
+
+## Rights and Elevation
+
+RegKit can relaunch itself under different security contexts as many registry areas are protected by ACLs and/or owned by TI (TrustedInstaller). Some keys are owned by TI, and only that SID has write permissions (SYSTEM may be read only). If a key is readable but writes fail with access denied, check the owner and ACLs, if the owner is TI, use the TI mode, if it is SYSTEM, use SYSTEM. Use `Options > Run As` to restart with higher rights or to make the app always relaunch with them on startup.
+
+These levels can bypass protections, use them only when you understand the possible impact.
+
+- `Restart as Admin`: uses UAC elevation for a standard elevated token
+- `Restart as SYSTEM`: uses an elevated process to duplicate a SYSTEM token, then creates a new RegKit process in the active session
+- `Restart as TrustedInstaller`: uses SYSTEM to start/query the TI service, duplicates its token, then launches RegKit with that token
+
+SYSTEM rights are for example needed for reading keys such as `HKLM\SAM\SAM`, `HKLM\SECURITY\Policy`, TI rights are for example needed to write in keys like `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing`.
 
 ## Keyboard Shortcuts
 
@@ -176,204 +365,3 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 | `regkit --restart-system` | Relaunch under the SYSTEM account |
 | `regkit --restart-ti` | Relaunch under TrustedInstaller |
 | `regkit --help` | Print usage text |
-
-## Bit Definitions
-
-This is experimental at the moment.
-
-RegKit has currently three files for [ShellState](https://github.com/nohuto/regkit/blob/main/assets/bitfields/ShellState.regkit-bitfield.json) ([explorer-options/#shellstate](https://noverse.dev/docs/win-config/visibility/explorer-options/#shellstate)), [UserPreferencesMask](https://github.com/nohuto/regkit/blob/main/assets/bitfields/UserPreferencesMask.regkit-bitfield.json) ([minimal-visual-effects/#userpreferencesmask](https://noverse.dev/docs/win-config/visibility/minimal-visual-effects/#userpreferencesmask)) & [NVIDIA RM values](https://github.com/nohuto/regkit/blob/main/assets/bitfields/NVIDIA.regkit-bitfield.json) (previously [bitmask-calc](https://github.com/nohuto/bitmask-calc) which is now archived), see [`nvvalues.txt`](https://github.com/nohuto/bitmask-calc/blob/main/nvvalues.txt) for a list of all values.
-
-### JSON Format
-
-See the json files mentioned above for more examples.
-
-```json
-{
-  "format": "regkit-bitfield",
-  "name": "Example definitions",
-  "comment": "Comment about the file",
-  "definitions": [
-    {
-      "name": "Example value flags",
-      "value_name": "ExampleValue",
-      "key_paths": [ "\\Software\\Example" ],
-      "bit_width": 32,
-      "byte_offset": 0,
-      "comment": "Explanation of the value",
-      "fields": [
-        {
-          "name": "Name",
-          "bits": [0, 1],
-          "meaning": "Explanation of e.g. what each bit state do",
-          "states": [
-            { "value": 0, "name": "Off" },
-            { "value": 2, "name": "On", "meaning": "On if both bits are set" }
-          ]
-        },
-        {
-          "name": "Another name",
-          "bits": [4, 5, 6],
-          "meaning": "Explanation of what the bitfield does"
-        }
-      ]
-    }
-  ]
-}
-```
-
-#### Members
-
-| Member | | Required | Meaning |
-| --- | --- | --- | --- |
-| `format` | file | yes | Always `regkit-bitfield` |
-| `name` | file | no | Shown in the `Bit Definitions` submenu |
-| `comment` | file | no | Comment about the file itself |
-| `definitions` | file | yes | One entry per described value |
-| `name` | definition | no | Shown in the definition list. Falls back to `value_name` |
-| `value_name` | definition | yes | Registry value name (empty = unnamed default value) |
-| `bit_width` | definition | yes | `8`, `16`, `32`, `64` |
-| `key_paths` | definition | no | Key path parts, empty matches any path |
-| `byte_offset` | definition | no | First byte of window inside `REG_BINARY` value (default `0`) |
-| `comment` | definition | no | Shown above the bit list |
-| `fields` | definition | no | Described bits |
-| `name` | field | yes | Shown in the field column |
-| `bits` | field | yes | Bit numbers |
-| `meaning` | field | no | Shown in the meaning column |
-| `states` | field | no | Names for the values that field can use |
-| `value` | state | yes | The fields own number (e.g. bits `[4, 5, 6]` = states `0`-`7`) |
-| `name` | state | yes | Shown beside the value |
-| `meaning` | state | no | Replaces field meaning while that state is active |
-
-## Theme Presets
-
-It includes built in presets and a theme editor to customize colors, presets can also be saved, exported, and imported as `.rktheme` files.
-
-### Examples
-
-#### Default Dark
-
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-dark.png?raw=true" alt="" width="1648" height="1055">
-
-#### Default Light
-
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light.png?raw=true" alt="" width="1648" height="1055">
-
-##### W7 Light
-
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light-w7.png?raw=true" alt="" width="1490" height="970">
-
-#### Gruvbox Dark
-
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/gruvbox-dark.png?raw=true" alt="" width="1648" height="1055">
-
-#### Kanagawa Wave
-
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/kanagawa-wave.png?raw=true" alt="" width="1648" height="1055">
-
-## Icon Sets
-
-RegKit comes with multiple icon sets and supports loading your own icons, you can switch them via `Options > Icons`.
-
-Built in sets:
-
-- Phosphor + RegEdit (default)
-- Phosphor
-- Lucide
-- Material Symbols
-
-You can set your own ico set via `%LOCALAPPDATA%\Noverse\RegKit\icons` (use naming of icons listed below). If `icons\dark` and `icons\light` exist, regkit uses them for dark/light modes, if not it will use the root `icons` folder for both modes.
-
-### Previews
-
-| Icon | Phosphor | Lucide | Material Symbols |
-| --- | --- | --- | --- |
-| `back` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/back.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/back.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/back.ico?raw=true" width="16" height="16"> |
-| `binary` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/binary.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/binary.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/binary.ico?raw=true" width="16" height="16"> |
-| `copy` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/copy.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/copy.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/copy.ico?raw=true" width="16" height="16"> |
-| `database` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/database.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/database.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/database.ico?raw=true" width="16" height="16"> |
-| `delete` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/delete.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/delete.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/delete.ico?raw=true" width="16" height="16"> |
-| `export` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/export.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/export.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/export.ico?raw=true" width="16" height="16"> |
-| `folder` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/folder.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/folder.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/folder.ico?raw=true" width="16" height="16"> |
-| `folder-sim` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/folder-sim.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/folder-sim.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/folder-sim.ico?raw=true" width="16" height="16"> |
-| `forward` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/forward.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/forward.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/forward.ico?raw=true" width="16" height="16"> |
-| `local-registry` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/local-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/local-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/local-registry.ico?raw=true" width="16" height="16"> |
-| `offline-registry` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/offline-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/offline-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/offline-registry.ico?raw=true" width="16" height="16"> |
-| `paste` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/paste.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/paste.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/paste.ico?raw=true" width="16" height="16"> |
-| `redo` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/redo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/redo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/redo.ico?raw=true" width="16" height="16"> |
-| `refresh` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/refresh.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/refresh.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/refresh.ico?raw=true" width="16" height="16"> |
-| `remote-registry` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/remote-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/remote-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/remote-registry.ico?raw=true" width="16" height="16"> |
-| `replace` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/replace.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/replace.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/replace.ico?raw=true" width="16" height="16"> |
-| `search` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/search.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/search.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/search.ico?raw=true" width="16" height="16"> |
-| `symlink` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/symlink.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/symlink.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/symlink.ico?raw=true" width="16" height="16"> |
-| `text` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/text.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/text.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/text.ico?raw=true" width="16" height="16"> |
-| `undo` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/undo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/undo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/undo.ico?raw=true" width="16" height="16"> |
-| `up` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/up.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/up.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/up.ico?raw=true" width="16" height="16"> |
-
-## Icons Meaning
-
-### Symlink Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/symlink.ico?raw=true" width="16" height="16">
-
-A key created with `REG_OPTION_CREATE_LINK` is a registry symbolic link key, which let the Configuration Manager redirect lookups to another key. Internally, the link is saved as a `REG_LINK` value named `SymbolicLinkValue` that holds the path.
-
-RegKit displays keys as symbolic links when the registry reports a link (done by checking for a symbolic link during key enumeration), the value is usually not visible in regedit.
-
-Examples:
-- `HKLM\SYSTEM\CurrentControlSet` -> `HKLM\SYSTEM\ControlSet00x`
-- `HKEY_CURRENT_CONFIG` -> `HKLM\SYSTEM\CurrentControlSet\Hardware Profiles\Current`
-- `HKU\S-1-5-18` -> `HKU\.DEFAULT`
-- `HKLM\SOFTWARE\Wow6432Node\Classes` -> `HKLM\SOFTWARE\Classes\Wow6432Node`
-
-### Database Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/database.ico?raw=true" width="16" height="16">
-
-Used to mark keys that map to hive files listed under `HKLM\SYSTEM\CurrentControlSet\Control\Hivelist` (see "[A true hive is stored in a file.](https://scorpiosoftware.net/2022/04/15/mysteries-of-the-registry/)"). These (hive backed) keys can be opened directly via '*Open Hive File*' (menu). See [Hives and on-disk files](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#hives-and-on-disk-files) for hive file paths.
-
-### Simulated Key Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/folder-sim.ico?raw=true" width="16" height="16">
-
-Keys displayed as simulated are virtual entries created from trace files when a key exists in a trace but not in the actual hive view. They're displayed with the *folder-sim* icon so you can differ them from real keys. Creating or modifying a value in a simulated key will create the key path on demand.
-
-## Trace Menu
-
-There are three trace files which are quite similar, `23H2`/`24H2`/`25H2`. I've done all of them on new installations. Trace loading supports multiple active traces at once and shows "Read on boot" as `Yes (<traceName>, ...)`.
-
-The trace key menu shows the kernel paths as they appear in the trace (for example `REGISTRY\\MACHINE\\...`), but trace data is also shown under the root keys. Registry symbolic links (the `SymbolicLinkValue` targets) are also resolved so trace values show up under linked keys (including `CurrentControlSet` and other link keys). It can also [simulate missing keys](https://noverse.dev/docs/regkit/overview/#simulated-key-icon) for trace only data (optional "Simulated Keys" view toggle), you can either use traces for informational purposes or modify them.
-
-Note that WPR doesn't pass the type/data so you'll have to find that out on your own.
-
-It's recommended that you create your own trace, as the templates are based on my system and IDs such as those for the disk won't be correct for your system. Follow the [Boot Registry Activity](/docs/regkit/guides/wpr-wpa/) guide to create a trace which regkit can use.
-
-Loading traces affects startup time and memory consumption, therefore, it's recommended to either load only one trace or none at all if you don't use them frequently (loading a trace takes only a few seconds, so it's better to load it when needed than to keep it active all the time).
-
-## Default Menu
-
-Default presets are `.reg` exports that fill the value list's `Default` column with data from installation images. If a value is included in the registry but not in the loaded defaults, it'll be displayed as `(Missing)`. Currently all (beside two 25H2 exports were directly read from the hive files of images)
-
-`HKLM-SYSTEM-IMAGE.reg` for example is from `Windows\System32\config\SYSTEM`, `HKCU-DEFAULT-IMAGE.reg` from `Users\Default\NTUSER.DAT`, which is the template used when a user profile is created. 
-
-These are the exact builds for each file:
-
-| Release | Edition | Architecture | Build |
-| --- | --- | --- | --- |
-| [Windows Vista RTM](https://github.com/nohuto/regkit/tree/main/assets/defaults/6.0-WVista%20Business%20x64%20-%206.0.6000.16386) | Business | x64 | `6.0.6000.16386` |
-| [Windows 7 RTM](https://github.com/nohuto/regkit/tree/main/assets/defaults/6.1-W7%20Professional%20x64%20-%206.1.7600.16385) | Pro | x64 | `6.1.7600.16385` |
-| [Windows 8](https://github.com/nohuto/regkit/tree/main/assets/defaults/6.2-W8%20Pro%20x64%20-%206.2.9200.16384) | Pro | x64 | `6.2.9200.16384` |
-| [Windows 8.1](https://github.com/nohuto/regkit/tree/main/assets/defaults/6.3-W8.1%20Pro%20x64%20-%206.3.9600.16384) | Pro | x64 | `6.3.9600.16384` |
-| [Windows 10 21H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W10%2021H2%20Home%20x64%20-%2010.0.19044.3086) | Home | x64 | `10.0.19044.3086` |
-| [Windows 10 22H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W10%2022H2%20Home%20x64%20-%2010.0.19045.6456) | Home | x64 | `10.0.19045.6456` |
-| [Windows 11 21H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2021H2%20Home%20x64%20-%2010.0.22000.978) | Home | x64 | `10.0.22000.978` |
-| [Windows 11 22H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2022H2%20Home%20x64%20-%2010.0.22621.963) | Home | x64 | `10.0.22621.963` |
-| [Windows 11 23H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2023H2%20Home%20x64%20-%2010.0.22631.6060) | Home | x64 | `10.0.22631.6060` |
-| [Windows 11 24H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2024H2%20Home%20x64%20-%2010.0.26100.9168) | Home | x64 | `10.0.26100.9168` |
-| [Windows 11 25H2](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2025H2%20Home%20x64%20-%2010.0.26200.8037) | Home | x64 | `10.0.26200.8037` |
-| [Windows 11 26H1](https://github.com/nohuto/regkit/tree/main/assets/defaults/10-W11%2026H1%20Home%20x64%20-%2010.0.28000.2704) | Home | x64 | `10.0.28000.2704` |
-
-## Rights and Elevation
-
-RegKit can relaunch itself under different security contexts as many registry areas are protected by ACLs and/or owned by TI (TrustedInstaller). Some keys are owned by TI, and only that SID has write permissions (SYSTEM may be read only). If a key is readable but writes fail with access denied, check the owner and ACLs, if the owner is TI, use the TI mode, if it is SYSTEM, use SYSTEM. Use `Options > Run As` to restart with higher rights or to make the app always relaunch with them on startup.
-
-These levels can bypass protections, use them only when you understand the possible impact.
-
-- Restart as Admin: uses UAC elevation for a standard elevated token
-- Restart as SYSTEM: uses an elevated process to duplicate a SYSTEM token, then creates a new RegKit process in the active session
-- Restart as TrustedInstaller: uses SYSTEM to start/query the TI service, duplicates its token, then launches RegKit with that token
-
-SYSTEM rights are for example needed for reading keys such as `HKLM\SAM\SAM`, `HKLM\SECURITY\Policy`, TI rights are for example needed to write in keys like `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing`.

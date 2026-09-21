@@ -75,52 +75,45 @@ It includes built in presets and a theme editor to customize colors, presets can
 
 Use `Options > Icons` to switch between the built-in sets:
 
-- Phosphor + RegEdit (default)
-- Phosphor
-- Lucide
-- Material Symbols
+- Classic ([win-icons](https://github.com/nohuto/win-icons))
+- Phosphor (default)
 
 You can set your own ico set via `%LOCALAPPDATA%\Noverse\RegKit\icons` (use naming of icons listed below). If `icons\dark` and `icons\light` exist, regkit uses them for dark/light modes, if not it will use the root `icons` folder for both modes.
 
+See [win-icons](https://github.com/nohuto/win-icons) for a collection of icons, which you can use to create your own set.
+
 ### Previews
 
-| Icon | Phosphor | Lucide | Material Symbols |
-| --- | --- | --- | --- |
-| `back` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/back.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/back.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/back.ico?raw=true" width="16" height="16"> |
-| `binary` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/binary.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/binary.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/binary.ico?raw=true" width="16" height="16"> |
-| `copy` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/copy.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/copy.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/copy.ico?raw=true" width="16" height="16"> |
-| `database` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/database.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/database.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/database.ico?raw=true" width="16" height="16"> |
-| `delete` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/delete.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/delete.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/delete.ico?raw=true" width="16" height="16"> |
-| `export` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/export.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/export.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/export.ico?raw=true" width="16" height="16"> |
-| `folder` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/folder.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/folder.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/folder.ico?raw=true" width="16" height="16"> |
-| `folder-sim` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/folder-sim.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/folder-sim.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/folder-sim.ico?raw=true" width="16" height="16"> |
-| `forward` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/forward.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/forward.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/forward.ico?raw=true" width="16" height="16"> |
-| `local-registry` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/local-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/local-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/local-registry.ico?raw=true" width="16" height="16"> |
-| `offline-registry` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/offline-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/offline-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/offline-registry.ico?raw=true" width="16" height="16"> |
-| `paste` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/paste.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/paste.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/paste.ico?raw=true" width="16" height="16"> |
-| `redo` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/redo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/redo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/redo.ico?raw=true" width="16" height="16"> |
-| `refresh` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/refresh.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/refresh.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/refresh.ico?raw=true" width="16" height="16"> |
-| `remote-registry` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/remote-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/remote-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/remote-registry.ico?raw=true" width="16" height="16"> |
-| `replace` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/replace.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/replace.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/replace.ico?raw=true" width="16" height="16"> |
-| `search` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/search.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/search.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/search.ico?raw=true" width="16" height="16"> |
-| `symlink` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/symlink.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/symlink.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/symlink.ico?raw=true" width="16" height="16"> |
-| `text` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/text.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/text.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/text.ico?raw=true" width="16" height="16"> |
-| `undo` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/undo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/undo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/undo.ico?raw=true" width="16" height="16"> |
-| `up` | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/up.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/up.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/materialsymbols/light/up.ico?raw=true" width="16" height="16"> |
+| Icon | Classic | Phosphor |
+| --- | --- | --- |
+| `local-registry` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/local-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/local-registry.ico?raw=true" width="16" height="16"> |
+| `remote-registry` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/remote-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/remote-registry.ico?raw=true" width="16" height="16"> |
+| `offline-registry` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/offline-registry.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/offline-registry.ico?raw=true" width="16" height="16"> |
+| `search` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/search.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/search.ico?raw=true" width="16" height="16"> |
+| `replace` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/replace.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/replace.ico?raw=true" width="16" height="16"> |
+| `undo` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/undo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/undo.ico?raw=true" width="16" height="16"> |
+| `redo` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/redo.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/redo.ico?raw=true" width="16" height="16"> |
+| `copy` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/copy.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/copy.ico?raw=true" width="16" height="16"> |
+| `paste` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/paste.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/paste.ico?raw=true" width="16" height="16"> |
+| `delete` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/delete.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/delete.ico?raw=true" width="16" height="16"> |
+| `refresh` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/refresh.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/refresh.ico?raw=true" width="16" height="16"> |
+| `back` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/back.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/back.ico?raw=true" width="16" height="16"> |
+| `forward` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/forward.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/forward.ico?raw=true" width="16" height="16"> |
+| `up` | <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/up.ico?raw=true" width="16" height="16"> | <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/phosphor/light/up.ico?raw=true" width="16" height="16"> |
 
 ## Icon Meanings
 
-### Symlink Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/symlink.ico?raw=true" width="16" height="16">
+### Symlink Icon <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/symlink.ico?raw=true" width="16" height="16">
 
 See [registry-fundamentals#symbolic-links](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#symbolic-links).
 
-### Database Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/database.ico?raw=true" width="16" height="16">
+### Database Icon <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/database.ico?raw=true" width="16" height="16">
 
 The '*Open Hive File*' command opens the backing file.
 
 See [registry-fundamentals#loaded-hives](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#loaded-hives).
 
-### Simulated Key Icon <img src="https://github.com/nohuto/regkit/blob/main/assets/icons/lucide/light/folder-sim.ico?raw=true" width="16" height="16">
+### Simulated Key Icon <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/classic/folder-sim.ico?raw=true" width="16" height="16">
 
 Keys displayed as simulated are virtual entries created from trace files when a key exists in a trace but not in the actual hive view. They're displayed with the *folder-sim* icon so you can differ them from real keys. Creating or modifying a value in a simulated key will create the key path on demand.
 

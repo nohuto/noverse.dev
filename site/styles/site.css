@@ -1649,15 +1649,15 @@ main.home-main {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, max(340px, calc((100% - 16px) / 2))), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, max(340px, calc((100% - 16px) / 2))), 1fr));
   gap: 16px;
 }
 
-.project-section {
+.project-group + .project-group {
   margin-top: 24px;
 }
 
-.project-section .section-heading {
+.project-group .section-heading {
   margin-bottom: 20px;
 }
 

@@ -60,7 +60,7 @@ function renderProjectMedia(project) {
 
 function renderProjectCards(projects, section) {
   return projects.filter((project) => (
-    project.projects !== false && (project.section || 'main') === section
+    project.projects !== false && (project.section || 'active') === section
   )).map((project) => {
     const href = project.href || `https://github.com/${project.repo}`;
     const external = /^https?:\/\//.test(href);

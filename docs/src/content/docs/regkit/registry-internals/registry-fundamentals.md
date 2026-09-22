@@ -46,7 +46,7 @@ ffffd20e294dd2c4     WC
 
 ### [`\REGISTRY` Tree View](https://projectzero.google/2024/10/the-windows-registry-adventure-4-hives.html)
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/REGISTRYview.png?raw=true" alt="" width="670" height="789">
+<img src="https://github.com/nohuto/regkit/blob/main/docs/images/REGISTRYview.png?raw=true" alt="" width="670" height="789">
 
 ## `\REGISTRY` Only Keys
 
@@ -121,6 +121,99 @@ Exmaple of an volatile key with a UTF-16 string with type `0x20001`, `RegQueryVa
 set type=0x20001
 query status=0 returned type=0x20001 bytes=10 text=test
 leftover test keys: 0
+```
+
+## Key Handles
+
+Key handle = process handle to an open registry `Key` object, functions such as [`RegOpenKeyEx`](https://learn.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regopenkeyexw) return it as an `HKEY`. The handle can then be used to query the key, change it, or open another key relative to it.
+
+The `Access` column shows the [access rights](https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-key-security-and-access-rights):
+
+<img src="https://github.com/nohuto/regkit/blob/main/docs/images/key-handles-access.png?raw=true" alt="" width="1852" height="870">
+
+| Value | Meaning |
+| --- | --- |
+| KEY\_ALL\_ACCESS (0xF003F) | Combines the STANDARD\_RIGHTS\_REQUIRED, KEY\_QUERY\_VALUE, KEY\_SET\_VALUE, KEY\_CREATE\_SUB\_KEY, KEY\_ENUMERATE\_SUB\_KEYS, KEY\_NOTIFY, and KEY\_CREATE\_LINK access rights. |
+| KEY\_CREATE\_LINK (0x0020) | Reserved for system use. |
+| KEY\_CREATE\_SUB\_KEY (0x0004) | Required to create a subkey of a registry key. |
+| KEY\_ENUMERATE\_SUB\_KEYS (0x0008) | Required to enumerate the subkeys of a registry key. |
+| KEY\_EXECUTE (0x20019) | Equivalent to KEY\_READ. |
+| KEY\_NOTIFY (0x0010) | Required to request change notifications for a registry key or for subkeys of a registry key. |
+| KEY\_QUERY\_VALUE (0x0001) | Required to query the values of a registry key. |
+| KEY\_READ (0x20019) | Combines the STANDARD\_RIGHTS\_READ, KEY\_QUERY\_VALUE, KEY\_ENUMERATE\_SUB\_KEYS, and KEY\_NOTIFY values. |
+| KEY\_SET\_VALUE (0x0002) | Required to create, delete, or set a registry value. |
+| KEY\_WOW64\_32KEY (0x0200) | Indicates that an application on 64-bit Windows should operate on the 32-bit registry view. This flag is ignored by 32-bit Windows. For more information, see [Accessing an Alternate Registry View](https://learn.microsoft.com/en-us/windows/desktop/WinProg64/accessing-an-alternate-registry-view). This flag must be combined using the OR operator with the other flags in this table that either query or access registry values. **Windows 2000:** This flag is not supported. |
+| KEY\_WOW64\_64KEY (0x0100) | Indicates that an application on 64-bit Windows should operate on the 64-bit registry view. This flag is ignored by 32-bit Windows. For more information, see [Accessing an Alternate Registry View](https://learn.microsoft.com/en-us/windows/desktop/WinProg64/accessing-an-alternate-registry-view). This flag must be combined using the OR operator with the other flags in this table that either query or access registry values. **Windows 2000:** This flag is not supported. |
+| KEY\_WRITE (0x20006) | Combines the STANDARD\_RIGHTS\_WRITE, KEY\_SET\_VALUE, and KEY\_CREATE\_SUB\_KEY access rights. |
+
+### Access Example
+
+```c
+#include <windows.h>
+#include <stdio.h>
+
+int wmain(void)
+{
+    HKEY query_key = NULL;
+    HKEY set_key = NULL;
+
+    // open HKCU\Software twice with different access rights
+    LSTATUS query_status = RegOpenKeyExW(
+        HKEY_CURRENT_USER,
+        L"Software",
+        0,
+        KEY_QUERY_VALUE,
+        &query_key);
+    LSTATUS set_status = RegOpenKeyExW(
+        HKEY_CURRENT_USER,
+        L"Software",
+        0,
+        KEY_SET_VALUE,
+        &set_key);
+
+    printf(
+        "PID=%lu QUERY=%p SET=%p QSTATUS=%ld SSTATUS=%ld\n",
+        GetCurrentProcessId(),
+        query_key,
+        set_key,
+        query_status,
+        set_status);
+    fflush(stdout);
+    Sleep(60000); // keep both handles open for the debugger
+
+    RegCloseKey(set_key);
+    RegCloseKey(query_key);
+    return 0;
+}
+```
+
+```c
+PID=1428 QUERY=00000000000000F4 SET=00000000000000F8 QSTATUS=0 SSTATUS=0
+
+0:004> cdb: Reading initial command '!handle F4 f; !handle F8 f; !handle ffffffff80000001 f; q'
+Handle f4 // KEY_QUERY_VALUE
+  Type         	Key
+  Attributes   	0
+  GrantedAccess	0x1:
+         None
+         QueryValue
+  HandleCount  	2
+  PointerCount 	32769
+  Name         	\REGISTRY\USER\S-1-5-21-925530076-420762750-1089864997-1000\Software
+  Object Specific Information
+    Key last write time:  11:04:03. 9/22/2026
+    Key name Software
+Handle f8 // KEY_SET_VALUE
+  Type         	Key
+  Attributes   	0
+  GrantedAccess	0x2:
+         None
+         SetValue
+  HandleCount  	2 // UM !handle duplicated handles to query it
+  PointerCount 	32769
+  Name         	\REGISTRY\USER\S-1-5-21-925530076-420762750-1089864997-1000\Software
+  Object Specific Information
+Could not duplicate handle 80000001, error 6
 ```
 
 ## [Predefined Keys](https://learn.microsoft.com/en-us/windows/win32/sysinfo/predefined-keys)

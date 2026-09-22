@@ -23,9 +23,10 @@ RegKit adds functionality that native RegEdit doesn't support:
 - An extra root keys toggle for [predefined keys](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#predefined-keys) that RegEdit doesn't show
 - Switching between [User, Admin, SYSTEM, and TrustedInstaller rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation)
 - Favorites import/export
-- Comment column for values with import/export support
+- Comment column for values/keys (including [default comments](https://github.com/nohuto/regkit/blob/main/assets/comments/default-comments.json))
 - Decoding values (B64, hex...), interpeting values as `FILETIME`, `SYSTEMTIME`, GUID, SID, security descriptor, IPv4/IPv6...
 - [Edit Bits](https://noverse.dev/docs/regkit/overview/#bit-definitions), a bit editor for DWORD, big endian DWORD, QWORD and REG_BINARY values, with reusable JSON definitions that name each bit
+- [Key hanldes](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#key-handles)
 - Loading/unloading hives
 - Local, remote, offline registries
 - Undo/redo, copy/paste, replace

@@ -32,10 +32,6 @@
     "path": "images/projects/ps12bat-pre.png"
   },
   {
-    "url": "https://raw.githubusercontent.com/nohuto/regkit/main/assets/images/ayu-dark.png",
-    "path": "images/projects/regkit-ayu-dark.png"
-  },
-  {
     "url": "https://raw.githubusercontent.com/nohuto/nvapi-cli/main/images/nvapicli.png",
     "path": "images/projects/nvapi-cli.png"
   },

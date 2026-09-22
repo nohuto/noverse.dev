@@ -354,7 +354,7 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 | `regkit --edit-reg file.reg` | Open a `.reg` file in a tab |
 | `regkit --install-edit-context-menu` | Add the `Edit with RegKit` context menu entry |
 | `regkit --uninstall-edit-context-menu` | Remove `Edit with RegKit` context menu entry |
-| `regkit --install-regedit-replacement` | Replace RegEdit with this RegKit executable |
+| `regkit --install-regedit-replacement [--override]` | Replace RegEdit with this RegKit executable, fails if another program owns RegEdits Debugger entry, `--override` replaces it anyway |
 | `regkit --uninstall-regedit-replacement` | Remove this RegKit executable's RegEdit replacement |
 | `regkit --restart-system` | Relaunch under the SYSTEM account |
 | `regkit --restart-ti` | Relaunch under TrustedInstaller |

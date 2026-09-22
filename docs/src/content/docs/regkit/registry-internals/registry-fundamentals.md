@@ -256,9 +256,9 @@ As shown above each constant has its high bit set, which keeps it outside the no
 
 ### Symbolic Links
 
-A symbolic link is a key created with `REG_OPTION_CREATE_LINK`, its key node has the `KEY_SYM_LINK` flag and its target is stored in a `REG_LINK` value named `SymbolicLinkValue`. A normal open follows the target, while `RegOpenKeyEx`/`NtOpenKeyEx` with `REG_OPTION_OPEN_LINK` opens the link key itself.
+Symbolic link get created via `REG_OPTION_CREATE_LINK`, its key node then has the `KEY_SYM_LINK` flag, and the `SymbolicLinkValue` value stores the target as `REG_LINK` (`RegOpenKeyEx`/`NtOpenKeyEx` resolve that). Passing `REG_OPTION_OPEN_LINK` opens the link key itself.
 
-`CurrentControlSet` is a volatile symbolic link to the control set selected during boot, opening the link key in WinDbg shows its target:
+Example of `CurrentControlSet` which is a volatile symbolic link to `ControlSet00x`:
 
 ```c
 lkd> !reg q \REGISTRY\MACHINE\SYSTEM\CurrentControlSet

@@ -467,12 +467,19 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
     }
 
     #starlight__search .pagefind-ui__result-link {
+      position: unset;
       --pagefind-ui-text: var(--sl-color-white);
       font-weight: 600;
     }
 
     #starlight__search .pagefind-ui__result-link:hover {
       text-decoration: none;
+    }
+
+    #starlight__search .pagefind-ui__result-link::after {
+      content: '';
+      position: absolute;
+      inset: 0;
     }
 
     [dir='rtl'] .pagefind-ui__result-title::before {

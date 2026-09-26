@@ -228,3 +228,35 @@
 .legal-list .legal-item:last-child p {
   max-width: none;
 }
+
+@media (max-width: 650px) {
+  .product-header {
+    grid-template-columns: 1fr;
+    row-gap: 8px;
+  }
+
+  .product-cta {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .legal-list {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-list .legal-item:nth-child(2) {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .product-preview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-preview-card img {
+    height: auto;
+  }
+}

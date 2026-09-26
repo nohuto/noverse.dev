@@ -13,16 +13,30 @@ import type { TerminalToolContext } from './types';
       const dialog = document.getElementById('calc-window');
       const handle = document.getElementById('calc-drag');
       const closeButton = document.getElementById('calc-close');
-      const input = document.getElementById('calc-input') as HTMLInputElement | null;
+      const input = document.getElementById(
+        'calc-input',
+      ) as HTMLInputElement | null;
       const output = document.getElementById('calc-output');
       const resultEl = document.getElementById('calc-result');
       const meta = document.getElementById('calc-meta');
       const keypads = dialog?.querySelector('.calc-keypads');
-      if (!layer || !dialog || !handle || !closeButton || !input || !output || !resultEl || !meta || !keypads) {
-        return () => { };
+      if (
+        !layer ||
+        !dialog ||
+        !handle ||
+        !closeButton ||
+        !input ||
+        !output ||
+        !resultEl ||
+        !meta ||
+        !keypads
+      ) {
+        return () => {};
       }
 
-      const touchKeyboardMedia = window.matchMedia('(pointer: coarse), (hover: none)');
+      const touchKeyboardMedia = window.matchMedia(
+        '(pointer: coarse), (hover: none)',
+      );
       const syncTouchKeyboard = () => {
         const suppressKeyboard = touchKeyboardMedia.matches;
         input.readOnly = suppressKeyboard;
@@ -33,7 +47,7 @@ import type { TerminalToolContext } from './types';
       const constants = Object.freeze({
         pi: Math.PI,
         e: Math.E,
-        tau: Math.PI * 2
+        tau: Math.PI * 2,
       });
       const functions = Object.freeze({
         abs: Math.abs,
@@ -51,39 +65,47 @@ import type { TerminalToolContext } from './types';
         round: Math.round,
         sin: Math.sin,
         sqrt: Math.sqrt,
-        tan: Math.tan
+        tan: Math.tan,
       });
       const binaryOps = Object.freeze({
         '+': { precedence: 1, assoc: 'left', fn: (a, b) => a + b },
         '-': { precedence: 1, assoc: 'left', fn: (a, b) => a - b },
         '*': { precedence: 2, assoc: 'left', fn: (a, b) => a * b },
         '/': {
-          precedence: 2, assoc: 'left', fn: (a, b) => {
+          precedence: 2,
+          assoc: 'left',
+          fn: (a, b) => {
             if (b === 0) throw new Error('division by zero');
             return a / b;
-          }
+          },
         },
         '%': {
-          precedence: 2, assoc: 'left', fn: (a, b) => {
+          precedence: 2,
+          assoc: 'left',
+          fn: (a, b) => {
             if (b === 0) throw new Error('modulo by zero');
             return a % b;
-          }
+          },
         },
-        '^': { precedence: 4, assoc: 'right', fn: (a, b) => a ** b }
+        '^': { precedence: 4, assoc: 'right', fn: (a, b) => a ** b },
       });
       const previewOps = new Set(['+', '*', '/', '%', '^', '!']);
       const normalizers = Object.freeze({
         '\u00f7': '/',
         '\u2212': '-',
         '\u221a': 'sqrt',
-        '\u03c0': 'pi'
+        '\u03c0': 'pi',
       });
 
-      const normalizeExpression = value => String(value || '')
-        .replace(/[\u00f7\u2212\u221a\u03c0]/g, char => normalizers[char] || char)
-        .replace(/\s+/g, '');
+      const normalizeExpression = (value) =>
+        String(value || '')
+          .replace(
+            /[\u00f7\u2212\u221a\u03c0]/g,
+            (char) => normalizers[char] || char,
+          )
+          .replace(/\s+/g, '');
 
-      const factorial = value => {
+      const factorial = (value) => {
         if (!Number.isInteger(value) || value < 0 || value > 170) {
           throw new Error('factorial supports integers from 0 to 170');
         }
@@ -92,17 +114,18 @@ import type { TerminalToolContext } from './types';
         return result;
       };
 
-      const formatNumber = value => {
+      const formatNumber = (value) => {
         const number = Object.is(value, -0) ? 0 : value;
         if (!Number.isFinite(number)) throw new Error('result is not finite');
         const abs = Math.abs(number);
-        const text = abs >= 1e12 || (abs > 0 && abs < 1e-9)
-          ? number.toExponential(10)
-          : Number(number.toPrecision(14)).toString();
+        const text =
+          abs >= 1e12 || (abs > 0 && abs < 1e-9)
+            ? number.toExponential(10)
+            : Number(number.toPrecision(14)).toString();
         return text.replace(/(\.\d*?)0+(e|$)/, '$1$2').replace(/\.(e|$)/, '$1');
       };
 
-      const updateMeta = value => {
+      const updateMeta = (value) => {
         if (!Number.isSafeInteger(value) || value < 0) {
           meta.textContent = '';
           return;
@@ -129,20 +152,28 @@ import type { TerminalToolContext } from './types';
           let index = start + 2;
           while (/[0-9a-f]/i.test(source[index] || '')) index += 1;
           if (index === start + 2) throw new Error('invalid hex number');
-          return { value: Number.parseInt(source.slice(start + 2, index), 16), index };
+          return {
+            value: Number.parseInt(source.slice(start + 2, index), 16),
+            index,
+          };
         }
         if (source.startsWith('0b', start) || source.startsWith('0B', start)) {
           let index = start + 2;
           while (/[01]/.test(source[index] || '')) index += 1;
           if (index === start + 2) throw new Error('invalid binary number');
-          return { value: Number.parseInt(source.slice(start + 2, index), 2), index };
+          return {
+            value: Number.parseInt(source.slice(start + 2, index), 2),
+            index,
+          };
         }
-        const match = source.slice(start).match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?/i);
+        const match = source
+          .slice(start)
+          .match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?/i);
         if (!match) throw new Error('invalid number');
         return { value: Number(match[0]), index: start + match[0].length };
       };
 
-      const tokenize = source => {
+      const tokenize = (source) => {
         const rawTokens: { type: string; value: string | number }[] = [];
         for (let index = 0; index < source.length;) {
           const char = source[index];
@@ -155,23 +186,46 @@ import type { TerminalToolContext } from './types';
           if (/[a-z_]/i.test(char)) {
             let end = index + 1;
             while (/[a-z0-9_]/i.test(source[end] || '')) end += 1;
-            rawTokens.push({ type: 'name', value: source.slice(index, end).toLowerCase() });
+            rawTokens.push({
+              type: 'name',
+              value: source.slice(index, end).toLowerCase(),
+            });
             index = end;
             continue;
           }
           if ('+-*/%^!(),'.includes(char)) {
-            rawTokens.push({ type: char === '(' || char === ')' ? 'paren' : char === ',' ? 'comma' : 'op', value: char });
+            rawTokens.push({
+              type:
+                char === '(' || char === ')'
+                  ? 'paren'
+                  : char === ','
+                    ? 'comma'
+                    : 'op',
+              value: char,
+            });
             index += 1;
             continue;
           }
           throw new Error(`unexpected token: ${char}`);
         }
         const tokens: typeof rawTokens = [];
-        const endsValue = token => token && (token.type === 'number' || token.type === 'name' || token.value === ')' || token.value === '!');
-        const startsValue = token => token && (token.type === 'number' || token.type === 'name' || token.value === '(');
-        rawTokens.forEach(token => {
+        const endsValue = (token) =>
+          token &&
+          (token.type === 'number' ||
+            token.type === 'name' ||
+            token.value === ')' ||
+            token.value === '!');
+        const startsValue = (token) =>
+          token &&
+          (token.type === 'number' ||
+            token.type === 'name' ||
+            token.value === '(');
+        rawTokens.forEach((token) => {
           const previous = tokens[tokens.length - 1];
-          const isFunctionCall = previous?.type === 'name' && functions[previous.value] && token.value === '(';
+          const isFunctionCall =
+            previous?.type === 'name' &&
+            functions[previous.value] &&
+            token.value === '(';
           if (endsValue(previous) && startsValue(token) && !isFunctionCall) {
             tokens.push({ type: 'op', value: '*' });
           }
@@ -180,7 +234,7 @@ import type { TerminalToolContext } from './types';
         return tokens;
       };
 
-      const shouldPreviewExpression = source => {
+      const shouldPreviewExpression = (source) => {
         let tokens;
         try {
           tokens = tokenize(normalizeExpression(source));
@@ -190,13 +244,19 @@ import type { TerminalToolContext } from './types';
         return tokens.some((token, index) => {
           if (token.type === 'comma') return true;
           if (token.type === 'op' && previewOps.has(token.value)) return true;
-          if (token.type === 'op' && token.value === '-' && index > 0) return true;
-          if (token.type === 'name' && functions[token.value] && tokens[index + 1]?.value === '(') return true;
+          if (token.type === 'op' && token.value === '-' && index > 0)
+            return true;
+          if (
+            token.type === 'name' &&
+            functions[token.value] &&
+            tokens[index + 1]?.value === '('
+          )
+            return true;
           return false;
         });
       };
 
-      const evaluateExpression = source => {
+      const evaluateExpression = (source) => {
         const tokens = tokenize(normalizeExpression(source));
         let position = 0;
         const peek = () => tokens[position];
@@ -204,10 +264,15 @@ import type { TerminalToolContext } from './types';
 
         const parseExpression = (minPrecedence = 0) => {
           let left = parseUnary();
-          while (binaryOps[peek()?.value] && binaryOps[peek().value].precedence >= minPrecedence) {
+          while (
+            binaryOps[peek()?.value] &&
+            binaryOps[peek().value].precedence >= minPrecedence
+          ) {
             const op = consume().value;
             const { precedence, assoc, fn } = binaryOps[op];
-            const right = parseExpression(precedence + (assoc === 'left' ? 1 : 0));
+            const right = parseExpression(
+              precedence + (assoc === 'left' ? 1 : 0),
+            );
             left = fn(left, right);
           }
           return left;
@@ -237,14 +302,15 @@ import type { TerminalToolContext } from './types';
             consume();
             return args;
           }
-          for (; ;) {
+          for (;;) {
             args.push(parseExpression());
             const next = peek();
             if (next?.type === 'comma') {
               consume();
               continue;
             }
-            if (next?.value !== ')') throw new Error('missing closing parenthesis');
+            if (next?.value !== ')')
+              throw new Error('missing closing parenthesis');
             consume();
             return args;
           }
@@ -256,27 +322,31 @@ import type { TerminalToolContext } from './types';
           if (token.type === 'number') return token.value;
           if (token.type === 'name') {
             if (token.value === 'ans') return lastAnswer;
-            if (constants[token.value] !== undefined) return constants[token.value];
+            if (constants[token.value] !== undefined)
+              return constants[token.value];
             const fn = functions[token.value];
             if (!fn) throw new Error(`unknown function: ${token.value}`);
-            if (consume()?.value !== '(') throw new Error(`missing arguments for ${token.value}`);
+            if (consume()?.value !== '(')
+              throw new Error(`missing arguments for ${token.value}`);
             return fn(...readArguments());
           }
           if (token.value === '(') {
             const value = parseExpression();
-            if (consume()?.value !== ')') throw new Error('missing closing parenthesis');
+            if (consume()?.value !== ')')
+              throw new Error('missing closing parenthesis');
             return value;
           }
           throw new Error(`unexpected token: ${token.value}`);
         };
 
         const result = parseExpression();
-        if (position < tokens.length) throw new Error(`unexpected token: ${tokens[position].value}`);
+        if (position < tokens.length)
+          throw new Error(`unexpected token: ${tokens[position].value}`);
         if (!Number.isFinite(result)) throw new Error('result is not finite');
         return result;
       };
 
-      const setInput = value => {
+      const setInput = (value) => {
         input.value = value || '';
         input.focus({ preventScroll: true });
         input.setSelectionRange(input.value.length, input.value.length);
@@ -296,13 +366,13 @@ import type { TerminalToolContext } from './types';
         return value;
       };
 
-      const showError = error => {
+      const showError = (error) => {
         resultEl.textContent = '';
         meta.textContent = error.message || 'invalid expression';
         input.setAttribute('aria-invalid', 'true');
       };
 
-      const insertText = text => {
+      const insertText = (text) => {
         input.removeAttribute('aria-invalid');
         const current = input.value;
         const start = input.selectionStart ?? current.length;
@@ -314,7 +384,7 @@ import type { TerminalToolContext } from './types';
         renderDisplay();
       };
 
-      const handleAction = action => {
+      const handleAction = (action) => {
         input.removeAttribute('aria-invalid');
         if (action === 'clear') {
           meta.textContent = '';
@@ -333,14 +403,22 @@ import type { TerminalToolContext } from './types';
         }
         if (action === 'move-left' || action === 'move-right') {
           const pos = input.selectionStart ?? input.value.length;
-          const next = clampNumber(pos + (action === 'move-left' ? -1 : 1), 0, input.value.length);
+          const next = clampNumber(
+            pos + (action === 'move-left' ? -1 : 1),
+            0,
+            input.value.length,
+          );
           input.focus({ preventScroll: true });
           input.setSelectionRange(next, next);
           return;
         }
         if (action === 'negate') {
           const raw = input.value.trim();
-          setInput(raw.startsWith('-(') && raw.endsWith(')') ? raw.slice(2, -1) : `-(${raw || 0})`);
+          setInput(
+            raw.startsWith('-(') && raw.endsWith(')')
+              ? raw.slice(2, -1)
+              : `-(${raw || 0})`,
+          );
           return;
         }
         if (action === 'evaluate') {
@@ -352,8 +430,11 @@ import type { TerminalToolContext } from './types';
         }
       };
 
-      keypads.addEventListener('click', event => {
-        const button = event.target instanceof Element ? event.target.closest<HTMLButtonElement>('button') : null;
+      keypads.addEventListener('click', (event) => {
+        const button =
+          event.target instanceof Element
+            ? event.target.closest<HTMLButtonElement>('button')
+            : null;
         if (!button) return;
         if (button.dataset.calcValue !== undefined) {
           insertText(button.dataset.calcValue);
@@ -362,13 +443,18 @@ import type { TerminalToolContext } from './types';
         handleAction(button.dataset.calcAction);
       });
 
-      input.addEventListener('keydown', event => {
+      input.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
           event.preventDefault();
           handleAction('evaluate');
           return;
         }
-        if (event.key === 'Dead' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        if (
+          event.key === 'Dead' &&
+          !event.ctrlKey &&
+          !event.metaKey &&
+          !event.altKey
+        ) {
           event.preventDefault();
           insertText('^');
         }
@@ -378,8 +464,12 @@ import type { TerminalToolContext } from './types';
         meta.textContent = '';
         renderDisplay();
       });
-      output.addEventListener('click', event => {
-        if (event.target instanceof Element && event.target.closest('.calc-result')) return;
+      output.addEventListener('click', (event) => {
+        if (
+          event.target instanceof Element &&
+          event.target.closest('.calc-result')
+        )
+          return;
         if (event.target !== input) input.focus({ preventScroll: true });
       });
       const tool = initFloatingTool({
@@ -388,7 +478,7 @@ import type { TerminalToolContext } from './types';
         handle,
         closeButton,
         hash: 'calc',
-        focusTarget: () => input
+        focusTarget: () => input,
       });
       if (touchKeyboardMedia.addEventListener) {
         touchKeyboardMedia.addEventListener('change', syncTouchKeyboard);
@@ -406,6 +496,6 @@ import type { TerminalToolContext } from './types';
       syncTouchKeyboard();
       renderDisplay();
       return tool.open;
-    }
+    },
   };
 })(window);

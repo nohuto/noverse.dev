@@ -6,11 +6,15 @@ type SidebarEntry = {
 };
 
 function normalize(value: unknown) {
-  return String(value || '').trim().toLowerCase();
+  return String(value || '')
+    .trim()
+    .toLowerCase();
 }
 
 function slugify(value: unknown) {
-  return normalize(value).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return normalize(value)
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 function hrefRootSegment(href: unknown) {
@@ -26,7 +30,10 @@ function hrefRootSegment(href: unknown) {
   }
 }
 
-function collectKnownRoots(entries: SidebarEntry[] = [], roots = new Set<string>()) {
+function collectKnownRoots(
+  entries: SidebarEntry[] = [],
+  roots = new Set<string>(),
+) {
   entries.forEach((entry) => {
     if (entry.type === 'link') {
       const root = hrefRootSegment(entry.href);

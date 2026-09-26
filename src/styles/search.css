@@ -18,8 +18,12 @@
   mask: var(--search-icon) center / contain no-repeat;
 }
 
-.nv-search-box:focus-within { border-color: var(--accent); }
-.nv-search-box:focus-within .nv-search-icon { background: var(--accent); }
+.nv-search-box:focus-within {
+  border-color: var(--accent);
+}
+.nv-search-box:focus-within .nv-search-icon {
+  background: var(--accent);
+}
 
 .nv-search-box input {
   width: 100%;
@@ -32,7 +36,10 @@
   line-height: 24px;
 }
 
-.nv-search-box input:focus { outline: none; box-shadow: none; }
+.nv-search-box input:focus {
+  outline: none;
+  box-shadow: none;
+}
 
 .nv-search-shortcut {
   display: inline-flex;
@@ -50,4 +57,7 @@
   white-space: nowrap;
 }
 
-.nv-search-shortcut kbd { font: inherit; line-height: 1; }
+.nv-search-shortcut kbd {
+  font: inherit;
+  line-height: 1;
+}

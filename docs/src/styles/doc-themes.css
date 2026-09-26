@@ -505,39 +505,99 @@
 :root[data-theme][data-docs-theme],
 [data-theme][data-docs-theme] ::backdrop {
   --nv-doc-readable-text: var(--nv-doc-text);
-  --nv-doc-readable-text-soft: color-mix(in srgb, var(--nv-doc-readable-text) 92%, var(--nv-doc-muted));
+  --nv-doc-readable-text-soft: color-mix(
+    in srgb,
+    var(--nv-doc-readable-text) 92%,
+    var(--nv-doc-muted)
+  );
 
   --sl-color-white: var(--nv-doc-readable-text);
   --sl-color-gray-1: var(--nv-doc-readable-text-soft);
   --sl-color-gray-2: var(--nv-doc-readable-text);
   --sl-color-gray-3: var(--nv-doc-muted);
-  --sl-color-gray-4: color-mix(in srgb, var(--nv-doc-muted) 60%, var(--nv-doc-border));
+  --sl-color-gray-4: color-mix(
+    in srgb,
+    var(--nv-doc-muted) 60%,
+    var(--nv-doc-border)
+  );
   --sl-color-gray-5: var(--nv-doc-border);
   --sl-color-gray-6: var(--nv-doc-panel);
   --sl-color-gray-7: var(--nv-doc-panel-alt);
   --sl-color-black: var(--nv-doc-bg);
 
-  --sl-color-orange-low: color-mix(in srgb, var(--nv-doc-warning) 18%, var(--nv-doc-panel));
+  --sl-color-orange-low: color-mix(
+    in srgb,
+    var(--nv-doc-warning) 18%,
+    var(--nv-doc-panel)
+  );
   --sl-color-orange: var(--nv-doc-warning);
-  --sl-color-orange-high: color-mix(in srgb, var(--nv-doc-warning) 52%, var(--nv-doc-text));
-  --sl-color-green-low: color-mix(in srgb, var(--nv-doc-success) 18%, var(--nv-doc-panel));
+  --sl-color-orange-high: color-mix(
+    in srgb,
+    var(--nv-doc-warning) 52%,
+    var(--nv-doc-text)
+  );
+  --sl-color-green-low: color-mix(
+    in srgb,
+    var(--nv-doc-success) 18%,
+    var(--nv-doc-panel)
+  );
   --sl-color-green: var(--nv-doc-success);
-  --sl-color-green-high: color-mix(in srgb, var(--nv-doc-success) 52%, var(--nv-doc-text));
-  --sl-color-blue-low: color-mix(in srgb, var(--nv-doc-accent) 18%, var(--nv-doc-panel));
+  --sl-color-green-high: color-mix(
+    in srgb,
+    var(--nv-doc-success) 52%,
+    var(--nv-doc-text)
+  );
+  --sl-color-blue-low: color-mix(
+    in srgb,
+    var(--nv-doc-accent) 18%,
+    var(--nv-doc-panel)
+  );
   --sl-color-blue: var(--nv-doc-accent);
-  --sl-color-blue-high: color-mix(in srgb, var(--nv-doc-accent-2) 62%, var(--nv-doc-text));
-  --sl-color-purple-low: color-mix(in srgb, var(--nv-doc-accent-2) 16%, var(--nv-doc-panel));
+  --sl-color-blue-high: color-mix(
+    in srgb,
+    var(--nv-doc-accent-2) 62%,
+    var(--nv-doc-text)
+  );
+  --sl-color-purple-low: color-mix(
+    in srgb,
+    var(--nv-doc-accent-2) 16%,
+    var(--nv-doc-panel)
+  );
   --sl-color-purple: var(--nv-doc-accent-2);
-  --sl-color-purple-high: color-mix(in srgb, var(--nv-doc-accent-2) 52%, var(--nv-doc-text));
-  --sl-color-red-low: color-mix(in srgb, var(--nv-doc-danger) 18%, var(--nv-doc-panel));
+  --sl-color-purple-high: color-mix(
+    in srgb,
+    var(--nv-doc-accent-2) 52%,
+    var(--nv-doc-text)
+  );
+  --sl-color-red-low: color-mix(
+    in srgb,
+    var(--nv-doc-danger) 18%,
+    var(--nv-doc-panel)
+  );
   --sl-color-red: var(--nv-doc-danger);
-  --sl-color-red-high: color-mix(in srgb, var(--nv-doc-danger) 52%, var(--nv-doc-text));
+  --sl-color-red-high: color-mix(
+    in srgb,
+    var(--nv-doc-danger) 52%,
+    var(--nv-doc-text)
+  );
 
-  --sl-color-accent-low: color-mix(in srgb, var(--nv-doc-accent) 18%, var(--nv-doc-panel));
+  --sl-color-accent-low: color-mix(
+    in srgb,
+    var(--nv-doc-accent) 18%,
+    var(--nv-doc-panel)
+  );
   --sl-color-accent: var(--nv-doc-accent);
-  --sl-color-accent-high: color-mix(in srgb, var(--nv-doc-accent-2) 62%, var(--nv-doc-text));
+  --sl-color-accent-high: color-mix(
+    in srgb,
+    var(--nv-doc-accent-2) 62%,
+    var(--nv-doc-text)
+  );
   --sl-color-text: var(--nv-doc-readable-text);
-  --sl-color-text-accent: color-mix(in srgb, var(--nv-doc-accent) 62%, var(--nv-doc-text));
+  --sl-color-text-accent: color-mix(
+    in srgb,
+    var(--nv-doc-accent) 62%,
+    var(--nv-doc-text)
+  );
   --sl-color-text-invert: var(--nv-doc-accent-contrast);
   --sl-color-bg: var(--nv-doc-panel);
   --sl-color-bg-nav: var(--nv-doc-bg-alt);
@@ -547,7 +607,11 @@
   --sl-color-hairline-light: var(--nv-doc-border);
   --sl-color-hairline: var(--nv-doc-border);
   --sl-color-hairline-shade: var(--nv-doc-border-strong);
-  --sl-color-backdrop-overlay: color-mix(in srgb, var(--nv-doc-bg) 78%, transparent);
+  --sl-color-backdrop-overlay: color-mix(
+    in srgb,
+    var(--nv-doc-bg) 78%,
+    transparent
+  );
 
   --sl-shadow-sm: none;
   --sl-shadow-md: none;
@@ -556,10 +620,22 @@
   --sl-rapide-ui-bg-color: var(--nv-doc-panel);
   --sl-rapide-ui-header-bg-color: var(--nv-doc-bg-alt);
   --sl-rapide-ui-border-color: var(--nv-doc-border);
-  --sl-rapide-ec-marker-bg-color: color-mix(in srgb, var(--nv-doc-accent) 8%, var(--nv-doc-panel-alt));
-  --sl-rapide-ec-marker-border-color: color-mix(in srgb, var(--nv-doc-accent) 30%, var(--nv-doc-border));
+  --sl-rapide-ec-marker-bg-color: color-mix(
+    in srgb,
+    var(--nv-doc-accent) 8%,
+    var(--nv-doc-panel-alt)
+  );
+  --sl-rapide-ec-marker-border-color: color-mix(
+    in srgb,
+    var(--nv-doc-accent) 30%,
+    var(--nv-doc-border)
+  );
 
-  --starlight-image-zoom-backdrop-bg: color-mix(in srgb, var(--nv-doc-bg) 92%, black);
+  --starlight-image-zoom-backdrop-bg: color-mix(
+    in srgb,
+    var(--nv-doc-bg) 92%,
+    black
+  );
 }
 
 html[data-theme='light'] {
@@ -619,7 +695,7 @@ docs-theme-select[data-open='true'] .docs-theme-trigger {
 }
 
 .docs-theme-trigger::after {
-  content: "";
+  content: '';
   position: absolute;
   right: 0.75rem;
   top: 50%;
@@ -708,7 +784,9 @@ html {
   scroll-behavior: smooth;
 }
 
-:where(a, button, input, select, textarea, summary, [tabindex]):not([tabindex='-1']) {
+:where(a, button, input, select, textarea, summary, [tabindex]):not(
+  [tabindex='-1']
+) {
   transition:
     color 180ms ease,
     background-color 180ms ease,

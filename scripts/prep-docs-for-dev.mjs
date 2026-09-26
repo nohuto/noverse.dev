@@ -10,7 +10,10 @@ if (!existsSync(path.join(root, 'dist/docs/index.html'))) {
     [path.join(docs, 'scripts/sync-docs.mjs'), []],
     [astro, ['build']],
   ]) {
-    const result = spawnSync(process.execPath, [file, ...args], { cwd: docs, stdio: 'inherit' });
+    const result = spawnSync(process.execPath, [file, ...args], {
+      cwd: docs,
+      stdio: 'inherit',
+    });
     if (result.status !== 0) process.exit(result.status || 1);
   }
 }

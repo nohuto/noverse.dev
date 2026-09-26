@@ -25,7 +25,10 @@ const REPOSITORIES = [
   },
   {
     name: 'windbg-notes',
-    url: repoUrl('WINDBG_NOTES_REPO_URL', 'https://github.com/nohuto/windbg-notes'),
+    url: repoUrl(
+      'WINDBG_NOTES_REPO_URL',
+      'https://github.com/nohuto/windbg-notes',
+    ),
     files: [
       'windbg-init/loading-modules.md',
       'windbg-init/noisy-symbol-loading.md',
@@ -50,9 +53,15 @@ const REPOSITORIES = [
     url: repoUrl('REGKIT_REPO_URL', 'https://github.com/nohuto/regkit'),
     readmeOverview: true,
     sidebarOrderStart: 2,
-    files: ['docs/registry-fundamentals.md', 'docs/capture-table.md', 'docs/procmon.md', 'docs/wpr-wpa.md'],
+    files: [
+      'docs/registry-fundamentals.md',
+      'docs/capture-table.md',
+      'docs/procmon.md',
+      'docs/wpr-wpa.md',
+    ],
     outputPathOverrides: {
-      'docs/registry-fundamentals.md': 'registry-internals/registry-fundamentals',
+      'docs/registry-fundamentals.md':
+        'registry-internals/registry-fundamentals',
       'docs/capture-table.md': 'registry-internals/capture-table',
       'docs/procmon.md': 'guides/procmon',
       'docs/wpr-wpa.md': 'guides/wpr-wpa',
@@ -95,23 +104,68 @@ const MARKDOWN_IMAGE_RE = /!\[([^\]\r\n]*)\]\((https?:\/\/[^\s)\r\n]+)\)/gi;
 const IMAGE_METADATA_CONCURRENCY = 12;
 const IMAGE_FETCH_TIMEOUT_MS = 15_000;
 const KNOWN_REMOTE_IMAGE_DIMENSIONS = new Map([
-  ['https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-wired.jpg?raw=true', { width: 24, height: 24 }],
-  ['https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-wireless.jpg?raw=true', { width: 24, height: 24 }],
-  ['https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-no-internet.jpg?raw=true', { width: 24, height: 24 }],
-  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/hwinfo-powerlimit.png?raw=true', { width: 664, height: 134 }],
-  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/fancurve.png?raw=true', { width: 1141, height: 753 }],
-  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/MSIAfterburner-limits.png?raw=true', { width: 784, height: 540 }],
-  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/occt.png?raw=true', { width: 1521, height: 750 }],
-  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/oc.png?raw=true', { width: 1543, height: 543 }],
-  ['https://github.com/nohuto/gpu-oc-uv/blob/main/images/uv-curve.png?raw=true', { width: 766, height: 529 }],
-  ['https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif', { width: 640, height: 359 }],
+  [
+    'https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-wired.jpg?raw=true',
+    { width: 24, height: 24 },
+  ],
+  [
+    'https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-wireless.jpg?raw=true',
+    { width: 24, height: 24 },
+  ],
+  [
+    'https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-no-internet.jpg?raw=true',
+    { width: 24, height: 24 },
+  ],
+  [
+    'https://github.com/nohuto/gpu-oc-uv/blob/main/images/hwinfo-powerlimit.png?raw=true',
+    { width: 664, height: 134 },
+  ],
+  [
+    'https://github.com/nohuto/gpu-oc-uv/blob/main/images/fancurve.png?raw=true',
+    { width: 1141, height: 753 },
+  ],
+  [
+    'https://github.com/nohuto/gpu-oc-uv/blob/main/images/MSIAfterburner-limits.png?raw=true',
+    { width: 784, height: 540 },
+  ],
+  [
+    'https://github.com/nohuto/gpu-oc-uv/blob/main/images/occt.png?raw=true',
+    { width: 1521, height: 750 },
+  ],
+  [
+    'https://github.com/nohuto/gpu-oc-uv/blob/main/images/oc.png?raw=true',
+    { width: 1543, height: 543 },
+  ],
+  [
+    'https://github.com/nohuto/gpu-oc-uv/blob/main/images/uv-curve.png?raw=true',
+    { width: 766, height: 529 },
+  ],
+  [
+    'https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif',
+    { width: 640, height: 359 },
+  ],
 ]);
 const MOVED_IMAGE_URLS = new Map([
-  ['https://github.com/nohuto/regkit/blob/main/images/guide/images.png', 'https://github.com/nohuto/regkit/blob/main/docs/images/pmsave.png?raw=true'],
-  ['https://github.com/nohuto/regkit/blob/main/guide/images/WPRUI.png?raw=true', 'https://github.com/nohuto/regkit/blob/main/docs/images/WPRUI.png?raw=true'],
-  ['https://github.com/nohuto/regkit/blob/main/guide/images/WPA.png?raw=true', 'https://github.com/nohuto/regkit/blob/main/docs/images/WPA.png?raw=true'],
-  ['https://github.com/nohuto/win-config/blob/main/system/images/cameraosd.png?raw=true', 'https://github.com/nohuto/win-config/blob/main/security/images/cameraosd.png?raw=true'],
-  ['https://github.com/nohuto/windbg-notes/blob/main/assets/irql-levels.png?raw=true', 'https://github.com/nohuto/windbg-notes/blob/main/images/irql-levels.png?raw=true'],
+  [
+    'https://github.com/nohuto/regkit/blob/main/images/guide/images.png',
+    'https://github.com/nohuto/regkit/blob/main/docs/images/pmsave.png?raw=true',
+  ],
+  [
+    'https://github.com/nohuto/regkit/blob/main/guide/images/WPRUI.png?raw=true',
+    'https://github.com/nohuto/regkit/blob/main/docs/images/WPRUI.png?raw=true',
+  ],
+  [
+    'https://github.com/nohuto/regkit/blob/main/guide/images/WPA.png?raw=true',
+    'https://github.com/nohuto/regkit/blob/main/docs/images/WPA.png?raw=true',
+  ],
+  [
+    'https://github.com/nohuto/win-config/blob/main/system/images/cameraosd.png?raw=true',
+    'https://github.com/nohuto/win-config/blob/main/security/images/cameraosd.png?raw=true',
+  ],
+  [
+    'https://github.com/nohuto/windbg-notes/blob/main/assets/irql-levels.png?raw=true',
+    'https://github.com/nohuto/windbg-notes/blob/main/images/irql-levels.png?raw=true',
+  ],
 ]);
 
 const entries = [];
@@ -119,11 +173,13 @@ const entries = [];
 await main();
 
 async function main() {
-  const repoDirs = new Map(REPOSITORIES.map((repo) => {
-    const repoDir = resolveRepoDirectory(repo.name, repo.url);
-    assertDirectory(repoDir, repo.name);
-    return [repo.name, repoDir];
-  }));
+  const repoDirs = new Map(
+    REPOSITORIES.map((repo) => {
+      const repoDir = resolveRepoDirectory(repo.name, repo.url);
+      assertDirectory(repoDir, repo.name);
+      return [repo.name, repoDir];
+    }),
+  );
 
   resetContentDir();
   generateRootOverview();
@@ -145,8 +201,8 @@ async function main() {
 
   console.log(
     `[sync-docs] Generated ${entries.length} pages (` +
-    `${repoStats.join(', ')}, section indexes: ${sectionIndexPages}, ` +
-    `dimensioned images: ${imageStats.dimensioned}/${imageStats.total}).`
+      `${repoStats.join(', ')}, section indexes: ${sectionIndexPages}, ` +
+      `dimensioned images: ${imageStats.dimensioned}/${imageStats.total}).`,
   );
 }
 
@@ -157,10 +213,11 @@ function generateRootOverview() {
     relativePath: 'index.md',
     route: '/docs/',
     title: 'Overview',
-    description:
-      `Documentation generated from ${repoNames.join(', ')}.`,
+    description: `Documentation generated from ${repoNames.join(', ')}.`,
     sidebarHidden: true,
-    body: repoNames.map((repoName) => `- [${repoName}](/docs/${repoName}/)`).join('\n'),
+    body: repoNames
+      .map((repoName) => `- [${repoName}](/docs/${repoName}/)`)
+      .join('\n'),
   });
 }
 
@@ -195,7 +252,9 @@ function generateWinConfig(winConfigDir) {
     const categoryLabel = CATEGORY_LABELS[category] || toTitleCase(category);
 
     const raw = readText(filePath);
-    const sections = splitByHeadingLevel(raw, 1).filter((section) => section.heading);
+    const sections = splitByHeadingLevel(raw, 1).filter(
+      (section) => section.heading,
+    );
 
     if (sections.length === 0) {
       continue;
@@ -236,7 +295,8 @@ function resolveRepoDirectory(repoName, repoUrl) {
   ];
 
   for (const candidate of candidatePaths) {
-    if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory()) return candidate;
+    if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory())
+      return candidate;
   }
 
   const cacheDir = path.join(DOCS_DIR, '.cache', 'repos', repoName);
@@ -250,7 +310,9 @@ function resolveRepoDirectory(repoName, repoUrl) {
     if (!normalizedRepoUrl) return '';
 
     fs.mkdirSync(path.dirname(cacheDir), { recursive: true });
-    const cloneUrl = normalizedRepoUrl.endsWith('.git') ? normalizedRepoUrl : `${normalizedRepoUrl}.git`;
+    const cloneUrl = normalizedRepoUrl.endsWith('.git')
+      ? normalizedRepoUrl
+      : `${normalizedRepoUrl}.git`;
     execFileSync('git', ['clone', '--depth', '1', cloneUrl, cacheDir], {
       stdio: 'pipe',
       cwd: DOCS_DIR,
@@ -263,13 +325,19 @@ function resolveRepoDirectory(repoName, repoUrl) {
 
 function refreshRepoCache(cacheDir) {
   try {
-    execFileSync('git', ['reset', '--hard', 'HEAD'], { cwd: cacheDir, stdio: 'pipe' });
+    execFileSync('git', ['reset', '--hard', 'HEAD'], {
+      cwd: cacheDir,
+      stdio: 'pipe',
+    });
     execFileSync('git', ['fetch', '--depth', '1', 'origin', 'main'], {
       cwd: cacheDir,
       stdio: 'pipe',
     });
-    execFileSync('git', ['reset', '--hard', 'FETCH_HEAD'], { cwd: cacheDir, stdio: 'pipe' });
-  } catch { }
+    execFileSync('git', ['reset', '--hard', 'FETCH_HEAD'], {
+      cwd: cacheDir,
+      stdio: 'pipe',
+    });
+  } catch {}
 }
 
 function generateReadmeOverview(repo, repoDir) {
@@ -278,8 +346,14 @@ function generateReadmeOverview(repo, repoDir) {
 
   const raw = readText(readmePath);
   const titleMatch = raw.match(/^#\s+(.+)$/m);
-  const readmeTitle = titleMatch ? titleMatch[1].trim() : toTitleCase(repo.name);
-  const body = rewriteRelativeMarkdownLinks(stripFirstH1(raw).trim(), repo, 'README.md');
+  const readmeTitle = titleMatch
+    ? titleMatch[1].trim()
+    : toTitleCase(repo.name);
+  const body = rewriteRelativeMarkdownLinks(
+    stripFirstH1(raw).trim(),
+    repo,
+    'README.md',
+  );
 
   if (!body) {
     return 0;
@@ -305,17 +379,27 @@ function generateMarkdownFiles(repo, repoDir) {
     const sourcePath = repo.files[index];
     const filePath = path.join(repoDir, ...sourcePath.split('/'));
     if (!fs.existsSync(filePath)) {
-      throw new Error(`${repo.name} is missing configured Markdown file: ${sourcePath}`);
+      throw new Error(
+        `${repo.name} is missing configured Markdown file: ${sourcePath}`,
+      );
     }
 
     const raw = readText(filePath);
     const titleMatch = raw.match(/^#\s+(.+)$/m);
-    const title = titleOverrides[sourcePath.toLowerCase()] || (titleMatch
-      ? titleMatch[1].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim()
-      : toTitleCase(path.posix.basename(sourcePath, '.md')));
-    const body = rewriteRelativeMarkdownLinks(stripFirstH1(raw).trim(), repo, sourcePath);
+    const title =
+      titleOverrides[sourcePath.toLowerCase()] ||
+      (titleMatch
+        ? titleMatch[1].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim()
+        : toTitleCase(path.posix.basename(sourcePath, '.md')));
+    const body = rewriteRelativeMarkdownLinks(
+      stripFirstH1(raw).trim(),
+      repo,
+      sourcePath,
+    );
     const outputPath = sourceOutputPath(repo, sourcePath);
-    const displaySourcePath = sourcePath.includes('/') ? sourcePath : `./${sourcePath}`;
+    const displaySourcePath = sourcePath.includes('/')
+      ? sourcePath
+      : `./${sourcePath}`;
 
     addEntry({
       relativePath: `${repo.name}/${outputPath}.md`,
@@ -331,24 +415,27 @@ function generateMarkdownFiles(repo, repoDir) {
 }
 
 function rewriteRelativeMarkdownLinks(markdown, repo, sourcePath) {
-  return markdown.replace(/\]\((?![a-z]+:|\/|#)([^)\s]+\.md)(#[^)]*)?\)/gi, (_, target, hash = '') => {
-    const resolvedPath = path.posix.normalize(path.posix.join(path.posix.dirname(sourcePath), target));
-    return `](/docs/${repo.name}/${sourceOutputPath(repo, resolvedPath)}/${hash})`;
-  });
+  return markdown.replace(
+    /\]\((?![a-z]+:|\/|#)([^)\s]+\.md)(#[^)]*)?\)/gi,
+    (_, target, hash = '') => {
+      const resolvedPath = path.posix.normalize(
+        path.posix.join(path.posix.dirname(sourcePath), target),
+      );
+      return `](/docs/${repo.name}/${sourceOutputPath(repo, resolvedPath)}/${hash})`;
+    },
+  );
 }
 
 function sourceOutputPath(repo, sourcePath) {
   const normalized = sourcePath.toLowerCase();
   if (repo.readmeOverview && normalized === 'readme.md') return 'overview';
-  return repo.outputPathOverrides?.[normalized] || markdownOutputPath(sourcePath);
+  return (
+    repo.outputPathOverrides?.[normalized] || markdownOutputPath(sourcePath)
+  );
 }
 
 function markdownOutputPath(sourcePath) {
-  return sourcePath
-    .replace(/\.md$/i, '')
-    .split('/')
-    .map(slugify)
-    .join('/');
+  return sourcePath.replace(/\.md$/i, '').split('/').map(slugify).join('/');
 }
 
 function generateSectionIndexes() {
@@ -386,7 +473,6 @@ function generateSectionIndexes() {
 
     existingPaths.add(indexPath);
     generated += 1;
-
   }
 
   return generated;
@@ -395,7 +481,7 @@ function generateSectionIndexes() {
 async function normalizeGeneratedEntries(repoDirs) {
   for (const entry of entries) {
     entry.body = rewriteMovedImageUrls(
-      rewriteRepoMentions(normalizeGeneratedMarkdown(entry.body))
+      rewriteRepoMentions(normalizeGeneratedMarkdown(entry.body)),
     );
   }
 
@@ -423,34 +509,43 @@ async function addImageDimensions(repoDirs) {
   const dimensionsByUrl = new Map();
   const unresolvedUrls = [];
 
-  await mapWithConcurrency([...imageUrls], IMAGE_METADATA_CONCURRENCY, async (imageUrl) => {
-    const dimensions = await readImageDimensions(imageUrl, sourceRepos);
-    if (dimensions) {
-      dimensionsByUrl.set(imageUrl, dimensions);
-    } else {
-      unresolvedUrls.push(imageUrl);
-    }
-  });
+  await mapWithConcurrency(
+    [...imageUrls],
+    IMAGE_METADATA_CONCURRENCY,
+    async (imageUrl) => {
+      const dimensions = await readImageDimensions(imageUrl, sourceRepos);
+      if (dimensions) {
+        dimensionsByUrl.set(imageUrl, dimensions);
+      } else {
+        unresolvedUrls.push(imageUrl);
+      }
+    },
+  );
 
   let total = 0;
   let dimensioned = 0;
 
   for (const entry of entries) {
-    entry.body = entry.body.replace(MARKDOWN_IMAGE_RE, (match, alt, imageUrl) => {
-      total += 1;
-      const dimensions = dimensionsByUrl.get(imageUrl);
-      if (!dimensions) return match;
+    entry.body = entry.body.replace(
+      MARKDOWN_IMAGE_RE,
+      (match, alt, imageUrl) => {
+        total += 1;
+        const dimensions = dimensionsByUrl.get(imageUrl);
+        if (!dimensions) return match;
 
-      dimensioned += 1;
-      return `<img src="${escapeHtmlAttribute(imageUrl)}" alt="${escapeHtmlAttribute(alt)}" ` +
-        `width="${dimensions.width}" height="${dimensions.height}">`;
-    });
+        dimensioned += 1;
+        return (
+          `<img src="${escapeHtmlAttribute(imageUrl)}" alt="${escapeHtmlAttribute(alt)}" ` +
+          `width="${dimensions.width}" height="${dimensions.height}">`
+        );
+      },
+    );
   }
 
   if (unresolvedUrls.length > 0) {
     throw new Error(
       `[sync-docs] Missing intrinsic dimensions for ${unresolvedUrls.length} image URL(s):\n` +
-      unresolvedUrls.map((url) => `  - ${url}`).join('\n')
+        unresolvedUrls.map((url) => `  - ${url}`).join('\n'),
     );
   }
 
@@ -468,8 +563,11 @@ function mapGithubRepositories(repoDirs) {
       const [owner, name] = repoUrl.pathname.split('/').filter(Boolean);
       if (!owner || !name) continue;
 
-      sourceRepos.set(`${owner}/${name.replace(/\.git$/i, '')}`.toLowerCase(), repoDirs.get(repo.name));
-    } catch { }
+      sourceRepos.set(
+        `${owner}/${name.replace(/\.git$/i, '')}`.toLowerCase(),
+        repoDirs.get(repo.name),
+      );
+    } catch {}
   }
 
   return sourceRepos;
@@ -480,7 +578,8 @@ async function readImageDimensions(imageUrl, sourceRepos) {
   const knownDimensions = KNOWN_REMOTE_IMAGE_DIMENSIONS.get(imageUrl) || null;
 
   try {
-    if (localPath) return normalizeImageDimensions(await sharp(localPath).metadata());
+    if (localPath)
+      return normalizeImageDimensions(await sharp(localPath).metadata());
 
     const response = await fetch(toRawImageUrl(imageUrl), {
       headers: { 'User-Agent': 'noverse-docs-sync' },
@@ -490,7 +589,9 @@ async function readImageDimensions(imageUrl, sourceRepos) {
     if (!response.ok) return knownDimensions;
 
     const image = Buffer.from(await response.arrayBuffer());
-    return normalizeImageDimensions(await sharp(image).metadata()) || knownDimensions;
+    return (
+      normalizeImageDimensions(await sharp(image).metadata()) || knownDimensions
+    );
   } catch {
     return knownDimensions;
   }
@@ -500,7 +601,10 @@ function resolveLocalGithubImage(imageUrl, sourceRepos) {
   try {
     const url = new URL(imageUrl);
     const hostname = url.hostname.toLowerCase();
-    const parts = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+    const parts = url.pathname
+      .split('/')
+      .filter(Boolean)
+      .map(decodeURIComponent);
     let owner;
     let repo;
     let imageParts;
@@ -520,8 +624,10 @@ function resolveLocalGithubImage(imageUrl, sourceRepos) {
 
     const imagePath = path.resolve(repoDir, ...imageParts);
     const relativePath = path.relative(repoDir, imagePath);
-    if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) return null;
-    if (!fs.existsSync(imagePath) || !fs.statSync(imagePath).isFile()) return null;
+    if (relativePath.startsWith('..') || path.isAbsolute(relativePath))
+      return null;
+    if (!fs.existsSync(imagePath) || !fs.statSync(imagePath).isFile())
+      return null;
 
     return imagePath;
   } catch {
@@ -533,7 +639,11 @@ function toRawImageUrl(imageUrl) {
   try {
     const url = new URL(imageUrl);
     const parts = url.pathname.split('/').filter(Boolean);
-    if (url.hostname.toLowerCase() !== 'github.com' || parts[2] !== 'blob' || parts.length < 5) {
+    if (
+      url.hostname.toLowerCase() !== 'github.com' ||
+      parts[2] !== 'blob' ||
+      parts.length < 5
+    ) {
       return imageUrl;
     }
 
@@ -545,7 +655,8 @@ function toRawImageUrl(imageUrl) {
 }
 
 function normalizeImageDimensions(metadata) {
-  if (!Number.isInteger(metadata.width) || !Number.isInteger(metadata.height)) return null;
+  if (!Number.isInteger(metadata.width) || !Number.isInteger(metadata.height))
+    return null;
 
   const rotated = metadata.orientation >= 5 && metadata.orientation <= 8;
   return rotated
@@ -555,13 +666,16 @@ function normalizeImageDimensions(metadata) {
 
 async function mapWithConcurrency(items, concurrency, callback) {
   let nextIndex = 0;
-  const workers = Array.from({ length: Math.min(concurrency, items.length) }, async () => {
-    while (nextIndex < items.length) {
-      const item = items[nextIndex];
-      nextIndex += 1;
-      await callback(item);
-    }
-  });
+  const workers = Array.from(
+    { length: Math.min(concurrency, items.length) },
+    async () => {
+      while (nextIndex < items.length) {
+        const item = items[nextIndex];
+        nextIndex += 1;
+        await callback(item);
+      }
+    },
+  );
 
   await Promise.all(workers);
 }
@@ -575,19 +689,46 @@ function escapeHtmlAttribute(value) {
 }
 
 function rewriteRepoMentions(markdown) {
-  return markdown.replace(/See\s+[a-z]+(?:-[a-z]+)+ repo(?=\s+for a list of)/gi, 'See regkit repo');
+  return markdown.replace(
+    /See\s+[a-z]+(?:-[a-z]+)+ repo(?=\s+for a list of)/gi,
+    'See regkit repo',
+  );
 }
 
 function normalizeGeneratedMarkdown(markdown) {
   return markdown
-    .replace(/https:\/\/www\.noverse\.dev\/docs\/nvapi-cli\/sections\/overview\/?/g, 'https://github.com/nohuto/nvapi-cli')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g, '/docs/app-guides/$1/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g, '/docs/app-guides/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/overview\/#registry-fundamentals/g, '/docs/regkit/registry-internals/registry-fundamentals/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/(?:guides\/)?procmon\/?/g, '/docs/regkit/guides/procmon/')
-    .replace(/https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/(?:guides\/)?wpr-wpa\/?/g, '/docs/regkit/guides/wpr-wpa/')
-    .replace(/https:\/\/www\.noverse\.dev\/(product|projects|diff|policies)\.html/g, 'https://www.noverse.dev/$1')
+    .replace(
+      /https:\/\/www\.noverse\.dev\/docs\/nvapi-cli\/sections\/overview\/?/g,
+      'https://github.com/nohuto/nvapi-cli',
+    )
+    .replace(
+      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g,
+      '/docs/app-guides/$1/',
+    )
+    .replace(
+      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g,
+      '/docs/app-guides/$1/',
+    )
+    .replace(
+      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g,
+      '/docs/app-guides/',
+    )
+    .replace(
+      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/overview\/#registry-fundamentals/g,
+      '/docs/regkit/registry-internals/registry-fundamentals/',
+    )
+    .replace(
+      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/(?:guides\/)?procmon\/?/g,
+      '/docs/regkit/guides/procmon/',
+    )
+    .replace(
+      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/(?:guides\/)?wpr-wpa\/?/g,
+      '/docs/regkit/guides/wpr-wpa/',
+    )
+    .replace(
+      /https:\/\/www\.noverse\.dev\/(product|projects|diff|policies)\.html/g,
+      'https://www.noverse.dev/$1',
+    )
     .replace(/\]\(\((https?:\/\/[^)\s]+)\)\)/gi, ']($1)')
     .replace(/\[([^\]]+)\]\(\[([^\]]+)\]\(([^)]+)\)\)/g, '[$1]($3)');
 }
@@ -609,12 +750,17 @@ function collectGeneratedDirectories(allEntries) {
 function getDirectoryChildren(directory, allDirectories) {
   const directPages = entries
     .filter((entry) => path.posix.dirname(entry.relativePath) === directory)
-    .filter((entry) => path.posix.basename(entry.relativePath).toLowerCase() !== 'index.md')
+    .filter(
+      (entry) =>
+        path.posix.basename(entry.relativePath).toLowerCase() !== 'index.md',
+    )
     .map((entry) => ({
       type: 'page',
       label: entry.title,
       href: entry.route,
-      order: Number.isInteger(entry.sidebarOrder) ? entry.sidebarOrder : Number.MAX_SAFE_INTEGER,
+      order: Number.isInteger(entry.sidebarOrder)
+        ? entry.sidebarOrder
+        : Number.MAX_SAFE_INTEGER,
     }));
 
   const childDirectoryNames = new Set();
@@ -667,7 +813,8 @@ function getDirectorySidebarOrder(directory) {
 
   for (const entry of entries) {
     if (!entry.relativePath.startsWith(prefix)) continue;
-    if (path.posix.basename(entry.relativePath).toLowerCase() === 'index.md') continue;
+    if (path.posix.basename(entry.relativePath).toLowerCase() === 'index.md')
+      continue;
     if (!Number.isInteger(entry.sidebarOrder)) continue;
     if (entry.sidebarOrder < minOrder) minOrder = entry.sidebarOrder;
   }
@@ -702,7 +849,15 @@ function buildDirectoryListingMarkdown(children) {
   return lines.join('\n');
 }
 
-function addEntry({ relativePath, route, title, description, sidebarOrder, sidebarHidden, body }) {
+function addEntry({
+  relativePath,
+  route,
+  title,
+  description,
+  sidebarOrder,
+  sidebarHidden,
+  body,
+}) {
   entries.push({
     relativePath,
     route,
@@ -718,7 +873,9 @@ function writeEntries() {
   const pathSet = new Set();
   const routeSet = new Set();
 
-  const sorted = [...entries].sort((a, b) => a.relativePath.localeCompare(b.relativePath));
+  const sorted = [...entries].sort((a, b) =>
+    a.relativePath.localeCompare(b.relativePath),
+  );
 
   for (const entry of sorted) {
     if (pathSet.has(entry.relativePath)) {
@@ -794,11 +951,17 @@ function findDescFiles(rootDir) {
 }
 
 function sortCategories(items) {
-  const order = new Map(WIN_CONFIG_CATEGORIES.map((name, index) => [name, index]));
+  const order = new Map(
+    WIN_CONFIG_CATEGORIES.map((name, index) => [name, index]),
+  );
 
   return [...items].sort((a, b) => {
-    const aRank = order.has(a.category) ? order.get(a.category) : Number.MAX_SAFE_INTEGER;
-    const bRank = order.has(b.category) ? order.get(b.category) : Number.MAX_SAFE_INTEGER;
+    const aRank = order.has(a.category)
+      ? order.get(a.category)
+      : Number.MAX_SAFE_INTEGER;
+    const bRank = order.has(b.category)
+      ? order.get(b.category)
+      : Number.MAX_SAFE_INTEGER;
 
     if (aRank !== bRank) return aRank - bRank;
     return a.category.localeCompare(b.category);

@@ -34,13 +34,29 @@ main.bindiff-main {
   --diff-module-width: 9.75rem;
   --diff-name-width: 22.75rem;
   display: grid;
-  grid-template-columns: minmax(112px, var(--diff-build-width)) minmax(112px, var(--diff-build-width)) minmax(128px, var(--diff-module-width)) minmax(260px, var(--diff-name-width));
+  grid-template-columns:
+    minmax(112px, var(--diff-build-width)) minmax(
+      112px,
+      var(--diff-build-width)
+    )
+    minmax(128px, var(--diff-module-width)) minmax(
+      260px,
+      var(--diff-name-width)
+    );
   gap: 10px;
   min-width: 0;
 }
 
 .diff-grid {
-  grid-template-columns: minmax(112px, var(--diff-build-width)) minmax(112px, var(--diff-build-width)) max-content minmax(128px, var(--diff-module-width)) minmax(260px, var(--diff-name-width));
+  grid-template-columns:
+    minmax(112px, var(--diff-build-width)) minmax(
+      112px,
+      var(--diff-build-width)
+    )
+    max-content minmax(128px, var(--diff-module-width)) minmax(
+      260px,
+      var(--diff-name-width)
+    );
 }
 
 .bindiff-field {
@@ -49,15 +65,15 @@ main.bindiff-main {
   gap: 6px;
 }
 
-.bindiff-field>span,
-.bindiff-field>label {
+.bindiff-field > span,
+.bindiff-field > label {
   font-size: 0.625rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--muted);
 }
 
-.bindiff-field input[type="text"],
+.bindiff-field input[type='text'],
 .bindiff-field select {
   width: 100%;
   height: 24px;
@@ -402,11 +418,11 @@ main.bindiff-main {
   display: none;
 }
 
-#diff-maximize[aria-pressed="true"] .icon-maximize {
+#diff-maximize[aria-pressed='true'] .icon-maximize {
   display: none;
 }
 
-#diff-maximize[aria-pressed="true"] .icon-minimize {
+#diff-maximize[aria-pressed='true'] .icon-minimize {
   display: block;
 }
 
@@ -440,16 +456,28 @@ main.bindiff-main {
   --d2h-line-border-color: color-mix(in srgb, var(--border) 80%, transparent);
   --d2h-file-header-bg-color: var(--panel);
   --d2h-file-header-border-color: var(--border);
-  --d2h-empty-placeholder-bg-color: color-mix(in srgb, var(--panel) 78%, var(--bg));
+  --d2h-empty-placeholder-bg-color: color-mix(
+    in srgb,
+    var(--panel) 78%,
+    var(--bg)
+  );
   --d2h-empty-placeholder-border-color: var(--border);
   --d2h-selected-color: color-mix(in srgb, var(--accent) 18%, transparent);
   --d2h-ins-bg-color: color-mix(in srgb, var(--success) 20%, transparent);
   --d2h-ins-border-color: color-mix(in srgb, var(--success) 50%, var(--border));
-  --d2h-ins-highlight-bg-color: color-mix(in srgb, var(--success) 35%, transparent);
+  --d2h-ins-highlight-bg-color: color-mix(
+    in srgb,
+    var(--success) 35%,
+    transparent
+  );
   --d2h-ins-label-color: color-mix(in srgb, var(--success) 78%, var(--text));
   --d2h-del-bg-color: color-mix(in srgb, var(--danger) 20%, transparent);
   --d2h-del-border-color: color-mix(in srgb, var(--danger) 50%, var(--border));
-  --d2h-del-highlight-bg-color: color-mix(in srgb, var(--danger) 35%, transparent);
+  --d2h-del-highlight-bg-color: color-mix(
+    in srgb,
+    var(--danger) 35%,
+    transparent
+  );
   --d2h-del-label-color: color-mix(in srgb, var(--danger) 78%, var(--text));
   --d2h-change-del-color: color-mix(in srgb, var(--warning) 24%, transparent);
   --d2h-change-ins-color: color-mix(in srgb, var(--success) 24%, transparent);
@@ -461,26 +489,78 @@ main.bindiff-main {
   --d2h-dark-bg-color: var(--panel-alt);
   --d2h-dark-border-color: var(--border);
   --d2h-dark-dim-color: var(--muted);
-  --d2h-dark-line-border-color: color-mix(in srgb, var(--border) 80%, transparent);
+  --d2h-dark-line-border-color: color-mix(
+    in srgb,
+    var(--border) 80%,
+    transparent
+  );
   --d2h-dark-file-header-bg-color: var(--panel);
   --d2h-dark-file-header-border-color: var(--border);
-  --d2h-dark-empty-placeholder-bg-color: color-mix(in srgb, var(--panel) 78%, var(--bg));
+  --d2h-dark-empty-placeholder-bg-color: color-mix(
+    in srgb,
+    var(--panel) 78%,
+    var(--bg)
+  );
   --d2h-dark-empty-placeholder-border-color: var(--border);
   --d2h-dark-selected-color: color-mix(in srgb, var(--accent) 18%, transparent);
   --d2h-dark-ins-bg-color: color-mix(in srgb, var(--success) 20%, transparent);
-  --d2h-dark-ins-border-color: color-mix(in srgb, var(--success) 50%, var(--border));
-  --d2h-dark-ins-highlight-bg-color: color-mix(in srgb, var(--success) 35%, transparent);
-  --d2h-dark-ins-label-color: color-mix(in srgb, var(--success) 78%, var(--text));
+  --d2h-dark-ins-border-color: color-mix(
+    in srgb,
+    var(--success) 50%,
+    var(--border)
+  );
+  --d2h-dark-ins-highlight-bg-color: color-mix(
+    in srgb,
+    var(--success) 35%,
+    transparent
+  );
+  --d2h-dark-ins-label-color: color-mix(
+    in srgb,
+    var(--success) 78%,
+    var(--text)
+  );
   --d2h-dark-del-bg-color: color-mix(in srgb, var(--danger) 20%, transparent);
-  --d2h-dark-del-border-color: color-mix(in srgb, var(--danger) 50%, var(--border));
-  --d2h-dark-del-highlight-bg-color: color-mix(in srgb, var(--danger) 35%, transparent);
-  --d2h-dark-del-label-color: color-mix(in srgb, var(--danger) 78%, var(--text));
-  --d2h-dark-change-del-color: color-mix(in srgb, var(--warning) 24%, transparent);
-  --d2h-dark-change-ins-color: color-mix(in srgb, var(--success) 24%, transparent);
+  --d2h-dark-del-border-color: color-mix(
+    in srgb,
+    var(--danger) 50%,
+    var(--border)
+  );
+  --d2h-dark-del-highlight-bg-color: color-mix(
+    in srgb,
+    var(--danger) 35%,
+    transparent
+  );
+  --d2h-dark-del-label-color: color-mix(
+    in srgb,
+    var(--danger) 78%,
+    var(--text)
+  );
+  --d2h-dark-change-del-color: color-mix(
+    in srgb,
+    var(--warning) 24%,
+    transparent
+  );
+  --d2h-dark-change-ins-color: color-mix(
+    in srgb,
+    var(--success) 24%,
+    transparent
+  );
   --d2h-dark-info-bg-color: color-mix(in srgb, var(--accent) 14%, transparent);
-  --d2h-dark-info-border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-  --d2h-dark-change-label-color: color-mix(in srgb, var(--warning) 78%, var(--text));
-  --d2h-dark-moved-label-color: color-mix(in srgb, var(--accent) 78%, var(--text));
+  --d2h-dark-info-border-color: color-mix(
+    in srgb,
+    var(--accent) 40%,
+    var(--border)
+  );
+  --d2h-dark-change-label-color: color-mix(
+    in srgb,
+    var(--warning) 78%,
+    var(--text)
+  );
+  --d2h-dark-moved-label-color: color-mix(
+    in srgb,
+    var(--accent) 78%,
+    var(--text)
+  );
 }
 
 .bindiff-output .d2h-file-name-wrapper .d2h-icon {
@@ -634,8 +714,8 @@ main.bindiff-main {
   font-style: italic;
 }
 
-body.bindiff-maximized>.prompt-bar,
-body.bindiff-maximized>footer {
+body.bindiff-maximized > .prompt-bar,
+body.bindiff-maximized > footer {
   display: none;
 }
 
@@ -706,7 +786,12 @@ body.bindiff-maximized>footer {
 
 @media (max-width: 1200px) {
   .bindiff-grid.diff-grid {
-    grid-template-columns: minmax(112px, var(--diff-build-width)) minmax(112px, var(--diff-build-width)) max-content minmax(128px, var(--diff-module-width));
+    grid-template-columns:
+      minmax(112px, var(--diff-build-width)) minmax(
+        112px,
+        var(--diff-build-width)
+      )
+      max-content minmax(128px, var(--diff-module-width));
   }
 
   .diff-grid .diff-name-field {
@@ -767,7 +852,6 @@ body.bindiff-maximized>footer {
     display: grid;
     gap: 6px;
   }
-
 }
 
 main.bindiff-main:has(.select-ui.open) {

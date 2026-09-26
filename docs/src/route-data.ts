@@ -13,11 +13,16 @@ export const onRequest = defineRouteMiddleware((context) => {
 
   route.toc.minHeadingLevel = minHeadingLevel;
   route.toc.maxHeadingLevel = maxHeadingLevel;
-  route.toc.items = generateToC(route.headings, route.toc.items[0]?.text || 'Overview');
+  route.toc.items = generateToC(
+    route.headings,
+    route.toc.items[0]?.text || 'Overview',
+  );
 });
 
 function generateToC(headings: MarkdownHeading[], title: string): TocItem[] {
-  const toc: TocItem[] = [{ depth: 2, slug: '_top', text: title, children: [] }];
+  const toc: TocItem[] = [
+    { depth: 2, slug: '_top', text: title, children: [] },
+  ];
   for (const heading of headings) {
     if (heading.depth >= minHeadingLevel && heading.depth <= maxHeadingLevel) {
       injectChild(toc, { ...heading, children: [] });

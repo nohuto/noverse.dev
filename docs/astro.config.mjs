@@ -13,7 +13,7 @@ import { docsSidebar } from './docs-sidebar.mjs';
 const noverseDocsLabels = {
   name: 'noverse-docs-labels',
   hooks: {
-    'config:setup'() { },
+    'config:setup'() {},
     'i18n:setup'({ injectTranslations }) {
       injectTranslations({
         en: {
@@ -38,8 +38,10 @@ export default defineConfig({
             modalBackground: 'var(--sl-color-bg-nav)',
             modalBackgroundAlt: 'var(--sl-color-bg)',
             accentColor: 'var(--sl-color-accent)',
-            accentHover: 'color-mix(in srgb, var(--sl-color-accent) 10%, transparent)',
-            accentSelected: 'color-mix(in srgb, var(--sl-color-accent) 18%, transparent)',
+            accentHover:
+              'color-mix(in srgb, var(--sl-color-accent) 10%, transparent)',
+            accentSelected:
+              'color-mix(in srgb, var(--sl-color-accent) 18%, transparent)',
             textPrimary: 'var(--sl-color-white)',
             textSecondary: 'var(--sl-color-gray-3)',
             border: 'var(--sl-color-hairline-light)',
@@ -100,7 +102,11 @@ export default defineConfig({
       ],
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/nohuto' },
-        { icon: 'discord', label: 'Discord', href: 'https://discord.noverse.dev' },
+        {
+          icon: 'discord',
+          label: 'Discord',
+          href: 'https://discord.noverse.dev',
+        },
       ],
       tableOfContents: {
         minHeadingLevel: 2,
@@ -118,7 +124,10 @@ export default defineConfig({
         ThemeProvider: './src/components/starlight/ThemeProvider.astro',
         ThemeSelect: './src/components/starlight/ThemeSelect.astro',
       },
-      customCss: ['./src/styles/rapide-overrides.css', './src/styles/doc-themes.css'],
+      customCss: [
+        './src/styles/rapide-overrides.css',
+        './src/styles/doc-themes.css',
+      ],
       expressiveCode: {
         styleOverrides: {
           borderRadius: 'var(--nv-ui-radius)',

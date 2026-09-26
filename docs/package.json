@@ -9,7 +9,9 @@
     "dev": "npm run docs:sync && astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@astrojs/starlight": "0.38.0",

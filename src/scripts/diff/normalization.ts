@@ -10,7 +10,7 @@
     normalizeNumericNotation: true,
     normalizeGeneratedLabels: false,
     normalizePrototypeExpansionArgs: false,
-    trimTrailingWhitespace: true
+    trimTrailingWhitespace: true,
   });
 
   const TOKENIZER_STATES = Object.freeze({
@@ -18,31 +18,48 @@
     lineComment: 1,
     blockComment: 2,
     string: 3,
-    char: 4
+    char: 4,
   });
 
   const MAX_MEMO_ENTRIES = 300;
   const memoCache = new Map();
 
-  const ADDRESS_PREFIX_RE = /^(qword|dword|word|byte|xmmword|ymmword|zmmword|oword|unk|loc|off|stru|sub|nullsub)_(?:0x)?[0-9A-Fa-f]{6,}$/i;
+  const ADDRESS_PREFIX_RE =
+    /^(qword|dword|word|byte|xmmword|ymmword|zmmword|oword|unk|loc|off|stru|sub|nullsub)_(?:0x)?[0-9A-Fa-f]{6,}$/i;
   const LARGE_HEX_ADDR_RE = /^0[xX][0-9A-Fa-f]{8,}(?:[uUlL]{0,3})$/;
-  const AUTO_IDENTIFIER_DECLARATION_RE = /^(?:[_A-Za-z]\w*(?:\s+[_A-Za-z]\w*)*\s+)(?:\*+\s*)?(?:var_\d+|arg_\d+)(?:\s*\[[^\]]+\])?\s*;\s*$/;
+  const AUTO_IDENTIFIER_DECLARATION_RE =
+    /^(?:[_A-Za-z]\w*(?:\s+[_A-Za-z]\w*)*\s+)(?:\*+\s*)?(?:var_\d+|arg_\d+)(?:\s*\[[^\]]+\])?\s*;\s*$/;
   const GENERATED_LABEL_RE = /^LABEL_(\d+)$/;
-  const KEYWORDS_BEFORE_PAREN = new Set(['if', 'for', 'while', 'switch', 'sizeof', 'return', 'case']);
+  const KEYWORDS_BEFORE_PAREN = new Set([
+    'if',
+    'for',
+    'while',
+    'switch',
+    'sizeof',
+    'return',
+    'case',
+  ]);
 
-  const normalizeLineEndings = text => String(text || '').replace(/\r\n?/g, '\n');
-  const isWhitespace = char => char === ' ' || char === '\t' || char === '\n' || char === '\r' || char === '\f' || char === '\v';
-  const isIdentifierStart = char => /[A-Za-z_]/.test(char);
-  const isIdentifierPart = char => /[A-Za-z0-9_]/.test(char);
+  const normalizeLineEndings = (text) =>
+    String(text || '').replace(/\r\n?/g, '\n');
+  const isWhitespace = (char) =>
+    char === ' ' ||
+    char === '\t' ||
+    char === '\n' ||
+    char === '\r' ||
+    char === '\f' ||
+    char === '\v';
+  const isIdentifierStart = (char) => /[A-Za-z_]/.test(char);
+  const isIdentifierPart = (char) => /[A-Za-z0-9_]/.test(char);
 
   const cloneDefaults = () => ({ ...DEFAULTS });
 
-  const normalizeSettings = settings => {
+  const normalizeSettings = (settings) => {
     const normalized = cloneDefaults();
     if (!settings || typeof settings !== 'object') {
       return normalized;
     }
-    Object.keys(DEFAULTS).forEach(key => {
+    Object.keys(DEFAULTS).forEach((key) => {
       if (Object.prototype.hasOwnProperty.call(settings, key)) {
         normalized[key] = Boolean(settings[key]);
       }
@@ -50,28 +67,30 @@
     return normalized;
   };
 
-  const stableStringify = value => {
+  const stableStringify = (value) => {
     if (value === null) return 'null';
     if (typeof value !== 'object') return JSON.stringify(value);
     if (Array.isArray(value)) {
       return `[${value.map(stableStringify).join(',')}]`;
     }
     const keys = Object.keys(value).sort();
-    return `{${keys.map(key => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(',')}}`;
+    return `{${keys.map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(',')}}`;
   };
 
-  const hashFnv1a = text => {
+  const hashFnv1a = (text) => {
     let hash = 0x811c9dc5;
     for (let i = 0; i < text.length; i += 1) {
       hash ^= text.charCodeAt(i);
-      hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+      hash +=
+        (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
     }
     return (hash >>> 0).toString(16).padStart(8, '0');
   };
 
-  const memoKey = (source, settings) => `${hashFnv1a(source)}:${hashFnv1a(stableStringify(settings))}`;
+  const memoKey = (source, settings) =>
+    `${hashFnv1a(source)}:${hashFnv1a(stableStringify(settings))}`;
 
-  const memoGet = key => {
+  const memoGet = (key) => {
     if (!memoCache.has(key)) return null;
     const value = memoCache.get(key);
     memoCache.delete(key);
@@ -86,7 +105,7 @@
     if (!first.done) memoCache.delete(first.value);
   };
 
-  const parseIntegerLiteral = token => {
+  const parseIntegerLiteral = (token) => {
     const match = token.match(/^(0[xX][0-9A-Fa-f]+|\d+)([uUlL]{0,3})$/);
     if (!match) return null;
     const valueToken = match[1];
@@ -101,7 +120,7 @@
     }
   };
 
-  const canonicalizeIntegerLiteral = token => {
+  const canonicalizeIntegerLiteral = (token) => {
     const parsed = parseIntegerLiteral(token);
     if (!parsed) return token;
     return parsed.value.toString(10);
@@ -137,7 +156,7 @@
           output += char;
           continue;
         }
-        if (char === '\'') {
+        if (char === "'") {
           state = TOKENIZER_STATES.char;
           escape = false;
           output += char;
@@ -193,7 +212,7 @@
           escape = false;
         } else if (char === '\\') {
           escape = true;
-        } else if (char === '\'') {
+        } else if (char === "'") {
           state = TOKENIZER_STATES.code;
         }
       }
@@ -219,7 +238,7 @@
     let labelMap = new Map();
     let labelCount = 0;
 
-    const mapIdentifier = identifier => {
+    const mapIdentifier = (identifier) => {
       if (!settings.normalizeDecompilerIdentifiers) return identifier;
       if (!/^([av])\d+$/.test(identifier)) return identifier;
       if (!identifierMap.has(identifier)) {
@@ -238,7 +257,7 @@
       return mapped;
     };
 
-    const mapGeneratedLabel = identifier => {
+    const mapGeneratedLabel = (identifier) => {
       if (!settings.normalizeGeneratedLabels) return identifier;
       const match = identifier.match(GENERATED_LABEL_RE);
       if (!match) return identifier;
@@ -276,7 +295,7 @@
           output += char;
           continue;
         }
-        if (char === '\'') {
+        if (char === "'") {
           state = TOKENIZER_STATES.char;
           escape = false;
           output += char;
@@ -290,7 +309,10 @@
           }
           let identifier = source.slice(i, j);
 
-          if (settings.normalizeRelocationSymbols && ADDRESS_PREFIX_RE.test(identifier)) {
+          if (
+            settings.normalizeRelocationSymbols &&
+            ADDRESS_PREFIX_RE.test(identifier)
+          ) {
             const prefix = identifier.slice(0, identifier.indexOf('_'));
             identifier = `${prefix}_ADDR`;
             facts.relocationSymbolsNormalized += 1;
@@ -360,7 +382,10 @@
 
           const numberToken = source.slice(i, j);
           let transformedNumber = numberToken;
-          if (settings.normalizeRelocationSymbols && LARGE_HEX_ADDR_RE.test(numberToken)) {
+          if (
+            settings.normalizeRelocationSymbols &&
+            LARGE_HEX_ADDR_RE.test(numberToken)
+          ) {
             transformedNumber = '0xADDR';
             facts.relocationSymbolsNormalized += 1;
           } else if (settings.normalizeNumericNotation) {
@@ -438,7 +463,7 @@
           escape = false;
         } else if (char === '\\') {
           escape = true;
-        } else if (char === '\'') {
+        } else if (char === "'") {
           state = TOKENIZER_STATES.code;
         }
       }
@@ -447,7 +472,7 @@
     return output;
   };
 
-  const splitTopLevelArgs = text => {
+  const splitTopLevelArgs = (text) => {
     const args: string[] = [];
     let state: number = TOKENIZER_STATES.code;
     let escape = false;
@@ -476,7 +501,7 @@
           escape = false;
           continue;
         }
-        if (char === '\'') {
+        if (char === "'") {
           state = TOKENIZER_STATES.char;
           escape = false;
           continue;
@@ -487,7 +512,12 @@
         else if (char === ']') bracketDepth = Math.max(0, bracketDepth - 1);
         else if (char === '{') braceDepth += 1;
         else if (char === '}') braceDepth = Math.max(0, braceDepth - 1);
-        else if (char === ',' && parenDepth === 0 && bracketDepth === 0 && braceDepth === 0) {
+        else if (
+          char === ',' &&
+          parenDepth === 0 &&
+          bracketDepth === 0 &&
+          braceDepth === 0
+        ) {
           args.push(text.slice(start, i));
           start = i + 1;
         }
@@ -525,7 +555,7 @@
           escape = false;
         } else if (char === '\\') {
           escape = true;
-        } else if (char === '\'') {
+        } else if (char === "'") {
           state = TOKENIZER_STATES.code;
         }
       }
@@ -535,10 +565,11 @@
     return args;
   };
 
-  const isDefaultPrototypeArg = value => {
+  const isDefaultPrototypeArg = (value) => {
     const compact = value.replace(/\s+/g, '').toLowerCase();
     if (!compact) return false;
-    if (compact === '0' || compact === 'null' || compact === 'nullptr') return true;
+    if (compact === '0' || compact === 'null' || compact === 'nullptr')
+      return true;
     if (/^0[x]0+[uUlL]*$/.test(compact)) return true;
     if (/^0+[uUlL]+$/.test(compact)) return true;
     if (/^\(void\*\)0+$/.test(compact)) return true;
@@ -575,7 +606,7 @@
           output += char;
           continue;
         }
-        if (char === '\'') {
+        if (char === "'") {
           state = TOKENIZER_STATES.char;
           escape = false;
           output += char;
@@ -594,7 +625,11 @@
             k += 1;
           }
 
-          if (k < source.length && source[k] === '(' && !KEYWORDS_BEFORE_PAREN.has(identifier)) {
+          if (
+            k < source.length &&
+            source[k] === '(' &&
+            !KEYWORDS_BEFORE_PAREN.has(identifier)
+          ) {
             let depth = 1;
             let m = k + 1;
             let callState: number = TOKENIZER_STATES.code;
@@ -619,7 +654,7 @@
                   m += 1;
                   continue;
                 }
-                if (c === '\'') {
+                if (c === "'") {
                   callState = TOKENIZER_STATES.char;
                   callEscape = false;
                   m += 1;
@@ -654,7 +689,7 @@
               if (callState === TOKENIZER_STATES.char) {
                 if (callEscape) callEscape = false;
                 else if (c === '\\') callEscape = true;
-                else if (c === '\'') callState = TOKENIZER_STATES.code;
+                else if (c === "'") callState = TOKENIZER_STATES.code;
                 m += 1;
               }
             }
@@ -664,13 +699,20 @@
               const args = splitTopLevelArgs(argsText);
               if (args.length >= 3) {
                 let cutIndex = args.length;
-                while (cutIndex > 0 && isDefaultPrototypeArg(args[cutIndex - 1].trim())) {
+                while (
+                  cutIndex > 0 &&
+                  isDefaultPrototypeArg(args[cutIndex - 1].trim())
+                ) {
                   cutIndex -= 1;
                 }
                 if (cutIndex < args.length && cutIndex > 0) {
-                  const kept = args.slice(0, cutIndex).map(arg => arg.trim()).join(', ');
+                  const kept = args
+                    .slice(0, cutIndex)
+                    .map((arg) => arg.trim())
+                    .join(', ');
                   output += `(${kept})`;
-                  facts.prototypeExpansionArgsNormalized += args.length - cutIndex;
+                  facts.prototypeExpansionArgsNormalized +=
+                    args.length - cutIndex;
                   i = m - 1;
                   continue;
                 }
@@ -714,7 +756,7 @@
         output += char;
         if (escape) escape = false;
         else if (char === '\\') escape = true;
-        else if (char === '\'') state = TOKENIZER_STATES.code;
+        else if (char === "'") state = TOKENIZER_STATES.code;
       }
     }
 
@@ -726,10 +768,16 @@
 
     return source
       .split('\n')
-      .map(line => {
+      .map((line) => {
         const next = line
-          .replace(/\s*\/\/\s*\[(?:rsp|rbp|esp|ebp)[^\]]*\](?:\s*\[(?:rsp|rbp|esp|ebp)[^\]]*\])*(?:\s*BYREF)?\s*$/i, '')
-          .replace(/\s*\/\/\s*(?:[re]?[abcd]x|[re]?(?:si|di|sp|bp|ip)|r\d+[bwd]?|xmm\d+|ymm\d+|zmm\d+)\s*$/i, '');
+          .replace(
+            /\s*\/\/\s*\[(?:rsp|rbp|esp|ebp)[^\]]*\](?:\s*\[(?:rsp|rbp|esp|ebp)[^\]]*\])*(?:\s*BYREF)?\s*$/i,
+            '',
+          )
+          .replace(
+            /\s*\/\/\s*(?:[re]?[abcd]x|[re]?(?:si|di|sp|bp|ip)|r\d+[bwd]?|xmm\d+|ymm\d+|zmm\d+)\s*$/i,
+            '',
+          );
         if (next !== line) {
           facts.storageLocationCommentsStripped += 1;
         }
@@ -743,7 +791,7 @@
 
     const lines = source.split('\n');
     const kept: string[] = [];
-    lines.forEach(line => {
+    lines.forEach((line) => {
       if (AUTO_IDENTIFIER_DECLARATION_RE.test(line.trim())) {
         facts.autoDeclarationsStripped += 1;
         return;
@@ -762,12 +810,12 @@
     return next;
   };
 
-  const finalizeText = source => {
+  const finalizeText = (source) => {
     const compact = source.replace(/\n{3,}/g, '\n\n').trimEnd();
     return compact ? `${compact}\n` : '';
   };
 
-  const countStatements = source => {
+  const countStatements = (source) => {
     let state: number = TOKENIZER_STATES.code;
     let escape = false;
     let braceDepth = 0;
@@ -794,7 +842,7 @@
           escape = false;
           continue;
         }
-        if (char === '\'') {
+        if (char === "'") {
           state = TOKENIZER_STATES.char;
           escape = false;
           continue;
@@ -843,7 +891,7 @@
       if (state === TOKENIZER_STATES.char) {
         if (escape) escape = false;
         else if (char === '\\') escape = true;
-        else if (char === '\'') state = TOKENIZER_STATES.code;
+        else if (char === "'") state = TOKENIZER_STATES.code;
       }
     }
 
@@ -860,7 +908,7 @@
     prototypeExpansionArgsNormalized: 0,
     autoDeclarationsStripped: 0,
     trailingWhitespaceTrimmed: false,
-    statementCount: 0
+    statementCount: 0,
   });
 
   const normalize = (source, settingsInput) => {
@@ -871,7 +919,7 @@
     if (memoized) {
       return {
         text: memoized.text,
-        facts: { ...memoized.facts }
+        facts: { ...memoized.facts },
       };
     }
 
@@ -894,7 +942,7 @@
     memoSet(key, result);
     return {
       text: result.text,
-      facts: { ...result.facts }
+      facts: { ...result.facts },
     };
   };
 
@@ -910,14 +958,14 @@
       diagnostics: {
         left: leftResult.facts,
         right: rightResult.facts,
-        settings
-      }
+        settings,
+      },
     };
   };
 
   global.Normalization = Object.freeze({
     normalize,
-    preparePair
+    preparePair,
   });
 })(window);
 export {};

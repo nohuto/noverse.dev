@@ -36,7 +36,7 @@
     'rose-pine',
     'rose-pine-moon',
     'solarized-dark',
-    'solarized-light'
+    'solarized-light',
   ]);
 
   const BG_OPTIONS = new Set([
@@ -46,9 +46,9 @@
     'noise',
     'dots',
     'grid',
-    'starfield'
+    'starfield',
   ]);
-  const safeGet = key => {
+  const safeGet = (key) => {
     try {
       return localStorage.getItem(key);
     } catch {
@@ -73,17 +73,23 @@
     }
   };
 
-  const setTheme = value => {
+  const setTheme = (value) => {
     const candidate = (value || '').trim();
-    const selected = candidate && THEME_OPTIONS.has(candidate) ? candidate : DEFAULT_THEME;
-    const applied = selected === THEME_SYSTEM ? getSystemDefaultTheme() : selected;
+    const selected =
+      candidate && THEME_OPTIONS.has(candidate) ? candidate : DEFAULT_THEME;
+    const applied =
+      selected === THEME_SYSTEM ? getSystemDefaultTheme() : selected;
     document.documentElement.setAttribute('data-theme-setting', selected);
     document.documentElement.setAttribute('data-theme', applied);
   };
 
   try {
     setTheme(safeGet(THEME_KEY) || DEFAULT_THEME);
-    setAttrIfValid('data-bg', safeGet(BG_KEY) || DEFAULT_BG, BG_OPTIONS, DEFAULT_BG);
-  } catch {
-  }
+    setAttrIfValid(
+      'data-bg',
+      safeGet(BG_KEY) || DEFAULT_BG,
+      BG_OPTIONS,
+      DEFAULT_BG,
+    );
+  } catch {}
 })();

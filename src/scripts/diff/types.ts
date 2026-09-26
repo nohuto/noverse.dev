@@ -24,7 +24,12 @@ export interface DiffSource extends ManifestSource {
   defaultLeft: string;
   defaultRight: string;
   defaultModule: string;
-  preparePair(left: string, right: string, leftFile: DiffFile, rightFile: DiffFile): DiffPair;
+  preparePair(
+    left: string,
+    right: string,
+    leftFile: DiffFile,
+    rightFile: DiffFile,
+  ): DiffPair;
   prepareSingle(source: string, file: DiffFile): string;
   renderSettings(body: HTMLElement, onChange: () => void): void;
   resetSettings(): unknown;
@@ -35,7 +40,12 @@ export interface DiffSettingsStore<T extends object> {
   read(): T;
   write(values: T): T;
   reset(): T;
-  addCheckbox(body: HTMLElement, id: string, label: string, checked: boolean): HTMLInputElement;
+  addCheckbox(
+    body: HTMLElement,
+    id: string,
+    label: string,
+    checked: boolean,
+  ): HTMLInputElement;
 }
 
 export interface DiffManifestOptions {

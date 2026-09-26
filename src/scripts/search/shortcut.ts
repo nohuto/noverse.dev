@@ -1,6 +1,8 @@
 export {};
 
-const searchInput = document.querySelector<HTMLInputElement>('#project-search, #policy-search');
+const searchInput = document.querySelector<HTMLInputElement>(
+  '#project-search, #policy-search',
+);
 
 if (searchInput) {
   const isApple = /(Mac|iPhone|iPod|iPad)/i.test(navigator.userAgent);
@@ -13,8 +15,9 @@ if (searchInput) {
     input.setAttribute('aria-keyshortcuts', isApple ? 'Meta+K' : 'Control+K');
   }
 
-  document.addEventListener('keydown', event => {
-    if (event.key.toLowerCase() !== 'k' || !(event.ctrlKey || event.metaKey)) return;
+  document.addEventListener('keydown', (event) => {
+    if (event.key.toLowerCase() !== 'k' || !(event.ctrlKey || event.metaKey))
+      return;
     event.preventDefault();
     searchInput.focus({ preventScroll: true });
     searchInput.select();

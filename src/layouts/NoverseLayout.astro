@@ -6,28 +6,50 @@ import notFound from '../scripts/shell/not-found-redirect.js?raw';
 import appearanceStyles from '../styles/appearance.css?url';
 import siteStyles from '../styles/site.css?url';
 
-interface Props { title: string; description: string; page: string; noShell?: boolean; styles?: string[] }
+interface Props {
+  title: string;
+  description: string;
+  page: string;
+  noShell?: boolean;
+  styles?: string[];
+}
 const { title, description, page, noShell = false, styles = [] } = Astro.props;
 ---
+
 <!doctype html>
-<html lang="en" data-theme-setting="gruvbox-dark" data-theme="gruvbox-dark" data-bg="crosshatch">
+<html
+  lang="en"
+  data-theme-setting="gruvbox-dark"
+  data-theme="gruvbox-dark"
+  data-bg="crosshatch"
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="stylesheet" href={appearanceStyles} />
     <link rel="stylesheet" href={siteStyles} />
-    {styles.map(href => <link rel="stylesheet" href={href} />)}
+    {styles.map((href) => (
+      <link rel="stylesheet" href={href} />
+    ))}
     <title>{title}</title>
     <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-    <link rel="preload" href="/main/fonts/CascadiaCode-2407.24.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href="/main/fonts/CascadiaCode-2407.24.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <script is:inline set:html={noShell ? notFound : bootstrap}></script>
   </head>
   <body>
     {!noShell && <Header page={page} />}
     <slot />
     {!noShell && <Footer />}
-    {!noShell && <script>import '../scripts/shell/interface-controls.ts';</script>}
+    {!noShell && <script>
+      import '../scripts/shell/interface-controls.ts';
+    </script>}
   </body>
 </html>

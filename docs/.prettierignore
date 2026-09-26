@@ -1,0 +1,5 @@
+/node_modules/
+/.astro/
+/.cache/
+/public/
+/src/content/docs/

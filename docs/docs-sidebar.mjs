@@ -1,4 +1,8 @@
-import { CATEGORY_LABELS, WIN_CONFIG_CATEGORIES, getDirectoryLabel } from './docs-constants.mjs';
+import {
+  CATEGORY_LABELS,
+  WIN_CONFIG_CATEGORIES,
+  getDirectoryLabel,
+} from './docs-constants.mjs';
 
 const sidebarRepos = ['win-config', 'windbg-notes', 'regkit', 'app-guides'];
 const expandedSidebarRepos = new Set(['win-config', 'windbg-notes', 'regkit']);
@@ -45,13 +49,21 @@ function createSidebarRepoEntry(repoName) {
         createSidebarDirectory('windbg-notes/symbols'),
         createSidebarGroup('windbg-notes/threads', [
           createSidebarDirectory('windbg-notes/threads/thread-internals'),
-          createSidebarDirectory('windbg-notes/threads/examining-thread-activity'),
+          createSidebarDirectory(
+            'windbg-notes/threads/examining-thread-activity',
+          ),
           createSidebarDirectory('windbg-notes/threads/thread-scheduling'),
         ]),
         createSidebarGroup('windbg-notes/system-mechanisms', [
-          createSidebarDirectory('windbg-notes/system-mechanisms/processor-execution-model'),
-          createSidebarDirectory('windbg-notes/system-mechanisms/trap-dispatching'),
-          createSidebarDirectory('windbg-notes/system-mechanisms/software-interrupts'),
+          createSidebarDirectory(
+            'windbg-notes/system-mechanisms/processor-execution-model',
+          ),
+          createSidebarDirectory(
+            'windbg-notes/system-mechanisms/trap-dispatching',
+          ),
+          createSidebarDirectory(
+            'windbg-notes/system-mechanisms/software-interrupts',
+          ),
         ]),
         { label: 'Cheat Sheet', slug: 'windbg-notes/cheat-sheet' },
       ],
@@ -65,11 +77,20 @@ function createSidebarRepoEntry(repoName) {
       items: [
         { label: 'Overview', slug: 'regkit/overview' },
         createSidebarGroup('regkit/registry-internals', [
-          { label: 'Registry Fundamentals', slug: 'regkit/registry-internals/registry-fundamentals' },
-          { label: 'Capture Table', slug: 'regkit/registry-internals/capture-table' },
+          {
+            label: 'Registry Fundamentals',
+            slug: 'regkit/registry-internals/registry-fundamentals',
+          },
+          {
+            label: 'Capture Table',
+            slug: 'regkit/registry-internals/capture-table',
+          },
         ]),
         createSidebarGroup('regkit/guides', [
-          { label: 'Capturing Registry Activity', slug: 'regkit/guides/procmon' },
+          {
+            label: 'Capturing Registry Activity',
+            slug: 'regkit/guides/procmon',
+          },
           { label: 'Boot Registry Activity', slug: 'regkit/guides/wpr-wpa' },
         ]),
       ],

@@ -3,7 +3,10 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const packageEntry = fileURLToPath(import.meta.resolve('starlight-telescope'));
-const targetFile = resolve(dirname(packageEntry), 'src/libs/telescope-search.ts');
+const targetFile = resolve(
+  dirname(packageEntry),
+  'src/libs/telescope-search.ts',
+);
 let source = readFileSync(targetFile, 'utf8');
 
 const patches = [
@@ -116,10 +119,14 @@ for (const patch of patches) {
     continue;
   }
   if (patch.after && source.includes(patch.after)) continue;
-  throw new Error(`[postinstall] Could not apply Telescope patch: ${patch.name}`);
+  throw new Error(
+    `[postinstall] Could not apply Telescope patch: ${patch.name}`,
+  );
 }
 
 if (changed) {
   writeFileSync(targetFile, source, 'utf8');
-  console.log('[postinstall] Removed duplicate recent-page sections from Telescope search');
+  console.log(
+    '[postinstall] Removed duplicate recent-page sections from Telescope search',
+  );
 }

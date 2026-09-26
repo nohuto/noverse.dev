@@ -118,7 +118,7 @@ body {
 
 body::before,
 body::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -134,88 +134,121 @@ body::after {
   z-index: 0;
 }
 
-html[data-bg="diamonds"] body::before {
+html[data-bg='diamonds'] body::before {
   opacity: 0.8;
   background-image:
-    repeating-linear-gradient(45deg,
+    repeating-linear-gradient(
+      45deg,
       color-mix(in srgb, var(--accent) 20%, transparent) 0,
       color-mix(in srgb, var(--accent) 20%, transparent) 1px,
       transparent 1px,
-      transparent 22px),
-    repeating-linear-gradient(-45deg,
+      transparent 22px
+    ),
+    repeating-linear-gradient(
+      -45deg,
       color-mix(in srgb, var(--accent-2) 12%, transparent) 0,
       color-mix(in srgb, var(--accent-2) 12%, transparent) 1px,
       transparent 1px,
-      transparent 22px);
+      transparent 22px
+    );
   background-size: 44px 44px;
 }
 
-html[data-bg="noise"] body::before {
+html[data-bg='noise'] body::before {
   opacity: 0.9;
   background-image:
-    radial-gradient(circle at 1px 1px,
+    radial-gradient(
+      circle at 1px 1px,
       color-mix(in srgb, var(--accent) 22%, transparent) 1px,
-      transparent 0),
-    radial-gradient(circle at 1px 1px,
+      transparent 0
+    ),
+    radial-gradient(
+      circle at 1px 1px,
       color-mix(in srgb, var(--accent-2) 20%, transparent) 1px,
-      transparent 0),
-    radial-gradient(circle at 1px 1px,
+      transparent 0
+    ),
+    radial-gradient(
+      circle at 1px 1px,
       color-mix(in srgb, var(--danger) 16%, transparent) 1px,
-      transparent 0);
-  background-size: 20px 20px, 30px 30px, 25px 25px;
-  background-position: 0 0, 10px 10px, 15px 5px;
+      transparent 0
+    );
+  background-size:
+    20px 20px,
+    30px 30px,
+    25px 25px;
+  background-position:
+    0 0,
+    10px 10px,
+    15px 5px;
 }
 
-html[data-bg="clear"] body::before {
+html[data-bg='clear'] body::before {
   opacity: 0;
 }
 
-html[data-bg="crosshatch"] body::before {
+html[data-bg='crosshatch'] body::before {
   opacity: 1;
   background-image:
-    repeating-linear-gradient(22.5deg,
+    repeating-linear-gradient(
+      22.5deg,
       transparent 0,
       transparent 2px,
       color-mix(in srgb, var(--text) 3%, transparent) 2px,
       color-mix(in srgb, var(--text) 3%, transparent) 3px,
       transparent 3px,
-      transparent 8px),
-    repeating-linear-gradient(67.5deg,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      67.5deg,
       transparent 0,
       transparent 2px,
       color-mix(in srgb, var(--text) 2.5%, transparent) 2px,
       color-mix(in srgb, var(--text) 2.5%, transparent) 3px,
       transparent 3px,
-      transparent 8px),
-    repeating-linear-gradient(112.5deg,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      112.5deg,
       transparent 0,
       transparent 2px,
       color-mix(in srgb, var(--text) 2%, transparent) 2px,
       color-mix(in srgb, var(--text) 2%, transparent) 3px,
       transparent 3px,
-      transparent 8px),
-    repeating-linear-gradient(157.5deg,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      157.5deg,
       transparent 0,
       transparent 2px,
       color-mix(in srgb, var(--text) 1.5%, transparent) 2px,
       color-mix(in srgb, var(--text) 1.5%, transparent) 3px,
       transparent 3px,
-      transparent 8px);
+      transparent 8px
+    );
 }
 
-html[data-bg="dots"] body::before {
+html[data-bg='dots'] body::before {
   opacity: 1;
   background-image:
-    radial-gradient(circle at 25% 25%, color-mix(in srgb, var(--text) 12%, transparent) 0.5px, transparent 1px),
-    radial-gradient(circle at 75% 75%, color-mix(in srgb, var(--text) 6%, transparent) 0.5px, transparent 1px);
+    radial-gradient(
+      circle at 25% 25%,
+      color-mix(in srgb, var(--text) 12%, transparent) 0.5px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      color-mix(in srgb, var(--text) 6%, transparent) 0.5px,
+      transparent 1px
+    );
   background-size: 10px 10px;
   image-rendering: pixelated;
 }
 
-html[data-bg="grid"] body::before {
+html[data-bg='grid'] body::before {
   opacity: 0.95;
   background-image:
-    repeating-linear-gradient(0deg,
+    repeating-linear-gradient(
+      0deg,
       transparent 0,
       transparent 11px,
       color-mix(in srgb, var(--accent) 14%, transparent) 11px,
@@ -223,8 +256,10 @@ html[data-bg="grid"] body::before {
       transparent 12px,
       transparent 23px,
       color-mix(in srgb, var(--accent) 14%, transparent) 23px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 24px),
-    repeating-linear-gradient(90deg,
+      color-mix(in srgb, var(--accent) 14%, transparent) 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
       transparent 0,
       transparent 11px,
       color-mix(in srgb, var(--accent) 14%, transparent) 11px,
@@ -232,8 +267,11 @@ html[data-bg="grid"] body::before {
       transparent 12px,
       transparent 23px,
       color-mix(in srgb, var(--accent) 14%, transparent) 23px,
-      color-mix(in srgb, var(--accent) 14%, transparent) 24px);
-  background-size: 24px 24px, 24px 24px;
+      color-mix(in srgb, var(--accent) 14%, transparent) 24px
+    );
+  background-size:
+    24px 24px,
+    24px 24px;
 }
 
 .stars {
@@ -246,7 +284,7 @@ html[data-bg="grid"] body::before {
   pointer-events: none;
 }
 
-html[data-bg="starfield"] .stars {
+html[data-bg='starfield'] .stars {
   display: block;
   --starfield-depth: 300px;
   --starfield-speed: 3s;
@@ -257,21 +295,21 @@ html[data-bg="starfield"] .stars {
   animation: fly var(--starfield-speed) linear infinite !important;
 }
 
-html[data-bg="starfield"] .stars::before,
-html[data-bg="starfield"] .stars::after {
-  content: "";
+html[data-bg='starfield'] .stars::before,
+html[data-bg='starfield'] .stars::after {
+  content: '';
   position: absolute;
   width: inherit;
   height: inherit;
   box-shadow: inherit;
 }
 
-html[data-bg="starfield"] .stars::before {
+html[data-bg='starfield'] .stars::before {
   transform: translateZ(calc(var(--starfield-depth) * -1));
   animation: fade1 var(--starfield-speed) linear infinite !important;
 }
 
-html[data-bg="starfield"] .stars::after {
+html[data-bg='starfield'] .stars::after {
   transform: translateZ(calc(var(--starfield-depth) * -2));
   animation: fade2 var(--starfield-speed) linear infinite !important;
 }
@@ -284,7 +322,7 @@ html[data-bg="starfield"] .stars::after {
   z-index: 1;
 }
 
-html[data-bg="starfield"] .overlay {
+html[data-bg='starfield'] .overlay {
   perspective: 340px;
   perspective-origin: 50% 50%;
 }
@@ -353,7 +391,7 @@ main {
 }
 
 .nav-tabs a::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   right: 0;
@@ -411,7 +449,7 @@ main {
   mask: var(--theme-moon-icon) center / contain no-repeat;
 }
 
-.theme-toggle[data-theme-mode="light"] .theme-toggle-icon {
+.theme-toggle[data-theme-mode='light'] .theme-toggle-icon {
   -webkit-mask-image: var(--theme-sun-icon);
   mask-image: var(--theme-sun-icon);
 }
@@ -427,7 +465,7 @@ button {
   outline: none;
 }
 
-:where(a, button, input, select, textarea, [tabindex]):not([tabindex="-1"]) {
+:where(a, button, input, select, textarea, [tabindex]):not([tabindex='-1']) {
   transition:
     color 180ms ease,
     background-color 180ms ease,
@@ -436,7 +474,7 @@ button {
     transform 180ms ease;
 }
 
-:where(a, button, [role="button"]):active {
+:where(a, button, [role='button']):active {
   transform: translateY(1px);
 }
 
@@ -517,7 +555,7 @@ select option:active {
 }
 
 .select-trigger::after {
-  content: "";
+  content: '';
   position: absolute;
   right: 8px;
   top: 50%;
@@ -759,7 +797,7 @@ a.link,
 
 a.link::after,
 .home-email::after {
-  content: "";
+  content: '';
   position: absolute;
   right: 0;
   bottom: 0.08em;
@@ -929,8 +967,8 @@ footer {
   height: 1em;
   flex: 0 0 auto;
   background-color: currentColor;
-  -webkit-mask: url("/main/icons/ui/copyright.svg") center / contain no-repeat;
-  mask: url("/main/icons/ui/copyright.svg") center / contain no-repeat;
+  -webkit-mask: url('/main/icons/ui/copyright.svg') center / contain no-repeat;
+  mask: url('/main/icons/ui/copyright.svg') center / contain no-repeat;
 }
 
 .footer-tools select,
@@ -948,7 +986,9 @@ footer {
 .footer-tools select {
   padding: 2px 28px 2px 10px;
   line-height: normal;
-  background-position: calc(100% - 16px) 48%, calc(100% - 10px) 48%;
+  background-position:
+    calc(100% - 16px) 48%,
+    calc(100% - 10px) 48%;
 }
 
 .toast {
@@ -1019,37 +1059,32 @@ footer {
     border-top: 1px solid var(--border);
     padding-top: 16px;
   }
-
 }
 
 @media (max-width: 960px) {
   main {
     padding: 28px 16px 32px;
   }
-
 }
 
 @media (max-width: 600px) {
   .nav-tabs {
     flex: 1 1 100%;
   }
-
 }
 
 @media (max-width: 430px) {
   .nav-tabs {
     flex-wrap: wrap;
   }
-
 }
 
 @media (max-width: 720px) {
-
   main:not(.main-terminal) {
     padding-inline: 0;
   }
 
-  main:not(.main-terminal)>.content-box {
+  main:not(.main-terminal) > .content-box {
     border-inline: 0;
   }
 
@@ -1087,8 +1122,6 @@ footer {
     justify-content: flex-end;
     flex-wrap: nowrap;
   }
-
-
 }
 
 @media (max-width: 560px) {
@@ -1134,7 +1167,6 @@ footer {
   .product-preview-grid {
     grid-template-columns: 1fr;
   }
-
 }
 
 .select-limit-controls {
@@ -1176,7 +1208,7 @@ footer {
   opacity: 0.55;
 }
 
-.select-limit-toggle input[type="checkbox"] {
+.select-limit-toggle input[type='checkbox'] {
   width: 12px;
   height: 12px;
   max-width: 12px;
@@ -1200,8 +1232,8 @@ footer {
   font: inherit;
 }
 
-.select-limit-toggle input[type="checkbox"]::after {
-  content: "";
+.select-limit-toggle input[type='checkbox']::after {
+  content: '';
   position: absolute;
   left: 50%;
   top: 50%;
@@ -1213,18 +1245,18 @@ footer {
   opacity: 0;
 }
 
-.select-limit-toggle input[type="checkbox"]:checked {
+.select-limit-toggle input[type='checkbox']:checked {
   background: var(--accent);
   border-color: var(--accent);
 }
 
-.select-limit-toggle input[type="checkbox"]:checked::after {
+.select-limit-toggle input[type='checkbox']:checked::after {
   border-right-color: var(--accent-contrast);
   border-bottom-color: var(--accent-contrast);
   opacity: 1;
 }
 
-.select-limit-toggle input[type="checkbox"]:focus-visible {
+.select-limit-toggle input[type='checkbox']:focus-visible {
   outline: none;
   box-shadow: none;
   border-color: var(--accent);
@@ -1245,8 +1277,8 @@ footer {
 .settings-icon,
 .settings-close-icon {
   background-color: currentColor;
-  -webkit-mask: url("/main/icons/ui/gear.svg") center / contain no-repeat;
-  mask: url("/main/icons/ui/gear.svg") center / contain no-repeat;
+  -webkit-mask: url('/main/icons/ui/gear.svg') center / contain no-repeat;
+  mask: url('/main/icons/ui/gear.svg') center / contain no-repeat;
 }
 
 #policy-settings:focus,
@@ -1338,8 +1370,8 @@ footer {
   width: 14px;
   height: 14px;
   display: block;
-  -webkit-mask-image: url("/main/icons/ui/x.svg");
-  mask-image: url("/main/icons/ui/x.svg");
+  -webkit-mask-image: url('/main/icons/ui/x.svg');
+  mask-image: url('/main/icons/ui/x.svg');
 }
 
 .site-error-modal {
@@ -1379,7 +1411,7 @@ footer {
   padding: 2px 0;
 }
 
-.settings-row input[type="checkbox"] {
+.settings-row input[type='checkbox'] {
   width: 12px;
   height: 12px;
   max-width: 12px;
@@ -1403,8 +1435,8 @@ footer {
   font: inherit;
 }
 
-.settings-row input[type="checkbox"]::after {
-  content: "";
+.settings-row input[type='checkbox']::after {
+  content: '';
   position: absolute;
   left: 50%;
   top: 50%;
@@ -1416,18 +1448,18 @@ footer {
   opacity: 0;
 }
 
-.settings-row input[type="checkbox"]:checked {
+.settings-row input[type='checkbox']:checked {
   background: var(--accent);
   border-color: var(--accent);
 }
 
-.settings-row input[type="checkbox"]:checked::after {
+.settings-row input[type='checkbox']:checked::after {
   border-right-color: var(--accent-contrast);
   border-bottom-color: var(--accent-contrast);
   opacity: 1;
 }
 
-.settings-row input[type="checkbox"]:focus-visible {
+.settings-row input[type='checkbox']:focus-visible {
   outline: none;
   box-shadow: none;
   border-color: var(--accent);
@@ -1437,7 +1469,7 @@ footer {
   cursor: default;
 }
 
-.settings-number-row input[type="number"] {
+.settings-number-row input[type='number'] {
   width: 82px;
   height: 24px;
   margin-left: auto;
@@ -1449,8 +1481,8 @@ footer {
   -moz-appearance: textfield;
 }
 
-.settings-number-row input[type="number"]::-webkit-inner-spin-button,
-.settings-number-row input[type="number"]::-webkit-outer-spin-button {
+.settings-number-row input[type='number']::-webkit-inner-spin-button,
+.settings-number-row input[type='number']::-webkit-outer-spin-button {
   appearance: none;
   margin: 0;
 }
@@ -1491,7 +1523,6 @@ body.settings-open {
 }
 
 @media (max-width: 720px) {
-
   .diff-name-field .select-limit-controls {
     margin-left: 0;
   }

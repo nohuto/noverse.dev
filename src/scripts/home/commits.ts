@@ -7,19 +7,27 @@ interface Commit {
 }
 
 let commitsPromise: Promise<Commit[]> | undefined;
-const dateFormatter = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' });
+const dateFormatter = new Intl.DateTimeFormat('en', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
 
 function isCommit(value: unknown): value is Commit {
   if (!value || typeof value !== 'object') return false;
   const row = value as Record<string, unknown>;
-  return ['url', 'repo', 'sha', 'message', 'date'].every(key => typeof row[key] === 'string');
+  return ['url', 'repo', 'sha', 'message', 'date'].every(
+    (key) => typeof row[key] === 'string',
+  );
 }
 
 function loadCommits(): Promise<Commit[]> {
-  return commitsPromise ||= fetch('/main/data/commits.json')
-    .then(async response => response.ok ? await response.json() as unknown : [])
-    .then(value => Array.isArray(value) ? value.filter(isCommit) : [])
-    .catch(() => []);
+  return (commitsPromise ||= fetch('/main/data/commits.json')
+    .then(async (response) =>
+      response.ok ? ((await response.json()) as unknown) : [],
+    )
+    .then((value) => (Array.isArray(value) ? value.filter(isCommit) : []))
+    .catch(() => []));
 }
 
 function commitRow(commit: Commit): HTMLAnchorElement {
@@ -56,9 +64,12 @@ async function initHome(): Promise<void> {
 
   const commits = await loadCommits();
   const fallback = Object.assign(document.createElement('p'), {
-    className: 'home-status', textContent: 'No recent commits available',
+    className: 'home-status',
+    textContent: 'No recent commits available',
   });
-  list.replaceChildren(...(commits.length ? commits.map(commitRow) : [fallback]));
+  list.replaceChildren(
+    ...(commits.length ? commits.map(commitRow) : [fallback]),
+  );
   root.setAttribute('aria-busy', 'false');
 }
 

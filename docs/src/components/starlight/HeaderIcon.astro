@@ -7,14 +7,25 @@ import telescope from '../../../../public/main/icons/ui/telescope.svg?raw';
 import zen from '../../../../public/main/icons/ui/zen.svg?raw';
 import zenExit from '../../../../public/main/icons/ui/zen-exit.svg?raw';
 
-const icons = { discord, github, home, repo, telescope, zen, 'zen-exit': zenExit };
+const icons = {
+  discord,
+  github,
+  home,
+  repo,
+  telescope,
+  zen,
+  'zen-exit': zenExit,
+};
 
 interface Props {
   name: keyof typeof icons;
 }
 
 const { name } = Astro.props;
-const svg = icons[name].replace('<svg', '<svg aria-hidden="true" class="nv-header-icon"');
+const svg = icons[name].replace(
+  '<svg',
+  '<svg aria-hidden="true" class="nv-header-icon"',
+);
 ---
 
 <Fragment set:html={svg} />

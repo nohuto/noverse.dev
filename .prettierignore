@@ -1,0 +1,12 @@
+/node_modules/
+/dist/
+/.astro/
+/sources/
+/public/
+/src/image-sources/
+/src/data/*.json
+/docs/node_modules/
+/docs/.astro/
+/docs/.cache/
+/docs/public/
+/docs/src/content/docs/

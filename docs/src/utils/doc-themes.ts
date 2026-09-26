@@ -41,8 +41,4 @@ export const docsLightThemeIds = docsThemes
   .filter((theme) => theme.scheme === 'light')
   .map((theme) => theme.id);
 
-export const docsDefaultThemes = {
-  dark: 'gruvbox-dark',
-  light: 'catppuccin-latte',
-} as const;
-
+export const docsDefaultTheme = 'gruvbox-dark';

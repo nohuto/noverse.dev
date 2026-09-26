@@ -6,48 +6,70 @@
   const DEFAULT_LEFT_RELEASE = '11-23H2';
   const DEFAULT_RIGHT_RELEASE = '11-24H2';
   const DEFAULT_MODULE = 'ntoskrnl';
-  const SETTINGS_DEFAULTS: { hideDecimalValue: boolean; hideMetadata: boolean } = { hideDecimalValue: false, hideMetadata: false };
+  const SETTINGS_DEFAULTS: {
+    hideDecimalValue: boolean;
+    hideMetadata: boolean;
+  } = { hideDecimalValue: false, hideMetadata: false };
   const settingsStore = global.createNVDiffSettingsStore({
     key: SETTINGS_KEY,
     defaults: SETTINGS_DEFAULTS,
-    normalize: candidate => ({
+    normalize: (candidate) => ({
       hideDecimalValue: Boolean(candidate?.hideDecimalValue),
-      hideMetadata: Boolean(candidate?.hideMetadata)
-    })
+      hideMetadata: Boolean(candidate?.hideMetadata),
+    }),
   });
   const source = global.createNVDiffManifestSource({
     repository: 'nohuto/globals',
     dataset: 'globals',
     cacheKey: 'nv-diff-globals-name-cache-v1',
-    displayName: fileName => String(fileName || '').replace(/\.cpp$/i, '')
+    displayName: (fileName) => String(fileName || '').replace(/\.cpp$/i, ''),
   });
 
   const readSettings = settingsStore.read;
   const writeSettings = settingsStore.write;
   const resetSettings = settingsStore.reset;
 
-  const prepareSource = sourceText => {
+  const prepareSource = (sourceText) => {
     const settings = readSettings();
     let text = String(sourceText || '').replace(/\r\n?/g, '\n');
     if (settings.hideMetadata) {
-      text = text.replace(/^\/\/[ \t]*(?:RVA\b|PE[ \t]+section\b|Type:).*?(?:\n|$)/gim, '');
+      text = text.replace(
+        /^\/\/[ \t]*(?:RVA\b|PE[ \t]+section\b|Type:).*?(?:\n|$)/gim,
+        '',
+      );
     }
     if (settings.hideDecimalValue) {
-      text = text.replace(/[ \t]+\/\/[ \t]*[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?[ \t]*$/gim, '');
+      text = text.replace(
+        /[ \t]+\/\/[ \t]*[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?[ \t]*$/gim,
+        '',
+      );
     }
-    return `${text.replace(/^\n+/, '').replace(/[ \t]+$/gm, '').trimEnd()}\n`;
+    return `${text
+      .replace(/^\n+/, '')
+      .replace(/[ \t]+$/gm, '')
+      .trimEnd()}\n`;
   };
 
   const renderSettings = (body, onChange) => {
     const settings = readSettings();
     body.replaceChildren();
-    const hideDecimalValue = settingsStore.addCheckbox(body, 'diff-setting-hide-decimal-value', 'Hide decimal value', settings.hideDecimalValue);
-    const hideMetadata = settingsStore.addCheckbox(body, 'diff-setting-hide-global-metadata', 'Hide RVA, PE section, type', settings.hideMetadata);
-    [hideDecimalValue, hideMetadata].forEach(input => {
+    const hideDecimalValue = settingsStore.addCheckbox(
+      body,
+      'diff-setting-hide-decimal-value',
+      'Hide decimal value',
+      settings.hideDecimalValue,
+    );
+    const hideMetadata = settingsStore.addCheckbox(
+      body,
+      'diff-setting-hide-global-metadata',
+      'Hide RVA, PE section, type',
+      settings.hideMetadata,
+    );
+    [hideDecimalValue, hideMetadata].forEach((input) => {
       input.addEventListener('change', () => {
         writeSettings({
           hideDecimalValue: hideDecimalValue.checked,
-          hideMetadata: hideMetadata.checked
+          hideMetadata: hideMetadata.checked,
         });
         onChange();
       });
@@ -61,7 +83,8 @@
       leftText,
       rightText,
       equivalent: false,
-      context: Math.max(leftText.split('\n').length, rightText.split('\n').length) + 2
+      context:
+        Math.max(leftText.split('\n').length, rightText.split('\n').length) + 2,
     };
   };
 
@@ -75,7 +98,7 @@
     prepareSingle: prepareSource,
     renderSettings,
     resetSettings,
-    highlightBlockComments: false
+    highlightBlockComments: false,
   };
 })(window);
 export {};

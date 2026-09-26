@@ -20,7 +20,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     '  \\  |                                    ',
     '   \\ |   _ \\ \\ \\   /  _ \\   __|  __|   _ \\',
     ' |\\  |  (   | \\ \\ /   __/  |   \\__ \\   __/',
-    '_| \\_| \\___/   \\_/  \\___| _|   ____/ \\___|'
+    '_| \\_| \\___/   \\_/  \\___| _|   ____/ \\___|',
   ];
 
   const GITHUB_URL = 'https://github.com/nohuto';
@@ -45,7 +45,13 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     if (!parent) return;
     const compactMedia = window.matchMedia('(max-width: 720px)');
     let mode = '';
-    let desktopGeometry: { left: number; top: number; width: number; height: number; userPositioned: boolean } | null = null;
+    let desktopGeometry: {
+      left: number;
+      top: number;
+      width: number;
+      height: number;
+      userPositioned: boolean;
+    } | null = null;
     let positionTries = 0;
     let syncSizeRaf = 0;
 
@@ -53,13 +59,19 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       const rect = parent.getBoundingClientRect();
       return {
         width: Math.max(0, parent.clientWidth || rect.width || 0),
-        height: Math.max(0, parent.clientHeight || rect.height || 0)
+        height: Math.max(0, parent.clientHeight || rect.height || 0),
       };
     };
 
     const getWindowSize = () => ({
-      width: Math.max(0, windowEl.offsetWidth || windowEl.getBoundingClientRect().width || 0),
-      height: Math.max(0, windowEl.offsetHeight || windowEl.getBoundingClientRect().height || 0)
+      width: Math.max(
+        0,
+        windowEl.offsetWidth || windowEl.getBoundingClientRect().width || 0,
+      ),
+      height: Math.max(
+        0,
+        windowEl.offsetHeight || windowEl.getBoundingClientRect().height || 0,
+      ),
     });
 
     const getMetrics = () => {
@@ -71,15 +83,20 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         windowWidth: windowSize.width,
         windowHeight: windowSize.height,
         maxLeft: Math.max(0, parentSize.width - windowSize.width),
-        maxTop: Math.max(0, parentSize.height - windowSize.height)
+        maxTop: Math.max(0, parentSize.height - windowSize.height),
       };
     };
 
-    const isAbsoluteWindow = () => getComputedStyle(windowEl).position === 'absolute';
+    const isAbsoluteWindow = () =>
+      getComputedStyle(windowEl).position === 'absolute';
 
-    const hasMetrics = metrics => metrics.parentWidth && metrics.parentHeight && metrics.windowWidth && metrics.windowHeight;
+    const hasMetrics = (metrics) =>
+      metrics.parentWidth &&
+      metrics.parentHeight &&
+      metrics.windowWidth &&
+      metrics.windowHeight;
 
-    const getSavedNumber = value => {
+    const getSavedNumber = (value) => {
       const number = Number.parseFloat(value);
       return Number.isFinite(number) ? number : null;
     };
@@ -88,11 +105,14 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       const parentRect = parent.getBoundingClientRect();
       const rect = windowEl.getBoundingClientRect();
       return {
-        left: getSavedNumber(windowEl.style.left) ?? rect.left - parentRect.left,
+        left:
+          getSavedNumber(windowEl.style.left) ?? rect.left - parentRect.left,
         top: getSavedNumber(windowEl.style.top) ?? rect.top - parentRect.top,
         width: windowEl.offsetWidth,
         height: windowEl.offsetHeight,
-        userPositioned: windowEl.dataset.userPositioned === 'true' || Boolean(windowEl.style.width || windowEl.style.height)
+        userPositioned:
+          windowEl.dataset.userPositioned === 'true' ||
+          Boolean(windowEl.style.width || windowEl.style.height),
       };
     };
 
@@ -269,7 +289,10 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
 
     if (consoleResizeHandler) {
       window.removeEventListener('resize', consoleResizeHandler);
-      window.visualViewport?.removeEventListener('resize', consoleResizeHandler);
+      window.visualViewport?.removeEventListener(
+        'resize',
+        consoleResizeHandler,
+      );
     }
     if (consolePageShowHandler) {
       window.removeEventListener('pageshow', consolePageShowHandler);
@@ -279,7 +302,10 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     }
     if (consoleModeMedia && consoleModeChangeHandler) {
       if (consoleModeMedia.removeEventListener) {
-        consoleModeMedia.removeEventListener('change', consoleModeChangeHandler);
+        consoleModeMedia.removeEventListener(
+          'change',
+          consoleModeChangeHandler,
+        );
       } else {
         consoleModeMedia.removeListener?.(consoleModeChangeHandler);
       }
@@ -301,7 +327,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
 
     syncMode();
 
-    handle.addEventListener('pointerdown', e => {
+    handle.addEventListener('pointerdown', (e) => {
       if (e.button !== 0) return;
       if (mode !== 'floating' || !isAbsoluteWindow()) return;
       e.preventDefault();
@@ -333,7 +359,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         windowEl.style.transform = `translate3d(${nextLeft - startLeft}px, ${nextTop - startTop}px, 0)`;
       };
 
-      const onMove = ev => {
+      const onMove = (ev) => {
         pendingX = ev.clientX;
         pendingY = ev.clientY;
         if (rafId) return;
@@ -370,13 +396,28 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     const consoleRoot = document.getElementById('console');
     const output = document.getElementById('console-output');
     const lines = document.getElementById('console-lines');
-    const form = document.getElementById('console-form') as HTMLFormElement | null;
-    const input = document.getElementById('console-command') as HTMLInputElement | null;
+    const form = document.getElementById(
+      'console-form',
+    ) as HTMLFormElement | null;
+    const input = document.getElementById(
+      'console-command',
+    ) as HTMLInputElement | null;
     const previewText = document.getElementById('console-preview-text');
     const suggestion = document.getElementById('console-suggestion');
     const caret = document.getElementById('console-cursor');
     const measure = document.getElementById('console-measure');
-    if (!consoleRoot || !output || !lines || !form || !input || !previewText || !suggestion || !caret || !measure) return;
+    if (
+      !consoleRoot ||
+      !output ||
+      !lines ||
+      !form ||
+      !input ||
+      !previewText ||
+      !suggestion ||
+      !caret ||
+      !measure
+    )
+      return;
     if (consoleRoot.dataset.ready === 'true') return;
     consoleRoot.dataset.ready = 'true';
 
@@ -396,26 +437,36 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     let promptMetricsDirty = true;
     let caretRaf = 0;
     let pendingLineFragment: DocumentFragment | null = null;
-    let measureState: { width: number; font: string; lineHeight: string; lineHeightPx: number; promptIndent: string | null } = {
+    let measureState: {
+      width: number;
+      font: string;
+      lineHeight: string;
+      lineHeightPx: number;
+      promptIndent: string | null;
+    } = {
       width: 0,
       font: '',
       lineHeight: '',
       lineHeightPx: 0,
-      promptIndent: null
+      promptIndent: null,
     };
     const measureText = document.createTextNode('');
     const measureMarker = document.createElement('span');
     measureMarker.textContent = '\u200b';
     measure.append(measureText, measureMarker);
 
-    const setInputActive = active => {
+    const setInputActive = (active) => {
       consoleRoot.dataset.inputActive = active ? 'true' : 'false';
     };
 
     const outputHasSelection = () => {
       const selection = window.getSelection();
-      if (!selection || selection.isCollapsed || !selection.toString()) return false;
-      return output.contains(selection.anchorNode) || output.contains(selection.focusNode);
+      if (!selection || selection.isCollapsed || !selection.toString())
+        return false;
+      return (
+        output.contains(selection.anchorNode) ||
+        output.contains(selection.focusNode)
+      );
     };
 
     const invalidatePromptMetrics = () => {
@@ -423,7 +474,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       measureState.promptIndent = null;
     };
 
-    const formatDisplayPath = path => {
+    const formatDisplayPath = (path) => {
       if (path === rootPath) return rootPath;
       if (path === DOCS_ROOT_PATH) return '~/docs';
       if (String(path || '').startsWith(`${DOCS_ROOT_PATH}/`)) {
@@ -454,13 +505,19 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       return promptIndent;
     };
 
-    const promptLabel = () => `${promptUser}@${promptHost}:${formatDisplayPath(currentPath)}$`;
+    const promptLabel = () =>
+      `${promptUser}@${promptHost}:${formatDisplayPath(currentPath)}$`;
 
     const updateTimestamp = () => {
       if (!timestampEl) return;
       const now = new Date();
-      const day = new Intl.DateTimeFormat(undefined, { weekday: 'long' }).format(now);
-      const time = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(now);
+      const day = new Intl.DateTimeFormat(undefined, {
+        weekday: 'long',
+      }).format(now);
+      const time = new Intl.DateTimeFormat(undefined, {
+        hour: 'numeric',
+        minute: '2-digit',
+      }).format(now);
       timestampEl.textContent = `${day} at ${time}`;
     };
 
@@ -481,20 +538,27 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         const seed = cdMatch[1];
         if (!seed) return '';
         const useBackslash = seed.startsWith('.\\');
-        const options = listDirs().map(option => useBackslash ? option.replace(/\//g, '\\') : option);
-        const match = options.find(option => option.startsWith(seed));
+        const options = listDirs().map((option) =>
+          useBackslash ? option.replace(/\//g, '\\') : option,
+        );
+        const match = options.find((option) => option.startsWith(seed));
         return match ? `cd ${match}` : '';
       }
-      if ((head === 'theme' || head === 'bg') && (parts.length > 1 || hasTrailingSpace)) {
+      if (
+        (head === 'theme' || head === 'bg') &&
+        (parts.length > 1 || hasTrailingSpace)
+      ) {
         const seed = parts.length > 1 ? parts.slice(1).join(' ') : '';
         const options = head === 'theme' ? listThemes() : listBackgrounds();
-        const match = options.find(option => option.startsWith(seed));
+        const match = options.find((option) => option.startsWith(seed));
         return match ? `${head} ${match}` : '';
       }
       if (parts.length > 1) return '';
-      const commandMatch = commandNames.find(option => option.startsWith(head));
+      const commandMatch = commandNames.find((option) =>
+        option.startsWith(head),
+      );
       if (commandMatch) return commandMatch;
-      return aliasNames.find(option => option.startsWith(head)) || '';
+      return aliasNames.find((option) => option.startsWith(head)) || '';
     };
 
     const updateSuggestion = (value, pos) => {
@@ -504,7 +568,11 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         return;
       }
       const completion = getCompletion();
-      if (!completion || completion === value || !completion.startsWith(value)) {
+      if (
+        !completion ||
+        completion === value ||
+        !completion.startsWith(value)
+      ) {
         suggestion.textContent = '';
         return;
       }
@@ -539,7 +607,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
           font,
           lineHeight,
           lineHeightPx: Number.parseFloat(lineHeight) || input.offsetHeight,
-          promptIndent
+          promptIndent,
         };
       }
       return measureState;
@@ -553,7 +621,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       return {
         left: markerRect.left - measureRect.left,
         top: markerRect.top - measureRect.top,
-        lineHeight: metrics.lineHeightPx
+        lineHeight: metrics.lineHeightPx,
       };
     };
 
@@ -561,7 +629,10 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       updatePromptIndent();
       resizeInput();
       const value = input.value;
-      const pos = typeof input.selectionStart === 'number' ? input.selectionStart : value.length;
+      const pos =
+        typeof input.selectionStart === 'number'
+          ? input.selectionStart
+          : value.length;
       const caretBox = measureCaret(value, pos);
       const caretHeight = Math.round(caretBox.lineHeight * CARET_HEIGHT_RATIO);
       caret.style.left = `${caretBox.left + 1}px`;
@@ -578,7 +649,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       });
     };
 
-    const appendConsoleLine = line => {
+    const appendConsoleLine = (line) => {
       if (pendingLineFragment) {
         pendingLineFragment.appendChild(line);
         return;
@@ -587,7 +658,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       scrollToBottom();
     };
 
-    const withLineBatch = callback => {
+    const withLineBatch = (callback) => {
       const previousFragment = pendingLineFragment;
       const fragment = document.createDocumentFragment();
       pendingLineFragment = fragment;
@@ -611,14 +682,18 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       appendConsoleLine(line);
     };
 
-    const addLineParts = (parts: { text: string; className?: string }[], className = '') => {
+    const addLineParts = (
+      parts: { text: string; className?: string }[],
+      className = '',
+    ) => {
       const line = document.createElement('div');
       line.className = className ? `console-line ${className}` : 'console-line';
-      parts.forEach(part => {
+      parts.forEach((part) => {
         const span = document.createElement('span');
         span.textContent = part.text;
         if (part.className) span.className = part.className;
-        if (URL_PATTERN.test(part.text || '')) span.classList.add('console-url');
+        if (URL_PATTERN.test(part.text || ''))
+          span.classList.add('console-url');
         line.appendChild(span);
       });
       appendConsoleLine(line);
@@ -633,10 +708,10 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     };
 
     const addIndentedLines = (items: string[], className = '') => {
-      items.forEach(item => addLine(`  ${item}`, className));
+      items.forEach((item) => addLine(`  ${item}`, className));
     };
 
-    const parseAnimationDimension = value => {
+    const parseAnimationDimension = (value) => {
       if (value == null || value === '') return null;
       const normalized = String(value).trim().toLowerCase();
       if (!normalized) return null;
@@ -646,26 +721,39 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       return Number.isFinite(parsed) && parsed > 0 ? parsed : Number.NaN;
     };
 
-    const startTrippyAnimation = async (requestedWidth: number | null = null, requestedHeight: number | null = null) => {
+    const startTrippyAnimation = async (
+      requestedWidth: number | null = null,
+      requestedHeight: number | null = null,
+    ) => {
       try {
         const { startTerminalAnimation } = await import('./animation');
-        startTerminalAnimation({
-          output, form, addNodeLine, addLine, scrollToBottom,
-          stop: stopConsoleAnimation,
-          setCleanup: cleanup => { consoleAnimationCleanup = cleanup; }
-        }, requestedWidth, requestedHeight);
+        startTerminalAnimation(
+          {
+            output,
+            form,
+            addNodeLine,
+            addLine,
+            scrollToBottom,
+            stop: stopConsoleAnimation,
+            setCleanup: (cleanup) => {
+              consoleAnimationCleanup = cleanup;
+            },
+          },
+          requestedWidth,
+          requestedHeight,
+        );
       } catch {
         addLine('animation unavailable', 'muted');
       }
     };
 
-    const extractFirstUrl = text => {
+    const extractFirstUrl = (text) => {
       if (!text) return null;
       const match = text.match(URL_PATTERN);
       return match ? match[0] : null;
     };
 
-    const openConsoleUrlFromEvent = event => {
+    const openConsoleUrlFromEvent = (event) => {
       if (!(event.ctrlKey || event.metaKey)) return false;
       const target = event.target instanceof Element ? event.target : null;
       if (!target) return false;
@@ -675,7 +763,9 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
 
       const span = target.closest('span');
       const line = target.closest('.console-line');
-      const url = extractFirstUrl(span?.textContent || '') || extractFirstUrl(line?.textContent || '');
+      const url =
+        extractFirstUrl(span?.textContent || '') ||
+        extractFirstUrl(line?.textContent || '');
       if (!url) return false;
 
       event.preventDefault();
@@ -683,8 +773,11 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       return true;
     };
 
-    const addKeyValueLines = entries => {
-      const width = entries.reduce((max, [key]) => Math.max(max, key.length), 0);
+    const addKeyValueLines = (entries) => {
+      const width = entries.reduce(
+        (max, [key]) => Math.max(max, key.length),
+        0,
+      );
       entries.forEach(([key, value]) => {
         if (!value) {
           addLine(`  ${key}`);
@@ -692,26 +785,37 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         }
         addLineParts([
           { text: `  ${key.padEnd(width + 2)}` },
-          { text: value, className: 'console-comment' }
+          { text: value, className: 'console-comment' },
         ]);
       });
     };
 
-    const initFloatingTool = ({ layer, dialog, handle, closeButton, hash, focusTarget }: FloatingToolConfig) => {
+    const initFloatingTool = ({
+      layer,
+      dialog,
+      handle,
+      closeButton,
+      hash,
+      focusTarget,
+    }: FloatingToolConfig) => {
       const dialogManager = window.NV_CREATE_DRAGGABLE_DIALOG_MANAGER?.({
         layer,
         dialog,
         handle,
         resizeHandle: dialog.querySelector<HTMLElement>('.tool-resize-handle'),
         margin: 12,
-        topBiased: true
+        topBiased: true,
       });
       const targetHash = `#${hash}`;
       const isHashActive = () => location.hash.toLowerCase() === targetHash;
-      const syncHash = active => {
+      const syncHash = (active) => {
         if (active === isHashActive()) return;
         const nextHash = active ? targetHash : '';
-        history.replaceState(history.state, '', `${location.pathname}${location.search}${nextHash}`);
+        history.replaceState(
+          history.state,
+          '',
+          `${location.pathname}${location.search}${nextHash}`,
+        );
       };
       const close = (syncUrl = true) => {
         if (syncUrl) syncHash(false);
@@ -722,10 +826,10 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         if (!layer.hidden) return;
         dialogManager?.open({ initialFocus: focusTarget?.() });
       };
-      const onLayerClick = event => {
+      const onLayerClick = (event) => {
         if (event.target === layer) close();
       };
-      const onKeyDown = event => {
+      const onKeyDown = (event) => {
         if (event.key === 'Escape' && !layer.hidden) close();
       };
       const onHashChange = () => {
@@ -748,11 +852,15 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
           document.removeEventListener('keydown', onKeyDown);
           window.removeEventListener('hashchange', onHashChange);
           dialogManager?.destroy();
-        }
+        },
       };
     };
 
-    const createLazyTool = (load: () => Promise<unknown>, globalName: 'NoverseBitmask' | 'NoverseCalculator', createOptions: () => TerminalToolContext) => {
+    const createLazyTool = (
+      load: () => Promise<unknown>,
+      globalName: 'NoverseBitmask' | 'NoverseCalculator',
+      createOptions: () => TerminalToolContext,
+    ) => {
       let open: (() => void) | null = null;
       return async () => {
         try {
@@ -769,27 +877,34 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     const openBitmaskTool = createLazyTool(
       () => import('./bitmask'),
       'NoverseBitmask',
-      () => ({ initFloatingTool, clampNumber })
+      () => ({ initFloatingTool, clampNumber }),
     );
     const openCalculatorTool = createLazyTool(
       () => import('./calculator'),
       'NoverseCalculator',
-      () => ({ initFloatingTool, clampNumber })
+      () => ({ initFloatingTool, clampNumber }),
     );
 
-    const mainRoutes = Array.isArray(window.NV_MAIN_ROUTES) ? window.NV_MAIN_ROUTES : [];
-    const NAV_MAP = Object.fromEntries(mainRoutes.map(route => [route.slug, route.clean]));
+    const mainRoutes = Array.isArray(window.NV_MAIN_ROUTES)
+      ? window.NV_MAIN_ROUTES
+      : [];
+    const NAV_MAP = Object.fromEntries(
+      mainRoutes.map((route) => [route.slug, route.clean]),
+    );
     const rootDirectories = [
-      ...mainRoutes.filter(route => route.slug !== 'terminal').map(route => route.slug),
-      'docs'
+      ...mainRoutes
+        .filter((route) => route.slug !== 'terminal')
+        .map((route) => route.slug),
+      'docs',
     ];
-    const normalizePath = input => (input || '').replace(/\\/g, '/').trim();
-    const trimSlashes = value => (value || '').replace(/^\/+|\/+$/g, '');
+    const normalizePath = (input) => (input || '').replace(/\\/g, '/').trim();
+    const trimSlashes = (value) => (value || '').replace(/^\/+|\/+$/g, '');
 
-    const resolvePath = input => {
+    const resolvePath = (input) => {
       if (!input) return rootPath;
       let raw = normalizePath(input);
-      if (!raw || raw === '~' || raw === '/' || raw === rootPath) return rootPath;
+      if (!raw || raw === '~' || raw === '/' || raw === rootPath)
+        return rootPath;
       if (raw === '.' || raw === './' || raw === '.\\') return currentPath;
       if (raw === '..' || raw.startsWith('../')) return rootPath;
       if (raw.startsWith('~/')) raw = raw.slice(2);
@@ -821,19 +936,28 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       return ['..'];
     };
 
-    const navigateToPath = nextPath => {
-      if (nextPath === DOCS_ROOT_PATH || nextPath.startsWith(`${DOCS_ROOT_PATH}/`)) {
-        const docsRelative = nextPath === DOCS_ROOT_PATH ? '' : nextPath.slice(DOCS_ROOT_PATH.length + 1);
+    const navigateToPath = (nextPath) => {
+      if (
+        nextPath === DOCS_ROOT_PATH ||
+        nextPath.startsWith(`${DOCS_ROOT_PATH}/`)
+      ) {
+        const docsRelative =
+          nextPath === DOCS_ROOT_PATH
+            ? ''
+            : nextPath.slice(DOCS_ROOT_PATH.length + 1);
         const cleanRelative = trimSlashes(docsRelative);
         const target = cleanRelative ? `/docs/${cleanRelative}/` : '/docs/';
         const currentPathname = location.pathname || '/';
-        const normalizedCurrent = currentPathname.endsWith('/') ? currentPathname : `${currentPathname}/`;
+        const normalizedCurrent = currentPathname.endsWith('/')
+          ? currentPathname
+          : `${currentPathname}/`;
         if (normalizedCurrent === target) return;
         location.href = target;
         return;
       }
 
-      const segment = nextPath === rootPath ? 'terminal' : nextPath.split('/').pop();
+      const segment =
+        nextPath === rootPath ? 'terminal' : nextPath.split('/').pop();
       const target = NAV_MAP[segment];
       if (!target) return;
       const currentPath = location.pathname.replace(/\/+$/g, '') || '/';
@@ -859,10 +983,10 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       cabout: 'about',
       calculator: 'calc',
       quit: 'exit',
-      '..': 'cd ..'
+      '..': 'cd ..',
     });
 
-    const expandAlias = input => {
+    const expandAlias = (input) => {
       const parts = input.trim().split(/\s+/);
       const key = parts[0];
       const expansion = aliases[key];
@@ -872,9 +996,11 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     };
 
     const listThemes = () => {
-      const select = document.getElementById('theme-select') as HTMLSelectElement | null;
+      const select = document.getElementById(
+        'theme-select',
+      ) as HTMLSelectElement | null;
       if (!select) return [];
-      return Array.from(select.options).map(option => option.value);
+      return Array.from(select.options).map((option) => option.value);
     };
 
     const listBackgrounds = () => {
@@ -898,13 +1024,16 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
           ['themes', 'list theme names'],
           ['theme <name>', 'set theme'],
           ['ascii', 'print the banner'],
-          ['animation [x y]', 'some cool animation (x,y = pixels)']
+          ['animation [x y]', 'some cool animation (x,y = pixels)'],
         ];
-        const width = entries.reduce((max, [cmd]) => Math.max(max, cmd.length), 0);
+        const width = entries.reduce(
+          (max, [cmd]) => Math.max(max, cmd.length),
+          0,
+        );
         entries.forEach(([cmd, desc]) => {
           addLineParts([
             { text: `  ${cmd.padEnd(width + 2)}` },
-            { text: desc, className: 'console-comment' }
+            { text: desc, className: 'console-comment' },
           ]);
         });
       },
@@ -914,7 +1043,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
           ['name', 'nohuto (Discord: ".nohuto", 836853057235976232)'],
           ['proprietor', 'Noverse'],
           ['github', GITHUB_URL],
-          ['discord', DISCORD_URL]
+          ['discord', DISCORD_URL],
         ]);
       },
       bitmask: openBitmaskTool,
@@ -923,7 +1052,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         addLine('contact:');
         addKeyValueLines([
           ['email', 'use the footer icon to copy it'],
-          ['discord', DISCORD_URL]
+          ['discord', DISCORD_URL],
         ]);
       },
       github: () => {
@@ -933,7 +1062,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         location.href = DISCORD_URL;
       },
       ascii: () => {
-        ASCII_ART.forEach(line => addLine(line, 'art'));
+        ASCII_ART.forEach((line) => addLine(line, 'art'));
       },
       ls: () => {
         const entries = listDirs();
@@ -946,7 +1075,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       pwd: () => {
         addLine(formatDisplayPath(currentPath));
       },
-      cd: args => {
+      cd: (args) => {
         const target = args.join(' ');
         const nextPath = resolvePath(target);
         if (!nextPath) {
@@ -961,11 +1090,13 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         addLine('themes:', 'muted');
         addIndentedLines(listThemes());
       },
-      bg: args => {
+      bg: (args) => {
         const backgrounds = listBackgrounds();
         if (!backgrounds.length) return;
         if (!args.length) {
-          addLine(`current bg: ${document.documentElement.getAttribute('data-bg') || 'crosshatch'}`);
+          addLine(
+            `current bg: ${document.documentElement.getAttribute('data-bg') || 'crosshatch'}`,
+          );
           addLine('backgrounds:', 'muted');
           addIndentedLines(backgrounds);
           return;
@@ -975,20 +1106,25 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
           addLine(`bg not found: ${next}`, 'muted');
           return;
         }
-        const applied = typeof window.NV_APPLY_BACKGROUND === 'function'
-          ? window.NV_APPLY_BACKGROUND(next)
-          : next;
+        const applied =
+          typeof window.NV_APPLY_BACKGROUND === 'function'
+            ? window.NV_APPLY_BACKGROUND(next)
+            : next;
         addLine(`bg set: ${applied}`);
       },
-      theme: args => {
-        const select = document.getElementById('theme-select') as HTMLSelectElement | null;
+      theme: (args) => {
+        const select = document.getElementById(
+          'theme-select',
+        ) as HTMLSelectElement | null;
         if (!select) return;
         if (!args.length) {
           addLine(`current theme: ${select.value}`);
           return;
         }
         const next = args.join(' ').trim();
-        if (!Array.from(select.options).some(option => option.value === next)) {
+        if (
+          !Array.from(select.options).some((option) => option.value === next)
+        ) {
           addLine(`theme not found: ${next}`, 'muted');
           return;
         }
@@ -996,10 +1132,14 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         select.dispatchEvent(new Event('change', { bubbles: true }));
         addLine(`theme set: ${next}`);
       },
-      animation: args => {
+      animation: (args) => {
         const requestedWidth = parseAnimationDimension(args[0]);
         const requestedHeight = parseAnimationDimension(args[1]);
-        if (Number.isNaN(requestedWidth) || Number.isNaN(requestedHeight) || args.length > 2) {
+        if (
+          Number.isNaN(requestedWidth) ||
+          Number.isNaN(requestedHeight) ||
+          args.length > 2
+        ) {
           addLine('usage: animation [width] [height]', 'muted');
           addLine('example: animation 900 180', 'muted');
           return;
@@ -1017,15 +1157,17 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         location.href = '/';
       },
     };
-    const commandNames = Object.keys(commands).sort((a, b) => a.localeCompare(b));
+    const commandNames = Object.keys(commands).sort((a, b) =>
+      a.localeCompare(b),
+    );
     const aliasNames = Object.keys(aliases).sort((a, b) => a.localeCompare(b));
 
-    const runCommand = async raw => {
+    const runCommand = async (raw) => {
       const trimmed = raw.trim();
       if (!trimmed) return;
       addLineParts([
         { text: `${promptLabel()} `, className: 'console-prompt-text' },
-        { text: trimmed, className: 'console-muted' }
+        { text: trimmed, className: 'console-muted' },
       ]);
       const expanded = expandAlias(trimmed);
       const parts = expanded.split(' ').filter(Boolean);
@@ -1046,7 +1188,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       updateCaret();
     };
 
-    form.addEventListener('submit', async e => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const value = input.value;
       if (value.trim()) {
@@ -1059,7 +1201,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       scrollToBottom();
     });
 
-    ['input', 'keyup', 'click', 'focus'].forEach(eventName => {
+    ['input', 'keyup', 'click', 'focus'].forEach((eventName) => {
       input.addEventListener(eventName, scheduleCaretUpdate);
     });
     input.addEventListener('focus', () => {
@@ -1070,7 +1212,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       setInputActive(false);
     });
 
-    input.addEventListener('keydown', e => {
+    input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         form.requestSubmit();
@@ -1079,7 +1221,10 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       if (e.key === 'Tab' || e.key === 'ArrowRight') {
         if (e.key === 'ArrowRight') {
           const value = input.value;
-          const pos = typeof input.selectionStart === 'number' ? input.selectionStart : value.length;
+          const pos =
+            typeof input.selectionStart === 'number'
+              ? input.selectionStart
+              : value.length;
           const completion = getCompletion();
           const canApply =
             pos === value.length &&
@@ -1102,31 +1247,47 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         if (consoleHistory.length === 0) return;
-        consoleHistoryIndex = Math.min(consoleHistory.length, consoleHistoryIndex + 1);
+        consoleHistoryIndex = Math.min(
+          consoleHistory.length,
+          consoleHistoryIndex + 1,
+        );
         input.value = consoleHistory[consoleHistoryIndex] || '';
         scheduleCaretUpdate();
       }
     });
 
-    output.addEventListener('pointerdown', event => {
+    output.addEventListener('pointerdown', (event) => {
       if (event.button !== 0) return;
       input.blur();
       setInputActive(false);
     });
 
-    output.addEventListener('click', event => {
+    output.addEventListener('click', (event) => {
       if (openConsoleUrlFromEvent(event)) return;
       if (outputHasSelection()) return;
       input.focus();
     });
 
     if (!consoleFocusListener) {
-      consoleFocusListener = e => {
+      consoleFocusListener = (e) => {
         const activeInput = document.getElementById('console-command');
         if (!activeInput) return;
-        if (e.ctrlKey || e.metaKey || e.altKey || ['Control', 'Meta', 'Alt', 'Shift'].includes(e.key)) return;
+        if (
+          e.ctrlKey ||
+          e.metaKey ||
+          e.altKey ||
+          ['Control', 'Meta', 'Alt', 'Shift'].includes(e.key)
+        )
+          return;
         const target = e.target;
-        if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.tagName === 'BUTTON' || target.isContentEditable)) {
+        if (
+          target &&
+          (target.tagName === 'INPUT' ||
+            target.tagName === 'TEXTAREA' ||
+            target.tagName === 'SELECT' ||
+            target.tagName === 'BUTTON' ||
+            target.isContentEditable)
+        ) {
           return;
         }
         activeInput.focus({ preventScroll: true });
@@ -1156,9 +1317,12 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     }
 
     withLineBatch(() => {
-      ASCII_ART.forEach(line => addLine(line, 'art'));
+      ASCII_ART.forEach((line) => addLine(line, 'art'));
       addLine(' ');
-      addLine('A yet minimal terminal for navigation, customization, and webtools. Use the top sections if it feels unfamiliar.', 'muted');
+      addLine(
+        'A yet minimal terminal for navigation, customization, and webtools. Use the top sections if it feels unfamiliar.',
+        'muted',
+      );
       addLine(' ');
       commands.help([]);
     });

@@ -1,11 +1,36 @@
 ---
 import type { Project } from '../../data/projects';
-interface Props { project: Project }
+interface Props {
+  project: Project;
+}
 const { project } = Astro.props;
 const source = project.image;
 ---
+
 {project.video ? (
-  <video class="project-media" src={`/main/media/projects/${project.video}.mp4`} poster={`/main/images/projects/posters/${project.video}.webp`} width="2560" height="1440" controls preload="none" playsinline muted></video>
+  <video
+    class="project-media"
+    src={`/main/media/projects/${project.video}.mp4`}
+    poster={`/main/images/projects/posters/${project.video}.webp`}
+    width="2560"
+    height="1440"
+    controls
+    preload="none"
+    playsinline
+    muted
+  ></video>
 ) : source ? (
-  <img decoding="async" class="project-media-img" src={`${source}-640.webp`} srcset={`${source}-480.webp 480w, ${source}-640.webp 640w, ${source}-960.webp 960w`} sizes="(max-width: 700px) calc(100vw - 48px), (max-width: 1100px) 50vw, 430px" width={project.width} height={project.height} alt="" fetchpriority={project.priority ? 'high' : undefined} loading={project.priority ? undefined : 'lazy'} referrerpolicy={project.repo ? 'no-referrer' : undefined} />
+  <img
+    decoding="async"
+    class="project-media-img"
+    src={`${source}-640.webp`}
+    srcset={`${source}-480.webp 480w, ${source}-640.webp 640w, ${source}-960.webp 960w`}
+    sizes="(max-width: 700px) calc(100vw - 48px), (max-width: 1100px) 50vw, 430px"
+    width={project.width}
+    height={project.height}
+    alt=""
+    fetchpriority={project.priority ? 'high' : undefined}
+    loading={project.priority ? undefined : 'lazy'}
+    referrerpolicy={project.repo ? 'no-referrer' : undefined}
+  />
 ) : null}

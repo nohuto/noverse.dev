@@ -6,31 +6,32 @@ import HeaderIcon from './HeaderIcon.astro';
 const { entry } = Astro.locals.starlightRoute;
 const isTemplateSplash = entry.data.template === 'splash';
 
-const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.starlightViewModes.modes, entry.id);
+const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(
+  Astro.locals.starlightViewModes.modes,
+  entry.id,
+);
 ---
 
-{
-  isTemplateSplash ? (
+{isTemplateSplash ? (
+  <Default />
+) : (
+  <div class="docs-page-title-row">
     <Default />
-  ) : (
-    <div class="docs-page-title-row">
-      <Default />
-      {zenTarget && (
-        <div class="docs-page-title-switcher">
-          <a
-            class="docs-page-title-zen"
-            href={zenTarget.href}
-            aria-label={Astro.locals.t(zenTarget.switchToText)}
-            aria-keyshortcuts="Control+Shift+X"
-            data-nv-tip="Ctrl+Shift+X"
-          >
-            <HeaderIcon name={inZenMode ? 'zen-exit' : 'zen'} />
-          </a>
-        </div>
-      )}
-    </div>
-  )
-}
+    {zenTarget && (
+      <div class="docs-page-title-switcher">
+        <a
+          class="docs-page-title-zen"
+          href={zenTarget.href}
+          aria-label={Astro.locals.t(zenTarget.switchToText)}
+          aria-keyshortcuts="Control+Shift+X"
+          data-nv-tip="Ctrl+Shift+X"
+        >
+          <HeaderIcon name={inZenMode ? 'zen-exit' : 'zen'} />
+        </a>
+      </div>
+    )}
+  </div>
+)}
 
 <style>
   .docs-page-title-row {
@@ -58,13 +59,19 @@ const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.st
     outline: none;
   }
 
-  body:has(.starlight-view-modes-zen-mode-no-header):has(.starlight-view-modes-zen-mode-no-table-of-contents) .docs-page-title-row {
+  body:has(.starlight-view-modes-zen-mode-no-header):has(
+      .starlight-view-modes-zen-mode-no-table-of-contents
+    )
+    .docs-page-title-row {
     display: grid;
     grid-template-columns: 1fr 2rem;
     align-items: center;
   }
 
-  body:has(.starlight-view-modes-zen-mode-no-header):has(.starlight-view-modes-zen-mode-no-table-of-contents) .docs-page-title-switcher {
+  body:has(.starlight-view-modes-zen-mode-no-header):has(
+      .starlight-view-modes-zen-mode-no-table-of-contents
+    )
+    .docs-page-title-switcher {
     display: flex !important;
     margin-top: 0;
   }
@@ -76,7 +83,8 @@ const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.st
       align-items: center;
     }
 
-    body:has(.starlight-view-modes-zen-mode-no-header) .docs-page-title-switcher {
+    body:has(.starlight-view-modes-zen-mode-no-header)
+      .docs-page-title-switcher {
       display: flex !important;
       margin-top: 0;
     }

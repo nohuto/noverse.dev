@@ -17,11 +17,17 @@ function slugifyLabel(value: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-function cloneGroup(group: Extract<SidebarEntry, { type: 'group' }>, entries: SidebarEntry[]): SidebarEntry {
+function cloneGroup(
+  group: Extract<SidebarEntry, { type: 'group' }>,
+  entries: SidebarEntry[],
+): SidebarEntry {
   return { ...group, entries };
 }
 
-function flattenSectionsGroups(entries: SidebarEntry[], capitalizeGroups = false): SidebarEntry[] {
+function flattenSectionsGroups(
+  entries: SidebarEntry[],
+  capitalizeGroups = false,
+): SidebarEntry[] {
   const flattened: SidebarEntry[] = [];
   const orderedEntries = orderSectionsFirst(entries);
 
@@ -35,8 +41,12 @@ function flattenSectionsGroups(entries: SidebarEntry[], capitalizeGroups = false
 
     if (entry.type === 'group') {
       const isSectionsGroup = slugifyLabel(entry.label) === 'sections';
-      const capitalizeChildren = capitalizeGroups || slugifyLabel(entry.label) === 'windbg-notes';
-      const flattenedChildren = flattenSectionsGroups(entry.entries || [], capitalizeChildren);
+      const capitalizeChildren =
+        capitalizeGroups || slugifyLabel(entry.label) === 'windbg-notes';
+      const flattenedChildren = flattenSectionsGroups(
+        entry.entries || [],
+        capitalizeChildren,
+      );
       if (isSectionsGroup) {
         flattened.push(...flattenedChildren);
         continue;
@@ -67,7 +77,9 @@ function orderSectionsFirst(entries: SidebarEntry[]): SidebarEntry[] {
 }
 
 function isSectionsGroup(entry: SidebarEntry): boolean {
-  return Boolean(entry && entry.type === 'group' && slugifyLabel(entry.label) === 'sections');
+  return Boolean(
+    entry && entry.type === 'group' && slugifyLabel(entry.label) === 'sections',
+  );
 }
 ---
 
@@ -83,7 +95,9 @@ function isSectionsGroup(entry: SidebarEntry): boolean {
       spellcheck="false"
     />
     <kbd class="sidebar-tree-shortcut" aria-hidden="true">
-      <kbd data-sidebar-primary-key>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd>
+      <kbd data-sidebar-primary-key>Ctrl</kbd>
+      <kbd>Shift</kbd>
+      <kbd>F</kbd>
     </kbd>
   </label>
   <p id="sidebar-tree-no-results" class="sidebar-tree-no-results sl-hidden">
@@ -95,7 +109,9 @@ function isSectionsGroup(entry: SidebarEntry): boolean {
   <SidebarSublist sublist={renderedSidebar} />
 </SidebarPersister>
 
-<p class="sidebar-docs-copyright"><span class="copyright-icon" aria-hidden="true"></span>2026 nohuto</p>
+<p class="sidebar-docs-copyright">
+  <span class="copyright-icon" aria-hidden="true"></span>2026 nohuto
+</p>
 
 <div class="md:sl-hidden">
   <MobileMenuFooter />
@@ -105,7 +121,9 @@ function isSectionsGroup(entry: SidebarEntry): boolean {
   (() => {
     const initSidebarTreeFilter = () => {
       const searchInput = document.getElementById('sidebar-tree-search');
-      const noResultsMessage = document.getElementById('sidebar-tree-no-results');
+      const noResultsMessage = document.getElementById(
+        'sidebar-tree-no-results',
+      );
       const sidebarTree = document.querySelector('sl-sidebar-state-persist');
       if (!searchInput || !noResultsMessage || !sidebarTree) return;
       if (searchInput.dataset.bound === 'true') return;
@@ -116,7 +134,9 @@ function isSectionsGroup(entry: SidebarEntry): boolean {
         primaryKey.textContent = '⌘';
       }
 
-      const detailsElements = Array.from(sidebarTree.querySelectorAll('details'));
+      const detailsElements = Array.from(
+        sidebarTree.querySelectorAll('details'),
+      );
       const items = Array.from(sidebarTree.querySelectorAll('li'));
       let activeFilter = false;
       let openStatesBeforeFilter = new Map();
@@ -169,7 +189,9 @@ function isSectionsGroup(entry: SidebarEntry): boolean {
 
         if (!activeFilter) {
           activeFilter = true;
-          openStatesBeforeFilter = new Map(detailsElements.map((details) => [details, details.open]));
+          openStatesBeforeFilter = new Map(
+            detailsElements.map((details) => [details, details.open]),
+          );
         }
 
         const searchTerms = query
@@ -220,7 +242,9 @@ function isSectionsGroup(entry: SidebarEntry): boolean {
         if (matchedItems.size === 0) {
           items.forEach((item) => {
             const textContent = (item.textContent || '').toLowerCase();
-            const hasPartialMatch = searchTerms.some((term) => textContent.includes(term));
+            const hasPartialMatch = searchTerms.some((term) =>
+              textContent.includes(term),
+            );
             if (!hasPartialMatch) return;
 
             item.style.display = '';
@@ -250,7 +274,9 @@ function isSectionsGroup(entry: SidebarEntry): boolean {
     };
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initSidebarTreeFilter, { once: true });
+      document.addEventListener('DOMContentLoaded', initSidebarTreeFilter, {
+        once: true,
+      });
     } else {
       initSidebarTreeFilter();
     }

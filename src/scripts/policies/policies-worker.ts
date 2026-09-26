@@ -1,7 +1,7 @@
 /* Copyright (c) 2026 nohuto */
 'use strict';
 
-self.addEventListener('message', async event => {
+self.addEventListener('message', async (event) => {
   if (event.data?.type !== 'load') return;
   const startedAt = performance.now();
   try {
@@ -9,7 +9,8 @@ self.addEventListener('message', async event => {
       fetch(event.data.policyUrl, { cache: 'force-cache' }),
       fetch(event.data.categoryUrl, { cache: 'force-cache' }),
     ]);
-    if (!policyResponse.ok) throw new Error(`Policy data request failed (${policyResponse.status})`);
+    if (!policyResponse.ok)
+      throw new Error(`Policy data request failed (${policyResponse.status})`);
 
     const categoryAvailable = categoryResponse.ok;
     const [policyText, categoryText] = await Promise.all([
@@ -24,10 +25,13 @@ self.addEventListener('message', async event => {
     self.postMessage({
       type: 'loaded',
       data: Array.isArray(policyJson) ? policyJson : [],
-      categories: categoryJson?.categories && typeof categoryJson.categories === 'object'
-        ? categoryJson.categories
-        : {},
-      categoryWarning: categoryAvailable ? '' : `Policy category data request failed (${categoryResponse.status})`,
+      categories:
+        categoryJson?.categories && typeof categoryJson.categories === 'object'
+          ? categoryJson.categories
+          : {},
+      categoryWarning: categoryAvailable
+        ? ''
+        : `Policy category data request failed (${categoryResponse.status})`,
       profile: {
         fetchMs: downloadedAt - startedAt,
         parseMs: parsedAt - downloadedAt,
@@ -36,6 +40,12 @@ self.addEventListener('message', async event => {
       },
     });
   } catch (error) {
-    self.postMessage({ type: 'error', message: error instanceof Error ? error.message : 'Failed to load policy definitions' });
+    self.postMessage({
+      type: 'error',
+      message:
+        error instanceof Error
+          ? error.message
+          : 'Failed to load policy definitions',
+    });
   }
 });

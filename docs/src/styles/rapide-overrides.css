@@ -1,6 +1,6 @@
 @font-face {
-  font-family: "Cascadia Code";
-  src: url("/main/fonts/CascadiaCode-2407.24.woff2") format("woff2");
+  font-family: 'Cascadia Code';
+  src: url('/main/fonts/CascadiaCode-2407.24.woff2') format('woff2');
   font-style: normal;
   font-weight: 200 700;
   font-display: block;
@@ -24,10 +24,10 @@
 
 :root,
 ::backdrop {
-  --sl-font-system: "Cascadia Code";
-  --sl-font-system-mono: "Cascadia Code";
-  --__sl-font: "Cascadia Code";
-  --__sl-font-mono: "Cascadia Code";
+  --sl-font-system: 'Cascadia Code';
+  --sl-font-system-mono: 'Cascadia Code';
+  --__sl-font: 'Cascadia Code';
+  --__sl-font-mono: 'Cascadia Code';
   /* --sl-font-system: "UbuntuMono Nerd Font Mono"; */
   /* --sl-font-system-mono: "UbuntuMono Nerd Font Mono"; */
   /* --__sl-font: "UbuntuMono Nerd Font Mono"; */
@@ -42,10 +42,10 @@
   --sl-text-h5: 0.9375rem;
   --sl-text-h6: 0.9375rem;
   --nv-ui-radius: 0px;
-  --nv-search-icon: url("/main/icons/ui/search.svg");
+  --nv-search-icon: url('/main/icons/ui/search.svg');
   --nv-header-icon-size: 17px;
   --nv-header-control-height: 26px;
-  --nv-x-icon: url("/main/icons/ui/x.svg");
+  --nv-x-icon: url('/main/icons/ui/x.svg');
   --sl-color-accent-low: #143448;
   --sl-color-accent: #4792c1;
   --sl-color-accent-high: #8fbede;
@@ -190,7 +190,9 @@ html:not([data-has-sidebar]) {
 
   html[data-has-sidebar][data-has-toc] .main-frame > .lg\:sl-flex {
     display: grid;
-    grid-template-columns: minmax(0, var(--nv-doc-main-width)) var(--nv-doc-toc-width);
+    grid-template-columns: minmax(0, var(--nv-doc-main-width)) var(
+        --nv-doc-toc-width
+      );
     column-gap: var(--nv-doc-cluster-gap);
     justify-content: start;
     width: 100%;
@@ -252,8 +254,10 @@ html:not([data-has-sidebar]) {
         calc(
           (
               100vw - var(--sl-content-inline-start, var(--sl-sidebar-width)) -
-                var(--nv-doc-main-width) - var(--nv-doc-cluster-gap) + var(--nv-doc-toc-width)
-            ) / 2 - 1rem
+                var(--nv-doc-main-width) - var(--nv-doc-cluster-gap) +
+                var(--nv-doc-toc-width)
+            ) /
+            2 - 1rem
         )
       )
     );
@@ -265,12 +269,19 @@ html:not([data-has-sidebar]) {
 }
 
 @media (min-width: 72rem) {
-  body:has(.starlight-view-modes-zen-mode-no-sidebar.starlight-view-modes-zen-mode-no-table-of-contents) .main-frame > .lg\:sl-flex {
+  body:has(
+      .starlight-view-modes-zen-mode-no-sidebar.starlight-view-modes-zen-mode-no-table-of-contents
+    )
+    .main-frame
+    > .lg\:sl-flex {
     display: block;
     width: 100%;
   }
 
-  body:has(.starlight-view-modes-zen-mode-no-sidebar.starlight-view-modes-zen-mode-no-table-of-contents) .main-pane {
+  body:has(
+      .starlight-view-modes-zen-mode-no-sidebar.starlight-view-modes-zen-mode-no-table-of-contents
+    )
+    .main-pane {
     width: 100% !important;
   }
 }
@@ -441,7 +452,11 @@ body::-webkit-scrollbar-thumb {
   width: 100%;
   border: 1px solid var(--sl-rapide-ui-border-color);
   border-radius: var(--nv-ui-radius);
-  background-color: color-mix(in srgb, var(--sl-rapide-ui-bg-color) 96%, var(--sl-color-bg));
+  background-color: color-mix(
+    in srgb,
+    var(--sl-rapide-ui-bg-color) 96%,
+    var(--sl-color-bg)
+  );
   color: var(--sl-color-text);
   font-size: 0.78125rem;
   height: var(--nv-header-control-height);
@@ -529,7 +544,11 @@ site-search button[data-open-modal] > kbd,
   padding: 0 5px;
   border: 1px solid var(--sl-color-hairline);
   border-radius: var(--nv-ui-radius);
-  background-color: color-mix(in srgb, var(--sl-color-bg) 90%, var(--sl-rapide-ui-bg-color));
+  background-color: color-mix(
+    in srgb,
+    var(--sl-color-bg) 90%,
+    var(--sl-rapide-ui-bg-color)
+  );
   color: var(--sl-color-gray-3);
   font: 0.6875rem/1 var(--__sl-font-mono);
   white-space: nowrap;
@@ -567,11 +586,19 @@ site-search dialog #starlight__search {
     height: var(--nv-header-control-height);
     padding-inline: 0.65rem 0.45rem;
     border-color: var(--sl-rapide-ui-border-color);
-    background-color: color-mix(in srgb, var(--sl-rapide-ui-bg-color) 96%, var(--sl-color-bg));
+    background-color: color-mix(
+      in srgb,
+      var(--sl-rapide-ui-bg-color) 96%,
+      var(--sl-color-bg)
+    );
   }
 
   site-search button[data-open-modal]:is(:hover, :focus-visible) {
-    background-color: color-mix(in srgb, var(--sl-rapide-ui-bg-color) 80%, var(--sl-color-accent-low));
+    background-color: color-mix(
+      in srgb,
+      var(--sl-rapide-ui-bg-color) 80%,
+      var(--sl-color-accent-low)
+    );
     border-color: var(--sl-color-accent);
   }
 }
@@ -697,7 +724,10 @@ site-search dialog #starlight__search {
   border-inline-start-color: var(--sl-color-text-accent) !important;
 }
 
-.sidebar-pane ul ul li:has(> a:not([aria-current='page']):is(:hover, :focus-visible)) {
+.sidebar-pane
+  ul
+  ul
+  li:has(> a:not([aria-current='page']):is(:hover, :focus-visible)) {
   border-inline-start-color: var(--sl-color-gray-2) !important;
 }
 

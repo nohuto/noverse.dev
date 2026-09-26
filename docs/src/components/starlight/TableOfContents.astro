@@ -17,7 +17,8 @@ function flattenToc(items: TocItem[]): TocItem[] {
 const items = toc ? flattenToc(toc.items as TocItem[]) : [];
 const entries = items.map((heading, index) => {
   const indent = heading.depth - toc!.minHeadingLevel;
-  const previousIndent = index > 0 ? items[index - 1].depth - toc!.minHeadingLevel : indent;
+  const previousIndent =
+    index > 0 ? items[index - 1].depth - toc!.minHeadingLevel : indent;
   const delta = indent - previousIndent;
 
   return {
@@ -26,47 +27,67 @@ const entries = items.map((heading, index) => {
     connector:
       delta === 0
         ? null
-        : { start: Math.min(indent, previousIndent), span: Math.abs(delta), descends: delta > 0 },
+        : {
+            start: Math.min(indent, previousIndent),
+            span: Math.abs(delta),
+            descends: delta > 0,
+          },
   };
 });
 ---
 
-{
-  toc && (
-    <starlight-toc data-nv-toc data-min-h={toc.minHeadingLevel} data-max-h={toc.maxHeadingLevel}>
-      <nav class="nv-toc-nav" aria-labelledby="starlight__on-this-page">
-        <h2 id="starlight__on-this-page">{Astro.locals.t('tableOfContents.onThisPage')}</h2>
-        <svg class="nv-toc-rail" aria-hidden="true" fill="none">
-          <path class="nv-toc-active-path" data-nv-toc-active-path vector-effect="non-scaling-stroke" />
-        </svg>
-        <ul class="nv-toc-list">
-          {entries.map(({ heading, indent, connector }) => (
-            <li>
-              {connector && (
-                <svg
-                  aria-hidden="true"
-                  class="nv-toc-connector"
-                  style={`--nv-toc-x: ${connector.start}; --nv-toc-w: ${connector.span};`}
-                  viewBox="0 0 1 1"
-                  preserveAspectRatio="none"
-                  fill="none"
-                >
-                  <path
-                    vector-effect="non-scaling-stroke"
-                    d={connector.descends ? 'M 0 0 C 0 0.5, 1 0.5, 1 1' : 'M 1 0 C 1 0.5, 0 0.5, 0 1'}
-                  />
-                </svg>
-              )}
-              <a class="nv-toc-link" href={`#${heading.slug}`} style={`--nv-toc-indent: ${indent};`}>
-                {heading.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </starlight-toc>
-  )
-}
+{toc && (
+  <starlight-toc
+    data-nv-toc
+    data-min-h={toc.minHeadingLevel}
+    data-max-h={toc.maxHeadingLevel}
+  >
+    <nav class="nv-toc-nav" aria-labelledby="starlight__on-this-page">
+      <h2 id="starlight__on-this-page">
+        {Astro.locals.t('tableOfContents.onThisPage')}
+      </h2>
+      <svg class="nv-toc-rail" aria-hidden="true" fill="none">
+        <path
+          class="nv-toc-active-path"
+          data-nv-toc-active-path
+          vector-effect="non-scaling-stroke"
+        />
+      </svg>
+      <ul class="nv-toc-list">
+        {entries.map(({ heading, indent, connector }) => (
+          <li>
+            {connector && (
+              <svg
+                aria-hidden="true"
+                class="nv-toc-connector"
+                style={`--nv-toc-x: ${connector.start}; --nv-toc-w: ${connector.span};`}
+                viewBox="0 0 1 1"
+                preserveAspectRatio="none"
+                fill="none"
+              >
+                <path
+                  vector-effect="non-scaling-stroke"
+                  d={
+                    connector.descends
+                      ? 'M 0 0 C 0 0.5, 1 0.5, 1 1'
+                      : 'M 1 0 C 1 0.5, 0 0.5, 0 1'
+                  }
+                />
+              </svg>
+            )}
+            <a
+              class="nv-toc-link"
+              href={`#${heading.slug}`}
+              style={`--nv-toc-indent: ${indent};`}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </starlight-toc>
+)}
 
 <ViewModeTableOfContents />
 
@@ -75,7 +96,9 @@ const entries = items.map((heading, index) => {
 
   for (const root of document.querySelectorAll('[data-nv-toc]')) {
     const nav = root.querySelector<HTMLElement>('.nv-toc-nav');
-    const activePath = root.querySelector<SVGPathElement>('[data-nv-toc-active-path]');
+    const activePath = root.querySelector<SVGPathElement>(
+      '[data-nv-toc-active-path]',
+    );
     const links = [...root.querySelectorAll<HTMLElement>('.nv-toc-link')];
     if (!nav || !activePath || links.length === 0) continue;
 
@@ -126,7 +149,9 @@ const entries = items.map((heading, index) => {
             const midY = previous.bottom + dy / 2;
             const curve = `C ${previous.x} ${midY}, ${box.x} ${midY}, ${box.x} ${box.top} `;
             parts.push(curve);
-            cumulative += curveLength(`M ${previous.x} ${previous.bottom} ${curve}`);
+            cumulative += curveLength(
+              `M ${previous.x} ${previous.bottom} ${curve}`,
+            );
           }
         }
 
@@ -151,7 +176,8 @@ const entries = items.map((heading, index) => {
       activePath.style.strokeDashoffset = `${-segment.start}`;
       activePath.dataset.ready = 'true';
 
-      if (instant) requestAnimationFrame(() => delete activePath.dataset.instant);
+      if (instant)
+        requestAnimationFrame(() => delete activePath.dataset.instant);
     };
 
     const setActive = (index: number, instant: boolean) => {
@@ -177,7 +203,8 @@ const entries = items.map((heading, index) => {
 
     new ResizeObserver((entries) => {
       const entry = entries[entries.length - 1]!;
-      observedWidth = entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
+      observedWidth =
+        entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
       if (frame || observedWidth === builtWidth) return;
       frame = requestAnimationFrame(() => {
         frame = 0;
@@ -188,7 +215,10 @@ const entries = items.map((heading, index) => {
     }).observe(nav);
 
     buildRail();
-    setActive(links.findIndex((link) => link.getAttribute('aria-current') === 'true'), true);
+    setActive(
+      links.findIndex((link) => link.getAttribute('aria-current') === 'true'),
+      true,
+    );
   }
 </script>
 
@@ -264,7 +294,9 @@ const entries = items.map((heading, index) => {
   .nv-toc-connector {
     display: block;
     height: 0.5rem;
-    margin-inline-start: calc(var(--nv-toc-x) * 1rem - var(--nv-toc-rail-offset));
+    margin-inline-start: calc(
+      var(--nv-toc-x) * 1rem - var(--nv-toc-rail-offset)
+    );
     width: calc(var(--nv-toc-w) * 1rem);
     overflow: visible;
     stroke: var(--nv-toc-line);

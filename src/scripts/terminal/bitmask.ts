@@ -14,14 +14,35 @@ import type { TerminalToolContext } from './types';
       const handle = document.getElementById('bitmask-drag');
       const closeButton = document.getElementById('bitmask-close');
       const field = document.getElementById('bitmask-field');
-      const decInput = document.getElementById('bitmask-dec') as HTMLInputElement | null;
-      const hexInput = document.getElementById('bitmask-hex') as HTMLInputElement | null;
-      const binInput = document.getElementById('bitmask-bin') as HTMLInputElement | null;
-      if (!layer || !dialog || !handle || !closeButton || !field || !decInput || !hexInput || !binInput) return () => { };
+      const decInput = document.getElementById(
+        'bitmask-dec',
+      ) as HTMLInputElement | null;
+      const hexInput = document.getElementById(
+        'bitmask-hex',
+      ) as HTMLInputElement | null;
+      const binInput = document.getElementById(
+        'bitmask-bin',
+      ) as HTMLInputElement | null;
+      if (
+        !layer ||
+        !dialog ||
+        !handle ||
+        !closeButton ||
+        !field ||
+        !decInput ||
+        !hexInput ||
+        !binInput
+      )
+        return () => {};
 
       let value = 0n;
       const maxValue = (1n << 32n) - 1n;
-      type BitControl = { button: HTMLButtonElement; strong: HTMLElement; bit: number; mask: bigint };
+      type BitControl = {
+        button: HTMLButtonElement;
+        strong: HTMLElement;
+        bit: number;
+        mask: bigint;
+      };
       const bitControls: BitControl[] = [];
       const bitControlByButton = new WeakMap<HTMLButtonElement, BitControl>();
 
@@ -57,20 +78,32 @@ import type { TerminalToolContext } from './types';
           const active = (value & mask) !== 0n;
           const activeText = active ? '1' : '0';
           button.setAttribute('aria-pressed', String(active));
-          button.setAttribute('aria-label', `Bit ${bit}: ${active ? 'on' : 'off'}`);
-          if (strong.textContent !== activeText) strong.textContent = activeText;
+          button.setAttribute(
+            'aria-label',
+            `Bit ${bit}: ${active ? 'on' : 'off'}`,
+          );
+          if (strong.textContent !== activeText)
+            strong.textContent = activeText;
         });
-        ([
-          [decInput, value.toString(10)],
-          [hexInput, `0x${value.toString(16).toUpperCase().padStart(8, '0')}`],
-          [binInput, value.toString(2).padStart(32, '0').match(/.{8}/g)!.join(' ')]
-        ] as [HTMLInputElement, string][]).forEach(([input, formatted]) => {
+        (
+          [
+            [decInput, value.toString(10)],
+            [
+              hexInput,
+              `0x${value.toString(16).toUpperCase().padStart(8, '0')}`,
+            ],
+            [
+              binInput,
+              value.toString(2).padStart(32, '0').match(/.{8}/g)!.join(' '),
+            ],
+          ] as [HTMLInputElement, string][]
+        ).forEach(([input, formatted]) => {
           if (input !== source) input.value = formatted;
           input.removeAttribute('aria-invalid');
         });
       };
 
-      const parseValue = input => {
+      const parseValue = (input) => {
         let raw = input.value.trim();
         let pattern;
         let prefix;
@@ -91,7 +124,7 @@ import type { TerminalToolContext } from './types';
         return parsed <= maxValue ? parsed : null;
       };
 
-      const updateFromInput = input => {
+      const updateFromInput = (input) => {
         const parsed = parseValue(input);
         if (parsed === null) {
           input.setAttribute('aria-invalid', 'true');
@@ -101,44 +134,53 @@ import type { TerminalToolContext } from './types';
         render(input);
       };
 
-      field.addEventListener('click', event => {
-        const button = event.target instanceof Element ? event.target.closest<HTMLButtonElement>('.bitmask-bit') : null;
+      field.addEventListener('click', (event) => {
+        const button =
+          event.target instanceof Element
+            ? event.target.closest<HTMLButtonElement>('.bitmask-bit')
+            : null;
         if (!button) return;
         const control = bitControlByButton.get(button);
         if (!control) return;
         value ^= control.mask;
         render();
       });
-      [decInput, hexInput, binInput].forEach(input => {
+      [decInput, hexInput, binInput].forEach((input) => {
         input.addEventListener('input', () => updateFromInput(input));
         input.addEventListener('blur', () => render());
-        input.addEventListener('keydown', event => {
+        input.addEventListener('keydown', (event) => {
           if (event.key !== 'Enter') return;
           event.preventDefault();
           input.blur();
         });
       });
-      dialog.querySelector<HTMLElement>('.bitmask-actions')?.addEventListener('click', event => {
-        const action = event.target instanceof Element ? event.target.closest<HTMLElement>('[data-bitmask-action]')?.dataset.bitmaskAction : undefined;
-        if (!action) return;
-        if (action === 'clear') value = 0n;
-        if (action === 'all') value = maxValue;
-        if (action === 'invert') value ^= maxValue;
-        render();
-      });
+      dialog
+        .querySelector<HTMLElement>('.bitmask-actions')
+        ?.addEventListener('click', (event) => {
+          const action =
+            event.target instanceof Element
+              ? event.target.closest<HTMLElement>('[data-bitmask-action]')
+                  ?.dataset.bitmaskAction
+              : undefined;
+          if (!action) return;
+          if (action === 'clear') value = 0n;
+          if (action === 'all') value = maxValue;
+          if (action === 'invert') value ^= maxValue;
+          render();
+        });
       const tool = initFloatingTool({
         layer,
         dialog,
         handle,
         closeButton,
         hash: 'bitmask',
-        focusTarget: () => bitControls[0]?.button
+        focusTarget: () => bitControls[0]?.button,
       });
       bitmaskCleanup = () => {
         tool.cleanup();
       };
       render();
       return tool.open;
-    }
+    },
   };
 })(window);

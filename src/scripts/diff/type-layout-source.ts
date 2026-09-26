@@ -6,31 +6,38 @@
   const DEFAULT_LEFT_RELEASE = '11-23H2';
   const DEFAULT_RIGHT_RELEASE = '11-24H2';
   const DEFAULT_MODULE = 'ntdll';
-  const SETTINGS_DEFAULTS: { showDependencies: boolean; hideComments: boolean } = { showDependencies: false, hideComments: false };
+  const SETTINGS_DEFAULTS: {
+    showDependencies: boolean;
+    hideComments: boolean;
+  } = { showDependencies: false, hideComments: false };
   const settingsStore = global.createNVDiffSettingsStore({
     key: SETTINGS_KEY,
     defaults: SETTINGS_DEFAULTS,
-    normalize: candidate => ({
+    normalize: (candidate) => ({
       showDependencies: Boolean(candidate?.showDependencies),
-      hideComments: Boolean(candidate?.hideComments)
-    })
+      hideComments: Boolean(candidate?.hideComments),
+    }),
   });
   const source = global.createNVDiffManifestSource({
     repository: 'nohuto/type-layouts',
     dataset: 'type-layouts',
     cacheKey: 'nv-diff-type-name-cache-v1',
-    displayName: fileName => String(fileName || '').replace(/\.cpp$/i, '')
+    displayName: (fileName) => String(fileName || '').replace(/\.cpp$/i, ''),
   });
-  const normalizeText = source => String(source || '').replace(/\r\n?/g, '\n');
+  const normalizeText = (source) =>
+    String(source || '').replace(/\r\n?/g, '\n');
 
   const readSettings = settingsStore.read;
   const writeSettings = settingsStore.write;
   const resetSettings = settingsStore.reset;
 
-  const expectedTypeNames = typeName => {
+  const expectedTypeNames = (typeName) => {
     const names = new Set([typeName]);
     if (typeName.startsWith('-')) {
-      const unnamed = typeName.replace(/^-/, '').replace(/_\d+$/i, '').replace(/-$/, '');
+      const unnamed = typeName
+        .replace(/^-/, '')
+        .replace(/_\d+$/i, '')
+        .replace(/-$/, '');
       if (unnamed) names.add(`<${unnamed}>`);
     }
     return names;
@@ -53,7 +60,7 @@
         } else if (char === '"') {
           state = 'string';
           escape = false;
-        } else if (char === '\'') {
+        } else if (char === "'") {
           state = 'char';
           escape = false;
         } else if (char === '{') {
@@ -77,7 +84,11 @@
       } else if (state === 'string' || state === 'char') {
         if (escape) escape = false;
         else if (char === '\\') escape = true;
-        else if ((state === 'string' && char === '"') || (state === 'char' && char === '\'')) state = 'code';
+        else if (
+          (state === 'string' && char === '"') ||
+          (state === 'char' && char === "'")
+        )
+          state = 'code';
       }
     }
     return source.length;
@@ -85,7 +96,8 @@
 
   const extractPrimaryLayout = (source, typeName) => {
     const text = normalizeText(source);
-    const declaration = /^(struct|union|enum)\s+([^\s/{]+|<[^>]+>)(?=\s|\/|\{|$)/gm;
+    const declaration =
+      /^(struct|union|enum)\s+([^\s/{]+|<[^>]+>)(?=\s|\/|\{|$)/gm;
     const wanted = expectedTypeNames(typeName);
     const blocks: { name: string; start: number; end: number }[] = [];
     let match;
@@ -96,11 +108,15 @@
       blocks.push({ name: match[2], start: match.index, end });
       declaration.lastIndex = end;
     }
-    const selected = blocks.find(block => wanted.has(block.name)) || blocks[blocks.length - 1];
-    return selected ? `${text.slice(selected.start, selected.end).trimEnd()}\n` : text;
+    const selected =
+      blocks.find((block) => wanted.has(block.name)) ||
+      blocks[blocks.length - 1];
+    return selected
+      ? `${text.slice(selected.start, selected.end).trimEnd()}\n`
+      : text;
   };
 
-  const stripComments = source => {
+  const stripComments = (source) => {
     let state = 'code';
     let escape = false;
     let output = '';
@@ -121,7 +137,7 @@
         if (char === '"') {
           state = 'string';
           escape = false;
-        } else if (char === '\'') {
+        } else if (char === "'") {
           state = 'char';
           escape = false;
         }
@@ -145,14 +161,23 @@
       output += char;
       if (escape) escape = false;
       else if (char === '\\') escape = true;
-      else if ((state === 'string' && char === '"') || (state === 'char' && char === '\'')) state = 'code';
+      else if (
+        (state === 'string' && char === '"') ||
+        (state === 'char' && char === "'")
+      )
+        state = 'code';
     }
-    return `${output.replace(/[ \t]+$/gm, '').replace(/\n{3,}/g, '\n\n').trimEnd()}\n`;
+    return `${output
+      .replace(/[ \t]+$/gm, '')
+      .replace(/\n{3,}/g, '\n\n')
+      .trimEnd()}\n`;
   };
 
   const prepareSource = (source, file) => {
     const settings = readSettings();
-    let prepared = settings.showDependencies ? normalizeText(source) : extractPrimaryLayout(source, file.name);
+    let prepared = settings.showDependencies
+      ? normalizeText(source)
+      : extractPrimaryLayout(source, file.name);
     if (settings.hideComments) prepared = stripComments(prepared);
     return prepared;
   };
@@ -160,13 +185,23 @@
   const renderSettings = (body, onChange) => {
     const settings = readSettings();
     body.replaceChildren();
-    const showDependencies = settingsStore.addCheckbox(body, 'diff-setting-show-dependencies', 'Show dependencies', settings.showDependencies);
-    const hideComments = settingsStore.addCheckbox(body, 'diff-setting-hide-comments', 'Hide comments', settings.hideComments);
-    [showDependencies, hideComments].forEach(input => {
+    const showDependencies = settingsStore.addCheckbox(
+      body,
+      'diff-setting-show-dependencies',
+      'Show dependencies',
+      settings.showDependencies,
+    );
+    const hideComments = settingsStore.addCheckbox(
+      body,
+      'diff-setting-hide-comments',
+      'Hide comments',
+      settings.hideComments,
+    );
+    [showDependencies, hideComments].forEach((input) => {
       input.addEventListener('change', () => {
         writeSettings({
           showDependencies: showDependencies.checked,
-          hideComments: hideComments.checked
+          hideComments: hideComments.checked,
         });
         onChange();
       });
@@ -180,7 +215,8 @@
       leftText,
       rightText,
       equivalent: false,
-      context: Math.max(leftText.split('\n').length, rightText.split('\n').length) + 2
+      context:
+        Math.max(leftText.split('\n').length, rightText.split('\n').length) + 2,
     };
   };
 
@@ -194,7 +230,7 @@
     prepareSingle: prepareSource,
     renderSettings,
     resetSettings,
-    highlightBlockComments: false
+    highlightBlockComments: false,
   };
 })(window);
 export {};

@@ -12,13 +12,19 @@ import KeyboardShortcuts from './KeyboardShortcuts.astro';
 const { id, sidebar } = Astro.locals.starlightRoute;
 
 const activeRepo = getActiveRepo(id, sidebar);
-const hasActiveRepo = Boolean(activeRepo && !['index', '404'].includes(activeRepo));
+const hasActiveRepo = Boolean(
+  activeRepo && !['index', '404'].includes(activeRepo),
+);
 const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
 
-const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.starlightViewModes.modes, id);
+const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(
+  Astro.locals.starlightViewModes.modes,
+  id,
+);
 
 const shouldRenderSearch =
-  config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
+  config.pagefind ||
+  config.components.Search !== '@astrojs/starlight/components/Search.astro';
 ---
 
 <div class="header">
@@ -29,36 +35,46 @@ const shouldRenderSearch =
       <span class="prompt-host">noverse</span>
     </a>
   </div>
-  <div class="sl-flex print:hidden">
-    {shouldRenderSearch && <Search />}
-  </div>
+  <div class="sl-flex print:hidden">{shouldRenderSearch && <Search />}</div>
   <div class="sl-hidden md:sl-flex print:hidden right-group">
     <KeyboardShortcuts zenHref={zenTarget?.href} />
-    {
-      zenTarget && (
-        <a
-          class="header-icon-link zen-link"
-          href={zenTarget.href}
-          aria-label={Astro.locals.t(zenTarget.switchToText)}
-          aria-keyshortcuts="Control+Shift+X"
-          data-nv-tip="Ctrl+Shift+X"
-          data-zen-toggle
-        >
-          <HeaderIcon name={inZenMode ? 'zen-exit' : 'zen'} />
-        </a>
-      )
-    }
-    {
-      hasActiveRepo && (
-        <a class="header-icon-link repo-link" href={repoHref} target="_blank" rel="noopener noreferrer" aria-label={`Open ${activeRepo} repository`}>
-          <HeaderIcon name="repo" />
-        </a>
-      )
-    }
-    <a class="header-icon-link external-link" href="https://github.com/nohuto" rel="me" aria-label="GitHub">
+    {zenTarget && (
+      <a
+        class="header-icon-link zen-link"
+        href={zenTarget.href}
+        aria-label={Astro.locals.t(zenTarget.switchToText)}
+        aria-keyshortcuts="Control+Shift+X"
+        data-nv-tip="Ctrl+Shift+X"
+        data-zen-toggle
+      >
+        <HeaderIcon name={inZenMode ? 'zen-exit' : 'zen'} />
+      </a>
+    )}
+    {hasActiveRepo && (
+      <a
+        class="header-icon-link repo-link"
+        href={repoHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Open ${activeRepo} repository`}
+      >
+        <HeaderIcon name="repo" />
+      </a>
+    )}
+    <a
+      class="header-icon-link external-link"
+      href="https://github.com/nohuto"
+      rel="me"
+      aria-label="GitHub"
+    >
       <HeaderIcon name="github" />
     </a>
-    <a class="header-icon-link external-link" href="https://discord.noverse.dev" rel="me" aria-label="Discord">
+    <a
+      class="header-icon-link external-link"
+      href="https://discord.noverse.dev"
+      rel="me"
+      aria-label="Discord"
+    >
       <HeaderIcon name="discord" />
     </a>
     <a class="header-icon-link home-link" href="/" aria-label="Go to homepage">
@@ -177,17 +193,28 @@ const shouldRenderSearch =
       }
 
       .header {
-        --__sidebar-width: max(0rem, var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x));
+        --__sidebar-width: max(
+          0rem,
+          var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x)
+        );
         --__main-column-fr: calc(
           (
-              100% + var(--__sidebar-pad, 0rem) - var(--__toc-width, var(--sl-sidebar-width)) -
-                (2 * var(--__toc-width, var(--sl-nav-pad-x))) - var(--sl-content-inline-start, 0rem) -
-                var(--sl-content-width)
-            ) / 2
+              100% + var(--__sidebar-pad, 0rem) -
+                var(--__toc-width, var(--sl-sidebar-width)) -
+                (2 * var(--__toc-width, var(--sl-nav-pad-x))) -
+                var(--sl-content-inline-start, 0rem) - var(--sl-content-width)
+            ) /
+            2
         );
         display: grid;
         grid-template-columns:
-          minmax(calc(var(--__sidebar-width) + max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))), auto)
+          minmax(
+            calc(
+              var(--__sidebar-width) +
+                max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))
+            ),
+            auto
+          )
           1fr
           auto;
         align-content: center;

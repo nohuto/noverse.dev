@@ -120,15 +120,16 @@
   width: 12px;
   height: 12px;
   background: var(--muted);
-  mask: url("/main/icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
-  -webkit-mask: url("/main/icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
+  mask: url('/main/icons/ui/chevron-down.svg') center / 12px 12px no-repeat;
+  -webkit-mask: url('/main/icons/ui/chevron-down.svg') center / 12px 12px
+    no-repeat;
 }
 
-#policy-view-trigger[aria-expanded="true"] .policy-view-chevron {
+#policy-view-trigger[aria-expanded='true'] .policy-view-chevron {
   transform: rotate(180deg);
 }
 
-#policy-column-trigger[aria-expanded="true"] .policy-view-chevron {
+#policy-column-trigger[aria-expanded='true'] .policy-view-chevron {
   transform: rotate(180deg);
 }
 
@@ -179,22 +180,32 @@
 .policy-layout {
   display: grid;
   grid-template-columns:
-    minmax(180px, var(--policy-tree-width)) 8px minmax(460px, 10fr) 8px minmax(360px, var(--policy-detail-width));
+    minmax(180px, var(--policy-tree-width)) 8px minmax(460px, 10fr)
+    8px minmax(360px, var(--policy-detail-width));
   gap: 0;
   height: calc(100vh - 172px);
   min-height: 0;
 }
 
 #policy-explorer.policy-hide-detail .policy-layout {
-  grid-template-columns: minmax(180px, var(--policy-tree-width)) 8px minmax(460px, 17fr);
+  grid-template-columns: minmax(180px, var(--policy-tree-width)) 8px minmax(
+      460px,
+      17fr
+    );
 }
 
 #policy-explorer.policy-hide-tree .policy-layout {
-  grid-template-columns: minmax(460px, 10fr) 8px minmax(360px, var(--policy-detail-width));
+  grid-template-columns: minmax(460px, 10fr) 8px minmax(
+      360px,
+      var(--policy-detail-width)
+    );
 }
 
 #policy-explorer.policy-hide-table .policy-layout {
-  grid-template-columns: minmax(180px, var(--policy-tree-width)) 8px minmax(300px, var(--policy-detail-width));
+  grid-template-columns: minmax(180px, var(--policy-tree-width)) 8px minmax(
+      300px,
+      var(--policy-detail-width)
+    );
 }
 
 #policy-explorer.policy-hide-tree.policy-hide-detail .policy-layout,
@@ -224,7 +235,7 @@
 }
 
 .policy-splitter::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 8px;
   bottom: 8px;
@@ -283,7 +294,7 @@
 }
 
 .policy-tree-level::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   bottom: 0;
@@ -310,7 +321,7 @@
 }
 
 .policy-tree-item::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   bottom: 0;
@@ -329,13 +340,14 @@
 
 .policy-tree-chevron {
   background: var(--muted);
-  mask: url("/main/icons/ui/chevron-right.svg") center / 14px 14px no-repeat;
-  -webkit-mask: url("/main/icons/ui/chevron-right.svg") center / 14px 14px no-repeat;
+  mask: url('/main/icons/ui/chevron-right.svg') center / 14px 14px no-repeat;
+  -webkit-mask: url('/main/icons/ui/chevron-right.svg') center / 14px 14px
+    no-repeat;
 }
 
 .policy-tree-chevron.is-open {
-  mask-image: url("/main/icons/ui/chevron-down.svg");
-  -webkit-mask-image: url("/main/icons/ui/chevron-down.svg");
+  mask-image: url('/main/icons/ui/chevron-down.svg');
+  -webkit-mask-image: url('/main/icons/ui/chevron-down.svg');
 }
 
 .policy-tree-item.is-active,
@@ -428,8 +440,9 @@
   height: 12px;
   justify-self: end;
   background: var(--muted);
-  mask: url("/main/icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
-  -webkit-mask: url("/main/icons/ui/chevron-down.svg") center / 12px 12px no-repeat;
+  mask: url('/main/icons/ui/chevron-down.svg') center / 12px 12px no-repeat;
+  -webkit-mask: url('/main/icons/ui/chevron-down.svg') center / 12px 12px
+    no-repeat;
   vertical-align: -2px;
 }
 
@@ -448,7 +461,7 @@
 }
 
 .policy-column-resizer::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 5px;
   bottom: 5px;
@@ -481,9 +494,9 @@ body.policy-column-resizing * {
   border-inline-start: 2px solid var(--accent);
 }
 
-.policy-table td[data-column="scope"],
-.policy-table td[data-column="registry"],
-.policy-table td[data-column="supported"] {
+.policy-table td[data-column='scope'],
+.policy-table td[data-column='registry'],
+.policy-table td[data-column='supported'] {
   color: var(--muted);
 }
 
@@ -543,7 +556,7 @@ body.policy-column-resizing * {
 
 .policy-column-choice input::after,
 .policy-view-option input::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 50%;
   top: 50%;
@@ -603,7 +616,7 @@ body.policy-column-resizing * {
 }
 
 .policy-field-label::after {
-  content: ":";
+  content: ':';
 }
 
 .policy-field-value {
@@ -665,7 +678,7 @@ body.policy-column-resizing * {
   gap: 5px;
 }
 
-.policy-value-entry+.policy-value-entry {
+.policy-value-entry + .policy-value-entry {
   margin-top: 2px;
 }
 
@@ -768,8 +781,8 @@ body.policy-column-resizing * {
   justify-self: end;
   background: var(--muted);
   opacity: 0.82;
-  mask: url("/main/icons/ui/copy.svg") center / 13px 13px no-repeat;
-  -webkit-mask: url("/main/icons/ui/copy.svg") center / 13px 13px no-repeat;
+  mask: url('/main/icons/ui/copy.svg') center / 13px 13px no-repeat;
+  -webkit-mask: url('/main/icons/ui/copy.svg') center / 13px 13px no-repeat;
 }
 
 .policy-copy-button:hover .policy-copy-icon,
@@ -860,7 +873,8 @@ body.policy-column-resizing * {
 @media (max-width: 1280px) {
   .policy-layout {
     grid-template-columns:
-      minmax(170px, var(--policy-tree-width)) 8px minmax(360px, 10fr) 8px minmax(320px, var(--policy-detail-width));
+      minmax(170px, var(--policy-tree-width)) 8px minmax(360px, 10fr)
+      8px minmax(320px, var(--policy-detail-width));
     grid-template-rows: none;
     height: calc(100vh - 172px);
     min-height: 0;
@@ -874,7 +888,6 @@ body.policy-column-resizing * {
 }
 
 @media (max-width: 960px) {
-
   .policy-toolbar {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: end;

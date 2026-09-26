@@ -1,9 +1,9 @@
 ﻿/* Copyright (c) 2026 nohuto */
-@import url("/main/data/starfield-stars.css");
+@import url('/main/data/starfield-stars.css');
 
 @font-face {
-  font-family: "Cascadia Code";
-  src: url("/main/fonts/CascadiaCode-2407.24.woff2") format("woff2");
+  font-family: 'Cascadia Code';
+  src: url('/main/fonts/CascadiaCode-2407.24.woff2') format('woff2');
   font-style: normal;
   font-weight: 200 700;
   font-display: block;
@@ -26,6 +26,7 @@
 } */
 
 :root {
+  color-scheme: dark;
   --bg: #0e0e0e;
   --bg-alt: #131313;
   --panel: #141414;
@@ -41,7 +42,7 @@
   --warning: #e4c07a;
   --danger: #ff6b6b;
   --starfield-dot: color-mix(in srgb, var(--text) 90%, transparent);
-  --font-family: "Cascadia Code";
+  --font-family: 'Cascadia Code';
   /* --font-family: "UbuntuMono Nerd Font Mono"; */
   --font-size-navigation: 0.78125rem;
   --font-size-control: 0.75rem;
@@ -50,17 +51,30 @@
   --scrollbar-track: var(--bg-alt);
   --scrollbar-thumb: var(--border-strong);
   --scrollbar-thumb-hover: var(--accent);
-  --search-icon: url("/main/icons/ui/search.svg");
+  --search-icon: url('/main/icons/ui/search.svg');
   --select-chevron-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6 -6'/%3E%3C/svg%3E");
-  --social-github-icon: url("/main/icons/ui/github-logo.svg");
-  --social-email-icon: url("/main/icons/ui/mail.svg");
-  --social-discord-icon: url("/main/icons/ui/discord.svg");
-  --social-key-icon: url("/main/icons/ui/key.svg");
-  --theme-sun-icon: url("/main/icons/ui/sun.svg");
-  --theme-moon-icon: url("/main/icons/ui/moon.svg");
+  --social-github-icon: url('/main/icons/ui/github-logo.svg');
+  --social-email-icon: url('/main/icons/ui/mail.svg');
+  --social-discord-icon: url('/main/icons/ui/discord.svg');
+  --social-key-icon: url('/main/icons/ui/key.svg');
+  --theme-sun-icon: url('/main/icons/ui/sun.svg');
+  --theme-moon-icon: url('/main/icons/ui/moon.svg');
 }
 
-[data-theme="purple-black"] {
+:root:is(
+  [data-theme='light'],
+  [data-theme='gruvbox-light'],
+  [data-theme='kanagawa-lotus'],
+  [data-theme='catppuccin-latte'],
+  [data-theme='solarized-light'],
+  [data-theme='one-light'],
+  [data-theme='ayu-light'],
+  [data-theme='everforest-light']
+) {
+  color-scheme: light;
+}
+
+[data-theme='purple-black'] {
   --bg: #08080d;
   --bg-alt: #0c0b12;
   --panel: #111018;
@@ -102,7 +116,7 @@
   border: 0;
 }
 
-[data-theme="light"] {
+[data-theme='light'] {
   --bg: #f5f5f5;
   --bg-alt: #ececec;
   --panel: #f1f1f1;
@@ -119,7 +133,7 @@
   --danger: #b44a4a;
 }
 
-[data-theme="gray-black"] {
+[data-theme='gray-black'] {
   --bg: #080808;
   --bg-alt: #0d0d0d;
   --panel: #151515;
@@ -136,7 +150,7 @@
   --danger: #d2d2d2;
 }
 
-[data-theme="gruvbox-dark"] {
+[data-theme='gruvbox-dark'] {
   --bg: #0f1010;
   --bg-alt: #171819;
   --panel: #202020;
@@ -153,7 +167,7 @@
   --danger: #cc241d;
 }
 
-[data-theme="gruvbox-light"] {
+[data-theme='gruvbox-light'] {
   --bg: #fbf1c7;
   --bg-alt: #f2e5bc;
   --panel: #f2e5bc;
@@ -170,7 +184,7 @@
   --danger: #cc241d;
 }
 
-[data-theme="nord"] {
+[data-theme='nord'] {
   --bg: #242933;
   --bg-alt: #2e3440;
   --panel: #3b4252;
@@ -187,7 +201,7 @@
   --danger: #bf616a;
 }
 
-[data-theme="kanagawa-wave"] {
+[data-theme='kanagawa-wave'] {
   --bg: #16161d;
   --bg-alt: #1f1f28;
   --panel: #2a2a37;
@@ -204,7 +218,7 @@
   --danger: #e46876;
 }
 
-[data-theme="kanagawa-dragon"] {
+[data-theme='kanagawa-dragon'] {
   --bg: #12120f;
   --bg-alt: #181616;
   --panel: #1d1c19;
@@ -221,7 +235,7 @@
   --danger: #c4746e;
 }
 
-[data-theme="kanagawa-lotus"] {
+[data-theme='kanagawa-lotus'] {
   --bg: #f2ecbc;
   --bg-alt: #e5ddb0;
   --panel: #e7ddb0;
@@ -238,7 +252,7 @@
   --danger: #c84053;
 }
 
-[data-theme="catppuccin-mocha"] {
+[data-theme='catppuccin-mocha'] {
   --bg: #181825;
   --bg-alt: #1e1e2e;
   --panel: #313244;
@@ -255,7 +269,7 @@
   --danger: #f38ba8;
 }
 
-[data-theme="catppuccin-macchiato"] {
+[data-theme='catppuccin-macchiato'] {
   --bg: #1e2030;
   --bg-alt: #24273a;
   --panel: #363a4f;
@@ -272,7 +286,7 @@
   --danger: #ed8796;
 }
 
-[data-theme="catppuccin-frappe"] {
+[data-theme='catppuccin-frappe'] {
   --bg: #292c3c;
   --bg-alt: #303446;
   --panel: #414559;
@@ -289,7 +303,7 @@
   --danger: #e78284;
 }
 
-[data-theme="catppuccin-latte"] {
+[data-theme='catppuccin-latte'] {
   --bg: #eff1f5;
   --bg-alt: #e6e9ef;
   --panel: #dce0e8;
@@ -306,7 +320,7 @@
   --danger: #d20f39;
 }
 
-[data-theme="solarized-dark"] {
+[data-theme='solarized-dark'] {
   --bg: #01212b;
   --bg-alt: #002b36;
   --panel: #073642;
@@ -323,7 +337,7 @@
   --danger: #dc322f;
 }
 
-[data-theme="solarized-light"] {
+[data-theme='solarized-light'] {
   --bg: #fdf6e3;
   --bg-alt: #f3ead1;
   --panel: #eee8d5;
@@ -340,7 +354,7 @@
   --danger: #dc322f;
 }
 
-[data-theme="one-dark"] {
+[data-theme='one-dark'] {
   --bg: #21252b;
   --bg-alt: #282c34;
   --panel: #2f343f;
@@ -357,7 +371,7 @@
   --danger: #e06c75;
 }
 
-[data-theme="one-light"] {
+[data-theme='one-light'] {
   --bg: #fafafa;
   --bg-alt: #f2f2f2;
   --panel: #f2f2f2;
@@ -374,7 +388,7 @@
   --danger: #e45649;
 }
 
-[data-theme="ayu-dark"] {
+[data-theme='ayu-dark'] {
   --bg: #0b1014;
   --bg-alt: #0f1419;
   --panel: #151a21;
@@ -391,7 +405,7 @@
   --danger: #f07178;
 }
 
-[data-theme="ayu-light"] {
+[data-theme='ayu-light'] {
   --bg: #fafafa;
   --bg-alt: #f3f3f3;
   --panel: #f3f3f3;
@@ -408,7 +422,7 @@
   --danger: #e65050;
 }
 
-[data-theme="everforest-dark"] {
+[data-theme='everforest-dark'] {
   --bg: #171d1c;
   --bg-alt: #232a2e;
   --panel: #272e33;
@@ -425,7 +439,7 @@
   --danger: #e67e80;
 }
 
-[data-theme="everforest-light"] {
+[data-theme='everforest-light'] {
   --bg: #fdf6e3;
   --bg-alt: #efebd4;
   --panel: #f4f0d9;
@@ -442,7 +456,7 @@
   --danger: #f85552;
 }
 
-[data-theme="rose-pine"] {
+[data-theme='rose-pine'] {
   --bg: #191724;
   --bg-alt: #1f1d2e;
   --panel: #26233a;
@@ -459,7 +473,7 @@
   --danger: #eb6f92;
 }
 
-[data-theme="rose-pine-moon"] {
+[data-theme='rose-pine-moon'] {
   --bg: #232136;
   --bg-alt: #2a273f;
   --panel: #393552;
@@ -476,7 +490,7 @@
   --danger: #ea9a97;
 }
 
-[data-theme="monokai"] {
+[data-theme='monokai'] {
   --bg: #1f201b;
   --bg-alt: #272822;
   --panel: #2d2e27;
@@ -493,7 +507,7 @@
   --danger: #f92672;
 }
 
-[data-theme="horizon"] {
+[data-theme='horizon'] {
   --bg: #161821;
   --bg-alt: #1c1e26;
   --panel: #232530;
@@ -510,7 +524,7 @@
   --danger: #e95678;
 }
 
-[data-theme="night-owl"] {
+[data-theme='night-owl'] {
   --bg: #00121f;
   --bg-alt: #011627;
   --panel: #0b253a;
@@ -526,4 +540,3 @@
   --warning: #ecc48d;
   --danger: #ef5350;
 }
-

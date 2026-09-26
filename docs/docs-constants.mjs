@@ -31,7 +31,8 @@ const DIRECTORY_LABEL_OVERRIDES = {
   'windbg-notes/threads/thread-internals': 'Thread Internals',
   'windbg-notes/threads/examining-thread-activity': 'Examining Thread Activity',
   'windbg-notes/system-mechanisms': 'System Mechanisms',
-  'windbg-notes/system-mechanisms/processor-execution-model': 'Processor Execution Model',
+  'windbg-notes/system-mechanisms/processor-execution-model':
+    'Processor Execution Model',
   'windbg-notes/system-mechanisms/trap-dispatching': 'Trap Dispatching',
   'windbg-notes/system-mechanisms/software-interrupts': 'Software Interrupts',
 };
@@ -43,7 +44,9 @@ const DIRECTORY_LABELS = {
 };
 
 export function getDirectoryLabel(directory) {
-  const normalizedDirectory = directory.replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
+  const normalizedDirectory = directory
+    .replace(/\\/g, '/')
+    .replace(/^\/+|\/+$/g, '');
   const segment = normalizedDirectory.split('/').pop() || normalizedDirectory;
 
   if (DIRECTORY_LABEL_OVERRIDES[normalizedDirectory]) {

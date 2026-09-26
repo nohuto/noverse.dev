@@ -1,7 +1,10 @@
 type Modes = App.Locals['starlightViewModes']['modes'];
 type Mode = Modes[number];
 
-export function getZenTarget(modes: Modes, routeId: string): {
+export function getZenTarget(
+  modes: Modes,
+  routeId: string,
+): {
   target: Mode | undefined;
   isCurrent: boolean;
 } {

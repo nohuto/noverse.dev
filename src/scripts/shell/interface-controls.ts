@@ -17,11 +17,19 @@ const LIGHT_THEMES = new Set([
   'solarized-light',
   'one-light',
   'ayu-light',
-  'everforest-light'
+  'everforest-light',
 ]);
 const BG_KEY = 'nv-bg';
 const DEFAULT_BG = 'crosshatch';
-const BG_KEYS = ['clear', 'crosshatch', 'diamonds', 'noise', 'dots', 'grid', 'starfield'];
+const BG_KEYS = [
+  'clear',
+  'crosshatch',
+  'diamonds',
+  'noise',
+  'dots',
+  'grid',
+  'starfield',
+];
 const BG_SET = new Set(BG_KEYS);
 window.NV_BACKGROUND_KEYS = BG_KEYS;
 const MAIN_PAGE_ROUTES = Object.freeze([
@@ -30,11 +38,11 @@ const MAIN_PAGE_ROUTES = Object.freeze([
   { slug: 'product', clean: '/product' },
   { slug: 'projects', clean: '/projects' },
   { slug: 'diff', clean: '/diff' },
-  { slug: 'policies', clean: '/policies' }
+  { slug: 'policies', clean: '/policies' },
 ]);
 const ACTIVE_PAGE_KEY = 'nv-active-page-path';
 const NOT_FOUND_KEY = 'nv-not-found-path';
-const MAIN_PAGE_PATHS = new Set(MAIN_PAGE_ROUTES.map(route => route.clean));
+const MAIN_PAGE_PATHS = new Set(MAIN_PAGE_ROUTES.map((route) => route.clean));
 window.NV_MAIN_ROUTES = MAIN_PAGE_ROUTES;
 const SELECT_SEARCH_RENDER_LIMIT_DEFAULT = 300;
 const SYSTEM_THEME_QUERY = '(prefers-color-scheme: light)';
@@ -42,21 +50,24 @@ const SYSTEM_THEME_QUERY = '(prefers-color-scheme: light)';
 let selectUiListener: ((event: MouseEvent) => void) | undefined;
 let selectUiKeyListener: ((event: KeyboardEvent) => void) | undefined;
 let openSelectUI: HTMLElement | null = null;
-let siteErrorDialogManager: ReturnType<typeof createDraggableDialogManager> | null = null;
+let siteErrorDialogManager: ReturnType<
+  typeof createDraggableDialogManager
+> | null = null;
 
-const normalizeMainPagePath = pathname => {
-  let path = `/${String(pathname || '').replace(/^\/+|\/+$/g, '')}`.toLowerCase();
+const normalizeMainPagePath = (pathname) => {
+  let path =
+    `/${String(pathname || '').replace(/^\/+|\/+$/g, '')}`.toLowerCase();
   if (path === '/index.html') path = '/';
   else if (path.endsWith('.html')) path = path.slice(0, -5);
   return MAIN_PAGE_PATHS.has(path) ? path : null;
 };
 
-const rememberActivePage = pathname => {
+const rememberActivePage = (pathname) => {
   const path = normalizeMainPagePath(pathname);
   if (!path) return;
   try {
     sessionStorage.setItem(ACTIVE_PAGE_KEY, path);
-  } catch { }
+  } catch {}
 };
 
 const consumeNotFoundPath = () => {
@@ -69,30 +80,44 @@ const consumeNotFoundPath = () => {
   }
 };
 
-const hasSelectOption = (select: HTMLSelectElement, value: string) => Array.from(select.options).some(option => option.value === value);
+const hasSelectOption = (select: HTMLSelectElement, value: string) =>
+  Array.from(select.options).some((option) => option.value === value);
 const closeSelectUIs = (restoreFocus = false) => {
   if (!openSelectUI) return;
   const trigger = openSelectUI.querySelector('.select-trigger');
   openSelectUI.classList.remove('open', 'open-up');
-  openSelectUI.querySelector<HTMLElement>('.select-list')?.style.removeProperty('max-height');
+  openSelectUI
+    .querySelector<HTMLElement>('.select-list')
+    ?.style.removeProperty('max-height');
   trigger?.setAttribute('aria-expanded', 'false');
   openSelectUI = null;
-  if (restoreFocus && trigger instanceof HTMLElement) trigger.focus({ preventScroll: true });
+  if (restoreFocus && trigger instanceof HTMLElement)
+    trigger.focus({ preventScroll: true });
 };
 
 function updateIconTheme(theme?: string) {
-  const applied = resolveTheme(theme || document.documentElement.getAttribute('data-theme') || DEFAULT_THEME);
+  const applied = resolveTheme(
+    theme ||
+      document.documentElement.getAttribute('data-theme') ||
+      DEFAULT_THEME,
+  );
   const useLight = LIGHT_THEMES.has(applied);
-  document.querySelectorAll('img[data-dark-src][data-light-src]').forEach(img => {
-    const next = useLight ? img.getAttribute('data-light-src') : img.getAttribute('data-dark-src');
-    if (!next || img.getAttribute('src') === next) return;
-    img.setAttribute('src', next);
-  });
+  document
+    .querySelectorAll('img[data-dark-src][data-light-src]')
+    .forEach((img) => {
+      const next = useLight
+        ? img.getAttribute('data-light-src')
+        : img.getAttribute('data-dark-src');
+      if (!next || img.getAttribute('src') === next) return;
+      img.setAttribute('src', next);
+    });
 }
 
 function getSystemDefaultTheme() {
   try {
-    return window.matchMedia(SYSTEM_THEME_QUERY).matches ? THEME_LIGHT : THEME_DARK;
+    return window.matchMedia(SYSTEM_THEME_QUERY).matches
+      ? THEME_LIGHT
+      : THEME_DARK;
   } catch {
     return THEME_DARK;
   }
@@ -104,7 +129,9 @@ function normalizeTheme(theme) {
 
 function resolveTheme(theme) {
   const normalized = normalizeTheme(theme);
-  return normalized === THEME_SYSTEM ? getSystemDefaultTheme() : (normalized || THEME_DARK);
+  return normalized === THEME_SYSTEM
+    ? getSystemDefaultTheme()
+    : normalized || THEME_DARK;
 }
 
 function applyTheme(theme) {
@@ -113,45 +140,61 @@ function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme-setting', selected);
   document.documentElement.setAttribute('data-theme', applied);
   updateIconTheme(applied);
-  document.dispatchEvent(new CustomEvent('nv:theme-change', {
-    detail: {
-      theme: selected,
-      appliedTheme: applied,
-      isLight: LIGHT_THEMES.has(applied)
-    }
-  }));
+  document.dispatchEvent(
+    new CustomEvent('nv:theme-change', {
+      detail: {
+        theme: selected,
+        appliedTheme: applied,
+        isLight: LIGHT_THEMES.has(applied),
+      },
+    }),
+  );
   return selected;
 }
 
-function syncThemeControls(theme = document.documentElement.getAttribute('data-theme-setting') || DEFAULT_THEME) {
+function syncThemeControls(
+  theme = document.documentElement.getAttribute('data-theme-setting') ||
+    DEFAULT_THEME,
+) {
   const selected = normalizeTheme(theme || DEFAULT_THEME);
   const applied = resolveTheme(selected);
   const isLight = LIGHT_THEMES.has(applied);
-  const select = document.getElementById('theme-select') as HTMLSelectElement | null;
+  const select = document.getElementById(
+    'theme-select',
+  ) as HTMLSelectElement | null;
   if (select && hasSelectOption(select, selected)) {
     select.value = selected;
     const selectedOption = select.options[select.selectedIndex];
     const selectUI = select.closest('.select-ui');
     const label = selectUI?.querySelector('.select-trigger-label');
     if (label && selectedOption) label.textContent = selectedOption.textContent;
-    selectUI?.querySelectorAll<HTMLElement>('.select-option').forEach(option => {
-      const active = option.dataset.value === selected;
-      option.classList.toggle('is-active', active);
-      option.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
+    selectUI
+      ?.querySelectorAll<HTMLElement>('.select-option')
+      .forEach((option) => {
+        const active = option.dataset.value === selected;
+        option.classList.toggle('is-active', active);
+        option.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
   }
-  document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach(button => {
-    button.dataset.themeMode = isLight ? 'light' : 'dark';
-    button.setAttribute('aria-label', `Switch to ${isLight ? 'dark' : 'light'} theme`);
-    button.setAttribute('aria-pressed', isLight ? 'true' : 'false');
-  });
+  document
+    .querySelectorAll<HTMLElement>('[data-theme-toggle]')
+    .forEach((button) => {
+      button.dataset.themeMode = isLight ? 'light' : 'dark';
+      button.setAttribute(
+        'aria-label',
+        `Switch to ${isLight ? 'dark' : 'light'} theme`,
+      );
+      button.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+    });
 }
 
 function initSelectUI() {
-  const selects = document.querySelectorAll<HTMLSelectElement>('.footer-tools select, select.select-enhanced');
+  const selects = document.querySelectorAll<HTMLSelectElement>(
+    '.footer-tools select, select.select-enhanced',
+  );
   if (!selects.length) return;
 
-  selects.forEach(select => {
+  selects.forEach((select) => {
     if (select.dataset.ui === 'true') return;
     select.dataset.ui = 'true';
 
@@ -226,21 +269,40 @@ function initSelectUI() {
     list.className = 'select-list';
     list.id = `${select.id || `select-${Math.random().toString(36).slice(2)}`}-listbox`;
     list.setAttribute('role', 'listbox');
-    list.setAttribute('aria-label', label?.textContent?.trim() || select.getAttribute('aria-label') || 'Options');
+    list.setAttribute(
+      'aria-label',
+      label?.textContent?.trim() ||
+        select.getAttribute('aria-label') ||
+        'Options',
+    );
     trigger.setAttribute('aria-controls', list.id);
     menu.appendChild(list);
     if (menuMeta) menu.appendChild(menuMeta);
 
     let optionsDirty = true;
-    let virtualOptions: { value: string; textContent: string; disabled: boolean; selected: boolean }[] | null = null;
+    let virtualOptions:
+      | {
+          value: string;
+          textContent: string;
+          disabled: boolean;
+          selected: boolean;
+        }[]
+      | null = null;
     const getSearchRenderLimit = () => {
       const raw = (select.dataset.searchLimit || '').trim().toLowerCase();
       if (!raw) return SELECT_SEARCH_RENDER_LIMIT_DEFAULT;
-      if (raw === 'all' || raw === 'unlimited' || raw === '0' || raw === 'inf' || raw === 'infinity') {
+      if (
+        raw === 'all' ||
+        raw === 'unlimited' ||
+        raw === '0' ||
+        raw === 'inf' ||
+        raw === 'infinity'
+      ) {
         return Number.POSITIVE_INFINITY;
       }
       const parsed = Number.parseInt(raw, 10);
-      if (!Number.isFinite(parsed) || parsed < 1) return SELECT_SEARCH_RENDER_LIMIT_DEFAULT;
+      if (!Number.isFinite(parsed) || parsed < 1)
+        return SELECT_SEARCH_RENDER_LIMIT_DEFAULT;
       return parsed;
     };
 
@@ -257,8 +319,9 @@ function initSelectUI() {
       }
     };
 
-    const escapeSearchRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const wildcardToRegexPattern = term => {
+    const escapeSearchRegex = (value) =>
+      value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const wildcardToRegexPattern = (term) => {
       let pattern = '';
       for (const char of term) {
         if (char === '*') {
@@ -272,21 +335,25 @@ function initSelectUI() {
       return pattern;
     };
 
-    const buildSearchMatcher = filterText => {
+    const buildSearchMatcher = (filterText) => {
       const raw = (filterText || '').trim();
       if (!raw) return null;
 
       const terms = raw.split(/\s+/).filter(Boolean);
-      const checks = terms.map(term => /[*?]/.test(term)
-        ? new RegExp(wildcardToRegexPattern(term), 'i')
-        : term.toLowerCase());
+      const checks = terms.map((term) =>
+        /[*?]/.test(term)
+          ? new RegExp(wildcardToRegexPattern(term), 'i')
+          : term.toLowerCase(),
+      );
 
-      return text => {
+      return (text) => {
         const value = text || '';
         const lowerValue = value.toLowerCase();
-        return checks.every(check => typeof check === 'string'
-          ? lowerValue.includes(check)
-          : check.test(value));
+        return checks.every((check) =>
+          typeof check === 'string'
+            ? lowerValue.includes(check)
+            : check.test(value),
+        );
       };
     };
 
@@ -294,22 +361,25 @@ function initSelectUI() {
       list.replaceChildren();
       const normalizedFilter = (filterText || '').trim();
       const matcher = buildSearchMatcher(normalizedFilter);
-      const allOptions = virtualOptions || Array.from(select.options, option => ({
-        value: option.value,
-        textContent: option.textContent || '',
-        disabled: option.disabled,
-        selected: option.selected
-      }));
+      const allOptions =
+        virtualOptions ||
+        Array.from(select.options, (option) => ({
+          value: option.value,
+          textContent: option.textContent || '',
+          disabled: option.disabled,
+          selected: option.selected,
+        }));
       const filteredOptions = matcher
-        ? allOptions.filter(option => matcher(option.textContent || ''))
+        ? allOptions.filter((option) => matcher(option.textContent || ''))
         : allOptions;
       const searchRenderLimit = getSearchRenderLimit();
-      const optionsToRender = isSearchable && Number.isFinite(searchRenderLimit)
-        ? filteredOptions.slice(0, searchRenderLimit)
-        : filteredOptions;
+      const optionsToRender =
+        isSearchable && Number.isFinite(searchRenderLimit)
+          ? filteredOptions.slice(0, searchRenderLimit)
+          : filteredOptions;
       const fragment = document.createDocumentFragment();
 
-      optionsToRender.forEach(option => {
+      optionsToRender.forEach((option) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'select-option';
@@ -332,7 +402,10 @@ function initSelectUI() {
         syncLimitControls();
         if (!filteredOptions.length) {
           menuMetaText.textContent = 'No matches';
-        } else if (isSearchable && filteredOptions.length > optionsToRender.length) {
+        } else if (
+          isSearchable &&
+          filteredOptions.length > optionsToRender.length
+        ) {
           menuMetaText.textContent = `Showing ${optionsToRender.length} / ${filteredOptions.length}`;
         } else {
           menuMetaText.textContent = `${filteredOptions.length} option${filteredOptions.length === 1 ? '' : 's'}`;
@@ -341,9 +414,12 @@ function initSelectUI() {
       optionsDirty = false;
     };
 
-    const setSearchRenderLimit = value => {
+    const setSearchRenderLimit = (value) => {
       const parsed = Number.parseInt(String(value || ''), 10);
-      select.dataset.searchLimit = Number.isFinite(parsed) && parsed > 0 ? String(parsed) : String(SELECT_SEARCH_RENDER_LIMIT_DEFAULT);
+      select.dataset.searchLimit =
+        Number.isFinite(parsed) && parsed > 0
+          ? String(parsed)
+          : String(SELECT_SEARCH_RENDER_LIMIT_DEFAULT);
       buildOptions(searchValue);
       updateActive();
     };
@@ -352,11 +428,13 @@ function initSelectUI() {
       const active = select.value;
       const selected = select.options[select.selectedIndex];
       triggerLabel.textContent = selected ? selected.textContent : active;
-      list.querySelectorAll<HTMLButtonElement>('.select-option').forEach(btn => {
-        const isActive = btn.dataset.value === active;
-        btn.classList.toggle('is-active', isActive);
-        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      });
+      list
+        .querySelectorAll<HTMLButtonElement>('.select-option')
+        .forEach((btn) => {
+          const isActive = btn.dataset.value === active;
+          btn.classList.toggle('is-active', isActive);
+          btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
     };
 
     const syncMenuOptions = (forceRebuild = false) => {
@@ -375,10 +453,15 @@ function initSelectUI() {
       wrapper.classList.remove('open-up');
       list.style.removeProperty('max-height');
       const triggerRect = trigger.getBoundingClientRect();
-      const headerBottom = document.querySelector('.prompt-bar')?.getBoundingClientRect().bottom || 0;
+      const headerBottom =
+        document.querySelector('.prompt-bar')?.getBoundingClientRect().bottom ||
+        0;
       const gap = 4;
       const below = Math.max(0, innerHeight - triggerRect.bottom - gap - 8);
-      const above = Math.max(0, triggerRect.top - gap - Math.max(8, headerBottom));
+      const above = Math.max(
+        0,
+        triggerRect.top - gap - Math.max(8, headerBottom),
+      );
       const menuHeight = menu.offsetHeight;
       const openUp = below < menuHeight && above > below;
       const room = openUp ? above : below;
@@ -395,13 +478,22 @@ function initSelectUI() {
       }
     };
 
-    const focusListOption = target => {
-      const options = Array.from(list.querySelectorAll<HTMLButtonElement>('.select-option:not(:disabled)'));
+    const focusListOption = (target) => {
+      const options = Array.from(
+        list.querySelectorAll<HTMLButtonElement>(
+          '.select-option:not(:disabled)',
+        ),
+      );
       if (!options.length) return;
-      const activeIndex = options.findIndex(option => option.classList.contains('is-active'));
-      const index = target === 'last'
-        ? options.length - 1
-        : target === 'active' && activeIndex >= 0 ? activeIndex : 0;
+      const activeIndex = options.findIndex((option) =>
+        option.classList.contains('is-active'),
+      );
+      const index =
+        target === 'last'
+          ? options.length - 1
+          : target === 'active' && activeIndex >= 0
+            ? activeIndex
+            : 0;
       options[index]?.focus({ preventScroll: true });
     };
 
@@ -415,7 +507,9 @@ function initSelectUI() {
       syncMenuOptions();
       positionMenu();
       if (searchInput) {
-        requestAnimationFrame(() => searchInput?.focus({ preventScroll: true }));
+        requestAnimationFrame(() =>
+          searchInput?.focus({ preventScroll: true }),
+        );
       } else {
         requestAnimationFrame(() => focusListOption(focusTarget));
       }
@@ -423,47 +517,87 @@ function initSelectUI() {
 
     updateActive();
     select.addEventListener('change', () => syncMenuOptions());
-    select.addEventListener('nv:options-updated', event => {
-      if (searchInput && event instanceof CustomEvent && event.detail?.resetSearch) {
+    select.addEventListener('nv:options-updated', (event) => {
+      if (
+        searchInput &&
+        event instanceof CustomEvent &&
+        event.detail?.resetSearch
+      ) {
         searchValue = '';
         searchInput.value = '';
       }
       if (event instanceof CustomEvent) {
         virtualOptions = Array.isArray(event.detail?.options)
-          ? event.detail.options.map(value => ({ value, textContent: value, disabled: false, selected: value === select.value }))
+          ? event.detail.options.map((value) => ({
+              value,
+              textContent: value,
+              disabled: false,
+              selected: value === select.value,
+            }))
           : null;
       }
       syncMenuOptions(true);
     });
-    list.addEventListener('click', event => {
-      const optionButton = event.target instanceof Element ? event.target.closest<HTMLButtonElement>('.select-option') : null;
-      if (!optionButton || !list.contains(optionButton) || optionButton.disabled) return;
-      if (virtualOptions) select.replaceChildren(new Option(optionButton.dataset.value || '', optionButton.dataset.value || ''));
+    list.addEventListener('click', (event) => {
+      const optionButton =
+        event.target instanceof Element
+          ? event.target.closest<HTMLButtonElement>('.select-option')
+          : null;
+      if (
+        !optionButton ||
+        !list.contains(optionButton) ||
+        optionButton.disabled
+      )
+        return;
+      if (virtualOptions)
+        select.replaceChildren(
+          new Option(
+            optionButton.dataset.value || '',
+            optionButton.dataset.value || '',
+          ),
+        );
       select.value = optionButton.dataset.value || '';
       select.dispatchEvent(new Event('change', { bubbles: true }));
       closeSelectUIs();
       trigger.focus({ preventScroll: true });
     });
-    trigger.addEventListener('pointerdown', event => {
+    trigger.addEventListener('pointerdown', (event) => {
       event.preventDefault();
       event.stopPropagation();
       toggleOpen();
     });
-    trigger.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    trigger.addEventListener('keydown', (event) => {
+      if (
+        event.key === 'Enter' ||
+        event.key === ' ' ||
+        event.key === 'ArrowDown' ||
+        event.key === 'ArrowUp'
+      ) {
         event.preventDefault();
         if (!wrapper.classList.contains('open')) {
           toggleOpen(event.key === 'ArrowUp' ? 'last' : 'active');
         }
       }
     });
-    list.addEventListener('keydown', event => {
-      const options = Array.from(list.querySelectorAll<HTMLButtonElement>('.select-option:not(:disabled)'));
-      const current = event.target instanceof Element ? event.target.closest<HTMLButtonElement>('.select-option') : null;
+    list.addEventListener('keydown', (event) => {
+      const options = Array.from(
+        list.querySelectorAll<HTMLButtonElement>(
+          '.select-option:not(:disabled)',
+        ),
+      );
+      const current =
+        event.target instanceof Element
+          ? event.target.closest<HTMLButtonElement>('.select-option')
+          : null;
       const index = current ? options.indexOf(current) : -1;
       let nextIndex = -1;
-      if (event.key === 'ArrowDown') nextIndex = index < 0 ? 0 : (index + 1) % options.length;
-      else if (event.key === 'ArrowUp') nextIndex = index < 0 ? options.length - 1 : (index - 1 + options.length) % options.length;
+      if (event.key === 'ArrowDown')
+        nextIndex = index < 0 ? 0 : (index + 1) % options.length;
+      else if (event.key === 'ArrowUp')
+        nextIndex =
+          index < 0
+            ? options.length - 1
+            : (index - 1 + options.length) % options.length;
       else if (event.key === 'Home') nextIndex = 0;
       else if (event.key === 'End') nextIndex = options.length - 1;
       else if (event.key === 'Escape') {
@@ -478,7 +612,7 @@ function initSelectUI() {
       event.preventDefault();
       options[nextIndex]?.focus({ preventScroll: true });
     });
-    menu.addEventListener('keydown', event => {
+    menu.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         event.preventDefault();
         closeSelectUIs(true);
@@ -527,24 +661,39 @@ function initSelectUI() {
   updateIconTheme();
 
   if (!selectUiListener) {
-    selectUiListener = e => {
-      if (!(e.target instanceof Element) || !e.target.closest('.select-ui')) closeSelectUIs();
+    selectUiListener = (e) => {
+      if (!(e.target instanceof Element) || !e.target.closest('.select-ui'))
+        closeSelectUIs();
     };
-    selectUiKeyListener = e => {
+    selectUiKeyListener = (e) => {
       if (e.key === 'Escape') closeSelectUIs(true);
     };
     document.addEventListener('click', selectUiListener);
     document.addEventListener('keydown', selectUiKeyListener);
     window.addEventListener('resize', () => closeSelectUIs());
-    window.addEventListener('scroll', () => closeSelectUIs(), { passive: true });
+    window.addEventListener('scroll', () => closeSelectUIs(), {
+      passive: true,
+    });
   }
 }
 
 function initTheme() {
-  const select = document.getElementById('theme-select') as HTMLSelectElement | null;
+  const select = document.getElementById(
+    'theme-select',
+  ) as HTMLSelectElement | null;
 
-  const stored = normalizeTheme(storageGet(THEME_KEY, document.documentElement.getAttribute('data-theme-setting') || DEFAULT_THEME));
-  const initial = select ? (hasSelectOption(select, stored) ? stored : DEFAULT_THEME) : stored || DEFAULT_THEME;
+  const stored = normalizeTheme(
+    storageGet(
+      THEME_KEY,
+      document.documentElement.getAttribute('data-theme-setting') ||
+        DEFAULT_THEME,
+    ),
+  );
+  const initial = select
+    ? hasSelectOption(select, stored)
+      ? stored
+      : DEFAULT_THEME
+    : stored || DEFAULT_THEME;
   applyTheme(initial);
   syncThemeControls(initial);
 
@@ -558,27 +707,38 @@ function initTheme() {
     });
   }
 
-  document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach(button => {
-    if (button.dataset.themeReady === 'true') return;
-    button.dataset.themeReady = 'true';
-    button.addEventListener('click', () => {
-      const current = resolveTheme(document.documentElement.getAttribute('data-theme-setting') || DEFAULT_THEME);
-      const next = LIGHT_THEMES.has(current) ? DEFAULT_THEME : DEFAULT_LIGHT_THEME;
-      applyTheme(next);
-      storageSet(THEME_KEY, next);
-      syncThemeControls(next);
+  document
+    .querySelectorAll<HTMLElement>('[data-theme-toggle]')
+    .forEach((button) => {
+      if (button.dataset.themeReady === 'true') return;
+      button.dataset.themeReady = 'true';
+      button.addEventListener('click', () => {
+        const current = resolveTheme(
+          document.documentElement.getAttribute('data-theme-setting') ||
+            DEFAULT_THEME,
+        );
+        const next = LIGHT_THEMES.has(current)
+          ? DEFAULT_THEME
+          : DEFAULT_LIGHT_THEME;
+        applyTheme(next);
+        storageSet(THEME_KEY, next);
+        syncThemeControls(next);
+      });
     });
-  });
 
   try {
     const media = window.matchMedia(SYSTEM_THEME_QUERY);
     const syncSystemTheme = () => {
-      if ((document.documentElement.getAttribute('data-theme-setting') || '') !== THEME_SYSTEM) return;
+      if (
+        (document.documentElement.getAttribute('data-theme-setting') || '') !==
+        THEME_SYSTEM
+      )
+        return;
       applyTheme(THEME_SYSTEM);
       syncThemeControls(THEME_SYSTEM);
     };
     media.addEventListener('change', syncSystemTheme);
-  } catch { }
+  } catch {}
 }
 
 function applyBackground(key) {
@@ -587,14 +747,17 @@ function applyBackground(key) {
   return applied;
 }
 
-window.NV_APPLY_BACKGROUND = key => {
+window.NV_APPLY_BACKGROUND = (key) => {
   const applied = applyBackground(key);
   storageSet(BG_KEY, applied);
   return applied;
 };
 
 function initBackground() {
-  const stored = storageGet(BG_KEY, document.documentElement.getAttribute('data-bg') || DEFAULT_BG);
+  const stored = storageGet(
+    BG_KEY,
+    document.documentElement.getAttribute('data-bg') || DEFAULT_BG,
+  );
   const initial = BG_SET.has(stored) ? stored : DEFAULT_BG;
   const applied = applyBackground(initial);
   storageSet(BG_KEY, applied);
@@ -627,14 +790,20 @@ function createSiteErrorModal() {
 
   const dialog = modal.querySelector('.site-error-dialog');
   const header = modal.querySelector('.site-error-header');
-  if (!(dialog instanceof HTMLElement) || !(header instanceof HTMLElement)) return modal;
+  if (!(dialog instanceof HTMLElement) || !(header instanceof HTMLElement))
+    return modal;
 
-  siteErrorDialogManager = createDraggableDialogManager({ layer: modal, dialog, handle: header });
-  modal.addEventListener('click', event => {
-    const target = event.target instanceof Element ? event.target : null;
-    if (target === modal || target?.closest('[data-site-error-close]')) hideSiteError();
+  siteErrorDialogManager = createDraggableDialogManager({
+    layer: modal,
+    dialog,
+    handle: header,
   });
-  modal.addEventListener('keydown', event => {
+  modal.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (target === modal || target?.closest('[data-site-error-close]'))
+      hideSiteError();
+  });
+  modal.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
     event.preventDefault();
     hideSiteError();
@@ -644,39 +813,45 @@ function createSiteErrorModal() {
 }
 
 function showNotFoundError(url) {
-  const modal = document.getElementById('site-error-modal') || createSiteErrorModal();
+  const modal =
+    document.getElementById('site-error-modal') || createSiteErrorModal();
   const requestedUrl = new URL(url, location.href);
   const pathElement = modal.querySelector('.site-error-path');
-  if (pathElement) pathElement.textContent = `${requestedUrl.pathname}${requestedUrl.search}${requestedUrl.hash}`;
+  if (pathElement)
+    pathElement.textContent = `${requestedUrl.pathname}${requestedUrl.search}${requestedUrl.hash}`;
   siteErrorDialogManager?.open({
-    initialFocus: modal.querySelector<HTMLElement>('[data-site-error-close]') || undefined,
-    recenter: true
+    initialFocus:
+      modal.querySelector<HTMLElement>('[data-site-error-close]') || undefined,
+    recenter: true,
   });
 }
 
 function initPageNavShortcut() {
   const paths = Array.from(document.querySelectorAll('.nav-tabs a'))
-    .map(link => link.getAttribute('href') || '')
+    .map((link) => link.getAttribute('href') || '')
     .filter(Boolean)
-    .map(href => normalizeMainPagePath(href) || href);
+    .map((href) => normalizeMainPagePath(href) || href);
   const index = paths.indexOf(normalizeMainPagePath(location.pathname) || '');
   if (paths.length < 2 || index < 0) return;
 
   const isApple = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
-  const guarded = 'input, select, textarea, [contenteditable=""], [contenteditable="true"], [role="tree"], [role="grid"]';
+  const guarded =
+    'input, select, textarea, [contenteditable=""], [contenteditable="true"], [role="tree"], [role="grid"]';
 
-  document.addEventListener('keydown', event => {
+  document.addEventListener('keydown', (event) => {
     if (event.repeat || event.altKey || event.shiftKey) return;
     const primaryKey = isApple ? event.metaKey : event.ctrlKey;
     const otherPrimaryKey = isApple ? event.ctrlKey : event.metaKey;
     if (!primaryKey || otherPrimaryKey) return;
 
-    const step = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
+    const step =
+      event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
     if (!step) return;
 
     const target = event.target instanceof Element ? event.target : null;
     if (target?.closest(guarded)) return;
-    if (document.querySelector('dialog[open], .settings-modal:not([hidden])')) return;
+    if (document.querySelector('dialog[open], .settings-modal:not([hidden])'))
+      return;
 
     const next = paths[index + step];
     if (!next) return;
@@ -685,13 +860,17 @@ function initPageNavShortcut() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const notFoundPath = consumeNotFoundPath();
-  rememberActivePage(location.pathname);
-  initTheme();
-  initBackground();
-  initSelectUI();
-  initPageNavShortcut();
-  initClipboard();
-  if (notFoundPath) showNotFoundError(notFoundPath);
-}, { once: true });
+document.addEventListener(
+  'DOMContentLoaded',
+  () => {
+    const notFoundPath = consumeNotFoundPath();
+    rememberActivePage(location.pathname);
+    initTheme();
+    initBackground();
+    initSelectUI();
+    initPageNavShortcut();
+    initClipboard();
+    if (notFoundPath) showNotFoundError(notFoundPath);
+  },
+  { once: true },
+);

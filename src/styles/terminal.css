@@ -148,15 +148,17 @@ main.main-terminal .terminal-shell {
 }
 
 .tool-resize-handle::after {
-  content: "";
+  content: '';
   position: absolute;
   right: 1px;
   bottom: 1px;
   width: 8px;
   height: 8px;
-  background: repeating-linear-gradient(135deg,
-      #494949 0 1px,
-      transparent 1px 2px);
+  background: repeating-linear-gradient(
+    135deg,
+    #494949 0 1px,
+    transparent 1px 2px
+  );
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
   pointer-events: none;
 }
@@ -222,8 +224,8 @@ main.main-terminal .terminal-shell {
   height: 14px;
   display: block;
   background-color: currentColor;
-  -webkit-mask: url("/main/icons/ui/x.svg") center / contain no-repeat;
-  mask: url("/main/icons/ui/x.svg") center / contain no-repeat;
+  -webkit-mask: url('/main/icons/ui/x.svg') center / contain no-repeat;
+  mask: url('/main/icons/ui/x.svg') center / contain no-repeat;
 }
 
 .bitmask-body {
@@ -279,7 +281,7 @@ main.main-terminal .terminal-shell {
   line-height: 1;
 }
 
-.bitmask-bit[aria-pressed="true"] {
+.bitmask-bit[aria-pressed='true'] {
   border-color: var(--accent);
   background: var(--accent);
   color: var(--accent-contrast);
@@ -317,7 +319,7 @@ main.main-terminal .terminal-shell {
   white-space: nowrap;
 }
 
-.bitmask-values input[aria-invalid="true"] {
+.bitmask-values input[aria-invalid='true'] {
   border-color: var(--danger);
 }
 
@@ -431,7 +433,7 @@ main.main-terminal .terminal-shell {
   font-size: var(--font-size-body);
 }
 
-.calc-output:has(#calc-input[aria-invalid="true"]) {
+.calc-output:has(#calc-input[aria-invalid='true']) {
   border-color: var(--danger);
 }
 
@@ -491,13 +493,13 @@ main.main-terminal .terminal-shell {
   color: color-mix(in srgb, var(--text) 86%, var(--muted));
 }
 
-.calc-grid button[data-calc-key="number"] {
+.calc-grid button[data-calc-key='number'] {
   background: color-mix(in srgb, var(--accent) 18%, var(--panel-alt));
   border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
   color: color-mix(in srgb, var(--accent-2) 78%, var(--text));
 }
 
-.calc-grid button[data-calc-key="operator"] {
+.calc-grid button[data-calc-key='operator'] {
   background: color-mix(in srgb, var(--panel) 72%, var(--bg));
   color: color-mix(in srgb, var(--warning) 70%, var(--text));
 }
@@ -529,14 +531,18 @@ main.main-terminal .terminal-shell {
   .calc-keypads {
     --calc-key-gap: clamp(2px, 1.1cqw, 4px);
     --calc-group-gap: clamp(6px, 2.4cqw, 14px);
-    --calc-key-size: clamp(38px, calc((100cqw - (4 * var(--calc-key-gap)) - var(--calc-group-gap)) / 6), 52px);
+    --calc-key-size: clamp(
+      38px,
+      calc((100cqw - (4 * var(--calc-key-gap)) - var(--calc-group-gap)) / 6),
+      52px
+    );
     --calc-key-height: clamp(26px, calc(var(--calc-key-size) * 0.58), 30px);
     grid-template-columns: repeat(2, max-content);
   }
 
   .calc-tools,
-  .calc-actions [data-calc-value="!"],
-  .calc-actions [data-calc-value="%"] {
+  .calc-actions [data-calc-value='!'],
+  .calc-actions [data-calc-value='%'] {
     display: none;
   }
 }
@@ -554,7 +560,11 @@ main.main-terminal .terminal-shell {
   .calc-keypads {
     --calc-key-gap: clamp(1px, 0.8cqw, 3px);
     --calc-group-gap: clamp(4px, 1.6cqw, 8px);
-    --calc-key-size: clamp(32px, calc((100cqw - (4 * var(--calc-key-gap)) - var(--calc-group-gap)) / 6), 52px);
+    --calc-key-size: clamp(
+      32px,
+      calc((100cqw - (4 * var(--calc-key-gap)) - var(--calc-group-gap)) / 6),
+      52px
+    );
     --calc-key-height: clamp(22px, calc(var(--calc-key-size) * 0.58), 30px);
   }
 }
@@ -745,7 +755,9 @@ main.main-terminal .terminal-shell {
   z-index: 0;
 }
 
-.console[data-input-active="true"] .console-edit:focus-within .console-block-cursor {
+.console[data-input-active='true']
+  .console-edit:focus-within
+  .console-block-cursor {
   display: block;
 }
 
@@ -769,7 +781,6 @@ main.main-terminal .terminal-shell {
 }
 
 @keyframes blink {
-
   0%,
   49% {
     opacity: 1;
@@ -840,8 +851,6 @@ main.main-terminal .terminal-shell {
   .calc-window {
     height: min(286px, calc(100svh - 24px));
   }
-
-
 }
 
 .console-block-cursor {

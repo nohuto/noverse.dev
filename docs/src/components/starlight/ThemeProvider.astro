@@ -1,140 +1,165 @@
 ---
-import { docsDefaultThemes, docsLightThemeIds, docsThemeIds } from '../../utils/doc-themes';
+import {
+  docsDefaultTheme,
+  docsLightThemeIds,
+  docsThemeIds,
+} from '../../utils/doc-themes';
 ---
 
 <script
   define:vars={{
-    defaultThemes: docsDefaultThemes,
+    defaultTheme: docsDefaultTheme,
     lightThemeIds: docsLightThemeIds,
     themeIds: docsThemeIds,
   }}
 >
-  window.DocsThemeProvider = window.DocsThemeProvider || (() => {
-    const storageKey = 'nv-theme';
-    const systemTheme = 'system';
-    const darkTheme = 'dark';
-    const lightTheme = 'light';
-    const availableThemeIds = new Set(themeIds);
-    const availableLightThemeIds = new Set(lightThemeIds);
-    const defaults = defaultThemes;
+  window.DocsThemeProvider =
+    window.DocsThemeProvider ||
+    (() => {
+      const storageKey = 'nv-theme';
+      const systemTheme = 'system';
+      const darkTheme = 'dark';
+      const lightTheme = 'light';
+      const availableThemeIds = new Set(themeIds);
+      const availableLightThemeIds = new Set(lightThemeIds);
+      const getPreferredTheme = () =>
+        window.matchMedia('(prefers-color-scheme: light)').matches
+          ? lightTheme
+          : darkTheme;
 
-    const getPreferredScheme = () =>
-      window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      const normalizeTheme = (theme) => {
+        return typeof theme === 'string' ? theme.trim() : '';
+      };
 
-    const getPreferredTheme = () => (getPreferredScheme() === 'light' ? lightTheme : darkTheme);
+      const resolveTheme = (theme) => {
+        const normalized = normalizeTheme(theme);
+        return normalized === systemTheme
+          ? getPreferredTheme()
+          : normalized || darkTheme;
+      };
 
-    const normalizeTheme = (theme) => {
-      return typeof theme === 'string' ? theme.trim() : '';
-    };
+      const getThemeScheme = (theme) =>
+        availableLightThemeIds.has(resolveTheme(theme)) ? 'light' : 'dark';
 
-    const resolveTheme = (theme) => {
-      const normalized = normalizeTheme(theme);
-      return normalized === systemTheme ? getPreferredTheme() : (normalized || darkTheme);
-    };
+      const isValidTheme = (theme) =>
+        typeof theme === 'string' && availableThemeIds.has(theme);
 
-    const getThemeScheme = (theme) => (availableLightThemeIds.has(resolveTheme(theme)) ? 'light' : 'dark');
+      const parseTheme = (theme) => {
+        const normalized = normalizeTheme(theme);
+        return isValidTheme(normalized) ? normalized : '';
+      };
 
-    const isValidTheme = (theme) => typeof theme === 'string' && availableThemeIds.has(theme);
+      const loadTheme = () => {
+        if (typeof localStorage === 'undefined') return '';
+        try {
+          return parseTheme(localStorage.getItem(storageKey));
+        } catch {
+          return '';
+        }
+      };
 
-    const getFallbackTheme = (scheme = getPreferredScheme()) => defaults[scheme] ?? defaults.dark;
+      const applyTheme = (requestedTheme) => {
+        const nextTheme = parseTheme(requestedTheme) || defaultTheme;
+        const appliedTheme = resolveTheme(nextTheme);
+        const nextScheme = getThemeScheme(appliedTheme);
+        document.documentElement.dataset.theme = nextScheme;
+        document.documentElement.dataset.docsThemeSetting = nextTheme;
+        document.documentElement.dataset.docsTheme = appliedTheme;
+        return { theme: nextTheme, appliedTheme, scheme: nextScheme };
+      };
 
-    const parseTheme = (theme) => {
-      const normalized = normalizeTheme(theme);
-      return isValidTheme(normalized) ? normalized : '';
-    };
+      const updatePickers = (
+        theme = loadTheme() ||
+          document.documentElement.dataset.docsThemeSetting ||
+          defaultTheme,
+      ) => {
+        document.querySelectorAll('docs-theme-select').forEach((picker) => {
+          picker.dataset.themeValue = theme;
+          const optionButtons = Array.from(
+            picker.querySelectorAll('[data-theme-option]'),
+          );
+          let activeLabel = '';
 
-    const loadTheme = () => {
-      if (typeof localStorage === 'undefined') return '';
-      try {
-        return parseTheme(localStorage.getItem(storageKey));
-      } catch {
-        return '';
-      }
-    };
+          optionButtons.forEach((optionButton) => {
+            if (!(optionButton instanceof HTMLButtonElement)) return;
+            const isActive = optionButton.dataset.themeOption === theme;
+            optionButton.setAttribute('aria-selected', String(isActive));
+            optionButton.setAttribute('aria-checked', String(isActive));
+            optionButton.tabIndex = isActive ? 0 : -1;
+            optionButton.dataset.active = String(isActive);
+            if (isActive) {
+              activeLabel =
+                optionButton.dataset.themeLabel ||
+                optionButton.textContent?.trim() ||
+                '';
+            }
+          });
 
-    const applyTheme = (requestedTheme) => {
-      const nextTheme = parseTheme(requestedTheme) || getFallbackTheme();
-      const appliedTheme = resolveTheme(nextTheme);
-      const nextScheme = getThemeScheme(appliedTheme);
-      document.documentElement.dataset.theme = nextScheme;
-      document.documentElement.dataset.docsThemeSetting = nextTheme;
-      document.documentElement.dataset.docsTheme = appliedTheme;
-      return { theme: nextTheme, appliedTheme, scheme: nextScheme };
-    };
+          const currentLabel = picker.querySelector('[data-current-label]');
+          if (currentLabel) currentLabel.textContent = activeLabel || theme;
 
-    const updatePickers = (theme = loadTheme() || document.documentElement.dataset.docsThemeSetting || getFallbackTheme()) => {
-      document.querySelectorAll('docs-theme-select').forEach((picker) => {
-        picker.dataset.themeValue = theme;
-        const optionButtons = Array.from(picker.querySelectorAll('[data-theme-option]'));
-        let activeLabel = '';
-
-        optionButtons.forEach((optionButton) => {
-          if (!(optionButton instanceof HTMLButtonElement)) return;
-          const isActive = optionButton.dataset.themeOption === theme;
-          optionButton.setAttribute('aria-selected', String(isActive));
-          optionButton.setAttribute('aria-checked', String(isActive));
-          optionButton.tabIndex = isActive ? 0 : -1;
-          optionButton.dataset.active = String(isActive);
-          if (isActive) {
-            activeLabel = optionButton.dataset.themeLabel || optionButton.textContent?.trim() || '';
+          const trigger = picker.querySelector('[data-theme-trigger]');
+          if (trigger instanceof HTMLButtonElement) {
+            const label = activeLabel || theme;
+            trigger.setAttribute(
+              'aria-label',
+              `Select docs theme. Current theme: ${label}`,
+            );
           }
         });
+      };
 
-        const currentLabel = picker.querySelector('[data-current-label]');
-        if (currentLabel) currentLabel.textContent = activeLabel || theme;
+      const storeTheme = (theme) => {
+        if (typeof localStorage === 'undefined') return;
+        try {
+          localStorage.setItem(storageKey, theme);
+        } catch {}
+      };
 
-        const trigger = picker.querySelector('[data-theme-trigger]');
-        if (trigger instanceof HTMLButtonElement) {
-          const label = activeLabel || theme;
-          trigger.setAttribute('aria-label', `Select docs theme. Current theme: ${label}`);
-        }
-      });
-    };
+      const setTheme = (theme) => {
+        const {
+          theme: selectedTheme,
+          appliedTheme,
+          scheme,
+        } = applyTheme(theme);
+        storeTheme(selectedTheme);
+        updatePickers(selectedTheme);
+        document.dispatchEvent(
+          new CustomEvent('nv:theme-change', {
+            detail: {
+              theme: selectedTheme,
+              appliedTheme,
+              scheme,
+              isLight: scheme === 'light',
+            },
+          }),
+        );
+        return selectedTheme;
+      };
 
-    const storeTheme = (theme) => {
-      if (typeof localStorage === 'undefined') return;
-      try {
-        localStorage.setItem(storageKey, theme);
-      } catch {}
-    };
+      const syncPreferredTheme = () => {
+        const selectedTheme =
+          loadTheme() ||
+          document.documentElement.dataset.docsThemeSetting ||
+          defaultTheme;
+        if (selectedTheme !== systemTheme) return;
+        const { theme } = applyTheme(systemTheme);
+        updatePickers(theme);
+      };
 
-    const setTheme = (theme) => {
-      const { theme: selectedTheme, appliedTheme, scheme } = applyTheme(theme);
-      storeTheme(selectedTheme);
-      updatePickers(selectedTheme);
-      document.dispatchEvent(
-        new CustomEvent('nv:theme-change', {
-          detail: {
-            theme: selectedTheme,
-            appliedTheme,
-            scheme,
-            isLight: scheme === 'light',
-          },
-        }),
-      );
-      return selectedTheme;
-    };
+      const initialTheme = loadTheme();
+      applyTheme(initialTheme);
 
-    const syncPreferredTheme = () => {
-      const selectedTheme = loadTheme() || document.documentElement.dataset.docsThemeSetting || getFallbackTheme();
-      if (selectedTheme !== systemTheme) return;
-      const { theme } = applyTheme(systemTheme);
-      updatePickers(theme);
-    };
+      window
+        .matchMedia('(prefers-color-scheme: light)')
+        .addEventListener('change', syncPreferredTheme);
 
-    const initialTheme = loadTheme();
-    applyTheme(initialTheme);
-
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', syncPreferredTheme);
-
-    return {
-      getFallbackTheme,
-      getThemeScheme,
-      loadTheme,
-      setTheme,
-      syncPreferredTheme,
-      updatePickers,
-    };
-  })();
+      return {
+        getThemeScheme,
+        loadTheme,
+        setTheme,
+        syncPreferredTheme,
+        updatePickers,
+      };
+    })();
 </script>
-

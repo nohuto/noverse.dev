@@ -1,12 +1,10 @@
-import { spawn } from 'node:child_process';
+import { execSync } from 'node:child_process';
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import sharp from 'sharp';
-import { minifyHtml } from './minify-html.mjs';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const root = path.join(import.meta.dirname, '..');
 const siteDir = path.join(root, 'site');
 const htmlDir = path.join(siteDir, 'pages');
 const dataDir = path.join(siteDir, 'data');
@@ -17,13 +15,13 @@ const publicDir = path.join(siteDir, 'public');
 const distDir = path.join(root, 'dist');
 const mainOutputDir = path.join(distDir, 'main');
 const responsiveImagePattern = /\/?(main\/images\/[^"'\s,]+)-(\d+)\.webp\s+\d+w/g;
-const pageNavigation = Object.freeze({
+const pageNavigation = {
   'index.html': 'home',
   'product.html': 'product',
   'projects.html': 'projects',
   'diff.html': 'diff',
   'policies.html': 'policies',
-});
+};
 const themeOptions = [
   ['system', 'System'], ['dark', 'Dark'], ['light', 'Light'], ['ayu-dark', 'Ayu Dark'],
   ['ayu-light', 'Ayu Light'], ['catppuccin-frappe', 'Catppuccin Frappe'],
@@ -143,10 +141,7 @@ async function loadPageSources() {
 }
 
 function expandPage(html, pageName, sources) {
-  let expanded = html.replace(/<!-- include:([\w-]+) -->/g, (_, name) => {
-    if (!sources.partials.has(name)) throw new Error(`Unknown HTML partial: ${name}`);
-    return sources.partials.get(name);
-  });
+  let expanded = html.replace(/<!-- include:([\w-]+) -->/g, (_, name) => sources.partials.get(name));
   const activeNavigation = pageNavigation[pageName] || '';
   expanded = expanded.replace(/\{\{nav-([\w-]+)\}\}/g, (_, name) => (
     name === activeNavigation ? ' class="active" aria-current="page"' : ''
@@ -162,18 +157,6 @@ function expandPage(html, pageName, sources) {
   expanded = expanded.replace(/<!-- component:settings-dialog-start:([\w-]+) -->/g, (_, prefix) => renderSettingsDialogStart(prefix));
   expanded = expanded.replace(/<!-- component:settings-dialog-end:([\w-]+) -->/g, (_, prefix) => renderSettingsDialogEnd(prefix));
   return expanded;
-}
-
-async function copyEntry(source, destination) {
-  await cp(source, destination, {
-    recursive: true,
-    filter: sourcePath => {
-      const relative = path.relative(publicDir, sourcePath);
-      const isProjectPng = relative.startsWith(path.join('main', 'images', 'projects') + path.sep)
-        && path.extname(relative).toLowerCase() === '.png';
-      return !isProjectPng;
-    },
-  });
 }
 
 async function buildResponsiveImages(pages) {
@@ -202,12 +185,11 @@ async function buildResponsiveImages(pages) {
 
 async function buildMainSite() {
   const pageSources = await loadPageSources();
-  const publicEntries = await readdir(publicDir, { withFileTypes: true });
-  await Promise.all(publicEntries.map((entry) => (
-    copyEntry(path.join(publicDir, entry.name), path.join(distDir, entry.name))
-  )));
-
-  await mkdir(path.join(mainOutputDir, 'min'), { recursive: true });
+  const projectImages = path.join(publicDir, 'main', 'images', 'projects') + path.sep;
+  await cp(publicDir, distDir, {
+    recursive: true,
+    filter: (source) => !(source.startsWith(projectImages) && path.extname(source).toLowerCase() === '.png'),
+  });
 
   const assetEntries = (await Promise.all([scriptDir, styleDir].map(async (directory) => (
     (await readdir(directory, { withFileTypes: true }))
@@ -224,7 +206,6 @@ async function buildMainSite() {
       entryPoints: [source],
       outfile: path.join(mainOutputDir, 'min', `${name}.min${extension}`),
       minify: true,
-      logLevel: 'silent',
     });
   }));
 
@@ -239,30 +220,11 @@ async function buildMainSite() {
   await Promise.all([
     buildResponsiveImages(pages),
     ...pages.map(({ entry, html }) => (
-      writeFile(path.join(distDir, entry.name), minifyHtml(html))
+      writeFile(path.join(distDir, entry.name), html)
     )),
   ]);
 }
 
-function buildDocs() {
-  const command = process.platform === 'win32' ? process.env.ComSpec || 'cmd.exe' : 'npm';
-  const args = process.platform === 'win32'
-    ? ['/d', '/s', '/c', 'npm run build:docs']
-    : ['run', 'build:docs'];
-
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, args, {
-      cwd: root,
-      stdio: 'inherit',
-    });
-    child.on('error', reject);
-    child.on('exit', (code) => (
-      code === 0 ? resolve() : reject(new Error(`Doc build failed - ${code}`))
-    ));
-  });
-}
-
 await rm(distDir, { recursive: true, force: true });
-await mkdir(distDir, { recursive: true });
 await buildMainSite();
-await buildDocs();
+execSync('npm run build:docs', { cwd: root, stdio: 'inherit' });

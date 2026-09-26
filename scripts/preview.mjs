@@ -1,115 +1,40 @@
-import { createReadStream } from 'node:fs';
-import { stat } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'dist');
-const port = Number.parseInt(process.argv[2] || '8888', 10);
-const mimeTypes = new Map([
-  ['.css', 'text/css; charset=utf-8'],
-  ['.html', 'text/html; charset=utf-8'],
-  ['.ico', 'image/x-icon'],
-  ['.jpeg', 'image/jpeg'],
-  ['.jpg', 'image/jpeg'],
-  ['.js', 'text/javascript; charset=utf-8'],
-  ['.json', 'application/json; charset=utf-8'],
-  ['.png', 'image/png'],
-  ['.svg', 'image/svg+xml; charset=utf-8'],
-  ['.txt', 'text/plain; charset=utf-8'],
-  ['.ttf', 'font/ttf'],
-  ['.webp', 'image/webp'],
-  ['.woff', 'font/woff'],
-  ['.woff2', 'font/woff2'],
-  ['.xml', 'application/xml; charset=utf-8'],
-]);
+const dist = path.join(import.meta.dirname, '..', 'dist');
+const types = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf',
+  '.mp4': 'video/mp4',
+  '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml',
+};
+const isFile = (file) => file.startsWith(dist) && stat(file).then((s) => s.isFile(), () => false);
+const send = async (response, status, file) => response
+  .writeHead(status, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' })
+  .end(await readFile(file));
 
-const insideRoot = target => target === root || target.startsWith(`${root}${path.sep}`);
+createServer(async (request, response) => {
+  const url = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+  if (url.endsWith('.html')) return response.writeHead(308, { Location: url.replace(/(index)?\.html$/, '') }).end();
 
-async function isFile(target) {
-  try {
-    return (await stat(target)).isFile();
-  } catch {
-    return false;
-  }
-}
+  const file = path.join(dist, url);
+  if (url.endsWith('/') && await isFile(path.join(file, 'index.html'))) return send(response, 200, path.join(file, 'index.html'));
+  if (await isFile(file)) return send(response, 200, file);
+  if (await isFile(`${file}.html`)) return send(response, 200, `${file}.html`);
+  if (await isFile(path.join(file, 'index.html'))) return response.writeHead(308, { Location: `${url}/` }).end();
 
-async function resolveRoute(pathname) {
-  const relative = pathname.replace(/^\/+/, '');
-  const direct = path.resolve(root, relative);
-  if (!insideRoot(direct)) return {};
-
-  if (pathname.endsWith('/')) {
-    const index = path.join(direct, 'index.html');
-    return (await isFile(index)) ? { file: index } : {};
-  }
-
-  if (path.extname(pathname)) {
-    return (await isFile(direct)) ? { file: direct } : {};
-  }
-
-  const html = `${direct}.html`;
-  if (await isFile(html)) return { file: html };
-
-  const index = path.join(direct, 'index.html');
-  return (await isFile(index)) ? { redirect: `${pathname}/` } : {};
-}
-
-async function closestNotFound(pathname) {
-  let directory = path.dirname(path.resolve(root, pathname.replace(/^\/+/, '')));
-  while (insideRoot(directory)) {
-    const candidate = path.join(directory, '404.html');
-    if (await isFile(candidate)) return candidate;
-    if (directory === root) break;
-    directory = path.dirname(directory);
-  }
-  return path.join(root, '404.html');
-}
-
-function sendFile(response, file, status = 200, method = 'GET') {
-  const cacheControl = [
-    'CascadiaCode-2407.24.woff2',
-    // 'UbuntuMonoNerdFontMono-Regular.ttf',
-    // 'UbuntuMonoNerdFontMono-Bold.ttf',
-  ].includes(path.basename(file))
-    ? 'public, max-age=31556952, immutable'
-    : 'no-store';
-  response.writeHead(status, {
-    'Cache-Control': cacheControl,
-    'Content-Type': mimeTypes.get(path.extname(file).toLowerCase()) || 'application/octet-stream',
-  });
-  if (method === 'HEAD') {
-    response.end();
-    return;
-  }
-  createReadStream(file).pipe(response);
-}
-
-const server = createServer(async (request, response) => {
-  if (!['GET', 'HEAD'].includes(request.method)) {
-    response.writeHead(405, { Allow: 'GET, HEAD' }).end();
-    return;
-  }
-
-  try {
-    const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-    if (pathname.endsWith('.html')) {
-      const route = pathname.endsWith('/index.html')
-        ? pathname.slice(0, -10) || '/'
-        : pathname.slice(0, -5) || '/';
-      response.writeHead(308, { Location: route }).end();
-      return;
-    }
-
-    const { file, redirect } = await resolveRoute(pathname);
-    if (redirect) {
-      response.writeHead(308, { Location: redirect }).end();
-      return;
-    }
-    sendFile(response, file || await closestNotFound(pathname), file ? 200 : 404, request.method);
-  } catch {
-    response.writeHead(400).end('Bad request');
-  }
-});
-
-server.listen(port, '127.0.0.1');
+  let dir = path.dirname(file);
+  while (dir.startsWith(dist) && !await isFile(path.join(dir, '404.html'))) dir = path.dirname(dir);
+  return send(response, 404, path.join(dir.startsWith(dist) ? dir : dist, '404.html'));
+}).listen(process.argv[2] || 8888, '127.0.0.1');

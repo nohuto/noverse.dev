@@ -88,7 +88,7 @@ def fetch(r):
 def upd_repos():
     projects = jload(PROJECTS, [])
     if not isinstance(projects, list):
-        raise RuntimeError(f'{PROJECTS} must contain a JSON array')
+        raise RuntimeError(f'{PROJECTS} must have a JSON array')
     descriptions = {}
     missing = []
     for project in projects:
@@ -103,7 +103,7 @@ def upd_repos():
         time.sleep(0.3)
 
     if missing:
-        raise RuntimeError(f'Could not resolve descriptions for: {", ".join(missing)}')
+        raise RuntimeError(f'Couldnt get descriptions for: {", ".join(missing)}')
 
     for project in projects:
         if not isinstance(project, dict):

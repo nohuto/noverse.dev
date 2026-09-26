@@ -8,7 +8,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "build:docs": "npm run build --workspace noverse-docs",
-    "preview": "node scripts/preview.mjs"
+    "dev": "node scripts/dev.mjs"
   },
   "engines": {
     "node": "^20.19.1 || >=22.12.0"

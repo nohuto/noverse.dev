@@ -1,0 +1,20 @@
+---
+import { themes } from '../../data/themes';
+---
+<div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<footer>
+  <div class="footer-row">
+    <div class="footer-left"><div class="footer-copy"><span class="copyright-icon" aria-hidden="true"></span>2026 nohuto</div></div>
+    <div class="footer-tools"><div class="footer-tools-row">
+      <select id="theme-select" name="theme" aria-label="Theme">
+        {themes.map(([value, label]) => <option value={value}>{label}</option>)}
+      </select>
+    </div></div>
+    <div class="social">
+      <a href="https://github.com/nohuto" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><span class="social-icon social-icon-github" aria-hidden="true"></span></a>
+      <button class="icon-button" type="button" data-email="copy" data-toast="Email copied" aria-label="Copy email to clipboard"><span class="social-icon social-icon-email" aria-hidden="true"></span></button>
+      <a href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer" aria-label="Discord server"><span class="social-icon social-icon-discord" aria-hidden="true"></span></a>
+      <a href="/public.asc" type="application/pgp-keys" download aria-label="Download public GPG key"><span class="social-icon social-icon-key" aria-hidden="true"></span></a>
+    </div>
+  </div>
+</footer>

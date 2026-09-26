@@ -2,11 +2,14 @@
 import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter';
 import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
 import SidebarSublist from '@astrojs/starlight/components/SidebarSublist.astro';
+import type { StarlightRouteData } from '@astrojs/starlight/route-data';
+
+type SidebarEntry = StarlightRouteData['sidebar'][number];
 
 const { sidebar } = Astro.locals.starlightRoute;
 const renderedSidebar = flattenSectionsGroups(sidebar);
 
-function slugifyLabel(value) {
+function slugifyLabel(value: string): string {
   return String(value || '')
     .trim()
     .toLowerCase()
@@ -14,12 +17,12 @@ function slugifyLabel(value) {
     .replace(/^-+|-+$/g, '');
 }
 
-function cloneGroup(group, entries) {
+function cloneGroup(group: Extract<SidebarEntry, { type: 'group' }>, entries: SidebarEntry[]): SidebarEntry {
   return { ...group, entries };
 }
 
-function flattenSectionsGroups(entries, capitalizeGroups = false) {
-  const flattened = [];
+function flattenSectionsGroups(entries: SidebarEntry[], capitalizeGroups = false): SidebarEntry[] {
+  const flattened: SidebarEntry[] = [];
   const orderedEntries = orderSectionsFirst(entries);
 
   for (const entry of orderedEntries) {
@@ -48,9 +51,9 @@ function flattenSectionsGroups(entries, capitalizeGroups = false) {
   return flattened;
 }
 
-function orderSectionsFirst(entries) {
-  const sections = [];
-  const others = [];
+function orderSectionsFirst(entries: SidebarEntry[]): SidebarEntry[] {
+  const sections: SidebarEntry[] = [];
+  const others: SidebarEntry[] = [];
 
   for (const entry of entries || []) {
     if (isSectionsGroup(entry)) {
@@ -63,7 +66,7 @@ function orderSectionsFirst(entries) {
   return [...sections, ...others];
 }
 
-function isSectionsGroup(entry) {
+function isSectionsGroup(entry: SidebarEntry): boolean {
   return Boolean(entry && entry.type === 'group' && slugifyLabel(entry.label) === 'sections');
 }
 ---

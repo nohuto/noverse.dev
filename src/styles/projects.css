@@ -1,0 +1,110 @@
+﻿.project-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+#project-search {
+  font-size: var(--font-size-body);
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, max(340px, calc((100% - 16px) / 2))), 1fr));
+  gap: 16px;
+}
+
+.project-group + .project-group {
+  margin-top: 24px;
+}
+
+.project-group .section-heading {
+  margin-bottom: 20px;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--border);
+  background: var(--panel-alt);
+}
+
+.project-card[hidden] {
+  display: none;
+}
+
+.project-empty {
+  margin: 24px 0 4px;
+  padding: 32px 20px;
+  border: 1px dashed var(--border-strong);
+  color: var(--muted);
+  text-align: center;
+}
+
+.clickable-card {
+  position: relative;
+  cursor: pointer;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.clickable-card:has(.clickable-card-link:active) {
+  transform: translateY(1px);
+}
+
+.clickable-card:hover,
+.clickable-card:focus-within {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.clickable-card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.clickable-card-link:focus-visible {
+  outline: none;
+}
+
+.clickable-card>video,
+.clickable-card>audio {
+  position: relative;
+  z-index: 2;
+}
+
+.project-media,
+.project-media-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-alt);
+}
+
+.project-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 10px;
+  padding: 16px 16px 18px;
+}
+
+.project-title {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.project-desc {
+  margin: 0;
+  color: var(--muted);
+}
+

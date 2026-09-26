@@ -2,11 +2,10 @@ import html, json, os, re, shutil, time, urllib.error, urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SITE = ROOT / 'site'
-PUBLIC = SITE / 'public' / 'main'
-PROJECTS = SITE / 'data' / 'projects.json'
-MS = SITE / 'data' / 'media-sources.json'
-MC = SITE / 'data' / 'media-cache.json'
+PUBLIC = ROOT / 'public' / 'main'
+PROJECTS = ROOT / 'src' / 'data' / 'projects.json'
+MS = ROOT / 'src' / 'data' / 'media-sources.json'
+MC = ROOT / 'src' / 'data' / 'media-cache.json'
 H = {'User-Agent': 'Mozilla/5.0'}
 
 def jload(p, d):
@@ -71,8 +70,10 @@ def fetch(r):
         q = urllib.request.Request(f'https://api.github.com/repos/{r}', headers=hh)
         with urllib.request.urlopen(q, timeout=20) as x:
             p = json.loads(x.read().decode('utf-8', 'ignore'))
-        if isinstance(p, dict) and 'description' in p:
-            return ndesc(p.get('description'), r)
+        if isinstance(p, dict):
+            description = ndesc(p.get('description'), r)
+            if description:
+                return description
     except Exception:
         pass
     try:
@@ -86,7 +87,7 @@ def fetch(r):
         return fetch_readme(r)
 
 def upd_repos():
-    projects = jload(PROJECTS, [])
+    projects = json.loads(PROJECTS.read_text(encoding='utf-8'))
     if not isinstance(projects, list):
         raise RuntimeError(f'{PROJECTS} must have a JSON array')
     descriptions = {}
@@ -103,7 +104,7 @@ def upd_repos():
         time.sleep(0.3)
 
     if missing:
-        raise RuntimeError(f'Couldnt get descriptions for: {", ".join(missing)}')
+        raise RuntimeError(f'couldnt get descriptions for - {", ".join(missing)}')
 
     for project in projects:
         if not isinstance(project, dict):

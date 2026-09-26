@@ -11,7 +11,7 @@ const activeRepo = getActiveRepo(id, sidebar);
 const hasActiveRepo = Boolean(activeRepo && !['index', '404'].includes(activeRepo));
 const repoHref = hasActiveRepo ? `https://github.com/nohuto/${activeRepo}` : '';
 
-const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.starlightViewModes.modes);
+const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(Astro.locals.starlightViewModes.modes, id);
 ---
 
 <div class="mobile-preferences sl-flex">

@@ -1,0 +1,224 @@
+﻿.home-intro h1 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.home-intro>p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.home-intro .home-contact {
+  margin-top: 8px;
+}
+
+.home-contact a,
+.home-email {
+  color: var(--accent);
+}
+
+.home-email {
+  display: inline-block;
+  width: 19ch;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.home-section {
+  margin-top: 20px;
+}
+
+.home-work-grid {
+  display: grid;
+  gap: 0 28px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.home-work-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+  padding: 9px 0 10px;
+}
+
+.home-work-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.home-work-title a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.home-work-title .home-work-docs {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.home-work-docs::before {
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+  content: '';
+  -webkit-mask: url('/main/icons/ui/book-bookmark.svg') center / contain no-repeat;
+  mask: url('/main/icons/ui/book-bookmark.svg') center / contain no-repeat;
+}
+
+.home-work-item span {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.home-work-item strong {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.home-work-title>a:hover strong,
+.home-work-title>a:focus-visible strong,
+.home-work-docs:hover,
+.home-work-docs:focus-visible {
+  color: var(--accent);
+}
+
+.commit-skeleton-row {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 76px;
+  gap: 14px;
+  align-items: center;
+  min-height: 36px;
+  padding: 10px 0;
+}
+
+.commit-skeleton-row:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
+
+.commit-skeleton-row span {
+  height: 0.6875rem;
+  background: color-mix(in srgb, var(--border-strong) 70%, transparent);
+  animation: commit-skeleton-pulse 1.4s ease-in-out infinite alternate;
+}
+
+.commit-skeleton-row:nth-child(3n + 2) span {
+  animation-delay: 160ms;
+}
+
+.commit-skeleton-row:nth-child(3n) span {
+  animation-delay: 320ms;
+}
+
+.commit-skeleton-repo {
+  width: 72%;
+}
+
+.commit-skeleton-message {
+  width: min(88%, 34rem);
+}
+
+.commit-skeleton-date {
+  width: 100%;
+}
+
+@keyframes commit-skeleton-pulse {
+  from {
+    opacity: 0.34;
+  }
+
+  to {
+    opacity: 0.82;
+  }
+}
+
+.commit-item {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: baseline;
+  padding: 10px 0;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.commit-item:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
+
+.commit-repo,
+.commit-sha,
+.commit-date {
+  color: var(--muted);
+  font-size: 0.6875rem;
+}
+
+.commit-date {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.commit-sha {
+  color: var(--text);
+}
+
+.commit-message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--font-size-control);
+}
+
+.commit-item:hover .commit-message,
+.commit-item:focus-visible .commit-message {
+  color: var(--accent);
+}
+
+.home-status {
+  margin: 0;
+  padding: 12px 0;
+  color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .home-work-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commit-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 12px;
+  }
+
+  .commit-message {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .commit-date {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .commit-skeleton-row {
+    grid-template-columns: minmax(0, 1fr) 76px;
+    gap: 7px 12px;
+    min-height: 52px;
+  }
+
+  .commit-skeleton-message {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+

@@ -1,0 +1,17 @@
+---
+import { mainRoutes } from '../../data/navigation';
+interface Props { page: string }
+const { page } = Astro.props;
+---
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="overlay" aria-hidden="true"><div class="stars"></div></div>
+<header class="prompt-bar">
+  <div class="prompt-line" role="group" aria-label="Terminal prompt">
+    <span class="prompt-user">nohuto</span><span class="prompt-sep">@</span><span class="prompt-host">noverse</span>
+  </div>
+  <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme"><span class="theme-toggle-icon" aria-hidden="true"></span></button>
+  <nav class="nav-tabs" aria-label="Primary navigation">
+    {mainRoutes.map(route => <a href={route.path} class:list={{ active: page === route.page }} aria-current={page === route.page ? 'page' : undefined}>{route.label}</a>)}
+    <a href="/docs/">docs</a>
+  </nav>
+</header>

@@ -1,4 +1,8 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
+import type { MarkdownHeading } from 'astro';
+import type { StarlightRouteData } from '@astrojs/starlight/route-data';
+
+type TocItem = NonNullable<StarlightRouteData['toc']>['items'][number];
 
 const minHeadingLevel = 2;
 const maxHeadingLevel = 6;
@@ -12,8 +16,8 @@ export const onRequest = defineRouteMiddleware((context) => {
   route.toc.items = generateToC(route.headings, route.toc.items[0]?.text || 'Overview');
 });
 
-function generateToC(headings, title) {
-  const toc = [{ depth: 2, slug: '_top', text: title, children: [] }];
+function generateToC(headings: MarkdownHeading[], title: string): TocItem[] {
+  const toc: TocItem[] = [{ depth: 2, slug: '_top', text: title, children: [] }];
   for (const heading of headings) {
     if (heading.depth >= minHeadingLevel && heading.depth <= maxHeadingLevel) {
       injectChild(toc, { ...heading, children: [] });
@@ -22,7 +26,7 @@ function generateToC(headings, title) {
   return toc;
 }
 
-function injectChild(items, item) {
+function injectChild(items: TocItem[], item: TocItem): void {
   const lastItem = items.at(-1);
   if (!lastItem || lastItem.depth >= item.depth) {
     items.push(item);

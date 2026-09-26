@@ -1,4 +1,4 @@
-name: site-update
+﻿name: site-update
 
 on:
   schedule:
@@ -89,7 +89,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git status --porcelain | grep .; then
-            git add -A -- docs/src/content/docs site/data site/public/main/data site/public/main/media site/public/main/images
+            git add -A -- docs/src/content/docs src/data public/main/data public/main/media public/main/images src/image-sources
             git commit -m "update docs data"
             git push
           else

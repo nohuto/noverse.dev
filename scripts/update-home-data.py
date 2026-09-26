@@ -4,7 +4,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'site' / 'public' / 'main' / 'data' / 'commits.json'
+OUT = ROOT / 'public' / 'main' / 'data' / 'commits.json'
 OWNER = 'nohuto'
 LIMIT = 15
 

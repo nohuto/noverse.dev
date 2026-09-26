@@ -1,11 +1,11 @@
-import type { StarlightViewModesRouteData } from 'starlight-view-modes/data';
+type Modes = App.Locals['starlightViewModes']['modes'];
+type Mode = Modes[number];
 
-type Mode = StarlightViewModesRouteData['modes'][number];
-
-export function getZenTarget(modes: StarlightViewModesRouteData['modes']): {
+export function getZenTarget(modes: Modes, routeId: string): {
   target: Mode | undefined;
   isCurrent: boolean;
 } {
+  if (routeId === '404') return { target: undefined, isCurrent: false };
   const zenMode = modes.find((mode) => mode.name === 'zen-mode');
   const defaultMode = modes.find((mode) => mode.name === 'default');
   const isCurrent = Boolean(zenMode?.isCurrent);

@@ -121,12 +121,12 @@ import { docsThemes } from '../../utils/doc-themes';
     };
 
     trigger?: HTMLButtonElement | null;
-    popover?: HTMLElement | null;
+    menu?: HTMLElement | null;
     options: HTMLButtonElement[] = [];
 
     connectedCallback() {
       this.trigger = this.querySelector('[data-theme-trigger]');
-      this.popover = this.querySelector('[data-theme-popover]');
+      this.menu = this.querySelector('[data-theme-popover]');
       this.options = Array.from(this.querySelectorAll('[data-theme-option]'));
       this.dataset.open = this.dataset.open || 'false';
 
@@ -149,8 +149,8 @@ import { docsThemes } from '../../utils/doc-themes';
     }
 
     openMenu(target: 'active' | 'first' | 'last' = 'active') {
-      if (!this.popover || !this.trigger) return;
-      this.popover.hidden = false;
+      if (!this.menu || !this.trigger) return;
+      this.menu.hidden = false;
       this.dataset.open = 'true';
       this.trigger.setAttribute('aria-expanded', 'true');
 
@@ -161,7 +161,7 @@ import { docsThemes } from '../../utils/doc-themes';
     }
 
     toggleMenu() {
-      if (this.popover?.hidden) {
+      if (this.menu?.hidden) {
         this.openMenu();
         return;
       }
@@ -169,8 +169,8 @@ import { docsThemes } from '../../utils/doc-themes';
     }
 
     closeMenu() {
-      if (!this.popover || !this.trigger) return;
-      this.popover.hidden = true;
+      if (!this.menu || !this.trigger) return;
+      this.menu.hidden = true;
       this.dataset.open = 'false';
       this.trigger.setAttribute('aria-expanded', 'false');
     }

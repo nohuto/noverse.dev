@@ -1,0 +1,8 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import { projects } from '../../data/projects';
+interface Props { section: string }
+const { section } = Astro.props;
+const visible = projects.filter(project => project.projects !== false && (project.section || 'active') === section);
+---
+{visible.map(project => <ProjectCard project={project} />)}

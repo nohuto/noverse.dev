@@ -1,0 +1,158 @@
+---
+import NoverseLayout from '../layouts/NoverseLayout.astro';
+import SettingsDialog from '../components/dialogs/SettingsDialog.astro';
+import policyStyles from '../styles/policies.css?url';
+import searchStyles from '../styles/search.css?url';
+---
+
+<NoverseLayout title="Policies - Noverse" description="Group Policy Explorer" page="policies" styles={[policyStyles, searchStyles]}>
+<main id="main" class="no-center policies-main">
+    <section class="content-box panel policy-hide-detail" id="policy-explorer" data-title="policies" aria-busy="true">
+      <div class="panel-body">
+        <div class="policy-intro">
+          <div class="policy-title-row">
+            <h1 class="page-heading">Group Policy Explorer</h1>
+            <span class="policy-source-note">(based on <a class="link" href="https://github.com/nohuto/admx-parser" rel="noopener noreferrer">admx-parser</a>)</span>
+          </div>
+          <div class="page-divider"></div>
+        </div>
+
+        <div class="policy-toolbar">
+          <div class="policy-search-field">
+            <div class="policy-search-row">
+              <div class="nv-search-box">
+                <span class="nv-search-icon" aria-hidden="true"></span>
+                <input id="policy-search" type="text" autocomplete="off" spellcheck="false" aria-label="Search policies" aria-keyshortcuts="Control+K">
+                <kbd class="nv-search-shortcut" aria-hidden="true"><kbd>Ctrl</kbd><kbd>K</kbd></kbd>
+              </div>
+              <button id="policy-settings" type="button" aria-label="Settings" title="Settings">
+                <span class="settings-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+          <div class="policy-toolbar-actions">
+            <div class="policy-view-dropdown" id="policy-view-dropdown">
+              <button id="policy-view-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+                <span>View</span>
+                <span class="policy-view-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="policy-view-menu" id="policy-view-menu" role="menu" hidden>
+                <label class="policy-view-option" role="menuitemcheckbox">
+                  <input type="checkbox" data-policy-pane="tree" checked>
+                  <span>Tree</span>
+                </label>
+                <label class="policy-view-option" role="menuitemcheckbox">
+                  <input type="checkbox" data-policy-pane="table" checked>
+                  <span>Table</span>
+                </label>
+                <label class="policy-view-option" role="menuitemcheckbox">
+                  <input type="checkbox" data-policy-pane="detail">
+                  <span>Details</span>
+                </label>
+              </div>
+            </div>
+            <div class="policy-column-dropdown" id="policy-column-dropdown">
+              <button id="policy-column-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+                <span>Table</span>
+                <span class="policy-view-chevron" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="policy-layout">
+          <aside class="policy-tree-panel" aria-label="Policy categories">
+            <div class="policy-pane-header">
+              <span>Categories</span>
+            </div>
+            <div class="policy-tree" id="policy-tree" role="tree">
+              <div class="policy-tree-placeholder"></div>
+            </div>
+          </aside>
+          <div class="policy-splitter" data-policy-splitter="tree" aria-hidden="true"></div>
+
+          <section class="policy-table-panel" aria-label="Policy list">
+            <div class="policy-table-wrap">
+              <table class="policy-table">
+                <colgroup id="policy-table-cols"></colgroup>
+                <thead>
+                  <tr id="policy-table-head">
+                    <th scope="col" data-column="setting" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Name</span></span></th>
+                    <th scope="col" data-column="value" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Value</span></span></th>
+                    <th scope="col" data-column="scope" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Scope</span></span></th>
+                    <th scope="col" data-column="supported" class="policy-table-header"><span class="policy-table-header-content"><span class="policy-table-header-label">Supported On</span></span></th>
+                  </tr>
+                </thead>
+                <tbody id="policy-table-body"></tbody>
+              </table>
+            </div>
+            <div class="policy-table-note" id="policy-table-note"></div>
+            <div class="policy-column-menu" id="policy-column-menu" hidden></div>
+          </section>
+          <div class="policy-splitter" data-policy-splitter="detail" aria-hidden="true" hidden></div>
+
+          <section class="policy-detail-panel" id="policy-detail" aria-label="Policy detail" hidden>
+            <div class="policy-pane-header">
+              <span>Details</span>
+            </div>
+            <div class="policy-detail-body" id="policy-detail-body"></div>
+          </section>
+        </div>
+
+        <SettingsDialog prefix="policy">
+            <div class="settings-body">
+              <label class="settings-row settings-number-row" for="policy-limit">
+                <span>Row limit</span>
+                <input id="policy-limit" type="number" min="1" max="5000" step="1" value="350">
+              </label>
+              <label class="settings-row" for="policy-limit-unlimited">
+                <input id="policy-limit-unlimited" type="checkbox">
+                <span>Unlimited rows</span>
+              </label>
+              <label class="settings-row settings-number-row" for="policy-search-delay">
+                <span>Search delay</span>
+                <input id="policy-search-delay" type="number" min="0" max="2000" step="50" value="200">
+                <span>ms</span>
+              </label>
+              <label class="settings-row" for="policy-search-wildcards">
+                <input id="policy-search-wildcards" type="checkbox">
+                <span>Use wildcards (* and ?)</span>
+              </label>
+              <label class="settings-row" for="policy-search-whole">
+                <input id="policy-search-whole" type="checkbox">
+                <span>Match whole string</span>
+              </label>
+              <label class="settings-row" for="policy-search-case">
+                <input id="policy-search-case" type="checkbox">
+                <span>Case sensitive</span>
+              </label>
+              <label class="settings-row" for="policy-search-any">
+                <input id="policy-search-any" type="checkbox">
+                <span>Match any term</span>
+              </label>
+              <label class="settings-row" for="policy-search-current-path">
+                <input id="policy-search-current-path" type="checkbox">
+                <span>Search only current selected path</span>
+              </label>
+              <label class="settings-row" for="policy-search-names">
+                <input id="policy-search-names" type="checkbox" checked>
+                <span>Search names and categories</span>
+              </label>
+              <label class="settings-row" for="policy-search-registry">
+                <input id="policy-search-registry" type="checkbox" checked>
+                <span>Search registry paths and values</span>
+              </label>
+              <label class="settings-row" for="policy-search-details">
+                <input id="policy-search-details" type="checkbox" checked>
+                <span>Search explanations and support text</span>
+              </label>
+            </div>
+        </SettingsDialog>
+      </div>
+    </section>
+  </main>
+</NoverseLayout>
+<script>
+  import '../scripts/policies/policies.ts';
+  import '../scripts/search/shortcut';
+</script>

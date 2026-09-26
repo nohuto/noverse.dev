@@ -1,0 +1,87 @@
+---
+import NoverseLayout from '../layouts/NoverseLayout.astro';
+import ProjectCards from '../components/projects/ProjectCards.astro';
+import projectStyles from '../styles/projects.css?url';
+import searchStyles from '../styles/search.css?url';
+---
+
+<NoverseLayout title="Projects - Noverse" description="My Open Source Projects" page="projects" styles={[projectStyles, searchStyles]}>
+<main id="main" class="no-center">
+    <section class="content-box panel" data-title="projects">
+      <div class="panel-body">
+        <h1 class="page-heading">My Open Source Projects</h1>
+        <div class="page-divider"></div>
+        <div class="project-filter">
+          <div class="filter-row">
+            <div class="nv-search-box">
+              <span class="nv-search-icon" aria-hidden="true"></span>
+              <input id="project-search" type="text" aria-label="Search projects" aria-keyshortcuts="Control+K">
+              <kbd class="nv-search-shortcut" aria-hidden="true"><kbd>Ctrl</kbd><kbd>K</kbd></kbd>
+            </div>
+          </div>
+        </div>
+        <section class="project-group" aria-labelledby="active-projects-title">
+          <div class="section-heading">
+            <h2 id="active-projects-title">Active projects</h2>
+          </div>
+          <div class="project-grid">
+            <ProjectCards section="active" />
+          </div>
+        </section>
+        <section class="project-group" aria-labelledby="resource-projects-title">
+          <div class="section-heading">
+            <h2 id="resource-projects-title">Resource repos</h2>
+          </div>
+          <div class="project-grid">
+            <ProjectCards section="resources" />
+          </div>
+        </section>
+        <section class="project-group" aria-labelledby="web-projects-title">
+          <div class="section-heading">
+            <h2 id="web-projects-title">Web tools</h2>
+          </div>
+          <div class="project-grid">
+            <ProjectCards section="web" />
+          </div>
+        </section>
+        <section class="project-group" aria-labelledby="powershell-projects-title">
+          <div class="section-heading">
+            <h2 id="powershell-projects-title">PS obfuscation / minification / conversion</h2>
+          </div>
+          <div class="project-grid">
+            <ProjectCards section="powershell" />
+          </div>
+        </section>
+        <section class="project-group" aria-labelledby="website-projects-title">
+          <div class="section-heading">
+            <h2 id="website-projects-title">Websites</h2>
+          </div>
+          <div class="project-grid">
+            <ProjectCards section="websites" />
+          </div>
+        </section>
+        <section class="project-group" aria-labelledby="misc-projects-title">
+          <div class="section-heading">
+            <h2 id="misc-projects-title">Misc</h2>
+          </div>
+          <div class="project-grid">
+            <ProjectCards section="misc" />
+          </div>
+        </section>
+        <section class="project-group" aria-labelledby="archive-projects-title">
+          <div class="section-heading">
+            <h2 id="archive-projects-title">Archive</h2>
+          </div>
+          <div class="project-grid">
+            <ProjectCards section="archive" />
+          </div>
+        </section>
+        <p class="project-empty" id="project-empty" hidden>No matching project(s)</p>
+      </div>
+    </section>
+  </main>
+</NoverseLayout>
+<script>
+  import '../scripts/projects/filter';
+  import '../scripts/search/shortcut';
+</script>

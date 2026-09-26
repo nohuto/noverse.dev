@@ -1,0 +1,14 @@
+---
+import { projects } from '../../data/projects';
+const visible = projects.filter(project => project.home).sort((left, right) => left.home!.order - right.home!.order);
+---
+{visible.map(project => {
+  const home = project.home!;
+  return <div class="home-work-item" data-repo={project.repo}>
+    <div class="home-work-title">
+      <a href={`https://github.com/${project.repo}`} target="_blank" rel="noopener noreferrer"><strong>{home.name}</strong></a>
+      <a class="home-work-docs" href={home.docs} target={home.external ? '_blank' : undefined} rel={home.external ? 'noopener noreferrer' : undefined} aria-label={home.docsLabel || `${home.name} documentation`} title={home.docsTitle || 'Documentation'}></a>
+    </div>
+    <span class="project-desc">{home.description || 'Fetching description...'}</span>
+  </div>;
+})}

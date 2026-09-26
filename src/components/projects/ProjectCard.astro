@@ -1,0 +1,17 @@
+---
+import ProjectMedia from './ProjectMedia.astro';
+import type { Project } from '../../data/projects';
+interface Props { project: Project }
+const { project } = Astro.props;
+const href = project.href || `https://github.com/${project.repo}`;
+const external = /^https?:\/\//.test(href);
+const onGitHub = href.startsWith('https://github.com/');
+---
+<article class="project-card clickable-card" data-repo={project.repo} data-card-href={project.repo ? undefined : href}>
+  <ProjectMedia project={project} />
+  <div class="project-body">
+    <h3 class="project-title">{project.title}</h3>
+    <p class="project-desc">{project.description || 'Fetching description...'}</p>
+  </div>
+  <a class="clickable-card-link" href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined} aria-label={`Open ${project.title}${onGitHub ? ' on GitHub' : ''}`}></a>
+</article>

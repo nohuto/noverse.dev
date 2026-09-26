@@ -2,7 +2,7 @@ import json, os, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'site' / 'public' / 'main' / 'data' / 'diff'
+OUT = ROOT / 'public' / 'main' / 'data' / 'diff'
 SOURCES = {
     'type-layouts': {
         'repo': 'nohuto/type-layouts',
@@ -70,8 +70,9 @@ def build_local(base, src, cfg):
             if files:
                 module_names.append(module.name)
                 save_names(base / 'names' / release.name / f'{module.name}.txt', files)
-        modules[release.name] = module_names
-    return {'releases': [p.name for p in releases], 'modules': modules}
+        if module_names:
+            modules[release.name] = module_names
+    return {'releases': list(modules), 'modules': modules}
 
 def build_remote(base, cfg):
     modules = {}
@@ -129,6 +130,6 @@ if __name__ == '__main__':
     names = sys.argv[1:] or SOURCES
     unknown = set(names) - SOURCES.keys()
     if unknown:
-        raise SystemExit(f'Unknown source: {", ".join(sorted(unknown))}')
+        raise SystemExit(f'unknown source - {", ".join(sorted(unknown))}')
     for name in names:
         build(name, SOURCES[name])

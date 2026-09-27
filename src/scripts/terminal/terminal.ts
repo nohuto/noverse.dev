@@ -402,21 +402,8 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     const input = document.getElementById(
       'console-command',
     ) as HTMLInputElement | null;
-    const previewText = document.getElementById('console-preview-text');
-    const suggestion = document.getElementById('console-suggestion');
-    const caret = document.getElementById('console-cursor');
-    const measure = document.getElementById('console-measure');
-    if (
-      !consoleRoot ||
-      !output ||
-      !lines ||
-      !form ||
-      !input ||
-      !previewText ||
-      !suggestion ||
-      !caret ||
-      !measure
-    )
+    const preview = document.getElementById('console-preview');
+    if (!consoleRoot || !output || !lines || !form || !input || !preview)
       return;
     if (consoleRoot.dataset.ready === 'true') return;
     consoleRoot.dataset.ready = 'true';
@@ -431,29 +418,22 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     const timestampEl = document.getElementById('console-timestamp');
     const DOCS_ROOT_PATH = `${rootPath}/docs`;
     const URL_PATTERN = /https?:\/\/[^\s<>"'`]+/i;
-    const CARET_HEIGHT_RATIO = 0.78;
-    const CARET_Y_OFFSET = -2;
     let promptIndent = '';
     let promptMetricsDirty = true;
     let caretRaf = 0;
     let pendingLineFragment: DocumentFragment | null = null;
-    let measureState: {
-      width: number;
-      font: string;
-      lineHeight: string;
-      lineHeightPx: number;
-      promptIndent: string | null;
-    } = {
-      width: 0,
-      font: '',
-      lineHeight: '',
-      lineHeightPx: 0,
-      promptIndent: null,
-    };
-    const measureText = document.createTextNode('');
-    const measureMarker = document.createElement('span');
-    measureMarker.textContent = '\u200b';
-    measure.append(measureText, measureMarker);
+    const typedBeforeCaret = document.createTextNode('');
+    const typedAfterCaret = document.createTextNode('');
+    const caret = document.createElement('span');
+    caret.className = 'console-block-cursor';
+    const suggestion = document.createElement('span');
+    suggestion.className = 'console-suggestion';
+    preview.replaceChildren(
+      typedBeforeCaret,
+      caret,
+      typedAfterCaret,
+      suggestion,
+    );
 
     const setInputActive = (active) => {
       consoleRoot.dataset.inputActive = active ? 'true' : 'false';
@@ -471,7 +451,6 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
 
     const invalidatePromptMetrics = () => {
       promptMetricsDirty = true;
-      measureState.promptIndent = null;
     };
 
     const formatDisplayPath = (path) => {
@@ -561,68 +540,25 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       return aliasNames.find((option) => option.startsWith(head)) || '';
     };
 
-    const updateSuggestion = (value, pos) => {
-      previewText.textContent = value;
-      if (!value || pos !== value.length) {
-        suggestion.textContent = '';
-        return;
-      }
-      const completion = getCompletion();
-      if (
-        !completion ||
-        completion === value ||
-        !completion.startsWith(value)
-      ) {
-        suggestion.textContent = '';
-        return;
-      }
-      suggestion.textContent = completion.slice(value.length);
+    const updatePreview = (value, pos) => {
+      const completion = pos === value.length ? getCompletion() : '';
+      const hint =
+        completion !== value && completion.startsWith(value)
+          ? completion.slice(value.length)
+          : '';
+      const code = value.codePointAt(pos);
+      const next = code === undefined ? '' : String.fromCodePoint(code);
+      const onChar = next !== '' && next !== '\n';
+      typedBeforeCaret.nodeValue = value.slice(0, pos);
+      caret.textContent = onChar ? next : hint[0] || ' ';
+      caret.classList.toggle('console-suggestion', !onChar && hint !== '');
+      typedAfterCaret.nodeValue = value.slice(onChar ? pos + next.length : pos);
+      suggestion.textContent = hint.slice(1);
     };
 
     const resizeInput = () => {
-      if (!input.value.includes('\n')) {
-        input.style.height = '';
-        return;
-      }
       input.style.height = 'auto';
       input.style.height = `${input.scrollHeight}px`;
-    };
-
-    const syncMeasureStyles = () => {
-      const inputStyle = getComputedStyle(input);
-      const width = input.clientWidth;
-      const font = inputStyle.font;
-      const lineHeight = inputStyle.lineHeight;
-      if (
-        width !== measureState.width ||
-        font !== measureState.font ||
-        lineHeight !== measureState.lineHeight ||
-        promptIndent !== measureState.promptIndent
-      ) {
-        measure.style.width = `${width}px`;
-        measure.style.font = font;
-        measure.style.lineHeight = lineHeight;
-        measureState = {
-          width,
-          font,
-          lineHeight,
-          lineHeightPx: Number.parseFloat(lineHeight) || input.offsetHeight,
-          promptIndent,
-        };
-      }
-      return measureState;
-    };
-
-    const measureCaret = (value, pos) => {
-      const metrics = syncMeasureStyles();
-      measureText.nodeValue = value.slice(0, pos) || '\u200b';
-      const measureRect = measure.getBoundingClientRect();
-      const markerRect = measureMarker.getBoundingClientRect();
-      return {
-        left: markerRect.left - measureRect.left,
-        top: markerRect.top - measureRect.top,
-        lineHeight: metrics.lineHeightPx,
-      };
     };
 
     const updateCaret = () => {
@@ -633,12 +569,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
         typeof input.selectionStart === 'number'
           ? input.selectionStart
           : value.length;
-      const caretBox = measureCaret(value, pos);
-      const caretHeight = Math.round(caretBox.lineHeight * CARET_HEIGHT_RATIO);
-      caret.style.left = `${caretBox.left + 1}px`;
-      caret.style.top = `${Math.round(caretBox.top + (caretBox.lineHeight - caretHeight) / 2 + CARET_Y_OFFSET)}px`;
-      caret.style.height = `${caretHeight}px`;
-      updateSuggestion(value, pos);
+      updatePreview(value, pos);
     };
 
     const scheduleCaretUpdate = () => {
@@ -1204,6 +1135,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
     ['input', 'keyup', 'click', 'focus'].forEach((eventName) => {
       input.addEventListener(eventName, scheduleCaretUpdate);
     });
+    new ResizeObserver(scheduleCaretUpdate).observe(form);
     input.addEventListener('focus', () => {
       setInputActive(true);
       scheduleCaretUpdate();

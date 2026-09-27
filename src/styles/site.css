@@ -125,11 +125,27 @@ body.has-site-header:not(.bindiff-maximized) {
 
 body::before {
   content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 1;
   opacity: 0;
+}
+
+body::before,
+.overlay {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  flex: none;
+  height: 100vh;
+  height: 100dvh;
+  margin-bottom: -100vh;
+  margin-bottom: -100dvh;
   pointer-events: none;
+}
+
+body.has-site-header:not(.bindiff-maximized)::before,
+body.has-site-header:not(.bindiff-maximized) .overlay {
+  margin-top: calc(-1 * var(--header-height));
+  margin-bottom: calc(var(--header-height) - 100vh);
+  margin-bottom: calc(var(--header-height) - 100dvh);
 }
 
 body::after {
@@ -322,11 +338,7 @@ html[data-bg='starfield'] .stars::after {
 }
 
 .overlay {
-  position: fixed;
-  inset: 0;
   overflow: hidden;
-  pointer-events: none;
-  z-index: 1;
 }
 
 html[data-bg='starfield'] .overlay {

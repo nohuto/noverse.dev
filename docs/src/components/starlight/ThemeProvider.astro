@@ -18,8 +18,8 @@ import {
     (() => {
       const storageKey = 'nv-theme';
       const systemTheme = 'system';
-      const darkTheme = 'dark';
-      const lightTheme = 'light';
+      const darkTheme = 'gruvbox-dark';
+      const lightTheme = 'catppuccin-latte';
       const availableThemeIds = new Set(themeIds);
       const availableLightThemeIds = new Set(lightThemeIds);
       const getPreferredTheme = () =>
@@ -35,7 +35,7 @@ import {
         const normalized = normalizeTheme(theme);
         return normalized === systemTheme
           ? getPreferredTheme()
-          : normalized || darkTheme;
+          : normalized || getPreferredTheme();
       };
 
       const getThemeScheme = (theme) =>

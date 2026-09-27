@@ -5,9 +5,9 @@ import { initClipboard } from './clipboard';
 /* Copyright (c) 2026 nohuto */
 const THEME_KEY = 'nv-theme';
 const THEME_SYSTEM = 'system';
-const THEME_DARK = 'dark';
 const THEME_LIGHT = 'light';
-const DEFAULT_THEME = 'gruvbox-dark';
+const DEFAULT_THEME = THEME_SYSTEM;
+const DEFAULT_DARK_THEME = 'gruvbox-dark';
 const DEFAULT_LIGHT_THEME = 'catppuccin-latte';
 const LIGHT_THEMES = new Set([
   THEME_LIGHT,
@@ -116,10 +116,10 @@ function updateIconTheme(theme?: string) {
 function getSystemDefaultTheme() {
   try {
     return window.matchMedia(SYSTEM_THEME_QUERY).matches
-      ? THEME_LIGHT
-      : THEME_DARK;
+      ? DEFAULT_LIGHT_THEME
+      : DEFAULT_DARK_THEME;
   } catch {
-    return THEME_DARK;
+    return DEFAULT_DARK_THEME;
   }
 }
 
@@ -131,7 +131,7 @@ function resolveTheme(theme) {
   const normalized = normalizeTheme(theme);
   return normalized === THEME_SYSTEM
     ? getSystemDefaultTheme()
-    : normalized || THEME_DARK;
+    : normalized || getSystemDefaultTheme();
 }
 
 function applyTheme(theme) {
@@ -718,7 +718,7 @@ function initTheme() {
             DEFAULT_THEME,
         );
         const next = LIGHT_THEMES.has(current)
-          ? DEFAULT_THEME
+          ? DEFAULT_DARK_THEME
           : DEFAULT_LIGHT_THEME;
         applyTheme(next);
         storageSet(THEME_KEY, next);

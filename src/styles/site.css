@@ -63,6 +63,7 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--prompt-bar-height, 44px) + 1rem);
 }
 
 .section-heading {
@@ -114,6 +115,10 @@ body {
   min-height: 100vh;
   min-height: 100svh;
   position: relative;
+}
+
+body.has-site-header:not(.bindiff-maximized) {
+  padding-top: var(--prompt-bar-height, 44px);
 }
 
 body::before,
@@ -335,8 +340,10 @@ main {
 }
 
 .prompt-bar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 20;
   display: flex;
   flex-wrap: wrap;

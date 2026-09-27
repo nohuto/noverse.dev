@@ -44,7 +44,7 @@ const { title, description, page, noShell = false, styles = [] } = Astro.props;
     />
     <script is:inline set:html={noShell ? notFound : bootstrap}></script>
   </head>
-  <body>
+  <body class:list={{ 'has-site-header': !noShell }}>
     {!noShell && <Header page={page} />}
     <slot />
     {!noShell && <Footer />}

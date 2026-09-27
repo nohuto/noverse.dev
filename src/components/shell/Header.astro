@@ -39,3 +39,14 @@ const { page } = Astro.props;
     <a href="/docs/">docs</a>
   </nav>
 </header>
+
+<script is:inline>
+  const header = document.querySelector('.prompt-bar');
+  const syncHeaderHeight = () =>
+    document.documentElement.style.setProperty(
+      '--prompt-bar-height',
+      `${header.offsetHeight}px`,
+    );
+  syncHeaderHeight();
+  new ResizeObserver(syncHeaderHeight).observe(header);
+</script>

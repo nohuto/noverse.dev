@@ -2206,7 +2206,9 @@ import { copyText, showToast } from '../shell/clipboard';
         setBusy(false);
       });
   }
-  document.addEventListener('DOMContentLoaded', initPolicyExplorer, {
-    once: true,
-  });
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', initPolicyExplorer, {
+      once: true,
+    });
+  else initPolicyExplorer();
 })();

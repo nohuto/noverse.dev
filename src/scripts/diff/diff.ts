@@ -1119,5 +1119,7 @@ import type {
     });
   }
 
-  document.addEventListener('DOMContentLoaded', initDiff, { once: true });
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', initDiff, { once: true });
+  else initDiff();
 })(window);

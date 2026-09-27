@@ -60,10 +60,14 @@ body {
 }
 
 html {
+  --header-height: 44px;
+  --footer-height: 44px;
+  background: var(--bg-alt);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--prompt-bar-height, 44px) + 1rem);
+  scroll-padding-top: calc(var(--header-height) + 1rem);
+  scroll-padding-bottom: var(--footer-height);
 }
 
 .section-heading {
@@ -107,7 +111,6 @@ html {
 }
 
 body {
-  background-color: var(--bg-alt);
   color: var(--text);
   display: flex;
   flex-direction: column;
@@ -118,25 +121,26 @@ body {
 }
 
 body.has-site-header:not(.bindiff-maximized) {
-  padding-top: var(--prompt-bar-height, 44px);
+  padding-top: var(--header-height);
+  padding-bottom: var(--footer-height);
 }
 
-body::before,
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
 body::after {
   content: '';
   position: fixed;
   inset: 0;
+  z-index: -1;
+  background: var(--bg);
   pointer-events: none;
-}
-
-body::before {
-  z-index: 1;
-  opacity: 0;
-}
-
-body::after {
-  background-color: var(--bg);
-  z-index: 0;
 }
 
 html[data-bg='diamonds'] body::before {
@@ -910,20 +914,29 @@ main.home-main {
 }
 
 footer {
-  flex: 0 0 auto;
-  width: 100%;
-  margin-top: auto;
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 20;
   padding: 0;
   border-top: 1px solid var(--border);
   background: var(--bg-alt);
-  box-shadow: 0 50vh 0 50vh var(--bg-alt);
   font-size: var(--font-size-control);
+}
+
+footer::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  height: 100vh;
+  background: inherit;
 }
 
 .footer-row {
   width: min(1200px, 100%);
   margin: 0 auto;
-  min-height: 43px;
+  min-height: calc(var(--footer-height) - 1px);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
@@ -1002,7 +1015,7 @@ footer {
 .toast {
   position: fixed;
   right: 20px;
-  bottom: 24px;
+  bottom: calc(var(--footer-height) + 12px);
   background: var(--panel-alt);
   color: var(--text);
   border: 1px solid var(--border-strong);
@@ -1075,7 +1088,6 @@ footer {
   }
 
   .footer-row {
-    min-height: 43px;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     justify-items: stretch;
     gap: 8px;

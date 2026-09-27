@@ -1332,5 +1332,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       openCalculatorTool();
     }
   }
-  document.addEventListener('DOMContentLoaded', initConsole, { once: true });
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', initConsole, { once: true });
+  else initConsole();
 })(window);

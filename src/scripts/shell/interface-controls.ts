@@ -860,17 +860,19 @@ function initPageNavShortcut() {
   });
 }
 
-document.addEventListener(
-  'DOMContentLoaded',
-  () => {
-    const notFoundPath = consumeNotFoundPath();
-    rememberActivePage(location.pathname);
-    initTheme();
-    initBackground();
-    initSelectUI();
-    initPageNavShortcut();
-    initClipboard();
-    if (notFoundPath) showNotFoundError(notFoundPath);
-  },
-  { once: true },
-);
+function initInterfaceControls() {
+  const notFoundPath = consumeNotFoundPath();
+  rememberActivePage(location.pathname);
+  initTheme();
+  initBackground();
+  initSelectUI();
+  initPageNavShortcut();
+  initClipboard();
+  if (notFoundPath) showNotFoundError(notFoundPath);
+}
+
+if (document.readyState === 'loading')
+  document.addEventListener('DOMContentLoaded', initInterfaceControls, {
+    once: true,
+  });
+else initInterfaceControls();

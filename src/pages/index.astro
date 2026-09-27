@@ -1,8 +1,15 @@
 ---
 import NoverseLayout from '../layouts/NoverseLayout.astro';
 import HomeProjects from '../components/projects/HomeProjects.astro';
-import CommitSkeleton from '../components/projects/CommitSkeleton.astro';
+import commits from '../data/commits.json';
 import homeStyles from '../styles/home.css?url';
+
+const dateFormatter = new Intl.DateTimeFormat('en', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
 ---
 
 <NoverseLayout
@@ -68,19 +75,34 @@ import homeStyles from '../styles/home.css?url';
           class="home-section"
           id="home-commits"
           aria-labelledby="latest-commits-title"
-          aria-busy="true"
         >
           <div class="section-heading">
             <h2 id="latest-commits-title">Latest commits</h2>
           </div>
-          <div class="commit-list" aria-live="polite">
-            <CommitSkeleton />
+          <div class="commit-list">
+            {commits.length ? (
+              commits.map((commit) => (
+                <a
+                  class="commit-item"
+                  href={commit.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="commit-repo">
+                    {commit.repo} <span class="commit-sha">{commit.sha}</span>
+                  </span>
+                  <span class="commit-message">{commit.message}</span>
+                  <time class="commit-date" datetime={commit.date}>
+                    {dateFormatter.format(new Date(commit.date))}
+                  </time>
+                </a>
+              ))
+            ) : (
+              <p class="home-status">No recent commits available</p>
+            )}
           </div>
         </section>
       </div>
     </section>
   </main>
-  <script>
-    import '../scripts/home/commits.ts';
-  </script>
 </NoverseLayout>

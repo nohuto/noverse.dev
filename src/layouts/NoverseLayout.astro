@@ -26,6 +26,7 @@ const { title, description, page, noShell = false, styles = [] } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline set:html={noShell ? notFound : bootstrap}></script>
     <meta name="description" content={description} />
     <link rel="stylesheet" href={appearanceStyles} />
     <link rel="stylesheet" href={siteStyles} />
@@ -42,7 +43,6 @@ const { title, description, page, noShell = false, styles = [] } = Astro.props;
       type="font/woff2"
       crossorigin
     />
-    <script is:inline set:html={noShell ? notFound : bootstrap}></script>
   </head>
   <body class:list={{ 'has-site-header': !noShell }}>
     {!noShell && <Header page={page} />}

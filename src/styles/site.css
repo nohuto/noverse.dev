@@ -916,6 +916,7 @@ footer {
   padding: 0;
   border-top: 1px solid var(--border);
   background: var(--bg-alt);
+  box-shadow: 0 50vh 0 50vh var(--bg-alt);
   font-size: var(--font-size-control);
 }
 

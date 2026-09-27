@@ -1377,7 +1377,7 @@ import { copyText, showToast } from '../shell/clipboard';
                 : 'No matching policies';
           tableNote.textContent = [countNote, policyLoadWarning]
             .filter(Boolean)
-            .join(' · ');
+            .join(' - ');
         }
       };
 

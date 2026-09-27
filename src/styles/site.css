@@ -124,7 +124,7 @@ body.has-site-header:not(.bindiff-maximized) {
 body::before,
 body::after {
   content: '';
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
 }

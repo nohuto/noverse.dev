@@ -3,7 +3,7 @@ title: 'Animations'
 description: 'Visibility option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 9
+  order: 10
 ---
 
 Minimize, maximize, taskbar animations / first sign-in animations etc.

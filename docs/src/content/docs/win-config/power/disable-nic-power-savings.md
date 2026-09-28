@@ -8,7 +8,7 @@ sidebar:
 
 You can get a lot of information about data ranges and more from `.inf` files, see examples below.
 
-## [Registry Value](https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt) Overview
+## [Registry Value](https://github.com/nohuto/regkit/blob/main/assets/records/NIC-Intel.txt) Overview
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 

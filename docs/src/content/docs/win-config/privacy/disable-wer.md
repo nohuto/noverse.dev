@@ -25,7 +25,7 @@ sidebar:
 6. If the application has registered for recovery and restart, WER executes the registered callback functions while the data is compressed and sent to Microsoft (if the user consented).
 7. If a response to the problem is available from Microsoft, the user is notified.
 
-[Error-Reporting.txt](https://github.com/nohuto/regkit/blob/main/records/Error-Reporting.txt) shows all read values on boot (`\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`) / [WER Settings](https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings) for some details.
+[Error-Reporting.txt](https://github.com/nohuto/regkit/blob/main/assets/records/Error-Reporting.txt) shows all read values on boot (`\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`) / [WER Settings](https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings) for some details.
 
 ## Services/Tasks
 
@@ -75,7 +75,7 @@ CrashDumpEnabled REG_DWORD 0x7 = Automatic memory dump
 CrashDumpEnabled REG_DWORD 0x1 and FilterPages REG_DWORD 0x1 = Active memory dump
 ```
 
-There're two values named [`CrashDumpEnabled.New`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt) & [`CrashDumpEnabled.Old`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt), I haven't looked into them yet, see this as note for future reference.
+There're two values named [`CrashDumpEnabled.New`](https://github.com/nohuto/regkit/blob/main/assets/records/CrashControl.txt) & [`CrashDumpEnabled.Old`](https://github.com/nohuto/regkit/blob/main/assets/records/CrashControl.txt), I haven't looked into them yet, see this as note for future reference.
 
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.New

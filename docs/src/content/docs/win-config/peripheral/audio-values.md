@@ -6,7 +6,7 @@ sidebar:
   order: 9
 ---
 
-You can find all mentioned functions in [decompiled-pseudocode/11-23H2/audiosrv](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv)/[decompiled-pseudocode/11-23H2/audiodg](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiodg)/[decompiled-pseudocode/11-23H2/AudioSrvPolicyManager](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/AudioSrvPolicyManager), everything below is currently based on xrefs of `RegGetValueW`. Since the function names often already tell a lot, I've written them down where they're from. See a boot capture of `CurrentVersion\\Audio` key [here](https://github.com/nohuto/regkit/blob/main/records/Audio.txt).
+You can find all mentioned functions in [decompiled-pseudocode/11-23H2/audiosrv](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv)/[decompiled-pseudocode/11-23H2/audiodg](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiodg)/[decompiled-pseudocode/11-23H2/AudioSrvPolicyManager](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/AudioSrvPolicyManager), everything below is currently based on xrefs of `RegGetValueW`. Since the function names often already tell a lot, I've written them down where they're from. See a boot capture of `CurrentVersion\\Audio` key [here](https://github.com/nohuto/regkit/blob/main/assets/records/Audio.txt).
 
 The titles below tell what binary I've the values from.
 

@@ -152,7 +152,7 @@ The vendor ID, product ID, and revision number values are obtained from the [USB
 \Registry\Machine\SYSTEM\ControlSet001\Control\usbflags\<vvvvpppprrrr> : osvc
 ```
 
-`IgnoreHWSerNum<vvvvpppp>` exists in [`\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags`](https://github.com/nohuto/regkit/blob/main/records/USB-Flags.txt) too.
+`IgnoreHWSerNum<vvvvpppp>` exists in [`\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags`](https://github.com/nohuto/regkit/blob/main/assets/records/USB-Flags.txt) too.
 
 ### RegistryMachin_* Keys
 

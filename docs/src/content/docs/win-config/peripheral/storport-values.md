@@ -6,7 +6,7 @@ sidebar:
   order: 11
 ---
 
-This currently includes all values from [`storport.sys`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport) (in relation to that StorPort key, this binary also has some PnP values/other single values, see [pnp-device-values/#default-data](https://noverse.dev/docs/win-config/power/pnp-device-values/#default-data)), see [DllInitialize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/DllInitialize.c) & [sub_1C0042F20](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C0042F20.c) functions. More details on StorPort topic/values may be added soon.
+This currently includes all values from [`storport.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/storport) (in relation to that StorPort key, this binary also has some PnP values/other single values, see [pnp-device-values/#default-data](https://noverse.dev/docs/win-config/power/pnp-device-values/#default-data)), see [DllInitialize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/DllInitialize.c) & [sub_1C0042F20](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C0042F20.c) functions. More details on StorPort topic/values may be added soon.
 
 Values that include `(bool)` as comment accept range `0-4294967295` but any nonzero has the same behaviour as `1`.
 

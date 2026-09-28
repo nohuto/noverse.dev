@@ -8,7 +8,7 @@ sidebar:
 
 ## CmControlVector
 
-CM = configuration manager, it loads & manages registry hives, inserts the `\REGISTRY` key object into the namespace and more. See regkits '[Registry fundamentals](/docs/regkit/registry-internals/registry-fundamentals/)' documentation for more information on the topic.
+CM = configuration manager, it loads & manages registry hives, inserts the `\REGISTRY` key object into the namespace and more. See regkits '[Registry fundamentals](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/)' documentation for more information on the topic.
 
 `CmControlVector` is a table used by [`CmpGetSystemControlValues`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/CmpGetSystemControlValues.c) while early CM init. Each entry is `0x30` bytes (six pointers), this is just a simple way to imagine each block:
 
@@ -755,7 +755,7 @@ VOID KeBugCheckEx(
 );
 ```
 
-##### [TIMER_OR_DPC_INVALID](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)
+##### [TIMER_OR_DPC_INVALID](https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)
 
 *The `TIMER_OR_DPC_INVALID` bug check has a value of `0x000000C7`. This is issued if a kernel timer or deferred procedure call (DPC) is found somewhere in memory where it is not permitted. This condition is usually caused by a driver failing to cancel a timer or DPC before freeing the memory where it resides.*
 

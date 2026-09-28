@@ -10,7 +10,7 @@ Prevents sending information about your computer to Microsoft by disabling gener
 
 See policy explanations below for more details.
 
-It's also recommended to apply the '[Microsoft (Windows, Office, MSN)](https://github.com/hagezi/dns-blocklists#calling-native-tracker---broadband-tracker-of-devices-services-and-operating-systems-)' blocklist ([Windows 11 connection endpoints for non-Enterprise editions](https://learn.microsoft.com/en-us/windows/privacy/windows-11-endpoints-non-enterprise-editions#windows-11-pro)) via the hosts file (you can use [blocklist-mgr](https://github.com/nohuto/blocklist-mgr) for that), or if you've a private DNS server, add that list to it.
+It's also recommended to apply the '[Microsoft (Windows, Office, MSN)](https://github.com/hagezi/dns-blocklists#native)' blocklist ([Windows 11 connection endpoints for non-Enterprise editions](https://learn.microsoft.com/en-us/windows/privacy/windows-11-endpoints-non-enterprise-editions#windows-11-pro)) via the hosts file (you can use [blocklist-mgr](https://github.com/nohuto/blocklist-mgr) for that), or if you've a private DNS server, add that list to it.
 
 ## DiagnosticDataSettings Values
 
@@ -69,7 +69,7 @@ Based on 23H2 [`DiagnosticDataSettings`](https://github.com/nohuto/decompiled-ps
 
 ### Boot Capture
 
-See [23H2.txt](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/records/23H2.txt) ([24H2](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/records/24H2.txt)/[25H2](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/records/25H2.txt) don't include more than that).
+See [23H2.txt](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/assets/records/23H2.txt) ([24H2](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/assets/records/24H2.txt)/[25H2](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/assets/records/25H2.txt) don't include more than that).
 
 ```
 \Registry\Machine\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection : AllowTelemetry

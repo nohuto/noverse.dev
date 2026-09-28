@@ -28,6 +28,7 @@ export default defineConfig({
   site: 'https://noverse.dev',
   base: '/docs',
   outDir: '../dist/docs',
+  compressHTML: true,
   integrations: [
     starlight({
       plugins: [

@@ -4,7 +4,6 @@ import type {
   DiffManifestOptions,
   ManifestSource,
 } from '../scripts/diff/types';
-import type { createDraggableDialogManager } from '../scripts/dialogs/draggable';
 import type { TerminalTool } from '../scripts/terminal/types';
 
 declare global {
@@ -38,12 +37,6 @@ declare global {
       highlight: unknown,
     ) => { draw(): void };
     hljs: unknown;
-    NV_CREATE_DRAGGABLE_DIALOG_MANAGER?: typeof createDraggableDialogManager;
-    LIGHT_THEMES?: Set<string>;
-    DEFAULT_THEME?: string;
-    NV_MAIN_ROUTES?: readonly { slug: string; clean: string }[];
-    NV_BACKGROUND_KEYS?: string[];
-    NV_APPLY_BACKGROUND?: (key: string) => string;
     NoverseBitmask?: TerminalTool;
     NoverseCalculator?: TerminalTool;
   }

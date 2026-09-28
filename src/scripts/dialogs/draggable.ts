@@ -347,5 +347,3 @@ export function createDraggableDialogManager({
     },
   };
 }
-
-window.NV_CREATE_DRAGGABLE_DIALOG_MANAGER = createDraggableDialogManager;

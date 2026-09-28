@@ -9,22 +9,6 @@
   font-display: block;
 }
 
-/* @font-face {
-  font-family: "UbuntuMono Nerd Font Mono";
-  src: url("/main/fonts/UbuntuMonoNerdFontMono-Regular.ttf") format("truetype");
-  font-style: normal;
-  font-weight: 400;
-  font-display: block;
-} */
-
-/* @font-face {
-  font-family: "UbuntuMono Nerd Font Mono";
-  src: url("/main/fonts/UbuntuMonoNerdFontMono-Bold.ttf") format("truetype");
-  font-style: normal;
-  font-weight: 700;
-  font-display: block;
-} */
-
 :root {
   color-scheme: dark;
   --bg: #0e0e0e;
@@ -43,7 +27,6 @@
   --danger: #ff6b6b;
   --starfield-dot: color-mix(in srgb, var(--text) 90%, transparent);
   --font-family: 'Cascadia Code';
-  /* --font-family: "UbuntuMono Nerd Font Mono"; */
   --font-size-navigation: 0.78125rem;
   --font-size-control: 0.75rem;
   --font-size-body: 0.78125rem;

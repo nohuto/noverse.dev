@@ -1,4 +1,6 @@
 /* Copyright (c) 2026 nohuto */
+import { createDraggableDialogManager } from '../dialogs/draggable';
+import { lightThemes } from '../../data/themes';
 import type {
   DiffFile,
   DiffSource,
@@ -184,22 +186,8 @@ import type {
   };
 
   const colorScheme = () => {
-    const lightThemes =
-      global.LIGHT_THEMES ||
-      new Set([
-        'light',
-        'gruvbox-light',
-        'kanagawa-lotus',
-        'catppuccin-latte',
-        'solarized-light',
-        'one-light',
-        'ayu-light',
-        'everforest-light',
-      ]);
     return lightThemes.has(
-      document.documentElement.getAttribute('data-theme') ||
-        global.DEFAULT_THEME ||
-        'gruvbox-dark',
+      document.documentElement.getAttribute('data-theme') || '',
     )
       ? 'light'
       : 'dark';
@@ -505,7 +493,7 @@ import type {
       string,
       { left: string; right: string; module: string; name: string }
     >();
-    const settingsDialogManager = window.NV_CREATE_DRAGGABLE_DIALOG_MANAGER?.({
+    const settingsDialogManager = createDraggableDialogManager({
       layer: settingsModal,
       dialog: settingsDialog,
       handle: settingsHeader,

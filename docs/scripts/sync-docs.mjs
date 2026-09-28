@@ -727,7 +727,7 @@ function normalizeGeneratedMarkdown(markdown) {
     )
     .replace(
       /https:\/\/www\.noverse\.dev\/(product|projects|diff|policies)\.html/g,
-      'https://www.noverse.dev/$1',
+      'https://noverse.dev/$1',
     )
     .replace(/\]\(\((https?:\/\/[^)\s]+)\)\)/gi, ']($1)')
     .replace(/\[([^\]]+)\]\(\[([^\]]+)\]\(([^)]+)\)\)/g, '[$1]($3)');

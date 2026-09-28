@@ -1,8 +1,16 @@
 ---
 import Header from '../components/shell/Header.astro';
 import Footer from '../components/shell/Footer.astro';
-import bootstrap from '../scripts/shell/theme-bootstrap.js?raw';
-import notFound from '../scripts/shell/not-found-redirect.js?raw';
+import {
+  BG_KEY,
+  DEFAULT_BG,
+  DEFAULT_DARK_THEME,
+  DEFAULT_LIGHT_THEME,
+  THEME_KEY,
+  THEME_SYSTEM,
+  backgrounds,
+  themes,
+} from '../data/themes';
 import appearanceStyles from '../styles/appearance.css?url';
 import siteStyles from '../styles/site.css?url';
 
@@ -26,7 +34,43 @@ const { title, description, page, noShell = false, styles = [] } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script is:inline set:html={noShell ? notFound : bootstrap}></script>
+    {noShell ? (
+      <slot name="head" />
+    ) : (
+      <script
+        is:inline
+        define:vars={{
+          themeKey: THEME_KEY,
+          themeOptions: themes.map(([value]) => value),
+          systemTheme: THEME_SYSTEM,
+          darkTheme: DEFAULT_DARK_THEME,
+          lightTheme: DEFAULT_LIGHT_THEME,
+          bgKey: BG_KEY,
+          bgOptions: backgrounds,
+          defaultBg: DEFAULT_BG,
+        }}
+      >
+        const read = (key) => {
+          try {
+            return (localStorage.getItem(key) || '').trim();
+          } catch {
+            return '';
+          }
+        };
+        const root = document.documentElement;
+        const theme = read(themeKey);
+        const setting = themeOptions.includes(theme) ? theme : systemTheme;
+        root.dataset.themeSetting = setting;
+        root.dataset.theme =
+          setting !== systemTheme
+            ? setting
+            : matchMedia('(prefers-color-scheme: light)').matches
+              ? lightTheme
+              : darkTheme;
+        const bg = read(bgKey);
+        root.dataset.bg = bgOptions.includes(bg) ? bg : defaultBg;
+      </script>
+    )}
     <meta name="description" content={description} />
     <link rel="stylesheet" href={appearanceStyles} />
     <link rel="stylesheet" href={siteStyles} />

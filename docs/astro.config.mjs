@@ -25,7 +25,7 @@ const noverseDocsLabels = {
 };
 
 export default defineConfig({
-  site: 'https://www.noverse.dev',
+  site: 'https://noverse.dev',
   base: '/docs',
   outDir: '../dist/docs',
   integrations: [
@@ -70,7 +70,7 @@ export default defineConfig({
         starlightCodeblockFullscreen(),
         starlightImageZoom(),
         starlightLinksValidator({
-          exclude: ['https://www.noverse.dev/diff'],
+          exclude: ['https://noverse.dev/diff'],
           failOnError: false,
           sameSitePolicy: 'validate',
         }),

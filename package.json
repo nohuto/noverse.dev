@@ -10,7 +10,7 @@
     "build:docs": "npm run build --workspace noverse-docs",
     "predev": "node scripts/prep-docs-for-dev.mjs",
     "dev": "astro dev",
-    "build:main": "astro build && node scripts/build-image-variants.mjs",
+    "build:main": "astro build && node scripts/build-image-variants.mjs && node scripts/csp-hashes.mjs",
     "check": "astro check",
     "preview": "astro preview",
     "format": "prettier --write .",

@@ -1,5 +1,6 @@
 ---
 import NoverseLayout from '../layouts/NoverseLayout.astro';
+import { ACTIVE_PAGE_KEY, NOT_FOUND_KEY, pageRoutes } from '../data/navigation';
 ---
 
 <NoverseLayout
@@ -8,6 +9,26 @@ import NoverseLayout from '../layouts/NoverseLayout.astro';
   page="404"
   noShell
 >
+  <script
+    slot="head"
+    is:inline
+    define:vars={{
+      routes: pageRoutes.map((route) => route.path),
+      activeKey: ACTIVE_PAGE_KEY,
+      notFoundKey: NOT_FOUND_KEY,
+    }}
+  >
+    let target = '/';
+    try {
+      sessionStorage.setItem(
+        notFoundKey,
+        location.pathname + location.search + location.hash,
+      );
+      const active = sessionStorage.getItem(activeKey);
+      if (routes.includes(active)) target = active;
+    } catch {}
+    location.replace(target);
+  </script>
   <a class="skip-link" href="#main">
     Skip to content
   </a>

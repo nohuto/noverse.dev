@@ -1,4 +1,8 @@
 /* Copyright (c) 2026 nohuto */
+import { createDraggableDialogManager } from '../dialogs/draggable';
+import { applyBackground } from '../shell/background';
+import { pageRoutes } from '../../data/navigation';
+import { backgrounds } from '../../data/themes';
 import type { FloatingToolConfig, TerminalToolContext } from './types';
 
 (function attachTerminal(global) {
@@ -729,7 +733,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       hash,
       focusTarget,
     }: FloatingToolConfig) => {
-      const dialogManager = window.NV_CREATE_DRAGGABLE_DIALOG_MANAGER?.({
+      const dialogManager = createDraggableDialogManager({
         layer,
         dialog,
         handle,
@@ -816,14 +820,11 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       () => ({ initFloatingTool, clampNumber }),
     );
 
-    const mainRoutes = Array.isArray(window.NV_MAIN_ROUTES)
-      ? window.NV_MAIN_ROUTES
-      : [];
-    const NAV_MAP = Object.fromEntries(
-      mainRoutes.map((route) => [route.slug, route.clean]),
+    const NAV_MAP: Record<string, string> = Object.fromEntries(
+      pageRoutes.map((route) => [route.slug, route.path]),
     );
     const rootDirectories = [
-      ...mainRoutes
+      ...pageRoutes
         .filter((route) => route.slug !== 'terminal')
         .map((route) => route.slug),
       'docs',
@@ -934,10 +935,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
       return Array.from(select.options).map((option) => option.value);
     };
 
-    const listBackgrounds = () => {
-      const keys = window.NV_BACKGROUND_KEYS;
-      return Array.isArray(keys) ? keys.slice() : [];
-    };
+    const listBackgrounds = (): string[] => [...backgrounds];
 
     const commands: Record<string, (args: string[]) => void | Promise<void>> = {
       help: () => {
@@ -1037,10 +1035,7 @@ import type { FloatingToolConfig, TerminalToolContext } from './types';
           addLine(`bg not found: ${next}`, 'muted');
           return;
         }
-        const applied =
-          typeof window.NV_APPLY_BACKGROUND === 'function'
-            ? window.NV_APPLY_BACKGROUND(next)
-            : next;
+        const applied = applyBackground(next, true);
         addLine(`bg set: ${applied}`);
       },
       theme: (args) => {

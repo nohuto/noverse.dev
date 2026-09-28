@@ -1,3 +1,8 @@
+export const THEME_KEY = 'nv-theme';
+export const THEME_SYSTEM = 'system';
+export const DEFAULT_DARK_THEME = 'gruvbox-dark';
+export const DEFAULT_LIGHT_THEME = 'catppuccin-latte';
+
 export const themes = [
   ['system', 'System'],
   ['dark', 'Dark'],
@@ -27,4 +32,27 @@ export const themes = [
   ['rose-pine-moon', 'Rose Pine Moon'],
   ['solarized-dark', 'Solarized Dark'],
   ['solarized-light', 'Solarized Light'],
+] as const;
+
+export const lightThemes: ReadonlySet<string> = new Set([
+  'light',
+  'ayu-light',
+  'catppuccin-latte',
+  'everforest-light',
+  'gruvbox-light',
+  'kanagawa-lotus',
+  'one-light',
+  'solarized-light',
+]);
+
+export const BG_KEY = 'nv-bg';
+export const DEFAULT_BG = 'crosshatch';
+export const backgrounds = [
+  'clear',
+  'crosshatch',
+  'diamonds',
+  'noise',
+  'dots',
+  'grid',
+  'starfield',
 ] as const;

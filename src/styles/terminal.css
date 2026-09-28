@@ -1,5 +1,26 @@
 /* Copyright (c) 2026 nohuto */
 
+.trippy-grid-container {
+  width: 100%;
+  max-width: 100%;
+  height: clamp(145px, 26vh, 230px);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.trippy-grid {
+  position: relative;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  background: transparent;
+  font-size: var(--font-size-navigation);
+  line-height: 1;
+}
+
 body:has(main.main-terminal) {
   min-height: 100vh;
   min-height: 100lvh;

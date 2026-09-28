@@ -1,5 +1,6 @@
 /* Copyright (c) 2026 nohuto */
 import { copyText, showToast } from '../shell/clipboard';
+import { createDraggableDialogManager } from '../dialogs/draggable';
 
 (() => {
   'use strict';
@@ -245,7 +246,7 @@ import { copyText, showToast } from '../shell/clipboard';
     let policyLoadWarning = '';
     const settingsDialogManager =
       settingsModal && settingsDialog && settingsHeader
-        ? window.NV_CREATE_DRAGGABLE_DIALOG_MANAGER?.({
+        ? createDraggableDialogManager({
             layer: settingsModal,
             dialog: settingsDialog,
             handle: settingsHeader,

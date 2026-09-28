@@ -1,49 +1,27 @@
 import { createDraggableDialogManager } from '../dialogs/draggable.ts';
 import { storageGet, storageSet } from './storage';
 import { initClipboard } from './clipboard';
+import { applyBackground } from './background';
+import {
+  ACTIVE_PAGE_KEY,
+  NOT_FOUND_KEY,
+  pageRoutes,
+} from '../../data/navigation';
+import {
+  BG_KEY,
+  DEFAULT_BG,
+  DEFAULT_DARK_THEME,
+  DEFAULT_LIGHT_THEME,
+  THEME_KEY,
+  THEME_SYSTEM,
+  lightThemes as LIGHT_THEMES,
+} from '../../data/themes';
 
 /* Copyright (c) 2026 nohuto */
-const THEME_KEY = 'nv-theme';
-const THEME_SYSTEM = 'system';
-const THEME_LIGHT = 'light';
 const DEFAULT_THEME = THEME_SYSTEM;
-const DEFAULT_DARK_THEME = 'gruvbox-dark';
-const DEFAULT_LIGHT_THEME = 'catppuccin-latte';
-const LIGHT_THEMES = new Set([
-  THEME_LIGHT,
-  'gruvbox-light',
-  'kanagawa-lotus',
-  'catppuccin-latte',
-  'solarized-light',
-  'one-light',
-  'ayu-light',
-  'everforest-light',
-]);
-const BG_KEY = 'nv-bg';
-const DEFAULT_BG = 'crosshatch';
-const BG_KEYS = [
-  'clear',
-  'crosshatch',
-  'diamonds',
-  'noise',
-  'dots',
-  'grid',
-  'starfield',
-];
-const BG_SET = new Set(BG_KEYS);
-window.NV_BACKGROUND_KEYS = BG_KEYS;
-const MAIN_PAGE_ROUTES = Object.freeze([
-  { slug: 'home', clean: '/' },
-  { slug: 'terminal', clean: '/terminal' },
-  { slug: 'product', clean: '/product' },
-  { slug: 'projects', clean: '/projects' },
-  { slug: 'diff', clean: '/diff' },
-  { slug: 'policies', clean: '/policies' },
-]);
-const ACTIVE_PAGE_KEY = 'nv-active-page-path';
-const NOT_FOUND_KEY = 'nv-not-found-path';
-const MAIN_PAGE_PATHS = new Set(MAIN_PAGE_ROUTES.map((route) => route.clean));
-window.NV_MAIN_ROUTES = MAIN_PAGE_ROUTES;
+const MAIN_PAGE_PATHS: ReadonlySet<string> = new Set(
+  pageRoutes.map((route) => route.path),
+);
 const SELECT_SEARCH_RENDER_LIMIT_DEFAULT = 300;
 const SYSTEM_THEME_QUERY = '(prefers-color-scheme: light)';
 
@@ -741,26 +719,14 @@ function initTheme() {
   } catch {}
 }
 
-function applyBackground(key) {
-  const applied = BG_SET.has(key) ? key : DEFAULT_BG;
-  document.documentElement.setAttribute('data-bg', applied);
-  return applied;
-}
-
-window.NV_APPLY_BACKGROUND = (key) => {
-  const applied = applyBackground(key);
-  storageSet(BG_KEY, applied);
-  return applied;
-};
-
 function initBackground() {
-  const stored = storageGet(
-    BG_KEY,
-    document.documentElement.getAttribute('data-bg') || DEFAULT_BG,
+  applyBackground(
+    storageGet(
+      BG_KEY,
+      document.documentElement.getAttribute('data-bg') || DEFAULT_BG,
+    ),
+    true,
   );
-  const initial = BG_SET.has(stored) ? stored : DEFAULT_BG;
-  const applied = applyBackground(initial);
-  storageSet(BG_KEY, applied);
 }
 
 function hideSiteError() {

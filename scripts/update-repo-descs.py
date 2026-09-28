@@ -2,7 +2,6 @@ import html, json, os, re, shutil, time, urllib.error, urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PUBLIC = ROOT / 'public' / 'main'
 PROJECTS = ROOT / 'src' / 'data' / 'projects.json'
 MS = ROOT / 'src' / 'data' / 'media-sources.json'
 MC = ROOT / 'src' / 'data' / 'media-cache.json'
@@ -120,7 +119,7 @@ def upd_repos():
 
 def pull(url, dst, cache):
     hh = dict(H)
-    p = PUBLIC / dst
+    p = ROOT / dst
     e = cache.get(url, {})
     if p.is_file() and e.get('etag'):
         hh['If-None-Match'] = e['etag']

@@ -103,7 +103,7 @@ import type { TerminalToolContext } from './types';
         });
       };
 
-      const parseValue = (input) => {
+      const parseValue = (input: HTMLInputElement) => {
         let raw = input.value.trim();
         let pattern;
         let prefix;
@@ -124,7 +124,7 @@ import type { TerminalToolContext } from './types';
         return parsed <= maxValue ? parsed : null;
       };
 
-      const updateFromInput = (input) => {
+      const updateFromInput = (input: HTMLInputElement) => {
         const parsed = parseValue(input);
         if (parsed === null) {
           input.setAttribute('aria-invalid', 'true');

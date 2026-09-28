@@ -15,7 +15,7 @@ function createSidebarDirectory(directory) {
   return {
     label: getDirectoryLabel(directory),
     collapsed: true,
-    autogenerate: { directory, collapsed: true },
+    items: [{ autogenerate: { directory, collapsed: true } }],
   };
 }
 
@@ -35,7 +35,14 @@ function createSidebarRepoEntry(repoName) {
       items: WIN_CONFIG_CATEGORIES.map((category) => ({
         label: CATEGORY_LABELS[category] || category,
         collapsed: true,
-        autogenerate: { directory: `win-config/${category}`, collapsed: true },
+        items: [
+          {
+            autogenerate: {
+              directory: `win-config/${category}`,
+              collapsed: true,
+            },
+          },
+        ],
       })),
     };
   }
@@ -100,7 +107,7 @@ function createSidebarRepoEntry(repoName) {
   return {
     label: repoName,
     ...collapsedIfNeeded(repoName),
-    autogenerate: { directory: repoName, collapsed: true },
+    items: [{ autogenerate: { directory: repoName, collapsed: true } }],
   };
 }
 

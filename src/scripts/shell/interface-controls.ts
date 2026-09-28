@@ -32,7 +32,7 @@ let siteErrorDialogManager: ReturnType<
   typeof createDraggableDialogManager
 > | null = null;
 
-const normalizeMainPagePath = (pathname) => {
+const normalizeMainPagePath = (pathname: string) => {
   let path =
     `/${String(pathname || '').replace(/^\/+|\/+$/g, '')}`.toLowerCase();
   if (path === '/index.html') path = '/';
@@ -40,7 +40,7 @@ const normalizeMainPagePath = (pathname) => {
   return MAIN_PAGE_PATHS.has(path) ? path : null;
 };
 
-const rememberActivePage = (pathname) => {
+const rememberActivePage = (pathname: string) => {
   const path = normalizeMainPagePath(pathname);
   if (!path) return;
   try {
@@ -101,18 +101,18 @@ function getSystemDefaultTheme() {
   }
 }
 
-function normalizeTheme(theme) {
+function normalizeTheme(theme: string) {
   return String(theme || '').trim();
 }
 
-function resolveTheme(theme) {
+function resolveTheme(theme: string) {
   const normalized = normalizeTheme(theme);
   return normalized === THEME_SYSTEM
     ? getSystemDefaultTheme()
     : normalized || getSystemDefaultTheme();
 }
 
-function applyTheme(theme) {
+function applyTheme(theme: string) {
   const selected = normalizeTheme(theme || DEFAULT_THEME);
   const applied = resolveTheme(selected);
   document.documentElement.setAttribute('data-theme-setting', selected);
@@ -297,9 +297,9 @@ function initSelectUI() {
       }
     };
 
-    const escapeSearchRegex = (value) =>
+    const escapeSearchRegex = (value: string) =>
       value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const wildcardToRegexPattern = (term) => {
+    const wildcardToRegexPattern = (term: string) => {
       let pattern = '';
       for (const char of term) {
         if (char === '*') {
@@ -313,18 +313,18 @@ function initSelectUI() {
       return pattern;
     };
 
-    const buildSearchMatcher = (filterText) => {
+    const buildSearchMatcher = (filterText: string) => {
       const raw = (filterText || '').trim();
       if (!raw) return null;
 
       const terms = raw.split(/\s+/).filter(Boolean);
-      const checks = terms.map((term) =>
+      const checks = terms.map((term: string) =>
         /[*?]/.test(term)
           ? new RegExp(wildcardToRegexPattern(term), 'i')
           : term.toLowerCase(),
       );
 
-      return (text) => {
+      return (text: string) => {
         const value = text || '';
         const lowerValue = value.toLowerCase();
         return checks.every((check) =>
@@ -392,7 +392,7 @@ function initSelectUI() {
       optionsDirty = false;
     };
 
-    const setSearchRenderLimit = (value) => {
+    const setSearchRenderLimit = (value: string) => {
       const parsed = Number.parseInt(String(value || ''), 10);
       select.dataset.searchLimit =
         Number.isFinite(parsed) && parsed > 0
@@ -456,7 +456,7 @@ function initSelectUI() {
       }
     };
 
-    const focusListOption = (target) => {
+    const focusListOption = (target: string) => {
       const options = Array.from(
         list.querySelectorAll<HTMLButtonElement>(
           '.select-option:not(:disabled)',
@@ -506,7 +506,7 @@ function initSelectUI() {
       }
       if (event instanceof CustomEvent) {
         virtualOptions = Array.isArray(event.detail?.options)
-          ? event.detail.options.map((value) => ({
+          ? event.detail.options.map((value: string) => ({
               value,
               textContent: value,
               disabled: false,
@@ -778,7 +778,7 @@ function createSiteErrorModal() {
   return modal;
 }
 
-function showNotFoundError(url) {
+function showNotFoundError(url: string | URL) {
   const modal =
     document.getElementById('site-error-modal') || createSiteErrorModal();
   const requestedUrl = new URL(url, location.href);

@@ -14,7 +14,6 @@
   margin-left: 9px;
   background: var(--muted);
   pointer-events: none;
-  -webkit-mask: var(--search-icon) center / contain no-repeat;
   mask: var(--search-icon) center / contain no-repeat;
 }
 

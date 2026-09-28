@@ -7,7 +7,7 @@
   Referrer-Policy: no-referrer
   X-Robots-Tag: noai, noimageai
 
-/main/fonts/CascadiaCode-2407.24.woff2
+/main/fonts/NoverseMono-2407.24.woff2
   Cache-Control: public, max-age=31556952, immutable
 
 /_astro/*

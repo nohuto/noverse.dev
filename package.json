@@ -10,8 +10,8 @@
     "build:docs": "npm run build --workspace noverse-docs",
     "predev": "node scripts/prep-docs-for-dev.mjs",
     "dev": "astro dev",
-    "build:main": "astro build && node scripts/build-image-variants.mjs && node scripts/csp-hashes.mjs",
-    "check": "astro check",
+    "build:main": "astro build && node scripts/csp-hashes.mjs",
+    "check": "astro check && astro check --root docs",
     "preview": "astro preview",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -21,10 +21,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "astro": "^6.0.2",
+    "astro": "^7.3.5",
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
-    "sharp": "0.34.5",
-    "typescript": "^5.9.3"
+    "sharp": "0.35.5",
+    "typescript": "^6.0.3"
   }
 }

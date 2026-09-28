@@ -1,6 +1,22 @@
 ---
 import NoverseLayout from '../layouts/NoverseLayout.astro';
 import productStyles from '../styles/product.css?url';
+import { webpWidths } from '../utils/images';
+
+const preview = async (name: string, label: string, linkOriginal = true) => {
+  const image = await webpWidths(`/main/images/${name}.png`, [640, 960]);
+  return {
+    label,
+    image,
+    href: linkOriginal ? image.source.src : image.byWidth[960],
+  };
+};
+const previews = await Promise.all([
+  preview('darkbluelogs', 'dark mode blue logs', false),
+  preview('lightblue', 'light mode blue'),
+  preview('lightviolet', 'light mode violet'),
+  preview('darkred', 'dark mode red'),
+]);
 ---
 
 <NoverseLayout
@@ -70,83 +86,28 @@ import productStyles from '../styles/product.css?url';
             </div>
           </div>
           <div class="product-preview-grid">
-            <figure class="product-preview-card">
-              <a
-                href="/main/images/darkbluelogs-960.webp"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Open dark mode blue logs preview"
-              >
-                <img
-                  decoding="async"
-                  src="/main/images/darkbluelogs-640.webp"
-                  srcset="/main/images/darkbluelogs-640.webp 640w, /main/images/darkbluelogs-960.webp 960w"
-                  sizes="(max-width: 700px) calc(100vw - 48px), 552px"
-                  width="640"
-                  height="387"
-                  alt=""
-                  loading="eager"
-                  fetchpriority="high"
-                />
-              </a>
-            </figure>
-            <figure class="product-preview-card">
-              <a
-                href="/main/images/lightblue.png"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Open light mode blue preview"
-              >
-                <img
-                  decoding="async"
-                  src="/main/images/lightblue-640.webp"
-                  srcset="/main/images/lightblue-640.webp 640w, /main/images/lightblue-960.webp 960w"
-                  sizes="(max-width: 700px) calc(100vw - 48px), 552px"
-                  width="640"
-                  height="387"
-                  alt=""
-                  loading="lazy"
-                />
-              </a>
-            </figure>
-            <figure class="product-preview-card">
-              <a
-                href="/main/images/lightviolet.png"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Open light mode violet preview"
-              >
-                <img
-                  decoding="async"
-                  src="/main/images/lightviolet-640.webp"
-                  srcset="/main/images/lightviolet-640.webp 640w, /main/images/lightviolet-960.webp 960w"
-                  sizes="(max-width: 700px) calc(100vw - 48px), 552px"
-                  width="640"
-                  height="387"
-                  alt=""
-                  loading="lazy"
-                />
-              </a>
-            </figure>
-            <figure class="product-preview-card">
-              <a
-                href="/main/images/darkred.png"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Open dark mode red preview"
-              >
-                <img
-                  decoding="async"
-                  src="/main/images/darkred-640.webp"
-                  srcset="/main/images/darkred-640.webp 640w, /main/images/darkred-960.webp 960w"
-                  sizes="(max-width: 700px) calc(100vw - 48px), 552px"
-                  width="640"
-                  height="387"
-                  alt=""
-                  loading="lazy"
-                />
-              </a>
-            </figure>
+            {previews.map(({ label, href, image }, index) => (
+              <figure class="product-preview-card">
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${label} preview`}
+                >
+                  <img
+                    decoding="async"
+                    src={image.byWidth[640]}
+                    srcset={image.srcset}
+                    sizes="(max-width: 700px) calc(100vw - 48px), 552px"
+                    width="640"
+                    height="387"
+                    alt=""
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    fetchpriority={index === 0 ? 'high' : undefined}
+                  />
+                </a>
+              </figure>
+            ))}
           </div>
         </div>
 

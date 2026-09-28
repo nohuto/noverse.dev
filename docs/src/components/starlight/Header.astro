@@ -1,13 +1,10 @@
 ---
-import config from 'virtual:starlight/user-config';
-
-import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
-import Search from 'virtual:starlight/components/Search';
-import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import { getActiveRepo } from '../../utils/active-repo';
 import { getZenTarget } from '../../utils/zen-mode';
 import HeaderIcon from './HeaderIcon.astro';
 import KeyboardShortcuts from './KeyboardShortcuts.astro';
+import Search from './Search.astro';
+import ThemeSelect from './ThemeSelect.astro';
 
 const { id, sidebar } = Astro.locals.starlightRoute;
 
@@ -21,10 +18,6 @@ const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(
   Astro.locals.starlightViewModes.modes,
   id,
 );
-
-const shouldRenderSearch =
-  config.pagefind ||
-  config.components.Search !== '@astrojs/starlight/components/Search.astro';
 ---
 
 <div class="header">
@@ -35,14 +28,16 @@ const shouldRenderSearch =
       <span class="prompt-host">noverse</span>
     </a>
   </div>
-  <div class="sl-flex print:hidden">{shouldRenderSearch && <Search />}</div>
+  <div class="sl-flex print:hidden">
+    <Search />
+  </div>
   <div class="sl-hidden md:sl-flex print:hidden right-group">
     <KeyboardShortcuts zenHref={zenTarget?.href} />
     {zenTarget && (
       <a
         class="header-icon-link zen-link"
         href={zenTarget.href}
-        aria-label={Astro.locals.t(zenTarget.switchToText)}
+        aria-label={zenTarget.switchToText}
         aria-keyshortcuts="Control+Shift+X"
         data-nv-tip="Ctrl+Shift+X"
         data-zen-toggle
@@ -82,7 +77,6 @@ const shouldRenderSearch =
     </a>
     <span class="header-divider" aria-hidden="true"></span>
     <ThemeSelect />
-    <LanguageSelect />
   </div>
 </div>
 
@@ -95,7 +89,6 @@ const shouldRenderSearch =
 
     @media (min-width: 50rem) {
       :global(:root) {
-        --sl-nav-height: 2.875rem;
         --sl-nav-pad-x: 1.25rem;
       }
     }

@@ -71,7 +71,7 @@ fffff803`1bd1d1c8  00000000
     StartedComponents & 0x100 // PageCombining started by SysMain
 ```
 
-`0x100` = bit `8`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data, example:
+`0x100` = bit `8`, you can use my [bitmask calculator](https://noverse.dev/terminal#bitmask) to see whenever that bit is set in your current `StartedComponents` data, example:
 
 <img src="https://github.com/nohuto/win-config/blob/main/system/images/StartedComponents.png?raw=true" alt="" width="910" height="220">
 

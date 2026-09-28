@@ -18,7 +18,6 @@ declare global {
     }): DiffSettingsStore<T>;
     createNVDiffManifestSource(options: DiffManifestOptions): ManifestSource;
     Normalization?: {
-      DEFAULTS?: Record<string, boolean>;
       normalize(
         source: string,
         settings?: Record<string, boolean>,

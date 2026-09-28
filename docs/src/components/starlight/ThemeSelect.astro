@@ -1,5 +1,5 @@
 ---
-import { docsThemes } from '../../utils/doc-themes';
+import { themes } from '../../../../src/data/themes';
 ---
 
 <docs-theme-select>
@@ -19,7 +19,7 @@ import { docsThemes } from '../../utils/doc-themes';
   <div class="docs-theme-popover" data-theme-popover hidden>
     <div class="docs-theme-panel">
       <ul class="docs-theme-list" role="menu" aria-label="Select docs theme">
-        {docsThemes.map(({ id, label }) => (
+        {themes.map(([id, label]) => (
           <li>
             <button
               type="button"
@@ -42,18 +42,78 @@ import { docsThemes } from '../../utils/doc-themes';
 </docs-theme-select>
 
 <script is:inline>
-  window.DocsThemeProvider?.updatePickers();
+  (() => {
+    const picker = document.currentScript.previousElementSibling;
+    const option = picker.querySelector(
+      `[data-theme-option="${document.documentElement.dataset.docsThemeSetting}"]`,
+    );
+    const label = picker.querySelector('[data-current-label]');
+    if (option && label) label.textContent = option.dataset.themeLabel;
+  })();
 </script>
 
 <script>
-  type DocsThemeProviderApi = {
-    setTheme(theme: string): string;
-    updatePickers(theme?: string): void;
+  import {
+    DEFAULT_DARK_THEME,
+    DEFAULT_LIGHT_THEME,
+    THEME_KEY,
+    THEME_SYSTEM,
+    lightThemes,
+  } from '../../../../src/data/themes';
+
+  const root = document.documentElement;
+  const lightQuery = matchMedia('(prefers-color-scheme: light)');
+  const currentSetting = () => root.dataset.docsThemeSetting || THEME_SYSTEM;
+
+  const applyTheme = (setting: string) => {
+    const theme =
+      setting !== THEME_SYSTEM
+        ? setting
+        : lightQuery.matches
+          ? DEFAULT_LIGHT_THEME
+          : DEFAULT_DARK_THEME;
+    root.dataset.docsThemeSetting = setting;
+    root.dataset.docsTheme = theme;
+    root.dataset.theme = lightThemes.has(theme) ? 'light' : 'dark';
   };
 
-  const getThemeProvider = (): DocsThemeProviderApi | undefined =>
-    (window as typeof window & { DocsThemeProvider?: DocsThemeProviderApi })
-      .DocsThemeProvider;
+  const updatePickers = () => {
+    const setting = currentSetting();
+    document.querySelectorAll('docs-theme-select').forEach((picker) => {
+      let activeLabel = '';
+      picker
+        .querySelectorAll<HTMLButtonElement>('[data-theme-option]')
+        .forEach((option) => {
+          const isActive = option.dataset.themeOption === setting;
+          option.setAttribute('aria-selected', String(isActive));
+          option.setAttribute('aria-checked', String(isActive));
+          option.tabIndex = isActive ? 0 : -1;
+          option.dataset.active = String(isActive);
+          if (isActive) activeLabel = option.dataset.themeLabel || '';
+        });
+      const label = activeLabel || setting;
+      const current = picker.querySelector('[data-current-label]');
+      if (current) current.textContent = label;
+      picker
+        .querySelector('[data-theme-trigger]')
+        ?.setAttribute(
+          'aria-label',
+          `Select docs theme. Current theme: ${label}`,
+        );
+    });
+  };
+
+  const setTheme = (setting: string) => {
+    applyTheme(setting);
+    try {
+      localStorage.setItem(THEME_KEY, setting);
+    } catch {}
+    updatePickers();
+  };
+
+  lightQuery.addEventListener('change', () => {
+    if (currentSetting() === THEME_SYSTEM) applyTheme(THEME_SYSTEM);
+  });
 
   class DocsThemeSelect extends HTMLElement {
     handleDocumentPointerDown = (event: PointerEvent) => {
@@ -82,7 +142,7 @@ import { docsThemes } from '../../utils/doc-themes';
       if (!(event.currentTarget instanceof HTMLButtonElement)) return;
       const theme = event.currentTarget.dataset.themeOption;
       if (!theme) return;
-      getThemeProvider()?.setTheme(theme);
+      setTheme(theme);
       this.closeMenu();
       this.trigger?.focus();
     };
@@ -143,7 +203,7 @@ import { docsThemes } from '../../utils/doc-themes';
       );
       document.addEventListener('pointerdown', this.handleDocumentPointerDown);
       document.addEventListener('keydown', this.handleDocumentKeyDown);
-      getThemeProvider()?.updatePickers();
+      updatePickers();
     }
 
     disconnectedCallback() {

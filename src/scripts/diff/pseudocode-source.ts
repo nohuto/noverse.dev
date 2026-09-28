@@ -35,7 +35,7 @@ import './normalization';
     cacheKey: 'nv-diff-pseudocode-name-cache-v1',
   });
 
-  const normalizationDefaults = () => ({
+  const normalizationDefaults = (): Record<string, boolean> => ({
     stripCrossReferenceMetadata: true,
     normalizeRelocationSymbols: true,
     stripStorageLocationComments: true,
@@ -44,14 +44,13 @@ import './normalization';
     normalizeGeneratedLabels: false,
     normalizePrototypeExpansionArgs: false,
     trimTrailingWhitespace: true,
-    ...(global.Normalization?.DEFAULTS || {}),
   });
 
   const readSettings = settingsStore.read;
   const writeSettings = settingsStore.write;
   const resetSettings = settingsStore.reset;
 
-  const renderSettings = (body, onChange) => {
+  const renderSettings = (body: HTMLElement, onChange: () => void) => {
     const settings = readSettings();
     body.replaceChildren();
     const inputs = {
@@ -136,10 +135,10 @@ import './normalization';
     );
   };
 
-  const normalizeText = (source) =>
+  const normalizeText = (source: string) =>
     String(source || '').replace(/\r\n?/g, '\n');
 
-  const preparePair = (leftSource, rightSource) => {
+  const preparePair = (leftSource: string, rightSource: string) => {
     const settings = readSettings();
     const result = global.Normalization?.preparePair
       ? global.Normalization.preparePair(
@@ -165,7 +164,7 @@ import './normalization';
     };
   };
 
-  const prepareSingle = (source) => {
+  const prepareSingle = (source: string) => {
     const settings = readSettings();
     return global.Normalization?.normalize
       ? global.Normalization.normalize(source, settings.normalization).text

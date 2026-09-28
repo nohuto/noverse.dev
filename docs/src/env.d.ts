@@ -1,1 +1,3 @@
-/// <reference path="../../node_modules/@astrojs/starlight/virtual-internal.d.ts" />
+declare module 'virtual:starlight/pagefind-config' {
+  export const pagefindUserConfig: Record<string, unknown>;
+}

@@ -1,9 +1,9 @@
 ﻿/* Copyright (c) 2026 nohuto */
-@import url('/main/data/starfield-stars.css');
+@import './starfield-stars.css';
 
 @font-face {
-  font-family: 'Cascadia Code';
-  src: url('/main/fonts/CascadiaCode-2407.24.woff2') format('woff2');
+  font-family: 'Noverse Mono';
+  src: url('/main/fonts/NoverseMono-2407.24.woff2') format('woff2');
   font-style: normal;
   font-weight: 200 700;
   font-display: block;
@@ -26,7 +26,7 @@
   --warning: #e4c07a;
   --danger: #ff6b6b;
   --starfield-dot: color-mix(in srgb, var(--text) 90%, transparent);
-  --font-family: 'Cascadia Code';
+  --font-family: 'Noverse Mono', monospace;
   --font-size-navigation: 0.78125rem;
   --font-size-control: 0.75rem;
   --font-size-body: 0.78125rem;

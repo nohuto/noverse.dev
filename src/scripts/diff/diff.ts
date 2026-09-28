@@ -8,6 +8,17 @@ import type {
   ManifestSource,
 } from './types';
 
+type Selection = Partial<Record<'left' | 'right' | 'module' | 'name', string>>;
+type DisplayOptions = {
+  leftRelease: string;
+  module: string;
+  leftFile: DiffFile;
+};
+type CompareOptions = DisplayOptions & {
+  rightRelease: string;
+  rightFile: DiffFile;
+};
+
 (function attachDiff(global) {
   'use strict';
 
@@ -39,7 +50,7 @@ import type {
   const assetPromises = new Map<string, Promise<void>>();
   let diffAssetsPromise: Promise<void> | undefined;
 
-  const estimateReleaseRank = (release) => {
+  const estimateReleaseRank = (release: string) => {
     const value = String(release || '').trim();
     const win11 = value.match(/^(\d+)-(\d{2})H([12])$/i);
     if (win11)
@@ -53,20 +64,20 @@ import type {
     return /^\d{4}$/.test(value) ? Number(value) : Number.NEGATIVE_INFINITY;
   };
 
-  const compareReleaseNames = (left, right) => {
+  const compareReleaseNames = (left: string, right: string) => {
     const leftRank = estimateReleaseRank(left);
     const rightRank = estimateReleaseRank(right);
     if (leftRank !== rightRank) return rightRank - leftRank;
     return COLLATOR.compare(right, left);
   };
 
-  const hasScript = (src) =>
+  const hasScript = (src: string) =>
     Array.from(document.scripts).some((script) => {
       const current = script.getAttribute('src') || '';
       return current === src || current.endsWith(`/${src}`);
     });
 
-  const hasStyle = (href) =>
+  const hasStyle = (href: string) =>
     Array.from(document.querySelectorAll('link[rel="stylesheet"]')).some(
       (link) => {
         const current = link.getAttribute('href') || '';
@@ -74,9 +85,10 @@ import type {
       },
     );
 
-  const ensureScript = (src) => {
+  const ensureScript = (src: string) => {
     if (hasScript(src)) return Promise.resolve();
-    if (assetPromises.has(src)) return assetPromises.get(src);
+    const pending = assetPromises.get(src);
+    if (pending) return pending;
     const promise = new Promise<void>((resolve, reject) => {
       const script = document.createElement('script');
       script.src = src;
@@ -95,9 +107,10 @@ import type {
     return promise;
   };
 
-  const ensureStyle = (href) => {
+  const ensureStyle = (href: string) => {
     if (hasStyle(href)) return Promise.resolve();
-    if (assetPromises.has(href)) return assetPromises.get(href);
+    const pending = assetPromises.get(href);
+    if (pending) return pending;
     const promise = new Promise<void>((resolve, reject) => {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
@@ -163,7 +176,7 @@ import type {
     return selected;
   };
 
-  const lineList = (source) => {
+  const lineList = (source: string) => {
     const text = String(source || '').replace(/\r\n?/g, '\n');
     if (!text) return [];
     return text.endsWith('\n')
@@ -171,7 +184,11 @@ import type {
       : text.split('\n');
   };
 
-  const buildNoChangePatch = (leftLabel, rightLabel, source) => {
+  const buildNoChangePatch = (
+    leftLabel: string,
+    rightLabel: string,
+    source: string,
+  ) => {
     const lines = lineList(source);
     const count = lines.length;
     const start = count > 0 ? 1 : 0;
@@ -193,7 +210,7 @@ import type {
       : 'dark';
   };
 
-  const storageGet = (key, fallback) => {
+  const storageGet = (key: string, fallback: string) => {
     try {
       return localStorage.getItem(key) || fallback;
     } catch {
@@ -201,7 +218,7 @@ import type {
     }
   };
 
-  const storageSet = (key, value) => {
+  const storageSet = (key: string, value: string) => {
     try {
       localStorage.setItem(key, value);
     } catch {}
@@ -219,7 +236,7 @@ import type {
     const defaultValues = () => ({
       ...(typeof defaults === 'function' ? defaults() : defaults),
     });
-    const normalizeValues = (candidate) =>
+    const normalizeValues = (candidate: Partial<T> | null) =>
       normalize(candidate, defaultValues());
     const read = () => {
       try {
@@ -228,13 +245,18 @@ import type {
         return defaultValues();
       }
     };
-    const write = (values) => {
+    const write = (values: T) => {
       const normalized = normalizeValues(values);
       storageSet(key, JSON.stringify(normalized));
       return normalized;
     };
     const reset = () => write(defaultValues());
-    const addCheckbox = (body, id, label, checked) => {
+    const addCheckbox = (
+      body: HTMLElement,
+      id: string,
+      label: string,
+      checked: boolean,
+    ) => {
       const row = document.createElement('label');
       row.className = 'settings-row';
       row.htmlFor = id;
@@ -260,9 +282,9 @@ import type {
     let manifestPromise:
       | Promise<{ releases: string[]; modules: Record<string, string[]> }>
       | undefined;
-    const encodePath = (parts) =>
+    const encodePath = (parts: string[]) =>
       parts.filter(Boolean).map(encodeURIComponent).join('/');
-    const pathKey = (parts) => parts.filter(Boolean).join('/');
+    const pathKey = (parts: string[]) => parts.filter(Boolean).join('/');
 
     const fetchJson = async (url: string) => {
       const response = await fetch(url, { cache: 'force-cache' });
@@ -276,7 +298,7 @@ import type {
         throw new Error(`Couldnt load ${url} (${response.status})`);
       return response.text();
     };
-    const decodeNames = (text) => {
+    const decodeNames = (text: string) => {
       if (typeof text !== 'string') return [];
       let previous = '';
       return text
@@ -335,7 +357,7 @@ import type {
         JSON.stringify({ entries: Object.fromEntries(entries) }),
       );
     };
-    const cachedNames = (key) => {
+    const cachedNames = (key: string) => {
       const entry = readStore().entries?.[key];
       return entry &&
         Array.isArray(entry.names) &&
@@ -343,7 +365,7 @@ import type {
         ? entry.names
         : null;
     };
-    const listNames = async (release, module) => {
+    const listNames = async (release: string, module: string) => {
       const path = [release, module];
       const key = pathKey(path);
       let names = nameCache.get(key) || cachedNames(key);
@@ -385,8 +407,8 @@ import type {
     } satisfies ManifestSource;
   };
 
-  const clampFontSize = (value) => {
-    const parsed = Number.parseFloat(value);
+  const clampFontSize = (value: string | number) => {
+    const parsed = Number.parseFloat(String(value));
     if (!Number.isFinite(parsed)) return DEFAULT_FONT_SIZE;
     const clamped = Math.min(Math.max(parsed, MIN_FONT_SIZE), MAX_FONT_SIZE);
     return Math.round(clamped - MIN_FONT_SIZE) + MIN_FONT_SIZE;
@@ -468,7 +490,7 @@ import type {
     )
       return;
 
-    let activeKind = 'type';
+    let activeKind: (typeof SOURCE_ORDER)[number] = 'type';
     let activeSource: DiffSource = null!;
     let leftFiles = new Map<string, DiffFile>();
     let rightFiles = new Map<string, DiffFile>();
@@ -476,34 +498,33 @@ import type {
     let currentViewMode = 'side-by-side';
     let currentFontSize = DEFAULT_FONT_SIZE;
     let isMaximized = false;
-    let lastRender: null | {
-      kind: string;
-      single: boolean;
-      leftSource: string;
-      rightSource?: string;
-      options: {
-        leftRelease: string;
-        rightRelease?: string;
-        module: string;
-        leftFile: DiffFile;
-        rightFile?: DiffFile;
-      };
-    } = null;
-    const selectionMemory = new Map<
-      string,
-      { left: string; right: string; module: string; name: string }
-    >();
+    let lastRender:
+      | null
+      | {
+          kind: string;
+          single: true;
+          leftSource: string;
+          options: DisplayOptions;
+        }
+      | {
+          kind: string;
+          single: false;
+          leftSource: string;
+          rightSource: string;
+          options: CompareOptions;
+        } = null;
+    const selectionMemory = new Map<string, Selection>();
     const settingsDialogManager = createDraggableDialogManager({
       layer: settingsModal,
       dialog: settingsDialog,
       handle: settingsHeader,
     });
 
-    const setBusy = (busy) => {
+    const setBusy = (busy: boolean) => {
       root.setAttribute('aria-busy', busy ? 'true' : 'false');
     };
 
-    const setMaximized = (maximized) => {
+    const setMaximized = (maximized: boolean) => {
       const next = Boolean(maximized);
       if (isMaximized === next) return;
       isMaximized = next;
@@ -517,7 +538,7 @@ import type {
       maximizeButton.title = next ? 'Restore size' : 'Maximize';
     };
 
-    const setFontSize = (size, persist = true) => {
+    const setFontSize = (size: string | number, persist = true) => {
       currentFontSize = clampFontSize(size);
       output.style.setProperty(
         '--bindiff-font-size',
@@ -528,7 +549,7 @@ import type {
       if (persist) storageSet(FONT_SIZE_KEY, String(currentFontSize));
     };
 
-    const setResultUi = (visible, comparison = visible) => {
+    const setResultUi = (visible: boolean, comparison = visible) => {
       [links, settingsButton, maximizeButton].forEach((node) => {
         node.hidden = !visible;
       });
@@ -596,9 +617,9 @@ import type {
       });
     };
 
-    const setKind = (kind) => {
-      activeKind = SOURCE_ORDER.includes(kind) ? kind : 'type';
-      activeSource = global.NVDiffSources[activeKind];
+    const setKind = (kind: string | undefined) => {
+      activeKind = SOURCE_ORDER.find((value) => value === kind) || 'type';
+      activeSource = global.NVDiffSources[activeKind]!;
       const nameText =
         activeKind === 'pseudocode'
           ? 'Function'
@@ -621,7 +642,7 @@ import type {
       });
     };
 
-    const setViewMode = (mode) => {
+    const setViewMode = (mode: string | undefined) => {
       currentViewMode =
         mode === 'line-by-line' ? 'line-by-line' : 'side-by-side';
       viewButtons.forEach((button) => {
@@ -631,7 +652,7 @@ import type {
       });
     };
 
-    setFontSize(storageGet(FONT_SIZE_KEY, DEFAULT_FONT_SIZE), false);
+    setFontSize(storageGet(FONT_SIZE_KEY, String(DEFAULT_FONT_SIZE)), false);
 
     const setLinks = (
       leftFile: DiffFile,
@@ -706,7 +727,7 @@ import type {
         });
     };
 
-    const drawPatch = (patch, mode) => {
+    const drawPatch = (patch: string, mode: string) => {
       const ui = new global.Diff2HtmlUI(
         output,
         patch.replace(/^(---|\+\+\+) ([^\n\t]+)\t$/gm, '$1 $2'),
@@ -730,7 +751,11 @@ import type {
       applyRenderedTheme();
     };
 
-    const renderCompare = (leftSource, rightSource, options) => {
+    const renderCompare = (
+      leftSource: string,
+      rightSource: string,
+      options: CompareOptions,
+    ) => {
       output.classList.remove('bindiff-single-source');
       const prepared = activeSource.preparePair(
         leftSource,
@@ -763,7 +788,7 @@ import type {
       drawPatch(patch, currentViewMode);
     };
 
-    const renderDisplay = (source, options) => {
+    const renderDisplay = (source: string, options: DisplayOptions) => {
       output.classList.add('bindiff-single-source');
       const prepared = activeSource.prepareSingle(source, options.leftFile);
       const label = activeSource.fileLabel(
@@ -863,7 +888,7 @@ import type {
       }
     };
 
-    const refreshReleases = async (preferred) => {
+    const refreshReleases = async (preferred: Selection) => {
       const currentToken = ++token;
       setBusy(true);
       clearResult();
@@ -874,17 +899,19 @@ import type {
           compareReleaseNames,
         );
         if (currentToken !== token || !releases.length) return;
-        const leftDefault = releases.includes(preferred.left)
-          ? preferred.left
-          : releases.includes(activeSource.defaultLeft)
-            ? activeSource.defaultLeft
-            : releases[0];
-        const preferredRight = releases.includes(preferred.right)
-          ? preferred.right
-          : releases.includes(activeSource.defaultRight)
-            ? activeSource.defaultRight
-            : releases.find((release) => release !== leftDefault) ||
-              leftDefault;
+        const leftDefault =
+          preferred.left && releases.includes(preferred.left)
+            ? preferred.left
+            : releases.includes(activeSource.defaultLeft)
+              ? activeSource.defaultLeft
+              : releases[0];
+        const preferredRight =
+          preferred.right && releases.includes(preferred.right)
+            ? preferred.right
+            : releases.includes(activeSource.defaultRight)
+              ? activeSource.defaultRight
+              : releases.find((release) => release !== leftDefault) ||
+                leftDefault;
         replaceOptions(leftSelect, releases, leftDefault);
         replaceOptions(
           rightSelect,

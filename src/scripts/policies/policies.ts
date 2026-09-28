@@ -1,6 +1,19 @@
 /* Copyright (c) 2026 nohuto */
 import { copyText, showToast } from '../shell/clipboard';
 import { createDraggableDialogManager } from '../dialogs/draggable';
+import type {
+  CategoryNode,
+  CategorySegment,
+  MetaItem,
+  Policy,
+  PolicyCategory,
+  PolicyColumn,
+  PolicyElement,
+  PolicyPayload,
+  RawPolicy,
+  StorageEntry,
+  StorageRow,
+} from './types';
 
 (() => {
   'use strict';
@@ -9,7 +22,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policies.json';
   const POLICY_CATEGORY_DATA_URL =
     'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policyCategories.json';
-  let policyPayloadPromise;
+  let policyPayloadPromise: Promise<PolicyPayload> | undefined;
   const afterNextPaint = () =>
     new Promise((resolve) => {
       requestAnimationFrame(() => requestAnimationFrame(resolve));
@@ -54,7 +67,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       return policyPayloadPromise;
     }
 
-    policyPayloadPromise = new Promise((resolve, reject) => {
+    policyPayloadPromise = new Promise<PolicyPayload>((resolve, reject) => {
       const worker = new Worker(
         new URL('./policies-worker.ts', import.meta.url),
         { type: 'module' },
@@ -92,7 +105,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     return policyPayloadPromise;
   };
 
-  const getPolicyScope = (policy) => {
+  const getPolicyScope = (policy: RawPolicy) => {
     const hives = new Set(
       (policy.KeyPath || [])
         .map((path) =>
@@ -109,7 +122,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     return 'Machine';
   };
 
-  const formatPolicyRange = (element) => {
+  const formatPolicyRange = (element: PolicyElement) => {
     const maxValue = element?.MaxValue;
     const minValue = element?.MinValue ?? '0';
     if (maxValue !== null && maxValue !== undefined && maxValue !== '')
@@ -128,7 +141,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     return node;
   };
 
-  const getPolicyElementValueNames = (policy) => {
+  const getPolicyElementValueNames = (policy: RawPolicy) => {
     const elements = Array.isArray(policy?.Elements) ? policy.Elements : [];
     return [
       ...new Set(
@@ -226,14 +239,14 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     )
       return;
 
-    let policies: Record<string, any>[] = [];
-    let policyById = new Map<string, Record<string, any>>();
-    let policyByShareId = new Map<string, Record<string, any>>();
-    let filtered: Record<string, any>[] = [];
+    let policies: Policy[] = [];
+    let policyById = new Map<string, Policy>();
+    let policyByShareId = new Map<string, Policy>();
+    let filtered: Policy[] = [];
     let selectedId: string | null = null;
     let selectedCategoryKey = '';
-    let categoryMap = new Map();
-    let categoryTree: ReturnType<typeof buildCategoryTree> | null = null;
+    let categoryMap = new Map<string, PolicyCategory>();
+    let categoryTree: CategoryNode | null = null;
     let tableRenderId = 0;
     const expandedTreeNodes = new Set(['__admin__']);
     const defaultRowLimit = 350;
@@ -274,41 +287,43 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     };
     const collator = new Intl.Collator(undefined, { sensitivity: 'base' });
 
-    const setBusy = (busy) => {
+    const setBusy = (busy: boolean) => {
       root.setAttribute('aria-busy', busy ? 'true' : 'false');
     };
 
-    const getCategory = (policy) => policy.CategoryName || 'Uncategorized';
-    const normalizeCategorySegment = (segment) =>
+    const getCategory = (policy: RawPolicy) =>
+      policy.CategoryName || 'Uncategorized';
+    const normalizeCategorySegment = (segment: string) =>
       String(segment || '')
         .trim()
         .toLowerCase();
-    const makeCategoryKey = (path) =>
+    const makeCategoryKey = (path: CategorySegment[]) =>
       path
         .map((segment) =>
           normalizeCategorySegment(segment.name || segment.displayName),
         )
         .join('\u001f');
-    const getCategoryPath = (policy) => {
+    const getCategoryPath = (policy: RawPolicy): CategorySegment[] => {
       const categoryName = getCategory(policy);
       const meta = categoryMap.get(categoryName);
       if (meta?.path?.length) return meta.path;
       return [{ name: categoryName, displayName: categoryName }];
     };
-    const getCategoryDisplayPath = (policy) =>
+    const getCategoryDisplayPath = (policy: Policy) =>
       (policy.categoryPath || getCategoryPath(policy))
         .map((segment) => segment.displayName || segment.name)
         .join(' / ') ||
       policy.categoryDisplayPath ||
       getCategory(policy);
-    const getPrimaryPath = (policy) => (policy.KeyPath || [])[0] || '';
-    const getPolicyValue = (policy) => {
+    const getPrimaryPath = (policy: RawPolicy) =>
+      (policy.KeyPath || [])[0] || '';
+    const getPolicyValue = (policy: RawPolicy) => {
       if (policy.ValueName) return policy.ValueName;
       const valueNames = getPolicyElementValueNames(policy);
       return valueNames.length ? valueNames.join(', ') : '<ElementDefined>';
     };
     const POLICY_QUERY_PARAM = 'p';
-    const getPolicyShareId = (policy) => {
+    const getPolicyShareId = (policy: RawPolicy) => {
       const policyName = String(policy?.PolicyName || '').trim();
       if (!policyName) return '';
       const fileName = String(policy?.File || '')
@@ -318,11 +333,11 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       const namespace = String(policy?.NameSpace || '').trim();
       return namespace ? `${namespace}*${policyName}` : policyName;
     };
-    const normalizePolicyShareId = (value) =>
+    const normalizePolicyShareId = (value: string) =>
       String(value || '')
         .trim()
         .toLowerCase();
-    const updatePolicyUrl = (policy) => {
+    const updatePolicyUrl = (policy: Policy | null) => {
       if (!history?.replaceState) return;
       const url = new URL(location.href);
       const shareId = policy?.shareId || '';
@@ -351,7 +366,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         null
       );
     };
-    const expandTreeForPolicy = (policy) => {
+    const expandTreeForPolicy = (policy: Policy) => {
       expandedTreeNodes.add('__admin__');
       const path = Array.isArray(policy?.categoryPath)
         ? policy.categoryPath
@@ -360,8 +375,9 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         expandedTreeNodes.add(makeCategoryKey(path.slice(0, index + 1)));
       });
     };
-    const isNumericData = (value) => /^-?\d+$/.test(String(value ?? '').trim());
-    const getElementRegistryType = (element) => {
+    const isNumericData = (value: string | undefined) =>
+      /^-?\d+$/.test(String(value ?? '').trim());
+    const getElementRegistryType = (element: PolicyElement) => {
       const type = element?.Type || '';
       if (type === 'Text')
         return element?.Expandable ? 'REG_EXPAND_SZ' : 'REG_SZ';
@@ -394,7 +410,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       }
       return 'Unknown';
     };
-    const getElementDisplayType = (element) => {
+    const getElementDisplayType = (element: PolicyElement) => {
       const type = element?.Type || 'Element';
       if (
         type === 'EnabledValue' ||
@@ -406,18 +422,22 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       }
       return type;
     };
-    const appendUnique = (target, value) => {
+    const appendUnique = (target: string[], value: string) => {
       if (value === null || value === undefined) return;
       const normalized = String(value);
       if (!normalized && value !== '') return;
       if (!target.includes(normalized)) target.push(normalized);
     };
-    const formatPolicyMetaValue = (value) => {
+    const formatPolicyMetaValue = (value: string | boolean) => {
       if (typeof value === 'boolean') return value ? 'Yes' : 'No';
       if (value === '') return '""';
       return String(value);
     };
-    const addPolicyMeta = (group, label, value) => {
+    const addPolicyMeta = (
+      group: { meta: MetaItem[] },
+      label: string,
+      value: string | boolean | null | undefined,
+    ) => {
       if (value === null || value === undefined) return;
       const text = formatPolicyMetaValue(value);
       const existing = group.meta.find((item) => item.label === label);
@@ -427,25 +447,34 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         group.meta.push({ label, values: [text] });
       }
     };
-    const addElementMeta = (entry, element) => {
-      [
+    const addElementMeta = (
+      entry: { meta: MetaItem[] },
+      element: PolicyElement | null,
+    ) => {
+      const fields: [string, string | boolean | undefined][] = [
         ['Required', element?.Required],
         ['Max length', element?.MaxLength],
         ['Max strings', element?.MaxStrings],
         ['Expandable', element?.Expandable],
         ['Stored as text', element?.StoreAsText],
         ['Client extension', element?.ClientExtension],
-      ].forEach(([label, value]) => addPolicyMeta(entry, label, value));
+      ];
+      fields.forEach(([label, value]) => addPolicyMeta(entry, label, value));
     };
-    const getPathTail = (path) => {
+    const getPathTail = (path: string | undefined) => {
       const parts = String(path || '')
         .split('\\')
         .filter(Boolean);
       return parts[parts.length - 1] || '';
     };
-    const getActionValue = (item) =>
-      item?.Action === 'Delete' ? 'Delete' : (item?.Data ?? '');
-    const getEntryValueLabel = (valueName, element, paths) => {
+    const getActionValue = (
+      item: { Action?: string; Data?: string } | null | undefined,
+    ) => (item?.Action === 'Delete' ? 'Delete' : (item?.Data ?? ''));
+    const getEntryValueLabel = (
+      valueName: string,
+      element: PolicyElement | null,
+      paths: string[],
+    ) => {
       const cleanValue = String(valueName || '').trim();
       if (cleanValue) return cleanValue;
       if (element?.Type === 'List') return '<ListEntries>';
@@ -453,7 +482,10 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         return '<ListValue>';
       return getPathTail(paths[0]) || '<ElementDefined>';
     };
-    const getElementPaths = (policy, element) => {
+    const getElementPaths = (
+      policy: RawPolicy,
+      element: PolicyElement | null,
+    ) => {
       const elementPaths = Array.isArray(element?.KeyPath)
         ? element.KeyPath.filter(Boolean)
         : [];
@@ -462,23 +494,14 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         ? policy.KeyPath.filter(Boolean)
         : [];
     };
-    const makePathGroupKey = (paths) =>
+    const makePathGroupKey = (paths: string[]) =>
       (paths.length ? paths : ['__no_key__'])
         .map((path) => String(path || '').toLowerCase())
         .join('\u001f');
-    const getPolicyStorageGroups = (policy) => {
-      const groups: {
-        keyPaths: string[];
-        entries: {
-          key: string;
-          valueName: string;
-          copyValue: string | null;
-          meta: any[];
-          rows: any[];
-        }[];
-      }[] = [];
+    const getPolicyStorageGroups = (policy: RawPolicy) => {
+      const groups: { keyPaths: string[]; entries: StorageEntry[] }[] = [];
       const groupByPath = new Map<string, (typeof groups)[number]>();
-      const ensureGroup = (paths) => {
+      const ensureGroup = (paths: string[]) => {
         const normalizedPaths = paths.length
           ? paths
           : ['<RegistryPathNotSpecified>'];
@@ -494,11 +517,11 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         return groupByPath.get(key)!;
       };
       const addEntry = (
-        paths,
-        valueName,
-        element,
-        rows,
-        copyValue = valueName,
+        paths: string[],
+        valueName: string,
+        element: PolicyElement | null,
+        rows: StorageRow[],
+        copyValue: string | null = valueName,
       ) => {
         const group = ensureGroup(paths);
         const label = getEntryValueLabel(valueName, element, paths);
@@ -690,7 +713,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         return leftMain ? -1 : 1;
       });
     };
-    const getPolicyValueGroups = (policy) =>
+    const getPolicyValueGroups = (policy: RawPolicy) =>
       getPolicyStorageGroups(policy).flatMap((group) =>
         group.entries.map((entry) => ({
           valueName: entry.valueName,
@@ -705,7 +728,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
           })),
         })),
       );
-    const getEntryRegistryTypes = (entry) => [
+    const getEntryRegistryTypes = (entry: StorageEntry) => [
       ...new Set(
         entry.rows
           .map((row) =>
@@ -717,7 +740,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       ),
     ];
 
-    const columns = [
+    const columns: PolicyColumn[] = [
       {
         id: 'setting',
         label: 'Name',
@@ -781,9 +804,9 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
 
     const getVisibleColumns = () =>
       columns.filter((column) => visibleColumns.has(column.id));
-    const getColumnMinWidth = (column) => column.minWidth || 80;
+    const getColumnMinWidth = (column: PolicyColumn) => column.minWidth || 80;
 
-    const copyPolicyText = async (text, successMessage = 'Copied') => {
+    const copyPolicyText = async (text: string, successMessage = 'Copied') => {
       if (!text) return;
       try {
         showToast((await copyText(text)) ? successMessage : 'Copy failed');
@@ -793,8 +816,8 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     };
 
     const createCopyBox = (
-      className,
-      text,
+      className: string,
+      text: string,
       label = 'Copy',
       successMessage = 'Copied',
       prefixText = '',
@@ -819,7 +842,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       box.appendChild(button);
       return box;
     };
-    const createPolicyValueTitle = (entry, typeText) => {
+    const createPolicyValueTitle = (entry: StorageEntry, typeText: string) => {
       if (entry.copyValue !== null) {
         return createCopyBox(
           'policy-copy-box policy-value-name',
@@ -886,7 +909,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       }
     };
 
-    const renderDetail = (policy) => {
+    const renderDetail = (policy: Policy | null | undefined) => {
       detailBody.replaceChildren();
       if (!policy || !paneState.detail) {
         return;
@@ -899,7 +922,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       detailBody.appendChild(heading);
 
       const fields = createNode('div', 'policy-detail-grid');
-      const detailFields = [
+      const detailFields: [string, string | undefined][] = [
         ['Policy', policy.PolicyName],
         ['Scope', policy.scope],
         ['ADMX', policy.File],
@@ -1021,7 +1044,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       detailBody.appendChild(elementSection);
     };
 
-    const sortPolicies = (rows) => {
+    const sortPolicies = (rows: Policy[]) => {
       if (sortState.id === 'setting') {
         return sortState.direction === 'asc' ? rows : rows.slice().reverse();
       }
@@ -1101,10 +1124,10 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       columnTrigger?.setAttribute('aria-expanded', 'false');
     };
 
-    const escapeRegExp = (value) =>
+    const escapeRegExp = (value: string) =>
       String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-    const wildcardToRegExp = (term) => {
+    const wildcardToRegExp = (term: string) => {
       const pattern = String(term)
         .split('')
         .map((char) => {
@@ -1119,7 +1142,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       );
     };
 
-    const splitSearchTerms = (value) => {
+    const splitSearchTerms = (value: string) => {
       const terms: string[] = [];
       String(value || '').replace(/"([^"]+)"|(\S+)/g, (_, quoted, bare) => {
         const term = quoted || bare;
@@ -1129,23 +1152,30 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       return terms;
     };
 
-    const getSearchFields = (policy, lowercase = false) => {
+    const getSearchFields = (policy: Policy, lowercase = false) => {
       if (searchOptions.registry || searchOptions.details)
         preparePolicySearchFields(policy);
       const source = lowercase ? policy.searchFieldsLower : policy.searchFields;
       const fields: string[] = [];
       if (searchOptions.names) fields.push(...source.names);
-      if (searchOptions.registry) fields.push(...source.registry);
-      if (searchOptions.details) fields.push(...source.details);
+      if (searchOptions.registry) fields.push(...(source.registry || []));
+      if (searchOptions.details) fields.push(...(source.details || []));
       return fields;
     };
 
-    const compileSearchTerm = (term) => {
+    const compileSearchTerm = (
+      term: string,
+    ):
+      | { regex: RegExp; value?: undefined }
+      | { regex?: undefined; value: string } => {
       if (searchOptions.wildcards) return { regex: wildcardToRegExp(term) };
       return { value: searchOptions.caseSensitive ? term : term.toLowerCase() };
     };
 
-    const termMatchesPolicy = (policy, matcher) => {
+    const termMatchesPolicy = (
+      policy: Policy,
+      matcher: ReturnType<typeof compileSearchTerm>,
+    ) => {
       const fields = getSearchFields(
         policy,
         !searchOptions.caseSensitive && !matcher.regex,
@@ -1194,7 +1224,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       });
     };
 
-    const startColumnResize = (column, event) => {
+    const startColumnResize = (column: PolicyColumn, event: PointerEvent) => {
       if (event.button !== 0) return;
       event.preventDefault();
       event.stopPropagation();
@@ -1209,7 +1239,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       let rafId = 0;
       let pendingX = startX;
       let resizing = true;
-      const target = event.currentTarget;
+      const target = event.currentTarget as HTMLElement;
 
       const paint = () => {
         rafId = 0;
@@ -1219,7 +1249,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         applyTableColumnWidths();
       };
 
-      const onMove = (moveEvent) => {
+      const onMove = (moveEvent: PointerEvent) => {
         if (!resizing || (moveEvent.buttons & 1) !== 1) {
           stop(false);
           return;
@@ -1337,7 +1367,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
           visible[0]?.id ||
           null;
       }
-      const appendRows = (start) => {
+      const appendRows = (start: number) => {
         if (renderId !== tableRenderId) return;
         const end = Math.min(start + 50, visible.length);
         const fragment = document.createDocumentFragment();
@@ -1386,7 +1416,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       if (activePolicy && paneState.detail) renderDetail(activePolicy);
     };
 
-    const categoryMatches = (policy, categoryKey) => {
+    const categoryMatches = (policy: Policy, categoryKey: string) => {
       if (!categoryKey) return true;
       return (
         policy.categoryPathKey === categoryKey ||
@@ -1395,7 +1425,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     };
 
     const selectPolicy = (
-      policy: Record<string, any> | null | undefined,
+      policy: Policy | null | undefined,
       options: { updateUrl?: boolean; selectCategory?: boolean } = {},
     ) => {
       if (!policy) return;
@@ -1424,7 +1454,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       applyFilters();
     };
 
-    const focusTreeNode = (nodeKey) => {
+    const focusTreeNode = (nodeKey: string) => {
       const item = Array.from(
         treeEl.querySelectorAll<HTMLElement>('.policy-tree-item'),
       ).find((candidate) => candidate.dataset.nodeKey === nodeKey);
@@ -1437,7 +1467,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       item.focus({ preventScroll: true });
     };
 
-    const toggleTreeNode = (nodeKey, restoreFocus = false) => {
+    const toggleTreeNode = (nodeKey: string, restoreFocus = false) => {
       if (expandedTreeNodes.has(nodeKey)) {
         expandedTreeNodes.delete(nodeKey);
       } else {
@@ -1455,6 +1485,14 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       nodeKey = '',
       selectionKey = '',
       hasChildren = false,
+    }: {
+      label: string;
+      count: number;
+      categoryKey?: string;
+      depth?: number;
+      nodeKey?: string;
+      selectionKey?: string;
+      hasChildren?: boolean;
     }) => {
       const button = document.createElement('button');
       const treeNodeKey = nodeKey || categoryKey;
@@ -1544,14 +1582,6 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     };
 
     const buildCategoryTree = () => {
-      type CategoryNode = {
-        key: string;
-        name: string;
-        label: string;
-        categoryKey: string;
-        count: number;
-        children: Map<string, CategoryNode>;
-      };
       const rootNode: CategoryNode = {
         key: '',
         name: '',
@@ -1582,7 +1612,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       });
       const applyKeys = (
         node: CategoryNode,
-        prefix: { name: string; displayName: string }[] = [],
+        prefix: CategorySegment[] = [],
       ) => {
         [...node.children.values()].forEach((child) => {
           const path = [
@@ -1597,7 +1627,11 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       return rootNode;
     };
 
-    const appendCategoryNodes = (parent, node, depth) => {
+    const appendCategoryNodes = (
+      parent: HTMLElement | DocumentFragment,
+      node: CategoryNode,
+      depth: number,
+    ) => {
       [...node.children.values()]
         .sort((left, right) => collator.compare(left.label, right.label))
         .forEach((child) => {
@@ -1626,7 +1660,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         });
     };
 
-    const appendAdministrativeTemplatesTree = (parent) => {
+    const appendAdministrativeTemplatesTree = (parent: DocumentFragment) => {
       const count = policies.length;
       parent.appendChild(
         createTreeButton({
@@ -1689,7 +1723,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       renderDetail(selectedId ? policyById.get(selectedId) : undefined);
     };
 
-    const normalizePolicy = (policy, index) => {
+    const normalizePolicy = (policy: RawPolicy, index: number): Policy => {
       const categoryPath = getCategoryPath(policy);
       const categoryDisplayPath = categoryPath
         .map((segment) => segment.displayName || segment.name)
@@ -1726,7 +1760,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       };
     };
 
-    const preparePolicySearchFields = (policy) => {
+    const preparePolicySearchFields = (policy: Policy) => {
       if (policy.searchFields.registry) return;
       const elements = Array.isArray(policy.Elements) ? policy.Elements : [];
       const valueGroups = getPolicyValueGroups(policy);
@@ -1790,8 +1824,8 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       );
     };
 
-    const normalizePolicies = async (data) => {
-      const normalized: Record<string, any>[] = [];
+    const normalizePolicies = async (data: RawPolicy[]) => {
+      const normalized: Policy[] = [];
       for (let start = 0; start < data.length; start += 250) {
         const end = Math.min(start + 250, data.length);
         for (let index = start; index < end; index += 1) {
@@ -1807,8 +1841,14 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       );
     };
 
+    const searchOptionEntries = () =>
+      Object.entries(searchOptionInputs) as [
+        keyof typeof searchOptions,
+        HTMLInputElement | null,
+      ][];
+
     const syncSettingsUi = () => {
-      Object.entries(searchOptionInputs).forEach(([key, input]) => {
+      searchOptionEntries().forEach(([key, input]) => {
         if (input) input.checked = Boolean(searchOptions[key]);
       });
       if (searchDelayInput) searchDelayInput.value = String(searchDelayMs);
@@ -1820,7 +1860,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
     };
 
     const applySearchSettingsFromUi = () => {
-      Object.entries(searchOptionInputs).forEach(([key, input]) => {
+      searchOptionEntries().forEach(([key, input]) => {
         if (input) searchOptions[key] = input.checked;
       });
       if (searchDelayInput) {
@@ -1847,17 +1887,15 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       settingsDialogManager?.close();
     };
 
-    const startPaneResize = (splitter, event) => {
+    const startPaneResize = (splitter: HTMLElement, event: PointerEvent) => {
       if (event.button !== 0) return;
-      const type = splitter.dataset.policySplitter;
+      const splitterType = splitter.dataset.policySplitter;
+      const type =
+        splitterType === 'tree' || splitterType === 'detail'
+          ? splitterType
+          : null;
       const treePanel = root.querySelector('.policy-tree-panel');
-      if (
-        !['tree', 'detail'].includes(type) ||
-        !tablePanel ||
-        !treePanel ||
-        !detailPanel
-      )
-        return;
+      if (!type || !tablePanel || !treePanel || !detailPanel) return;
       event.preventDefault();
 
       const startX = event.clientX;
@@ -1900,7 +1938,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
         root.style.setProperty(property, `${nextWidth}px`);
       };
 
-      const onMove = (moveEvent) => {
+      const onMove = (moveEvent: PointerEvent) => {
         pendingX = moveEvent.clientX;
         if (!rafId) rafId = requestAnimationFrame(paint);
       };
@@ -1946,7 +1984,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       else if (event.key === 'ArrowRight') {
         if (current.getAttribute('aria-expanded') === 'false') {
           event.preventDefault();
-          toggleTreeNode(current.dataset.nodeKey, true);
+          toggleTreeNode(current.dataset.nodeKey || '', true);
           return;
         }
         if (current.getAttribute('aria-expanded') === 'true') {
@@ -1960,7 +1998,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
       } else if (event.key === 'ArrowLeft') {
         if (current.getAttribute('aria-expanded') === 'true') {
           event.preventDefault();
-          toggleTreeNode(current.dataset.nodeKey, true);
+          toggleTreeNode(current.dataset.nodeKey || '', true);
           return;
         }
         const currentDepth = Number(current.dataset.depth);
@@ -2095,7 +2133,7 @@ import { createDraggableDialogManager } from '../dialogs/draggable';
           button.checked = false;
           return;
         }
-        paneState[pane] = button.checked;
+        paneState[pane as keyof typeof paneState] = button.checked;
         updatePaneLayout();
         renderDetail(selectedId ? policyById.get(selectedId) : undefined);
       });

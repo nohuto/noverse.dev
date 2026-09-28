@@ -22,23 +22,12 @@ export function showToast(message: string): void {
 }
 
 export async function copyText(value: string): Promise<boolean> {
-  if (navigator.clipboard && window.isSecureContext) {
+  try {
     await navigator.clipboard.writeText(value);
     return true;
+  } catch {
+    return false;
   }
-  const textarea = document.createElement('textarea');
-  textarea.value = value;
-  textarea.style.position = 'fixed';
-  textarea.style.opacity = '0';
-  document.body.appendChild(textarea);
-  textarea.focus();
-  textarea.select();
-  let copied = false;
-  try {
-    copied = document.execCommand('copy');
-  } catch {}
-  textarea.remove();
-  return copied;
 }
 
 export function initClipboard(): void {
@@ -56,10 +45,7 @@ export function initClipboard(): void {
       : source.dataset.copy;
     if (!value) return;
     event.preventDefault();
-    let copied = false;
-    try {
-      copied = await copyText(value);
-    } catch {}
+    const copied = await copyText(value);
     showToast(copied ? source.dataset.toast || 'Copied' : 'Copy failed');
   });
 }

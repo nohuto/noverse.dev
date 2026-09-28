@@ -1,165 +1,38 @@
 ---
 import {
-  docsDefaultTheme,
-  docsLightThemeIds,
-  docsThemeIds,
-} from '../../utils/doc-themes';
+  DEFAULT_DARK_THEME,
+  DEFAULT_LIGHT_THEME,
+  THEME_KEY,
+  THEME_SYSTEM,
+  lightThemes,
+  themes,
+} from '../../../../src/data/themes';
 ---
 
 <script
+  is:inline
   define:vars={{
-    defaultTheme: docsDefaultTheme,
-    lightThemeIds: docsLightThemeIds,
-    themeIds: docsThemeIds,
+    themeKey: THEME_KEY,
+    themeOptions: themes.map(([value]) => value),
+    lightOptions: [...lightThemes],
+    systemTheme: THEME_SYSTEM,
+    darkTheme: DEFAULT_DARK_THEME,
+    lightTheme: DEFAULT_LIGHT_THEME,
   }}
 >
-  window.DocsThemeProvider =
-    window.DocsThemeProvider ||
-    (() => {
-      const storageKey = 'nv-theme';
-      const systemTheme = 'system';
-      const darkTheme = 'gruvbox-dark';
-      const lightTheme = 'catppuccin-latte';
-      const availableThemeIds = new Set(themeIds);
-      const availableLightThemeIds = new Set(lightThemeIds);
-      const getPreferredTheme = () =>
-        window.matchMedia('(prefers-color-scheme: light)').matches
-          ? lightTheme
-          : darkTheme;
-
-      const normalizeTheme = (theme) => {
-        return typeof theme === 'string' ? theme.trim() : '';
-      };
-
-      const resolveTheme = (theme) => {
-        const normalized = normalizeTheme(theme);
-        return normalized === systemTheme
-          ? getPreferredTheme()
-          : normalized || getPreferredTheme();
-      };
-
-      const getThemeScheme = (theme) =>
-        availableLightThemeIds.has(resolveTheme(theme)) ? 'light' : 'dark';
-
-      const isValidTheme = (theme) =>
-        typeof theme === 'string' && availableThemeIds.has(theme);
-
-      const parseTheme = (theme) => {
-        const normalized = normalizeTheme(theme);
-        return isValidTheme(normalized) ? normalized : '';
-      };
-
-      const loadTheme = () => {
-        if (typeof localStorage === 'undefined') return '';
-        try {
-          return parseTheme(localStorage.getItem(storageKey));
-        } catch {
-          return '';
-        }
-      };
-
-      const applyTheme = (requestedTheme) => {
-        const nextTheme = parseTheme(requestedTheme) || defaultTheme;
-        const appliedTheme = resolveTheme(nextTheme);
-        const nextScheme = getThemeScheme(appliedTheme);
-        document.documentElement.dataset.theme = nextScheme;
-        document.documentElement.dataset.docsThemeSetting = nextTheme;
-        document.documentElement.dataset.docsTheme = appliedTheme;
-        return { theme: nextTheme, appliedTheme, scheme: nextScheme };
-      };
-
-      const updatePickers = (
-        theme = loadTheme() ||
-          document.documentElement.dataset.docsThemeSetting ||
-          defaultTheme,
-      ) => {
-        document.querySelectorAll('docs-theme-select').forEach((picker) => {
-          picker.dataset.themeValue = theme;
-          const optionButtons = Array.from(
-            picker.querySelectorAll('[data-theme-option]'),
-          );
-          let activeLabel = '';
-
-          optionButtons.forEach((optionButton) => {
-            if (!(optionButton instanceof HTMLButtonElement)) return;
-            const isActive = optionButton.dataset.themeOption === theme;
-            optionButton.setAttribute('aria-selected', String(isActive));
-            optionButton.setAttribute('aria-checked', String(isActive));
-            optionButton.tabIndex = isActive ? 0 : -1;
-            optionButton.dataset.active = String(isActive);
-            if (isActive) {
-              activeLabel =
-                optionButton.dataset.themeLabel ||
-                optionButton.textContent?.trim() ||
-                '';
-            }
-          });
-
-          const currentLabel = picker.querySelector('[data-current-label]');
-          if (currentLabel) currentLabel.textContent = activeLabel || theme;
-
-          const trigger = picker.querySelector('[data-theme-trigger]');
-          if (trigger instanceof HTMLButtonElement) {
-            const label = activeLabel || theme;
-            trigger.setAttribute(
-              'aria-label',
-              `Select docs theme. Current theme: ${label}`,
-            );
-          }
-        });
-      };
-
-      const storeTheme = (theme) => {
-        if (typeof localStorage === 'undefined') return;
-        try {
-          localStorage.setItem(storageKey, theme);
-        } catch {}
-      };
-
-      const setTheme = (theme) => {
-        const {
-          theme: selectedTheme,
-          appliedTheme,
-          scheme,
-        } = applyTheme(theme);
-        storeTheme(selectedTheme);
-        updatePickers(selectedTheme);
-        document.dispatchEvent(
-          new CustomEvent('nv:theme-change', {
-            detail: {
-              theme: selectedTheme,
-              appliedTheme,
-              scheme,
-              isLight: scheme === 'light',
-            },
-          }),
-        );
-        return selectedTheme;
-      };
-
-      const syncPreferredTheme = () => {
-        const selectedTheme =
-          loadTheme() ||
-          document.documentElement.dataset.docsThemeSetting ||
-          defaultTheme;
-        if (selectedTheme !== systemTheme) return;
-        const { theme } = applyTheme(systemTheme);
-        updatePickers(theme);
-      };
-
-      const initialTheme = loadTheme();
-      applyTheme(initialTheme);
-
-      window
-        .matchMedia('(prefers-color-scheme: light)')
-        .addEventListener('change', syncPreferredTheme);
-
-      return {
-        getThemeScheme,
-        loadTheme,
-        setTheme,
-        syncPreferredTheme,
-        updatePickers,
-      };
-    })();
+  let setting = '';
+  try {
+    setting = (localStorage.getItem(themeKey) || '').trim();
+  } catch {}
+  if (!themeOptions.includes(setting)) setting = systemTheme;
+  const theme =
+    setting !== systemTheme
+      ? setting
+      : matchMedia('(prefers-color-scheme: light)').matches
+        ? lightTheme
+        : darkTheme;
+  const root = document.documentElement;
+  root.dataset.docsThemeSetting = setting;
+  root.dataset.docsTheme = theme;
+  root.dataset.theme = lightOptions.includes(theme) ? 'light' : 'dark';
 </script>

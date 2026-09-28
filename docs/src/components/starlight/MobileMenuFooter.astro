@@ -1,9 +1,8 @@
 ---
-import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
-import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import { getActiveRepo } from '../../utils/active-repo';
 import { getZenTarget } from '../../utils/zen-mode';
 import HeaderIcon from './HeaderIcon.astro';
+import ThemeSelect from './ThemeSelect.astro';
 
 const { id, sidebar } = Astro.locals.starlightRoute;
 
@@ -33,7 +32,7 @@ const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(
       <a
         class="mobile-icon-link"
         href={zenTarget.href}
-        aria-label={Astro.locals.t(zenTarget.switchToText)}
+        aria-label={zenTarget.switchToText}
       >
         <HeaderIcon name={inZenMode ? 'zen-exit' : 'zen'} />
       </a>
@@ -70,7 +69,6 @@ const { target: zenTarget, isCurrent: inZenMode } = getZenTarget(
     </a>
   </div>
   <ThemeSelect />
-  <LanguageSelect />
 </div>
 
 <script>

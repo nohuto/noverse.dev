@@ -30,7 +30,7 @@ See '[Thread Activity](https://noverse.dev/docs/windbg-notes/threads/examining-t
     StartedComponents & 0x200 // MemoryCompression started by SysMain
 ```
 
-`0x200` = bit `9`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data, example:
+`0x200` = bit `9`, you can use my [bitmask calculator](https://noverse.dev/terminal#bitmask) to see whenever that bit is set in your current `StartedComponents` data, example:
 
 <img src="https://github.com/nohuto/win-config/blob/main/system/images/StartedComponents.png?raw=true" alt="" width="910" height="220">
 

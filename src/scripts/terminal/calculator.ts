@@ -1,6 +1,16 @@
 /* Copyright (c) 2026 nohuto */
 import type { TerminalToolContext } from './types';
 
+type Token =
+  | { type: 'number'; value: number }
+  | { type: 'name' | 'op' | 'paren' | 'comma'; value: string };
+
+interface BinaryOp {
+  precedence: number;
+  assoc: 'left' | 'right';
+  fn: (a: number, b: number) => number;
+}
+
 (function attachNoverseCalculator(global) {
   'use strict';
 
@@ -44,12 +54,14 @@ import type { TerminalToolContext } from './types';
       };
 
       let lastAnswer = 0;
-      const constants = Object.freeze({
+      const constants: Readonly<Record<string, number>> = Object.freeze({
         pi: Math.PI,
         e: Math.E,
         tau: Math.PI * 2,
       });
-      const functions = Object.freeze({
+      const functions: Readonly<
+        Record<string, (...values: number[]) => number>
+      > = Object.freeze({
         abs: Math.abs,
         acos: Math.acos,
         asin: Math.asin,
@@ -67,7 +79,7 @@ import type { TerminalToolContext } from './types';
         sqrt: Math.sqrt,
         tan: Math.tan,
       });
-      const binaryOps = Object.freeze({
+      const binaryOps: Readonly<Record<string, BinaryOp>> = Object.freeze({
         '+': { precedence: 1, assoc: 'left', fn: (a, b) => a + b },
         '-': { precedence: 1, assoc: 'left', fn: (a, b) => a - b },
         '*': { precedence: 2, assoc: 'left', fn: (a, b) => a * b },
@@ -90,14 +102,14 @@ import type { TerminalToolContext } from './types';
         '^': { precedence: 4, assoc: 'right', fn: (a, b) => a ** b },
       });
       const previewOps = new Set(['+', '*', '/', '%', '^', '!']);
-      const normalizers = Object.freeze({
+      const normalizers: Readonly<Record<string, string>> = Object.freeze({
         '\u00f7': '/',
         '\u2212': '-',
         '\u221a': 'sqrt',
         '\u03c0': 'pi',
       });
 
-      const normalizeExpression = (value) =>
+      const normalizeExpression = (value: string) =>
         String(value || '')
           .replace(
             /[\u00f7\u2212\u221a\u03c0]/g,
@@ -105,7 +117,7 @@ import type { TerminalToolContext } from './types';
           )
           .replace(/\s+/g, '');
 
-      const factorial = (value) => {
+      const factorial = (value: number) => {
         if (!Number.isInteger(value) || value < 0 || value > 170) {
           throw new Error('factorial supports integers from 0 to 170');
         }
@@ -114,7 +126,7 @@ import type { TerminalToolContext } from './types';
         return result;
       };
 
-      const formatNumber = (value) => {
+      const formatNumber = (value: number) => {
         const number = Object.is(value, -0) ? 0 : value;
         if (!Number.isFinite(number)) throw new Error('result is not finite');
         const abs = Math.abs(number);
@@ -125,7 +137,7 @@ import type { TerminalToolContext } from './types';
         return text.replace(/(\.\d*?)0+(e|$)/, '$1$2').replace(/\.(e|$)/, '$1');
       };
 
-      const updateMeta = (value) => {
+      const updateMeta = (value: number) => {
         if (!Number.isSafeInteger(value) || value < 0) {
           meta.textContent = '';
           return;
@@ -147,7 +159,7 @@ import type { TerminalToolContext } from './types';
         resultEl.textContent = nextResult;
       };
 
-      const readNumber = (source, start) => {
+      const readNumber = (source: string, start: number) => {
         if (source.startsWith('0x', start) || source.startsWith('0X', start)) {
           let index = start + 2;
           while (/[0-9a-f]/i.test(source[index] || '')) index += 1;
@@ -173,8 +185,8 @@ import type { TerminalToolContext } from './types';
         return { value: Number(match[0]), index: start + match[0].length };
       };
 
-      const tokenize = (source) => {
-        const rawTokens: { type: string; value: string | number }[] = [];
+      const tokenize = (source: string) => {
+        const rawTokens: Token[] = [];
         for (let index = 0; index < source.length;) {
           const char = source[index];
           if (/\d|\./.test(char)) {
@@ -208,14 +220,14 @@ import type { TerminalToolContext } from './types';
           }
           throw new Error(`unexpected token: ${char}`);
         }
-        const tokens: typeof rawTokens = [];
-        const endsValue = (token) =>
+        const tokens: Token[] = [];
+        const endsValue = (token: Token | undefined) =>
           token &&
           (token.type === 'number' ||
             token.type === 'name' ||
             token.value === ')' ||
             token.value === '!');
-        const startsValue = (token) =>
+        const startsValue = (token: Token) =>
           token &&
           (token.type === 'number' ||
             token.type === 'name' ||
@@ -234,8 +246,8 @@ import type { TerminalToolContext } from './types';
         return tokens;
       };
 
-      const shouldPreviewExpression = (source) => {
-        let tokens;
+      const shouldPreviewExpression = (source: string) => {
+        let tokens: Token[];
         try {
           tokens = tokenize(normalizeExpression(source));
         } catch {
@@ -256,29 +268,31 @@ import type { TerminalToolContext } from './types';
         });
       };
 
-      const evaluateExpression = (source) => {
+      const evaluateExpression = (source: string) => {
         const tokens = tokenize(normalizeExpression(source));
         let position = 0;
         const peek = () => tokens[position];
         const consume = () => tokens[position++];
+        const peekOp = () => {
+          const token = peek();
+          return token?.type === 'op' ? binaryOps[token.value] : undefined;
+        };
 
-        const parseExpression = (minPrecedence = 0) => {
+        const parseExpression = (minPrecedence = 0): number => {
           let left = parseUnary();
-          while (
-            binaryOps[peek()?.value] &&
-            binaryOps[peek().value].precedence >= minPrecedence
-          ) {
-            const op = consume().value;
-            const { precedence, assoc, fn } = binaryOps[op];
+          let op = peekOp();
+          while (op && op.precedence >= minPrecedence) {
+            consume();
             const right = parseExpression(
-              precedence + (assoc === 'left' ? 1 : 0),
+              op.precedence + (op.assoc === 'left' ? 1 : 0),
             );
-            left = fn(left, right);
+            left = op.fn(left, right);
+            op = peekOp();
           }
           return left;
         };
 
-        const parseUnary = () => {
+        const parseUnary = (): number => {
           const token = peek();
           if (token?.type === 'op' && token.value === '+') {
             consume();
@@ -316,7 +330,7 @@ import type { TerminalToolContext } from './types';
           }
         };
 
-        const parsePrimary = () => {
+        const parsePrimary = (): number => {
           const token = consume();
           if (!token) throw new Error('empty expression');
           if (token.type === 'number') return token.value;
@@ -346,7 +360,7 @@ import type { TerminalToolContext } from './types';
         return result;
       };
 
-      const setInput = (value) => {
+      const setInput = (value: string) => {
         input.value = value || '';
         input.focus({ preventScroll: true });
         input.setSelectionRange(input.value.length, input.value.length);
@@ -366,13 +380,14 @@ import type { TerminalToolContext } from './types';
         return value;
       };
 
-      const showError = (error) => {
+      const showError = (error: unknown) => {
         resultEl.textContent = '';
-        meta.textContent = error.message || 'invalid expression';
+        meta.textContent =
+          (error instanceof Error && error.message) || 'invalid expression';
         input.setAttribute('aria-invalid', 'true');
       };
 
-      const insertText = (text) => {
+      const insertText = (text: string) => {
         input.removeAttribute('aria-invalid');
         const current = input.value;
         const start = input.selectionStart ?? current.length;
@@ -384,7 +399,7 @@ import type { TerminalToolContext } from './types';
         renderDisplay();
       };
 
-      const handleAction = (action) => {
+      const handleAction = (action: string | undefined) => {
         input.removeAttribute('aria-invalid');
         if (action === 'clear') {
           meta.textContent = '';
@@ -480,17 +495,9 @@ import type { TerminalToolContext } from './types';
         hash: 'calc',
         focusTarget: () => input,
       });
-      if (touchKeyboardMedia.addEventListener) {
-        touchKeyboardMedia.addEventListener('change', syncTouchKeyboard);
-      } else {
-        touchKeyboardMedia.addListener?.(syncTouchKeyboard);
-      }
+      touchKeyboardMedia.addEventListener('change', syncTouchKeyboard);
       calcCleanup = () => {
-        if (touchKeyboardMedia.removeEventListener) {
-          touchKeyboardMedia.removeEventListener('change', syncTouchKeyboard);
-        } else {
-          touchKeyboardMedia.removeListener?.(syncTouchKeyboard);
-        }
+        touchKeyboardMedia.removeEventListener('change', syncTouchKeyboard);
         tool.cleanup();
       };
       syncTouchKeyboard();

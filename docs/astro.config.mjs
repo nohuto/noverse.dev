@@ -61,6 +61,7 @@ export default defineConfig({
               showFooter: false,
             },
           },
+          presentationModeSettings: { enabled: false },
         }),
         starlightScrollToTop({
           borderRadius: '0',
@@ -70,7 +71,11 @@ export default defineConfig({
         starlightCodeblockFullscreen(),
         starlightImageZoom(),
         starlightLinksValidator({
-          exclude: ['https://noverse.dev/diff'],
+          exclude: [
+            'https://noverse.dev/',
+            'https://noverse.dev/{diff,policies,product,projects,terminal}',
+            'https://noverse.dev/terminal#*',
+          ],
           failOnError: false,
           sameSitePolicy: 'validate',
         }),
@@ -93,7 +98,7 @@ export default defineConfig({
           tag: 'link',
           attrs: {
             rel: 'preload',
-            href: '/main/fonts/CascadiaCode-2407.24.woff2',
+            href: '/main/fonts/NoverseMono-2407.24.woff2',
             as: 'font',
             type: 'font/woff2',
             crossorigin: true,
@@ -108,10 +113,7 @@ export default defineConfig({
           href: 'https://discord.noverse.dev',
         },
       ],
-      tableOfContents: {
-        minHeadingLevel: 2,
-        maxHeadingLevel: 6,
-      },
+      tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 6 },
       routeMiddleware: './src/route-data.ts',
       components: {
         Head: './src/components/starlight/Head.astro',

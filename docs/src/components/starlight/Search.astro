@@ -1,6 +1,4 @@
 ---
-import project from 'virtual:starlight/project-context';
-
 const pagefindTranslations = {
   placeholder: '',
   ...Object.fromEntries(
@@ -13,8 +11,6 @@ const pagefindTranslations = {
 const dataAttributes: DOMStringMap = {
   'data-translations': JSON.stringify(pagefindTranslations),
 };
-if (project.trailingSlash === 'never')
-  dataAttributes['data-strip-trailing-slash'] = '';
 dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
   ? 'zen-mode'
   : 'default';
@@ -137,12 +133,6 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
         translations = JSON.parse(this.dataset.translations || '{}');
       } catch {}
 
-      const shouldStrip = this.dataset.stripTrailingSlash !== undefined;
-      const stripTrailingSlash = (path: string) =>
-        path.replace(/(.)\/(#.*)?$/, '$1$2');
-      const formatURL = shouldStrip
-        ? stripTrailingSlash
-        : (path: string) => path;
       const currentMode = this.dataset.mode || 'default';
       const insertModeInPath = (path: string) => {
         if (currentMode !== 'zen-mode' || path.includes('/zen-mode/'))
@@ -188,7 +178,7 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
               url: string;
               sub_results: Array<{ url: string }>;
             }) => {
-              result.url = preserveCurrentMode(formatURL(result.url));
+              result.url = preserveCurrentMode(result.url);
               result.sub_results = [];
               return result;
             },
@@ -224,9 +214,7 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
       width: 1em;
       height: 1em;
       background-color: currentColor;
-      -webkit-mask-image: var(--nv-search-icon);
       mask-image: var(--nv-search-icon);
-      -webkit-mask-size: 100%;
       mask-size: 100%;
     }
 
@@ -366,7 +354,6 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
 
     #starlight__search .pagefind-ui__form::before {
       --pagefind-ui-text: var(--sl-color-gray-1);
-      -webkit-mask-image: var(--nv-search-icon);
       mask-image: var(--nv-search-icon);
       opacity: 1;
     }
@@ -397,8 +384,6 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
     }
     #starlight__search .pagefind-ui__search-clear::before {
       content: '';
-      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m13.41 12 6.3-6.29a1 1 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1 1 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 .33 1.64 1 1 0 0 0 1.09-.22l6.29-6.3 6.29 6.3a1 1 0 0 0 1.64-.33 1 1 0 0 0-.22-1.09L13.41 12Z'/%3E%3C/svg%3E")
-        center / 50% no-repeat;
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m13.41 12 6.3-6.29a1 1 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1 1 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 .33 1.64 1 1 0 0 0 1.09-.22l6.29-6.3 6.29 6.3a1 1 0 0 0 1.64-.33 1 1 0 0 0-.22-1.09L13.41 12Z'/%3E%3C/svg%3E")
         center / 50% no-repeat;
       background-color: var(--sl-color-text-accent);
@@ -455,8 +440,6 @@ dataAttributes['data-mode'] = Astro.url.pathname.split('/').includes('zen-mode')
       inset-inline-start: var(--sl-search-page-icon-inline-start);
       width: var(--sl-search-page-icon-size);
       background: var(--sl-color-gray-3);
-      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'%3E%3Cpath d='M9 10h1a1 1 0 1 0 0-2H9a1 1 0 0 0 0 2Zm0 2a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9Zm11-3V8l-6-6a1 1 0 0 0-1 0H7a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V9Zm-6-4 3 3h-2a1 1 0 0 1-1-1V5Zm4 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5v3a3 3 0 0 0 3 3h3v9Zm-3-3H9a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2Z'/%3E%3C/svg%3E")
-        center no-repeat;
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'%3E%3Cpath d='M9 10h1a1 1 0 1 0 0-2H9a1 1 0 0 0 0 2Zm0 2a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9Zm11-3V8l-6-6a1 1 0 0 0-1 0H7a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V9Zm-6-4 3 3h-2a1 1 0 0 1-1-1V5Zm4 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5v3a3 3 0 0 0 3 3h3v9Zm-3-3H9a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2Z'/%3E%3C/svg%3E")
         center no-repeat;
     }

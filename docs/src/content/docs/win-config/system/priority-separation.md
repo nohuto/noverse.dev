@@ -20,7 +20,7 @@ INIT:0000000140BA3E58                 dq 3 dup(0)
 
 See '[CmControlVector](https://noverse.dev/docs/win-config/system/kernel-values/#cmcontrolvector)' if you don't understand the comments.
 
-Use my [minimal (32 bit) bitmask calculator](https://noverse.dev/#bitmask) whenever you want to get/read hex/dec values.
+Use my [minimal (32 bit) bitmask calculator](https://noverse.dev/terminal#bitmask) whenever you want to get/read hex/dec values.
 
 ## KiUpdateRunTime Quantum Expiration
 

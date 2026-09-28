@@ -1,8 +1,8 @@
 ---
-import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter';
 import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
 import SidebarSublist from '@astrojs/starlight/components/SidebarSublist.astro';
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
+import MobileMenuFooter from './MobileMenuFooter.astro';
 
 type SidebarEntry = StarlightRouteData['sidebar'][number];
 
@@ -117,170 +117,121 @@ function isSectionsGroup(entry: SidebarEntry): boolean {
   <MobileMenuFooter />
 </div>
 
-<script is:inline>
-  (() => {
-    const initSidebarTreeFilter = () => {
-      const searchInput = document.getElementById('sidebar-tree-search');
-      const noResultsMessage = document.getElementById(
-        'sidebar-tree-no-results',
-      );
-      const sidebarTree = document.querySelector('sl-sidebar-state-persist');
-      if (!searchInput || !noResultsMessage || !sidebarTree) return;
-      if (searchInput.dataset.bound === 'true') return;
-      searchInput.dataset.bound = 'true';
+<script>
+  const searchInput = document.getElementById('sidebar-tree-search');
+  const noResultsMessage = document.getElementById('sidebar-tree-no-results');
+  const sidebarTree = document.querySelector('sl-sidebar-state-persist');
 
-      const primaryKey = document.querySelector('[data-sidebar-primary-key]');
-      if (primaryKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
-        primaryKey.textContent = '⌘';
+  if (
+    searchInput instanceof HTMLInputElement &&
+    noResultsMessage &&
+    sidebarTree
+  ) {
+    const primaryKey = document.querySelector('[data-sidebar-primary-key]');
+    if (primaryKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+      primaryKey.textContent = '⌘';
+    }
+
+    const detailsElements = Array.from(sidebarTree.querySelectorAll('details'));
+    const items = Array.from(sidebarTree.querySelectorAll('li'));
+    let openStatesBeforeFilter: Map<HTMLDetailsElement, boolean> | null = null;
+
+    const matchesAllTerms = (text: string, searchTerms: string[]) => {
+      const lowerText = text.toLowerCase();
+      return searchTerms.every((term) => lowerText.includes(term));
+    };
+
+    const showParentChain = (element: Element) => {
+      let parent = element.parentElement;
+      while (parent && parent !== sidebarTree) {
+        if (parent instanceof HTMLLIElement) parent.style.display = '';
+        if (parent instanceof HTMLDetailsElement) parent.open = true;
+        parent = parent.parentElement;
       }
+    };
 
-      const detailsElements = Array.from(
-        sidebarTree.querySelectorAll('details'),
-      );
-      const items = Array.from(sidebarTree.querySelectorAll('li'));
-      let activeFilter = false;
-      let openStatesBeforeFilter = new Map();
-
-      const matchesAllTerms = (text, searchTerms) => {
-        const lowerText = (text || '').toLowerCase();
-        return searchTerms.every((term) => lowerText.includes(term));
-      };
-
-      const showParentChain = (element) => {
-        let parent = element.parentElement;
-        while (parent && parent !== sidebarTree) {
-          if (parent.tagName === 'LI') {
-            parent.style.display = '';
-          }
-          if (parent.tagName === 'DETAILS') {
-            parent.open = true;
-          }
-          parent = parent.parentElement;
-        }
-      };
-
-      const showDirectChildren = (details) => {
-        details.open = true;
-        const directList = details.querySelector(':scope > ul');
-        if (!directList) return;
-        directList.querySelectorAll(':scope > li').forEach((child) => {
+    const showDirectChildren = (details: HTMLDetailsElement) => {
+      details.open = true;
+      details
+        .querySelectorAll<HTMLLIElement>(':scope > ul > li')
+        .forEach((child) => {
           child.style.display = '';
         });
-      };
+    };
 
-      const filterSidebarItems = (query) => {
-        if (!query.trim()) {
-          items.forEach((item) => {
-            item.style.display = '';
-          });
-
-          detailsElements.forEach((details) => {
-            const originalOpen = openStatesBeforeFilter.get(details);
-            if (originalOpen !== undefined) {
-              details.open = originalOpen;
-            }
-          });
-
-          activeFilter = false;
-          openStatesBeforeFilter = new Map();
-          noResultsMessage.classList.add('sl-hidden');
-          return;
-        }
-
-        if (!activeFilter) {
-          activeFilter = true;
-          openStatesBeforeFilter = new Map(
-            detailsElements.map((details) => [details, details.open]),
-          );
-        }
-
-        const searchTerms = query
-          .toLowerCase()
-          .split(/\s+/)
-          .filter((term) => term.length > 0);
-
+    const filterSidebarItems = (query: string) => {
+      if (!query.trim()) {
         items.forEach((item) => {
-          item.style.display = 'none';
-        });
-
-        detailsElements.forEach((details) => {
-          details.open = false;
-        });
-
-        const matchedItems = new Set();
-
-        detailsElements.forEach((details) => {
-          const summary = details.querySelector(':scope > summary');
-          if (!summary) return;
-          const summaryText = summary.textContent || '';
-          if (!matchesAllTerms(summaryText, searchTerms)) return;
-
-          const parentLi = details.closest('li');
-          if (!parentLi || matchedItems.has(parentLi)) return;
-
-          parentLi.style.display = '';
-          showDirectChildren(details);
-          showParentChain(parentLi);
-          matchedItems.add(parentLi);
-        });
-
-        items.forEach((item) => {
-          if (matchedItems.has(item)) return;
-          if (item.querySelector(':scope > details')) return;
-
-          const link = item.querySelector(':scope > a');
-          if (!link) return;
-
-          const linkText = link.textContent || '';
-          if (!matchesAllTerms(linkText, searchTerms)) return;
-
           item.style.display = '';
+        });
+        openStatesBeforeFilter?.forEach((open, details) => {
+          details.open = open;
+        });
+        openStatesBeforeFilter = null;
+        noResultsMessage.classList.add('sl-hidden');
+        return;
+      }
+
+      openStatesBeforeFilter ??= new Map(
+        detailsElements.map((details) => [details, details.open]),
+      );
+
+      const searchTerms = query.toLowerCase().split(/\s+/).filter(Boolean);
+      items.forEach((item) => {
+        item.style.display = 'none';
+      });
+      detailsElements.forEach((details) => {
+        details.open = false;
+      });
+
+      const matchedItems = new Set<HTMLLIElement>();
+
+      detailsElements.forEach((details) => {
+        const summary = details.querySelector(':scope > summary');
+        if (!matchesAllTerms(summary?.textContent || '', searchTerms)) return;
+        const parentLi = details.closest('li');
+        if (!parentLi || matchedItems.has(parentLi)) return;
+        parentLi.style.display = '';
+        showDirectChildren(details);
+        showParentChain(parentLi);
+        matchedItems.add(parentLi);
+      });
+
+      items.forEach((item) => {
+        if (matchedItems.has(item) || item.querySelector(':scope > details'))
+          return;
+        const link = item.querySelector(':scope > a');
+        if (!link || !matchesAllTerms(link.textContent || '', searchTerms))
+          return;
+        item.style.display = '';
+        showParentChain(item);
+        matchedItems.add(item);
+      });
+
+      if (matchedItems.size === 0) {
+        items.forEach((item) => {
+          const textContent = (item.textContent || '').toLowerCase();
+          if (!searchTerms.some((term) => textContent.includes(term))) return;
+          item.style.display = '';
+          const details =
+            item.querySelector<HTMLDetailsElement>(':scope > details');
+          if (details) showDirectChildren(details);
           showParentChain(item);
           matchedItems.add(item);
         });
+      }
 
-        if (matchedItems.size === 0) {
-          items.forEach((item) => {
-            const textContent = (item.textContent || '').toLowerCase();
-            const hasPartialMatch = searchTerms.some((term) =>
-              textContent.includes(term),
-            );
-            if (!hasPartialMatch) return;
-
-            item.style.display = '';
-            const details = item.querySelector(':scope > details');
-            if (details) showDirectChildren(details);
-            showParentChain(item);
-            matchedItems.add(item);
-          });
-        }
-
-        if (matchedItems.size === 0) {
-          noResultsMessage.classList.remove('sl-hidden');
-        } else {
-          noResultsMessage.classList.add('sl-hidden');
-        }
-      };
-
-      searchInput.addEventListener('input', () => {
-        filterSidebarItems(searchInput.value);
-      });
-
-      searchInput.addEventListener('keydown', (event) => {
-        if (event.key !== 'Escape') return;
-        searchInput.value = '';
-        filterSidebarItems('');
-      });
+      noResultsMessage.classList.toggle('sl-hidden', matchedItems.size > 0);
     };
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initSidebarTreeFilter, {
-        once: true,
-      });
-    } else {
-      initSidebarTreeFilter();
-    }
+    searchInput.addEventListener('input', () => {
+      filterSidebarItems(searchInput.value);
+    });
 
-    document.addEventListener('astro:page-load', initSidebarTreeFilter);
-  })();
+    searchInput.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      searchInput.value = '';
+      filterSidebarItems('');
+    });
+  }
 </script>

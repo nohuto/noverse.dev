@@ -1201,7 +1201,6 @@ footer {
   background: var(--panel);
   border: 1px solid var(--border);
   appearance: textfield;
-  -moz-appearance: textfield;
 }
 
 .settings-number-row input[type='number']::-webkit-inner-spin-button,

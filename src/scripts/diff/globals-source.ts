@@ -29,7 +29,7 @@
   const writeSettings = settingsStore.write;
   const resetSettings = settingsStore.reset;
 
-  const prepareSource = (sourceText) => {
+  const prepareSource = (sourceText: string) => {
     const settings = readSettings();
     let text = String(sourceText || '').replace(/\r\n?/g, '\n');
     if (settings.hideMetadata) {
@@ -50,7 +50,7 @@
       .trimEnd()}\n`;
   };
 
-  const renderSettings = (body, onChange) => {
+  const renderSettings = (body: HTMLElement, onChange: () => void) => {
     const settings = readSettings();
     body.replaceChildren();
     const hideDecimalValue = settingsStore.addCheckbox(
@@ -76,7 +76,7 @@
     });
   };
 
-  const preparePair = (leftSource, rightSource) => {
+  const preparePair = (leftSource: string, rightSource: string) => {
     const leftText = prepareSource(leftSource);
     const rightText = prepareSource(rightSource);
     return {

@@ -97,7 +97,8 @@ export function createDraggableDialogManager({
   const focusManager = createModalFocusManager(layer);
   const resizer = resizeHandle instanceof HTMLElement ? resizeHandle : null;
   const inset = Math.max(0, Number(margin) || 0);
-  const clampValue = (value, min, max) => Math.min(Math.max(min, value), max);
+  const clampValue = (value: number, min: number, max: number) =>
+    Math.min(Math.max(min, value), max);
   let resizing = false;
 
   const trackPointer = (
@@ -112,7 +113,7 @@ export function createDraggableDialogManager({
       frame = 0;
       move(currentEvent);
     };
-    const onMove = (event) => {
+    const onMove = (event: PointerEvent) => {
       currentEvent = event;
       if (!frame) frame = requestAnimationFrame(paint);
     };
@@ -158,7 +159,7 @@ export function createDraggableDialogManager({
       height: Math.max(0, bottom - top),
     };
   };
-  const minimumTop = (view) => {
+  const minimumTop = (view: { top: number }) => {
     const siteHeader = document.querySelector('.prompt-bar');
     const headerBottom =
       siteHeader instanceof HTMLElement
@@ -182,7 +183,7 @@ export function createDraggableDialogManager({
       ),
     };
   };
-  const position = (left, top) => {
+  const position = (left: number, top: number) => {
     const offsetParent = dialog.offsetParent;
     const origin =
       offsetParent instanceof HTMLElement
@@ -222,7 +223,7 @@ export function createDraggableDialogManager({
     );
     dialog.dataset.positioned = 'true';
   };
-  const onDragStart = (event) => {
+  const onDragStart = (event: PointerEvent) => {
     if (
       event.button !== 0 ||
       layer.hidden ||
@@ -266,7 +267,7 @@ export function createDraggableDialogManager({
     );
   };
 
-  const onResizeStart = (event) => {
+  const onResizeStart = (event: PointerEvent) => {
     if (!resizer || event.button !== 0 || layer.hidden) return;
     event.preventDefault();
     event.stopPropagation();

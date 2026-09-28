@@ -245,7 +245,6 @@ main.main-terminal .terminal-shell {
   height: 14px;
   display: block;
   background-color: currentColor;
-  -webkit-mask: url('/main/icons/ui/x.svg') center / contain no-repeat;
   mask: url('/main/icons/ui/x.svg') center / contain no-repeat;
 }
 
@@ -601,6 +600,7 @@ main.main-terminal .terminal-shell {
   flex-direction: column;
   gap: 0;
   flex: 1;
+  min-width: 0;
   min-height: 0;
 }
 

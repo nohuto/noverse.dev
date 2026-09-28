@@ -1,8 +1,33 @@
 /* Copyright (c) 2026 nohuto */
+type NormalizationSettings = Record<
+  | 'stripCrossReferenceMetadata'
+  | 'normalizeRelocationSymbols'
+  | 'stripStorageLocationComments'
+  | 'normalizeDecompilerIdentifiers'
+  | 'normalizeNumericNotation'
+  | 'normalizeGeneratedLabels'
+  | 'normalizePrototypeExpansionArgs'
+  | 'trimTrailingWhitespace',
+  boolean
+>;
+
+interface Facts {
+  crossReferenceBlocksStripped: number;
+  relocationSymbolsNormalized: number;
+  storageLocationCommentsStripped: number;
+  decompilerIdentifiersNormalized: number;
+  numericLiteralsNormalized: number;
+  generatedLabelsNormalized: number;
+  prototypeExpansionArgsNormalized: number;
+  autoDeclarationsStripped: number;
+  trailingWhitespaceTrimmed: boolean;
+  statementCount: number;
+}
+
 (function attachNormalization(global) {
   'use strict';
 
-  const DEFAULTS = Object.freeze({
+  const DEFAULTS: Readonly<NormalizationSettings> = Object.freeze({
     stripCrossReferenceMetadata: true,
     normalizeRelocationSymbols: true,
     stripStorageLocationComments: true,
@@ -22,7 +47,7 @@
   });
 
   const MAX_MEMO_ENTRIES = 300;
-  const memoCache = new Map();
+  const memoCache = new Map<string, { text: string; facts: Facts }>();
 
   const ADDRESS_PREFIX_RE =
     /^(qword|dword|word|byte|xmmword|ymmword|zmmword|oword|unk|loc|off|stru|sub|nullsub)_(?:0x)?[0-9A-Fa-f]{6,}$/i;
@@ -40,44 +65,46 @@
     'case',
   ]);
 
-  const normalizeLineEndings = (text) =>
+  const normalizeLineEndings = (text: string) =>
     String(text || '').replace(/\r\n?/g, '\n');
-  const isWhitespace = (char) =>
+  const isWhitespace = (char: string) =>
     char === ' ' ||
     char === '\t' ||
     char === '\n' ||
     char === '\r' ||
     char === '\f' ||
     char === '\v';
-  const isIdentifierStart = (char) => /[A-Za-z_]/.test(char);
-  const isIdentifierPart = (char) => /[A-Za-z0-9_]/.test(char);
+  const isIdentifierStart = (char: string) => /[A-Za-z_]/.test(char);
+  const isIdentifierPart = (char: string) => /[A-Za-z0-9_]/.test(char);
 
-  const cloneDefaults = () => ({ ...DEFAULTS });
+  const cloneDefaults = (): NormalizationSettings => ({ ...DEFAULTS });
 
-  const normalizeSettings = (settings) => {
+  const normalizeSettings = (settings?: Record<string, boolean>) => {
     const normalized = cloneDefaults();
     if (!settings || typeof settings !== 'object') {
       return normalized;
     }
-    Object.keys(DEFAULTS).forEach((key) => {
-      if (Object.prototype.hasOwnProperty.call(settings, key)) {
-        normalized[key] = Boolean(settings[key]);
-      }
-    });
+    (Object.keys(DEFAULTS) as (keyof NormalizationSettings)[]).forEach(
+      (key) => {
+        if (Object.prototype.hasOwnProperty.call(settings, key)) {
+          normalized[key] = Boolean(settings[key]);
+        }
+      },
+    );
     return normalized;
   };
 
-  const stableStringify = (value) => {
+  const stableStringify = (value: unknown): string => {
     if (value === null) return 'null';
     if (typeof value !== 'object') return JSON.stringify(value);
     if (Array.isArray(value)) {
       return `[${value.map(stableStringify).join(',')}]`;
     }
     const keys = Object.keys(value).sort();
-    return `{${keys.map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(',')}}`;
+    return `{${keys.map((key) => `${JSON.stringify(key)}:${stableStringify((value as Record<string, unknown>)[key])}`).join(',')}}`;
   };
 
-  const hashFnv1a = (text) => {
+  const hashFnv1a = (text: string) => {
     let hash = 0x811c9dc5;
     for (let i = 0; i < text.length; i += 1) {
       hash ^= text.charCodeAt(i);
@@ -87,25 +114,25 @@
     return (hash >>> 0).toString(16).padStart(8, '0');
   };
 
-  const memoKey = (source, settings) =>
+  const memoKey = (source: string, settings: NormalizationSettings) =>
     `${hashFnv1a(source)}:${hashFnv1a(stableStringify(settings))}`;
 
-  const memoGet = (key) => {
-    if (!memoCache.has(key)) return null;
+  const memoGet = (key: string) => {
     const value = memoCache.get(key);
+    if (!value) return null;
     memoCache.delete(key);
     memoCache.set(key, value);
     return value;
   };
 
-  const memoSet = (key, value) => {
+  const memoSet = (key: string, value: { text: string; facts: Facts }) => {
     memoCache.set(key, value);
     if (memoCache.size <= MAX_MEMO_ENTRIES) return;
     const first = memoCache.keys().next();
     if (!first.done) memoCache.delete(first.value);
   };
 
-  const parseIntegerLiteral = (token) => {
+  const parseIntegerLiteral = (token: string) => {
     const match = token.match(/^(0[xX][0-9A-Fa-f]+|\d+)([uUlL]{0,3})$/);
     if (!match) return null;
     const valueToken = match[1];
@@ -120,13 +147,13 @@
     }
   };
 
-  const canonicalizeIntegerLiteral = (token) => {
+  const canonicalizeIntegerLiteral = (token: string) => {
     const parsed = parseIntegerLiteral(token);
     if (!parsed) return token;
     return parsed.value.toString(10);
   };
 
-  const stripXrefBlocks = (source, facts) => {
+  const stripXrefBlocks = (source: string, facts: Facts) => {
     const input = source;
     let state: number = TOKENIZER_STATES.code;
     let output = '';
@@ -224,21 +251,25 @@
     return output;
   };
 
-  const transformCodeTokens = (source, settings, facts) => {
+  const transformCodeTokens = (
+    source: string,
+    settings: NormalizationSettings,
+    facts: Facts,
+  ) => {
     let state: number = TOKENIZER_STATES.code;
     let escape = false;
     let output = '';
     let braceDepth = 0;
     let previousSignificant = '';
 
-    const identifierMap = new Map();
+    const identifierMap = new Map<string, string>();
     let argCount = 0;
     let varCount = 0;
 
-    let labelMap = new Map();
+    let labelMap = new Map<string, string>();
     let labelCount = 0;
 
-    const mapIdentifier = (identifier) => {
+    const mapIdentifier = (identifier: string) => {
       if (!settings.normalizeDecompilerIdentifiers) return identifier;
       if (!/^([av])\d+$/.test(identifier)) return identifier;
       if (!identifierMap.has(identifier)) {
@@ -257,7 +288,7 @@
       return mapped;
     };
 
-    const mapGeneratedLabel = (identifier) => {
+    const mapGeneratedLabel = (identifier: string) => {
       if (!settings.normalizeGeneratedLabels) return identifier;
       const match = identifier.match(GENERATED_LABEL_RE);
       if (!match) return identifier;
@@ -472,7 +503,7 @@
     return output;
   };
 
-  const splitTopLevelArgs = (text) => {
+  const splitTopLevelArgs = (text: string) => {
     const args: string[] = [];
     let state: number = TOKENIZER_STATES.code;
     let escape = false;
@@ -565,7 +596,7 @@
     return args;
   };
 
-  const isDefaultPrototypeArg = (value) => {
+  const isDefaultPrototypeArg = (value: string) => {
     const compact = value.replace(/\s+/g, '').toLowerCase();
     if (!compact) return false;
     if (compact === '0' || compact === 'null' || compact === 'nullptr')
@@ -576,7 +607,11 @@
     return false;
   };
 
-  const normalizePrototypeExpansionArgsPass = (source, settings, facts) => {
+  const normalizePrototypeExpansionArgsPass = (
+    source: string,
+    settings: NormalizationSettings,
+    facts: Facts,
+  ) => {
     if (!settings.normalizePrototypeExpansionArgs) return source;
 
     let state: number = TOKENIZER_STATES.code;
@@ -763,7 +798,11 @@
     return output;
   };
 
-  const stripStorageLocationCommentsPass = (source, settings, facts) => {
+  const stripStorageLocationCommentsPass = (
+    source: string,
+    settings: NormalizationSettings,
+    facts: Facts,
+  ) => {
     if (!settings.stripStorageLocationComments) return source;
 
     return source
@@ -786,7 +825,11 @@
       .join('\n');
   };
 
-  const stripAutoIdentifierDeclarationsPass = (source, settings, facts) => {
+  const stripAutoIdentifierDeclarationsPass = (
+    source: string,
+    settings: NormalizationSettings,
+    facts: Facts,
+  ) => {
     if (!settings.normalizeDecompilerIdentifiers) return source;
 
     const lines = source.split('\n');
@@ -801,7 +844,11 @@
     return kept.join('\n');
   };
 
-  const trimTrailingWhitespacePass = (source, settings, facts) => {
+  const trimTrailingWhitespacePass = (
+    source: string,
+    settings: NormalizationSettings,
+    facts: Facts,
+  ) => {
     if (!settings.trimTrailingWhitespace) return source;
     const next = source.replace(/[ \t]+$/gm, '');
     if (next !== source) {
@@ -810,12 +857,12 @@
     return next;
   };
 
-  const finalizeText = (source) => {
+  const finalizeText = (source: string) => {
     const compact = source.replace(/\n{3,}/g, '\n\n').trimEnd();
     return compact ? `${compact}\n` : '';
   };
 
-  const countStatements = (source) => {
+  const countStatements = (source: string) => {
     let state: number = TOKENIZER_STATES.code;
     let escape = false;
     let braceDepth = 0;
@@ -898,7 +945,7 @@
     return statements;
   };
 
-  const createFacts = () => ({
+  const createFacts = (): Facts => ({
     crossReferenceBlocksStripped: 0,
     relocationSymbolsNormalized: 0,
     storageLocationCommentsStripped: 0,
@@ -911,7 +958,10 @@
     statementCount: 0,
   });
 
-  const normalize = (source, settingsInput) => {
+  const normalize = (
+    source: string,
+    settingsInput?: Record<string, boolean>,
+  ) => {
     const settings = normalizeSettings(settingsInput);
     const normalizedSource = normalizeLineEndings(source);
     const key = memoKey(normalizedSource, settings);
@@ -946,7 +996,11 @@
     };
   };
 
-  const preparePair = (left, right, settingsInput) => {
+  const preparePair = (
+    left: string,
+    right: string,
+    settingsInput?: Record<string, boolean>,
+  ) => {
     const settings = normalizeSettings(settingsInput);
     const leftResult = normalize(left, settings);
     const rightResult = normalize(right, settings);

@@ -698,39 +698,13 @@ function rewriteRepoMentions(markdown) {
 function normalizeGeneratedMarkdown(markdown) {
   return markdown
     .replace(
-      /https:\/\/www\.noverse\.dev\/docs\/nvapi-cli\/sections\/overview\/?/g,
-      'https://github.com/nohuto/nvapi-cli',
-    )
-    .replace(
-      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/guides\/([^)/#?]+)\/?/g,
-      '/docs/app-guides/$1/',
-    )
-    .replace(
-      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/([^)/#?]+)\/?/g,
-      '/docs/app-guides/$1/',
-    )
-    .replace(
-      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/app-guides\/docs\/?/g,
-      '/docs/app-guides/',
-    )
-    .replace(
-      /https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/overview\/#registry-fundamentals/g,
-      '/docs/regkit/registry-internals/registry-fundamentals/',
-    )
-    .replace(
       /https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/(?:guides\/)?procmon\/?/g,
       '/docs/regkit/guides/procmon/',
     )
     .replace(
       /https?:\/\/(?:www\.)?noverse\.dev\/docs\/regkit\/(?:guides\/)?wpr-wpa\/?/g,
       '/docs/regkit/guides/wpr-wpa/',
-    )
-    .replace(
-      /https:\/\/www\.noverse\.dev\/(product|projects|diff|policies)\.html/g,
-      'https://noverse.dev/$1',
-    )
-    .replace(/\]\(\((https?:\/\/[^)\s]+)\)\)/gi, ']($1)')
-    .replace(/\[([^\]]+)\]\(\[([^\]]+)\]\(([^)]+)\)\)/g, '[$1]($3)');
+    );
 }
 
 function collectGeneratedDirectories(allEntries) {

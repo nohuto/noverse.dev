@@ -57,7 +57,12 @@ export function startTerminalAnimation(
   let canvasHeight = 0;
   let xTerms = new Float32Array(0);
   let yTerms = new Float32Array(0);
-  let glyphAtlas: HTMLCanvasElement[][] = [];
+
+  const glyphAtlas = document.createElement('canvas');
+  const glyphPadding = 2;
+  let glyphWidth = 0;
+  let glyphHeight = 0;
+  let glyphAtlasKey = '';
   let palette: string[] = [];
   let rafId = 0;
   let lastFrame = 0;
@@ -92,23 +97,29 @@ export function startTerminalAnimation(
     gridContainer.style.height = `${Math.floor(nextHeight)}px`;
   };
 
-  const buildGlyphAtlas = (font) => {
-    glyphAtlas = palette.map((color) => {
-      const colorGlyphs: HTMLCanvasElement[] = [];
+  const buildGlyphAtlas = (font: string) => {
+    const key = `${font}|${cellWidth}|${cellHeight}|${palette.join()}`;
+    if (key === glyphAtlasKey) return;
+    glyphAtlasKey = key;
+    glyphWidth = Math.ceil(cellWidth);
+    glyphHeight = Math.ceil(cellHeight);
+    const pitchX = glyphWidth + glyphPadding;
+    const pitchY = glyphHeight + glyphPadding;
+    glyphAtlas.width = pitchX * charRangeMax;
+    glyphAtlas.height = pitchY * palette.length;
+    const atlasCtx = glyphAtlas.getContext('2d', { alpha: true });
+    if (!atlasCtx) return;
+    atlasCtx.font = font;
+    atlasCtx.textBaseline = 'top';
+    palette.forEach((color, row) => {
+      atlasCtx.fillStyle = color;
       for (let code = 0; code < charRangeMax; code += 1) {
-        const glyphCanvas = document.createElement('canvas');
-        glyphCanvas.width = Math.ceil(cellWidth);
-        glyphCanvas.height = Math.ceil(cellHeight);
-        const glyphCtx = glyphCanvas.getContext('2d', { alpha: true });
-        if (glyphCtx) {
-          glyphCtx.font = font;
-          glyphCtx.textBaseline = 'top';
-          glyphCtx.fillStyle = color;
-          glyphCtx.fillText(String.fromCharCode(charRangeStart + code), 0, 0);
-        }
-        colorGlyphs.push(glyphCanvas);
+        atlasCtx.fillText(
+          String.fromCharCode(charRangeStart + code),
+          code * pitchX,
+          row * pitchY,
+        );
       }
-      return colorGlyphs;
     });
   };
 
@@ -153,7 +164,7 @@ export function startTerminalAnimation(
     scrollToBottom();
   };
 
-  const render = (ticks) => {
+  const render = (ticks: number) => {
     if (stopped || !line.isConnected) return;
     rafId = requestAnimationFrame(render);
     if (ticks - lastFrame < targetFrameMs) return;
@@ -170,7 +181,17 @@ export function startTerminalAnimation(
         const charVal = Math.floor(v % charRangeMax);
         const glyphIndex = (charVal + charRangeMax) % charRangeMax;
         const colorIndex = glyphIndex % palette.length;
-        ctx.drawImage(glyphAtlas[colorIndex][glyphIndex], x * cellWidth, drawY);
+        ctx.drawImage(
+          glyphAtlas,
+          glyphIndex * (glyphWidth + glyphPadding),
+          colorIndex * (glyphHeight + glyphPadding),
+          glyphWidth,
+          glyphHeight,
+          x * cellWidth,
+          drawY,
+          glyphWidth,
+          glyphHeight,
+        );
       }
     }
   };

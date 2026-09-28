@@ -42,10 +42,11 @@ const { page } = Astro.props;
 
 <script is:inline>
   const header = document.querySelector('.prompt-bar');
-  new ResizeObserver(([entry]) => {
+  const syncHeaderHeight = () =>
     document.documentElement.style.setProperty(
       '--header-height',
-      `${entry.borderBoxSize[0].blockSize}px`,
+      `${header.getBoundingClientRect().height}px`,
     );
-  }).observe(header);
+  syncHeaderHeight();
+  new ResizeObserver(syncHeaderHeight).observe(header);
 </script>

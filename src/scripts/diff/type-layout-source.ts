@@ -1,4 +1,5 @@
 /* Copyright (c) 2026 nohuto */
+import type { DiffFile } from './types';
 (function attachTypeLayoutDiffSource(global) {
   'use strict';
 
@@ -24,14 +25,14 @@
     cacheKey: 'nv-diff-type-name-cache-v1',
     displayName: (fileName) => String(fileName || '').replace(/\.cpp$/i, ''),
   });
-  const normalizeText = (source) =>
+  const normalizeText = (source: string) =>
     String(source || '').replace(/\r\n?/g, '\n');
 
   const readSettings = settingsStore.read;
   const writeSettings = settingsStore.write;
   const resetSettings = settingsStore.reset;
 
-  const expectedTypeNames = (typeName) => {
+  const expectedTypeNames = (typeName: string) => {
     const names = new Set([typeName]);
     if (typeName.startsWith('-')) {
       const unnamed = typeName
@@ -43,7 +44,7 @@
     return names;
   };
 
-  const findBlockEnd = (source, openIndex) => {
+  const findBlockEnd = (source: string, openIndex: number) => {
     let depth = 0;
     let state = 'code';
     let escape = false;
@@ -94,7 +95,7 @@
     return source.length;
   };
 
-  const extractPrimaryLayout = (source, typeName) => {
+  const extractPrimaryLayout = (source: string, typeName: string) => {
     const text = normalizeText(source);
     const declaration =
       /^(struct|union|enum)\s+([^\s/{]+|<[^>]+>)(?=\s|\/|\{|$)/gm;
@@ -116,7 +117,7 @@
       : text;
   };
 
-  const stripComments = (source) => {
+  const stripComments = (source: string) => {
     let state = 'code';
     let escape = false;
     let output = '';
@@ -173,7 +174,7 @@
       .trimEnd()}\n`;
   };
 
-  const prepareSource = (source, file) => {
+  const prepareSource = (source: string, file: DiffFile) => {
     const settings = readSettings();
     let prepared = settings.showDependencies
       ? normalizeText(source)
@@ -182,7 +183,7 @@
     return prepared;
   };
 
-  const renderSettings = (body, onChange) => {
+  const renderSettings = (body: HTMLElement, onChange: () => void) => {
     const settings = readSettings();
     body.replaceChildren();
     const showDependencies = settingsStore.addCheckbox(
@@ -208,7 +209,11 @@
     });
   };
 
-  const preparePair = (leftSource, rightSource, file) => {
+  const preparePair = (
+    leftSource: string,
+    rightSource: string,
+    file: DiffFile,
+  ) => {
     const leftText = prepareSource(leftSource, file);
     const rightText = prepareSource(rightSource, file);
     return {
@@ -233,4 +238,3 @@
     highlightBlockComments: false,
   };
 })(window);
-export {};

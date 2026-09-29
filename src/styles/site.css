@@ -60,6 +60,7 @@ body {
 
 html {
   --header-height: 44px;
+  overflow: auto;
   background: var(--bg-alt);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -116,6 +117,7 @@ body {
   min-height: 100vh;
   min-height: 100svh;
   position: relative;
+  overflow-y: clip;
 }
 
 body.has-site-header:not(.bindiff-maximized) {
@@ -842,7 +844,6 @@ footer {
   margin-top: auto;
   border-top: 1px solid var(--border);
   background: var(--bg-alt);
-  box-shadow: 0 50vh 0 50vh var(--bg-alt);
   font-size: var(--font-size-control);
 }
 
@@ -1233,7 +1234,6 @@ footer {
   color: var(--accent);
 }
 
-body.bindiff-maximized,
-body.settings-open {
+html:has(body.bindiff-maximized, body.settings-open) {
   overflow: hidden;
 }

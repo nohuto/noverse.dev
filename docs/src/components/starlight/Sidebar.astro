@@ -8,6 +8,41 @@ type SidebarEntry = StarlightRouteData['sidebar'][number];
 
 const { sidebar } = Astro.locals.starlightRoute;
 const renderedSidebar = flattenSectionsGroups(sidebar);
+markOverviewGroup(renderedSidebar, Astro.url.pathname);
+
+function linkHrefs(entries: SidebarEntry[]): string[] {
+  return entries.flatMap((entry) =>
+    entry.type === 'link' ? [entry.href] : linkHrefs(entry.entries),
+  );
+}
+
+function groupDirectory(entries: SidebarEntry[]): string {
+  const paths = linkHrefs(entries).map((href) => href.replace(/\/$/, ''));
+  if (!paths.length) return '';
+  let prefix = paths[0]!;
+  for (const path of paths) {
+    while (!path.startsWith(prefix)) prefix = prefix.slice(0, -1);
+  }
+  return prefix.slice(0, prefix.lastIndexOf('/') + 1);
+}
+
+function markOverviewGroup(entries: SidebarEntry[], pathname: string) {
+  for (const entry of entries) {
+    if (entry.type !== 'group') continue;
+    if (groupDirectory(entry.entries) === pathname) {
+      entry.entries.push({
+        type: 'link',
+        label: entry.label,
+        href: pathname,
+        isCurrent: true,
+        badge: undefined,
+        attrs: { hidden: true },
+      });
+      return;
+    }
+    markOverviewGroup(entry.entries, pathname);
+  }
+}
 
 function slugifyLabel(value: string): string {
   return String(value || '')

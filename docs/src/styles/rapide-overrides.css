@@ -663,6 +663,10 @@ site-search dialog #starlight__search {
   font-weight: 600 !important;
 }
 
+.sidebar-pane li:has(> a[hidden]) {
+  display: none;
+}
+
 .sidebar-pane ul ul li:has(> a[aria-current='page']) {
   border-inline-start-color: var(--sl-color-text-accent) !important;
 }

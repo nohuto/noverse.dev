@@ -32,17 +32,6 @@
   user-select: text;
 }
 
-.home-fingerprint {
-  padding: 0 4px;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  background: var(--panel-alt);
-  color: var(--text);
-  font: inherit;
-  font-size: 0.85em;
-  white-space: pre-wrap;
-}
-
 .home-section {
   margin-top: 20px;
 }

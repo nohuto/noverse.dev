@@ -132,6 +132,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 <img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mountains.png?raw=true" alt="" width="2560" height="1440">
 
+### Mountains Sunset
+
+<img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mountains-Sunset.png?raw=true" alt="" width="3840" height="2160">
+
 ### Plants Room
 
 <img src="https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Plants-Room.png?raw=true" alt="" width="2559" height="1390">

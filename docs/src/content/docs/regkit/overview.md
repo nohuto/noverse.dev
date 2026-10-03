@@ -18,6 +18,7 @@ RegKit adds functionality that native RegEdit doesn't support:
 - Custom [icon sets](https://noverse.dev/docs/regkit/overview/#icon-sets), with four sets included by default
 - [Symbolic link](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#symbolic-links) detection, including the link target
 - [Loaded hive root](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#loaded-hives) detection and an *Open Hive File* command for the backing file
+- File conversion, converts between `.reg` (Regedit 5 & ANSI `REGEDIT4`), `.bat`/`.cmd` (`reg add`/`reg delete`) & `.ps1`, or from a root key to any of them
 - [Trace presets](https://noverse.dev/docs/regkit/overview/#trace-menu) for 23H2, 24H2, 25H2, which fill the `Read on boot` column
 - Default presets from Windows installations, which fill the `Default` column
 - An extra root keys toggle for [predefined keys](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#predefined-keys) that RegEdit doesn't show
@@ -352,6 +353,7 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 | `regkit <key>` | Open the window at that key |
 | `regkit --goto <key>` | The same, in explicit form |
 | `regkit --edit-reg file.reg` | Open a `.reg` file in a tab |
+| `regkit convert <in> <out> [/y]` | Convert between `.reg`, `.bat`/`.cmd` & `.ps1`, `/y` overwrites an existing file |
 | `regkit --install-edit-context-menu` | Add the `Edit with RegKit` context menu entry |
 | `regkit --uninstall-edit-context-menu` | Remove `Edit with RegKit` context menu entry |
 | `regkit --install-regedit-replacement [--override]` | Replace RegEdit with this RegKit executable, fails if another program owns RegEdits Debugger entry, `--override` replaces it anyway |

@@ -8,6 +8,21 @@ sidebar:
 
 RegKit is a feature rich registry editor replacement, which includes several improvements & additions compared to the native RegEdit. It currently supports Windows Vista through Windows 11 (32bit & 64bit versions). Note that native RegEdit can't run alongside RegKit, as RegKit uses `RegEdit_RegEdit` window class (required for jump support), which causes RegEdit to see this window as an existing instance and exits instead of opening another one.
 
+## Verify Binaries
+
+All releases have a detached GPG sig, import the [public key](https://noverse.dev/public.asc) and verify the file next to its sig:
+
+```powershell
+curl.exe -sO https://noverse.dev/public.asc
+gpg --import public.asc
+
+gpg --verify RegKit-Setup-<version>-x64.exe.sig RegKit-Setup-<version>-x64.exe
+gpg --verify RegKit-Portable-<version>-x64.zip.sig RegKit-Portable-<version>-x64.zip
+gpg --verify regkit.exe.sig regkit.exe
+```
+
+It must show `Good signature from "nohuto <contact@noverse.dev>"`, made by the signing subkey `FF65 399D 1B28 95F6 CC34  BE79 1853 081F E103 04A2`.
+
 ## Differences to Native RegEdit
 
 RegKit adds functionality that native RegEdit doesn't support:

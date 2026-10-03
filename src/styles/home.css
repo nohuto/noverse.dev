@@ -16,20 +16,34 @@
 }
 
 .home-contact a,
-.home-email {
+.home-email,
+.home-fingerprint {
   color: var(--accent);
 }
 
-.home-email {
-  display: inline-block;
-  width: 19ch;
+.home-email,
+.home-fingerprint {
   padding: 0;
   border: 0;
   background: transparent;
   font: inherit;
   cursor: pointer;
+}
+
+.home-email {
+  display: inline-block;
+  width: 19ch;
   -webkit-user-select: text;
   user-select: text;
+}
+
+.fingerprint-dialog {
+  width: auto;
+}
+
+.settings-body.fingerprint-body {
+  padding: 14px;
+  white-space: nowrap;
 }
 
 .home-section {

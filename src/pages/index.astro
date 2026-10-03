@@ -45,9 +45,42 @@ const dateFormatter = new Intl.DateTimeFormat('en', {
             <a class="link" href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer">discord</a>,
             my public key is available
             <a class="link" href="/public.asc" type="application/pgp-keys" download>here</a>
-            (<a class="link" href="/fingerprint.txt" target="_blank" rel="noopener noreferrer">fingerprint</a>).
+            (<button class="home-fingerprint" type="button" data-fingerprint-open>fingerprint</button>).
           </p>
         </header>
+
+        <div
+          class="settings-modal fingerprint-modal"
+          id="fingerprint-modal"
+          hidden
+        >
+          <section
+            class="settings-dialog fingerprint-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Public key fingerprint"
+          >
+            <header class="settings-header">
+              <span></span>
+              <button
+                class="settings-close"
+                type="button"
+                data-fingerprint-close
+                aria-label="Close fingerprint"
+                title="Close fingerprint"
+              >
+                <span class="settings-close-icon" aria-hidden="true"></span>
+              </button>
+            </header>
+            <div class="settings-body fingerprint-body">
+              <code>
+                BDB8 AE58 93DD 3950 F633
+                <br />
+                1761 4DE7 CA76 A4B6 8BCF
+              </code>
+            </div>
+          </section>
+        </div>
 
         <section class="home-section" aria-labelledby="active-work-title">
           <div class="section-heading">
@@ -93,3 +126,38 @@ const dateFormatter = new Intl.DateTimeFormat('en', {
     </section>
   </main>
 </NoverseLayout>
+
+<script>
+  import { createDraggableDialogManager } from '../scripts/dialogs/draggable';
+
+  const modal = document.getElementById('fingerprint-modal');
+  const dialog = modal?.querySelector<HTMLElement>('.fingerprint-dialog');
+  const header = modal?.querySelector<HTMLElement>('.settings-header');
+  if (modal && dialog && header) {
+    const manager = createDraggableDialogManager({
+      layer: modal,
+      dialog,
+      handle: header,
+    });
+    document
+      .querySelector('[data-fingerprint-open]')
+      ?.addEventListener('click', () =>
+        manager?.open({
+          initialFocus:
+            modal.querySelector<HTMLElement>('[data-fingerprint-close]') ||
+            undefined,
+          recenter: true,
+        }),
+      );
+    modal.addEventListener('click', (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      if (target === modal || target?.closest('[data-fingerprint-close]'))
+        manager?.close();
+    });
+    modal.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      manager?.close();
+    });
+  }
+</script>

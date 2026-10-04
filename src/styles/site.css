@@ -728,14 +728,16 @@ a {
 }
 
 a.link,
-.home-email {
+.home-email,
+.home-fingerprint {
   position: relative;
   display: inline-block;
   text-decoration: none;
 }
 
 a.link::after,
-.home-email::after {
+.home-email::after,
+.home-fingerprint::after {
   content: '';
   position: absolute;
   right: 0;
@@ -750,7 +752,9 @@ a.link::after,
 a.link:hover::after,
 a.link:focus-visible::after,
 .home-email:hover::after,
-.home-email:focus-visible::after {
+.home-email:focus-visible::after,
+.home-fingerprint:hover::after,
+.home-fingerprint:focus-visible::after {
   opacity: 1;
 }
 

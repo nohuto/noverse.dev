@@ -29,6 +29,7 @@ RegKit adds functionality that native RegEdit doesn't support:
 
 - A `REGISTRY` root view in addition to the standard root keys, see [`\REGISTRY`](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#root-keys--registry)
 - [Theme modes](https://noverse.dev/docs/regkit/overview/#theme-presets) (System/Light/Dark) and custom theme presets (edit colors, import/export `.rktheme` files)
+- Supports several languages, which you can edit/add on your own
 - Custom font support
 - Custom [icon sets](https://noverse.dev/docs/regkit/overview/#icon-sets), with four sets included by default
 - [Symbolic link](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#symbolic-links) detection, including the link target
@@ -61,6 +62,20 @@ RegKit adds functionality that native RegEdit doesn't support:
 - Drag and drop support for `.reg` files, hive files, folders
 - Read only mode
 - Miscellaneous common functionalities
+
+## Translations
+
+RegKit uses your display language if a matching language pack is installed by default, `Options > Language` can be used to change it manually. CLI output, files RegKit writes (exports, conversions, settings)/names (themes, traces, research links, `REG_*`/`HKEY_*`) won't be translated.
+
+### Adding a Language
+
+Whenever UI text changes in the source, rerun `translations.ps1` as shown below again, which then regenerates `regkit.pot`,  and merges it into every `.po`.
+
+1. Run `.\translations.ps1 -gettext <folder with xgettext.exe> -language <code>` ([GNU gettext download](https://mlocati.github.io/articles/gettext-iconv-windows.html)), `<code>` = language name (e.g. `fr`, `pt-BR`), which generates `regkit.pot` from the current source and creates `assets/lang/<code>.po`
+2. Translate it with any PO editor, keep `&` access keys, `%` placeholders and `\n` line breaks (empty entries fall back to english)
+4. Add the pack to `installer/regkit.iss`, two `lang\<code>` component lines with the primary language ID and one file line (see existing `de` entries)
+
+Or copy the `.po` into `assets\lang`, which would show up in `Options > Language` without rebuilding.
 
 ## Theme Presets
 

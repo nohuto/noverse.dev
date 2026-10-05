@@ -29,7 +29,7 @@ RegKit adds functionality that native RegEdit doesn't support:
 
 - A `REGISTRY` root view in addition to the standard root keys, see [`\REGISTRY`](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#root-keys--registry)
 - [Theme modes](https://noverse.dev/docs/regkit/overview/#theme-presets) (System/Light/Dark) and custom theme presets (edit colors, import/export `.rktheme` files)
-- Supports several languages, which you can edit/add on your own
+- Supports several languages, which [you can edit/add on your own](https://noverse.dev/docs/regkit/overview/#translations)
 - Custom font support
 - Custom [icon sets](https://noverse.dev/docs/regkit/overview/#icon-sets), with four sets included by default
 - [Symbolic link](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#symbolic-links) detection, including the link target
@@ -64,6 +64,8 @@ RegKit adds functionality that native RegEdit doesn't support:
 - Miscellaneous common functionalities
 
 ## Translations
+
+Please note that the translations I've made are auto generated using resources such as MS terminology, language style guides, etc., but may still have inaccuracies. **English is currently the only verified language.** If you are a native speaker of one of the supported languages, I would appreciate your feedback and corrections.
 
 RegKit uses your display language if a matching language pack is installed by default, `Options > Language` can be used to change it manually. CLI output, files RegKit writes (exports, conversions, settings)/names (themes, traces, research links, `REG_*`/`HKEY_*`) won't be translated.
 

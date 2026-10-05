@@ -150,7 +150,7 @@ This includes details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Sess
 | Prefix | Component |
 | --- | --- |
 | `Alpcp` | Advanced Local Procedure Calls |
-| `Cc` | Common Cache |
+| `Cc` | Cache Manager |
 | `Cm` / `Cmp` | Configuration manager |
 | `Dbgk` | Debugging Framework for user mode |
 | `Ex` / `Exp` | Executive support routines |
@@ -250,7 +250,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ObTracePermanent" = 0; // ObpTracePermanent
     "ObTracePoolTags" = 0; // ObpTracePoolTagsBuffer / ObpTracePoolTagsLength
     "ObTraceProcessName" = 0; // ObpTraceProcessNameBuffer / ObpTraceProcessNameLength
-    "ObUnsecureGlobalNames" = 6619246; // ObpUnsecureGlobalNamesBuffer / ObpUnsecureGlobalNamesLength
+    "ObUnsecureGlobalNames" = ?; // ObpUnsecureGlobalNamesBuffer / ObpUnsecureGlobalNamesLength (ObpIsUnsecureName)
     "PassiveWatchdogTimeout" = 300; // KiPassiveWatchdogTimeout
     "PerfIsoEnabled" = 0; // KiPerfIsoEnabled, cache isolation aware processor placement for threads whose scheduling group KSCB has RankBias set, range 0-64dec
     "PoCleanShutdownFlags" = 0; // PopShutdownCleanly
@@ -363,12 +363,11 @@ Everything listed below is based on personal findings, mistakes may exist.
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management";
     "AllocationPreference" = 0;
     "AllowUserHotPatchWithoutVbs" = 0;
-    "CacheUnmapBehindLengthInMB" = 8388608; // CcUnmapBehindLength
+    "CacheUnmapBehindLengthInMB" = 8; // MB, range 1-128
     "CustomDTPDenominator" = 8; // CcClientDTPDenominator
     "DeadlockRecursionDepthLimit" = 0; // ViRecursionDepthLimitFromRegistry
     "DeadlockSearchNodesLimit" = 0; // ViSearchedNodesLimitFromRegistry
-    "DifPluginConfigData" = 635710207; // DifPluginConfigData
-    "DifPluginConfigDataLength" = 1276097421; // DifPluginConfigDataLength
+    "DifPluginConfigData" = ?; // 24H2 VfInitBootDriversLoaded copies DifPluginConfigData using DifPluginConfigDataLength?
     "DisableCacheTelemetry" = 2; // CcDisableTelemetryRegKeyAtInit
     "DisablePageCombining" = 0;
     "DisablePagingExecutive" = 0;
@@ -411,8 +410,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "TrackPtes" = 0;
     "VerifierDifPoolTags" = 0; // DifpPoolTags
     "VerifierDifPoolTagsSizeBytes" = 4294967295; // DifpPoolTagsSizeBytes
-    "VerifierFaultApplications" = 0; // VerifierFaultApplicationsBuffer
-    "VerifierFaultApplicationsSize" = 4294967295; // VerifierFaultApplicationsBufferSize
+    "VerifierFaultApplications" = ?;
     "VerifierFaultBootMinutes" = 8; // VfFaultInjectionBootMinutes
     "VerifierFaultProbability" = 600; // VfFaultInjectionProbability
     "VerifierFaultTags" = 0; // VerifierFaultTagsBuffer
@@ -433,10 +431,8 @@ Everything listed below is based on personal findings, mistakes may exist.
     "VerifierTriageContext" = 0; // VfTriageContext
     "VerifyBTSBufferSize" = 0; // ViVerifyBTSBufferSize
     "VerifyDriverLevel" = 4294967295; // MmVerifyDriverLevel
-    "VerifyDrivers" = 3905129288; // MmVerifyDriverBuffer
-    "VerifyDriversLength" = 1207968387; // MmVerifyDriverBufferLength
-    "VerifyDriversSuppress" = 276138824; // VfXdvSuppressDriversBuffer
-    "VerifyDriversSuppressLength" = 3482011648; // VfXdvSuppressDriversBufferLength
+    "VerifyDrivers" = ?;
+    "VerifyDriversSuppress" = ?;
     "VerifyMode" = 4; // VfVerifyMode
     "VerifyTriage" = 4294967295; // ViVerifyTriage
     "VerifyTriageRules" = 0; // ViVerifyTriageRules

@@ -20,7 +20,7 @@ gi * -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
 `1` – Local intranet (internal network)
 `2` – Trusted sites
 `3` – Internet (mostly web downloads)
-`4` – Untrusted / Restricted sites (flagged as dangerous by smartscreen)
+`4` – Restricted sites ([`URLZONE_UNTRUSTED`](https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537175(v=vs.85)))
 
 ## Unblock-File
 

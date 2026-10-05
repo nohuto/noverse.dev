@@ -8,7 +8,7 @@ sidebar:
 
 It's a mechanism (for audio drivers) for idle detection that switches an audio device between active `D0` (highest power state) and low power sleep (normally [`D3`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-sleeping-states#device-power-state-d3) = *lowest powered device low power state*), after the configured timeout expires.
 
-Note that `IdlePowerState` only has a meaning if timeouts are nonzero, means as you can see below `PerformanceIdleTime` is set to `0` by default = stays in D0, only when being on DC (battery) it would enter [`D3`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-sleeping-states#device-power-state-d3) after 30 seconds. You can see your current device power state (Dx) via [`Device Manager > Sound, video and game controllers > <USB audio device> > Properties > Details > Power data`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-cm_power_data_s) (`PD_MostRecentPowerState`).
+Note that `IdlePowerState` only has a meaning if timeouts are nonzero, means as you can see below `PerformanceIdleTime` is set to `0` by default = stays in D0, while power saving policy selects `ConservationIdleTime = 30`, allowing an idle transition to [`D3`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-sleeping-states#device-power-state-d3) after 30s (selection follows active power plans `Device idle policy`, `DEVICEIDLE`, `0` = Performance, `1` = Power savings).  You can see your current device power state (Dx) via [`Device Manager > Sound, video and game controllers > <USB audio device> > Properties > Details > Power data`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-cm_power_data_s) (`PD_MostRecentPowerState`).
 
 It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/DeviceStart.c) -> [`RegistryGetIdleInfo`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c) -> [`PoRegisterDeviceForIdleDetection`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PoRegisterDeviceForIdleDetection.c). In 24H2+ it also registers [`PowerSettingCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/USBAUDIO/PowerSettingCallback.c) for `GUID_LOW_POWER_EPOCH`, which is why the additional `CS*` values exist.
 
@@ -25,8 +25,8 @@ It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blo
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\00xx\\PowerSettings";
-    "ConservationIdleTime" = 30; // DC (battery) timeout
-    "PerformanceIdleTime" = 0; // AC timeout
+    "ConservationIdleTime" = 30; // seconds, DEVICEIDLE = Power savings (1)
+    "PerformanceIdleTime" = 0; // seconds, DEVICEIDLE = Performance (0)
     "IdlePowerState" = 3; // see below
     "CSConservationIdleTime" = 30; // 24H2+, see below
     "CSPerformanceIdleTime" = 30; // 24H2+, ^

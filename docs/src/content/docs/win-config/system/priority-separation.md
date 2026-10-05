@@ -264,7 +264,7 @@ lkd> dd PsPrioritySeparation L1
 fffff804`1a31ec7c  00000000 // 0x18 (00)
 
 lkd> dd PsPrioritySeparation L1
-fffff801`2611ec7c  00000001 // 0x19 (01)https://x.com/TweakingTruth
+fffff801`2611ec7c  00000001 // 0x19 (01)
 
 lkd> dd PsPrioritySeparation L1
 fffff802`6b91ec7c  00000002 // 0x1A (10)
@@ -464,7 +464,7 @@ This is just a "extreme" example of what it could cause, using two thread with m
 You can practically also look at it via WinDbg, but rather use WPR.
 
 ```c
-// 0xA1
+// 0x2A
 lkd> !process 0 4 CPUSTRES.exe
 PROCESS ffffb9878e2023c0
     SessionId: 1  Cid: 1c98    Peb: 004dc000  ParentCid: 0e64
@@ -814,7 +814,7 @@ lkd> dd KiCyclesPerClockQuantum L1
 fffff805`4591d0d4  01260cb1
 ```
 
-`/10` converts the clock interval from 100ns units to ms (cycles per microsecond) & `/3` converts one clock interval into one QU, the output should be then the same as the `KiCyclesPerClockQuantum` read.
+`/10` converts the clock interval from 100ns units to microseconds, `/3` converts that into cycles per QU, and the output should then match the `KiCyclesPerClockQuantum` read.
 
 #### Quantum Exceptions
 
@@ -958,7 +958,7 @@ Means with the `clock interval / 18` unit, the table now is:
 
 See '[Duration Captures, 6/18 QU, 25H2](https://noverse.dev/docs/win-config/system/priority-separation/#618-qu-25h2)' for a capture showing that threads use their `BamQosLevel` to get the QU, instead of the 6 (BG)/18 (FG) QU.
 
-`BamQosLevel` doesn't use the `PspVariableQuantums`/`PspFixedQuantums` tables, these're still getting filled by the threads stored `QuantumReset`. When `ShortThreadQuantum` and variable quantums are used, [`KiQueryQuantumReset`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiQueryQuantumReset.c) (exists since 24H2) can instead return a QoS reset (fixed quantums set `KiVariableQuantumEnabled` to `0` and won't use that override, see '[18 QU, 25H2](https://noverse.dev/docs/win-config/system/priority-separation/#18-qu-25h2)' capture). `_KTHREAD.BamQosLevel` is at `0x204`, which is the `a1 + 516` byte read below.
+`BamQosLevel` override doesn't use the `PspVariableQuantums`/`PspFixedQuantums` tables, those still fill `PspForegroundQuantum`, which [`PspComputeQuantum`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/PspComputeQuantum.c) uses to get the stored quantum reset (except for idle class & job scheduling class). When `ShortThreadQuantum` and variable quantums are used, [`KiQueryQuantumReset`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiQueryQuantumReset.c) (exists since 24H2) can instead return a QoS reset (fixed quantums set `KiVariableQuantumEnabled` to `0` and won't use that override, see '[18 QU, 25H2](https://noverse.dev/docs/win-config/system/priority-separation/#18-qu-25h2)' capture). `_KTHREAD.BamQosLevel` is at `0x204`, which is the `a1 + 516` byte read below.
 
 ```c
 // KiQueryQuantumReset

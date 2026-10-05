@@ -93,7 +93,7 @@ The relevant 4 bit field uses `0` = default/not configured, `1` = force on, and 
 
 | Mitigation | Use case | Enabling mechanism |
 | --- | --- | --- |
-| SEH Overwrite Protection (SEHOP) | Validates structured exception handler chains so overwritten handlers cannot redirect exception dispatch. It mainly applies to 32-bit and WoW64 processes. | Set through `SetProcessDEPPolicy` or the SEHOP process-creation mitigation flag. |
+| SEH Overwrite Protection (SEHOP) | Validates structured exception handler chains so overwritten handlers cannot redirect exception dispatch. It mainly applies to 32-bit and WoW64 processes. | Set through SEHOP process creation mitigation flag or [process mitigation options](https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/override-mitigation-options-for-app-related-security-policies) |
 
 ## Validate Heap Integrity
 

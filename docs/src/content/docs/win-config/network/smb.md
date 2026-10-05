@@ -96,7 +96,7 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\enablesecuritysig
 
 ### Prefer AES-256 SMB Ciphers
 
-Specifies the encryption ciphers used by the SMB client and the preferred order, the suboption uses `AES_256_GCM`/`AES_256_CCM`. Windows automatically uses the most advanced cipher available. 3.1.1 still uses `AES-128-GCM` by default unless you explicitly prefer AES-256-capable ciphers.
+Specifies the supported SMB encryption ciphers and their preference order, the suboption restricts both client and server to `AES_256_GCM`/`AES_256_CCM`, so the peer must support one of those ciphers.
 
 ```powershell
 Set-SmbClientConfiguration -EncryptionCiphers "AES_256_GCM, AES_256_CCM"
@@ -131,7 +131,7 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\AutoShareWks	Type
 
 ### Force Encryption
 
-Encryption is enabled by default, some users reported slow read and write speeds. Disabling the encryption (`$false`) may improve it, otherwise leave it enabled for your own security. The last command prevents clients that do not support SMB encryption from connecting to encrypted shares.
+It can add additional processing, so measure throughput on your hardware, since some reported slow read/write speeds.
 
 ```powershell
 Set-SmbServerConfiguration -EncryptData $true

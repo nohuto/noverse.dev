@@ -28,7 +28,7 @@ sidebar:
 
 ## Hash Examples
 
-The computed hash depends on the file content, e.g. empty files have the same hash (which means that every change affects the hash - [Avalanche effect](https://en.wikipedia.org/wiki/Avalanche_effect)).
+The computed hash depends on the file content. With the same algorithm, identical inputs (including empty files) have identical hashes.
 
 ### Scenario 1 (no content)
 

@@ -131,7 +131,6 @@ Then use the `DriverStart` address + RVA:
 
 ```c
 lkd> dd 0xfffff801`890e82F8 L1
-fffff801`3aee82f8  0000000a // 10
 ```
 
 ## NetworkThrottlingIndex

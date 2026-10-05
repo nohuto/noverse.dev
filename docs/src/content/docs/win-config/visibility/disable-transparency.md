@@ -6,7 +6,7 @@ sidebar:
   order: 9
 ---
 
-See [DWM, `BackdropBlurCachingThrottleMs`](https://noverse.dev/docs/win-config/system/dwm-values/#backdropblurcachingthrottlems) for information on how to edit the caching rebuild time, which has a default of `25ms`, and can be throttled to down to `1000ms`.
+See [DWM, `BackdropBlurCachingThrottleMs`](https://noverse.dev/docs/win-config/system/dwm-values/#backdropblurcachingthrottlems) for information on the minimum time before cached blur outputs are marked dirty again. The default is `25ms`, and values are clamped to a maximum of `1000ms`.
 
 ### Transparency Enabled
 

@@ -6,7 +6,7 @@ sidebar:
   order: 25
 ---
 
-[FEC](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/forward-error-correction-fec-mode/) (forwarded error correction) improves link stability, but increases latency. Many high quality optics, direct attach cables, and backplane channels provide a stable link without FEC.
+[FEC](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/forward-error-correction-fec-mode/) (forward error correction) improves link stability, but increases latency. Many high quality optics, direct attach cables, and backplane channels provide a stable link without FEC.
 
 `Auto FEC`: Sets the FEC Mode based on the capabilities of the attached cable.  
 `CL108 RS-FEC`: Selects only RS-FEC ability and request capabilities.  

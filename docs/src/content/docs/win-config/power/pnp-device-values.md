@@ -346,7 +346,8 @@ Everything listed below is based on personal findings, mistakes may exist.
 
 ## MSPower_DeviceEnable
 
-Note that the known `MSPower_DeviceEnable` command does nothing more than recursively setting `IdleInWorkingState` & `SelectiveSuspendOn` to `0`.
+Note that the known `MSPower_DeviceEnable` command is recursively setting `IdleInWorkingState` & `SelectiveSuspendOn` to `0`, and sometimes additional values (e.g. `PnPCapabilities` for the NIC class).  
+
 ```powershell
 wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Enum\USB\ROOT_HUB30\5&2c35141&0&0\Device Parameters\WDF\IdleInWorkingState	Type: REG_DWORD, Length: 4, Data: 0
 wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Enum\USB\ROOT_HUB30\5&2bce96aa&0&0\Device Parameters\WDF\IdleInWorkingState	Type: REG_DWORD, Length: 4, Data: 0

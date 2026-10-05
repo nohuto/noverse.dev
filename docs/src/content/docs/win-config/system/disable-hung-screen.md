@@ -21,7 +21,7 @@ Windows Internals says that the default of `WaitToKillServiceTimeout` is `20000`
 "HKCU\\Control Panel\\Desktop";
     "WaitToKillTimeout" = 5000; // REG_SZ (ms), time CSRSS waits for a console control handler/process to exit before showing the hung program screen
     "HungAppTimeout" = 5000; // REG_SZ (ms), time CSRSS waits for a GUI thread/process to exit after shutdown messages before seeing it as hung
-    "AutoEndTasks" = 0; // REG_SZ (ms), 1 disables the 'Hung program' screen
+    "AutoEndTasks" = 0; // REG_SZ,  1 disables the 'Hung program' screen
 ```
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)

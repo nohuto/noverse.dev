@@ -12,6 +12,8 @@ Changes the size of text, apps, and other items. Note that on laptops the defaul
 
 ### SystemSettings Captures
 
+This seems to be dependend on what the default scaling, means for some `0` might be `150%`.
+
 ```c
 // 100%
 HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 0

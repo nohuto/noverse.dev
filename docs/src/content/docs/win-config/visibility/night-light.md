@@ -64,8 +64,8 @@ Example data:
 | 20 | `manualScheduleBlueLightReductionOnTime` | ScheduleTime | The start time of blue light reduction for a user manually setting their schedule. |  `18:00` |
 | 30 | `manualScheduleBlueLightReductionOffTime` | ScheduleTime | The end time of blue light reduction for a user manually setting their schedule. | `05:00` |
 | 40 | `targetColorTemperature` | int16 | The target color temperature (in Kelvin) for blue light reduction. | `4910` Kelvin |
-| 50 | `sunriseTime` | ScheduleTime | The scheduled sunset time for blue light reduction. | empty |
-| 60 | `sunsetTime` | ScheduleTime | The scheduled sunrise time for blue light reduction. | empty |
+| 50 | `sunriseTime` | ScheduleTime | The scheduled sunrise time for blue light reduction. | empty |
+| 60 | `sunsetTime` | ScheduleTime | The scheduled sunset time for blue light reduction. | empty |
 | 70 | `previewColorTemperatureChanges` | bool | Specifies whether blue light reduction color temperature changes should be previewed. | not present |
 | 80 | `darkMode` | bool | Specifies whether app mode should change when blue light reduction is turned on or off. | not present |
 

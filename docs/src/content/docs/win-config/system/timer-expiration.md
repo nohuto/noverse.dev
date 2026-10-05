@@ -576,7 +576,7 @@ if ( KiEnableClockTimerPerCpuTickScheduling && KiClockTimerPerCpu )
   KiClockTimerPerCpuTickScheduling = KiEnableClockTimerPerCpuTickScheduling == 1; // override
 ```
 
-[`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) has a branch for `KiClockTimerPerCpuTickScheduling && !KiSerializeTimerExpiration` (means `SerializeTimerExpiration = 2` & `EnablePerCpuClockTickScheduling = 1`), but I haven't looked into what it's used for yet.
+[`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) has a branch for `KiClockTimerPerCpuTickScheduling && !KiSerializeTimerExpiration` (means `SerializeTimerExpiration = 0` on non AOAC platforms, or >= 2 & `EnablePerCpuClockTickScheduling = 1`), but I haven't looked into what it's used for yet.
 
 ## Structures
 

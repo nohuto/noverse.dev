@@ -3,7 +3,7 @@ title: 'StartAllBack Config'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 4
+  order: 2
 ---
 
 Installation:

@@ -7,11 +7,10 @@ sidebar:
   order: 9
 ---
 
-- [RegKit](/docs/win-config/misc/regkit/)
-- [NVFetch](/docs/win-config/misc/nvfetch/)
 - [Explorer Blur](/docs/win-config/misc/explorer-blur/)
 - [StartAllBack Config](/docs/win-config/misc/startallback-config/)
 - [System Informer](/docs/win-config/misc/system-informer/)
+- [NVFetch](/docs/win-config/misc/nvfetch/)
 - [7-Zip Settings](/docs/win-config/misc/7-zip-settings/)
 - [VS Telemetry](/docs/win-config/misc/disable-vs-telemetry/)
 - [MS Office Telemetry](/docs/win-config/misc/disable-ms-office-telemetry/)

@@ -3,7 +3,7 @@ title: 'NVFetch'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 2
+  order: 4
 ---
 
 Used to be my personal [`neofetch`](https://github.com/dylanaraps/neofetch)/[`fastfetch`](https://github.com/fastfetch-cli/fastfetch) replacement with more details. Some arguments will probably also get added like `ids`, so it doesn't display the serial numbers and miscellaneous HWIDs by default.

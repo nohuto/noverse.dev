@@ -3,7 +3,7 @@ title: 'MS Office Telemetry'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 8
+  order: 7
 ---
 
 Disables logging, data collection, opts out from CEIP, disables feedback collection and telemetry agent tasks.

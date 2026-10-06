@@ -3,7 +3,7 @@ title: 'OneDrive'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 9
+  order: 8
 ---
 
 See the Windows Policies table below for policy links and registry details.

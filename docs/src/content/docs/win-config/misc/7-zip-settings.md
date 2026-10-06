@@ -3,7 +3,7 @@ title: '7-Zip Settings'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 6
+  order: 5
 ---
 
 7-Zip minimal context menu settings (if cascaded context menu enabled):

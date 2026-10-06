@@ -3,7 +3,7 @@ title: 'Explorer Blur'
 description: 'Misc option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 3
+  order: 1
 ---
 
 Installs [ExplorerBlurMica](https://github.com/Maplespe/ExplorerBlurMica), which adds a background blur/acrylic/mica effect effect to the explorer:

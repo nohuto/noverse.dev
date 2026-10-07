@@ -41,35 +41,43 @@ RegKit adds functionality that native RegEdit doesn't support:
   - Russian
   - Brazilian Portuguese
 - Custom font support
-- Custom [icon sets](https://noverse.dev/docs/regkit/overview/#icon-sets), with four sets included by default
+- Custom [icon sets](https://noverse.dev/docs/regkit/overview/#icon-sets), with two sets included by default
 - [Symbolic link](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#symbolic-links) detection, including the link target
-- [Loaded hive root](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#loaded-hives) detection and an *Open Hive File* command for the backing file
+- [Loaded hive root](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#loaded-hives) detection and an *On-Disk Hive File* command for the backing file
 - File conversion, converts between `.reg` (Regedit 5 & ANSI `REGEDIT4`), `.bat`/`.cmd` (`reg add`/`reg delete`) & `.ps1`, or from a root key to any of them
 - [Trace presets](https://noverse.dev/docs/regkit/overview/#trace-menu) for 23H2, 24H2, 25H2, which fill the `Read on boot` column
-- Default presets from Windows installations, which fill the `Default` column
+- Default presets from Windows installations, which fill the `Default` column (and "Reset do Default" which is disabled by default)
 - An extra root keys toggle for [predefined keys](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#predefined-keys) that RegEdit doesn't show
 - Switching between [User, Admin, SYSTEM, and TrustedInstaller rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation)
 - Favorites import/export
 - Comment column for values/keys (including [default comments](https://github.com/nohuto/regkit/blob/main/assets/comments/default-comments.jsonc))
-- Decoding values (B64, hex...), interpeting values as `FILETIME`, `SYSTEMTIME`, GUID, SID, security descriptor, IPv4/IPv6...
+- Decoding values (B64, hex...), interpreting values as `FILETIME`, `SYSTEMTIME`, GUID, SID, security descriptor, IPv4/IPv6...
 - [Edit Bits](https://noverse.dev/docs/regkit/overview/#bit-definitions), a bit editor for DWORD, big endian DWORD, QWORD and REG_BINARY values, with reusable JSON definitions that name each bit
-- [Key hanldes](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#key-handles)
+- [Key handles](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#key-handles)
+- Key Information window (native name, hive file, class name, last write time, volatile/symbolic link state, UAC virtualization flags/state, integrity level...)
 - Loading/unloading hives
-- Local, remote, offline registries
+- Local (64-bit & 32-bit view), remote, offline registries
+- *Go to Virtual Store Copy*, *Go to Global Key* (UAC virtualization)
+- *Open in Source Hive* for merged `HKEY_CLASSES_ROOT` keys
+- Creating symbolic links & volatile keys
 - Undo/redo, copy/paste, replace
-- Performant 'Find' with several options (e.g. '*Skip symbolic links*')
+- Performant 'Find' with several options (source, anomalies, regex...)
 - PCRE2 regular expressions for Find/Replace, see [pcre2syntax](https://pcre2project.github.io/pcre2/doc/pcre2syntax/) & [pcre2pattern](https://pcre2project.github.io/pcre2/doc/pcre2pattern/)
 - Address bar accepts multiple registry path formats (abbreviated HK*, full root, RegEdit address bar, `.reg` header, `reg:` link, PowerShell drive/provider, escaped)
-- Copy Key Path As menu for the same formats (to copy/paste into the address bar)
+- Copy Key Path As menu for the same formats (to copy/paste into the address bar) & native `REGISTRY` paths
 - Copy Value Name / Copy Value Data from value context menus
+- Open links found in value data or comments
 - Tab control
 - Tab session restore with *Save Tabs* and *Clear Tabs on Exit*, including cached Find results
 - Filter bar for the value list
 - History view
 - Option to save/forget previous key tree state
+- Auto refresh of the opened key (off by default)
+- [Backup/restore privilege mode](#rights-and-elevation) for keys whose permissions deny access
 - Simulated keys from traces
 - Compare Registries
 - Drag and drop support for `.reg` files, hive files, folders
+- *Edit with RegKit* context menu for `.reg` and hive files
 - Read only mode
 - Miscellaneous common functionalities
 
@@ -85,7 +93,7 @@ Whenever UI text changes in the source, rerun `translations.ps1` as shown below 
 
 1. Run `.\translations.ps1 -gettext <folder with xgettext.exe> -language <code>` ([GNU gettext download](https://mlocati.github.io/articles/gettext-iconv-windows.html)), `<code>` = language name (e.g. `fr`, `pt-BR`), which generates `regkit.pot` from the current source and creates `assets/lang/<code>.po`
 2. Translate it with any PO editor, keep `&` access keys, `%` placeholders and `\n` line breaks (empty entries fall back to english)
-4. Add the pack to `installer/regkit.iss`, two `lang\<code>` component lines with the primary language ID and one file line (see existing `de` entries)
+3. Add the pack to `installer/regkit.iss`, two `lang\<code>` component lines with the primary language ID and one file line (see existing `de` entries)
 
 Or copy the `.po` into `assets\lang`, which would show up in `Options > Language` without rebuilding.
 
@@ -153,13 +161,21 @@ See [registry-fundamentals#symbolic-links](https://noverse.dev/docs/regkit/regis
 
 ### Database Icon <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/database.ico?raw=true" width="16" height="16">
 
-The '*Open Hive File*' command opens the backing file.
+The '*On-Disk Hive File*' command opens the backing file.
 
 See [registry-fundamentals#loaded-hives](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#loaded-hives).
 
 ### Simulated Key Icon <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/folder-sim.ico?raw=true" width="16" height="16">
 
 Keys displayed as simulated are virtual entries created from trace files when a key exists in a trace but not in the actual hive view. They're displayed with the *folder-sim* icon so you can differ them from real keys. Creating or modifying a value in a simulated key will create the key path on demand.
+
+### Volatile Key Icon <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/folder-volatile.ico?raw=true" width="16" height="16">
+
+Volatile keys only exist in memory and are gone after a reboot. `Edit > New > Volatile Key` creates one, a volatile key can only have volatile subkeys.
+
+### Access Denied Icons <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/folder-denied.ico?raw=true" width="16" height="16"> <img src="https://github.com/nohuto/regkit/blob/main/resources/icons/database-denied.ico?raw=true" width="16" height="16">
+
+The key (or loaded hive root) exists, but its permissions deny reading it with the current rights. See [Rights and Elevation](#rights-and-elevation) for ways to open it anyway.
 
 ## Bit Definitions
 
@@ -271,6 +287,10 @@ These levels can bypass protections, use them only when you understand the possi
 
 SYSTEM rights are for example needed for reading keys such as `HKLM\SAM\SAM`, `HKLM\SECURITY\Policy`, TI rights are for example needed to write in keys like `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing`.
 
+`Options > Use Backup/Restore Privileges` (elevated only) is a lighter alternative that doesn't restart RegKit, which enables the backup and restore privileges, when opening a key fails with access denied, RegKit opens it again in backup/restore mode, which skips the keys permission check (backup for reading, restore for writing). The mode is never saved and turning it off removes the privileges again.
+
+`HKCU Follows Signed-In User` makes `HKEY_CURRENT_USER` show the signed in users hive when RegKit runs as a different account (e.g. SYSTEM/TrustedInstaller), instead of that accounts own hive.
+
 ## Keyboard Shortcuts
 
 ### Files & Registries
@@ -366,6 +386,7 @@ SYSTEM rights are for example needed for reading keys such as `HKLM\SAM\SAM`, `H
 | --- | --- |
 | `regkit file.reg` | Import `.reg` file (asks for confirmation) |
 | `regkit /s file.reg` | Import without confirmation |
+| `regkit <hive file>` | Open a hive file as offline registry tab |
 | `regkit /e file.reg <key>` | Export key to a `.reg` file |
 | `regkit /a file.reg <key>` | Same as `/e` (for compatibility) |
 | `regkit /c` `/m` `/l:file` `/r:file` | Accepted and ignored |
@@ -378,17 +399,17 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 | --- | --- |
 | `add <key> [/v name \| /ve] [/t type] [/s sep] [/d data] [/f]` | `/f` overwrites an existing value |
 | `delete <key> [/v name \| /ve \| /va] [/f]` | Without `/v` the whole key tree is removed |
-| `query <key> [/v [name] \| /ve] [/s] [/f data [/k] [/d] [/c] [/e]] [/t types] [/z] [/se sep]` | `/f` searches key names, value names & data (`*` & `?` wildcards); `/k`, `/v`, `/d` limit where, `/c` case sensitive, `/e` exact; `/t` takes a comma separated list; `/z` adds the numeric type |
+| `query <key> [/v [name] \| /ve] [/s] [/f data [/k] [/d] [/c] [/e]] [/t types] [/z] [/se sep]` | `/f` searches key names, value names & data (`*` & `?` wildcards), `/k`, `/v`, `/d` limit where, `/c` case sensitive, `/e` exact, `/t` takes a comma separated list, `/z` adds the numeric type |
 | `copy <src> <dst> [/s] [/f]` | `/s` copies subkeys too |
 | `export <key> <file.reg> [/y]` | `/y` overwrites an existing file |
 | `import <file.reg>` | |
 | `save <key> <file.hiv> [/y]` | Needs the backup privilege |
 | `restore <key> <file.hiv>` | Needs the restore & backup privileges |
 | `load <key> <file.hiv>` / `unload <key>` | Mounts/releases a hive file |
-| `compare <key1> <key2> [/v name \| /ve] [/oa \| /od \| /os \| /on] [/s]` | `/oa` all lines, `/od` differences (default), `/os` matches, `/on` none; exit code `0` = identical, `2` = different |
-| `flags <HKLM\Software\key> [QUERY \| SET [DONT_VIRTUALIZE] [DONT_SILENT_FAIL] [RECURSE_FLAG]] [/s]` | UAC virtualization flags; `SET` clears every flag it doesn't name, `/s` applies to subkeys |
+| `compare <key1> <key2> [/v name \| /ve] [/oa \| /od \| /os \| /on] [/s]` | `/oa` all lines, `/od` differences (default), `/os` matches, `/on` none, exit code `0` = identical, `2` = different |
+| `flags <HKLM\Software\key> [QUERY \| SET [DONT_VIRTUALIZE] [DONT_SILENT_FAIL] [RECURSE_FLAG]] [/s]` | UAC virtualization flags, `SET` clears every flag it doesn't name, `/s` applies to subkeys |
 | `/reg:32` `/reg:64` | Selects the 32/64 bit registry view |
-| `\\machine\HKLM\...` | Remote registry (HKLM & HKU only); `compare <key> \\machine` compares the same path on that machine |
+| `\\machine\HKLM\...` | Remote registry (HKLM & HKU), `compare <key> \\machine` compares the same path on that machine |
 
 ### regkit (additions)
 
@@ -396,12 +417,14 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 | --- | --- |
 | `regkit <key>` | Open the window at that key |
 | `regkit --goto <key>` | The same, in explicit form |
-| `regkit --edit-reg file.reg` | Open a `.reg` file in a tab |
+| `regkit --edit-reg <file>` | Open a `.reg` file or hive file in a tab (used by the `Edit with RegKit` context menu) |
 | `regkit convert <in> <out> [/y]` | Convert between `.reg`, `.bat`/`.cmd` & `.ps1`, `/y` overwrites an existing file |
-| `regkit --install-edit-context-menu` | Add the `Edit with RegKit` context menu entry |
+| `regkit --install-edit-context-menu` | Add the `Edit with RegKit` context menu entry for `.reg` files, `.hiv`/`.hve` files & hive files with standard names |
 | `regkit --uninstall-edit-context-menu` | Remove `Edit with RegKit` context menu entry |
 | `regkit --install-regedit-replacement [--override]` | Replace RegEdit with this RegKit executable, fails if another program owns RegEdits Debugger entry, `--override` replaces it anyway |
 | `regkit --uninstall-regedit-replacement` | Remove this RegKit executable's RegEdit replacement |
+| `regkit --restart-admin` | Relaunch elevated (UAC prompt) |
+| `regkit --restart-user` | Start without applying the *Always Run as...* options (used by *Restart as User*) |
 | `regkit --restart-system` | Relaunch under the SYSTEM account |
 | `regkit --restart-ti` | Relaunch under TrustedInstaller |
 | `regkit --help` | Print usage text |

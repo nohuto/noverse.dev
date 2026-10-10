@@ -102,27 +102,31 @@ Or copy the `.po` into `assets\lang`, which would show up in `Options > Language
 
 It includes built in presets and a theme editor to customize colors, presets can also be saved, exported/imported as `.rktheme` files.
 
-### Examples
+### Previews
 
 #### Default Dark
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-dark.png?raw=true" alt="" width="1650" height="933">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-dark.png?raw=true" alt="" width="1507" height="902">
+
+##### W7 Dark
+
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-dark-w7.png?raw=true" alt="" width="1376" height="889">
 
 #### Default Light
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light.png?raw=true" alt="" width="1650" height="933">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light.png?raw=true" alt="" width="1507" height="902">
 
-#### W7 Light
+##### W7 Light
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light-w7.png?raw=true" alt="" width="1383" height="810">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/default-light-w7.png?raw=true" alt="" width="1375" height="889">
 
 #### Gruvbox Dark
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/gruvbox-dark.png?raw=true" alt="" width="1650" height="933">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/gruvbox-dark.png?raw=true" alt="" width="1507" height="902">
 
 #### Kanagawa Wave
 
-<img src="https://github.com/nohuto/regkit/blob/main/assets/images/kanagawa-wave.png?raw=true" alt="" width="1650" height="933">
+<img src="https://github.com/nohuto/regkit/blob/main/assets/images/kanagawa-wave.png?raw=true" alt="" width="1507" height="902">
 
 ## Icon Sets
 

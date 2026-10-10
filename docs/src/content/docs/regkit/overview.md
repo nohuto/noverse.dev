@@ -13,7 +13,7 @@ RegKit is a feature rich registry editor replacement, which includes several imp
 All releases have a detached GPG sig, import the [public key](https://pgp.noverse.dev) and verify the file next to its sig:
 
 ```powershell
-curl.exe -sO https://pgp.noverse.dev
+curl.exe -fsSL https://pgp.noverse.dev -o public.asc
 gpg --import public.asc
 
 gpg --verify RegKit-Setup-<version>-x64.exe.sig RegKit-Setup-<version>-x64.exe
@@ -46,17 +46,18 @@ RegKit adds functionality that native RegEdit doesn't support:
 - [Loaded hive root](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#loaded-hives) detection and an *On-Disk Hive File* command for the backing file
 - File conversion, converts between `.reg` (Regedit 5 & ANSI `REGEDIT4`), `.bat`/`.cmd` (`reg add`/`reg delete`) & `.ps1`, or from a root key to any of them
 - [Trace presets](https://noverse.dev/docs/regkit/overview/#trace-menu) for 23H2, 24H2, 25H2, which fill the `Read on boot` column
-- Default presets from Windows installations, which fill the `Default` column (and "Reset do Default" which is disabled by default)
+- Default presets from Windows installations, which fill the `Default` column (and "Reset to Default" which is disabled by default)
 - An extra root keys toggle for [predefined keys](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#predefined-keys) that RegEdit doesn't show
-- Switching between [User, Admin, SYSTEM, and TrustedInstaller rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation)
+- Switching between [User, Admin, SYSTEM, and TrustedInstaller rights](https://noverse.dev/docs/regkit/overview/#rights-and-elevation) (*HKCU Follows Signed-In User*, shows the signed in users hive as `HKEY_CURRENT_USER` when running as SYSTEM/TrustedInstaller)
 - Favorites import/export
 - Comment column for values/keys (including [default comments](https://github.com/nohuto/regkit/blob/main/assets/comments/default-comments.jsonc))
 - Decoding values (B64, hex...), interpreting values as `FILETIME`, `SYSTEMTIME`, GUID, SID, security descriptor, IPv4/IPv6...
 - [Edit Bits](https://noverse.dev/docs/regkit/overview/#bit-definitions), a bit editor for DWORD, big endian DWORD, QWORD and REG_BINARY values, with reusable JSON definitions that name each bit
+- Resource list viewer for `REG_RESOURCE_LIST`, `REG_FULL_RESOURCE_DESCRIPTOR` & `REG_RESOURCE_REQUIREMENTS_LIST` values
 - [Key handles](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/#key-handles)
 - Key Information window (native name, hive file, class name, last write time, volatile/symbolic link state, UAC virtualization flags/state, integrity level...)
-- Loading/unloading hives
-- Local (64-bit & 32-bit view), remote, offline registries
+- Loading/unloading hives, saving keys as hive files & restoring keys from them
+- Local (64-bit & 32-bit view, *Go to Other View* between them), remote, offline registries
 - *Go to Virtual Store Copy*, *Go to Global Key* (UAC virtualization)
 - *Open in Source Hive* for merged `HKEY_CLASSES_ROOT` keys
 - Creating symbolic links & volatile keys
@@ -350,7 +351,7 @@ SYSTEM rights are for example needed for reading keys such as `HKLM\SAM\SAM`, `H
 | `F10` | Activate menu bar |
 | `Alt+F` / `Alt+E` / `Alt+V`... | Open matching menu (F = File, A = Favorites) |
 | `Shift+F10` / `Menu` | Open context menu for focused item |
-| `F1` | Open help |
+| `F1` | Open the documentation |
 
 ### Find & Replace
 
@@ -409,7 +410,7 @@ Using `reg` here is optional, means both `regkit reg query` & `regkit query` wor
 | `compare <key1> <key2> [/v name \| /ve] [/oa \| /od \| /os \| /on] [/s]` | `/oa` all lines, `/od` differences (default), `/os` matches, `/on` none, exit code `0` = identical, `2` = different |
 | `flags <HKLM\Software\key> [QUERY \| SET [DONT_VIRTUALIZE] [DONT_SILENT_FAIL] [RECURSE_FLAG]] [/s]` | UAC virtualization flags, `SET` clears every flag it doesn't name, `/s` applies to subkeys |
 | `/reg:32` `/reg:64` | Selects the 32/64 bit registry view |
-| `\\machine\HKLM\...` | Remote registry (HKLM & HKU), `compare <key> \\machine` compares the same path on that machine |
+| `\\machine\HKLM\...` | Remote registry (HKLM & HKU), `compare <key> \\machine` compares the same path on that machine, `save`/`restore`/`load`/`unload`/`flags` are local only (like reg.exe) |
 
 ### regkit (additions)
 

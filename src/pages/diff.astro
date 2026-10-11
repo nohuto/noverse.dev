@@ -11,12 +11,7 @@ import diffStyles from '../styles/diff.css?url';
   styles={[diffStyles]}
 >
   <main id="main" class="bindiff-main">
-    <section
-      class="content-box panel"
-      id="diff-app"
-      data-title="diff"
-      aria-busy="true"
-    >
+    <section id="diff-app" data-title="diff" aria-busy="true">
       <div class="panel-body">
         <div class="bindiff-intro">
           <h1 class="page-heading">
@@ -121,7 +116,6 @@ import diffStyles from '../styles/diff.css?url';
           <div
             class="bindiff-view-tools bindiff-frame-view-tools"
             id="diff-view-tools"
-            hidden
           >
             <div
               class="bindiff-view-toggle"
@@ -215,7 +209,7 @@ import diffStyles from '../styles/diff.css?url';
               </button>
             </div>
           </div>
-          <div class="bindiff-font-tools" id="diff-font-tools" hidden>
+          <div class="bindiff-font-tools" id="diff-font-tools">
             <button
               class="bindiff-icon-button"
               id="diff-font-decrease"
@@ -281,7 +275,6 @@ import diffStyles from '../styles/diff.css?url';
             type="button"
             aria-label="Swap builds"
             title="Swap builds"
-            hidden
           >
             <svg
               class="bindiff-swap-icon"
@@ -310,7 +303,7 @@ import diffStyles from '../styles/diff.css?url';
             type="button"
             aria-label="Settings"
             title="Settings"
-            hidden
+            disabled
           >
             <span class="settings-icon" aria-hidden="true"></span>
             <span class="sr-only">Settings</span>
@@ -321,7 +314,6 @@ import diffStyles from '../styles/diff.css?url';
             aria-pressed="false"
             aria-label="Maximize"
             title="Maximize"
-            hidden
           >
             <svg
               class="bindiff-maximize-icon icon-maximize"

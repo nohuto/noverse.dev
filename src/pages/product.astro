@@ -25,100 +25,167 @@ const previews = await Promise.all([
   page="product"
   styles={[productStyles]}
 >
-  <main id="main">
-    <section
-      class="content-box panel product-page"
-      id="product"
-      data-title="product"
-    >
-      <div class="panel-body">
-        <div class="product-section product-overview">
+  <main id="main" class="product-main">
+    <section id="product" data-title="product">
+      <div class="product-overview">
+        <div class="product-details">
           <h1 class="page-heading">Windows Configuration</h1>
-          <div class="page-divider"></div>
-          <div class="product-header">
-            <div class="product-intro">
-              <p>
-                WinConfig is based on my personal research on several topics,
-                which I began documenting around July 2024. It has transparent
-                logs so users can see every change, including the value name,
-                data, type and, for recursive changes, the number of modified
-                keys. Some options also show the executed PowerShell code.
-              </p>
-              <!-- prettier-ignore -->
-              <p>
-                Each option has its own
-                <a class="link" href="/docs/win-config/">documentation</a>,
-                some may be more detailed whenever theres no public
-                (trustworthy) documentation on them, some less.
-              </p>
-              <p>
-                These detailed notes are intended to be used for informational
-                purposes and to help users understand what exactly an option
-                changes. Reading/understanding the documentation isn't required
-                to use the tool, as there're templates for each section.
-              </p>
-            </div>
-            <div class="product-cta">
-              <span class="price-label">Lifetime</span>
-              <span class="product-price">9,99&nbsp;EUR</span>
-              <p class="pricing-note">Includes updates &amp; Discord role.</p>
-              <div class="purchase-actions">
-                <form
-                  class="paypal-form"
-                  action="https://www.paypal.com/ncp/payment/C4XUQMQZHS948"
-                  method="post"
-                  target="_blank"
-                >
-                  <button class="paypal-button" type="submit">
-                    <span>Buy via</span>
-                    <img
-                      decoding="async"
-                      class="paypal-button-logo"
-                      src="/main/images/paypal-methods.svg"
-                      width="140"
-                      height="20"
-                      alt=""
-                      loading="lazy"
-                    />
-                  </button>
-                </form>
-              </div>
-            </div>
+          <div class="product-intro">
+            <p>
+              A tool for modifying your system alongside my documentation
+              (reading it isn't required, as each section includes templates),
+              whether you follow my choices or test your own.
+            </p>
           </div>
-          <div class="product-preview-grid">
+          <ul class="product-highlights">
+            <li>Transparent logs for each change</li>
+            <li>
+              <a class="link" href="/docs/win-config/">
+                Documentation
+              </a>{' '}
+              for each option
+            </li>
+            <li>Templates for each section</li>
+          </ul>
+        </div>
+        <div
+          class="product-gallery"
+          role="region"
+          aria-label="Product screenshots"
+          aria-roledescription="carousel"
+        >
+          <div
+            class="product-slides"
+            id="product-slides"
+            tabindex="0"
+            aria-label="Screenshots, use left and right arrow keys"
+          >
             {previews.map(({ label, href, image }, index) => (
-              <figure class="product-preview-card">
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${label} preview`}
-                >
-                  <img
-                    decoding="async"
-                    src={image.byWidth[640]}
-                    srcset={image.srcset}
-                    sizes="(max-width: 700px) calc(100vw - 48px), 552px"
-                    width="640"
-                    height="387"
-                    alt=""
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                    fetchpriority={index === 0 ? 'high' : undefined}
-                  />
-                </a>
-              </figure>
+              <a
+                class="product-slide"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open full-size ${label} screenshot`}
+              >
+                <img
+                  decoding="async"
+                  src={image.byWidth[640]}
+                  srcset={image.srcset}
+                  sizes="(max-width: 900px) calc(100vw - 32px), 540px"
+                  width={image.source.width}
+                  height={image.source.height}
+                  alt={`WinConfig in ${label}`}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : undefined}
+                />
+              </a>
             ))}
           </div>
+          <button
+            class="product-gallery-arrow previous"
+            type="button"
+            data-gallery-direction="-1"
+            aria-label="Previous screenshot"
+            aria-controls="product-slides"
+            hidden
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m15 6-6 6 6 6" />
+            </svg>
+          </button>
+          <button
+            class="product-gallery-arrow next"
+            type="button"
+            data-gallery-direction="1"
+            aria-label="Next screenshot"
+            aria-controls="product-slides"
+            hidden
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9 6 6 6-6 6" />
+            </svg>
+          </button>
+          <span
+            id="product-gallery-status"
+            class="sr-only"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            Screenshot 1 of {previews.length}
+          </span>
         </div>
+        <div class="product-purchase">
+          <div class="product-cta">
+            <div class="product-pricing">
+              <span class="product-price">9,99&nbsp;EUR</span>
+              <span class="price-label">Lifetime license</span>
+            </div>
+            <form
+              action="https://www.paypal.com/ncp/payment/C4XUQMQZHS948"
+              method="post"
+              target="_blank"
+            >
+              <button class="paypal-button" type="submit">
+                <span>Buy via</span>
+                <img
+                  decoding="async"
+                  class="paypal-button-logo"
+                  src="/main/images/paypal-methods.svg"
+                  width="140"
+                  height="20"
+                  alt="PayPal"
+                  loading="lazy"
+                />
+              </button>
+            </form>
+          </div>
+          <!-- prettier-ignore -->
+          <p class="purchase-note">
+            Access is assigned manually via Discord, see <span class="purchase-reference">'<a
+              class="link"
+              href="#after-purchase">After Purchase</a>'</span> for more.
+          </p>
+        </div>
+        <div class="product-documentation">
+          <p>
+            WinConfig is based on my personal research on several topics, which
+            I began documenting around July 2024. Purchasing a license supports
+            my research and ongoing work. The detail of each options
+            <a class="link" href="/docs/win-config/">
+              documentation
+            </a>
+            depends on whether trustworthy public documentation exists.
+          </p>
+        </div>
+      </div>
 
-        <div class="product-section product-terms">
-          <div class="legal-section" id="terms">
-            <h2 class="product-divider-heading legal-heading">
-              Miscellaneous Information
-            </h2>
-            <div class="legal-list">
-              <article class="legal-item">
-                <h3>Data Privacy</h3>
+      <div class="product-terms">
+        <div class="legal-section" id="terms">
+          <h2 class="legal-heading">Miscellaneous Information</h2>
+          <div class="legal-list">
+            <div class="legal-column">
+              <details class="legal-item">
+                <summary>Refund Policy</summary>
+                <p>
+                  Refunds are available only if no registration has been made
+                  and no Discord role has been assigned. Include proof of
+                  purchase when submitting a refund request.
+                </p>
+              </details>
+              <details class="legal-item">
+                <summary>License</summary>
+                <p>
+                  Each purchase includes one hardware bound license. Keys do not
+                  transfer across devices without reregistration (which is
+                  possible within certain limits). Updates and a Discord role
+                  are included.
+                </p>
+              </details>
+            </div>
+            <div class="legal-column">
+              <details class="legal-item">
+                <summary>Data Privacy</summary>
                 <p>
                   WinConfig uses three hardware identifiers for license
                   registration and verification, SMBIOS UUID, baseboard serial,
@@ -126,35 +193,19 @@ const previews = await Promise.all([
                   Saved login data is stored locally, I don't have access to
                   your password.
                 </p>
-              </article>
-              <article class="legal-item">
-                <h3>Usage &amp; Redistribution</h3>
+              </details>
+              <details class="legal-item">
+                <summary>Usage &amp; Redistribution</summary>
                 <p>
                   Licenses are for personal use only. Reselling, transferring,
                   redistributing, or SRE of WinConfig is prohibited unless you
                   receive explicit written permission from me (nohuto). By
                   purchasing or using WinConfig, you accept these terms.
                 </p>
-              </article>
-              <article class="legal-item">
-                <h3>Refund Policy</h3>
-                <p>
-                  Refunds are available only if no registration has been made
-                  and no Discord role has been assigned. Include proof of
-                  purchase when submitting a refund request.
-                </p>
-              </article>
-              <article class="legal-item">
-                <h3>License</h3>
-                <p>
-                  Each purchase includes one hardware bound license. Keys do not
-                  transfer across devices without reregistration (which is
-                  possible within certain limits).
-                </p>
-              </article>
-              <article class="legal-item">
-                <h3>After Purchase</h3>
-                <p>
+              </details>
+              <details class="legal-item">
+                <summary>After Purchase</summary>
+                <p id="after-purchase">
                   To get access, you must either include your Discord ID in the
                   purchase message or send me your transaction ID so I can
                   assign the Discord role. The role isn't assigned
@@ -176,11 +227,29 @@ const previews = await Promise.all([
                   updates would theoretically work as long as no new
                   section/helper gets added).
                 </p>
-              </article>
+              </details>
             </div>
           </div>
         </div>
       </div>
     </section>
   </main>
+  <dialog
+    id="product-image-viewer"
+    class="image-viewer"
+    aria-label="Expanded product screenshot"
+  >
+    <button
+      class="image-viewer-close"
+      type="button"
+      aria-label="Close expanded image"
+      autofocus
+    >
+      <span class="settings-close-icon" aria-hidden="true"></span>
+    </button>
+    <img id="product-expanded-image" alt="" />
+  </dialog>
+  <script>
+    import '../scripts/product/gallery';
+  </script>
 </NoverseLayout>

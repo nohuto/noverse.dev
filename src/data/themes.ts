@@ -46,7 +46,7 @@ export const lightThemes: ReadonlySet<string> = new Set([
 ]);
 
 export const BG_KEY = 'nv-bg';
-export const DEFAULT_BG = 'crosshatch';
+export const DEFAULT_BG = 'clear';
 export const backgrounds = [
   'clear',
   'crosshatch',

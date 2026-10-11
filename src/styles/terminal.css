@@ -659,10 +659,6 @@ main.main-terminal .terminal-shell {
   color: var(--muted);
 }
 
-.console-url:hover {
-  text-decoration: underline;
-}
-
 .console-muted {
   color: var(--muted);
 }

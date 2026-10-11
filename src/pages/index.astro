@@ -19,19 +19,18 @@ const dateFormatter = new Intl.DateTimeFormat('en', {
   styles={[homeStyles]}
 >
   <main id="main" class="home-main">
-    <section class="content-box panel home-page" data-title="home">
-      <div class="panel-body">
-        <header class="home-intro">
-          <h1>nohuto</h1>
-          <p>
-            I'm currently studying (and partly documenting, often in relation to
-            registry values) Windows internals, with an interest in debugging
-            and static analysis. I also spend some time with online privacy
-            &amp; security. Note that Noverse is an independent entity, solely
-            managed by me. No one else works for/with me under this name.
-          </p>
-          <!-- prettier-ignore -->
-          <p class="home-contact">
+    <section data-title="home">
+      <header class="home-intro">
+        <h1>nohuto</h1>
+        <p>
+          I'm currently studying (and partly documenting, often in relation to
+          registry values) Windows internals, with an interest in debugging and
+          static analysis. I also spend some time with online privacy &amp;
+          security. Note that Noverse is an independent entity, solely managed
+          by me. No one else works for/with me under this name.
+        </p>
+        <!-- prettier-ignore -->
+        <p class="home-contact">
             You can contact me at
             <button
               class="home-email"
@@ -47,82 +46,81 @@ const dateFormatter = new Intl.DateTimeFormat('en', {
             <a class="link" href="https://pgp.noverse.dev">here</a>
             (<button class="home-fingerprint" type="button" data-fingerprint-open>fingerprint</button>).
           </p>
-        </header>
+      </header>
 
-        <div
-          class="settings-modal fingerprint-modal"
-          id="fingerprint-modal"
-          hidden
-        >
-          <section
-            class="settings-dialog fingerprint-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Public key fingerprint"
-          >
-            <header class="settings-header">
-              <span></span>
-              <button
-                class="settings-close"
-                type="button"
-                data-fingerprint-close
-                aria-label="Close fingerprint"
-                title="Close fingerprint"
-              >
-                <span class="settings-close-icon" aria-hidden="true"></span>
-              </button>
-            </header>
-            <div class="settings-body fingerprint-body">
-              <code>
-                BDB8 AE58 93DD 3950 F633
-                <br />
-                1761 4DE7 CA76 A4B6 8BCF
-              </code>
-            </div>
-          </section>
-        </div>
-
-        <section class="home-section" aria-labelledby="active-work-title">
-          <div class="section-heading">
-            <h2 id="active-work-title">Active work</h2>
-          </div>
-          <div class="home-work-grid">
-            <HomeProjects />
-          </div>
-        </section>
-
+      <div
+        class="settings-modal fingerprint-modal"
+        id="fingerprint-modal"
+        hidden
+      >
         <section
-          class="home-section"
-          id="home-commits"
-          aria-labelledby="latest-commits-title"
+          class="settings-dialog fingerprint-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Public key fingerprint"
         >
-          <div class="section-heading">
-            <h2 id="latest-commits-title">Latest commits</h2>
-          </div>
-          <div class="commit-list">
-            {commits.length ? (
-              commits.map((commit) => (
-                <a
-                  class="commit-item"
-                  href={commit.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span class="commit-repo">
-                    {commit.repo} <span class="commit-sha">{commit.sha}</span>
-                  </span>
-                  <span class="commit-message">{commit.message}</span>
-                  <time class="commit-date" datetime={commit.date}>
-                    {dateFormatter.format(new Date(commit.date))}
-                  </time>
-                </a>
-              ))
-            ) : (
-              <p class="home-status">No recent commits available</p>
-            )}
+          <header class="settings-header">
+            <span></span>
+            <button
+              class="settings-close"
+              type="button"
+              data-fingerprint-close
+              aria-label="Close fingerprint"
+              title="Close fingerprint"
+            >
+              <span class="settings-close-icon" aria-hidden="true"></span>
+            </button>
+          </header>
+          <div class="settings-body fingerprint-body">
+            <code>
+              BDB8 AE58 93DD 3950 F633
+              <br />
+              1761 4DE7 CA76 A4B6 8BCF
+            </code>
           </div>
         </section>
       </div>
+
+      <section class="home-section" aria-labelledby="active-work-title">
+        <div class="section-heading">
+          <h2 id="active-work-title">Active work</h2>
+        </div>
+        <div class="home-work-grid">
+          <HomeProjects />
+        </div>
+      </section>
+
+      <section
+        class="home-section"
+        id="home-commits"
+        aria-labelledby="latest-commits-title"
+      >
+        <div class="section-heading">
+          <h2 id="latest-commits-title">Latest commits</h2>
+        </div>
+        <div class="commit-list">
+          {commits.length ? (
+            commits.map((commit) => (
+              <a
+                class="commit-item"
+                href={commit.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="commit-repo">
+                  {commit.repo} <span class="commit-sha">{commit.sha}</span>
+                </span>
+                <span class="commit-message">{commit.message}</span>
+                <time class="commit-date" datetime={commit.date}>
+                  {dateFormatter.format(new Date(commit.date))}
+                </time>
+              </a>
+            ))
+          ) : (
+            <p class="home-status">No recent commits available</p>
+          )}
+        </div>
+      </section>
     </section>
   </main>
 </NoverseLayout>

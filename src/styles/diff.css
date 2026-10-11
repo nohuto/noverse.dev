@@ -79,18 +79,10 @@
   }
 }
 
-#diff-app .panel-body {
-  padding: 12px 14px 14px;
-}
-
 .bindiff-intro p {
   max-width: 980px;
   margin-bottom: 16px;
   color: var(--muted);
-}
-
-main.bindiff-main {
-  overflow-x: clip;
 }
 
 #diff-app .bindiff-intro p {
@@ -112,30 +104,28 @@ main.bindiff-main {
   --diff-build-width: 7.3125rem;
   --diff-module-width: 9.75rem;
   --diff-name-width: 22.75rem;
-  display: grid;
-  grid-template-columns:
-    minmax(112px, var(--diff-build-width)) minmax(
-      112px,
-      var(--diff-build-width)
-    )
-    minmax(128px, var(--diff-module-width)) minmax(
-      260px,
-      var(--diff-name-width)
-    );
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
   gap: 10px;
   min-width: 0;
 }
 
-.diff-grid {
-  grid-template-columns:
-    minmax(112px, var(--diff-build-width)) minmax(
-      112px,
-      var(--diff-build-width)
-    )
-    max-content minmax(128px, var(--diff-module-width)) minmax(
-      260px,
-      var(--diff-name-width)
-    );
+.diff-build-field {
+  flex: 0 0 min(100%, var(--diff-build-width));
+}
+
+.diff-module-field {
+  flex: 0 0 min(100%, var(--diff-module-width));
+}
+
+.diff-kind-field {
+  flex: 0 0 auto;
+}
+
+.diff-name-field {
+  max-width: var(--diff-name-width);
+  flex: 1 1 260px;
 }
 
 .bindiff-field {
@@ -200,7 +190,6 @@ main.bindiff-main {
 .diff-kind-toggle {
   display: grid;
   grid-template-columns: repeat(3, max-content);
-  height: 24px;
   border: 1px solid var(--border);
   background: var(--panel);
 }
@@ -212,13 +201,13 @@ main.bindiff-main {
 
 .diff-kind-toggle button {
   height: 22px;
-  padding: 0 12px;
+  padding: 2px 12px;
   border: 0;
   border-right: 1px solid var(--border);
   background: transparent;
   color: var(--text);
   font-size: var(--font-size-control);
-  line-height: 1;
+  line-height: 1.2;
   cursor: pointer;
 }
 
@@ -524,6 +513,20 @@ main.bindiff-main {
   color: var(--warning);
 }
 
+.bindiff-output:empty {
+  min-height: 80px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.bindiff-output:empty::before {
+  content: '';
+  display: block;
+  height: 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel-alt);
+}
+
 .bindiff-output .d2h-wrapper {
   width: 100%;
   max-width: none;
@@ -799,6 +802,7 @@ body.bindiff-maximized > footer {
 }
 
 #diff-app.bindiff-maximized {
+  background: var(--bg);
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -813,6 +817,7 @@ body.bindiff-maximized > footer {
 }
 
 #diff-app.bindiff-maximized .panel-body {
+  padding: 12px 14px 14px;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -863,69 +868,7 @@ body.bindiff-maximized > footer {
   }
 }
 
-@media (max-width: 1200px) {
-  .bindiff-grid.diff-grid {
-    grid-template-columns:
-      minmax(112px, var(--diff-build-width)) minmax(
-        112px,
-        var(--diff-build-width)
-      )
-      max-content minmax(128px, var(--diff-module-width));
-  }
-
-  .diff-grid .diff-name-field {
-    grid-column: 1 / -1;
-    justify-self: start;
-    width: min(100%, var(--diff-name-width));
-  }
-}
-
-@media (max-width: 960px) {
-  main.bindiff-main {
-    padding: 10px 8px 24px;
-  }
-
-  .bindiff-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 720px) {
-  main.bindiff-main {
-    padding-inline: 0;
-  }
-
-  .bindiff-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .bindiff-grid.diff-grid {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: end;
-  }
-
-  .diff-grid .diff-build-field {
-    width: min(100%, var(--diff-build-width));
-    flex: 0 0 min(100%, var(--diff-build-width));
-  }
-
-  .diff-grid .diff-module-field {
-    width: min(100%, var(--diff-module-width));
-    flex: 0 0 min(100%, var(--diff-module-width));
-  }
-
-  .diff-grid .diff-kind-field {
-    width: auto;
-    flex: 0 0 auto;
-  }
-
-  .diff-grid .diff-name-field {
-    width: min(100%, var(--diff-name-width));
-    max-width: var(--diff-name-width);
-    flex: 1 1 260px;
-  }
-
   .diff-name-field .select-menu-meta {
     display: grid;
     gap: 6px;

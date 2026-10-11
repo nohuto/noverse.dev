@@ -550,13 +550,10 @@ type CompareOptions = DisplayOptions & {
     };
 
     const setResultUi = (visible: boolean, comparison = visible) => {
-      [links, settingsButton, maximizeButton].forEach((node) => {
-        node.hidden = !visible;
-      });
-      fontTools.hidden = !visible;
+      links.hidden = !visible;
       root.classList.toggle('bindiff-display-result', visible && !comparison);
       [viewTools, swapButton].forEach((node) => {
-        node.hidden = !comparison;
+        node.hidden = visible && !comparison;
       });
       if (!visible) setMaximized(false);
     };
@@ -618,6 +615,7 @@ type CompareOptions = DisplayOptions & {
     };
 
     const setKind = (kind: string | undefined) => {
+      settingsButton.removeAttribute('disabled');
       activeKind = SOURCE_ORDER.find((value) => value === kind) || 'type';
       activeSource = global.NVDiffSources[activeKind]!;
       const nameText =
@@ -1102,7 +1100,7 @@ type CompareOptions = DisplayOptions & {
       if (event.target === settingsModal) closeSettings();
     });
     maximizeButton.addEventListener('click', () => {
-      if (lastRender) setMaximized(!isMaximized);
+      setMaximized(!isMaximized);
     });
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;

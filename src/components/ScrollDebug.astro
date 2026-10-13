@@ -21,7 +21,7 @@
           `header=${round(rect.top)}/${round(rect.height)} title=${round(titleTop)}/${round(titleTop + scrollY)}`,
       );
       panel.textContent =
-        `Scroll debug: ${navigation?.type ?? 'unknown'}\n` +
+        `Scroll debug: ${navigation?.type ?? 'unknown'} / ${history.scrollRestoration}\n` +
         `viewport=${round(viewport?.height ?? innerHeight)} scale=${round(viewport?.scale ?? 1)}\n` +
         `header=top/height title=viewport/document\n\n` +
         [...readings.values()].join('\n\n');

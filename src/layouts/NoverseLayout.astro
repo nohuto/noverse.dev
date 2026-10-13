@@ -20,23 +20,43 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <ThemeInit />
     <script is:inline>
-      // iOS can restore a nonzero scroll offset when reloading
+      // Braves pull to refresh can shift the page after pageshow
       if (
         performance.getEntriesByType('navigation')[0]?.type === 'reload' &&
         !location.hash
       ) {
         const restoration = history.scrollRestoration;
+        const controller = new AbortController();
         history.scrollRestoration = 'manual';
-        window.addEventListener(
-          'pageshow',
-          () => window.scrollTo({ top: 0, behavior: 'instant' }),
-          { once: true },
-        );
-        window.addEventListener(
+        const reset = () => {
+          if (scrollY > 0) window.scrollTo({ top: 0, behavior: 'instant' });
+        };
+        const stop = () => {
+          history.scrollRestoration = restoration;
+          controller.abort();
+        };
+        window.addEventListener('pageshow', reset, {
+          once: true,
+          signal: controller.signal,
+        });
+        window.addEventListener('scroll', reset, {
+          passive: true,
+          signal: controller.signal,
+        });
+        for (const type of [
+          'touchstart',
+          'pointerdown',
+          'wheel',
+          'keydown',
           'pagehide',
-          () => (history.scrollRestoration = restoration),
-          { once: true },
-        );
+          'hashchange',
+        ])
+          window.addEventListener(type, stop, {
+            once: true,
+            passive: true,
+            capture: true,
+            signal: controller.signal,
+          });
       }
     </script>
     <ScrollDebug />

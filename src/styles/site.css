@@ -103,15 +103,20 @@ h3 {
 }
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   justify-content: flex-end;
   padding: 1.5rem 2rem;
   overflow-x: clip;
+  pointer-events: none;
 }
 
 .site-nav {
   --nv-soft-backdrop-inset: -1.25rem -2rem;
   position: relative;
+  pointer-events: auto;
   display: flex;
   flex-wrap: wrap;
   align-items: center;

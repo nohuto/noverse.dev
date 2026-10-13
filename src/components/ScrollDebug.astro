@@ -1,0 +1,72 @@
+<script is:inline>
+  if (new URLSearchParams(location.search).has('debug-scroll')) {
+    const readings = new Map();
+    const panel = document.createElement('pre');
+    panel.className = 'scroll-debug';
+    panel.setAttribute('aria-hidden', 'true');
+    const navigation = performance.getEntriesByType('navigation')[0];
+    const round = (value) => Math.round(value * 10) / 10;
+
+    const sample = (label) => {
+      const header = document.querySelector('.site-header');
+      const title = document.querySelector('main h1');
+      if (!header || !title) return;
+      const viewport = window.visualViewport;
+      const rect = header.getBoundingClientRect();
+      const titleTop = title.getBoundingClientRect().top;
+      readings.set(
+        label,
+        `${label} @${Math.round(performance.now())}ms\n` +
+          `scrollY=${round(scrollY)} vvTop=${round(viewport?.offsetTop ?? 0)} vvPage=${round(viewport?.pageTop ?? scrollY)}\n` +
+          `header=${round(rect.top)}/${round(rect.height)} title=${round(titleTop)}/${round(titleTop + scrollY)}`,
+      );
+      panel.textContent =
+        `Scroll debug: ${navigation?.type ?? 'unknown'}\n` +
+        `viewport=${round(viewport?.height ?? innerHeight)} scale=${round(viewport?.scale ?? 1)}\n` +
+        `header=top/height title=viewport/document\n\n` +
+        [...readings.values()].join('\n\n');
+    };
+
+    const start = () => {
+      document.body.append(panel);
+      sample('first');
+      sample('live');
+    };
+    if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', start, { once: true });
+    else start();
+    window.addEventListener('pageshow', (event) => {
+      sample(event.persisted ? 'cached' : 'shown');
+      setTimeout(() => {
+        sample('settled');
+        sample('live');
+      }, 1000);
+    });
+    window.addEventListener('scroll', () => sample('live'), { passive: true });
+    window.addEventListener('resize', () => sample('live'));
+    window.visualViewport?.addEventListener('scroll', () => sample('live'));
+    window.visualViewport?.addEventListener('resize', () => sample('live'));
+  }
+</script>
+
+<style is:global>
+  .scroll-debug {
+    position: fixed;
+    right: 8px;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    z-index: 1000;
+    width: max-content;
+    max-width: calc(100vw - 16px);
+    max-height: 45svh;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid #888;
+    background: #111;
+    color: #fff;
+    font: 10px / 1.4 monospace;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    overflow: clip;
+    pointer-events: none;
+  }
+</style>

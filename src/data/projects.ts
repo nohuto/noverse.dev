@@ -6,21 +6,10 @@ export interface Project {
   href?: string;
   description?: string;
   image?: string;
+  imageLight?: string;
   video?: string;
-  width?: number;
-  height?: number;
-  priority?: boolean;
   section?: string;
-  projects?: boolean;
-  home?: {
-    name: string;
-    docs: string;
-    description?: string;
-    docsLabel?: string;
-    docsTitle?: string;
-    external?: boolean;
-    order: number;
-  };
+  home?: { order: number };
 }
 
 export const projects: Project[] = records;

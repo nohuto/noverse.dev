@@ -27,11 +27,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Refresh homepage activity
-        run: python scripts/update-home-data.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Refresh diff manifests
         run: python scripts/update-diff-manifests.py
 
@@ -70,11 +65,11 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci
 
-      - name: Sync documentation
-        run: npm run docs:sync --workspace noverse-docs
+      - name: Sync docs
+        run: npm run docs:sync
         env:
           WIN_CONFIG_REPO_URL: https://github.com/nohuto/win-config
           REGKIT_REPO_URL: https://github.com/nohuto/regkit
@@ -89,7 +84,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git status --porcelain | grep .; then
-            git add -A -- docs/src/content/docs src/data public/main/data public/main/media public/main/images src/image-sources
+            git add -A -- src/content/docs src/data public/main/data public/main/media src/image-sources
             git commit -m "update docs data"
             git push
           else

@@ -1,0 +1,23 @@
+---
+slug: docs/win-config/security/enable-camera-osd-indicator
+title: 'Camera OSD Indicator'
+description: 'Security option documentation from win-config.'
+editUrl: false
+sidebar:
+  order: 20
+---
+
+> "*`NoPhysicalCameraLED` indicates that there is no physical LED for the device's camera. An example of a physical LED for a camera is the small blue light that turns on whenever the camera is streaming video. This setting is used to indicate to the shell component that it will need to provide a small indicator in the user interface (UI) to show when video frames are streaming or not streaming to replace the notification by physical LED.*"
+>
+> — Microsoft, [NoPhysicalCameraLED](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-coremmres-nophysicalcameraled)
+
+<img src="https://raw.githubusercontent.com/nohuto/win-config/main/security/images/cameraosd.png" alt="" width="760" height="289" decoding="async">
+
+| Data | Description |
+| :---: | --- |
+| 0 | Does not draw an indicator in the UI to show when the camera is on or off. Instead, a physical LED exists to show when video frames are streaming or not streaming. This is the default value. |
+| 1 | Draws an indicator in the UI to show when video frames are streaming or not streaming. |
+
+```
+\Registry\Machine\SOFTWARE\Microsoft\OEM\Device\Capture : NoPhysicalCameraLED
+```

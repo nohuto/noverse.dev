@@ -1,0 +1,24 @@
+---
+slug: docs/win-config/visibility/classic-control-panel
+title: 'Classic Control Panel'
+description: 'Visibility option documentation from win-config.'
+editUrl: false
+sidebar:
+  order: 23
+---
+
+> "*This policy setting controls the default Control Panel view, whether by category or icons. If this policy setting is enabled, the Control Panel opens to the icon view. If this policy setting is disabled, the Control Panel opens to the category view.*"
+
+### Icon View
+
+<img src="https://raw.githubusercontent.com/nohuto/win-config/main/visibility/images/panel0.png" alt="" width="784" height="632" decoding="async">
+
+### Category View
+
+<img src="https://raw.githubusercontent.com/nohuto/win-config/main/visibility/images/panel1.png" alt="" width="784" height="632" loading="lazy" decoding="async">
+
+## [Windows Policies](https://noverse.dev/policies)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Always open All Control Panel Items when opening Control Panel](https://noverse.dev/policies?p=ControlPanel*ForceClassicControlPanel) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `ForceClassicControlPanel` |

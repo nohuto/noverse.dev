@@ -1,0 +1,21 @@
+---
+import Icon, { type IconName } from '../Icon.astro';
+interface Props {
+  class: string;
+}
+const links: [string, string, IconName][] = [
+  ['Home', '/overview/', 'home'],
+  ['Product', '/product/', 'product'],
+  ['Projects', '/projects/', 'projects'],
+  ['Web Tools', '/tools/', 'tools'],
+  ['Documentation', '/docs/', 'book'],
+];
+---
+
+<nav class={Astro.props.class} aria-label="Main sections">
+  {links.map(([label, href, icon]) => (
+    <a class="nv-icon-button" href={href} aria-label={label} title={label}>
+      <Icon name={icon} />
+    </a>
+  ))}
+</nav>

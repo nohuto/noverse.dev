@@ -1,0 +1,20 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { webTools } from '../data/docs-sidebar.mjs';
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Web Tools',
+    description: 'Web tools',
+    tableOfContents: false,
+  }}
+>
+  <ul>
+    {webTools.map(({ label, link }) => (
+      <li>
+        <a href={link}>{label}</a>
+      </li>
+    ))}
+  </ul>
+</StarlightPage>

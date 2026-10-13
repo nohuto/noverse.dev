@@ -1,0 +1,14 @@
+/* inspired by antfu.me, Anthony Fu (MIT) */
+.link,
+.sl-markdown-content a:not(:where(.not-content *, .sl-anchor-link)) {
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  text-decoration: none;
+  transition: border-color var(--nv-motion);
+}
+
+.link:is(:hover, :focus-visible),
+.sl-markdown-content
+  a:not(:where(.not-content *, .sl-anchor-link)):is(:hover, :focus-visible) {
+  border-bottom-color: currentColor;
+}

@@ -1,0 +1,187 @@
+.site-content {
+  container: page / inline-size;
+  min-width: 0;
+  color: var(--text);
+  font-size: var(--font-size-body);
+  font-weight: 350;
+  line-height: normal;
+}
+
+:where(.site-content) :where(input, select, button, textarea) {
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+:where(.site-content) :where(p) {
+  margin: 0 0 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+:where(.site-content) :where(h2, h3, h4) {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+:where(.site-content) h2 {
+  font-size: var(--sl-text-h2, 1.25rem);
+}
+
+:where(.site-content) :where(a) {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+:where(.site-content)
+  :where(
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    summary,
+    [tabindex]
+  ):focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+:where(.site-content) summary {
+  list-style: none;
+}
+
+:where(.site-content) summary::-webkit-details-marker {
+  display: none;
+}
+
+:where(.site-content) [hidden] {
+  display: none !important;
+}
+
+:where(.site-content) .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+:where(.site-content) select,
+:where(.site-content) input,
+:where(.site-content) button {
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 0;
+  outline: none;
+  font-size: var(--font-size-control);
+}
+
+:where(.site-content)
+  :where(a, button, input, select, textarea, [tabindex]):not([tabindex='-1']) {
+  transition:
+    color var(--nv-motion),
+    background-color var(--nv-motion),
+    border-color var(--nv-motion),
+    opacity var(--nv-motion);
+}
+
+:where(.site-content) select:focus,
+:where(.site-content) input:focus,
+:where(.site-content) button:focus {
+  border-color: var(--accent);
+  box-shadow: none;
+}
+
+:where(.site-content) img,
+:where(.site-content) video {
+  display: block;
+  max-width: 100%;
+}
+
+.toast {
+  --nv-soft-backdrop-inset: -0.75rem -1.25rem;
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  color: var(--text);
+  padding: 8px 12px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+  font-size: 0.8125rem;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+.nv-modal {
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  color: inherit;
+  background: color-mix(in srgb, var(--bg) 74%, transparent);
+}
+
+.nv-modal::backdrop {
+  background: none;
+}
+
+:where(.site-content) input[type='checkbox'] {
+  position: relative;
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  background: var(--panel-alt);
+  appearance: none;
+  cursor: pointer;
+}
+
+:where(.site-content) input[type='checkbox']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 7px;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  transform: translate(-50%, -56%) rotate(45deg);
+  opacity: 0;
+}
+
+:where(.site-content) input[type='checkbox']:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+:where(.site-content) input[type='checkbox']:checked::after {
+  border-right-color: var(--accent-contrast);
+  border-bottom-color: var(--accent-contrast);
+  opacity: 1;
+}
+
+:where(.site-content) input[type='checkbox']:focus-visible {
+  border-color: var(--accent);
+}
+
+html:has(body.bindiff-maximized, .nv-modal[open], .image-viewer[open]) {
+  overflow: hidden;
+}

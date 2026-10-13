@@ -9,7 +9,5 @@ export function storageGet(key: string, fallback: string): string {
 export function storageSet(key: string, value: string): void {
   try {
     localStorage.setItem(key, value);
-  } catch {
-    // Settings still work for this visit when storage is blocked.
-  }
+  } catch {}
 }

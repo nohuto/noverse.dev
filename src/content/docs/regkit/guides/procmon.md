@@ -1,0 +1,138 @@
+---
+slug: docs/regkit/guides/procmon
+title: 'Capturing Registry Activity'
+description: 'Generated from regkit file: docs/procmon.md.'
+editUrl: false
+sidebar:
+  order: 4
+---
+
+Requirements are [process monitor](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon) and the program you want to capture. I'll capture the activity of the game `The Last Of Us Part II`.
+
+Start with configuring the filter (`CTRL` + `L`):  
+`Process Name` `contains` `tlou`  
+`Operation` `is` `RegSetValue` - Registry writes  
+`Operation` `is` `RegQueryValue` - Registry reads  
+`Operation` `is` `RegDeleteValue`  
+
+You can disable the other activity monitoring:
+
+<img src="https://raw.githubusercontent.com/nohuto/regkit/main/docs/images/monitoring.png" alt="" width="453" height="69" decoding="async">
+
+If you want to capture all `Reg...` activity, which would use:
+```c
+RegCloseKey
+RegCreateKey
+RegDeleteKey
+RegDeleteValue
+RegEnumKey
+RegEnumValue
+RegFlushKey
+RegLoadKey
+RegOpenKey
+RegQueryKey
+RegQueryKeySecurity
+RegQueryMultipleValueKey
+RegQueryValue
+RegSetInfoKey
+RegSetKeySecurity
+RegSetValue
+RegUnloadKey
+```
+
+`Operation` `begins with` `Reg`
+
+Now you'll see all kind of registry activity, what you want to look for is the path the program uses, if there's any. TLOU II uses:
+`Path` `contains` `\Software\Naughty Dog\The Last of Us Part II`
+
+Save the content using `.csv`, afterwards you can remove specific parts of the file, if you want to.
+
+<img src="https://raw.githubusercontent.com/nohuto/regkit/main/docs/images/pmsave.png" alt="" width="462" height="387" loading="lazy" decoding="async">
+
+`CTRL` + `H` (Regular expression):  
+`"Reg\w*"` - Removes the operations  
+`"process.exe"` - Replace `process`  
+
+The result should look similar to: [TLOU2.txt](https://github.com/nohuto/regkit/blob/main/assets/records/TLOU2.txt)/[StartAllBack.txt](https://github.com/nohuto/regkit/blob/main/assets/records/StartAllBack.txt)/[Lighshot](https://github.com/nohuto/regkit/blob/main/assets/records/Lighshot.txt). This can be used to capture specific program/path registry activity, there's obviously much more you can do with procmon.
+
+Operations which can be used:
+```
+CloseFile
+CreateFile
+CreateFileMapping
+DeviceIoControl
+FileSystemControl
+FlushBuffersFile
+Load Image
+LockFile
+NotifyChangeDirectory
+Process Create
+Process Exit
+Process Profiling
+Process Start
+QueryAllInformationFile
+QueryAttributeInformationVolume
+QueryAttributeTagFile
+QueryBasicInformationFile
+QueryDeviceInformationVolume
+QueryDeviceRelations
+QueryDirectory
+QueryEAFile
+QueryEaInformationFile
+QueryFileInternalInformationFile
+QueryFullSizeInformationVolume
+QueryInformationVolume
+QueryNameInformationFile
+QueryNetworkOpenInformationFile
+QueryNetworkPhysicalNameInformationFile
+QueryNormalizedNameInformationFile
+QueryObjectIdInformationVolume
+QueryOpen
+QueryPositionInformationFile
+QueryRemoteProtocolInformation
+QuerySecurityFile
+QuerySizeInformationVolume
+QueryStandardInformationFile
+QueryStreamInformationFile
+ReadFile
+RegCloseKey
+RegCreateKey
+RegDeleteKey
+RegDeleteValue
+RegEnumKey
+RegEnumValue
+RegFlushKey
+RegLoadKey
+RegOpenKey
+RegQueryKey
+RegQueryKeySecurity
+RegQueryMultipleValueKey
+RegQueryValue
+RegSetInfoKey
+RegSetKeySecurity
+RegSetValue
+RegUnloadKey
+SetAllocationInformationFile
+SetBasicInformationFile
+SetDispositionInformationEx
+SetDispositionInformationFile
+SetEndOfFileInformationFile
+SetPositionInformationFile
+SetRenameInformationFile
+SetSecurityFile
+SetStorageReservedIdInformation
+TCP Accept
+TCP Connect
+TCP Disconnect
+TCP Receive
+TCP Reconnect
+TCP Retransmit
+TCP Send
+TCP TCPCopy
+Thread Create
+Thread Exit
+UDP Receive
+UDP Send
+UnlockFileSingle
+WriteFile
+```

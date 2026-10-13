@@ -47,9 +47,6 @@ Disallow: /
 User-agent: FacebookBot
 Disallow: /
 
-User-agent: meta-externalagent
-Disallow: /
-
 User-agent: Meta-ExternalAgent
 Disallow: /
 
@@ -67,3 +64,5 @@ Disallow: /
 
 User-agent: AI2Bot
 Disallow: /
+
+Sitemap: https://noverse.dev/sitemap-index.xml

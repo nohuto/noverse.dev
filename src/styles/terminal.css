@@ -21,7 +21,7 @@
   line-height: 1;
 }
 
-body:has(main.main-terminal) {
+body:has(.main-terminal) {
   min-height: 100vh;
   min-height: 100lvh;
   overflow-x: hidden;
@@ -32,13 +32,13 @@ body:has(main.main-terminal) {
   position: relative;
   flex: 1;
   min-height: 0;
-  height: auto;
+  height: max(480px, calc(100dvh - 220px));
   contain: layout paint style;
   overflow: hidden;
   padding: 0;
 }
 
-main.main-terminal {
+.main-terminal {
   width: 100%;
   max-width: none;
   padding: 0;
@@ -47,7 +47,7 @@ main.main-terminal {
   overflow: hidden;
 }
 
-main.main-terminal .terminal-shell {
+.main-terminal .terminal-shell {
   flex: 1;
   display: flex;
   min-height: 0;
@@ -55,6 +55,8 @@ main.main-terminal .terminal-shell {
 }
 
 .terminal-shell {
+  position: relative;
+  z-index: 2;
   width: 100%;
   background: transparent;
   border: none;
@@ -94,6 +96,7 @@ main.main-terminal .terminal-shell {
   font-size: 0.6875rem;
   letter-spacing: 0.18em;
   cursor: move;
+  -webkit-user-select: none;
   user-select: none;
   touch-action: none;
 }
@@ -106,13 +109,7 @@ main.main-terminal .terminal-shell {
 }
 
 .console-window-icon {
-  width: 14px;
-  height: 14px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  --nv-icon-size: 14px;
 }
 
 .console-window-body {
@@ -121,26 +118,6 @@ main.main-terminal .terminal-shell {
   padding: 0;
   background: var(--panel);
   display: flex;
-}
-
-.bitmask-layer[hidden],
-.calc-layer[hidden] {
-  display: none;
-}
-
-.bitmask-layer,
-.calc-layer {
-  position: fixed;
-  inset: 0;
-  background: color-mix(in srgb, var(--bg) 74%, transparent);
-}
-
-.bitmask-layer {
-  z-index: 80;
-}
-
-.calc-layer {
-  z-index: 82;
 }
 
 .bitmask-window,
@@ -177,7 +154,7 @@ main.main-terminal .terminal-shell {
   height: 8px;
   background: repeating-linear-gradient(
     135deg,
-    #494949 0 1px,
+    var(--border-strong) 0 1px,
     transparent 1px 2px
   );
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
@@ -206,6 +183,7 @@ main.main-terminal .terminal-shell {
   border-bottom: 1px solid var(--border);
   background: var(--panel-alt);
   cursor: move;
+  -webkit-user-select: none;
   user-select: none;
   touch-action: none;
 }
@@ -223,6 +201,7 @@ main.main-terminal .terminal-shell {
 
 .bitmask-close,
 .calc-close {
+  --nv-icon-size: 14px;
   width: 20px;
   height: 20px;
   min-width: 20px;
@@ -237,15 +216,6 @@ main.main-terminal .terminal-shell {
 .bitmask-close:hover,
 .calc-close:hover {
   color: var(--accent);
-}
-
-.bitmask-close .close-icon,
-.calc-close .close-icon {
-  width: 14px;
-  height: 14px;
-  display: block;
-  background-color: currentColor;
-  mask: url('/main/icons/ui/x.svg') center / contain no-repeat;
 }
 
 .bitmask-body {
@@ -642,7 +612,9 @@ main.main-terminal .terminal-shell {
   letter-spacing: 0.02em;
 }
 
-.console-line.muted {
+.console-line.muted,
+.console-comment,
+.console-muted {
   color: var(--muted);
 }
 
@@ -653,14 +625,6 @@ main.main-terminal .terminal-shell {
 .console-animation {
   width: 100%;
   margin: 6px 0 4px;
-}
-
-.console-comment {
-  color: var(--muted);
-}
-
-.console-muted {
-  color: var(--muted);
 }
 
 .console-prompt-text {
@@ -801,19 +765,8 @@ main.main-terminal .terminal-shell {
   }
 }
 
-@media (max-width: 720px) {
-  body:has(main.main-terminal) {
-    min-height: 100lvh;
-  }
-
-  main.main-terminal {
-    flex: 1 0 auto;
-    min-height: auto;
-    overflow: visible;
-    padding: 0;
-  }
-
-  main.main-terminal .terminal-shell {
+@container page (max-width: 720px) {
+  .main-terminal .terminal-shell {
     flex: 1 0 auto;
     overflow: visible;
   }

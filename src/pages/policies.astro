@@ -1,53 +1,34 @@
 ---
-import NoverseLayout from '../layouts/NoverseLayout.astro';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import Icon from '../components/Icon.astro';
+import '../styles/widgets.css';
 import SettingsDialog from '../components/dialogs/SettingsDialog.astro';
-import policyStyles from '../styles/policies.css?url';
-import searchStyles from '../styles/search.css?url';
+import '../styles/policies.css';
+import '../styles/search.css';
 ---
 
-<NoverseLayout
-  title="Policies - Noverse"
-  description="Group Policy Explorer"
-  page="policies"
-  styles={[policyStyles, searchStyles]}
+<StarlightPage
+  frontmatter={{
+    title: 'Group Policy Explorer',
+    description: 'Group Policy Explorer',
+    tableOfContents: false,
+  }}
 >
-  <main id="main" class="policies-main">
-    <section
-      class="policy-hide-detail"
-      id="policy-explorer"
-      data-title="policies"
-      aria-busy="true"
-    >
+  <div class="site-content not-content policies-main">
+    <section class="policy-hide-detail" id="policy-explorer" aria-busy="true">
       <div class="panel-body">
-        <div class="policy-intro">
-          <div class="policy-title-row">
-            <h1 class="page-heading">Group Policy Explorer</h1>
-            <!-- prettier-ignore -->
-            <span class="policy-source-note">
-              (based on
-              <a class="link" href="https://github.com/nohuto/admx-parser" rel="noopener noreferrer">admx-parser</a>)
-            </span>
-          </div>
-          <div class="page-divider"></div>
-        </div>
-
         <div class="policy-toolbar">
           <div class="policy-search-field">
             <div class="policy-search-row">
               <div class="nv-search-box">
-                <span class="nv-search-icon" aria-hidden="true"></span>
+                <Icon name="search" class="nv-search-icon" />
                 <input
                   id="policy-search"
                   type="text"
                   autocomplete="off"
                   spellcheck="false"
                   aria-label="Search policies"
-                  aria-keyshortcuts="Control+K"
                 />
-                <kbd class="nv-search-shortcut" aria-hidden="true">
-                  <kbd>Ctrl</kbd>
-                  <kbd>K</kbd>
-                </kbd>
               </div>
               <button
                 id="policy-settings"
@@ -55,7 +36,7 @@ import searchStyles from '../styles/search.css?url';
                 aria-label="Settings"
                 title="Settings"
               >
-                <span class="settings-icon" aria-hidden="true"></span>
+                <Icon name="settings" />
               </button>
             </div>
           </div>
@@ -64,27 +45,22 @@ import searchStyles from '../styles/search.css?url';
               <button
                 id="policy-view-trigger"
                 type="button"
-                aria-haspopup="menu"
+                aria-controls="policy-view-menu"
                 aria-expanded="false"
               >
                 <span>View</span>
                 <span class="policy-view-chevron" aria-hidden="true"></span>
               </button>
-              <div
-                class="policy-view-menu"
-                id="policy-view-menu"
-                role="menu"
-                hidden
-              >
-                <label class="policy-view-option" role="menuitemcheckbox">
+              <div class="policy-view-menu" id="policy-view-menu" hidden>
+                <label class="policy-view-option">
                   <input type="checkbox" data-policy-pane="tree" checked />
                   <span>Tree</span>
                 </label>
-                <label class="policy-view-option" role="menuitemcheckbox">
+                <label class="policy-view-option">
                   <input type="checkbox" data-policy-pane="table" checked />
                   <span>Table</span>
                 </label>
-                <label class="policy-view-option" role="menuitemcheckbox">
+                <label class="policy-view-option">
                   <input type="checkbox" data-policy-pane="detail" />
                   <span>Details</span>
                 </label>
@@ -94,7 +70,7 @@ import searchStyles from '../styles/search.css?url';
               <button
                 id="policy-column-trigger"
                 type="button"
-                aria-haspopup="menu"
+                aria-controls="policy-column-menu"
                 aria-expanded="false"
               >
                 <span>Table</span>
@@ -263,9 +239,8 @@ import searchStyles from '../styles/search.css?url';
         </SettingsDialog>
       </div>
     </section>
-  </main>
+  </div>
   <script>
     import '../scripts/policies/policies.ts';
-    import '../scripts/search/shortcut';
   </script>
-</NoverseLayout>
+</StarlightPage>

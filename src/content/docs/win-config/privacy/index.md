@@ -1,0 +1,53 @@
+---
+slug: docs/win-config/privacy
+title: 'Overview'
+description: 'Auto-generated overview for Privacy.'
+editUrl: false
+sidebar:
+  hidden: true
+  order: 5
+---
+
+- [App Configuration](/docs/win-config/privacy/app-configuration/)
+- [General Telemetry](/docs/win-config/privacy/disable-general-telemetry/)
+- [WER](/docs/win-config/privacy/disable-wer/)
+- [Troubleshooter Preference](/docs/win-config/privacy/troubleshooter-preference/)
+- [Suggestions/Tips/Tricks](/docs/win-config/privacy/disable-suggestions-tips-tricks/)
+- [Automatic Map Downloads](/docs/win-config/privacy/disable-automatic-map-downloads/)
+- [Time Sync](/docs/win-config/privacy/disable-time-sync/)
+- [Cross-Device Experiences](/docs/win-config/privacy/disable-cross-device-experiences/)
+- [Phone Linking](/docs/win-config/privacy/disable-phone-linking/)
+- [Hide Last Logged-In User](/docs/win-config/privacy/hide-last-logged-in-user/)
+- [Background Apps](/docs/win-config/privacy/disable-background-apps/)
+- [Apps for Websites](/docs/win-config/privacy/disable-apps-for-websites/)
+- [Clipboard](/docs/win-config/privacy/disable-clipboard/)
+- [Auto Maintenance](/docs/win-config/privacy/disable-auto-maintenance/)
+- [Microsoft Copilot](/docs/win-config/privacy/disable-microsoft-copilot/)
+- [Recall](/docs/win-config/privacy/disable-recall/)
+- [Xbox Game Bar](/docs/win-config/privacy/disable-xbox-game-bar/)
+- [Location Access](/docs/win-config/privacy/disable-location-access/)
+- [Sensors](/docs/win-config/privacy/disable-sensors/)
+- [PowerShell & .NET Telemetry](/docs/win-config/privacy/disable-powershell-net-telemetry/)
+- [Biometrics](/docs/win-config/privacy/disable-biometrics/)
+- [Remote Desktop](/docs/win-config/privacy/disable-remote-desktop/)
+- [Deny App Access](/docs/win-config/privacy/deny-app-access/)
+- [Startup ETS](/docs/win-config/privacy/disable-startup-ets/)
+- [Text Input Hosts](/docs/win-config/privacy/disable-text-input-hosts/)
+- [Camera](/docs/win-config/privacy/disable-camera/)
+- [Synchronization](/docs/win-config/privacy/disable-synchronization/)
+- [Activity History](/docs/win-config/privacy/disable-activity-history/)
+- [File History](/docs/win-config/privacy/disable-file-history/)
+- [MDM Enrollment](/docs/win-config/privacy/disable-mdm-enrollment/)
+- [Cortana](/docs/win-config/privacy/disable-cortana/)
+- [DRM Internet Access](/docs/win-config/privacy/disable-drm-internet-access/)
+- [Sleep Study](/docs/win-config/privacy/disable-sleep-study/)
+- [CSC](/docs/win-config/privacy/disable-csc/)
+- [Cloud Content Search](/docs/win-config/privacy/disable-cloud-content-search/)
+- [Microsoft Accounts](/docs/win-config/privacy/microsoft-accounts/)
+- [Font Providers](/docs/win-config/privacy/disable-font-providers/)
+- [Thumbnail Caching](/docs/win-config/privacy/disable-thumbnail-caching/)
+- [Application Compatibility](/docs/win-config/privacy/disable-application-compatibility/)
+- [OneSettings Download](/docs/win-config/privacy/disable-onesettings-download/)
+- [F1 Help Key](/docs/win-config/privacy/disable-f1-help-key/)
+- [Find My Device](/docs/win-config/privacy/disable-find-my-device/)
+- [WMPlayer Telemetry](/docs/win-config/privacy/disable-wmplayer-telemetry/)

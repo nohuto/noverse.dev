@@ -1,0 +1,130 @@
+---
+import Icon from './Icon.astro';
+---
+
+<dialog class="image-viewer" aria-label="Image">
+  <button
+    class="image-viewer-close nv-soft-backdrop"
+    type="button"
+    aria-label="Close image"
+    title="Close image"
+  >
+    <Icon name="zen-exit" />
+  </button>
+  <img alt="" />
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('.image-viewer');
+  const image = dialog?.querySelector('img');
+  if (dialog && image) {
+    const open = (src: string, alt: string) => {
+      image.src = src;
+      image.alt = alt;
+      dialog.showModal();
+    };
+    document.addEventListener('click', (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const link = target?.closest<HTMLAnchorElement>('a[data-image-view]');
+      const plain =
+        event.button === 0 &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.shiftKey &&
+        !event.altKey;
+      if (link && plain) {
+        event.preventDefault();
+        open(link.href, link.dataset.imageView || '');
+        return;
+      }
+      const docImage = target?.closest<HTMLImageElement>(
+        '.sl-markdown-content img',
+      );
+      if (docImage && !docImage.closest('a'))
+        open(docImage.currentSrc || docImage.src, docImage.alt);
+    });
+    dialog.addEventListener('click', (event) => {
+      if (event.target !== image) dialog.close();
+    });
+    dialog.addEventListener('close', () => image.removeAttribute('src'));
+  }
+</script>
+
+<style is:global>
+  .image-viewer {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 3rem 1rem 1rem;
+    border: 0;
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+  }
+
+  .image-viewer[open] {
+    display: grid;
+    place-items: center;
+  }
+
+  .image-viewer::backdrop {
+    background: transparent;
+  }
+
+  .image-viewer img {
+    max-width: 100%;
+    max-height: calc(100dvh - 4rem);
+  }
+
+  .image-viewer-close {
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    --nv-icon-size: 18px;
+  }
+
+  .image-viewer-close:is(:hover, :focus-visible) {
+    color: var(--accent);
+    outline: none;
+  }
+
+  .image-expand {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    background: color-mix(in srgb, var(--panel) 90%, transparent);
+    color: var(--text);
+  }
+
+  .image-expand:is(:hover, :focus-visible) {
+    color: var(--accent);
+  }
+
+  @media (hover: hover) {
+    .image-expand {
+      opacity: 0;
+      transition: opacity var(--nv-motion);
+    }
+
+    :is(:hover, :focus-within) > .image-expand {
+      opacity: 1;
+    }
+  }
+
+  .sl-markdown-content img:not(a img) {
+    cursor: zoom-in;
+  }
+</style>

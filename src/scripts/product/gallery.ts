@@ -29,37 +29,24 @@ if (gallery) {
   gallery.addEventListener('scroll', () => {
     if (status) status.textContent = `Screenshot ${current() + 1} of ${count}`;
   });
-
-  const viewer = document.querySelector<HTMLDialogElement>(
-    '#product-image-viewer',
-  );
-  const image = document.querySelector<HTMLImageElement>(
-    '#product-expanded-image',
-  );
-  if (viewer && image) {
-    gallery.addEventListener('click', (event) => {
-      const link = (event.target as Element).closest<HTMLAnchorElement>(
-        '.product-slide',
-      );
-      if (
-        !link ||
-        event.button !== 0 ||
-        event.ctrlKey ||
-        event.metaKey ||
-        event.shiftKey ||
-        event.altKey
-      )
-        return;
-      event.preventDefault();
-      image.src = link.href;
-      image.alt = link.querySelector('img')?.alt || '';
-      viewer.showModal();
-    });
-    viewer
-      .querySelector('button')
-      ?.addEventListener('click', () => viewer.close());
-    viewer.addEventListener('click', (event) => {
-      if (event.target === viewer) viewer.close();
-    });
-  }
 }
+
+function revealFragment(hash = location.hash) {
+  if (!hash) return;
+  let target: HTMLElement | null;
+  try {
+    target = document.getElementById(decodeURIComponent(hash.slice(1)));
+  } catch {
+    return;
+  }
+  const disclosure = target?.closest('details');
+  if (disclosure) disclosure.open = true;
+}
+revealFragment();
+window.addEventListener('hashchange', () => revealFragment());
+document.addEventListener('click', (event) => {
+  const link =
+    event.target instanceof Element ? event.target.closest('a') : null;
+  if (link?.origin === location.origin && link.pathname === location.pathname)
+    revealFragment(link.hash);
+});

@@ -1,52 +1,59 @@
 ---
-import { mainRoutes } from '../../data/navigation';
-interface Props {
-  page: string;
-}
-const { page } = Astro.props;
+import Icon from '../Icon.astro';
+import ThemeControls from './ThemeControls.astro';
 ---
 
 <a class="skip-link" href="#main">
   Skip to content
 </a>
-<div class="overlay" aria-hidden="true">
-  <div class="stars"></div>
-</div>
-<header class="prompt-bar">
-  <a class="prompt-line link" href="/" aria-label="Noverse home">
-    <span class="prompt-user">nohuto</span>
-    <span class="prompt-sep">@</span>
-    <span class="prompt-host">noverse</span>
-  </a>
-  <button
-    class="theme-toggle"
-    type="button"
-    data-theme-toggle
-    aria-label="Switch to light theme"
-  >
-    <span class="theme-toggle-icon" aria-hidden="true"></span>
-  </button>
-  <nav class="nav-tabs" aria-label="Primary navigation">
-    {mainRoutes.map((route) => (
-      <a
-        href={route.path}
-        class:list={{ active: page === route.page }}
-        aria-current={page === route.page ? 'page' : undefined}
-      >
-        {route.label}
-      </a>
-    ))}
-    <a href="/docs/">docs</a>
+<header class="site-header">
+  <nav class="site-nav nv-soft-backdrop" aria-label="Site">
+    <a class="site-nav-text" href="/overview/">
+      Main site
+    </a>
+    <span class="site-nav-divider" aria-hidden="true"></span>
+    <a
+      href="https://github.com/nohuto"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="GitHub"
+      title="GitHub"
+    >
+      <Icon name="github" />
+    </a>
+    <button
+      type="button"
+      data-email="copy"
+      data-toast="Email copied"
+      aria-label="Copy email address"
+      title="Copy email address"
+    >
+      <Icon name="mail" />
+    </button>
+    <a
+      href="https://discord.noverse.dev"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Discord"
+      title="Discord"
+    >
+      <Icon name="discord" />
+    </a>
+    <a
+      href="https://pgp.noverse.dev"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Public PGP key"
+      title="Public PGP key"
+    >
+      <Icon name="key" />
+    </a>
+    <span class="site-nav-divider" aria-hidden="true"></span>
+    <ThemeControls />
   </nav>
 </header>
 
-<script is:inline>
-  const header = document.querySelector('.prompt-bar');
-  const syncHeaderHeight = () =>
-    document.documentElement.style.setProperty(
-      '--header-height',
-      `${header.getBoundingClientRect().height}px`,
-    );
-  syncHeaderHeight();
-  new ResizeObserver(syncHeaderHeight).observe(header);
+<script>
+  import { initClipboard } from '../../scripts/shell/clipboard';
+  initClipboard();
 </script>

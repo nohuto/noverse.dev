@@ -6,7 +6,7 @@ const sources = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true },
 );
 
-export function sourceImage(path: string): ImageMetadata {
+function sourceImage(path: string): ImageMetadata {
   const source = sources[`../image-sources${path}`];
   if (!source)
     throw new Error(`Missing image source: src/image-sources${path}`);

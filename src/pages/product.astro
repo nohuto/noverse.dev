@@ -1,7 +1,11 @@
 ---
-import NoverseLayout from '../layouts/NoverseLayout.astro';
-import productStyles from '../styles/product.css?url';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import Icon from '../components/Icon.astro';
+import '../styles/widgets.css';
+import '../styles/product.css';
+import '../styles/section-heading.css';
 import { webpWidths } from '../utils/images';
+import paypalMethods from '../image-sources/main/images/paypal-methods.svg?url';
 
 const preview = async (name: string, label: string, linkOriginal = true) => {
   const image = await webpWidths(`/main/images/${name}.png`, [640, 960]);
@@ -19,17 +23,24 @@ const previews = await Promise.all([
 ]);
 ---
 
-<NoverseLayout
-  title="Product - Noverse"
-  description="Windows Configuration product"
-  page="product"
-  styles={[productStyles]}
+<StarlightPage
+  frontmatter={{
+    title: 'Windows Configuration',
+    description: 'Windows Configuration product',
+  }}
+  headings={[
+    { depth: 2, slug: 'terms', text: 'Miscellaneous Information' },
+    { depth: 3, slug: 'refund-policy', text: 'Refund Policy' },
+    { depth: 3, slug: 'license', text: 'License' },
+    { depth: 3, slug: 'data-privacy', text: 'Data Privacy' },
+    { depth: 3, slug: 'usage-redistribution', text: 'Usage & Redistribution' },
+    { depth: 3, slug: 'after-purchase', text: 'After Purchase' },
+  ]}
 >
-  <main id="main" class="product-main">
-    <section id="product" data-title="product">
+  <div class="site-content not-content product-main">
+    <section id="product">
       <div class="product-overview">
         <div class="product-details">
-          <h1 class="page-heading">Windows Configuration</h1>
           <div class="product-intro">
             <p>
               A tool for modifying your system alongside my documentation
@@ -58,27 +69,30 @@ const previews = await Promise.all([
             class="product-slides"
             id="product-slides"
             tabindex="0"
+            role="group"
             aria-label="Screenshots, use left and right arrow keys"
           >
             {previews.map(({ label, href, image }, index) => (
               <a
                 class="product-slide"
                 href={href}
-                target="_blank"
-                rel="noopener noreferrer"
+                data-image-view={`WinConfig in ${label}`}
                 aria-label={`Open full-size ${label} screenshot`}
               >
                 <img
                   decoding="async"
                   src={image.byWidth[640]}
                   srcset={image.srcset}
-                  sizes="(max-width: 900px) calc(100vw - 32px), 540px"
+                  sizes="(max-width: 759px) calc(100vw - 56px), 640px"
                   width={image.source.width}
                   height={image.source.height}
                   alt={`WinConfig in ${label}`}
                   loading={index === 0 ? 'eager' : 'lazy'}
                   fetchpriority={index === 0 ? 'high' : undefined}
                 />
+                <span class="image-expand" aria-hidden="true">
+                  <Icon name="zen" />
+                </span>
               </a>
             ))}
           </div>
@@ -90,9 +104,7 @@ const previews = await Promise.all([
             aria-controls="product-slides"
             hidden
           >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="m15 6-6 6 6 6" />
-            </svg>
+            <Icon name="chevron-left" />
           </button>
           <button
             class="product-gallery-arrow next"
@@ -102,9 +114,7 @@ const previews = await Promise.all([
             aria-controls="product-slides"
             hidden
           >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="m9 6 6 6-6 6" />
-            </svg>
+            <Icon name="chevron-right" />
           </button>
           <span
             id="product-gallery-status"
@@ -131,7 +141,7 @@ const previews = await Promise.all([
                 <img
                   decoding="async"
                   class="paypal-button-logo"
-                  src="/main/images/paypal-methods.svg"
+                  src={paypalMethods}
                   width="140"
                   height="20"
                   alt="PayPal"
@@ -162,11 +172,16 @@ const previews = await Promise.all([
 
       <div class="product-terms">
         <div class="legal-section" id="terms">
-          <h2 class="legal-heading">Miscellaneous Information</h2>
+          <div class="section-heading">
+            <h2>Miscellaneous information</h2>
+          </div>
           <div class="legal-list">
             <div class="legal-column">
               <details class="legal-item">
-                <summary>Refund Policy</summary>
+                <summary id="refund-policy">
+                  Refund Policy
+                  <Icon name="chevron-down" />
+                </summary>
                 <p>
                   Refunds are available only if no registration has been made
                   and no Discord role has been assigned. Include proof of
@@ -174,9 +189,12 @@ const previews = await Promise.all([
                 </p>
               </details>
               <details class="legal-item">
-                <summary>License</summary>
+                <summary id="license">
+                  License
+                  <Icon name="chevron-down" />
+                </summary>
                 <p>
-                  Each purchase includes one hardware bound license. Keys do not
+                  Each purchase includes one hardware bound license. Keys don't
                   transfer across devices without reregistration (which is
                   possible within certain limits). Updates and a Discord role
                   are included.
@@ -185,7 +203,10 @@ const previews = await Promise.all([
             </div>
             <div class="legal-column">
               <details class="legal-item">
-                <summary>Data Privacy</summary>
+                <summary id="data-privacy">
+                  Data Privacy
+                  <Icon name="chevron-down" />
+                </summary>
                 <p>
                   WinConfig uses three hardware identifiers for license
                   registration and verification, SMBIOS UUID, baseboard serial,
@@ -195,7 +216,10 @@ const previews = await Promise.all([
                 </p>
               </details>
               <details class="legal-item">
-                <summary>Usage &amp; Redistribution</summary>
+                <summary id="usage-redistribution">
+                  Usage &amp; Redistribution
+                  <Icon name="chevron-down" />
+                </summary>
                 <p>
                   Licenses are for personal use only. Reselling, transferring,
                   redistributing, or SRE of WinConfig is prohibited unless you
@@ -204,7 +228,10 @@ const previews = await Promise.all([
                 </p>
               </details>
               <details class="legal-item">
-                <summary>After Purchase</summary>
+                <summary>
+                  After Purchase
+                  <Icon name="chevron-down" />
+                </summary>
                 <p id="after-purchase">
                   To get access, you must either include your Discord ID in the
                   purchase message or send me your transaction ID so I can
@@ -233,23 +260,8 @@ const previews = await Promise.all([
         </div>
       </div>
     </section>
-  </main>
-  <dialog
-    id="product-image-viewer"
-    class="image-viewer"
-    aria-label="Expanded product screenshot"
-  >
-    <button
-      class="image-viewer-close"
-      type="button"
-      aria-label="Close expanded image"
-      autofocus
-    >
-      <span class="settings-close-icon" aria-hidden="true"></span>
-    </button>
-    <img id="product-expanded-image" alt="" />
-  </dialog>
+  </div>
   <script>
     import '../scripts/product/gallery';
   </script>
-</NoverseLayout>
+</StarlightPage>

@@ -1,0 +1,53 @@
+:root {
+  --nv-motion: 0.2s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --nv-motion: 0s;
+  }
+}
+
+.nv-icon {
+  transition: transform var(--nv-motion);
+}
+
+details::details-content {
+  opacity: 0;
+  transition:
+    opacity var(--nv-motion),
+    content-visibility var(--nv-motion) allow-discrete;
+}
+
+details[open]::details-content {
+  opacity: 1;
+}
+
+dialog[open]:not(.nv-modal),
+:popover-open,
+.select-ui.open .select-menu,
+.nv-modal[open] > * {
+  transition:
+    opacity var(--nv-motion),
+    translate var(--nv-motion);
+}
+
+@starting-style {
+  dialog[open]:not(.nv-modal),
+  :popover-open,
+  .select-ui.open .select-menu,
+  .nv-modal[open] > * {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+}
+
+.toast {
+  transition: opacity var(--nv-motion);
+}
+
+@starting-style {
+  .toast.show {
+    opacity: 0;
+  }
+}

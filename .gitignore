@@ -1,5 +1,6 @@
 /dist/
 /node_modules/
 /sources/
-/todo.md
+/todo/
 /.astro/
+/.cache/

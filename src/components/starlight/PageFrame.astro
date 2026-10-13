@@ -1,0 +1,67 @@
+---
+import Default from '@astrojs/starlight/components/PageFrame.astro';
+import Icon from '../Icon.astro';
+import Background from '../shell/Background.astro';
+import ImageViewer from '../ImageViewer.astro';
+import {
+  SIDEBAR_DEFAULT_WIDTH,
+  SIDEBAR_MAX_WIDTH,
+  SIDEBAR_MIN_WIDTH,
+} from '../../utils/sidebar-width';
+const { hasSidebar } = Astro.locals.starlightRoute;
+---
+
+<Background />
+<ImageViewer />
+<Default>
+  <slot name="header" slot="header" />
+  <slot name="sidebar" slot="sidebar" />
+  <slot />
+</Default>
+{hasSidebar && (
+  <div
+    class="sidebar-resizer"
+    role="separator"
+    tabindex="0"
+    aria-label="Resize sidebar"
+    aria-orientation="vertical"
+    aria-controls="starlight__sidebar"
+    aria-valuemin={SIDEBAR_MIN_WIDTH}
+    aria-valuemax={SIDEBAR_MAX_WIDTH}
+    aria-valuenow={SIDEBAR_DEFAULT_WIDTH}
+  ></div>
+)}
+<button
+  type="button"
+  class="nv-icon-button nv-soft-backdrop zen-exit"
+  aria-label="Exit Zen mode"
+  title="Exit Zen mode (Ctrl+Shift+X)"
+  data-zen-toggle
+>
+  <Icon name="zen-exit" />
+</button>
+<button
+  type="button"
+  class="scroll-to-top-button"
+  aria-label="Scroll to top"
+  title="Scroll to top"
+>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M7 14l5-5 5 5 M7 19l5-5 5 5"></path>
+  </svg>
+</button>
+<script>
+  import 'virtual:noverse-main-site-plugins';
+  import '../../scripts/site-shell';
+</script>
+{Astro.url.pathname.startsWith('/docs/') && <script>
+  import 'virtual:noverse-docs-plugins';
+</script>}

@@ -1,99 +1,55 @@
 ---
 import Header from '../components/shell/Header.astro';
-import Footer from '../components/shell/Footer.astro';
-import {
-  BG_KEY,
-  DEFAULT_BG,
-  DEFAULT_DARK_THEME,
-  DEFAULT_LIGHT_THEME,
-  THEME_KEY,
-  THEME_SYSTEM,
-  backgrounds,
-  themes,
-} from '../data/themes';
-import appearanceStyles from '../styles/appearance.css?url';
-import siteStyles from '../styles/site.css?url';
+import ThemeInit from '../components/shell/ThemeInit.astro';
+import ImageViewer from '../components/ImageViewer.astro';
+import Icon from '../components/Icon.astro';
+import '../styles/site.css';
 
 interface Props {
   title: string;
   description: string;
-  page: string;
-  noShell?: boolean;
-  styles?: string[];
 }
-const { title, description, page, noShell = false, styles = [] } = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <!doctype html>
-<html
-  lang="en"
-  data-theme-setting="system"
-  data-theme={DEFAULT_DARK_THEME}
-  data-bg={DEFAULT_BG}
->
+<html lang="en" data-theme-setting="system" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {noShell ? (
-      <slot name="head" />
-    ) : (
-      <script
-        is:inline
-        define:vars={{
-          themeKey: THEME_KEY,
-          themeOptions: themes.map(([value]) => value),
-          systemTheme: THEME_SYSTEM,
-          darkTheme: DEFAULT_DARK_THEME,
-          lightTheme: DEFAULT_LIGHT_THEME,
-          bgKey: BG_KEY,
-          bgOptions: backgrounds,
-          defaultBg: DEFAULT_BG,
-        }}
-      >
-        const read = (key) => {
-          try {
-            return (localStorage.getItem(key) || '').trim();
-          } catch {
-            return '';
-          }
-        };
-        const root = document.documentElement;
-        const theme = read(themeKey);
-        const setting = themeOptions.includes(theme) ? theme : systemTheme;
-        root.dataset.themeSetting = setting;
-        root.dataset.theme =
-          setting !== systemTheme
-            ? setting
-            : matchMedia('(prefers-color-scheme: light)').matches
-              ? lightTheme
-              : darkTheme;
-        const bg = read(bgKey);
-        root.dataset.bg = bgOptions.includes(bg) ? bg : defaultBg;
-      </script>
-    )}
+    <ThemeInit />
     <meta name="description" content={description} />
-    <link rel="stylesheet" href={appearanceStyles} />
-    <link rel="stylesheet" href={siteStyles} />
-    {styles.map((href) => (
-      <link rel="stylesheet" href={href} />
-    ))}
     <title>{title}</title>
     <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link
       rel="preload"
-      href="/main/fonts/NoverseMono-2407.24.woff2"
+      href="/main/fonts/InterVariable-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
   </head>
-  <body class:list={{ 'has-site-header': !noShell }}>
-    {!noShell && <Header page={page} />}
+  <body class="site-content">
+    <div class="site-art" aria-hidden="true"></div>
+    <Header />
     <slot />
-    {!noShell && <Footer />}
-    {!noShell && <script>
-      import '../scripts/shell/interface-controls.ts';
-    </script>}
+    <footer class="site-footer">
+      <Icon name="copyright" />
+      {new Date().getFullYear()} nohuto
+    </footer>
+    <ImageViewer />
+    <script>
+      const art = document.querySelector<HTMLElement>('.site-art');
+      const main = document.querySelector('main');
+      const start = () =>
+        import('../scripts/art/substrate').then(({ mountArt }) =>
+          mountArt(art!, main!),
+        );
+      if (art && main)
+        'requestIdleCallback' in window
+          ? requestIdleCallback(start, { timeout: 2000 })
+          : setTimeout(start, 200);
+    </script>
   </body>
 </html>

@@ -1,23 +1,22 @@
 ---
-import NoverseLayout from '../layouts/NoverseLayout.astro';
+import Icon from '../components/Icon.astro';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import '../styles/widgets.css';
 import SettingsDialog from '../components/dialogs/SettingsDialog.astro';
-import diffStyles from '../styles/diff.css?url';
+import '../styles/diff.css';
 ---
 
-<NoverseLayout
-  title="Diff - Noverse"
-  description="Compare decompiled pseudocode, type layouts, and globals"
-  page="diff"
-  styles={[diffStyles]}
+<StarlightPage
+  frontmatter={{
+    title: 'Pseudocode, Type Layout & Globals Diff',
+    description: 'Compare decompiled pseudocode, type layouts, and globals',
+    tableOfContents: false,
+  }}
 >
-  <main id="main" class="bindiff-main">
-    <section id="diff-app" data-title="diff" aria-busy="true">
+  <div class="site-content not-content bindiff-main">
+    <section id="diff-app" aria-busy="true">
       <div class="panel-body">
         <div class="bindiff-intro">
-          <h1 class="page-heading">
-            Pseudocode, type layout &amp; globals diff
-          </h1>
-          <div class="page-divider"></div>
           <!-- prettier-ignore -->
           <p>
             Compare or display (shows content of left build)
@@ -91,7 +90,6 @@ import diffStyles from '../styles/diff.css?url';
               <select
                 class="select-enhanced"
                 data-searchable="true"
-                data-search-limit="300"
                 id="diff-name"
                 name="name"
               >
@@ -113,258 +111,90 @@ import diffStyles from '../styles/diff.css?url';
         </div>
 
         <div class="bindiff-output-frame">
-          <div
-            class="bindiff-view-tools bindiff-frame-view-tools"
-            id="diff-view-tools"
-          >
+          <div class="bindiff-toolbar">
             <div
-              class="bindiff-view-toggle"
-              aria-label="View mode"
-              id="diff-view-mode"
-              role="group"
+              class="bindiff-view-tools bindiff-frame-view-tools"
+              id="diff-view-tools"
             >
-              <button
-                class="bindiff-view-button is-active"
-                type="button"
-                data-mode="side-by-side"
-                aria-label="Side by side"
-                title="Side by side"
-                aria-pressed="true"
+              <div
+                class="bindiff-view-toggle"
+                aria-label="View mode"
+                id="diff-view-mode"
+                role="group"
               >
-                <svg
-                  class="bindiff-view-icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                  focusable="false"
+                <button
+                  class="bindiff-view-button is-active"
+                  type="button"
+                  data-mode="side-by-side"
+                  aria-label="Side by side"
+                  title="Side by side"
+                  aria-pressed="true"
                 >
-                  <path d="M12 4l0 16"></path>
-                  <path d="M4 4l0 .01"></path>
-                  <path d="M8 4l0 .01"></path>
-                  <path d="M16 4l0 .01"></path>
-                  <path d="M20 4l0 .01"></path>
-                  <path d="M4 8l0 .01"></path>
-                  <path d="M20 8l0 .01"></path>
-                  <path d="M4 12l0 .01"></path>
-                  <path d="M8 12l0 .01"></path>
-                  <path d="M16 12l0 .01"></path>
-                  <path d="M20 12l0 .01"></path>
-                  <path d="M4 16l0 .01"></path>
-                  <path d="M20 16l0 .01"></path>
-                  <path d="M4 20l0 .01"></path>
-                  <path d="M8 20l0 .01"></path>
-                  <path d="M16 20l0 .01"></path>
-                  <path d="M20 20l0 .01"></path>
-                </svg>
-                <span class="sr-only">Side by side</span>
+                  <Icon name="layout-column" />
+                </button>
+                <button
+                  class="bindiff-view-button"
+                  type="button"
+                  data-mode="line-by-line"
+                  aria-label="Line by line"
+                  title="Line by line"
+                  aria-pressed="false"
+                >
+                  <Icon name="layout-row" />
+                </button>
+              </div>
+            </div>
+            <div class="bindiff-font-tools" id="diff-font-tools">
+              <button
+                class="bindiff-icon-button"
+                id="diff-font-decrease"
+                type="button"
+                aria-label="Decrease font size"
+                title="Decrease font size"
+              >
+                <Icon name="zoom-out" />
               </button>
               <button
-                class="bindiff-view-button"
+                class="bindiff-icon-button"
+                id="diff-font-increase"
                 type="button"
-                data-mode="line-by-line"
-                aria-label="Line by line"
-                title="Line by line"
-                aria-pressed="false"
+                aria-label="Increase font size"
+                title="Increase font size"
               >
-                <svg
-                  class="bindiff-view-icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <path d="M4 12l16 0"></path>
-                  <path d="M4 4l0 .01"></path>
-                  <path d="M8 4l0 .01"></path>
-                  <path d="M12 4l0 .01"></path>
-                  <path d="M16 4l0 .01"></path>
-                  <path d="M20 4l0 .01"></path>
-                  <path d="M4 8l0 .01"></path>
-                  <path d="M12 8l0 .01"></path>
-                  <path d="M20 8l0 .01"></path>
-                  <path d="M4 16l0 .01"></path>
-                  <path d="M12 16l0 .01"></path>
-                  <path d="M20 16l0 .01"></path>
-                  <path d="M4 20l0 .01"></path>
-                  <path d="M8 20l0 .01"></path>
-                  <path d="M12 20l0 .01"></path>
-                  <path d="M16 20l0 .01"></path>
-                  <path d="M20 20l0 .01"></path>
-                </svg>
-                <span class="sr-only">Line by line</span>
+                <Icon name="zoom-in" />
               </button>
             </div>
-          </div>
-          <div class="bindiff-font-tools" id="diff-font-tools">
             <button
               class="bindiff-icon-button"
-              id="diff-font-decrease"
+              id="diff-swap"
               type="button"
-              aria-label="Decrease font size"
-              title="Decrease font size"
+              aria-label="Swap builds"
+              title="Swap builds"
             >
-              <svg
-                class="bindiff-tool-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M4 19l4.5 -11.5"></path>
-                <path d="M13 19l-4.5 -11.5"></path>
-                <path d="M5.5 15h6"></path>
-                <path d="M16 16h4"></path>
-              </svg>
-              <span class="sr-only">Decrease font size</span>
+              <Icon name="swap" />
             </button>
             <button
               class="bindiff-icon-button"
-              id="diff-font-increase"
+              id="diff-settings"
               type="button"
-              aria-label="Increase font size"
-              title="Increase font size"
+              aria-label="Settings"
+              title="Settings"
+              disabled
             >
-              <svg
-                class="bindiff-tool-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M4 19l5 -13"></path>
-                <path d="M14 19l-5 -13"></path>
-                <path d="M6 14h6"></path>
-                <path d="M18 14v6"></path>
-                <path d="M15 17h6"></path>
-              </svg>
-              <span class="sr-only">Increase font size</span>
+              <Icon name="settings" />
+            </button>
+            <button
+              class="bindiff-icon-button"
+              id="diff-maximize"
+              type="button"
+              aria-pressed="false"
+              aria-label="Maximize"
+              title="Maximize"
+            >
+              <Icon name="zen" class="icon-maximize" />
+              <Icon name="zen-exit" class="icon-minimize" />
             </button>
           </div>
-          <button
-            id="diff-swap"
-            type="button"
-            aria-label="Swap builds"
-            title="Swap builds"
-          >
-            <svg
-              class="bindiff-swap-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M16 3l4 4l-4 4"></path>
-              <path d="M10 7h10"></path>
-              <path d="M8 13l-4 4l4 4"></path>
-              <path d="M4 17h9"></path>
-            </svg>
-            <span class="sr-only">Swap builds</span>
-          </button>
-          <button
-            id="diff-settings"
-            type="button"
-            aria-label="Settings"
-            title="Settings"
-            disabled
-          >
-            <span class="settings-icon" aria-hidden="true"></span>
-            <span class="sr-only">Settings</span>
-          </button>
-          <button
-            id="diff-maximize"
-            type="button"
-            aria-pressed="false"
-            aria-label="Maximize"
-            title="Maximize"
-          >
-            <svg
-              class="bindiff-maximize-icon icon-maximize"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M16 4h4v4"></path>
-              <path d="M14 10l6 -6"></path>
-              <path d="M8 20h-4v-4"></path>
-              <path d="M4 20l6 -6"></path>
-              <path d="M16 20h4v-4"></path>
-              <path d="M14 14l6 6"></path>
-              <path d="M8 4h-4v4"></path>
-              <path d="M4 4l6 6"></path>
-            </svg>
-            <svg
-              class="bindiff-maximize-icon icon-minimize"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M5 9h4v-4"></path>
-              <path d="M3 3l6 6"></path>
-              <path d="M5 15h4v4"></path>
-              <path d="M3 21l6 -6"></path>
-              <path d="M19 9h-4v-4"></path>
-              <path d="M15 9l6 -6"></path>
-              <path d="M19 15h-4v4"></path>
-              <path d="M15 15l6 6"></path>
-            </svg>
-            <span class="sr-only">Toggle maximize</span>
-          </button>
           <div id="diff-output" class="bindiff-output" aria-live="off"></div>
         </div>
 
@@ -394,8 +224,8 @@ import diffStyles from '../styles/diff.css?url';
         </div>
       </div>
     </section>
-  </main>
+  </div>
   <script>
-    import '../scripts/diff/diff.ts';
+    import '../scripts/diff/diff';
   </script>
-</NoverseLayout>
+</StarlightPage>

@@ -4,53 +4,34 @@ export interface DiffFile {
   downloadUrl: string;
 }
 
-export interface DiffPair {
-  leftText: string;
-  rightText: string;
-  equivalent: boolean;
-  context: number;
+export type Settings = Record<string, boolean>;
+
+export interface SourceConfig {
+  repository: string;
+  dataset: string;
+  settingsKey: string;
+  defaultModule: string;
+  settings: { key: string; label: string; value: boolean }[];
+  displayName?: (fileName: string) => string;
+  prepare: (text: string, file: DiffFile, settings: Settings) => string;
+  highlightBlockComments?: boolean;
 }
 
-export interface ManifestSource {
+export interface DiffSource {
+  defaultModule: string;
+  settings: SourceConfig['settings'];
+  highlightBlockComments: boolean;
   listReleases(): Promise<string[]>;
   listModules(release: string): Promise<string[]>;
   listNames(release: string, module: string): Promise<DiffFile[]>;
-  sourceUrl(file: DiffFile): string;
   blobUrl(release: string, module: string, file: DiffFile): string;
-  fileLabel(release: string, module: string, file: DiffFile): string;
-}
-
-export interface DiffSource extends ManifestSource {
-  defaultLeft: string;
-  defaultRight: string;
-  defaultModule: string;
+  readSettings(): Settings;
+  writeSettings(values: Settings): void;
+  resetSettings(): void;
+  prepareSingle(text: string, file: DiffFile): string;
   preparePair(
     left: string,
     right: string,
-    leftFile: DiffFile,
-    rightFile: DiffFile,
-  ): DiffPair;
-  prepareSingle(source: string, file: DiffFile): string;
-  renderSettings(body: HTMLElement, onChange: () => void): void;
-  resetSettings(): unknown;
-  highlightBlockComments: boolean;
-}
-
-export interface DiffSettingsStore<T extends object> {
-  read(): T;
-  write(values: T): T;
-  reset(): T;
-  addCheckbox(
-    body: HTMLElement,
-    id: string,
-    label: string,
-    checked: boolean,
-  ): HTMLInputElement;
-}
-
-export interface DiffManifestOptions {
-  repository: string;
-  dataset: string;
-  cacheKey: string;
-  displayName?: (fileName: string) => string;
+    file: DiffFile,
+  ): { leftText: string; rightText: string; context: number };
 }

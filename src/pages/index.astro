@@ -1,29 +1,24 @@
 ---
 import NoverseLayout from '../layouts/NoverseLayout.astro';
-import HomeProjects from '../components/projects/HomeProjects.astro';
-import commits from '../data/commits.json';
-import homeStyles from '../styles/home.css?url';
+import Icon from '../components/Icon.astro';
+import ProjectMedia from '../components/projects/ProjectMedia.astro';
+import { projects } from '../data/projects';
+import '../styles/home.css';
 
-const dateFormatter = new Intl.DateTimeFormat('en', {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
+const selected = projects
+  .filter((project) => project.home)
+  .sort((left, right) => left.home!.order - right.home!.order);
 ---
 
-<NoverseLayout
-  title="Home - Noverse"
-  description="Current work, latest activity"
-  page="index"
-  styles={[homeStyles]}
->
+<NoverseLayout title="nohuto" description="Current work and projects">
   <main id="main" class="home-main">
-    <section data-title="home">
+    <section>
       <header class="home-intro">
         <h1>nohuto</h1>
+        <!-- prettier-ignore -->
         <p>
-          I'm currently studying (and partly documenting, often in relation to
+          I'm currently studying (and partly
+          <a class="link" href="/docs/">documenting</a>, often in relation to
           registry values) Windows internals, with an interest in debugging and
           static analysis. I also spend some time with online privacy &amp;
           security. Note that Noverse is an independent entity, solely managed
@@ -33,129 +28,47 @@ const dateFormatter = new Intl.DateTimeFormat('en', {
         <p class="home-contact">
             You can contact me at
             <button
-              class="home-email"
+              class="home-email link"
               type="button"
               data-email
-              data-email-text
               data-toast="Email copied"
-              aria-label="Copy email address"
-            ></button>
+              title="Copy email address"
+            ><Icon name="tuta" /><span data-email-text></span></button>
             or via
-            <a class="link" href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer">discord</a>,
+            <a class="link" href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer"><Icon name="discord-brand" />discord</a>,
             my public key is available
-            <a class="link" href="https://pgp.noverse.dev">here</a>
-            (<button class="home-fingerprint" type="button" data-fingerprint-open>fingerprint</button>).
+            <a class="link" href="https://pgp.noverse.dev">here</a>.
           </p>
+        <!-- prettier-ignore -->
+        <p>
+          Find a list of projects, documentation etc. on the
+          <a class="link" href="/overview/">main site</a>.
+        </p>
       </header>
 
-      <div
-        class="settings-modal fingerprint-modal"
-        id="fingerprint-modal"
-        hidden
-      >
-        <section
-          class="settings-dialog fingerprint-dialog"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Public key fingerprint"
-        >
-          <header class="settings-header">
-            <span></span>
-            <button
-              class="settings-close"
-              type="button"
-              data-fingerprint-close
-              aria-label="Close fingerprint"
-              title="Close fingerprint"
-            >
-              <span class="settings-close-icon" aria-hidden="true"></span>
-            </button>
-          </header>
-          <div class="settings-body fingerprint-body">
-            <code>
-              BDB8 AE58 93DD 3950 F633
-              <br />
-              1761 4DE7 CA76 A4B6 8BCF
-            </code>
-          </div>
-        </section>
-      </div>
+      <hr class="home-rule" />
 
-      <section class="home-section" aria-labelledby="active-work-title">
-        <div class="section-heading">
-          <h2 id="active-work-title">Active work</h2>
-        </div>
-        <div class="home-work-grid">
-          <HomeProjects />
-        </div>
-      </section>
-
-      <section
-        class="home-section"
-        id="home-commits"
-        aria-labelledby="latest-commits-title"
-      >
-        <div class="section-heading">
-          <h2 id="latest-commits-title">Latest commits</h2>
-        </div>
-        <div class="commit-list">
-          {commits.length ? (
-            commits.map((commit) => (
-              <a
-                class="commit-item"
-                href={commit.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span class="commit-repo">
-                  {commit.repo} <span class="commit-sha">{commit.sha}</span>
-                </span>
-                <span class="commit-message">{commit.message}</span>
-                <time class="commit-date" datetime={commit.date}>
-                  {dateFormatter.format(new Date(commit.date))}
-                </time>
-              </a>
-            ))
-          ) : (
-            <p class="home-status">No recent commits available</p>
-          )}
-        </div>
+      <section class="home-work" aria-labelledby="selected-work-title">
+        <h2 id="selected-work-title">Selected work</h2>
+        {selected.map((project) => (
+          <article class="work">
+            <details class="work-preview">
+              <summary>
+                <h3>{project.title}</h3>
+                <Icon name="chevron-down" />
+              </summary>
+              <ProjectMedia
+                project={project}
+                sizes="(max-width: 656px) calc(100vw - 56px), 600px"
+              />
+            </details>
+            <p class="work-desc">{project.description}</p>
+          </article>
+        ))}
+        <a class="home-more link" href="/projects/">
+          Show all projects
+        </a>
       </section>
     </section>
   </main>
 </NoverseLayout>
-
-<script>
-  import { createDraggableDialogManager } from '../scripts/dialogs/draggable';
-
-  const modal = document.getElementById('fingerprint-modal');
-  const dialog = modal?.querySelector<HTMLElement>('.fingerprint-dialog');
-  const header = modal?.querySelector<HTMLElement>('.settings-header');
-  if (modal && dialog && header) {
-    const manager = createDraggableDialogManager({
-      layer: modal,
-      dialog,
-      handle: header,
-    });
-    document
-      .querySelector('[data-fingerprint-open]')
-      ?.addEventListener('click', () =>
-        manager?.open({
-          initialFocus:
-            modal.querySelector<HTMLElement>('[data-fingerprint-close]') ||
-            undefined,
-          recenter: true,
-        }),
-      );
-    modal.addEventListener('click', (event) => {
-      const target = event.target instanceof Element ? event.target : null;
-      if (target === modal || target?.closest('[data-fingerprint-close]'))
-        manager?.close();
-    });
-    modal.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape') return;
-      event.preventDefault();
-      manager?.close();
-    });
-  }
-</script>

@@ -1,17 +1,37 @@
 ---
-import NoverseLayout from '../layouts/NoverseLayout.astro';
-import terminalStyles from '../styles/terminal.css?url';
+import Icon from '../components/Icon.astro';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import '../styles/widgets.css';
+import '../styles/terminal.css';
+
+const calcTools = [
+  ['x<sup>2</sup>', '^2'],
+  ['x<sup>y</sup>', '^'],
+  ['abs', 'abs('],
+  ['sqrt', 'sqrt('],
+  ['log', 'log('],
+  ['ln', 'ln('],
+  ['sin', 'sin('],
+  ['cos', 'cos('],
+  ['tan', 'tan('],
+  ['pi'],
+  ['e'],
+  [','],
+  ['('],
+  [')'],
+];
+const calcKeys = [...'789/456*123-0.', 'ans', '+'];
 ---
 
-<NoverseLayout
-  title="Terminal - Noverse"
-  description="Interactive terminal"
-  page="terminal"
-  styles={[terminalStyles]}
+<StarlightPage
+  frontmatter={{
+    title: 'Terminal',
+    description: 'Interactive terminal',
+    tableOfContents: false,
+  }}
 >
-  <main id="main" class="main-terminal">
-    <h1 class="sr-only">Interactive terminal</h1>
-    <section class="terminal-shell" data-title="terminal">
+  <div class="site-content not-content main-terminal">
+    <section class="terminal-shell">
       <div class="window-surface">
         <div
           class="console-window"
@@ -21,15 +41,7 @@ import terminalStyles from '../styles/terminal.css?url';
         >
           <div class="console-window-header" id="console-drag">
             <span class="console-window-title">
-              <svg
-                class="console-window-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path d="M5 7l5 5l-5 5"></path>
-                <path d="M12 19h7"></path>
-              </svg>
+              <Icon name="terminal" class="console-window-icon" />
               <span>terminal</span>
             </span>
           </div>
@@ -78,14 +90,12 @@ import terminalStyles from '../styles/terminal.css?url';
             </div>
           </div>
         </div>
-        <div class="bitmask-layer" id="bitmask-layer" hidden>
-          <div
-            class="bitmask-window"
-            id="bitmask-window"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="bitmask-title"
-          >
+        <dialog
+          class="nv-modal"
+          id="bitmask-layer"
+          aria-labelledby="bitmask-title"
+        >
+          <div class="bitmask-window" id="bitmask-window">
             <div class="bitmask-header" id="bitmask-drag">
               <h2 id="bitmask-title">bitmask</h2>
               <button
@@ -95,13 +105,14 @@ import terminalStyles from '../styles/terminal.css?url';
                 aria-label="Close bitmask calculator"
                 title="Close"
               >
-                <span class="close-icon" aria-hidden="true"></span>
+                <Icon name="x" />
               </button>
             </div>
             <div class="bitmask-body">
               <div
                 class="bitmask-field"
                 id="bitmask-field"
+                role="group"
                 aria-label="32-bit field"
               ></div>
               <div class="bitmask-values" aria-live="polite">
@@ -152,15 +163,9 @@ import terminalStyles from '../styles/terminal.css?url';
             </div>
             <span class="tool-resize-handle" aria-hidden="true"></span>
           </div>
-        </div>
-        <div class="calc-layer" id="calc-layer" hidden>
-          <div
-            class="calc-window"
-            id="calc-window"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="calc-title"
-          >
+        </dialog>
+        <dialog class="nv-modal" id="calc-layer" aria-labelledby="calc-title">
+          <div class="calc-window" id="calc-window">
             <div class="calc-header" id="calc-drag">
               <h2 id="calc-title">calculator</h2>
               <button
@@ -170,7 +175,7 @@ import terminalStyles from '../styles/terminal.css?url';
                 aria-label="Close calculator"
                 title="Close"
               >
-                <span class="close-icon" aria-hidden="true"></span>
+                <Icon name="x" />
               </button>
             </div>
             <div class="calc-body">
@@ -179,6 +184,7 @@ import terminalStyles from '../styles/terminal.css?url';
                   <div
                     class="calc-output"
                     id="calc-output"
+                    role="group"
                     aria-label="Calculator expression and result"
                   >
                     <input
@@ -203,166 +209,48 @@ import terminalStyles from '../styles/terminal.css?url';
                   ></div>
                 </div>
                 <div class="calc-keypads">
-                  <div class="calc-tools" aria-label="Calculator functions">
-                    <button type="button" data-calc-value="^2">
-                      <span>
-                        x<sup>2</sup>
-                      </span>
-                    </button>
-                    <button type="button" data-calc-value="^">
-                      x<sup>y</sup>
-                    </button>
-                    <button type="button" data-calc-value="abs(">
-                      abs
-                    </button>
-                    <button type="button" data-calc-value="sqrt(">
-                      sqrt
-                    </button>
-                    <button type="button" data-calc-value="log(">
-                      log
-                    </button>
-                    <button type="button" data-calc-value="ln(">
-                      ln
-                    </button>
-                    <button type="button" data-calc-value="sin(">
-                      sin
-                    </button>
-                    <button type="button" data-calc-value="cos(">
-                      cos
-                    </button>
-                    <button type="button" data-calc-value="tan(">
-                      tan
-                    </button>
-                    <button type="button" data-calc-value="pi">
-                      pi
-                    </button>
-                    <button type="button" data-calc-value="e">
-                      e
-                    </button>
-                    <button type="button" data-calc-value=",">
-                      ,
-                    </button>
-                    <button type="button" data-calc-value="(">
-                      (
-                    </button>
-                    <button type="button" data-calc-value=")">
-                      )
-                    </button>
+                  <div
+                    class="calc-tools"
+                    role="group"
+                    aria-label="Calculator functions"
+                  >
+                    {calcTools.map(([label, value = label]) => (
+                      <button
+                        type="button"
+                        data-calc-value={value}
+                        set:html={label}
+                      />
+                    ))}
                     <button type="button" data-calc-action="negate">
                       +/-
                     </button>
                   </div>
-                  <div class="calc-grid" aria-label="Calculator keypad">
-                    <button
-                      type="button"
-                      data-calc-value="7"
-                      data-calc-key="number"
-                    >
-                      7
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="8"
-                      data-calc-key="number"
-                    >
-                      8
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="9"
-                      data-calc-key="number"
-                    >
-                      9
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="/"
-                      data-calc-key="operator"
-                    >
-                      /
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="4"
-                      data-calc-key="number"
-                    >
-                      4
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="5"
-                      data-calc-key="number"
-                    >
-                      5
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="6"
-                      data-calc-key="number"
-                    >
-                      6
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="*"
-                      data-calc-key="operator"
-                    >
-                      *
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="1"
-                      data-calc-key="number"
-                    >
-                      1
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="2"
-                      data-calc-key="number"
-                    >
-                      2
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="3"
-                      data-calc-key="number"
-                    >
-                      3
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="-"
-                      data-calc-key="operator"
-                    >
-                      -
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="0"
-                      data-calc-key="number"
-                    >
-                      0
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="."
-                      data-calc-key="number"
-                    >
-                      .
-                    </button>
-                    <button type="button" data-calc-value="ans">
-                      ans
-                    </button>
-                    <button
-                      type="button"
-                      data-calc-value="+"
-                      data-calc-key="operator"
-                    >
-                      +
-                    </button>
+                  <div
+                    class="calc-grid"
+                    role="group"
+                    aria-label="Calculator keypad"
+                  >
+                    {calcKeys.map((value) => (
+                      <button
+                        type="button"
+                        data-calc-value={value}
+                        data-calc-key={
+                          /[\d.]/.test(value)
+                            ? 'number'
+                            : value.length === 1
+                              ? 'operator'
+                              : undefined
+                        }
+                      >
+                        {value}
+                      </button>
+                    ))}
                   </div>
-                  <div class="calc-actions" aria-label="Calculator actions">
+                  <div
+                    class="calc-actions"
+                    role="group"
+                    aria-label="Calculator actions"
+                  >
                     <button type="button" data-calc-value="!">
                       !
                     </button>
@@ -407,11 +295,11 @@ import terminalStyles from '../styles/terminal.css?url';
             </div>
             <span class="tool-resize-handle" aria-hidden="true"></span>
           </div>
-        </div>
+        </dialog>
       </div>
     </section>
-  </main>
+  </div>
   <script>
     import '../scripts/terminal/terminal.ts';
   </script>
-</NoverseLayout>
+</StarlightPage>

@@ -1,18 +1,18 @@
 ---
+import Icon from '../Icon.astro';
+
 interface Props {
   prefix: 'diff' | 'policy';
 }
 const { prefix } = Astro.props;
 ---
 
-<div class="settings-modal" id={`${prefix}-settings-modal`} hidden>
-  <div
-    class="settings-dialog"
-    id={`${prefix}-settings-dialog`}
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby={`${prefix}-settings-title`}
-  >
+<dialog
+  class="nv-modal"
+  id={`${prefix}-settings-modal`}
+  aria-labelledby={`${prefix}-settings-title`}
+>
+  <div class="settings-dialog" id={`${prefix}-settings-dialog`}>
     <div class="settings-header" id={`${prefix}-settings-header`}>
       <h2 id={`${prefix}-settings-title`}>Settings</h2>
       <button
@@ -22,7 +22,7 @@ const { prefix } = Astro.props;
         aria-label="Close settings"
         title="Close settings"
       >
-        <span class="settings-close-icon" aria-hidden="true"></span>
+        <Icon name="x" />
       </button>
     </div>
     <slot />
@@ -43,4 +43,127 @@ const { prefix } = Astro.props;
       </button>
     </div>
   </div>
-</div>
+</dialog>
+
+<style is:global>
+  :where(.site-content) .settings-dialog {
+    position: absolute;
+    width: min(460px, calc(100vw - 24px));
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    background: var(--panel);
+  }
+
+  :where(.site-content) .settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 24px;
+    padding: 0 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel-alt);
+    cursor: move;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+  }
+
+  :where(.site-content) .settings-header h2 {
+    margin: 0;
+    font-size: 0.625rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  :where(.site-content) .settings-close {
+    height: 20px;
+    width: 20px;
+    min-width: 20px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: var(--text);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    --nv-icon-size: 14px;
+  }
+
+  :where(.site-content) .settings-close:is(:hover, :focus-visible) {
+    color: var(--accent);
+    outline: none;
+  }
+
+  :where(.site-content) .settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 10px;
+  }
+
+  :where(.site-content) .settings-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: var(--font-size-control);
+    padding: 2px 0;
+  }
+
+  :where(.site-content) .settings-number-row {
+    cursor: default;
+  }
+
+  :where(.site-content) .settings-number-row input[type='number'] {
+    width: 82px;
+    height: 24px;
+    margin-left: auto;
+    padding: 0 6px;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    appearance: textfield;
+  }
+
+  :where(.site-content)
+    .settings-number-row
+    input[type='number']::-webkit-inner-spin-button,
+  :where(.site-content)
+    .settings-number-row
+    input[type='number']::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  :where(.site-content) .settings-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 0;
+    padding: 8px 10px;
+  }
+
+  :where(.site-content) .settings-action {
+    height: 24px;
+    min-width: 72px;
+    padding: 0 8px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  :where(.site-content) .settings-action:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

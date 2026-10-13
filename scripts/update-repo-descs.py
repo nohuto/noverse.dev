@@ -112,8 +112,6 @@ def upd_repos():
         if not description:
             continue
         project['description'] = description
-        if isinstance(project.get('home'), dict):
-            project['home']['description'] = description
 
     save_projects(projects)
 

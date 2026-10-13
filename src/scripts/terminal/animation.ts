@@ -1,29 +1,18 @@
-interface TerminalAnimationOptions {
-  output: HTMLElement;
-  form: HTMLFormElement;
-  addNodeLine(node: Node, className: string): HTMLElement;
-  addLine(text: string, className?: string): void;
-  scrollToBottom(): void;
-  stop(): void;
-  setCleanup(cleanup: () => void): void;
-}
-
 export function startTerminalAnimation(
-  options: TerminalAnimationOptions,
-  requestedWidth: number | null = null,
-  requestedHeight: number | null = null,
-): void {
-  const {
+  {
     output,
     form,
     addNodeLine,
-    addLine,
     scrollToBottom,
-    stop,
-    setCleanup,
-  } = options;
-  stop();
-
+  }: {
+    output: HTMLElement;
+    form: HTMLFormElement;
+    addNodeLine(node: Node, className: string): HTMLElement;
+    scrollToBottom(): void;
+  },
+  requestedWidth: number | null,
+  requestedHeight: number | null,
+) {
   const container = document.createElement('div');
   container.className = 'console-animation console-animation-trippy';
 
@@ -38,12 +27,7 @@ export function startTerminalAnimation(
   container.appendChild(gridContainer);
 
   const line = addNodeLine(container, 'console-animation-line');
-  const ctx = canvas.getContext('2d', { alpha: true });
-  if (!ctx) {
-    addLine('animation unavailable - canvas is not supported', 'muted');
-    line.remove();
-    return;
-  }
+  const ctx = canvas.getContext('2d')!;
 
   const charRangeStart = 33;
   const charRangeEnd = 126;
@@ -107,8 +91,7 @@ export function startTerminalAnimation(
     const pitchY = glyphHeight + glyphPadding;
     glyphAtlas.width = pitchX * charRangeMax;
     glyphAtlas.height = pitchY * palette.length;
-    const atlasCtx = glyphAtlas.getContext('2d', { alpha: true });
-    if (!atlasCtx) return;
+    const atlasCtx = glyphAtlas.getContext('2d')!;
     atlasCtx.font = font;
     atlasCtx.textBaseline = 'top';
     palette.forEach((color, row) => {
@@ -196,23 +179,20 @@ export function startTerminalAnimation(
     }
   };
 
-  const resizeObserver = window.ResizeObserver
-    ? new ResizeObserver(updateSize)
-    : null;
-  const handleThemeChange = updateSize;
-  resizeObserver?.observe(line);
-  resizeObserver?.observe(output);
-  document.addEventListener('nv:theme-change', handleThemeChange);
+  const resizeObserver = new ResizeObserver(updateSize);
+  resizeObserver.observe(line);
+  resizeObserver.observe(output);
+  document.addEventListener('nv:theme-change', updateSize);
   requestAnimationFrame(() => {
     updateSize();
     rafId = requestAnimationFrame(render);
   });
 
-  setCleanup(() => {
+  return () => {
     stopped = true;
-    if (rafId) cancelAnimationFrame(rafId);
-    resizeObserver?.disconnect();
-    document.removeEventListener('nv:theme-change', handleThemeChange);
-    if (line.isConnected) line.remove();
-  });
+    cancelAnimationFrame(rafId);
+    resizeObserver.disconnect();
+    document.removeEventListener('nv:theme-change', updateSize);
+    line.remove();
+  };
 }

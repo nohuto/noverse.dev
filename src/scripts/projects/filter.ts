@@ -3,9 +3,6 @@ export {};
 const searchInput = document.querySelector<HTMLInputElement>('#project-search');
 const cards = [...document.querySelectorAll<HTMLElement>('.project-card')];
 const groups = [...document.querySelectorAll<HTMLElement>('.project-group')];
-const sectionNav = document.querySelector<HTMLElement>(
-  '.project-section-links',
-);
 const emptyState = document.querySelector<HTMLElement>('#project-empty');
 
 if (searchInput && cards.length) {
@@ -32,12 +29,7 @@ if (searchInput && cards.length) {
     }
     for (const group of groups) {
       group.hidden = !group.querySelector('.project-card:not([hidden])');
-      const link = sectionNav?.querySelector<HTMLAnchorElement>(
-        `a[href="#${group.getAttribute('aria-labelledby')}"]`,
-      );
-      if (link) link.hidden = group.hidden;
     }
-    if (sectionNav) sectionNav.hidden = visible === 0;
     if (emptyState) emptyState.hidden = visible > 0;
   }
 

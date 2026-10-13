@@ -1,0 +1,254 @@
+@layer rapide {
+  :root {
+    --sl-sidebar-width: 18.5rem;
+    --nv-sidebar-saved-width: 296px;
+    --nv-navigation-width: clamp(
+      240px,
+      var(--nv-sidebar-saved-width),
+      max(240px, min(480px, 40vw))
+    );
+  }
+  .sidebar-icon-rail,
+  .sidebar-resizer,
+  .zen-exit {
+    display: none;
+  }
+  .sidebar-expanded-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1 0 auto;
+  }
+  .sidebar-icon-rail .nv-icon-button,
+  .zen-exit {
+    width: 36px;
+    height: 36px;
+  }
+  .zen-exit {
+    --nv-soft-backdrop-bg: var(--sl-color-bg);
+    position: fixed;
+    z-index: var(--sl-z-index-navbar);
+    top: 8px;
+    right: 8px;
+  }
+  @media (min-width: 50rem) {
+    :root[data-sidebar-collapsed] {
+      --nv-navigation-width: 56px;
+    }
+    :root[data-has-sidebar] #starlight__sidebar {
+      width: var(--nv-navigation-width);
+    }
+    :root[data-sidebar-collapsed] #starlight__sidebar {
+      scrollbar-gutter: auto;
+      overflow: hidden;
+    }
+    :root[data-sidebar-collapsed] .sidebar-content {
+      padding: 0.75rem 10px;
+    }
+    :root[data-sidebar-collapsed] .sidebar-expanded-tree {
+      display: none;
+    }
+    :root[data-sidebar-collapsed] .sidebar-icon-rail {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .sidebar-resizer {
+      display: block;
+      position: fixed;
+      z-index: var(--sl-z-index-menu);
+      top: var(--sl-nav-height);
+      bottom: 0;
+      left: calc(var(--nv-navigation-width) - 3px);
+      width: 6px;
+      cursor: col-resize;
+      touch-action: none;
+    }
+    .sidebar-resizer:is(:hover, :focus-visible) {
+      background: var(--sl-color-accent-low);
+    }
+    :root[data-sidebar-collapsed] .sidebar-resizer {
+      display: none;
+    }
+    :root[data-sidebar-resizing] {
+      cursor: col-resize;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  }
+  @media (min-width: 72rem) {
+    html[data-has-sidebar][data-has-toc]:not([data-zen]) {
+      --nv-doc-main-width: 72rem;
+      --nv-doc-cluster-gap: 1.5rem;
+      --nv-doc-toc-width: clamp(13rem, 16vw, 18rem);
+      --nv-doc-active-toc-width: var(--nv-doc-toc-width);
+    }
+
+    html[data-has-sidebar][data-has-toc]:not([data-zen])
+      .main-frame
+      > .lg\:sl-flex {
+      display: grid;
+      grid-template-columns: minmax(0, var(--nv-doc-main-width)) minmax(
+          0,
+          var(--nv-doc-toc-width)
+        );
+      column-gap: var(--nv-doc-cluster-gap);
+      justify-content: start;
+      width: 100%;
+    }
+
+    html[data-has-sidebar][data-has-toc]:not([data-zen]) .main-pane {
+      grid-column: 1;
+      order: 1;
+      min-width: 0;
+      --sl-content-margin-inline: auto;
+      width: auto;
+    }
+
+    html[data-has-sidebar][data-has-toc]:not([data-zen]) .main-pane main {
+      min-width: 0;
+      width: 100%;
+    }
+
+    html[data-has-sidebar][data-has-toc]:not([data-zen])
+      .main-pane
+      .sl-container {
+      box-sizing: border-box;
+      width: auto;
+      max-width: var(--nv-doc-main-width);
+      margin-inline: auto;
+    }
+
+    html[data-has-sidebar][data-has-toc]:not([data-zen])
+      .right-sidebar-container {
+      grid-column: 2;
+      order: 2;
+      min-width: 0;
+      width: auto;
+    }
+
+    html[data-has-sidebar][data-has-toc]:not([data-zen]) .right-sidebar {
+      width: min(
+        var(--nv-doc-active-toc-width),
+        calc(
+          100vw - var(--nv-navigation-width) - var(--nv-doc-cluster-gap) - 2rem
+        )
+      );
+    }
+
+    html[data-has-sidebar][data-has-toc]:not([data-zen]) .right-sidebar-panel {
+      padding-inline: 1rem;
+    }
+
+    html[data-has-sidebar][data-has-toc]:not([data-zen])
+      .right-sidebar-panel
+      .sl-container {
+      width: 100%;
+      max-width: none;
+    }
+  }
+
+  @media (min-width: 110rem) {
+    html[data-has-sidebar][data-has-toc]:not([data-zen]) {
+      --nv-doc-main-width: 76rem;
+    }
+  }
+
+  @media (min-width: 120rem) {
+    html[data-has-sidebar][data-has-toc]:not([data-zen]) {
+      --nv-doc-active-toc-width: min(
+        30rem,
+        max(
+          var(--nv-doc-toc-width),
+          calc(
+            (
+                100vw -
+                  var(--sl-content-inline-start, var(--sl-sidebar-width)) -
+                  var(--nv-doc-main-width) - var(--nv-doc-cluster-gap) +
+                  var(--nv-doc-toc-width)
+              ) /
+              2 - 1rem
+          )
+        )
+      );
+    }
+
+    html[data-has-sidebar][data-has-toc]:not([data-zen])
+      .main-frame
+      > .lg\:sl-flex {
+      justify-content: center;
+    }
+  }
+
+  :root[data-zen] {
+    --sl-nav-height: 0px;
+    --sl-mobile-toc-height: 0px;
+  }
+  :root[data-zen] .page > .header,
+  :root[data-zen] .page > .sidebar,
+  :root[data-zen] .right-sidebar-container,
+  :root[data-zen] mobile-starlight-toc,
+  :root[data-zen] .sidebar-resizer,
+  :root[data-zen] .pagination-links,
+  :root[data-zen] .main-pane footer {
+    display: none !important;
+  }
+  :root[data-zen] .main-frame {
+    padding-top: 1rem;
+    padding-inline-start: 0;
+  }
+  :root[data-zen] .main-frame > .lg\:sl-flex {
+    display: block;
+  }
+  :root[data-zen] .main-pane {
+    width: 100%;
+  }
+  .main-pane:has(.policies-main, .bindiff-main, .main-terminal) .sl-container {
+    max-width: none;
+  }
+  .main-pane:has(.main-terminal) .content-panel:first-of-type {
+    display: none;
+  }
+  .page:has(.policies-main) {
+    height: 100dvh;
+
+    :is(
+      .main-frame,
+      .main-frame > .lg\:sl-flex,
+      .main-pane,
+      .main-pane > main,
+      .content-panel:has(.policies-main),
+      .content-panel:has(.policies-main) > .sl-container,
+      .sl-markdown-content
+    ) {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+    }
+
+    .main-pane footer {
+      display: none;
+    }
+  }
+  :root[data-zen] .zen-exit {
+    display: flex;
+  }
+  @media print {
+    .sidebar-resizer,
+    .sidebar-icon-rail,
+    .zen-exit {
+      display: none !important;
+    }
+  }
+}
+
+@media (min-width: 50rem) {
+  :root[data-has-sidebar] {
+    --sl-content-inline-start: var(--nv-navigation-width);
+  }
+}
+:root[data-zen] {
+  --sl-content-inline-start: 0px;
+}

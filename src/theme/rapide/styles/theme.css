@@ -1,0 +1,110 @@
+@import '../../../styles/fonts.css';
+@import '../../../styles/palette.css';
+@import '../../../styles/scrollbar.css' layer(rapide);
+@import '../../../styles/links.css' layer(rapide);
+@import '../../../styles/icons.css' layer(rapide);
+@import '../../../styles/motion.css' layer(rapide);
+
+@layer rapide {
+  :root,
+  ::backdrop {
+    --sl-font: var(--font-family);
+    --sl-font-mono: var(--font-family-mono);
+    --sl-text-body: 0.8125rem;
+    --sl-text-code: 0.8125rem;
+    --sl-text-code-sm: 0.8125rem;
+    --sl-text-h1: 1.5625rem;
+    --sl-text-h2: 1.25rem;
+    --sl-text-h3: 1.125rem;
+    --sl-text-h4: 0.9375rem;
+    --sl-text-h5: 0.9375rem;
+    --sl-text-h6: 0.9375rem;
+    --nv-ui-radius: 0px;
+    --nv-icon-size: 18px;
+    --sl-menu-button-size: 28px;
+    --nv-header-control-height: 26px;
+    --sl-content-width: 80rem;
+    --sl-content-pad-x: 1.375rem;
+  }
+
+  :root,
+  ::backdrop {
+    --sl-color-white: var(--text);
+    --sl-color-gray-1: color-mix(in srgb, var(--text) 92%, var(--muted));
+    --sl-color-gray-2: var(--text);
+    --sl-color-gray-3: var(--muted);
+    --sl-color-gray-4: color-mix(in srgb, var(--muted) 60%, var(--border));
+    --sl-color-gray-5: var(--border);
+    --sl-color-gray-6: var(--panel);
+    --sl-color-gray-7: var(--panel-alt);
+    --sl-color-black: var(--bg);
+
+    --sl-color-orange-low: color-mix(in srgb, var(--warning) 18%, var(--panel));
+    --sl-color-orange: var(--warning);
+    --sl-color-orange-high: color-mix(in srgb, var(--warning) 52%, var(--text));
+    --sl-color-green-low: color-mix(in srgb, var(--success) 18%, var(--panel));
+    --sl-color-green: var(--success);
+    --sl-color-green-high: color-mix(in srgb, var(--success) 52%, var(--text));
+    --sl-color-blue-low: color-mix(in srgb, var(--accent) 18%, var(--panel));
+    --sl-color-blue: var(--accent);
+    --sl-color-blue-high: color-mix(in srgb, var(--accent-2) 62%, var(--text));
+    --sl-color-purple-low: color-mix(
+      in srgb,
+      var(--accent-2) 16%,
+      var(--panel)
+    );
+    --sl-color-purple: var(--accent-2);
+    --sl-color-purple-high: color-mix(
+      in srgb,
+      var(--accent-2) 52%,
+      var(--text)
+    );
+    --sl-color-red-low: color-mix(in srgb, var(--danger) 18%, var(--panel));
+    --sl-color-red: var(--danger);
+    --sl-color-red-high: color-mix(in srgb, var(--danger) 52%, var(--text));
+
+    --sl-color-accent-low: color-mix(in srgb, var(--accent) 18%, var(--panel));
+    --sl-color-accent: var(--accent);
+    --sl-color-accent-high: color-mix(
+      in srgb,
+      var(--accent-2) 62%,
+      var(--text)
+    );
+    --sl-color-text: var(--text);
+    --sl-color-text-accent: color-mix(in srgb, var(--accent) 62%, var(--text));
+    --sl-color-text-invert: var(--accent-contrast);
+    --sl-color-bg: var(--panel);
+    --sl-color-bg-nav: var(--bg-alt);
+    --sl-color-bg-sidebar: var(--bg-alt);
+    --sl-color-bg-inline-code: var(--panel-alt);
+    --sl-color-bg-accent: var(--accent);
+    --sl-color-hairline-light: var(--separator);
+    --sl-color-hairline: var(--separator);
+    --sl-color-hairline-shade: var(--separator);
+    --sl-color-backdrop-overlay: color-mix(in srgb, var(--bg) 78%, transparent);
+
+    --sl-shadow-sm: none;
+    --sl-shadow-md: none;
+    --sl-shadow-lg: none;
+
+    --sl-rapide-ui-bg-color: var(--panel);
+    --sl-rapide-ui-header-bg-color: var(--bg-alt);
+    --sl-rapide-ui-border-color: var(--border);
+    --sl-rapide-ec-marker-bg-color: color-mix(
+      in srgb,
+      var(--accent) 8%,
+      var(--panel-alt)
+    );
+    --sl-rapide-ec-marker-border-color: color-mix(
+      in srgb,
+      var(--accent) 30%,
+      var(--border)
+    );
+  }
+
+  @media (min-width: 72rem) {
+    :root {
+      --sl-content-pad-x: 2.125rem;
+    }
+  }
+}

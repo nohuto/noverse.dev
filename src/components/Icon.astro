@@ -1,0 +1,51 @@
+---
+export type IconName =
+  | 'book'
+  | 'chevron-down'
+  | 'chevron-left'
+  | 'chevron-right'
+  | 'copy'
+  | 'copyright'
+  | 'discord'
+  | 'discord-brand'
+  | 'file'
+  | 'filter'
+  | 'github'
+  | 'home'
+  | 'key'
+  | 'layout-column'
+  | 'layout-row'
+  | 'list'
+  | 'mail'
+  | 'moon'
+  | 'product'
+  | 'projects'
+  | 'repo'
+  | 'search'
+  | 'settings'
+  | 'sidebar'
+  | 'sun'
+  | 'swap'
+  | 'telescope'
+  | 'terminal'
+  | 'tools'
+  | 'tuta'
+  | 'user-list'
+  | 'x'
+  | 'zen'
+  | 'zen-exit'
+  | 'zoom-in'
+  | 'zoom-out';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+
+<span
+  class:list={['nv-icon', `nv-icon-${name}`, className]}
+  aria-hidden="true"
+></span>

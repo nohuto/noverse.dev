@@ -1,5 +1,6 @@
 ---
 import ProjectMedia from './ProjectMedia.astro';
+import Icon from '../Icon.astro';
 import type { Project } from '../../data/projects';
 interface Props {
   project: Project;
@@ -10,23 +11,34 @@ const external = /^https?:\/\//.test(href);
 const onGitHub = href.startsWith('https://github.com/');
 ---
 
-<article
-  class="project-card clickable-card"
-  data-repo={project.repo}
-  data-card-href={project.repo ? undefined : href}
->
-  <ProjectMedia project={project} />
+<article class="project-card" data-repo={project.repo}>
   <div class="project-body">
-    <h3 class="project-title">{project.title}</h3>
-    <p class="project-desc">
-      {project.description || 'Fetching description...'}
-    </p>
+    <h3 class="project-title">
+      <a
+        href={href}
+        target={external ? '_blank' : undefined}
+        rel={external ? 'noopener noreferrer' : undefined}
+        aria-label={`Open ${project.title}${onGitHub ? ' on GitHub' : ''}`}
+      >
+        {project.title}
+      </a>
+    </h3>
+    <p class="project-desc">{project.description}</p>
   </div>
-  <a
-    class="clickable-card-link"
-    href={href}
-    target={external ? '_blank' : undefined}
-    rel={external ? 'noopener noreferrer' : undefined}
-    aria-label={`Open ${project.title}${onGitHub ? ' on GitHub' : ''}`}
-  ></a>
+  <details class="project-preview">
+    <summary aria-label={`Show ${project.title} preview`} title="Show preview">
+      <Icon name="chevron-down" />
+    </summary>
+    <ProjectMedia project={project} />
+  </details>
 </article>
+
+<script>
+  document
+    .querySelectorAll<HTMLDetailsElement>('.project-preview')
+    .forEach((preview) => {
+      preview.addEventListener('toggle', () => {
+        if (!preview.open) preview.querySelector('video')?.pause();
+      });
+    });
+</script>

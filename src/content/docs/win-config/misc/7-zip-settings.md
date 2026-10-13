@@ -1,0 +1,31 @@
+---
+slug: docs/win-config/misc/7-zip-settings
+title: '7-Zip Settings'
+description: 'Misc option documentation from win-config.'
+editUrl: false
+sidebar:
+  order: 5
+---
+
+7-Zip minimal context menu settings (if cascaded context menu enabled):
+
+<img src="https://raw.githubusercontent.com/nohuto/win-config/main/misc/images/7z-folder.png" alt="" width="1000" height="579" decoding="async">
+<img src="https://raw.githubusercontent.com/nohuto/win-config/main/misc/images/7z-archive.png" alt="" width="1000" height="579" loading="lazy" decoding="async">
+
+All *context menu items* are getting handled via `ContextMenu` (`HKCU\Software\7-Zip\Options`).
+
+```c
+// Cascaded context menu, 1 = enabled, 0 = disabled
+7zFM.exe	RegSetValue	HKCU\Software\7-Zip\Options\CascadedMenu	Type: REG_DWORD, Length: 4, Data: 1
+
+// Eliminate dublication of root folders, 1 = enabled, 0 = disabled
+7zFM.exe	RegSetValue	HKCU\Software\7-Zip\Options\ElimDupExtract	Type: REG_DWORD, Length: 4, Data: 1
+
+// Icons in context menu, 1 = enabled, 0 = disabled
+7zFM.exe	RegSetValue	HKCU\Software\7-Zip\Options\MenuIcons	Type: REG_DWORD, Length: 4, Data: 1
+
+// Propagate Zone.Id stream, delete = * No, 1 = Yes, 2 = For Office files
+7zFM.exe	RegSetValue	HKCU\Software\7-Zip\Options\WriteZoneIdExtract	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+A decent replacement would be [NanaZip](https://github.com/M2Team/NanaZip).

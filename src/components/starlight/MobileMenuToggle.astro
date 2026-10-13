@@ -1,0 +1,16 @@
+---
+import Icon from '../Icon.astro';
+---
+
+<button
+  popovertarget="starlight__sidebar"
+  class="nv-icon-button sl-menu-button print:hidden"
+  aria-label={Astro.locals.t('menuButton.accessibleLabel')}
+>
+  <span class="open-menu">
+    <Icon name="list" />
+  </span>
+  <span class="close-menu">
+    <Icon name="x" />
+  </span>
+</button>

@@ -1,0 +1,248 @@
+@import './starfield-stars.css';
+
+:root {
+  --starfield-dot: color-mix(in srgb, var(--text) 90%, transparent);
+}
+
+body {
+  isolation: isolate;
+}
+
+body::before {
+  content: '';
+  opacity: 0;
+}
+
+body::before,
+.background-stars {
+  position: fixed;
+  top: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  left: 0;
+  pointer-events: none;
+}
+
+html[data-bg='diamonds'] body::before {
+  opacity: 0.8;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--accent) 20%, transparent) 0,
+      color-mix(in srgb, var(--accent) 20%, transparent) 1px,
+      transparent 1px,
+      transparent 22px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, var(--accent-2) 12%, transparent) 0,
+      color-mix(in srgb, var(--accent-2) 12%, transparent) 1px,
+      transparent 1px,
+      transparent 22px
+    );
+  background-size: 44px 44px;
+}
+
+html[data-bg='noise'] body::before {
+  opacity: 0.9;
+  background-image:
+    radial-gradient(
+      circle at 1px 1px,
+      color-mix(in srgb, var(--accent) 22%, transparent) 1px,
+      transparent 0
+    ),
+    radial-gradient(
+      circle at 1px 1px,
+      color-mix(in srgb, var(--accent-2) 20%, transparent) 1px,
+      transparent 0
+    ),
+    radial-gradient(
+      circle at 1px 1px,
+      color-mix(in srgb, var(--danger) 16%, transparent) 1px,
+      transparent 0
+    );
+  background-size:
+    20px 20px,
+    30px 30px,
+    25px 25px;
+  background-position:
+    0 0,
+    10px 10px,
+    15px 5px;
+}
+
+html[data-bg='crosshatch'] body::before {
+  opacity: 1;
+  background-image:
+    repeating-linear-gradient(
+      22.5deg,
+      transparent 0,
+      transparent 2px,
+      color-mix(in srgb, var(--text) 3%, transparent) 2px,
+      color-mix(in srgb, var(--text) 3%, transparent) 3px,
+      transparent 3px,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      67.5deg,
+      transparent 0,
+      transparent 2px,
+      color-mix(in srgb, var(--text) 2.5%, transparent) 2px,
+      color-mix(in srgb, var(--text) 2.5%, transparent) 3px,
+      transparent 3px,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      112.5deg,
+      transparent 0,
+      transparent 2px,
+      color-mix(in srgb, var(--text) 2%, transparent) 2px,
+      color-mix(in srgb, var(--text) 2%, transparent) 3px,
+      transparent 3px,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      157.5deg,
+      transparent 0,
+      transparent 2px,
+      color-mix(in srgb, var(--text) 1.5%, transparent) 2px,
+      color-mix(in srgb, var(--text) 1.5%, transparent) 3px,
+      transparent 3px,
+      transparent 8px
+    );
+}
+
+html[data-bg='dots'] body::before {
+  opacity: 1;
+  background-image:
+    radial-gradient(
+      circle at 25% 25%,
+      color-mix(in srgb, var(--text) 12%, transparent) 0.5px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      color-mix(in srgb, var(--text) 6%, transparent) 0.5px,
+      transparent 1px
+    );
+  background-size: 10px 10px;
+  image-rendering: pixelated;
+}
+
+html[data-bg='grid'] body::before {
+  opacity: 0.95;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 11px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 11px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 12px,
+      transparent 12px,
+      transparent 23px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 23px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 11px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 11px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 12px,
+      transparent 12px,
+      transparent 23px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 23px,
+      color-mix(in srgb, var(--accent) 14%, transparent) 24px
+    );
+  background-size:
+    24px 24px,
+    24px 24px;
+}
+
+.background-star {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 2px;
+  pointer-events: none;
+}
+
+html[data-bg='starfield'] .background-star {
+  display: block;
+  --starfield-depth: 300px;
+  --starfield-speed: 3s;
+  box-shadow: var(--starfield-shadow);
+  transform-style: preserve-3d;
+  will-change: transform;
+  animation: fly var(--starfield-speed) linear infinite;
+}
+
+html[data-bg='starfield'] .background-star::before,
+html[data-bg='starfield'] .background-star::after {
+  content: '';
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  box-shadow: inherit;
+}
+
+html[data-bg='starfield'] .background-star::before {
+  transform: translateZ(calc(var(--starfield-depth) * -1));
+  animation: fade1 var(--starfield-speed) linear infinite;
+}
+
+html[data-bg='starfield'] .background-star::after {
+  transform: translateZ(calc(var(--starfield-depth) * -2));
+  animation: fade2 var(--starfield-speed) linear infinite;
+}
+
+.background-stars {
+  overflow: hidden;
+}
+
+html[data-bg='starfield'] .background-stars {
+  perspective: 340px;
+  perspective-origin: 50% 50%;
+}
+
+@keyframes fly {
+  0% {
+    transform: translateZ(0);
+  }
+
+  100% {
+    transform: translateZ(var(--starfield-depth));
+  }
+}
+
+@keyframes fade1 {
+  0% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade2 {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-bg='starfield'] .background-star,
+  html[data-bg='starfield'] .background-star::before,
+  html[data-bg='starfield'] .background-star::after {
+    animation: none;
+  }
+}

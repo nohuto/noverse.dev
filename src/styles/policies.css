@@ -1,33 +1,12 @@
 /* Copyright (c) 2026 nohuto */
 
-.policy-intro {
-  container-type: inline-size;
-}
-
-.policy-title-row {
+.policies-main,
+#policy-explorer,
+#policy-explorer > .panel-body {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
-  flex-wrap: nowrap;
-  min-width: 0;
-}
-
-.policy-title-row .page-heading {
-  flex: 0 0 auto;
-  margin-bottom: 8px;
-}
-
-.policy-source-note {
-  flex: 0 0 auto;
-  color: var(--muted);
-  font-size: 0.6875rem;
-  white-space: nowrap;
-}
-
-@container (max-width: 35rem) {
-  .policy-source-note {
-    display: none;
-  }
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 #policy-explorer {
@@ -44,7 +23,6 @@
   margin-bottom: 10px;
 }
 
-.policy-search-field,
 .policy-view-dropdown,
 .policy-column-dropdown {
   display: flex;
@@ -71,10 +49,13 @@
 }
 
 .policy-search-field {
-  display: block;
+  min-width: 0;
 }
 
 #policy-settings {
+  --nv-icon-size: 16px;
+  display: grid;
+  place-items: center;
   width: 24px;
   height: 24px;
   border: 0;
@@ -118,7 +99,8 @@
   width: 12px;
   height: 12px;
   background: var(--muted);
-  mask: url('/main/icons/ui/chevron-down.svg') center / 12px 12px no-repeat;
+  mask: var(--nv-icon-chevron-down) center / 12px 12px no-repeat;
+  transition: transform var(--nv-motion);
 }
 
 #policy-view-trigger[aria-expanded='true'] .policy-view-chevron {
@@ -139,10 +121,6 @@
   background: var(--panel);
   font-size: var(--font-size-control);
   padding: 0;
-}
-
-.policy-view-menu[hidden] {
-  display: none;
 }
 
 .policy-view-option {
@@ -175,11 +153,11 @@
 
 .policy-layout {
   display: grid;
+  flex: 1;
   grid-template-columns:
     minmax(180px, var(--policy-tree-width)) 8px minmax(460px, 10fr)
     8px minmax(360px, var(--policy-detail-width));
   gap: 0;
-  height: calc(100vh - 172px);
   min-height: 0;
 }
 
@@ -240,13 +218,6 @@
 .policy-splitter:hover::after,
 .policy-splitter.is-resizing::after {
   background: var(--accent);
-}
-
-.policy-tree-panel[hidden],
-.policy-table-panel[hidden],
-.policy-detail-panel[hidden],
-.policy-splitter[hidden] {
-  display: none !important;
 }
 
 .policy-pane-header {
@@ -333,11 +304,11 @@
 
 .policy-tree-chevron {
   background: var(--muted);
-  mask: url('/main/icons/ui/chevron-right.svg') center / 14px 14px no-repeat;
+  mask: var(--nv-icon-chevron-right) center / 14px 14px no-repeat;
 }
 
 .policy-tree-chevron.is-open {
-  mask-image: url('/main/icons/ui/chevron-down.svg');
+  mask-image: var(--nv-icon-chevron-down);
 }
 
 .policy-tree-item.is-active,
@@ -363,7 +334,6 @@
 
 .policy-table-wrap {
   flex: 1;
-  overflow: auto;
 }
 
 .policy-table {
@@ -383,14 +353,6 @@
   white-space: nowrap;
 }
 
-#policy-search {
-  font-size: var(--font-size-body);
-}
-
-.policy-tree-item {
-  font-size: var(--font-size-control);
-}
-
 .policy-table td {
   font-size: var(--font-size-control);
 }
@@ -403,9 +365,11 @@
   padding-right: 18px;
   background: var(--panel-alt);
   color: var(--muted);
+  font-weight: inherit;
   font-size: 0.625rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
+  -webkit-user-select: none;
   user-select: none;
   cursor: pointer;
 }
@@ -426,11 +390,12 @@
 
 .policy-sort-indicator {
   display: inline-block;
+  transition: transform var(--nv-motion);
   width: 12px;
   height: 12px;
   justify-self: end;
   background: var(--muted);
-  mask: url('/main/icons/ui/chevron-down.svg') center / 12px 12px no-repeat;
+  mask: var(--nv-icon-chevron-down) center / 12px 12px no-repeat;
   vertical-align: -2px;
 }
 
@@ -466,6 +431,7 @@ body.policy-column-resizing .policy-column-resizer::after {
 body.policy-column-resizing,
 body.policy-column-resizing * {
   cursor: col-resize !important;
+  -webkit-user-select: none !important;
   user-select: none !important;
 }
 
@@ -518,51 +484,6 @@ body.policy-column-resizing * {
 
 .policy-column-choice:hover {
   background: color-mix(in srgb, var(--accent) 14%, transparent);
-}
-
-.policy-column-choice input,
-.policy-view-option input {
-  width: 12px;
-  height: 12px;
-  min-width: 12px;
-  min-height: 12px;
-  max-width: 12px;
-  max-height: 12px;
-  appearance: none;
-  border: 1px solid var(--border);
-  background: var(--panel-alt);
-  margin: 0;
-  padding: 0;
-  line-height: 0;
-  display: inline-block;
-  flex: 0 0 12px;
-  position: relative;
-  vertical-align: middle;
-}
-
-.policy-column-choice input::after,
-.policy-view-option input::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 4px;
-  height: 7px;
-  border-right: 1px solid transparent;
-  border-bottom: 1px solid transparent;
-  transform: translate(-50%, -56%) rotate(45deg);
-}
-
-.policy-column-choice input:checked,
-.policy-view-option input:checked {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.policy-column-choice input:checked::after,
-.policy-view-option input:checked::after {
-  border-right-color: var(--accent-contrast);
-  border-bottom-color: var(--accent-contrast);
 }
 
 .policy-detail-body {
@@ -721,6 +642,7 @@ body.policy-column-resizing * {
   text-align: left;
   color: var(--text);
   cursor: text;
+  -webkit-user-select: text;
   user-select: text;
 }
 
@@ -767,7 +689,7 @@ body.policy-column-resizing * {
   justify-self: end;
   background: var(--muted);
   opacity: 0.82;
-  mask: url('/main/icons/ui/copy.svg') center / 13px 13px no-repeat;
+  mask: var(--nv-icon-copy) center / 13px 13px no-repeat;
 }
 
 .policy-copy-button:hover .policy-copy-icon,
@@ -836,11 +758,12 @@ body.policy-column-resizing * {
   justify-self: end;
   justify-content: center;
   text-align: center;
+  -webkit-user-select: text;
   user-select: text;
   min-width: 52px;
 }
 
-@media (max-width: 720px) {
+@container page (max-width: 720px) {
   .policy-value-meta-row {
     display: grid;
     gap: 3px;
@@ -855,13 +778,12 @@ body.policy-column-resizing * {
   }
 }
 
-@media (max-width: 1280px) {
+@container page (max-width: 1280px) {
   .policy-layout {
     grid-template-columns:
       minmax(170px, var(--policy-tree-width)) 8px minmax(360px, 10fr)
       8px minmax(320px, var(--policy-detail-width));
     grid-template-rows: none;
-    height: calc(100vh - 172px);
     min-height: 0;
   }
 
@@ -872,7 +794,7 @@ body.policy-column-resizing * {
   }
 }
 
-@media (max-width: 960px) {
+@container page (max-width: 960px) {
   .policy-toolbar {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 10px;
@@ -892,11 +814,6 @@ body.policy-column-resizing * {
     grid-template-columns: minmax(0, 1fr) 24px;
   }
 
-  .policy-view-dropdown,
-  .policy-column-dropdown {
-    width: 76px;
-  }
-
   #policy-explorer .policy-layout,
   #policy-explorer.policy-hide-detail .policy-layout,
   #policy-explorer.policy-hide-tree .policy-layout,
@@ -908,6 +825,7 @@ body.policy-column-resizing * {
     grid-template-columns: minmax(0, 1fr);
     grid-auto-rows: auto;
     gap: 10px;
+    flex: none;
     height: auto;
     min-height: 0;
   }
@@ -931,20 +849,12 @@ body.policy-column-resizing * {
     height: min(440px, 46vh);
   }
 
-  .policy-detail-panel {
-    max-height: none;
-  }
-
-  .policy-table-wrap {
-    overflow: auto;
-  }
-
   .policy-table {
     min-width: 750px;
   }
 }
 
-@media (max-width: 720px) {
+@container page (max-width: 720px) {
   .policy-tree-panel {
     height: min(320px, 32vh);
   }
@@ -954,7 +864,7 @@ body.policy-column-resizing * {
   }
 }
 
-@media (max-width: 380px) {
+@container page (max-width: 380px) {
   .policy-toolbar {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 6px;

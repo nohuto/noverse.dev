@@ -1,20 +1,35 @@
 ---
 import type { Project } from '../../data/projects';
+import Icon from '../Icon.astro';
 import { webpWidths } from '../../utils/images';
 interface Props {
   project: Project;
+  sizes?: string;
 }
-const { project } = Astro.props;
+const {
+  project,
+  sizes = 'auto, (max-width: 600px) calc(100vw - 32px), (max-width: 960px) calc((100vw - 56px) / 2), 370px',
+} = Astro.props;
 const poster = project.video
   ? await webpWidths(
       `/main/images/projects/posters/${project.video}.webp`,
       [960],
     )
   : null;
-const image =
+const images =
   !project.video && project.image
-    ? await webpWidths(`${project.image}.png`, [480, 640, 960])
-    : null;
+    ? await Promise.all(
+        [
+          [project.image, project.imageLight ? 'theme-dark-only' : ''],
+          ...(project.imageLight
+            ? [[project.imageLight, 'theme-light-only']]
+            : []),
+        ].map(async ([path, theme]) => ({
+          theme,
+          image: await webpWidths(`${path}.png`, [480, 640, 960]),
+        })),
+      )
+    : [];
 ---
 
 {poster ? (
@@ -22,25 +37,61 @@ const image =
     class="project-media"
     src={`/main/media/projects/${project.video}.mp4`}
     poster={poster.byWidth[960]}
-    width="2560"
-    height="1440"
+    width={poster.source.width}
+    height={poster.source.height}
     controls
     preload="none"
     playsinline
     muted
   ></video>
-) : image ? (
-  <img
-    decoding="async"
-    class="project-media-img"
-    src={image.byWidth[640]}
-    srcset={image.srcset}
-    sizes="(max-width: 700px) calc(100vw - 48px), (max-width: 1100px) 50vw, 430px"
-    width={project.width}
-    height={project.height}
-    alt=""
-    fetchpriority={project.priority ? 'high' : undefined}
-    loading={project.priority ? undefined : 'lazy'}
-    referrerpolicy={project.repo ? 'no-referrer' : undefined}
-  />
-) : null}
+) : (
+  images.map(({ theme, image }) => (
+    <div class:list={['project-image-preview', theme]}>
+      <img
+        decoding="async"
+        class="project-media-img"
+        src={image.byWidth[640]}
+        srcset={image.srcset}
+        sizes={sizes}
+        width={image.source.width}
+        height={image.source.height}
+        alt=""
+        loading="lazy"
+      />
+      <a
+        class="image-expand"
+        href={image.source.src}
+        data-image-view={project.title}
+        aria-label={`Open full-size ${project.title} image`}
+        title="Open full-size image"
+      >
+        <Icon name="zen" />
+      </a>
+    </div>
+  ))
+)}
+
+<style is:global>
+  .project-media,
+  .project-media-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-alt);
+  }
+
+  .project-media,
+  .project-image-preview {
+    margin-top: 8px;
+  }
+
+  .project-image-preview {
+    position: relative;
+  }
+
+  [data-theme='light'] .theme-dark-only,
+  :root:not([data-theme='light']) .theme-light-only {
+    display: none;
+  }
+</style>

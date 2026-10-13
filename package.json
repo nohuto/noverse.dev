@@ -2,19 +2,15 @@
   "name": "noverse.dev",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "docs"
-  ],
   "scripts": {
-    "build": "npm run build:main && npm run build:docs",
-    "build:docs": "npm run build --workspace noverse-docs",
-    "predev": "node scripts/prep-docs-for-dev.mjs",
+    "build": "astro build && node scripts/csp-hashes.mjs",
     "dev": "astro dev",
-    "build:main": "astro build && node scripts/csp-hashes.mjs",
-    "check": "astro check && astro check --root docs",
+    "check": "astro check",
     "preview": "astro preview",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "docs:sync": "node scripts/sync-docs.mjs",
+    "postinstall": "node scripts/patch-starlight-telescope.mjs && node scripts/patch-starlight-lists.mjs"
   },
   "engines": {
     "node": ">=22.12.0"
@@ -26,5 +22,12 @@
     "prettier-plugin-astro": "^1.1.0",
     "sharp": "0.35.5",
     "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
+    "@astrojs/starlight": "0.42.4",
+    "starlight-codeblock-fullscreen": "2.0.0",
+    "starlight-links-validator": "0.26.0",
+    "starlight-telescope": "2.0.0"
   }
 }

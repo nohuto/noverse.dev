@@ -12,10 +12,20 @@ function emailAddress(): string {
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined;
 
+function toastElement(): HTMLElement {
+  const existing = document.querySelector<HTMLElement>('.toast');
+  if (existing) return existing;
+  const toast = document.createElement('div');
+  toast.className = 'toast nv-soft-backdrop';
+  toast.setAttribute('role', 'status');
+  toast.setAttribute('aria-atomic', 'true');
+  document.body.append(toast);
+  return toast;
+}
+
 export function showToast(message: string): void {
-  const toast = document.querySelector<HTMLElement>('.toast');
-  if (!toast) return;
-  toast.textContent = message;
+  const toast = toastElement();
+  requestAnimationFrame(() => (toast.textContent = message));
   toast.classList.add('show');
   if (toastTimer) clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);

@@ -1,0 +1,51 @@
+---
+import {
+  BG_KEY,
+  DEFAULT_BG,
+  backgrounds,
+  DEFAULT_DARK_THEME,
+  DEFAULT_LIGHT_THEME,
+  THEME_KEY,
+  THEME_SYSTEM,
+  lightThemes,
+  themes,
+} from '../../data/themes';
+---
+
+<script
+  is:inline
+  define:vars={{
+    themeKey: THEME_KEY,
+    themeOptions: themes.map(([value]) => value),
+    systemTheme: THEME_SYSTEM,
+    darkTheme: DEFAULT_DARK_THEME,
+    lightTheme: DEFAULT_LIGHT_THEME,
+    lightOptions: [...lightThemes],
+    bgKey: BG_KEY,
+    bgOptions: backgrounds,
+    defaultBg: DEFAULT_BG,
+  }}
+>
+  {
+    const read = (key) => {
+      try {
+        return (localStorage.getItem(key) || '').trim();
+      } catch {
+        return '';
+      }
+    };
+    const root = document.documentElement;
+    const saved = read(themeKey);
+    const setting = themeOptions.includes(saved) ? saved : systemTheme;
+    const palette =
+      setting === systemTheme
+        ? matchMedia('(prefers-color-scheme: light)').matches
+          ? lightTheme
+          : darkTheme
+        : setting;
+    root.dataset.themeSetting = setting;
+    root.dataset.theme = lightOptions.includes(palette) ? 'light' : 'dark';
+    const background = read(bgKey);
+    root.dataset.bg = bgOptions.includes(background) ? background : defaultBg;
+  }
+</script>

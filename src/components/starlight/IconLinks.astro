@@ -1,0 +1,70 @@
+---
+import { sidebarRepos } from '../../data/docs-sidebar.mjs';
+import Icon from '../Icon.astro';
+
+const [section, repo = ''] = Astro.locals.starlightRoute.id
+  .split('/')
+  .filter(Boolean);
+const activeRepo =
+  section === 'docs' && sidebarRepos.includes(repo) ? repo : '';
+---
+
+<button
+  type="button"
+  class="nv-icon-button"
+  aria-label="Open Telescope Search"
+  aria-keyshortcuts="Control+/"
+  title="Telescope Search (Ctrl+/)"
+  data-telescope-open
+>
+  <Icon name="telescope" />
+</button>
+<button
+  type="button"
+  class="nv-icon-button"
+  aria-label="Enter Zen mode"
+  aria-keyshortcuts="Control+Shift+X"
+  data-zen-toggle
+>
+  <Icon name="zen" />
+</button>
+{activeRepo && (
+  <a
+    class="nv-icon-button"
+    href={`https://github.com/nohuto/${activeRepo}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={`Open ${activeRepo} repository`}
+  >
+    <Icon name="repo" />
+  </a>
+)}
+<a
+  class="nv-icon-button"
+  href="https://github.com/nohuto"
+  rel="me"
+  aria-label="GitHub"
+>
+  <Icon name="github" />
+</a>
+<a
+  class="nv-icon-button"
+  href="https://discord.noverse.dev"
+  rel="me"
+  aria-label="Discord"
+>
+  <Icon name="discord" />
+</a>
+<a class="nv-icon-button" href="/" aria-label="Portfolio">
+  <Icon name="user-list" />
+</a>
+
+<script>
+  document.addEventListener('click', (event) => {
+    if (!(event.target as Element | null)?.closest('[data-telescope-open]'))
+      return;
+    document
+      .querySelector<HTMLButtonElement>('telescope-search button')
+      ?.click();
+  });
+</script>

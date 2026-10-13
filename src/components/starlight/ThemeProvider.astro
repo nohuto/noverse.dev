@@ -1,0 +1,21 @@
+---
+import ThemeInit from '../shell/ThemeInit.astro';
+---
+
+<ThemeInit />
+<script is:inline>
+  const root = document.documentElement;
+  root.toggleAttribute(
+    'data-zen',
+    new URL(location.href).searchParams.get('view') === 'zen',
+  );
+  try {
+    root.toggleAttribute(
+      'data-sidebar-collapsed',
+      localStorage.getItem('nv-sidebar-collapsed') === 'true',
+    );
+    const width = Number(localStorage.getItem('nv-sidebar-width'));
+    if (width > 0)
+      root.style.setProperty('--nv-sidebar-saved-width', `${width}px`);
+  } catch {}
+</script>

@@ -1,176 +1,100 @@
-﻿.home-intro h1 {
-  margin: 0 0 12px;
-  font-size: 18px;
-  text-transform: uppercase;
-  letter-spacing: 0;
+.home-intro h1 {
+  margin-bottom: 0.75rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
-.home-intro > p {
-  margin: 0;
+.home-intro p {
+  margin: 0 0 1em;
   color: var(--muted);
-  line-height: 1.65;
+  line-height: 1.75;
 }
 
-.home-intro .home-contact {
-  margin-top: 8px;
+.home-intro .link {
+  color: var(--text);
 }
 
-.home-contact a,
-.home-email,
-.home-fingerprint {
-  color: var(--accent);
-}
-
-.home-email,
-.home-fingerprint {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  font: inherit;
-  cursor: pointer;
+.home-contact .nv-icon {
+  --nv-icon-size: 1.05em;
+  margin-right: 0.25em;
 }
 
 .home-email {
+  padding: 0;
+  background: transparent;
+  font: inherit;
+  line-height: normal;
+  cursor: pointer;
+}
+
+.home-email [data-email-text] {
   display: inline-block;
-  width: 19ch;
+  min-width: 10.3em;
+  text-align: left;
   -webkit-user-select: text;
   user-select: text;
 }
 
-.fingerprint-dialog {
-  width: auto;
+.home-rule {
+  width: 50px;
+  margin: 2.5rem auto;
+  border: 0;
+  border-top: 1px solid var(--separator);
 }
 
-.settings-body.fingerprint-body {
-  padding: 14px;
-  white-space: nowrap;
+.home-work h2 {
+  margin-bottom: 1rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
-.home-section {
-  margin-top: 20px;
+.work + .work {
+  margin-top: 1.25rem;
 }
 
-.home-work-grid {
-  display: grid;
-  gap: 0 28px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.home-work-item {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 6px;
-  padding: 9px 0 10px;
-}
-
-.home-work-title {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  min-width: 0;
-}
-
-.home-work-title a {
-  color: var(--text);
-  text-decoration: none;
-}
-
-.home-work-title .home-work-docs {
+.work-preview summary {
   display: inline-flex;
-  flex: 0 0 auto;
-  color: var(--muted);
-}
-
-.home-work-docs::before {
-  width: 14px;
-  height: 14px;
-  background: currentColor;
-  content: '';
-  mask: url('/main/icons/ui/book-bookmark.svg') center / contain no-repeat;
-}
-
-.home-work-item span {
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.home-work-item strong {
-  font-size: 0.8125rem;
-  font-weight: 600;
-}
-
-.home-work-title > a:hover strong,
-.home-work-title > a:focus-visible strong,
-.home-work-docs:hover,
-.home-work-docs:focus-visible {
-  color: var(--accent);
-}
-
-.commit-item {
-  display: grid;
-  grid-template-columns: 18ch minmax(0, 1fr) auto;
-  gap: 14px;
-  align-items: baseline;
-  padding: 10px 0;
+  align-items: center;
+  gap: 0.35em;
   color: var(--text);
-  text-decoration: none;
+  cursor: pointer;
 }
 
-.commit-item:not(:last-child) {
-  border-bottom: 1px solid var(--border);
+.work-preview h3 {
+  font-size: 1rem;
 }
 
-.commit-repo,
-.commit-sha,
-.commit-date {
+.work-preview summary .nv-icon {
+  --nv-icon-size: 0.85rem;
   color: var(--muted);
-  font-size: 0.6875rem;
 }
 
-.commit-date {
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+.work-preview[open] summary .nv-icon {
+  transform: rotate(180deg);
 }
 
-.commit-sha {
+.work-preview summary:is(:hover, :focus-visible) .nv-icon {
   color: var(--text);
 }
 
-.commit-message {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  font-size: var(--font-size-control);
+.work-preview .project-image-preview {
+  margin: 0.75rem 0 0.5rem;
 }
 
-.commit-item:hover .commit-message,
-.commit-item:focus-visible .commit-message {
-  color: var(--accent);
+.work-desc {
+  margin: 0.25rem 0 0;
 }
 
-.home-status {
-  margin: 0;
-  padding: 12px 0;
+.home-more {
+  display: inline-block;
+  margin-top: 1.75rem;
   color: var(--muted);
+  font-size: 0.875rem;
+  opacity: 0.75;
 }
 
-@media (max-width: 720px) {
-  .home-work-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .commit-item {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 4px 12px;
-  }
-
-  .commit-message {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
-  .commit-date {
-    grid-column: 2;
-    grid-row: 1;
-  }
+.home-more:is(:hover, :focus-visible) {
+  opacity: 1;
 }

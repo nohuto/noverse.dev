@@ -1,8 +1,10 @@
 ---
 import ThemeInit from '../shell/ThemeInit.astro';
+import PullRefreshFix from '../shell/PullRefreshFix.astro';
 ---
 
 <ThemeInit />
+<PullRefreshFix />
 <script is:inline>
   const root = document.documentElement;
   root.toggleAttribute(

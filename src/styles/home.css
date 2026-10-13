@@ -11,7 +11,7 @@
   line-height: 1.75;
 }
 
-.home-intro .link {
+:is(.home-intro, .work) .link {
   color: var(--text);
 }
 
@@ -54,16 +54,23 @@
   margin-top: 1.25rem;
 }
 
+.work h3 {
+  float: left;
+  margin-right: 0.35em;
+  font-size: 1rem;
+}
+
 .work-preview summary {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.35em;
-  color: var(--text);
+  width: fit-content;
+  height: 1.75rem;
   cursor: pointer;
 }
 
-.work-preview h3 {
-  font-size: 1rem;
+.work-preview > :not(summary),
+.work-desc {
+  clear: both;
 }
 
 .work-preview summary .nv-icon {

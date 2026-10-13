@@ -265,6 +265,10 @@ body:has(.main-terminal) {
   cursor: pointer;
 }
 
+.bitmask-bit:focus-visible {
+  outline: none;
+}
+
 .bitmask-bit strong {
   font-size: var(--font-size-control);
   font-weight: 400;

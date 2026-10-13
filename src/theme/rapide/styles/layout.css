@@ -201,6 +201,7 @@
     display: block;
   }
   :root[data-zen] .main-pane {
+    --sl-content-margin-inline: auto;
     width: 100%;
   }
   .main-pane:has(.policies-main, .bindiff-main, .main-terminal) .sl-container {

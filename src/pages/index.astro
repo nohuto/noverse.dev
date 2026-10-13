@@ -52,9 +52,21 @@ const selected = projects
         <h2 id="selected-work-title">Selected work</h2>
         {selected.map((project) => (
           <article class="work">
+            <h3>
+              <a
+                class="link"
+                href={`https://github.com/${project.repo}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {project.title}
+              </a>
+            </h3>
             <details class="work-preview">
-              <summary>
-                <h3>{project.title}</h3>
+              <summary
+                aria-label={`Show ${project.title} preview`}
+                title="Show preview"
+              >
                 <Icon name="chevron-down" />
               </summary>
               <ProjectMedia

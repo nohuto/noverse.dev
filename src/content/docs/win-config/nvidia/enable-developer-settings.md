@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/enable-developer-settings
+slug: 'docs/win-config/nvidia/enable-developer-settings'
 title: 'Developer Settings'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

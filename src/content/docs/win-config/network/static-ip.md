@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/static-ip
+slug: 'docs/win-config/network/static-ip'
 title: 'Static IP'
 description: 'Network option documentation from win-config.'
 editUrl: false

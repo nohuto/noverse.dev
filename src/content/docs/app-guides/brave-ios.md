@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/brave-ios
+slug: 'docs/app-guides/brave-ios'
 title: 'Brave (iOS)'
 description: 'Generated from app-guides file: ./brave-ios.md.'
 editUrl: false

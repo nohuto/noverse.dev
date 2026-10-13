@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/disable-nic-power-savings
+slug: 'docs/win-config/power/disable-nic-power-savings'
 title: 'NIC Power Savings'
 description: 'Power option documentation from win-config.'
 editUrl: false

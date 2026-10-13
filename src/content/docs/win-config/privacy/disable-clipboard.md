@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-clipboard
+slug: 'docs/win-config/privacy/disable-clipboard'
 title: 'Clipboard'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

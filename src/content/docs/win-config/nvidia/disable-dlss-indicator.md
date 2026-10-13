@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/disable-dlss-indicator
+slug: 'docs/win-config/nvidia/disable-dlss-indicator'
 title: 'DLSS Indicator'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

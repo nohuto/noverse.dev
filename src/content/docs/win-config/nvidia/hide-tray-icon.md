@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/hide-tray-icon
+slug: 'docs/win-config/nvidia/hide-tray-icon'
 title: 'Hide Tray Icon'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

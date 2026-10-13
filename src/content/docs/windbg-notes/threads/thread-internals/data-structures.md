@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/threads/thread-internals/data-structures
+slug: 'docs/windbg-notes/threads/thread-internals/data-structures'
 title: 'Data Structures'
 description: 'Generated from windbg-notes file: threads/thread-internals/data-structures.md.'
 editUrl: false

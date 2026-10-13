@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/detailed-file-transfer
+slug: 'docs/win-config/visibility/detailed-file-transfer'
 title: 'Detailed File Transfer'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/nvlddmkm-hex-values
+slug: 'docs/win-config/nvidia/nvlddmkm-hex-values'
 title: 'NVLDDMKM Hex Values'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

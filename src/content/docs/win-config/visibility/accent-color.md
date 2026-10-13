@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/accent-color
+slug: 'docs/win-config/visibility/accent-color'
 title: 'Accent Color'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

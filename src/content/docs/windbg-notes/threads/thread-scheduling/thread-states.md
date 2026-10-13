@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/threads/thread-scheduling/thread-states
+slug: 'docs/windbg-notes/threads/thread-scheduling/thread-states'
 title: 'Thread States'
 description: 'Generated from windbg-notes file: threads/thread-scheduling/thread-states.md.'
 editUrl: false

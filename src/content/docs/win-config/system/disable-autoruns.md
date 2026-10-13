@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/disable-autoruns
+slug: 'docs/win-config/system/disable-autoruns'
 title: 'Autoruns'
 description: 'System option documentation from win-config.'
 editUrl: false

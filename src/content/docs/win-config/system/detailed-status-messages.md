@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/detailed-status-messages
+slug: 'docs/win-config/system/detailed-status-messages'
 title: 'Detailed Status Messages'
 description: 'System option documentation from win-config.'
 editUrl: false

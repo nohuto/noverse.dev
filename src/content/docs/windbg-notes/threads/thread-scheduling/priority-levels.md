@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/threads/thread-scheduling/priority-levels
+slug: 'docs/windbg-notes/threads/thread-scheduling/priority-levels'
 title: 'Priority Levels'
 description: 'Generated from windbg-notes file: threads/thread-scheduling/priority-levels.md.'
 editUrl: false

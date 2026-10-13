@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-powershell-net-telemetry
+slug: 'docs/win-config/privacy/disable-powershell-net-telemetry'
 title: 'PowerShell & .NET Telemetry'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

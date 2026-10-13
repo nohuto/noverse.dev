@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/hide-last-logged-in-user
+slug: 'docs/win-config/privacy/hide-last-logged-in-user'
 title: 'Hide Last Logged-In User'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

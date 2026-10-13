@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/mouse-hover-time
+slug: 'docs/win-config/visibility/mouse-hover-time'
 title: 'Mouse Hover Time'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

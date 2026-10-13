@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-application-compatibility
+slug: 'docs/win-config/privacy/disable-application-compatibility'
 title: 'Application Compatibility'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

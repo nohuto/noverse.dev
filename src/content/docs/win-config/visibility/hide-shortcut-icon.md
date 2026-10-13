@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/hide-shortcut-icon
+slug: 'docs/win-config/visibility/hide-shortcut-icon'
 title: 'Hide Shortcut Icon'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

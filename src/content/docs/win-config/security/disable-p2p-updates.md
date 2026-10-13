@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/disable-p2p-updates
+slug: 'docs/win-config/security/disable-p2p-updates'
 title: 'P2P Updates'
 description: 'Security option documentation from win-config.'
 editUrl: false

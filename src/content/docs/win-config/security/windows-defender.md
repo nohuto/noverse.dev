@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/windows-defender
+slug: 'docs/win-config/security/windows-defender'
 title: 'Windows Defender'
 description: 'Security option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/disable-telemetry
+slug: 'docs/win-config/nvidia/disable-telemetry'
 title: 'Telemetry'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

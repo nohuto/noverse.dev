@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/usb-audio-idle
+slug: 'docs/win-config/power/usb-audio-idle'
 title: 'USB Audio Idle'
 description: 'Power option documentation from win-config.'
 editUrl: false

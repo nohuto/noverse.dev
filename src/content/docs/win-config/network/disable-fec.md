@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-fec
+slug: 'docs/win-config/network/disable-fec'
 title: 'FEC'
 description: 'Network option documentation from win-config.'
 editUrl: false

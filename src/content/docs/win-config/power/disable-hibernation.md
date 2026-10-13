@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/disable-hibernation
+slug: 'docs/win-config/power/disable-hibernation'
 title: 'Hibernation'
 description: 'Power option documentation from win-config.'
 editUrl: false

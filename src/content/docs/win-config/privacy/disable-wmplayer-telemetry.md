@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-wmplayer-telemetry
+slug: 'docs/win-config/privacy/disable-wmplayer-telemetry'
 title: 'WMPlayer Telemetry'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

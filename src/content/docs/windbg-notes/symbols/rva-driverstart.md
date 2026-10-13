@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/symbols/rva-driverstart
+slug: 'docs/windbg-notes/symbols/rva-driverstart'
 title: 'RVA + DriverStart'
 description: 'Generated from windbg-notes file: symbols/rva-driverstart.md.'
 editUrl: false

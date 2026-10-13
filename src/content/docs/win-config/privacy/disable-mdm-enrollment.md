@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-mdm-enrollment
+slug: 'docs/win-config/privacy/disable-mdm-enrollment'
 title: 'MDM Enrollment'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/discord
+slug: 'docs/app-guides/discord'
 title: 'Discord'
 description: 'Generated from app-guides file: ./discord.md.'
 editUrl: false

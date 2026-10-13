@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/disable-downloads-blocking
+slug: 'docs/win-config/security/disable-downloads-blocking'
 title: 'Downloads Blocking'
 description: 'Security option documentation from win-config.'
 editUrl: false

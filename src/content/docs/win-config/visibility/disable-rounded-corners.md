@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/disable-rounded-corners
+slug: 'docs/win-config/visibility/disable-rounded-corners'
 title: 'Rounded Corners'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-phone-linking
+slug: 'docs/win-config/privacy/disable-phone-linking'
 title: 'Phone Linking'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

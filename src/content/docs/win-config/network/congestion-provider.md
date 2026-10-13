@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/congestion-provider
+slug: 'docs/win-config/network/congestion-provider'
 title: 'Congestion Provider'
 description: 'Network option documentation from win-config.'
 editUrl: false

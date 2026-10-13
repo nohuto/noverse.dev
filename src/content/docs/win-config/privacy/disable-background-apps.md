@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-background-apps
+slug: 'docs/win-config/privacy/disable-background-apps'
 title: 'Background Apps'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-suggestions-tips-tricks
+slug: 'docs/win-config/privacy/disable-suggestions-tips-tricks'
 title: 'Suggestions/Tips/Tricks'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

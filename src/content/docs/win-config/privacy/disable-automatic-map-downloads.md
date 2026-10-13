@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-automatic-map-downloads
+slug: 'docs/win-config/privacy/disable-automatic-map-downloads'
 title: 'Automatic Map Downloads'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

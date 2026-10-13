@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/sample-rate
+slug: 'docs/win-config/peripheral/sample-rate'
 title: 'Sample Rate'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

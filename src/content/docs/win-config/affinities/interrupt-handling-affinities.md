@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/affinities/interrupt-handling-affinities
+slug: 'docs/win-config/affinities/interrupt-handling-affinities'
 title: 'Interrupt Handling & Affinities'
 description: 'Affinities option documentation from win-config.'
 editUrl: false

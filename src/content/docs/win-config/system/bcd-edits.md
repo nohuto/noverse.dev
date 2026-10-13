@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/bcd-edits
+slug: 'docs/win-config/system/bcd-edits'
 title: 'BCD Edits'
 description: 'System option documentation from win-config.'
 editUrl: false

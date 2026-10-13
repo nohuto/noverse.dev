@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/disable-audio-video-preview
+slug: 'docs/win-config/visibility/disable-audio-video-preview'
 title: 'Audio / Video Preview'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

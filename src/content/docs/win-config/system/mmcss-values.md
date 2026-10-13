@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/mmcss-values
+slug: 'docs/win-config/system/mmcss-values'
 title: 'MMCSS Values'
 description: 'System option documentation from win-config.'
 editUrl: false

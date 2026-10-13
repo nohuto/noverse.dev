@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/disable-vbs-hvci
+slug: 'docs/win-config/security/disable-vbs-hvci'
 title: 'VBS (HVCI)'
 description: 'Security option documentation from win-config.'
 editUrl: false

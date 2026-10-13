@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/lghub
+slug: 'docs/app-guides/lghub'
 title: 'LGHUB'
 description: 'Generated from app-guides file: ./lghub.md.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc/hash-generator
+slug: 'docs/win-config/misc/hash-generator'
 title: 'Hash Generator'
 description: 'Misc option documentation from win-config.'
 editUrl: false

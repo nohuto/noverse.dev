@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/network-buffers
+slug: 'docs/win-config/network/network-buffers'
 title: 'Network Buffers'
 description: 'Network option documentation from win-config.'
 editUrl: false

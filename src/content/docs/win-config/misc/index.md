@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc
+slug: 'docs/win-config/misc'
 title: 'Overview'
 description: 'Auto-generated overview for Misc.'
 editUrl: false

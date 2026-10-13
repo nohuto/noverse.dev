@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/mouse-values
+slug: 'docs/win-config/peripheral/mouse-values'
 title: 'Mouse Values'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

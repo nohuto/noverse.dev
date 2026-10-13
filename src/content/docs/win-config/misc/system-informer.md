@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc/system-informer
+slug: 'docs/win-config/misc/system-informer'
 title: 'System Informer'
 description: 'Misc option documentation from win-config.'
 editUrl: false

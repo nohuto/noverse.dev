@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/disable-transparency
+slug: 'docs/win-config/visibility/disable-transparency'
 title: 'Transparency'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

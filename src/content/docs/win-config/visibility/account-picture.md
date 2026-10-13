@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/account-picture
+slug: 'docs/win-config/visibility/account-picture'
 title: 'Account Picture'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

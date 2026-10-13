@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/display-scaling
+slug: 'docs/win-config/system/display-scaling'
 title: 'Display Scaling'
 description: 'System option documentation from win-config.'
 editUrl: false

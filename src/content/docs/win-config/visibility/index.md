@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility
+slug: 'docs/win-config/visibility'
 title: 'Overview'
 description: 'Auto-generated overview for Visibility.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/disable-dynamic-lighting
+slug: 'docs/win-config/peripheral/disable-dynamic-lighting'
 title: 'Dynamic Lighting'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

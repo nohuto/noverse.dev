@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/windbg-init/noisy-symbol-loading
+slug: 'docs/windbg-notes/windbg-init/noisy-symbol-loading'
 title: 'Noisy Symbol Loading'
 description: 'Generated from windbg-notes file: windbg-init/noisy-symbol-loading.md.'
 editUrl: false

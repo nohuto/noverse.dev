@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/enable-legacy-switch-compatibility-mode
+slug: 'docs/win-config/network/enable-legacy-switch-compatibility-mode'
 title: 'Legacy Switch Compatibility Mode'
 description: 'Network option documentation from win-config.'
 editUrl: false

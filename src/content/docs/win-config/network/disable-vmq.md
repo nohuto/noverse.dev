@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-vmq
+slug: 'docs/win-config/network/disable-vmq'
 title: 'VMQ'
 description: 'Network option documentation from win-config.'
 editUrl: false

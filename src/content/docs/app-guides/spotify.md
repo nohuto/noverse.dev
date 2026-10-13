@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/spotify
+slug: 'docs/app-guides/spotify'
 title: 'Spotify'
 description: 'Generated from app-guides file: ./spotify.md.'
 editUrl: false

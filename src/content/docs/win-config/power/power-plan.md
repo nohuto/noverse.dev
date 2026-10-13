@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/power-plan
+slug: 'docs/win-config/power/power-plan'
 title: 'Power Plan'
 description: 'Power option documentation from win-config.'
 editUrl: false

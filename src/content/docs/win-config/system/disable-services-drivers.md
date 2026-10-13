@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/disable-services-drivers
+slug: 'docs/win-config/system/disable-services-drivers'
 title: 'Services/Drivers'
 description: 'System option documentation from win-config.'
 editUrl: false

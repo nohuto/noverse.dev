@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/explorer-options
+slug: 'docs/win-config/visibility/explorer-options'
 title: 'Explorer Options'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

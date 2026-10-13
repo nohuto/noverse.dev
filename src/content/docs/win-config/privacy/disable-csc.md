@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-csc
+slug: 'docs/win-config/privacy/disable-csc'
 title: 'CSC'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/stornvme-values
+slug: 'docs/win-config/peripheral/stornvme-values'
 title: 'StorNVMe Values'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/mullvad-desktop
+slug: 'docs/app-guides/mullvad-desktop'
 title: 'Mullvad'
 description: 'Generated from app-guides file: ./mullvad-desktop.md.'
 editUrl: false

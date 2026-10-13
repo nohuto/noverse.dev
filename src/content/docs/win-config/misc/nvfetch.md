@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc/nvfetch
+slug: 'docs/win-config/misc/nvfetch'
 title: 'NVFetch'
 description: 'Misc option documentation from win-config.'
 editUrl: false

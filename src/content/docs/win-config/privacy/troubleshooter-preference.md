@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/troubleshooter-preference
+slug: 'docs/win-config/privacy/troubleshooter-preference'
 title: 'Troubleshooter Preference'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

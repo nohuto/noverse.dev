@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-general-telemetry
+slug: 'docs/win-config/privacy/disable-general-telemetry'
 title: 'General Telemetry'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

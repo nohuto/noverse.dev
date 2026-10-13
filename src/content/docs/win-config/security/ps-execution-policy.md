@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/ps-execution-policy
+slug: 'docs/win-config/security/ps-execution-policy'
 title: 'PS Execution Policy'
 description: 'Security option documentation from win-config.'
 editUrl: false

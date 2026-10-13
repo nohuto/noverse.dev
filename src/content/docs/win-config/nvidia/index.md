@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia
+slug: 'docs/win-config/nvidia'
 title: 'Overview'
 description: 'Auto-generated overview for NVIDIA.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/timer-expiration
+slug: 'docs/win-config/system/timer-expiration'
 title: 'Timer Expiration'
 description: 'System option documentation from win-config.'
 editUrl: false

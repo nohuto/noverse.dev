@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/app-configuration
+slug: 'docs/win-config/privacy/app-configuration'
 title: 'App Configuration'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

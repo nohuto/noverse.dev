@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/nvcpl-settings
+slug: 'docs/win-config/nvidia/nvcpl-settings'
 title: 'NVCPL Settings'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

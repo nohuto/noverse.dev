@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-ics-mobile-hotspot
+slug: 'docs/win-config/network/disable-ics-mobile-hotspot'
 title: 'ICS / Mobile Hotspot'
 description: 'Network option documentation from win-config.'
 editUrl: false

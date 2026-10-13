@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/system-mechanisms/software-interrupts/deferred-procedure-calls
+slug: 'docs/windbg-notes/system-mechanisms/software-interrupts/deferred-procedure-calls'
 title: 'Deferred Procedure Calls'
 description: 'Generated from windbg-notes file: system-mechanisms/software-interrupts/deferred-procedure-calls.md.'
 editUrl: false

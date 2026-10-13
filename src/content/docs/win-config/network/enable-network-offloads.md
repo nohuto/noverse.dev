@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/enable-network-offloads
+slug: 'docs/win-config/network/enable-network-offloads'
 title: 'Network Offloads'
 description: 'Network option documentation from win-config.'
 editUrl: false

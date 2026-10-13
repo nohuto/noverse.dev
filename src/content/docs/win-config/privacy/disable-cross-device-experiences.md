@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-cross-device-experiences
+slug: 'docs/win-config/privacy/disable-cross-device-experiences'
 title: 'Cross-Device Experiences'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

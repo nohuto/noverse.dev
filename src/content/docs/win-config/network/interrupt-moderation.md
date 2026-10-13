@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/interrupt-moderation
+slug: 'docs/win-config/network/interrupt-moderation'
 title: 'Interrupt Moderation'
 description: 'Network option documentation from win-config.'
 editUrl: false

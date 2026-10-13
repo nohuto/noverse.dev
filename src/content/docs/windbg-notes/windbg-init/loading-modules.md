@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/windbg-init/loading-modules
+slug: 'docs/windbg-notes/windbg-init/loading-modules'
 title: 'Loading Modules'
 description: 'Generated from windbg-notes file: windbg-init/loading-modules.md.'
 editUrl: false

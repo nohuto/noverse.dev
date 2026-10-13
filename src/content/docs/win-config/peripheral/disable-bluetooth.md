@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/disable-bluetooth
+slug: 'docs/win-config/peripheral/disable-bluetooth'
 title: 'Bluetooth'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

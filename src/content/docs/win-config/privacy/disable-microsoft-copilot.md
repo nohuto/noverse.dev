@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-microsoft-copilot
+slug: 'docs/win-config/privacy/disable-microsoft-copilot'
 title: 'Microsoft Copilot'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

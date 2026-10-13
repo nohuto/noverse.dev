@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-synchronization
+slug: 'docs/win-config/privacy/disable-synchronization'
 title: 'Synchronization'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

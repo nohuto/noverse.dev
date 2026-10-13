@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-sr-iov
+slug: 'docs/win-config/network/disable-sr-iov'
 title: 'SR-IOV'
 description: 'Network option documentation from win-config.'
 editUrl: false

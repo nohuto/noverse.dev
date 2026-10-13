@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/pointer-style
+slug: 'docs/win-config/visibility/pointer-style'
 title: 'Pointer Style'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

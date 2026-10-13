@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system
+slug: 'docs/win-config/system'
 title: 'Overview'
 description: 'Auto-generated overview for System.'
 editUrl: false

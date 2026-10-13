@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/page-combining
+slug: 'docs/win-config/system/page-combining'
 title: 'Page Combining'
 description: 'System option documentation from win-config.'
 editUrl: false

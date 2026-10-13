@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/settings-page-visibility
+slug: 'docs/win-config/visibility/settings-page-visibility'
 title: 'Settings Page Visibility'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

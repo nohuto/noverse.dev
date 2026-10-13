@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/disable-printers
+slug: 'docs/win-config/peripheral/disable-printers'
 title: 'Printers'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

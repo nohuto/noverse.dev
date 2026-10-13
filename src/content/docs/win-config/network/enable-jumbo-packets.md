@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/enable-jumbo-packets
+slug: 'docs/win-config/network/enable-jumbo-packets'
 title: 'Jumbo Packets'
 description: 'Network option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/microsoft-accounts
+slug: 'docs/win-config/privacy/microsoft-accounts'
 title: 'Microsoft Accounts'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

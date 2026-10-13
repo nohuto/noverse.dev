@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-network-discovery
+slug: 'docs/win-config/network/disable-network-discovery'
 title: 'Network Discovery'
 description: 'Network option documentation from win-config.'
 editUrl: false

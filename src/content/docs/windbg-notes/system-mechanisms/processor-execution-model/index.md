@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/system-mechanisms/processor-execution-model
+slug: 'docs/windbg-notes/system-mechanisms/processor-execution-model'
 title: 'Overview'
 description: 'Auto-generated overview for Processor Execution Model.'
 editUrl: false

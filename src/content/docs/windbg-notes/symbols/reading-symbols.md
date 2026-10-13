@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/symbols/reading-symbols
+slug: 'docs/windbg-notes/symbols/reading-symbols'
 title: 'Symbols'
 description: 'Generated from windbg-notes file: symbols/reading-symbols.md.'
 editUrl: false

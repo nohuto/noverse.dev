@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/enable-dark-theme
+slug: 'docs/win-config/visibility/enable-dark-theme'
 title: 'Dark Theme'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

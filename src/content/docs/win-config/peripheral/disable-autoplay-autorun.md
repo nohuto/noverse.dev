@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/disable-autoplay-autorun
+slug: 'docs/win-config/peripheral/disable-autoplay-autorun'
 title: 'AutoPlay/Autorun'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

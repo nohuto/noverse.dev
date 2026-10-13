@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/disable-energy-estimation
+slug: 'docs/win-config/power/disable-energy-estimation'
 title: 'Energy Estimation'
 description: 'Power option documentation from win-config.'
 editUrl: false

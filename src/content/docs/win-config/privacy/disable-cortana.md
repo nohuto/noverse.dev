@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-cortana
+slug: 'docs/win-config/privacy/disable-cortana'
 title: 'Cortana'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral
+slug: 'docs/win-config/peripheral'
 title: 'Overview'
 description: 'Auto-generated overview for Peripheral.'
 editUrl: false

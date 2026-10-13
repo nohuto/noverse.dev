@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/windbg-init
+slug: 'docs/windbg-notes/windbg-init'
 title: 'Overview'
 description: 'Auto-generated overview for WinDbg Init.'
 editUrl: false

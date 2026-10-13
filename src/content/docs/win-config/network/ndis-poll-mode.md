@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/ndis-poll-mode
+slug: 'docs/win-config/network/ndis-poll-mode'
 title: 'NDIS Poll Mode'
 description: 'Network option documentation from win-config.'
 editUrl: false

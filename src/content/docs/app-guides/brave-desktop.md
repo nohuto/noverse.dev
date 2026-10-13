@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/brave-desktop
+slug: 'docs/app-guides/brave-desktop'
 title: 'Brave (Desktop)'
 description: 'Generated from app-guides file: ./brave-desktop.md.'
 editUrl: false

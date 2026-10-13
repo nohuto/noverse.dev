@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/usbhub-values
+slug: 'docs/win-config/peripheral/usbhub-values'
 title: 'USBHUB Values'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

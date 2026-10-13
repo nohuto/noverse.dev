@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-font-providers
+slug: 'docs/win-config/privacy/disable-font-providers'
 title: 'Font Providers'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

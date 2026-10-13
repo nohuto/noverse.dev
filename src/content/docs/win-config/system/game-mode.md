@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/game-mode
+slug: 'docs/win-config/system/game-mode'
 title: 'Game Mode'
 description: 'System option documentation from win-config.'
 editUrl: false

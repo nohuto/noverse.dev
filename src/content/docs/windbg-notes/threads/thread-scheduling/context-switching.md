@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/threads/thread-scheduling/context-switching
+slug: 'docs/windbg-notes/threads/thread-scheduling/context-switching'
 title: 'Context Switching'
 description: 'Generated from windbg-notes file: threads/thread-scheduling/context-switching.md.'
 editUrl: false

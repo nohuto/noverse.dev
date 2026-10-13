@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/threads/thread-internals
+slug: 'docs/windbg-notes/threads/thread-internals'
 title: 'Overview'
 description: 'Auto-generated overview for Thread Internals.'
 editUrl: false

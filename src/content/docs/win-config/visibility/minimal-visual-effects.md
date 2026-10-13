@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/minimal-visual-effects
+slug: 'docs/win-config/visibility/minimal-visual-effects'
 title: 'Minimal Visual Effects'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

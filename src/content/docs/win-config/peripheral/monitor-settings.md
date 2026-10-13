@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/monitor-settings
+slug: 'docs/win-config/peripheral/monitor-settings'
 title: 'Monitor Settings'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

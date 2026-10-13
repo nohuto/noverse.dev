@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/hide-lock-screen
+slug: 'docs/win-config/visibility/hide-lock-screen'
 title: 'Hide Lock Screen'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

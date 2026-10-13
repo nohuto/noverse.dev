@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/remove-context-menu-entry
+slug: 'docs/win-config/nvidia/remove-context-menu-entry'
 title: 'Remove Context Menu Entry'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

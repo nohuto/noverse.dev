@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/uac
+slug: 'docs/win-config/security/uac'
 title: 'UAC'
 description: 'Security option documentation from win-config.'
 editUrl: false

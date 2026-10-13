@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power
+slug: 'docs/win-config/power'
 title: 'Overview'
 description: 'Auto-generated overview for Power.'
 editUrl: false

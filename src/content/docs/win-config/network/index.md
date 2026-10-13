@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network
+slug: 'docs/win-config/network'
 title: 'Overview'
 description: 'Auto-generated overview for Network.'
 editUrl: false

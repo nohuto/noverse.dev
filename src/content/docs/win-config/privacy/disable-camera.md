@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-camera
+slug: 'docs/win-config/privacy/disable-camera'
 title: 'Camera'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

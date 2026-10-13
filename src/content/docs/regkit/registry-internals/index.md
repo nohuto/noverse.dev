@@ -1,5 +1,5 @@
 ---
-slug: docs/regkit/registry-internals
+slug: 'docs/regkit/registry-internals'
 title: 'Overview'
 description: 'Auto-generated overview for Registry Internals.'
 editUrl: false

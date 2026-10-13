@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/memory-compression
+slug: 'docs/win-config/system/memory-compression'
 title: 'Memory Compression'
 description: 'System option documentation from win-config.'
 editUrl: false

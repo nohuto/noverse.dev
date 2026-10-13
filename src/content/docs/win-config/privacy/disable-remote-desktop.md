@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-remote-desktop
+slug: 'docs/win-config/privacy/disable-remote-desktop'
 title: 'Remote Desktop'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

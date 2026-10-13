@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/desktop-icon-spacing
+slug: 'docs/win-config/visibility/desktop-icon-spacing'
 title: 'Desktop Icon Spacing'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

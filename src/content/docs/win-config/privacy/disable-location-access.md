@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-location-access
+slug: 'docs/win-config/privacy/disable-location-access'
 title: 'Location Access'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

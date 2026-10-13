@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/system-mechanisms/software-interrupts
+slug: 'docs/windbg-notes/system-mechanisms/software-interrupts'
 title: 'Overview'
 description: 'Auto-generated overview for Software Interrupts.'
 editUrl: false

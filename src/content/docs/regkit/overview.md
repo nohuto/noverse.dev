@@ -1,5 +1,5 @@
 ---
-slug: docs/regkit/overview
+slug: 'docs/regkit/overview'
 title: 'Overview'
 description: 'RegKit overview generated from README.'
 editUrl: false

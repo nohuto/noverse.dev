@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-sleep-study
+slug: 'docs/win-config/privacy/disable-sleep-study'
 title: 'Sleep Study'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

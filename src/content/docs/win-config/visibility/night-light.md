@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/night-light
+slug: 'docs/win-config/visibility/night-light'
 title: 'Night Light'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

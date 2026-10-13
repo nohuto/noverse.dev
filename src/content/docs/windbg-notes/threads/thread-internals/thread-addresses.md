@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/threads/thread-internals/thread-addresses
+slug: 'docs/windbg-notes/threads/thread-internals/thread-addresses'
 title: 'Thread Addresses'
 description: 'Generated from windbg-notes file: threads/thread-internals/thread-addresses.md.'
 editUrl: false

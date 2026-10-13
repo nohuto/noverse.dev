@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/administrator-account
+slug: 'docs/win-config/security/administrator-account'
 title: 'Administrator Account'
 description: 'Security option documentation from win-config.'
 editUrl: false

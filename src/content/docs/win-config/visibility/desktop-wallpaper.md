@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/desktop-wallpaper
+slug: 'docs/win-config/visibility/desktop-wallpaper'
 title: 'Desktop Wallpaper'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

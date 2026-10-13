@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-file-history
+slug: 'docs/win-config/privacy/disable-file-history'
 title: 'File History'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

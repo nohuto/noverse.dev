@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/threads/thread-scheduling
+slug: 'docs/windbg-notes/threads/thread-scheduling'
 title: 'Overview'
 description: 'Auto-generated overview for Thread Scheduling.'
 editUrl: false

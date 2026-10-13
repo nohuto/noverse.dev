@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/powershell-colors
+slug: 'docs/win-config/visibility/powershell-colors'
 title: 'PowerShell Colors'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

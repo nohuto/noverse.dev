@@ -1,5 +1,5 @@
 ---
-slug: docs/regkit/registry-internals/registry-fundamentals
+slug: 'docs/regkit/registry-internals/registry-fundamentals'
 title: 'Registry Fundamentals'
 description: 'Generated from regkit file: docs/registry-fundamentals.md.'
 editUrl: false

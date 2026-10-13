@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-thumbnail-caching
+slug: 'docs/win-config/privacy/disable-thumbnail-caching'
 title: 'Thumbnail Caching'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

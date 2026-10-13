@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/disable-logging
+slug: 'docs/win-config/nvidia/disable-logging'
 title: 'Logging'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

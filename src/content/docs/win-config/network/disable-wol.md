@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-wol
+slug: 'docs/win-config/network/disable-wol'
 title: 'WoL'
 description: 'Network option documentation from win-config.'
 editUrl: false

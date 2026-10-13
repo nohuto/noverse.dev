@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/deny-app-access
+slug: 'docs/win-config/privacy/deny-app-access'
 title: 'Deny App Access'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

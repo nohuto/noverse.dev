@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-llse
+slug: 'docs/win-config/network/disable-llse'
 title: 'LLSE'
 description: 'Network option documentation from win-config.'
 editUrl: false

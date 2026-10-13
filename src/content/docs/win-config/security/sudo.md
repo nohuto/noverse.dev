@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/sudo
+slug: 'docs/win-config/security/sudo'
 title: 'Sudo'
 description: 'Security option documentation from win-config.'
 editUrl: false

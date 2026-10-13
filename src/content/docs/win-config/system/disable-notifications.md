@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/disable-notifications
+slug: 'docs/win-config/system/disable-notifications'
 title: 'Notifications'
 description: 'System option documentation from win-config.'
 editUrl: false

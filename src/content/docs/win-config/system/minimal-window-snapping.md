@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/minimal-window-snapping
+slug: 'docs/win-config/system/minimal-window-snapping'
 title: 'Minimal Window Snapping'
 description: 'System option documentation from win-config.'
 editUrl: false

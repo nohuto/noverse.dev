@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/system-fonts
+slug: 'docs/win-config/visibility/system-fonts'
 title: 'System Fonts'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/steelseries
+slug: 'docs/app-guides/steelseries'
 title: 'SteelSeries'
 description: 'Generated from app-guides file: ./steelseries.md.'
 editUrl: false

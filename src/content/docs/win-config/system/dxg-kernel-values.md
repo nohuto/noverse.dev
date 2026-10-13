@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/dxg-kernel-values
+slug: 'docs/win-config/system/dxg-kernel-values'
 title: 'DXG Kernel Values'
 description: 'System option documentation from win-config.'
 editUrl: false

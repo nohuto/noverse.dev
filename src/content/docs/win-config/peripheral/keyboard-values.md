@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/keyboard-values
+slug: 'docs/win-config/peripheral/keyboard-values'
 title: 'Keyboard Values'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

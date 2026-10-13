@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/smb
+slug: 'docs/win-config/network/smb'
 title: 'SMB'
 description: 'Network option documentation from win-config.'
 editUrl: false

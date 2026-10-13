@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/enable-usb-write-protection
+slug: 'docs/win-config/security/enable-usb-write-protection'
 title: 'USB Write Protection'
 description: 'Security option documentation from win-config.'
 editUrl: false

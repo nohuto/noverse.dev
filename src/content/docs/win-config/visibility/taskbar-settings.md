@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/taskbar-settings
+slug: 'docs/win-config/visibility/taskbar-settings'
 title: 'Taskbar Settings'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

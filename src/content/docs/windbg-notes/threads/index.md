@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/threads
+slug: 'docs/windbg-notes/threads'
 title: 'Overview'
 description: 'Auto-generated overview for Threads.'
 editUrl: false

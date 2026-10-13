@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/search-engine
+slug: 'docs/app-guides/search-engine'
 title: 'Search Engines'
 description: 'Generated from app-guides file: ./search-engine.md.'
 editUrl: false

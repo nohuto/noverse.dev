@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/file-system-values
+slug: 'docs/win-config/system/file-system-values'
 title: 'File System Values'
 description: 'System option documentation from win-config.'
 editUrl: false

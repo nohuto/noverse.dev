@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/hags
+slug: 'docs/win-config/system/hags'
 title: 'HAGS'
 description: 'System option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/audio-ducking
+slug: 'docs/win-config/peripheral/audio-ducking'
 title: 'Audio Ducking'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/disable-system-restore
+slug: 'docs/win-config/security/disable-system-restore'
 title: 'System Restore'
 description: 'Security option documentation from win-config.'
 editUrl: false

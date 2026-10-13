@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/encrypted-dns
+slug: 'docs/win-config/network/encrypted-dns'
 title: 'Encrypted DNS'
 description: 'Network option documentation from win-config.'
 editUrl: false

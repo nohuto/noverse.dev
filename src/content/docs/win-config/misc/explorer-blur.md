@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc/explorer-blur
+slug: 'docs/win-config/misc/explorer-blur'
 title: 'Explorer Blur'
 description: 'Misc option documentation from win-config.'
 editUrl: false

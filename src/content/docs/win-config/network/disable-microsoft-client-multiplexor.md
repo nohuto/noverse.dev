@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-microsoft-client-multiplexor
+slug: 'docs/win-config/network/disable-microsoft-client-multiplexor'
 title: 'Microsoft Client/Multiplexor'
 description: 'Network option documentation from win-config.'
 editUrl: false

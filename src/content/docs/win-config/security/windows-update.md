@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/windows-update
+slug: 'docs/win-config/security/windows-update'
 title: 'Windows Update'
 description: 'Security option documentation from win-config.'
 editUrl: false

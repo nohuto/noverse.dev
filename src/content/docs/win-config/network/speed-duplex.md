@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/speed-duplex
+slug: 'docs/win-config/network/speed-duplex'
 title: 'Speed & Duplex'
 description: 'Network option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/disable-storage-sense
+slug: 'docs/win-config/system/disable-storage-sense'
 title: 'Storage Sense'
 description: 'System option documentation from win-config.'
 editUrl: false

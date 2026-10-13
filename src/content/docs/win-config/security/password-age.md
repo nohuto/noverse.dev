@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/password-age
+slug: 'docs/win-config/security/password-age'
 title: 'Password Age'
 description: 'Security option documentation from win-config.'
 editUrl: false

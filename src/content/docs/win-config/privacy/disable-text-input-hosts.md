@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-text-input-hosts
+slug: 'docs/win-config/privacy/disable-text-input-hosts'
 title: 'Text Input Hosts'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

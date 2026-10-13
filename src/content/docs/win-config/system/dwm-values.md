@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/dwm-values
+slug: 'docs/win-config/system/dwm-values'
 title: 'DWM Values'
 description: 'System option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/classic-context-menu
+slug: 'docs/win-config/visibility/classic-context-menu'
 title: 'Classic Context Menu'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

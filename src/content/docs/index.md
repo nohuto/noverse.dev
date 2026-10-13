@@ -1,5 +1,5 @@
 ---
-slug: docs
+slug: 'docs'
 title: 'Overview'
 description: 'Documentation generated from win-config, windbg-notes, regkit, app-guides.'
 editUrl: false

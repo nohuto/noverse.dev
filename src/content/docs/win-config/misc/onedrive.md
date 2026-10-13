@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc/onedrive
+slug: 'docs/win-config/misc/onedrive'
 title: 'OneDrive'
 description: 'Misc option documentation from win-config.'
 editUrl: false

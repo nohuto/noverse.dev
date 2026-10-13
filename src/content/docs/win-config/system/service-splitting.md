@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/service-splitting
+slug: 'docs/win-config/system/service-splitting'
 title: 'Service Splitting'
 description: 'System option documentation from win-config.'
 editUrl: false

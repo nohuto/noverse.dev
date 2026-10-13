@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/affinities
+slug: 'docs/win-config/affinities'
 title: 'Overview'
 description: 'Auto-generated overview for Affinities.'
 editUrl: false

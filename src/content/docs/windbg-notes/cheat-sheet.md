@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/cheat-sheet
+slug: 'docs/windbg-notes/cheat-sheet'
 title: 'Cheat Sheet'
 description: 'Generated from windbg-notes file: ./cheat-sheet.md.'
 editUrl: false

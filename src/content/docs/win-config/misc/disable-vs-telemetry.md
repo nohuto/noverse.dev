@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc/disable-vs-telemetry
+slug: 'docs/win-config/misc/disable-vs-telemetry'
 title: 'VS Telemetry'
 description: 'Misc option documentation from win-config.'
 editUrl: false

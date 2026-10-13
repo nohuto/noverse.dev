@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/disable-audio-enhancements
+slug: 'docs/win-config/peripheral/disable-audio-enhancements'
 title: 'Audio Enhancements'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

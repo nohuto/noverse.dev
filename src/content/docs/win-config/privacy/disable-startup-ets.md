@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-startup-ets
+slug: 'docs/win-config/privacy/disable-startup-ets'
 title: 'Startup ETS'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

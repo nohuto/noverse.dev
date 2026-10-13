@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/symbols
+slug: 'docs/windbg-notes/symbols'
 title: 'Overview'
 description: 'Auto-generated overview for Symbols.'
 editUrl: false

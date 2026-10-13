@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/windows-firewall
+slug: 'docs/win-config/security/windows-firewall'
 title: 'Windows Firewall'
 description: 'Security option documentation from win-config.'
 editUrl: false

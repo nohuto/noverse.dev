@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-active-probing
+slug: 'docs/win-config/network/disable-active-probing'
 title: 'Active Probing'
 description: 'Network option documentation from win-config.'
 editUrl: false

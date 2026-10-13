@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-onesettings-download
+slug: 'docs/win-config/privacy/disable-onesettings-download'
 title: 'OneSettings Download'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

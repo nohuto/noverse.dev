@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/time-zone
+slug: 'docs/win-config/system/time-zone'
 title: 'Time Zone'
 description: 'System option documentation from win-config.'
 editUrl: false

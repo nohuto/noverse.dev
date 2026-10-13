@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/dma-remapping
+slug: 'docs/win-config/security/dma-remapping'
 title: 'DMA Remapping'
 description: 'Security option documentation from win-config.'
 editUrl: false

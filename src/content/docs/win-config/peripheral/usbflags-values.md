@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/usbflags-values
+slug: 'docs/win-config/peripheral/usbflags-values'
 title: 'USBFlags Values'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

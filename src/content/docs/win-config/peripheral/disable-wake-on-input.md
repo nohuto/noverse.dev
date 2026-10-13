@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/disable-wake-on-input
+slug: 'docs/win-config/peripheral/disable-wake-on-input'
 title: 'Wake on Input'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

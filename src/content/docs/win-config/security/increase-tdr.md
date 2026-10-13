@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/increase-tdr
+slug: 'docs/win-config/security/increase-tdr'
 title: 'Increase TDR'
 description: 'Security option documentation from win-config.'
 editUrl: false

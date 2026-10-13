@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc/disable-ms-office-telemetry
+slug: 'docs/win-config/misc/disable-ms-office-telemetry'
 title: 'MS Office Telemetry'
 description: 'Misc option documentation from win-config.'
 editUrl: false

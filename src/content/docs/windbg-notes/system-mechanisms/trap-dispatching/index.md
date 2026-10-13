@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/system-mechanisms/trap-dispatching
+slug: 'docs/windbg-notes/system-mechanisms/trap-dispatching'
 title: 'Overview'
 description: 'Auto-generated overview for Trap Dispatching.'
 editUrl: false

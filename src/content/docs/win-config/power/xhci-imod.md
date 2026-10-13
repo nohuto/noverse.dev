@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/xhci-imod
+slug: 'docs/win-config/power/xhci-imod'
 title: 'xHCI IMOD'
 description: 'Power option documentation from win-config.'
 editUrl: false

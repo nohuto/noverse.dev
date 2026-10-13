@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-activity-history
+slug: 'docs/win-config/privacy/disable-activity-history'
 title: 'Activity History'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-biometrics
+slug: 'docs/win-config/privacy/disable-biometrics'
 title: 'Biometrics'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

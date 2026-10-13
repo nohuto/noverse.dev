@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-vpns
+slug: 'docs/win-config/network/disable-vpns'
 title: 'VPNs'
 description: 'Network option documentation from win-config.'
 editUrl: false

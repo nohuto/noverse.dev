@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-wi-fi
+slug: 'docs/win-config/network/disable-wi-fi'
 title: 'Wi-Fi'
 description: 'Network option documentation from win-config.'
 editUrl: false

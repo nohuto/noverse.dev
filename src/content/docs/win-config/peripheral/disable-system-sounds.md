@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/disable-system-sounds
+slug: 'docs/win-config/peripheral/disable-system-sounds'
 title: 'System Sounds'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

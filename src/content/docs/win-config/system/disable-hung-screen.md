@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/disable-hung-screen
+slug: 'docs/win-config/system/disable-hung-screen'
 title: 'Hung Screen'
 description: 'System option documentation from win-config.'
 editUrl: false

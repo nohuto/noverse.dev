@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy
+slug: 'docs/win-config/privacy'
 title: 'Overview'
 description: 'Auto-generated overview for Privacy.'
 editUrl: false

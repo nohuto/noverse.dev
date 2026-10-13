@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/enable-fso
+slug: 'docs/win-config/system/enable-fso'
 title: 'FSO'
 description: 'System option documentation from win-config.'
 editUrl: false

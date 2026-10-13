@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/steam
+slug: 'docs/app-guides/steam'
 title: 'Steam'
 description: 'Generated from app-guides file: ./steam.md.'
 editUrl: false

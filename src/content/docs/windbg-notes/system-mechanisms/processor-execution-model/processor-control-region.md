@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/system-mechanisms/processor-execution-model/processor-control-region
+slug: 'docs/windbg-notes/system-mechanisms/processor-execution-model/processor-control-region'
 title: 'Processor Control Region'
 description: 'Generated from windbg-notes file: system-mechanisms/processor-execution-model/processor-control-region.md.'
 editUrl: false

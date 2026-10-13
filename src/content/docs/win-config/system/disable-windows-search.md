@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/disable-windows-search
+slug: 'docs/win-config/system/disable-windows-search'
 title: 'Windows Search'
 description: 'System option documentation from win-config.'
 editUrl: false

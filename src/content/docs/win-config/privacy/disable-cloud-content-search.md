@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-cloud-content-search
+slug: 'docs/win-config/privacy/disable-cloud-content-search'
 title: 'Cloud Content Search'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/policies
+slug: 'docs/win-config/policies'
 title: 'Overview'
 description: 'Auto-generated overview for Policies.'
 editUrl: false

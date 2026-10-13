@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides
+slug: 'docs/app-guides'
 title: 'Overview'
 description: 'Auto-generated overview for App Guides.'
 editUrl: false

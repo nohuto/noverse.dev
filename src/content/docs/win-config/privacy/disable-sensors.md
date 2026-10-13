@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-sensors
+slug: 'docs/win-config/privacy/disable-sensors'
 title: 'Sensors'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

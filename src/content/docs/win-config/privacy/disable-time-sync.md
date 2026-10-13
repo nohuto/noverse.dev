@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-time-sync
+slug: 'docs/win-config/privacy/disable-time-sync'
 title: 'Time Sync'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

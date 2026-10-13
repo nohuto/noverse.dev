@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-flow-control
+slug: 'docs/win-config/network/disable-flow-control'
 title: 'Flow Control'
 description: 'Network option documentation from win-config.'
 editUrl: false

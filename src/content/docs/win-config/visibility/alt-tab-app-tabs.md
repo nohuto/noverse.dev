@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/alt-tab-app-tabs
+slug: 'docs/win-config/visibility/alt-tab-app-tabs'
 title: 'Alt-Tab App Tabs'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/page-file
+slug: 'docs/win-config/system/page-file'
 title: 'Page File'
 description: 'System option documentation from win-config.'
 editUrl: false

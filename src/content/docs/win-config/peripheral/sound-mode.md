@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/sound-mode
+slug: 'docs/win-config/peripheral/sound-mode'
 title: 'Sound Mode'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

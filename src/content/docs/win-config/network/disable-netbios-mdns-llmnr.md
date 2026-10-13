@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-netbios-mdns-llmnr
+slug: 'docs/win-config/network/disable-netbios-mdns-llmnr'
 title: 'NetBIOS/mDNS/LLMNR'
 description: 'Network option documentation from win-config.'
 editUrl: false

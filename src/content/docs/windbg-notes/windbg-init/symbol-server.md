@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/windbg-init/symbol-server
+slug: 'docs/windbg-notes/windbg-init/symbol-server'
 title: 'Symbol Server'
 description: 'Generated from windbg-notes file: windbg-init/symbol-server.md.'
 editUrl: false

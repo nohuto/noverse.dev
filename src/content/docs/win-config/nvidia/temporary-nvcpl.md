@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/temporary-nvcpl
+slug: 'docs/win-config/nvidia/temporary-nvcpl'
 title: 'Temporary NVCPL'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

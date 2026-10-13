@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/enable-dynamic-lock
+slug: 'docs/win-config/security/enable-dynamic-lock'
 title: 'Dynamic Lock'
 description: 'Security option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/policies/windows-policies
+slug: 'docs/win-config/policies/windows-policies'
 title: 'Windows Policies'
 description: 'Policies option documentation from win-config.'
 editUrl: false

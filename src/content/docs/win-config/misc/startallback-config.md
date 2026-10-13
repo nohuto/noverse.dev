@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc/startallback-config
+slug: 'docs/win-config/misc/startallback-config'
 title: 'StartAllBack Config'
 description: 'Misc option documentation from win-config.'
 editUrl: false

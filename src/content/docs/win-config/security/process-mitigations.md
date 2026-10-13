@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/process-mitigations
+slug: 'docs/win-config/security/process-mitigations'
 title: 'Process Mitigations'
 description: 'Security option documentation from win-config.'
 editUrl: false

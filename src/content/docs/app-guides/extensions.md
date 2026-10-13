@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/extensions
+slug: 'docs/app-guides/extensions'
 title: 'Browser Extensions'
 description: 'Generated from app-guides file: ./extensions.md.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/disable-password-reveal
+slug: 'docs/win-config/security/disable-password-reveal'
 title: 'Password Reveal'
 description: 'Security option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/audio-values
+slug: 'docs/win-config/peripheral/audio-values'
 title: 'Audio Values'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

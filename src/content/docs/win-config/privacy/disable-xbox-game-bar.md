@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-xbox-game-bar
+slug: 'docs/win-config/privacy/disable-xbox-game-bar'
 title: 'Xbox Game Bar'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

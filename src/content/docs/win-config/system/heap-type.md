@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/heap-type
+slug: 'docs/win-config/system/heap-type'
 title: 'Heap Type'
 description: 'System option documentation from win-config.'
 editUrl: false

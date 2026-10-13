@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-wer
+slug: 'docs/win-config/privacy/disable-wer'
 title: 'WER'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

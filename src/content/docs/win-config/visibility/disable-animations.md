@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/disable-animations
+slug: 'docs/win-config/visibility/disable-animations'
 title: 'Animations'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

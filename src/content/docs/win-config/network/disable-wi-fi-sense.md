@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-wi-fi-sense
+slug: 'docs/win-config/network/disable-wi-fi-sense'
 title: 'Wi-Fi Sense'
 description: 'Network option documentation from win-config.'
 editUrl: false

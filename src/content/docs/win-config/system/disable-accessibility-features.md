@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/disable-accessibility-features
+slug: 'docs/win-config/system/disable-accessibility-features'
 title: 'Accessibility Features'
 description: 'System option documentation from win-config.'
 editUrl: false

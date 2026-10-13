@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/export-explorer-taskbar-pins
+slug: 'docs/win-config/system/export-explorer-taskbar-pins'
 title: 'Export Explorer/Taskbar Pins'
 description: 'System option documentation from win-config.'
 editUrl: false

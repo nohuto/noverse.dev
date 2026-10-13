@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/qos-policy
+slug: 'docs/win-config/network/qos-policy'
 title: 'QoS Policy'
 description: 'Network option documentation from win-config.'
 editUrl: false

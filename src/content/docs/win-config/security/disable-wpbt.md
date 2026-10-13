@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/disable-wpbt
+slug: 'docs/win-config/security/disable-wpbt'
 title: 'WPBT'
 description: 'Security option documentation from win-config.'
 editUrl: false

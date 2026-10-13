@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/remove-power-options
+slug: 'docs/win-config/power/remove-power-options'
 title: 'Remove Power Options'
 description: 'Power option documentation from win-config.'
 editUrl: false

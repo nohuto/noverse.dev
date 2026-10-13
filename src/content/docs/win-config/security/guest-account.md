@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/guest-account
+slug: 'docs/win-config/security/guest-account'
 title: 'Guest Account'
 description: 'Security option documentation from win-config.'
 editUrl: false

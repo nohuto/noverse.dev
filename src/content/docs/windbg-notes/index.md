@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes
+slug: 'docs/windbg-notes'
 title: 'Overview'
 description: 'Auto-generated overview for Windbg Notes.'
 editUrl: false

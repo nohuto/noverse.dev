@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-f1-help-key
+slug: 'docs/win-config/privacy/disable-f1-help-key'
 title: 'F1 Help Key'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

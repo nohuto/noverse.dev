@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/disable-bitlocker-efs
+slug: 'docs/win-config/security/disable-bitlocker-efs'
 title: 'Bitlocker & EFS'
 description: 'Security option documentation from win-config.'
 editUrl: false

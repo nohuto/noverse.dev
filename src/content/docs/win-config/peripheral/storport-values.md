@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/storport-values
+slug: 'docs/win-config/peripheral/storport-values'
 title: 'StorPort Values'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

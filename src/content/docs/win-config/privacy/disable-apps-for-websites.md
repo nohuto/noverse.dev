@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-apps-for-websites
+slug: 'docs/win-config/privacy/disable-apps-for-websites'
 title: 'Apps for Websites'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

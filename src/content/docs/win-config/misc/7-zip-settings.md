@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/misc/7-zip-settings
+slug: 'docs/win-config/misc/7-zip-settings'
 title: '7-Zip Settings'
 description: 'Misc option documentation from win-config.'
 editUrl: false

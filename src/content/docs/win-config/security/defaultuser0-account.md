@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/defaultuser0-account
+slug: 'docs/win-config/security/defaultuser0-account'
 title: 'defaultuser0 Account'
 description: 'Security option documentation from win-config.'
 editUrl: false

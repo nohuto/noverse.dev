@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/bitmask-calculator
+slug: 'docs/win-config/nvidia/bitmask-calculator'
 title: 'Bitmask Calculator'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/debloated-driver
+slug: 'docs/win-config/nvidia/debloated-driver'
 title: 'Debloated Driver'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

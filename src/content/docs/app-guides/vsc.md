@@ -1,5 +1,5 @@
 ---
-slug: docs/app-guides/vsc
+slug: 'docs/app-guides/vsc'
 title: 'VSC'
 description: 'Generated from app-guides file: ./vsc.md.'
 editUrl: false

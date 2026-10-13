@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-auto-maintenance
+slug: 'docs/win-config/privacy/disable-auto-maintenance'
 title: 'Auto Maintenance'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

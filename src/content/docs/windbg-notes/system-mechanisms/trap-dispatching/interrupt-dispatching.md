@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-dispatching
+slug: 'docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-dispatching'
 title: 'Interrupt Dispatching'
 description: 'Generated from windbg-notes file: system-mechanisms/trap-dispatching/interrupt-dispatching.md.'
 editUrl: false

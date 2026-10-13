@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/system-mechanisms
+slug: 'docs/windbg-notes/system-mechanisms'
 title: 'Overview'
 description: 'Auto-generated overview for System Mechanisms.'
 editUrl: false

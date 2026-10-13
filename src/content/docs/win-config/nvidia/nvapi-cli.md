@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/nvapi-cli
+slug: 'docs/win-config/nvidia/nvapi-cli'
 title: 'NvAPI CLI'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

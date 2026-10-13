@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/disable-touch-tablet
+slug: 'docs/win-config/peripheral/disable-touch-tablet'
 title: 'Touch & Tablet'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

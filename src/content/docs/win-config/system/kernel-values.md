@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/kernel-values
+slug: 'docs/win-config/system/kernel-values'
 title: 'Kernel Values'
 description: 'System option documentation from win-config.'
 editUrl: false

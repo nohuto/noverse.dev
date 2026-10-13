@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/threads/examining-thread-activity
+slug: 'docs/windbg-notes/threads/examining-thread-activity'
 title: 'Overview'
 description: 'Auto-generated overview for Examining Thread Activity.'
 editUrl: false

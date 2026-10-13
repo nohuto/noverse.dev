@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-drm-internet-access
+slug: 'docs/win-config/privacy/disable-drm-internet-access'
 title: 'DRM Internet Access'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

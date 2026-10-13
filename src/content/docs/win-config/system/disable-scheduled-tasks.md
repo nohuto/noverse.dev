@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/disable-scheduled-tasks
+slug: 'docs/win-config/system/disable-scheduled-tasks'
 title: 'Scheduled Tasks'
 description: 'System option documentation from win-config.'
 editUrl: false

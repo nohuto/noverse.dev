@@ -1,5 +1,5 @@
 ---
-slug: docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels
+slug: 'docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels'
 title: 'Interrupt Request Levels'
 description: 'Generated from windbg-notes file: system-mechanisms/trap-dispatching/interrupt-request-levels.md.'
 editUrl: false

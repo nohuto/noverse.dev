@@ -1,5 +1,5 @@
 ---
-slug: docs/regkit/registry-internals/capture-table
+slug: 'docs/regkit/registry-internals/capture-table'
 title: 'Capture Table'
 description: 'Generated from regkit file: docs/capture-table.md.'
 editUrl: false

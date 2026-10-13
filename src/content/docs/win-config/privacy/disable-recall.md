@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-recall
+slug: 'docs/win-config/privacy/disable-recall'
 title: 'Recall'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

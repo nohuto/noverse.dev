@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security/enable-camera-osd-indicator
+slug: 'docs/win-config/security/enable-camera-osd-indicator'
 title: 'Camera OSD Indicator'
 description: 'Security option documentation from win-config.'
 editUrl: false

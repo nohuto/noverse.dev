@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/security
+slug: 'docs/win-config/security'
 title: 'Overview'
 description: 'Auto-generated overview for Security.'
 editUrl: false

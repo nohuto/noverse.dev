@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/nvidia/disable-scheduled-tasks
+slug: 'docs/win-config/nvidia/disable-scheduled-tasks'
 title: 'Scheduled Tasks'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false

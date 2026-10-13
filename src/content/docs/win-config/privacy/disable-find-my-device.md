@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/privacy/disable-find-my-device
+slug: 'docs/win-config/privacy/disable-find-my-device'
 title: 'Find My Device'
 description: 'Privacy option documentation from win-config.'
 editUrl: false

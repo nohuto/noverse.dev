@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/peripheral/device-manager
+slug: 'docs/win-config/peripheral/device-manager'
 title: 'Device Manager'
 description: 'Peripheral option documentation from win-config.'
 editUrl: false

@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/power-values
+slug: 'docs/win-config/power/power-values'
 title: 'Power Values'
 description: 'Power option documentation from win-config.'
 editUrl: false

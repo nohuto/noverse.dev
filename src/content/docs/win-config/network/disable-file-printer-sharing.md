@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/network/disable-file-printer-sharing
+slug: 'docs/win-config/network/disable-file-printer-sharing'
 title: 'File/Printer Sharing'
 description: 'Network option documentation from win-config.'
 editUrl: false

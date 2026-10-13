@@ -1,5 +1,5 @@
 ---
-slug: docs/regkit/guides/procmon
+slug: 'docs/regkit/guides/procmon'
 title: 'Capturing Registry Activity'
 description: 'Generated from regkit file: docs/procmon.md.'
 editUrl: false

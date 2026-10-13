@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/system/priority-separation
+slug: 'docs/win-config/system/priority-separation'
 title: 'Priority Separation'
 description: 'System option documentation from win-config.'
 editUrl: false

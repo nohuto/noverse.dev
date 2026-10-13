@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/pnp-device-values
+slug: 'docs/win-config/power/pnp-device-values'
 title: 'PnP Device Values'
 description: 'Power option documentation from win-config.'
 editUrl: false

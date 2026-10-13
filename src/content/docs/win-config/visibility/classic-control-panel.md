@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/classic-control-panel
+slug: 'docs/win-config/visibility/classic-control-panel'
 title: 'Classic Control Panel'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

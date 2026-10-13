@@ -1,5 +1,5 @@
 ---
-slug: docs/regkit/guides/wpr-wpa
+slug: 'docs/regkit/guides/wpr-wpa'
 title: 'Boot Registry Activity'
 description: 'Generated from regkit file: docs/wpr-wpa.md.'
 editUrl: false

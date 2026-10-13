@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/visibility/oem-information
+slug: 'docs/win-config/visibility/oem-information'
 title: 'OEM Information'
 description: 'Visibility option documentation from win-config.'
 editUrl: false

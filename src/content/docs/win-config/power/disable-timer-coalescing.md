@@ -1,5 +1,5 @@
 ---
-slug: docs/win-config/power/disable-timer-coalescing
+slug: 'docs/win-config/power/disable-timer-coalescing'
 title: 'Timer Coalescing'
 description: 'Power option documentation from win-config.'
 editUrl: false

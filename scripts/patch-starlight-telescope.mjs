@@ -30,7 +30,7 @@ const patches = [
     }
 `,
     after: `
-    // Recent pages are intentionally exclusive to the Recent tab
+    // Recent pages are intentionally exclusive to the Recent tab.
 `,
   },
   {
@@ -39,7 +39,7 @@ const patches = [
     const validatedRecent = this.validateStoredPages(this.recentPages);
 `,
     after: `
-    // Search tab doesnt need recent page metadata
+    // The Search tab does not need recent-page metadata.
 `,
   },
   {
@@ -51,7 +51,7 @@ const patches = [
         this.createSectionHeader('Recently Visited', () => this.clearRecentPages())
       );
 
-      // Get recent pages that arent pinned
+      // Get recent pages that aren't pinned
       const nonPinnedRecent = validatedRecent.filter((page) => !this.isPagePinned(page.path));
       const pinnedCount = validatedPinned.length;
 
@@ -63,7 +63,7 @@ const patches = [
     }
 `,
     after: `
-    // Recent pages are rendered by the dedicated Recent tab
+    // Recent pages are rendered by the dedicated Recent tab.
 `,
   },
   {
@@ -77,7 +77,7 @@ const patches = [
     );
 `,
     after: `
-    // Pinned pages have their own section, recent pages remain regular search results
+    // Pinned pages have their own section; recent pages remain regular search results.
     const pinnedPaths = new Set(validatedPinned.map((page) => page.path));
     const filteredResults = this.filteredPages.filter((page) => !pinnedPaths.has(page.path));
 `,
@@ -101,7 +101,7 @@ const patches = [
     );
 `,
     after: `
-    // Recent pages dont contribute an index offset in the Search tab
+    // Recent pages do not contribute an index offset in the Search tab.
 `,
   },
   {

@@ -19,6 +19,26 @@ const { title, description } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <ThemeInit />
+    <script is:inline>
+      // iOS can restore a nonzero scroll offset when reloading
+      if (
+        performance.getEntriesByType('navigation')[0]?.type === 'reload' &&
+        !location.hash
+      ) {
+        const restoration = history.scrollRestoration;
+        history.scrollRestoration = 'manual';
+        window.addEventListener(
+          'pageshow',
+          () => window.scrollTo({ top: 0, behavior: 'instant' }),
+          { once: true },
+        );
+        window.addEventListener(
+          'pagehide',
+          () => (history.scrollRestoration = restoration),
+          { once: true },
+        );
+      }
+    </script>
     <ScrollDebug />
     <meta name="description" content={description} />
     <title>{title}</title>

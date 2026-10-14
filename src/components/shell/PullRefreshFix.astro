@@ -1,7 +1,4 @@
 <script is:inline>
-  // Brave iOS pins a pull to refresh reload 60px down (its spinner height)
-  // and reverts scrollTo(0) until its toolbar next resizes the viewport.
-  // Pad the top by that much meanwhile, then drop it without moving content.
   if (
     / Brave$/.test(navigator.userAgent) &&
     performance.getEntriesByType('navigation')[0]?.type === 'reload'
@@ -22,7 +19,6 @@
       clearTimeout(timer);
       timer = setTimeout(() => scrollY < 60 && release(), 200);
     };
-    // window scroll events can skip the overscroll, the visual viewport's don't
     addEventListener('scroll', onScroll, options);
     visualViewport?.addEventListener('scroll', onScroll, options);
     addEventListener('resize', release, options);

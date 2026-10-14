@@ -114,7 +114,6 @@ h3 {
 }
 
 .site-nav {
-  --nv-soft-backdrop-inset: -1.25rem -2rem;
   position: relative;
   pointer-events: auto;
   display: flex;

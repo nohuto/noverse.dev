@@ -51,9 +51,11 @@ const previews = await Promise.all([
           <ul class="product-highlights">
             <li>Transparent logs for each change</li>
             <li>
-              <a class="link" href="/docs/win-config/">
-                Documentation
-              </a>{' '}
+              <a
+                class="link"
+                href="/docs/win-config/"
+                set:text="Documentation"
+              />{' '}
               for each option
             </li>
             <li>Templates for each section</li>
@@ -162,9 +164,7 @@ const previews = await Promise.all([
             WinConfig is based on my personal research on several topics, which
             I began documenting around July 2024. Purchasing a license supports
             my research and ongoing work. The detail of each options
-            <a class="link" href="/docs/win-config/">
-              documentation
-            </a>
+            <a class="link" href="/docs/win-config/" set:text="documentation" />
             depends on whether trustworthy public documentation exists.
           </p>
         </div>
@@ -246,9 +246,8 @@ const previews = await Promise.all([
                     href="https://discord.noverse.dev"
                     target="_blank"
                     rel="noopener noreferrer"
-                  >
-                    Discord server
-                  </a>{' '}
+                    set:text="Discord server"
+                  />{' '}
                   is recommended for now so you receive updates, announcements,
                   and support. Otherwise you may miss app updates (config
                   updates would theoretically work as long as no new

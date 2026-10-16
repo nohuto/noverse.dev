@@ -4,7 +4,7 @@ title: 'Scheduled Tasks'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 9
+  order: 8
 ---
 
 Disables NVIDIA scheduled tasks recusively. All 3 tasks no longer seem to be created, I'll leave this option for now.

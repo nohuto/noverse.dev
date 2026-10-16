@@ -4,7 +4,7 @@ title: 'Logging'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 8
+  order: 7
 ---
 
 ```cpp

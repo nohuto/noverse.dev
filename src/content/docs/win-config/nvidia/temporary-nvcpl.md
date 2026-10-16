@@ -4,7 +4,7 @@ title: 'Temporary NVCPL'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 5
+  order: 4
 ---
 
 `NVDisplay.Container.exe` is required for nvcpl to start. [`nvcpl.ps1`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/nvcpl.ps1) starts them, waits till you close the program, and then terminates them.

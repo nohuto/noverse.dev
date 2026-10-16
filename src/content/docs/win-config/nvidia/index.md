@@ -8,7 +8,6 @@ sidebar:
   order: 8
 ---
 
-- [Bitmask Calculator](/docs/win-config/nvidia/bitmask-calculator/)
 - [NVCPL Settings](/docs/win-config/nvidia/nvcpl-settings/)
 - [Debloated Driver](/docs/win-config/nvidia/debloated-driver/)
 - [NvAPI CLI](/docs/win-config/nvidia/nvapi-cli/)

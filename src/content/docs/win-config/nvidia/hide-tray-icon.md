@@ -4,7 +4,7 @@ title: 'Hide Tray Icon'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 6
+  order: 5
 ---
 
 ```

@@ -4,7 +4,7 @@ title: 'Telemetry'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 9
 ---
 
 Installing a [debloated driver](https://noverse.dev/docs/win-config/nvidia/debloated-driver/) is the first step, the option removes several files & preventing the system from sending telemetry data.

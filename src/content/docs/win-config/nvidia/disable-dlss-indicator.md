@@ -4,7 +4,7 @@ title: 'DLSS Indicator'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 7
+  order: 6
 ---
 
 Enabled = `1024`  

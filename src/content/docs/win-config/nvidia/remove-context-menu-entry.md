@@ -4,7 +4,7 @@ title: 'Remove Context Menu Entry'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 12
+  order: 11
 ---
 
 Disables `Add Desktop Context Menu` in the NVIDIA control panel.

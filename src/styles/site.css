@@ -6,6 +6,7 @@
 @import './links.css';
 @import './icons.css';
 @import './motion.css';
+@import './tooltips.css';
 
 @font-face {
   font-family: 'Inter';

@@ -42,6 +42,8 @@ const { title, description } = Astro.props;
     </footer>
     <ImageViewer />
     <script>
+      import '../scripts/tooltips';
+
       const art = document.querySelector<HTMLElement>('.site-art');
       const main = document.querySelector('main');
       const start = () =>

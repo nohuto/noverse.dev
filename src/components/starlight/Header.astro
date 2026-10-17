@@ -13,8 +13,10 @@ import SectionLinks from './SectionLinks.astro';
       type="button"
       class="nv-icon-button sidebar-toggle"
       aria-label="Collapse sidebar"
+      aria-keyshortcuts="Control+Shift+S"
       aria-expanded="true"
       aria-controls="starlight__sidebar"
+      data-nv-tip="Ctrl+Shift+S"
       data-sidebar-toggle
     >
       <Icon name="sidebar" />
@@ -55,7 +57,6 @@ import SectionLinks from './SectionLinks.astro';
     }
 
     .title-wrapper {
-      overflow: clip;
       padding: 0.125rem;
       margin: -0.125rem;
       min-width: 0;

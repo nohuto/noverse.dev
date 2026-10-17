@@ -88,8 +88,8 @@
     width: var(--sl-menu-button-size);
     height: var(--sl-menu-button-size);
   }
-  .sl-menu-button:has(~ :popover-open) .open-menu,
-  .sl-menu-button:not(:has(~ :popover-open)) .close-menu {
+  .sl-menu-button:has(~ #starlight__sidebar:popover-open) .open-menu,
+  .sl-menu-button:not(:has(~ #starlight__sidebar:popover-open)) .close-menu {
     display: none;
   }
   body:has(#starlight__sidebar:popover-open) {
@@ -529,49 +529,6 @@
         border-bottom: 1px solid var(--sl-rapide-ui-border-color);
       }
     }
-  }
-
-  telescope-search {
-    display: none;
-  }
-  .telescope__modal,
-  .telescope__close-button,
-  .telescope__tab,
-  .telescope__tag,
-  .telescope__pin-button,
-  .telescope__modal kbd,
-  .telescope__highlight,
-  .telescope__clear-btn {
-    border-radius: var(--nv-ui-radius) !important;
-  }
-
-  .telescope__results::-webkit-scrollbar-thumb,
-  .telescope__section::-webkit-scrollbar-thumb {
-    border-radius: var(--nv-ui-radius);
-  }
-
-  .telescope__close-button,
-  .telescope__close-button:hover {
-    background: transparent !important;
-  }
-
-  .telescope__close-button {
-    color: var(--quiet) !important;
-  }
-
-  .telescope__close-button:hover,
-  .telescope__close-button:focus-visible {
-    color: var(--sl-color-white) !important;
-    outline: none !important;
-  }
-
-  .telescope__close-button svg {
-    width: var(--nv-icon-size);
-    height: var(--nv-icon-size);
-    fill: transparent;
-    stroke: transparent;
-    background-color: currentColor;
-    mask: var(--nv-icon-x) center / contain no-repeat;
   }
 
   .scroll-to-top-button {

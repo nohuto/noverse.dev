@@ -9,7 +9,12 @@ const isRtl = dir === 'rtl';
 {(prev || next) && (
   <div class="pagination-links print:hidden" dir={dir}>
     {prev && (
-      <a href={prev.href} rel="prev">
+      <a
+        href={prev.href}
+        rel="prev"
+        aria-keyshortcuts="Control+ArrowLeft"
+        data-nv-tip="Ctrl+Left"
+      >
         <span class="link-label sl-flex">
           <Icon name={isRtl ? 'right-arrow' : 'left-arrow'} size="1.25rem" />
           {Astro.locals.t('page.previousLink')}
@@ -18,7 +23,12 @@ const isRtl = dir === 'rtl';
       </a>
     )}
     {next && (
-      <a href={next.href} rel="next">
+      <a
+        href={next.href}
+        rel="next"
+        aria-keyshortcuts="Control+ArrowRight"
+        data-nv-tip="Ctrl+Right"
+      >
         <span class="link-label sl-flex">
           {Astro.locals.t('page.nextLink')}
           <Icon name={isRtl ? 'left-arrow' : 'right-arrow'} size="1.25rem" />

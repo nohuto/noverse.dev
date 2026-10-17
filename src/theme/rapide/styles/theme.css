@@ -4,6 +4,7 @@
 @import '../../../styles/links.css' layer(rapide);
 @import '../../../styles/icons.css' layer(rapide);
 @import '../../../styles/motion.css' layer(rapide);
+@import '../../../styles/tooltips.css' layer(rapide);
 
 @layer rapide {
   :root,

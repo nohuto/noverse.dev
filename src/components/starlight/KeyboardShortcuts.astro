@@ -18,6 +18,23 @@ const { pagination } = Astro.locals.starlightRoute;
       const isApple = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
       const { prevHref, nextHref } = this.dataset;
 
+      if (isApple)
+        document
+          .querySelectorAll<HTMLElement>('[aria-keyshortcuts^="Control"]')
+          .forEach((element) => {
+            element.setAttribute(
+              'aria-keyshortcuts',
+              element
+                .getAttribute('aria-keyshortcuts')!
+                .replace('Control', 'Meta'),
+            );
+            if (element.dataset.nvTip)
+              element.dataset.nvTip = element.dataset.nvTip.replace(
+                'Ctrl',
+                '⌘',
+              );
+          });
+
       const isTyping = (event: KeyboardEvent) => {
         const target = (event.composedPath()[0] ??
           event.target) as HTMLElement | null;
@@ -46,6 +63,17 @@ const { pagination } = Astro.locals.starlightRoute;
           const key = event.key.toLowerCase();
 
           if (event.shiftKey) {
+            if (key === 's') {
+              const toggle = [
+                ...document.querySelectorAll<HTMLButtonElement>(
+                  '[data-sidebar-toggle], .sl-menu-button',
+                ),
+              ].find((button) => button.getClientRects().length > 0);
+              if (!toggle) return;
+              event.preventDefault();
+              toggle.click();
+              return;
+            }
             if (key === 'x') {
               event.preventDefault();
               document.querySelector<HTMLElement>('[data-zen-toggle]')?.click();

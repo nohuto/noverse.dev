@@ -20,7 +20,7 @@ if (gallery) {
       );
     });
 
-  gallery.addEventListener('keydown', (event) => {
+  gallery.parentElement?.addEventListener('keydown', (event) => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
     event.preventDefault();
     move(event.key === 'ArrowLeft' ? -1 : 1);

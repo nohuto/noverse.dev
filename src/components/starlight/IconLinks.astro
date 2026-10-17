@@ -12,18 +12,9 @@ const activeRepo =
 <button
   type="button"
   class="nv-icon-button"
-  aria-label="Open Telescope Search"
-  aria-keyshortcuts="Control+/"
-  title="Telescope Search (Ctrl+/)"
-  data-telescope-open
->
-  <Icon name="telescope" />
-</button>
-<button
-  type="button"
-  class="nv-icon-button"
   aria-label="Enter Zen mode"
   aria-keyshortcuts="Control+Shift+X"
+  data-nv-tip="Ctrl+Shift+X"
   data-zen-toggle
 >
   <Icon name="zen" />
@@ -58,13 +49,3 @@ const activeRepo =
 <a class="nv-icon-button" href="/" aria-label="Portfolio">
   <Icon name="user-list" />
 </a>
-
-<script>
-  document.addEventListener('click', (event) => {
-    if (!(event.target as Element | null)?.closest('[data-telescope-open]'))
-      return;
-    document
-      .querySelector<HTMLButtonElement>('telescope-search button')
-      ?.click();
-  });
-</script>

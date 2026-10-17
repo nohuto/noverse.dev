@@ -1,7 +1,6 @@
 export function mainSitePlugins() {
   /** @type {Record<string, string[]>} */
   const modules = {
-    'virtual:noverse-main-site-plugins': [],
     'virtual:noverse-docs-plugins': [],
   };
 
@@ -11,7 +10,7 @@ export function mainSitePlugins() {
      * @param {string} [moduleId]
      * @returns {import('@astrojs/starlight/types').StarlightPlugin}
      */
-    scope(plugin, moduleId = 'virtual:noverse-main-site-plugins') {
+    scope(plugin, moduleId = 'virtual:noverse-docs-plugins') {
       const scripts = modules[moduleId];
       return {
         ...plugin,

@@ -35,7 +35,8 @@ const { hasSidebar } = Astro.locals.starlightRoute;
   type="button"
   class="nv-icon-button nv-soft-backdrop zen-exit"
   aria-label="Exit Zen mode"
-  title="Exit Zen mode (Ctrl+Shift+X)"
+  aria-keyshortcuts="Control+Shift+X"
+  data-nv-tip="Ctrl+Shift+X"
   data-zen-toggle
 >
   <Icon name="zen-exit" />
@@ -59,8 +60,8 @@ const { hasSidebar } = Astro.locals.starlightRoute;
   </svg>
 </button>
 <script>
-  import 'virtual:noverse-main-site-plugins';
   import '../../scripts/site-shell';
+  import '../../scripts/tooltips';
 </script>
 {Astro.url.pathname.startsWith('/docs/') && <script>
   import 'virtual:noverse-docs-plugins';

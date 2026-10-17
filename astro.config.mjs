@@ -2,7 +2,6 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
-import starlightTelescope from 'starlight-telescope';
 import starlightCodeblockFullscreen from 'starlight-codeblock-fullscreen';
 import starlightLinksValidator from 'starlight-links-validator';
 import { mainSitePlugins } from './scripts/main-site-plugins.mjs';
@@ -20,26 +19,6 @@ export default defineConfig({
     sitemap(),
     starlight({
       plugins: [
-        mainSiteClients.scope(
-          starlightTelescope({
-            theme: {
-              overlayBackground: 'var(--sl-color-backdrop-overlay)',
-              modalBackground: 'var(--sl-color-bg-nav)',
-              modalBackgroundAlt: 'var(--sl-color-bg)',
-              accentColor: 'var(--sl-color-accent)',
-              accentHover:
-                'color-mix(in srgb, var(--sl-color-accent) 10%, transparent)',
-              accentSelected:
-                'color-mix(in srgb, var(--sl-color-accent) 18%, transparent)',
-              textPrimary: 'var(--sl-color-white)',
-              textSecondary: 'var(--sl-color-gray-3)',
-              border: 'var(--sl-color-hairline-light)',
-              borderActive: 'var(--sl-color-gray-5)',
-              pinColor: 'var(--sl-color-purple)',
-              tagColor: 'var(--sl-color-green)',
-            },
-          }),
-        ),
         mainSiteClients.scope(
           starlightCodeblockFullscreen(),
           'virtual:noverse-docs-plugins',

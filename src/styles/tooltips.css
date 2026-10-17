@@ -1,0 +1,18 @@
+.nv-shortcut-tip {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  color: var(--text);
+  font: 0.6875rem / 1 var(--font-family-mono);
+}
+
+.nv-shortcut-tip::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}

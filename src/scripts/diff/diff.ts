@@ -214,7 +214,14 @@ const setMaximized = (maximized: boolean) => {
     'aria-label',
     maximized ? 'Restore size' : 'Maximize',
   );
-  maximizeButton.title = maximized ? 'Restore size' : 'Maximize';
+  maximizeButton.title = maximized ? '' : 'Maximize';
+  if (maximized) {
+    maximizeButton.dataset.nvTip = 'Esc';
+    maximizeButton.setAttribute('aria-keyshortcuts', 'Escape');
+  } else {
+    delete maximizeButton.dataset.nvTip;
+    maximizeButton.removeAttribute('aria-keyshortcuts');
+  }
 };
 
 const setFontSize = (size: string | number, persist = true) => {

@@ -26,7 +26,6 @@
   --nv-icon-sidebar: url('../icons/sidebar-simple.svg');
   --nv-icon-sun: url('../icons/sun.svg');
   --nv-icon-swap: url('../icons/arrows-left-right.svg');
-  --nv-icon-telescope: url('../icons/list-magnifying-glass.svg');
   --nv-icon-terminal: url('../icons/terminal.svg');
   --nv-icon-tools: url('../icons/wrench.svg');
   --nv-icon-tuta: url('../icons/si-tuta.svg');
@@ -126,9 +125,6 @@
 }
 .nv-icon-swap {
   --nv-icon: var(--nv-icon-swap);
-}
-.nv-icon-telescope {
-  --nv-icon: var(--nv-icon-telescope);
 }
 .nv-icon-terminal {
   --nv-icon: var(--nv-icon-terminal);

@@ -24,7 +24,7 @@ details[open]::details-content {
 }
 
 dialog[open]:not(.nv-modal),
-:popover-open,
+:popover-open:not(.nv-shortcut-tip),
 .select-ui.open .select-menu,
 .nv-modal[open] > * {
   transition:
@@ -34,7 +34,7 @@ dialog[open]:not(.nv-modal),
 
 @starting-style {
   dialog[open]:not(.nv-modal),
-  :popover-open,
+  :popover-open:not(.nv-shortcut-tip),
   .select-ui.open .select-menu,
   .nv-modal[open] > * {
     opacity: 0;

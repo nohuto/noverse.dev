@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docs:sync": "node scripts/sync-docs.mjs",
-    "postinstall": "node scripts/patch-starlight-telescope.mjs && node scripts/patch-starlight-lists.mjs"
+    "postinstall": "node scripts/patch-starlight-lists.mjs"
   },
   "engines": {
     "node": ">=22.12.0"
@@ -27,7 +27,6 @@
     "@astrojs/sitemap": "3.7.4",
     "@astrojs/starlight": "0.42.4",
     "starlight-codeblock-fullscreen": "2.0.0",
-    "starlight-links-validator": "0.26.0",
-    "starlight-telescope": "2.0.0"
+    "starlight-links-validator": "0.26.0"
   }
 }

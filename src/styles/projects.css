@@ -69,12 +69,12 @@
   cursor: pointer;
 }
 
-.project-preview summary .nv-icon {
+.project-preview summary .icon {
   width: 10px;
   height: 10px;
 }
 
-.project-preview[open] summary .nv-icon {
+.project-preview[open] summary .icon {
   transform: rotate(180deg);
 }
 

@@ -14,7 +14,7 @@ const links: [string, string, IconName][] = [
 
 <nav class={Astro.props.class} aria-label="Main sections">
   {links.map(([label, href, icon]) => (
-    <a class="nv-icon-button" href={href} aria-label={label} title={label}>
+    <a class="icon-button" href={href} aria-label={label} title={label}>
       <Icon name={icon} />
     </a>
   ))}

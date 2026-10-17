@@ -1,171 +1,171 @@
 /* Icons: Phosphor (MIT, src/icons/LICENSE-phosphor.txt), brand marks from Simple Icons (CC0). */
 :root {
-  --nv-icon-book: url('../icons/books.svg');
-  --nv-icon-chevron-down: url('../icons/caret-down.svg');
-  --nv-icon-chevron-left: url('../icons/caret-left.svg');
-  --nv-icon-chevron-right: url('../icons/caret-right.svg');
-  --nv-icon-copy: url('../icons/copy.svg');
-  --nv-icon-copyright: url('../icons/copyright.svg');
-  --nv-icon-discord: url('../icons/discord-logo.svg');
-  --nv-icon-discord-brand: url('../icons/si-discord.svg');
-  --nv-icon-file: url('../icons/file-text.svg');
-  --nv-icon-filter: url('../icons/funnel.svg');
-  --nv-icon-github: url('../icons/github-logo.svg');
-  --nv-icon-home: url('../icons/house.svg');
-  --nv-icon-key: url('../icons/key.svg');
-  --nv-icon-layout-column: url('../icons/columns.svg');
-  --nv-icon-layout-row: url('../icons/rows.svg');
-  --nv-icon-list: url('../icons/list.svg');
-  --nv-icon-mail: url('../icons/envelope-simple.svg');
-  --nv-icon-moon: url('../icons/moon.svg');
-  --nv-icon-product: url('../icons/windows-logo.svg');
-  --nv-icon-projects: url('../icons/git-branch.svg');
-  --nv-icon-repo: url('../icons/book-bookmark.svg');
-  --nv-icon-search: url('../icons/magnifying-glass.svg');
-  --nv-icon-settings: url('../icons/gear.svg');
-  --nv-icon-sidebar: url('../icons/sidebar-simple.svg');
-  --nv-icon-sun: url('../icons/sun.svg');
-  --nv-icon-swap: url('../icons/arrows-left-right.svg');
-  --nv-icon-terminal: url('../icons/terminal.svg');
-  --nv-icon-tools: url('../icons/wrench.svg');
-  --nv-icon-tuta: url('../icons/si-tuta.svg');
-  --nv-icon-user-list: url('../icons/user-list.svg');
-  --nv-icon-x: url('../icons/x.svg');
-  --nv-icon-zen: url('../icons/arrows-out.svg');
-  --nv-icon-zen-exit: url('../icons/arrows-in.svg');
-  --nv-icon-zoom-in: url('../icons/magnifying-glass-plus.svg');
-  --nv-icon-zoom-out: url('../icons/magnifying-glass-minus.svg');
+  --icon-book: url('../icons/books.svg');
+  --icon-chevron-down: url('../icons/caret-down.svg');
+  --icon-chevron-left: url('../icons/caret-left.svg');
+  --icon-chevron-right: url('../icons/caret-right.svg');
+  --icon-copy: url('../icons/copy.svg');
+  --icon-copyright: url('../icons/copyright.svg');
+  --icon-discord: url('../icons/discord-logo.svg');
+  --icon-discord-brand: url('../icons/si-discord.svg');
+  --icon-file: url('../icons/file-text.svg');
+  --icon-filter: url('../icons/funnel.svg');
+  --icon-github: url('../icons/github-logo.svg');
+  --icon-home: url('../icons/house.svg');
+  --icon-key: url('../icons/key.svg');
+  --icon-layout-column: url('../icons/columns.svg');
+  --icon-layout-row: url('../icons/rows.svg');
+  --icon-list: url('../icons/list.svg');
+  --icon-mail: url('../icons/envelope-simple.svg');
+  --icon-moon: url('../icons/moon.svg');
+  --icon-product: url('../icons/windows-logo.svg');
+  --icon-projects: url('../icons/git-branch.svg');
+  --icon-repo: url('../icons/book-bookmark.svg');
+  --icon-search: url('../icons/magnifying-glass.svg');
+  --icon-settings: url('../icons/gear.svg');
+  --icon-sidebar: url('../icons/sidebar-simple.svg');
+  --icon-sun: url('../icons/sun.svg');
+  --icon-swap: url('../icons/arrows-left-right.svg');
+  --icon-terminal: url('../icons/terminal.svg');
+  --icon-tools: url('../icons/wrench.svg');
+  --icon-tuta: url('../icons/si-tuta.svg');
+  --icon-user-list: url('../icons/user-list.svg');
+  --icon-x: url('../icons/x.svg');
+  --icon-zen: url('../icons/arrows-out.svg');
+  --icon-zen-exit: url('../icons/arrows-in.svg');
+  --icon-zoom-in: url('../icons/magnifying-glass-plus.svg');
+  --icon-zoom-out: url('../icons/magnifying-glass-minus.svg');
 }
 
-.nv-icon {
+span.icon {
   display: inline-block;
   flex: none;
-  width: var(--nv-icon-size, 1.2em);
-  height: var(--nv-icon-size, 1.2em);
+  width: var(--icon-size, 1.2em);
+  height: var(--icon-size, 1.2em);
   background-color: currentColor;
-  mask: var(--nv-icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
   vertical-align: text-bottom;
 }
 
-.nv-icon-book {
-  --nv-icon: var(--nv-icon-book);
+.icon-book {
+  --icon: var(--icon-book);
 }
-.nv-icon-chevron-down {
-  --nv-icon: var(--nv-icon-chevron-down);
+.icon-chevron-down {
+  --icon: var(--icon-chevron-down);
 }
-.nv-icon-chevron-left {
-  --nv-icon: var(--nv-icon-chevron-left);
+.icon-chevron-left {
+  --icon: var(--icon-chevron-left);
 }
-.nv-icon-chevron-right {
-  --nv-icon: var(--nv-icon-chevron-right);
+.icon-chevron-right {
+  --icon: var(--icon-chevron-right);
 }
-.nv-icon-copy {
-  --nv-icon: var(--nv-icon-copy);
+.icon-copy {
+  --icon: var(--icon-copy);
 }
-.nv-icon-copyright {
-  --nv-icon: var(--nv-icon-copyright);
+.icon-copyright {
+  --icon: var(--icon-copyright);
 }
-.nv-icon-discord {
-  --nv-icon: var(--nv-icon-discord);
+.icon-discord {
+  --icon: var(--icon-discord);
 }
-.nv-icon-discord-brand {
-  --nv-icon: var(--nv-icon-discord-brand);
+.icon-discord-brand {
+  --icon: var(--icon-discord-brand);
   color: #5865f2;
 }
-.nv-icon-file {
-  --nv-icon: var(--nv-icon-file);
+.icon-file {
+  --icon: var(--icon-file);
 }
-.nv-icon-filter {
-  --nv-icon: var(--nv-icon-filter);
+.icon-filter {
+  --icon: var(--icon-filter);
 }
-.nv-icon-github {
-  --nv-icon: var(--nv-icon-github);
+.icon-github {
+  --icon: var(--icon-github);
 }
-.nv-icon-home {
-  --nv-icon: var(--nv-icon-home);
+.icon-home {
+  --icon: var(--icon-home);
 }
-.nv-icon-key {
-  --nv-icon: var(--nv-icon-key);
+.icon-key {
+  --icon: var(--icon-key);
 }
-.nv-icon-layout-column {
-  --nv-icon: var(--nv-icon-layout-column);
+.icon-layout-column {
+  --icon: var(--icon-layout-column);
 }
-.nv-icon-layout-row {
-  --nv-icon: var(--nv-icon-layout-row);
+.icon-layout-row {
+  --icon: var(--icon-layout-row);
 }
-.nv-icon-list {
-  --nv-icon: var(--nv-icon-list);
+.icon-list {
+  --icon: var(--icon-list);
 }
-.nv-icon-mail {
-  --nv-icon: var(--nv-icon-mail);
+.icon-mail {
+  --icon: var(--icon-mail);
 }
-.nv-icon-moon {
-  --nv-icon: var(--nv-icon-moon);
+.icon-moon {
+  --icon: var(--icon-moon);
 }
-.nv-icon-product {
-  --nv-icon: var(--nv-icon-product);
+.icon-product {
+  --icon: var(--icon-product);
 }
-.nv-icon-projects {
-  --nv-icon: var(--nv-icon-projects);
+.icon-projects {
+  --icon: var(--icon-projects);
 }
-.nv-icon-repo {
-  --nv-icon: var(--nv-icon-repo);
+.icon-repo {
+  --icon: var(--icon-repo);
 }
-.nv-icon-search {
-  --nv-icon: var(--nv-icon-search);
+.icon-search {
+  --icon: var(--icon-search);
 }
-.nv-icon-settings {
-  --nv-icon: var(--nv-icon-settings);
+.icon-settings {
+  --icon: var(--icon-settings);
 }
-.nv-icon-sidebar {
-  --nv-icon: var(--nv-icon-sidebar);
+.icon-sidebar {
+  --icon: var(--icon-sidebar);
 }
-.nv-icon-sun {
-  --nv-icon: var(--nv-icon-sun);
+.icon-sun {
+  --icon: var(--icon-sun);
 }
-.nv-icon-swap {
-  --nv-icon: var(--nv-icon-swap);
+.icon-swap {
+  --icon: var(--icon-swap);
 }
-.nv-icon-terminal {
-  --nv-icon: var(--nv-icon-terminal);
+.icon-terminal {
+  --icon: var(--icon-terminal);
 }
-.nv-icon-tools {
-  --nv-icon: var(--nv-icon-tools);
+.icon-tools {
+  --icon: var(--icon-tools);
 }
-.nv-icon-tuta {
-  --nv-icon: var(--nv-icon-tuta);
+.icon-tuta {
+  --icon: var(--icon-tuta);
   color: #850122;
 }
-.nv-icon-user-list {
-  --nv-icon: var(--nv-icon-user-list);
+.icon-user-list {
+  --icon: var(--icon-user-list);
 }
-.nv-icon-x {
-  --nv-icon: var(--nv-icon-x);
+.icon-x {
+  --icon: var(--icon-x);
 }
-.nv-icon-zen {
-  --nv-icon: var(--nv-icon-zen);
+.icon-zen {
+  --icon: var(--icon-zen);
 }
-.nv-icon-zen-exit {
-  --nv-icon: var(--nv-icon-zen-exit);
+.icon-zen-exit {
+  --icon: var(--icon-zen-exit);
 }
-.nv-icon-zoom-in {
-  --nv-icon: var(--nv-icon-zoom-in);
+.icon-zoom-in {
+  --icon: var(--icon-zoom-in);
 }
-.nv-icon-zoom-out {
-  --nv-icon: var(--nv-icon-zoom-out);
+.icon-zoom-out {
+  --icon: var(--icon-zoom-out);
 }
 
-.nv-soft-backdrop {
+.soft-backdrop {
   isolation: isolate;
 }
-.nv-soft-backdrop::before {
+.soft-backdrop::before {
   content: '';
   position: absolute;
   inset: -0.5rem -0.75rem;
   z-index: -1;
   background: color-mix(
     in srgb,
-    var(--nv-soft-backdrop-bg, var(--bg)) 60%,
+    var(--soft-backdrop-bg, var(--bg)) 60%,
     transparent
   );
   -webkit-backdrop-filter: blur(6px);

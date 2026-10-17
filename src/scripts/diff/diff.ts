@@ -34,7 +34,7 @@ const DIFF_SCRIPTS = [
 ];
 const DEFAULT_LEFT_RELEASE = '11-23H2';
 const DEFAULT_RIGHT_RELEASE = '11-24H2';
-const FONT_SIZE_KEY = 'nv-diff-font-size';
+const FONT_SIZE_KEY = 'diff-font-size';
 const DEFAULT_FONT_SIZE = 12.5;
 const MIN_FONT_SIZE = 8.5;
 const MAX_FONT_SIZE = 17.5;
@@ -104,7 +104,7 @@ const replaceOptions = (
   });
   if (selected) select.value = selected;
   select.dispatchEvent(
-    new CustomEvent('nv:options-updated', {
+    new CustomEvent('options-updated', {
       detail: { resetSearch: true, options: virtual ? options : null },
     }),
   );
@@ -216,10 +216,10 @@ const setMaximized = (maximized: boolean) => {
   );
   maximizeButton.title = maximized ? '' : 'Maximize';
   if (maximized) {
-    maximizeButton.dataset.nvTip = 'Esc';
+    maximizeButton.dataset.tip = 'Esc';
     maximizeButton.setAttribute('aria-keyshortcuts', 'Escape');
   } else {
-    delete maximizeButton.dataset.nvTip;
+    delete maximizeButton.dataset.tip;
     maximizeButton.removeAttribute('aria-keyshortcuts');
   }
 };
@@ -728,7 +728,7 @@ document.addEventListener('keydown', (event) => {
   event.preventDefault();
   setMaximized(false);
 });
-document.addEventListener('nv:theme-change', () => {
+document.addEventListener('theme-change', () => {
   if (lastRender) applyRenderedTheme();
 });
 

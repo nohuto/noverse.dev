@@ -4,7 +4,7 @@ import { createSource } from './source';
 export const source = createSource({
   repository: 'nohuto/globals',
   dataset: 'globals',
-  settingsKey: 'nv-diff-globals-settings-v1',
+  settingsKey: 'diff-globals-settings-v1',
   defaultModule: 'ntoskrnl',
   displayName: (fileName) => fileName.replace(/\.cpp$/i, ''),
   settings: [

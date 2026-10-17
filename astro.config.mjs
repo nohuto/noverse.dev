@@ -21,7 +21,7 @@ export default defineConfig({
       plugins: [
         mainSiteClients.scope(
           starlightCodeblockFullscreen(),
-          'virtual:noverse-docs-plugins',
+          'virtual:docs-plugins',
         ),
         starlightLinksValidator({
           exclude: [
@@ -51,7 +51,7 @@ export default defineConfig({
           tag: 'link',
           attrs: {
             rel: 'preload',
-            href: '/main/fonts/NoverseMono-2407.24.woff2',
+            href: '/main/fonts/Mono-2407.24.woff2',
             as: 'font',
             type: 'font/woff2',
             crossorigin: true,
@@ -84,16 +84,16 @@ export default defineConfig({
           codeFontFamily: 'var(--sl-font-mono)',
           codeFontSize: '0.8125rem',
           borderColor: 'var(--sl-rapide-ui-border-color)',
-          borderRadius: 'var(--nv-ui-radius)',
+          borderRadius: 'var(--ui-radius)',
           frames: {
-            editorTabBorderRadius: 'var(--nv-ui-radius)',
+            editorTabBorderRadius: 'var(--ui-radius)',
             editorActiveTabIndicatorTopColor: 'unset',
             editorActiveTabIndicatorBottomColor: 'var(--sl-color-gray-3)',
             editorTabBarBorderBottomColor: 'var(--sl-rapide-ui-border-color)',
             frameBoxShadowCssValue: 'unset',
           },
           textMarkers: {
-            inlineMarkerBorderRadius: 'var(--nv-ui-radius)',
+            inlineMarkerBorderRadius: 'var(--ui-radius)',
             backgroundOpacity: '40%',
             markBackground: 'var(--sl-rapide-ec-marker-bg-color)',
             markBorderColor: 'var(--sl-rapide-ec-marker-border-color)',

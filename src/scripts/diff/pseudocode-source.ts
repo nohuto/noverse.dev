@@ -5,7 +5,7 @@ import { createSource } from './source';
 export const source = createSource({
   repository: 'nohuto/decompiled-pseudocode',
   dataset: 'decompiled-pseudocode',
-  settingsKey: 'nv-diff-pseudocode-settings-v2',
+  settingsKey: 'diff-pseudocode-settings-v2',
   defaultModule: 'ntoskrnl',
   settings: [
     {

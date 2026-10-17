@@ -1,7 +1,7 @@
 export function mainSitePlugins() {
   /** @type {Record<string, string[]>} */
   const modules = {
-    'virtual:noverse-docs-plugins': [],
+    'virtual:docs-plugins': [],
   };
 
   return {
@@ -10,7 +10,7 @@ export function mainSitePlugins() {
      * @param {string} [moduleId]
      * @returns {import('@astrojs/starlight/types').StarlightPlugin}
      */
-    scope(plugin, moduleId = 'virtual:noverse-docs-plugins') {
+    scope(plugin, moduleId = 'virtual:docs-plugins') {
       const scripts = modules[moduleId];
       return {
         ...plugin,
@@ -45,14 +45,14 @@ export function mainSitePlugins() {
     },
     /** @type {import('astro').AstroIntegration} */
     integration: {
-      name: 'noverse-main-site-plugins',
+      name: 'main-site-plugins',
       hooks: {
         'astro:config:setup'({ updateConfig }) {
           updateConfig({
             vite: {
               plugins: [
                 {
-                  name: 'noverse-main-site-plugins',
+                  name: 'main-site-plugins',
                   resolveId(id) {
                     if (id in modules) return `\0${id}`;
                   },

@@ -14,10 +14,10 @@ import PullRefreshFix from '../shell/PullRefreshFix.astro';
   try {
     root.toggleAttribute(
       'data-sidebar-collapsed',
-      localStorage.getItem('nv-sidebar-collapsed') === 'true',
+      localStorage.getItem('sidebar-collapsed') === 'true',
     );
-    const width = Number(localStorage.getItem('nv-sidebar-width'));
+    const width = Number(localStorage.getItem('sidebar-width'));
     if (width > 0)
-      root.style.setProperty('--nv-sidebar-saved-width', `${width}px`);
+      root.style.setProperty('--sidebar-saved-width', `${width}px`);
   } catch {}
 </script>

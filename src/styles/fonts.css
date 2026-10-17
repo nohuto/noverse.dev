@@ -1,13 +1,13 @@
 @font-face {
-  font-family: 'Noverse Mono';
-  src: url('/main/fonts/NoverseMono-2407.24.woff2') format('woff2');
+  font-family: 'Mono';
+  src: url('/main/fonts/Mono-2407.24.woff2') format('woff2');
   font-style: normal;
   font-weight: 200 700;
   font-display: block;
 }
 
 :root {
-  --font-family: 'Noverse Mono', monospace;
+  --font-family: 'Mono', monospace;
   --font-family-mono: var(--font-family);
   --font-size-body: 0.78125rem;
   --font-size-navigation: 0.78125rem;

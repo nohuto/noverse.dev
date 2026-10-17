@@ -181,10 +181,10 @@ const dataAttributes: DOMStringMap = {
     }
 
     .search-button-icon {
-      width: min(1em, var(--nv-icon-size));
-      height: min(1em, var(--nv-icon-size));
+      width: min(1em, var(--icon-size));
+      height: min(1em, var(--icon-size));
       background-color: currentColor;
-      mask-image: var(--nv-icon-search);
+      mask-image: var(--icon-search);
       mask-size: 100%;
     }
 
@@ -272,7 +272,7 @@ const dataAttributes: DOMStringMap = {
 
       dialog {
         margin: 4rem auto auto;
-        border-radius: var(--nv-ui-radius);
+        border-radius: var(--ui-radius);
         width: 90%;
         max-width: 40rem;
         height: max-content;
@@ -304,9 +304,9 @@ const dataAttributes: DOMStringMap = {
         1.25rem * var(--pagefind-ui-scale)
       );
       --sl-search-result-pad-block: calc(0.9375rem * var(--pagefind-ui-scale));
-      --sl-search-corners: var(--nv-ui-radius);
-      --pagefind-ui-border-radius: var(--nv-ui-radius);
-      --pagefind-ui-image-border-radius: var(--nv-ui-radius);
+      --sl-search-corners: var(--ui-radius);
+      --pagefind-ui-border-radius: var(--ui-radius);
+      --pagefind-ui-image-border-radius: var(--ui-radius);
       --sl-search-page-icon-size: calc(1.875rem * var(--pagefind-ui-scale));
       --sl-search-page-icon-inline-start: calc(
         (
@@ -319,7 +319,7 @@ const dataAttributes: DOMStringMap = {
 
     #starlight__search .pagefind-ui__form::before {
       --pagefind-ui-text: var(--sl-color-gray-1);
-      mask-image: var(--nv-icon-search);
+      mask-image: var(--icon-search);
       opacity: 1;
     }
 
@@ -349,7 +349,7 @@ const dataAttributes: DOMStringMap = {
     }
     #starlight__search .pagefind-ui__search-clear::before {
       content: '';
-      mask: var(--nv-icon-x) center / 50% no-repeat;
+      mask: var(--icon-x) center / 50% no-repeat;
       background-color: var(--sl-color-text-accent);
       display: block;
       width: 100%;
@@ -404,7 +404,7 @@ const dataAttributes: DOMStringMap = {
       inset-inline-start: var(--sl-search-page-icon-inline-start);
       width: var(--sl-search-page-icon-size);
       background: var(--sl-color-gray-3);
-      mask: var(--nv-icon-file) center no-repeat;
+      mask: var(--icon-file) center no-repeat;
     }
 
     #starlight__search .pagefind-ui__result-inner {

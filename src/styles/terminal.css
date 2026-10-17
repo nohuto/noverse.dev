@@ -109,7 +109,7 @@ body:has(.main-terminal) {
 }
 
 .console-window-icon {
-  --nv-icon-size: 14px;
+  --icon-size: 14px;
 }
 
 .console-window-body {
@@ -201,7 +201,7 @@ body:has(.main-terminal) {
 
 .bitmask-close,
 .calc-close {
-  --nv-icon-size: 14px;
+  --icon-size: 14px;
   width: 20px;
   height: 20px;
   min-width: 20px;

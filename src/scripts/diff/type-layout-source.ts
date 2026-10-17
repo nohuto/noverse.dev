@@ -146,7 +146,7 @@ const stripComments = (source: string) => {
 export const source = createSource({
   repository: 'nohuto/type-layouts',
   dataset: 'type-layouts',
-  settingsKey: 'nv-diff-type-settings-v1',
+  settingsKey: 'diff-type-settings-v1',
   defaultModule: 'ntdll',
   displayName: (fileName) => fileName.replace(/\.cpp$/i, ''),
   settings: [

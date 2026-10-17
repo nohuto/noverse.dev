@@ -57,9 +57,9 @@
   height: 13px;
   background: var(--muted);
   transform: translateY(-50%);
-  mask: var(--nv-icon-chevron-down) center / 100% no-repeat;
+  mask: var(--icon-chevron-down) center / 100% no-repeat;
   pointer-events: none;
-  transition: transform var(--nv-motion);
+  transition: transform var(--motion);
 }
 
 :where(.site-content) .select-ui.open .select-trigger::after {
@@ -396,7 +396,7 @@
 }
 
 .bindiff-toolbar {
-  --nv-icon-size: 16px;
+  --icon-size: 16px;
   position: absolute;
   top: 1px;
   right: 8px;

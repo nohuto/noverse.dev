@@ -11,12 +11,12 @@ import SectionLinks from './SectionLinks.astro';
   <div class="title-wrapper sl-flex">
     <button
       type="button"
-      class="nv-icon-button sidebar-toggle"
+      class="icon-button sidebar-toggle"
       aria-label="Collapse sidebar"
       aria-keyshortcuts="Control+Shift+S"
       aria-expanded="true"
       aria-controls="starlight__sidebar"
-      data-nv-tip="Ctrl+Shift+S"
+      data-tip="Ctrl+Shift+S"
       data-sidebar-toggle
     >
       <Icon name="sidebar" />
@@ -103,27 +103,27 @@ import SectionLinks from './SectionLinks.astro';
     }
 
     .right-group {
-      --nv-header-control-gap: 0.75rem;
+      --header-control-gap: 0.75rem;
       align-items: center;
-      gap: var(--nv-header-control-gap);
+      gap: var(--header-control-gap);
       padding-inline-end: 0.5rem;
     }
 
-    .header :global(.nv-icon-button) {
-      width: var(--nv-icon-size);
-      height: var(--nv-header-control-height);
+    .header :global(.icon-button) {
+      width: var(--icon-size);
+      height: var(--header-control-height);
     }
 
     .header-divider {
       flex: none;
       width: 1px;
-      height: var(--nv-header-control-height);
+      height: var(--header-control-height);
       background-color: var(--separator);
     }
   }
 
   .right-group :global(.theme-toggle) {
-    width: var(--nv-icon-size);
-    height: var(--nv-header-control-height);
+    width: var(--icon-size);
+    height: var(--header-control-height);
   }
 </style>

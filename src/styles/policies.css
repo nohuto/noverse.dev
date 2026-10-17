@@ -53,7 +53,7 @@
 }
 
 #policy-settings {
-  --nv-icon-size: 16px;
+  --icon-size: 16px;
   display: grid;
   place-items: center;
   width: 24px;
@@ -99,8 +99,8 @@
   width: 12px;
   height: 12px;
   background: var(--muted);
-  mask: var(--nv-icon-chevron-down) center / 12px 12px no-repeat;
-  transition: transform var(--nv-motion);
+  mask: var(--icon-chevron-down) center / 12px 12px no-repeat;
+  transition: transform var(--motion);
 }
 
 #policy-view-trigger[aria-expanded='true'] .policy-view-chevron {
@@ -304,11 +304,11 @@
 
 .policy-tree-chevron {
   background: var(--muted);
-  mask: var(--nv-icon-chevron-right) center / 14px 14px no-repeat;
+  mask: var(--icon-chevron-right) center / 14px 14px no-repeat;
 }
 
 .policy-tree-chevron.is-open {
-  mask-image: var(--nv-icon-chevron-down);
+  mask-image: var(--icon-chevron-down);
 }
 
 .policy-tree-item.is-active,
@@ -390,12 +390,12 @@
 
 .policy-sort-indicator {
   display: inline-block;
-  transition: transform var(--nv-motion);
+  transition: transform var(--motion);
   width: 12px;
   height: 12px;
   justify-self: end;
   background: var(--muted);
-  mask: var(--nv-icon-chevron-down) center / 12px 12px no-repeat;
+  mask: var(--icon-chevron-down) center / 12px 12px no-repeat;
   vertical-align: -2px;
 }
 
@@ -689,7 +689,7 @@ body.policy-column-resizing * {
   justify-self: end;
   background: var(--muted);
   opacity: 0.82;
-  mask: var(--nv-icon-copy) center / 13px 13px no-repeat;
+  mask: var(--icon-copy) center / 13px 13px no-repeat;
 }
 
 .policy-copy-button:hover .policy-copy-icon,

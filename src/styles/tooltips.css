@@ -1,4 +1,4 @@
-.nv-shortcut-tip {
+.shortcut-tip {
   position: fixed;
   inset: auto;
   margin: 0;
@@ -11,7 +11,7 @@
   font: 0.6875rem / 1 var(--font-family-mono);
 }
 
-.nv-shortcut-tip::before {
+.shortcut-tip::before {
   content: '';
   position: absolute;
   inset: -8px;

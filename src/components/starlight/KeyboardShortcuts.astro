@@ -28,11 +28,8 @@ const { pagination } = Astro.locals.starlightRoute;
                 .getAttribute('aria-keyshortcuts')!
                 .replace('Control', 'Meta'),
             );
-            if (element.dataset.nvTip)
-              element.dataset.nvTip = element.dataset.nvTip.replace(
-                'Ctrl',
-                '⌘',
-              );
+            if (element.dataset.tip)
+              element.dataset.tip = element.dataset.tip.replace('Ctrl', '⌘');
           });
 
       const isTyping = (event: KeyboardEvent) => {
@@ -80,7 +77,7 @@ const { pagination } = Astro.locals.starlightRoute;
               return;
             }
             if (key !== 'f') return;
-            document.dispatchEvent(new Event('nv-sidebar-expand'));
+            document.dispatchEvent(new Event('sidebar-expand'));
             const pane = document.getElementById('starlight__sidebar');
             if (pane instanceof HTMLElement && pane.popover) pane.showPopover();
             const filter = document.getElementById('sidebar-tree-search');

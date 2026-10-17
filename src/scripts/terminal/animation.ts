@@ -182,7 +182,7 @@ export function startTerminalAnimation(
   const resizeObserver = new ResizeObserver(updateSize);
   resizeObserver.observe(line);
   resizeObserver.observe(output);
-  document.addEventListener('nv:theme-change', updateSize);
+  document.addEventListener('theme-change', updateSize);
   requestAnimationFrame(() => {
     updateSize();
     rafId = requestAnimationFrame(render);
@@ -192,7 +192,7 @@ export function startTerminalAnimation(
     stopped = true;
     cancelAnimationFrame(rafId);
     resizeObserver.disconnect();
-    document.removeEventListener('nv:theme-change', updateSize);
+    document.removeEventListener('theme-change', updateSize);
     line.remove();
   };
 }

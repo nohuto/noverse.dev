@@ -15,8 +15,8 @@
   color: var(--text);
 }
 
-.home-contact .nv-icon {
-  --nv-icon-size: 1.05em;
+.home-contact .icon {
+  --icon-size: 1.05em;
   margin-right: 0.25em;
 }
 
@@ -73,16 +73,16 @@
   clear: both;
 }
 
-.work-preview summary .nv-icon {
-  --nv-icon-size: 0.85rem;
+.work-preview summary .icon {
+  --icon-size: 0.85rem;
   color: var(--muted);
 }
 
-.work-preview[open] summary .nv-icon {
+.work-preview[open] summary .icon {
   transform: rotate(180deg);
 }
 
-.work-preview summary:is(:hover, :focus-visible) .nv-icon {
+.work-preview summary:is(:hover, :focus-visible) .icon {
   color: var(--text);
 }
 

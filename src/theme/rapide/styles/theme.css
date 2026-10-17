@@ -20,10 +20,10 @@
     --sl-text-h4: 0.9375rem;
     --sl-text-h5: 0.9375rem;
     --sl-text-h6: 0.9375rem;
-    --nv-ui-radius: 0px;
-    --nv-icon-size: 18px;
+    --ui-radius: 0px;
+    --icon-size: 18px;
     --sl-menu-button-size: 28px;
-    --nv-header-control-height: 26px;
+    --header-control-height: 26px;
     --sl-content-width: 80rem;
     --sl-content-pad-x: 1.375rem;
   }

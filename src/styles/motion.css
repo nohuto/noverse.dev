@@ -1,49 +1,49 @@
 :root {
-  --nv-motion: 0.2s ease-in-out;
+  --motion: 0.2s ease-in-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --nv-motion: 0s;
+    --motion: 0s;
   }
 }
 
-.nv-icon {
-  transition: transform var(--nv-motion);
+span.icon {
+  transition: transform var(--motion);
 }
 
 details::details-content {
   opacity: 0;
   transition:
-    opacity var(--nv-motion),
-    content-visibility var(--nv-motion) allow-discrete;
+    opacity var(--motion),
+    content-visibility var(--motion) allow-discrete;
 }
 
 details[open]::details-content {
   opacity: 1;
 }
 
-dialog[open]:not(.nv-modal),
-:popover-open:not(.nv-shortcut-tip),
+dialog[open]:not(.modal),
+:popover-open:not(.shortcut-tip),
 .select-ui.open .select-menu,
-.nv-modal[open] > * {
+.modal[open] > * {
   transition:
-    opacity var(--nv-motion),
-    translate var(--nv-motion);
+    opacity var(--motion),
+    translate var(--motion);
 }
 
 @starting-style {
-  dialog[open]:not(.nv-modal),
-  :popover-open:not(.nv-shortcut-tip),
+  dialog[open]:not(.modal),
+  :popover-open:not(.shortcut-tip),
   .select-ui.open .select-menu,
-  .nv-modal[open] > * {
+  .modal[open] > * {
     opacity: 0;
     translate: 0 -4px;
   }
 }
 
 .toast {
-  transition: opacity var(--nv-motion);
+  transition: opacity var(--motion);
 }
 
 @starting-style {

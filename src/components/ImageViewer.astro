@@ -4,11 +4,11 @@ import Icon from './Icon.astro';
 
 <dialog class="image-viewer" aria-label="Image">
   <button
-    class="image-viewer-close nv-soft-backdrop"
+    class="image-viewer-close soft-backdrop"
     type="button"
     aria-label="Close image"
     aria-keyshortcuts="Escape"
-    data-nv-tip="Esc"
+    data-tip="Esc"
   >
     <Icon name="zen-exit" />
   </button>
@@ -90,7 +90,7 @@ import Icon from './Icon.astro';
     background: transparent;
     color: var(--muted);
     cursor: pointer;
-    --nv-icon-size: 18px;
+    --icon-size: 18px;
   }
 
   .image-viewer-close:is(:hover, :focus-visible) {
@@ -117,7 +117,7 @@ import Icon from './Icon.astro';
   @media (hover: hover) {
     .image-expand {
       opacity: 0;
-      transition: opacity var(--nv-motion);
+      transition: opacity var(--motion);
     }
 
     :is(:hover, :focus-within) > .image-expand {

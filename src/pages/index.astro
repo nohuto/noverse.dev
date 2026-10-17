@@ -1,5 +1,5 @@
 ---
-import NoverseLayout from '../layouts/NoverseLayout.astro';
+import PortfolioLayout from '../layouts/PortfolioLayout.astro';
 import Icon from '../components/Icon.astro';
 import ProjectMedia from '../components/projects/ProjectMedia.astro';
 import { projects } from '../data/projects';
@@ -10,7 +10,7 @@ const selected = projects
   .sort((left, right) => left.home!.order - right.home!.order);
 ---
 
-<NoverseLayout title="nohuto" description="Current work and projects">
+<PortfolioLayout title="nohuto" description="Current work and projects">
   <main id="main" class="home-main">
     <section>
       <header class="home-intro">
@@ -83,4 +83,4 @@ const selected = projects
       </section>
     </section>
   </main>
-</NoverseLayout>
+</PortfolioLayout>

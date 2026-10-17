@@ -8,7 +8,7 @@ const { prefix } = Astro.props;
 ---
 
 <dialog
-  class="nv-modal"
+  class="modal"
   id={`${prefix}-settings-modal`}
   aria-labelledby={`${prefix}-settings-title`}
 >
@@ -21,7 +21,7 @@ const { prefix } = Astro.props;
         type="button"
         aria-label="Close settings"
         aria-keyshortcuts="Escape"
-        data-nv-tip="Esc"
+        data-tip="Esc"
       >
         <Icon name="x" />
       </button>
@@ -93,7 +93,7 @@ const { prefix } = Astro.props;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    --nv-icon-size: 14px;
+    --icon-size: 14px;
   }
 
   :where(.site-content) .settings-close:is(:hover, :focus-visible) {

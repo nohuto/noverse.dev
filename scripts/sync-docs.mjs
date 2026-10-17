@@ -582,7 +582,7 @@ async function readImageDimensions(imageUrl, sourceRepos) {
       return normalizeImageDimensions(await sharp(localPath).metadata());
 
     const response = await fetch(toRawImageUrl(imageUrl), {
-      headers: { 'User-Agent': 'noverse-docs-sync' },
+      headers: { 'User-Agent': 'docs-sync' },
       redirect: 'follow',
       signal: AbortSignal.timeout(IMAGE_FETCH_TIMEOUT_MS),
     });

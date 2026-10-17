@@ -22,10 +22,10 @@
     [tabindex='-1']
   ) {
     transition:
-      color var(--nv-motion),
-      background-color var(--nv-motion),
-      border-color var(--nv-motion),
-      opacity var(--nv-motion);
+      color var(--motion),
+      background-color var(--motion),
+      border-color var(--motion),
+      opacity var(--motion);
   }
 
   :where(a, button, input, select, textarea, summary, [tabindex]):not(
@@ -37,20 +37,20 @@
     outline-offset: 2px;
   }
 
-  .nv-icon-button {
+  .icon-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--nv-icon-color, var(--quiet));
+    color: var(--icon-color, var(--quiet));
     cursor: pointer;
     line-height: 0;
     text-decoration: none;
   }
 
-  .nv-icon-button:is(:hover, :focus-visible) {
+  .icon-button:is(:hover, :focus-visible) {
     color: var(--sl-color-white);
     outline: none;
   }
@@ -73,7 +73,7 @@
     align-items: center;
     gap: 4px;
   }
-  .mobile-section-links .nv-icon-button {
+  .mobile-section-links .icon-button {
     width: 28px;
     height: 28px;
   }
@@ -119,7 +119,7 @@
     min-width: var(--sl-menu-button-size);
     padding: 0;
     border: 1px solid transparent;
-    border-radius: var(--nv-ui-radius);
+    border-radius: var(--ui-radius);
     background-color: transparent;
     box-shadow: none;
     color: var(--quiet);
@@ -144,7 +144,7 @@
     min-height: 16px;
     padding: 0 5px;
     border: 1px solid var(--sl-color-hairline);
-    border-radius: var(--nv-ui-radius);
+    border-radius: var(--ui-radius);
     background-color: color-mix(
       in srgb,
       var(--sl-color-bg) 90%,
@@ -173,8 +173,8 @@
     site-search button[data-open-modal] {
       justify-content: initial;
       min-width: 0;
-      min-height: var(--nv-header-control-height);
-      height: var(--nv-header-control-height);
+      min-height: var(--header-control-height);
+      height: var(--header-control-height);
       padding-inline: 0.65rem 0.45rem;
       border-color: var(--sl-rapide-ui-border-color);
       background-color: color-mix(
@@ -197,7 +197,7 @@
   }
 
   .sidebar-pane {
-    --nv-sidebar-tree-font-size: 0.78125rem;
+    --sidebar-tree-font-size: 0.78125rem;
     border-inline-end: 1px solid var(--sl-color-hairline-shade);
   }
 
@@ -205,7 +205,7 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 0;
-    font-size: var(--nv-sidebar-tree-font-size);
+    font-size: var(--sidebar-tree-font-size);
     padding: 0.2em var(--sl-sidebar-item-padding-inline);
   }
 
@@ -228,7 +228,7 @@
   }
 
   .sidebar-pane .large {
-    font-size: var(--nv-sidebar-tree-font-size);
+    font-size: var(--sidebar-tree-font-size);
     font-weight: inherit;
   }
 
@@ -236,14 +236,14 @@
     color: var(--sl-color-white);
   }
 
-  .sidebar-pane a:where(:not(.nv-icon-button)) {
-    border-radius: var(--nv-ui-radius);
+  .sidebar-pane a:where(:not(.icon-button)) {
+    border-radius: var(--ui-radius);
     color: var(--sl-color-gray-3);
-    font-size: var(--nv-sidebar-tree-font-size);
+    font-size: var(--sidebar-tree-font-size);
     padding: 0.3em var(--sl-sidebar-item-padding-inline);
   }
 
-  .sidebar-pane a:where(:not(.nv-icon-button)):is(:hover, :focus) {
+  .sidebar-pane a:where(:not(.icon-button)):is(:hover, :focus) {
     color: var(--sl-color-white);
   }
 
@@ -314,7 +314,7 @@
     background-color: currentColor;
     transform: translateY(-50%);
     pointer-events: none;
-    mask-image: var(--nv-icon-filter);
+    mask-image: var(--icon-filter);
     mask-size: 100%;
     mask-repeat: no-repeat;
     mask-position: center;
@@ -323,7 +323,7 @@
   .sidebar-tree-search-input {
     width: 100%;
     border: 1px solid var(--sl-rapide-ui-border-color);
-    border-radius: var(--nv-ui-radius);
+    border-radius: var(--ui-radius);
     background-color: color-mix(
       in srgb,
       var(--sl-rapide-ui-bg-color) 96%,
@@ -331,8 +331,8 @@
     );
     color: var(--sl-color-text);
     font-size: 0.78125rem;
-    height: var(--nv-header-control-height);
-    line-height: var(--nv-header-control-height);
+    height: var(--header-control-height);
+    line-height: var(--header-control-height);
     padding: 0 88px 0 29px;
     box-shadow: none;
   }
@@ -380,7 +380,7 @@
   }
 
   .sidebar-docs-copyright {
-    --nv-icon-size: 1em;
+    --icon-size: 1em;
   }
 
   @media (max-width: 50rem) {
@@ -421,7 +421,7 @@
 
       a {
         border: 1px solid var(--sl-color-gray-5);
-        border-radius: var(--nv-ui-radius);
+        border-radius: var(--ui-radius);
         padding: 0.25rem 0.5rem;
 
         &:is(:hover, :focus-visible) {
@@ -471,7 +471,7 @@
     }
 
     .toggle {
-      border-radius: var(--nv-ui-radius);
+      border-radius: var(--ui-radius);
     }
 
     .dropdown {
@@ -495,7 +495,7 @@
     }
 
     code:not(:where(.not-content *)) {
-      border-radius: var(--nv-ui-radius);
+      border-radius: var(--ui-radius);
     }
 
     tr:nth-child(2n):not(:where(.not-content *)) {
@@ -548,9 +548,9 @@
     opacity: 0;
     visibility: hidden;
     transition:
-      opacity var(--nv-motion),
-      visibility var(--nv-motion),
-      color var(--nv-motion);
+      opacity var(--motion),
+      visibility var(--motion),
+      color var(--motion);
   }
 
   .scroll-to-top-button.visible {
@@ -585,7 +585,7 @@
   .cb-fullscreen__font-btn,
   .cb-fullscreen__font-btn--decrease::after,
   .cb-fullscreen__font-btn--increase::after {
-    border-radius: var(--nv-ui-radius) !important;
+    border-radius: var(--ui-radius) !important;
   }
 
   .expressive-code .frame,
@@ -626,7 +626,7 @@
   }
   .sidebar-section-caret {
     flex: none;
-    transition: transform var(--nv-motion);
+    transition: transform var(--motion);
   }
   .sidebar-sections details[open] > summary > .sidebar-section-caret {
     transform: rotate(90deg);

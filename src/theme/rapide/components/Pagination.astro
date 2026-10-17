@@ -13,7 +13,7 @@ const isRtl = dir === 'rtl';
         href={prev.href}
         rel="prev"
         aria-keyshortcuts="Control+ArrowLeft"
-        data-nv-tip="Ctrl+Left"
+        data-tip="Ctrl+Left"
       >
         <span class="link-label sl-flex">
           <Icon name={isRtl ? 'right-arrow' : 'left-arrow'} size="1.25rem" />
@@ -27,7 +27,7 @@ const isRtl = dir === 'rtl';
         href={next.href}
         rel="next"
         aria-keyshortcuts="Control+ArrowRight"
-        data-nv-tip="Ctrl+Right"
+        data-tip="Ctrl+Right"
       >
         <span class="link-label sl-flex">
           {Astro.locals.t('page.nextLink')}

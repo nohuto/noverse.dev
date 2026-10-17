@@ -13,12 +13,12 @@ const resizer = document.querySelector<HTMLElement>('.sidebar-resizer');
 const toggles = document.querySelectorAll<HTMLButtonElement>(
   '[data-sidebar-toggle]',
 );
-let width = Number(storageGet('nv-sidebar-width', ''));
+let width = Number(storageGet('sidebar-width', ''));
 let collapsed = root.hasAttribute('data-sidebar-collapsed');
 
 const updateSidebar = () => {
   const currentWidth = sidebarWidth(width, innerWidth);
-  root.style.setProperty('--nv-sidebar-saved-width', `${currentWidth}px`);
+  root.style.setProperty('--sidebar-saved-width', `${currentWidth}px`);
   root.toggleAttribute('data-sidebar-collapsed', collapsed);
   toggles.forEach((button) => {
     button.setAttribute('aria-expanded', String(!collapsed));
@@ -33,19 +33,19 @@ const updateSidebar = () => {
 const setCollapsed = (value: boolean) => {
   collapsed = value;
   updateSidebar();
-  storageSet('nv-sidebar-collapsed', String(value));
+  storageSet('sidebar-collapsed', String(value));
 };
 const setWidth = (value: number) => {
   width = sidebarWidth(value, innerWidth);
   updateSidebar();
-  storageSet('nv-sidebar-width', String(width));
+  storageSet('sidebar-width', String(width));
 };
 updateSidebar();
 window.addEventListener('resize', updateSidebar);
 toggles.forEach((button) =>
   button.addEventListener('click', () => setCollapsed(!collapsed)),
 );
-document.addEventListener('nv-sidebar-expand', () => setCollapsed(false));
+document.addEventListener('sidebar-expand', () => setCollapsed(false));
 resizer?.addEventListener('pointerdown', (event) => {
   if (event.button !== 0) return;
   resizer.setPointerCapture(event.pointerId);

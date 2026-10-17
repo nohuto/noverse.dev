@@ -1,4 +1,4 @@
-.nv-search-box {
+.search-box {
   display: grid;
   grid-template-columns: 29px minmax(0, 1fr);
   align-items: center;
@@ -8,20 +8,20 @@
   background: var(--panel);
 }
 
-.nv-search-icon {
-  --nv-icon-size: 13px;
+.search-icon {
+  --icon-size: 13px;
   margin-left: 9px;
   color: var(--muted);
 }
 
-.nv-search-box:focus-within {
+.search-box:focus-within {
   border-color: var(--accent);
 }
-.nv-search-box:focus-within .nv-search-icon {
+.search-box:focus-within .search-icon {
   color: var(--accent);
 }
 
-.nv-search-box input {
+.search-box input {
   width: 100%;
   min-width: 0;
   height: 22px;
@@ -33,7 +33,7 @@
   line-height: 22px;
 }
 
-.nv-search-box input:focus {
+.search-box input:focus {
   outline: none;
   box-shadow: none;
 }

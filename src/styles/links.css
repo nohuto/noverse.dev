@@ -4,7 +4,7 @@
   border: 0;
   border-bottom: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   text-decoration: none;
-  transition: border-color var(--nv-motion);
+  transition: border-color var(--motion);
 }
 
 .link:is(:hover, :focus-visible),

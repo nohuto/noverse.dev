@@ -1,4 +1,4 @@
-export const THEME_KEY = 'nv-theme';
+export const THEME_KEY = 'theme';
 export const THEME_SYSTEM = 'system';
 export const DEFAULT_DARK_THEME = 'dark';
 export const DEFAULT_LIGHT_THEME = 'light';
@@ -45,7 +45,7 @@ export const lightThemes: ReadonlySet<string> = new Set([
   'solarized-light',
 ]);
 
-export const BG_KEY = 'nv-bg';
+export const BG_KEY = 'bg';
 export const DEFAULT_BG = 'clear';
 export const backgrounds = [
   'clear',

@@ -247,7 +247,7 @@ document
 
     updateActive();
     select.addEventListener('change', syncMenuOptions);
-    select.addEventListener('nv:options-updated', (event) => {
+    select.addEventListener('options-updated', (event) => {
       const detail = (event as CustomEvent).detail;
       if (searchInput && detail?.resetSearch)
         searchValue = searchInput.value = '';

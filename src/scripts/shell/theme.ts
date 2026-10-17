@@ -33,7 +33,7 @@ function applyTheme(setting: string) {
       );
       button.setAttribute('aria-pressed', String(isLight));
     });
-  document.dispatchEvent(new Event('nv:theme-change'));
+  document.dispatchEvent(new Event('theme-change'));
   return selected;
 }
 

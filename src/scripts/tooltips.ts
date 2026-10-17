@@ -1,5 +1,5 @@
 const tip = document.createElement('span');
-tip.className = 'nv-shortcut-tip';
+tip.className = 'shortcut-tip';
 tip.popover = 'manual';
 tip.setAttribute('aria-hidden', 'true');
 document.body.append(tip);
@@ -50,7 +50,7 @@ const show = (element: HTMLElement, delay: number) => {
   timer = setTimeout(() => {
     if (!element.isConnected || !element.getClientRects().length) return;
     (element.closest('dialog, [popover]') ?? document.body).append(tip);
-    tip.textContent = element.dataset.nvTip!;
+    tip.textContent = element.dataset.tip!;
     tip.showPopover();
     position();
   }, delay);
@@ -58,7 +58,7 @@ const show = (element: HTMLElement, delay: number) => {
 
 const hintTarget = (event: Event) =>
   event.target instanceof Element
-    ? event.target.closest<HTMLElement>('[data-nv-tip]')
+    ? event.target.closest<HTMLElement>('[data-tip]')
     : null;
 
 document.addEventListener('pointerover', (event) => {

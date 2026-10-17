@@ -16,7 +16,7 @@ function toastElement(): HTMLElement {
   const existing = document.querySelector<HTMLElement>('.toast');
   if (existing) return existing;
   const toast = document.createElement('div');
-  toast.className = 'toast nv-soft-backdrop';
+  toast.className = 'toast soft-backdrop';
   toast.setAttribute('role', 'status');
   toast.setAttribute('aria-atomic', 'true');
   document.body.append(toast);

@@ -86,10 +86,10 @@
 :where(.site-content)
   :where(a, button, input, select, textarea, [tabindex]):not([tabindex='-1']) {
   transition:
-    color var(--nv-motion),
-    background-color var(--nv-motion),
-    border-color var(--nv-motion),
-    opacity var(--nv-motion);
+    color var(--motion),
+    background-color var(--motion),
+    border-color var(--motion),
+    opacity var(--motion);
 }
 
 :where(.site-content) select:focus,
@@ -120,7 +120,7 @@
   opacity: 1;
 }
 
-.nv-modal {
+.modal {
   position: fixed;
   inset: 0;
   width: auto;
@@ -135,7 +135,7 @@
   background: color-mix(in srgb, var(--bg) 74%, transparent);
 }
 
-.nv-modal::backdrop {
+.modal::backdrop {
   background: none;
 }
 
@@ -180,6 +180,6 @@
   border-color: var(--accent);
 }
 
-html:has(body.bindiff-maximized, .nv-modal[open], .image-viewer[open]) {
+html:has(body.bindiff-maximized, .modal[open], .image-viewer[open]) {
   overflow: hidden;
 }

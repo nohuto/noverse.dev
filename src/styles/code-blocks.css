@@ -1,5 +1,5 @@
 .expressive-code .frame {
-  --code-action-size: 2.5rem;
+  --code-action-size: 2rem;
 }
 
 .expressive-code .code-actions {
@@ -15,11 +15,14 @@
   position: static;
 }
 
+.expressive-code .frame .code-actions button {
+  width: var(--code-action-size);
+  height: var(--code-action-size);
+}
+
 .expressive-code .code-expand {
   position: relative;
   align-self: flex-end;
-  width: var(--code-action-size);
-  height: var(--code-action-size);
   margin: 0;
   padding: 0;
   border: 0;
@@ -50,12 +53,20 @@
   opacity: var(--ec-frm-inlBtnBrdOpa);
 }
 
+.expressive-code .code-actions .copy button::after,
+.code-expand .icon {
+  inset: 0;
+  margin: auto;
+  width: 18px;
+  height: 18px;
+}
+
+.expressive-code .code-actions .copy button::after {
+  mask: var(--icon-copy) center / contain no-repeat;
+}
+
 .code-expand .icon {
   position: absolute;
-  inset: 0;
-  margin: 0.475rem;
-  width: auto;
-  height: auto;
   background: var(--ec-frm-inlBtnFg);
   z-index: 1;
 }
@@ -84,7 +95,7 @@
 
 @media (hover: hover) {
   .expressive-code .frame {
-    --code-action-size: 2rem;
+    --code-action-size: 1.5rem;
   }
 
   .expressive-code .code-expand {

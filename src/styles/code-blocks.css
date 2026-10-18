@@ -1,4 +1,5 @@
-.expressive-code .frame {
+.expressive-code .frame,
+.code-fullscreen {
   --code-action-size: 2rem;
 }
 
@@ -94,7 +95,8 @@
 }
 
 @media (hover: hover) {
-  .expressive-code .frame {
+  .expressive-code .frame,
+  .code-fullscreen {
     --code-action-size: 1.5rem;
   }
 
@@ -126,7 +128,7 @@
   height: 100dvh;
   max-height: none;
   margin: 0;
-  padding: 3.5rem 1rem 1rem;
+  padding: calc(8px + var(--code-action-size) + 0.25rem) 1rem 1rem;
   border: 0;
   background: var(--bg);
   color: var(--text);

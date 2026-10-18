@@ -9,6 +9,8 @@ sidebar:
 
 RegKit is a feature rich registry editor replacement, which includes several improvements & additions compared to the native RegEdit. It currently supports Windows Vista through Windows 11 (32bit & 64bit versions). Note that native RegEdit can't run alongside RegKit, as RegKit uses `RegEdit_RegEdit` window class (required for jump support), which causes RegEdit to see this window as an existing instance and exits instead of opening another one.
 
+Whenever you're not a power user, `View > Simple Mode` mirrors the RegEdit UI layout and only keeps some essential additions (address bar, tabs, filter bar, undo/redo...).
+
 ## Verify Binaries
 
 All releases have a detached GPG sig, import the [public key](https://pgp.noverse.dev) and verify the file next to its sig:
@@ -81,6 +83,7 @@ RegKit adds functionality that native RegEdit doesn't support:
 - Drag and drop support for `.reg` files, hive files, folders
 - *Edit with RegKit* context menu for `.reg` and hive files
 - Read only mode
+- Simple mode (hides some features)
 - Miscellaneous common functionalities
 
 ## Translations

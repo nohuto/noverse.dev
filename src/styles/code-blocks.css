@@ -105,6 +105,10 @@
   .expressive-code
     .frame:is(:hover, :has(:focus-visible, .feedback.show))
     .code-actions
+    button:not(:hover, :focus-visible, :active),
+  .code-fullscreen
+    .frame
+    .code-actions
     button:not(:hover, :focus-visible, :active) {
     opacity: 0.75;
   }

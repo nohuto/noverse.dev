@@ -3,6 +3,7 @@ import Default from '@astrojs/starlight/components/PageFrame.astro';
 import Icon from '../Icon.astro';
 import Background from '../shell/Background.astro';
 import ImageViewer from '../ImageViewer.astro';
+import CodeFullscreen from '../CodeFullscreen.astro';
 import {
   SIDEBAR_DEFAULT_WIDTH,
   SIDEBAR_MAX_WIDTH,
@@ -63,6 +64,4 @@ const { hasSidebar } = Astro.locals.starlightRoute;
   import '../../scripts/site-shell';
   import '../../scripts/tooltips';
 </script>
-{Astro.url.pathname.startsWith('/docs/') && <script>
-  import 'virtual:docs-plugins';
-</script>}
+{Astro.url.pathname.startsWith('/docs/') && <CodeFullscreen />}

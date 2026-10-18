@@ -26,7 +26,6 @@
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
     "@astrojs/starlight": "0.42.4",
-    "starlight-codeblock-fullscreen": "2.0.0",
     "starlight-links-validator": "0.26.0"
   }
 }

@@ -1,0 +1,132 @@
+.expressive-code .frame {
+  --code-action-size: 2.5rem;
+}
+
+.expressive-code .code-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  position: absolute;
+  inset-block-start: calc(var(--ec-brdWd) + var(--button-spacing));
+  inset-inline-end: calc(var(--ec-brdWd) + var(--ec-uiPadInl) / 2);
+}
+
+.expressive-code .code-actions .copy {
+  position: static;
+}
+
+.expressive-code .code-expand {
+  position: relative;
+  align-self: flex-end;
+  width: var(--code-action-size);
+  height: var(--code-action-size);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--code-background);
+  border-radius: var(--ui-radius);
+  z-index: 1;
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+.code-expand::before,
+.code-expand::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.code-expand::after {
+  background: var(--ec-frm-inlBtnBg);
+  opacity: var(--ec-frm-inlBtnBgIdleOpa);
+  transition: inherit;
+}
+
+.code-expand::before {
+  border: var(--ec-brdWd) solid var(--ec-frm-inlBtnBrd);
+  opacity: var(--ec-frm-inlBtnBrdOpa);
+}
+
+.code-expand .icon {
+  position: absolute;
+  inset: 0;
+  margin: 0.475rem;
+  width: auto;
+  height: auto;
+  background: var(--ec-frm-inlBtnFg);
+  z-index: 1;
+}
+
+.expressive-code .code-expand:is(:hover, :focus-visible, :active) {
+  opacity: 1;
+}
+
+.code-expand:is(:hover, :focus-visible)::after {
+  opacity: var(--ec-frm-inlBtnBgHoverOrFocusOpa);
+}
+
+.code-expand:active::after {
+  opacity: var(--ec-frm-inlBtnBgActOpa);
+}
+
+.code-expand[aria-expanded='true'] .icon {
+  --icon: var(--icon-zen-exit);
+}
+
+.expressive-code .frame :nth-child(1 of .ec-line) .code {
+  padding-inline-end: calc(
+    2 * var(--code-action-size) + 0.25rem + var(--ec-codePadInl)
+  );
+}
+
+@media (hover: hover) {
+  .expressive-code .frame {
+    --code-action-size: 2rem;
+  }
+
+  .expressive-code .code-expand {
+    opacity: 0;
+  }
+
+  .expressive-code
+    .frame:is(:hover, :has(:focus-visible, .feedback.show))
+    .code-actions
+    button:not(:hover, :focus-visible, :active) {
+    opacity: 0.75;
+  }
+}
+
+:root:has(.code-fullscreen[open]) {
+  overflow: hidden;
+}
+
+.code-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 3.5rem 1rem 1rem;
+  border: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.code-fullscreen::backdrop {
+  background: var(--bg);
+}
+
+.code-fullscreen .expressive-code {
+  margin: 0;
+}
+
+.code-fullscreen .code-actions {
+  position: fixed;
+  inset-block-start: 8px;
+  inset-inline-end: 16px;
+}

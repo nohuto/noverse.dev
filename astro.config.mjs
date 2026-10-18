@@ -2,13 +2,9 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
-import starlightCodeblockFullscreen from 'starlight-codeblock-fullscreen';
 import starlightLinksValidator from 'starlight-links-validator';
-import { mainSitePlugins } from './scripts/main-site-plugins.mjs';
 
 import { docsSidebar } from './src/data/docs-sidebar.mjs';
-
-const mainSiteClients = mainSitePlugins();
 
 export default defineConfig({
   site: 'https://noverse.dev',
@@ -19,10 +15,6 @@ export default defineConfig({
     sitemap(),
     starlight({
       plugins: [
-        mainSiteClients.scope(
-          starlightCodeblockFullscreen(),
-          'virtual:docs-plugins',
-        ),
         starlightLinksValidator({
           exclude: [
             'https://noverse.dev/',
@@ -35,8 +27,7 @@ export default defineConfig({
       ],
       title: 'Noverse',
       titleDelimiter: '-',
-      description:
-        'Docs from win-config, regkit, app-guides, and windbg-notes.',
+      description: 'Docs from win-config, regkit, app-guides, windbg-notes.',
       favicon: '/favicon.png',
       head: [
         {
@@ -102,6 +93,5 @@ export default defineConfig({
       },
       sidebar: docsSidebar,
     }),
-    mainSiteClients.integration,
   ],
 });

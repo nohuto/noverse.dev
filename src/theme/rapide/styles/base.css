@@ -575,24 +575,11 @@
   .expressive-code .copy button,
   .expressive-code .copy button div,
   .expressive-code .copy button::before,
-  .expressive-code .copy .feedback,
-  .expressive-code.cb-fullscreen__active,
-  .cb-fullscreen__button,
-  .cb-fullscreen__button[data-tooltip]:hover::after,
-  .cb-fullscreen__hint,
-  .cb-fullscreen__hint kbd,
-  .cb-fullscreen__font-controls,
-  .cb-fullscreen__font-btn,
-  .cb-fullscreen__font-btn--decrease::after,
-  .cb-fullscreen__font-btn--increase::after {
+  .expressive-code .copy .feedback {
     border-radius: var(--ui-radius) !important;
   }
 
-  .expressive-code .frame,
-  .expressive-code.cb-fullscreen__active,
-  .cb-fullscreen__button[data-tooltip]:hover::after,
-  .cb-fullscreen__hint,
-  .cb-fullscreen__font-controls {
+  .expressive-code .frame {
     box-shadow: none !important;
   }
 

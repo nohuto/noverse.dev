@@ -1,0 +1,76 @@
+---
+import Icon from './Icon.astro';
+import '../styles/code-blocks.css';
+---
+
+<dialog
+  class="code-fullscreen sl-markdown-content"
+  id="code-fullscreen"
+  aria-label="Code block"
+></dialog>
+<template id="code-expand-button">
+  <button
+    class="code-expand"
+    type="button"
+    title="Enter fullscreen"
+    aria-label="Enter fullscreen"
+    aria-haspopup="dialog"
+    aria-controls="code-fullscreen"
+    aria-expanded="false"
+  >
+    <Icon name="zen" />
+  </button>
+</template>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('.code-fullscreen')!;
+  const template = document.querySelector<HTMLTemplateElement>(
+    '#code-expand-button',
+  )!;
+  const placeholder = document.createElement('div');
+  let trigger: HTMLButtonElement | null = null;
+
+  for (const frame of document.querySelectorAll('.expressive-code .frame')) {
+    const actions = document.createElement('div');
+    actions.className = 'code-actions';
+    const copy = frame.querySelector('.copy');
+    if (copy) actions.append(copy);
+    actions.append(template.content.cloneNode(true));
+    frame.append(actions);
+  }
+  template.remove();
+
+  const setExpanded = (button: HTMLButtonElement, expanded: boolean) => {
+    button.setAttribute('aria-expanded', String(expanded));
+    button.title = expanded ? 'Exit fullscreen' : 'Enter fullscreen';
+    button.setAttribute('aria-label', button.title);
+  };
+
+  document.addEventListener('click', (event) => {
+    const button =
+      event.target instanceof Element
+        ? event.target.closest<HTMLButtonElement>('.code-expand')
+        : null;
+    if (!button) return;
+    if (trigger) {
+      dialog.close();
+      return;
+    }
+    const block = button.closest<HTMLElement>('.expressive-code')!;
+    placeholder.style.height = `${block.offsetHeight}px`;
+    placeholder.style.margin = getComputedStyle(block).margin;
+    block.replaceWith(placeholder);
+    dialog.append(block);
+    trigger = button;
+    setExpanded(button, true);
+    dialog.showModal();
+    button.focus({ preventScroll: true });
+  });
+
+  dialog.addEventListener('close', () => {
+    placeholder.replaceWith(dialog.firstElementChild!);
+    setExpanded(trigger!, false);
+    trigger!.focus({ preventScroll: true });
+    trigger = null;
+  });
+</script>

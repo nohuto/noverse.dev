@@ -14,7 +14,6 @@ sidebar:
 - [Temporary NVCPL](/docs/win-config/nvidia/temporary-nvcpl/)
 - [Hide Tray Icon](/docs/win-config/nvidia/hide-tray-icon/)
 - [DLSS Indicator](/docs/win-config/nvidia/disable-dlss-indicator/)
-- [Logging](/docs/win-config/nvidia/disable-logging/)
 - [Scheduled Tasks](/docs/win-config/nvidia/disable-scheduled-tasks/)
 - [Telemetry](/docs/win-config/nvidia/disable-telemetry/)
 - [Developer Settings](/docs/win-config/nvidia/enable-developer-settings/)

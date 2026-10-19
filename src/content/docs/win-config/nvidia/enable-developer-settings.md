@@ -4,7 +4,7 @@ title: 'Developer Settings'
 description: 'NVIDIA option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 10
+  order: 9
 ---
 
 Enables `Enable Developer Settings` in the NVIDIA control panel.

@@ -209,17 +209,21 @@ const dataAttributes: DOMStringMap = {
       white-space: pre-line;
     }
     dialog {
+      --sl-search-max-height: 100dvh;
       padding: 0;
       margin: 0;
-      background-color: var(--sl-color-gray-6);
+      background-color: var(--sl-color-black);
       border: 1px solid var(--sl-color-gray-5);
       width: 100%;
       max-width: 100%;
-      height: 100%;
-      max-height: 100%;
+      height: max-content;
+      max-height: var(--sl-search-max-height);
     }
     dialog[open] {
       display: flex;
+    }
+    dialog:focus-within {
+      border-color: var(--sl-color-accent);
     }
 
     dialog::backdrop {
@@ -233,8 +237,6 @@ const dataAttributes: DOMStringMap = {
       overflow: auto;
       flex-direction: column;
       flex-grow: 1;
-      gap: 1rem;
-      padding: 1rem;
     }
 
     button[data-close-modal] {
@@ -271,17 +273,11 @@ const dataAttributes: DOMStringMap = {
       }
 
       dialog {
+        --sl-search-max-height: calc(100dvh - 8rem);
         margin: 4rem auto auto;
         border-radius: var(--ui-radius);
         width: 90%;
         max-width: 40rem;
-        height: max-content;
-        min-height: 15rem;
-        max-height: calc(100% - 8rem);
-      }
-
-      .dialog-frame {
-        padding: 1.5rem;
       }
     }
   }
@@ -296,15 +292,14 @@ const dataAttributes: DOMStringMap = {
     }
 
     #starlight__search {
-      --sl-search-result-spacing: calc(1.25rem * var(--pagefind-ui-scale));
+      --sl-search-input-height: calc(64px * var(--pagefind-ui-scale));
       --sl-search-result-pad-inline-start: calc(
         3.75rem * var(--pagefind-ui-scale)
       );
       --sl-search-result-pad-inline-end: calc(
         1.25rem * var(--pagefind-ui-scale)
       );
-      --sl-search-result-pad-block: calc(0.9375rem * var(--pagefind-ui-scale));
-      --sl-search-corners: var(--ui-radius);
+      --sl-search-result-pad-block: calc(0.625rem * var(--pagefind-ui-scale));
       --pagefind-ui-border-radius: var(--ui-radius);
       --pagefind-ui-image-border-radius: var(--ui-radius);
       --sl-search-page-icon-size: calc(1.875rem * var(--pagefind-ui-scale));
@@ -318,23 +313,59 @@ const dataAttributes: DOMStringMap = {
     }
 
     #starlight__search .pagefind-ui__form::before {
-      --pagefind-ui-text: var(--sl-color-gray-1);
-      mask-image: var(--icon-search);
-      opacity: 1;
+      display: none;
     }
 
     #starlight__search .pagefind-ui__search-input {
       color: var(--sl-color-white);
       font-weight: 400;
       width: calc(100% - var(--sl-search-cancel-space));
+      height: var(--sl-search-input-height);
+      padding-inline-start: var(--sl-search-page-icon-inline-start);
+      border: 0;
+      outline: none;
     }
 
     #starlight__search .pagefind-ui__search-input::placeholder {
       color: transparent;
     }
 
-    #starlight__search input:focus {
-      --pagefind-ui-border: var(--sl-color-accent);
+    #starlight__search .pagefind-ui__drawer {
+      max-height: calc(
+        var(--sl-search-max-height) - var(--sl-search-input-height) - 3px
+      );
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      border-top: 1px solid var(--sl-color-gray-5);
+    }
+
+    #starlight__search .pagefind-ui__results-area {
+      margin-top: 0;
+    }
+
+    #starlight__search .pagefind-ui__message {
+      height: auto;
+      padding: var(--sl-search-result-pad-block)
+        var(--sl-search-page-icon-inline-start);
+      font-weight: 400;
+    }
+
+    #starlight__search
+      .pagefind-ui__results-area:has(.pagefind-ui__result)
+      .pagefind-ui__message {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    #starlight__search .pagefind-ui__button {
+      margin: 0;
+      border: 0;
+      border-top: 1px solid var(--sl-color-gray-5);
     }
 
     #starlight__search .pagefind-ui__search-clear {
@@ -356,25 +387,17 @@ const dataAttributes: DOMStringMap = {
       height: 100%;
     }
 
-    #starlight__search .pagefind-ui__results > * + * {
-      margin-top: var(--sl-search-result-spacing);
-    }
     #starlight__search .pagefind-ui__result {
-      border: 0;
-      padding: 0;
-    }
-
-    #starlight__search .pagefind-ui__result-title {
       position: relative;
-      background-color: var(--sl-color-black);
+      border: 0;
+      padding: var(--sl-search-result-pad-block) 0;
     }
 
-    #starlight__search .pagefind-ui__result-title:hover,
-    #starlight__search .pagefind-ui__result-title:focus-within {
-      outline: 1px solid var(--sl-color-accent-high);
+    #starlight__search .pagefind-ui__result:hover {
+      background-color: color-mix(in srgb, var(--text) 10%, transparent);
     }
 
-    #starlight__search .pagefind-ui__result-title:focus-within {
+    #starlight__search .pagefind-ui__result:focus-within {
       background-color: var(--sl-color-accent-low);
     }
 
@@ -383,33 +406,26 @@ const dataAttributes: DOMStringMap = {
       margin-top: 0;
     }
 
-    #starlight__search .pagefind-ui__result-inner > :first-child {
-      border-radius: var(--sl-search-corners) var(--sl-search-corners) 0 0;
-    }
-    #starlight__search .pagefind-ui__result-inner > :last-child {
-      border-radius: 0 0 var(--sl-search-corners) var(--sl-search-corners);
-    }
-
     #starlight__search .pagefind-ui__result-inner > .pagefind-ui__result-title {
-      padding: var(--sl-search-result-pad-block)
+      display: flex;
+      align-items: center;
+      gap: var(--sl-search-page-icon-inline-start);
+      padding-inline: var(--sl-search-page-icon-inline-start)
         var(--sl-search-result-pad-inline-end);
-      padding-inline-start: var(--sl-search-result-pad-inline-start);
     }
     #starlight__search
       .pagefind-ui__result-inner
       > .pagefind-ui__result-title::before {
       content: '';
-      position: absolute;
-      inset-block: 0;
-      inset-inline-start: var(--sl-search-page-icon-inline-start);
+      flex: none;
       width: var(--sl-search-page-icon-size);
+      height: var(--sl-search-page-icon-size);
       background: var(--sl-color-gray-3);
       mask: var(--icon-file) center no-repeat;
     }
 
     #starlight__search .pagefind-ui__result-inner {
       align-items: stretch;
-      gap: 1px;
     }
 
     #starlight__search .pagefind-ui__result-link {
@@ -433,12 +449,18 @@ const dataAttributes: DOMStringMap = {
     }
 
     #starlight__search .pagefind-ui__result-excerpt {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      padding-inline: var(--sl-search-result-pad-inline-start)
+        var(--sl-search-result-pad-inline-end);
       font-size: calc(1rem * var(--pagefind-ui-scale));
       overflow-wrap: anywhere;
     }
 
     #starlight__search mark {
-      color: var(--sl-color-gray-2);
+      color: var(--sl-color-accent);
       background-color: transparent;
       font-weight: 600;
     }

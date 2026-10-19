@@ -713,11 +713,6 @@ body:has(.main-terminal) {
   text-indent: var(--console-prompt-indent);
 }
 
-.console-input textarea:focus {
-  outline: none;
-  box-shadow: none;
-}
-
 .console-block-cursor {
   position: relative;
 }

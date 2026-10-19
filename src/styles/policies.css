@@ -103,6 +103,12 @@
   transition: transform var(--motion);
 }
 
+#policy-view-trigger:focus-visible,
+#policy-column-trigger:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
 #policy-view-trigger[aria-expanded='true'] .policy-view-chevron {
   transform: rotate(180deg);
 }

@@ -101,6 +101,7 @@ h3 {
 
 .skip-link:focus {
   transform: translateY(0);
+  outline: none;
 }
 
 .site-header {

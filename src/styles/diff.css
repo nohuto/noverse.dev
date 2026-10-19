@@ -481,6 +481,10 @@
   color: var(--accent);
 }
 
+.bindiff-actions button:focus-visible {
+  outline: none;
+}
+
 .bindiff-actions button:disabled {
   opacity: 0.55;
   cursor: not-allowed;

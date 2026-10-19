@@ -32,8 +32,3 @@
   font-size: var(--font-size-body);
   line-height: 22px;
 }
-
-.search-box input:focus {
-  outline: none;
-  box-shadow: none;
-}

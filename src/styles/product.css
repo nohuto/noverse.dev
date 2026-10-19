@@ -129,6 +129,7 @@
 
 .product-slides:focus-visible {
   border-color: var(--accent);
+  outline: none;
 }
 
 .product-slides::-webkit-scrollbar {

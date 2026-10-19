@@ -33,16 +33,7 @@
   text-decoration: none;
 }
 
-:where(.site-content)
-  :where(
-    a,
-    button,
-    input,
-    select,
-    textarea,
-    summary,
-    [tabindex]
-  ):focus-visible {
+:where(.site-content) :where(a, button, summary, [tabindex]):focus-visible {
   outline: 1px solid var(--accent);
   outline-offset: 2px;
 }
@@ -97,6 +88,10 @@
 :where(.site-content) button:focus {
   border-color: var(--accent);
   box-shadow: none;
+}
+
+:where(.site-content) :where(input, select, textarea):focus {
+  outline: none;
 }
 
 :where(.site-content) img,

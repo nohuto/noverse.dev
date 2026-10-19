@@ -11,7 +11,18 @@ RegKit is a feature rich registry editor replacement, which includes several imp
 
 Whenever you're not a power user, `View > Simple Mode` mirrors the RegEdit UI layout and only keeps some essential additions (address bar, tabs, filter bar, undo/redo...).
 
-## Verify Binaries
+## Installation
+
+The binaries can be downloaded via the [releases](https://github.com/nohuto/regkit/releases), winget ([PR](https://github.com/microsoft/winget-pkgs/pull/455779) wasn't merged yet), scoop (will be added to [extras](https://github.com/ScoopInstaller/Extras) as soon as the repo has 100 stars) or by building them on your own.
+
+```powershell
+winget install nohuto.RegKit
+
+scoop bucket add nohuto https://github.com/nohuto/regkit
+scoop install nohuto/regkit
+```
+
+### Verify Binaries
 
 All releases have a detached GPG sig, import the [public key](https://pgp.noverse.dev) and verify the file next to its sig:
 

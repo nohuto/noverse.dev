@@ -7,7 +7,7 @@ sidebar:
   order: 2
 ---
 
-Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NVIDIA-Tool.ps1).
+Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/blob/main/nvidia/assets/scripts/NVIDIA-Tool.ps1).
 
 ### Main Menu
 

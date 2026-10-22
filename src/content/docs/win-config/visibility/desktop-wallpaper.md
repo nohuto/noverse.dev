@@ -217,7 +217,7 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%` via the suboption.
 
-### [TranscodeImage](https://github.com/nohuto/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
+### [TranscodeImage](https://github.com/nohuto/win-config/blob/main/system/assets/pseudocode/jpeg-TranscodeImage.c)
 
 ```c
 if ( (int)SHRegGetDWORD(

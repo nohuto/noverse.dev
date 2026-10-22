@@ -43,10 +43,10 @@ Disabling spatial sound via these values would gray out the option in the device
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/peripheral/images/spatialsystemsettings.png" alt="" width="1053" height="514" loading="lazy" decoding="async">
 
-- [BlockSpatialAudioRegistryGates](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/BlockSpatialAudioRegistryGates.c)
-- [IsSpatialComboEndpointDeterminationDisabled](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/IsSpatialComboEndpointDeterminationDisabled.c)
-- [GetSpatialAudioLicenseGracePeriodInMs](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/-GetSpatialAudioLicenseGracePeriodInMs@AtmosCheck@@CAHXZ.c)
-- [IsMultiUserSKU](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/-IsMultiUserSKU@@YA_NXZ.c)
+- [BlockSpatialAudioRegistryGates](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/audiosrv/BlockSpatialAudioRegistryGates.c)
+- [IsSpatialComboEndpointDeterminationDisabled](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/audiosrv/IsSpatialComboEndpointDeterminationDisabled.c)
+- [GetSpatialAudioLicenseGracePeriodInMs](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/audiosrv/-GetSpatialAudioLicenseGracePeriodInMs@AtmosCheck@@CAHXZ.c)
+- [IsMultiUserSKU](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/audiosrv/-IsMultiUserSKU@@YA_NXZ.c)
 
 ## Mono/Stereo Audio
 

@@ -59,7 +59,7 @@ if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbD
 
 `TimeStampInterval` under `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` is in seconds, the value under `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` is read as minutes and multiplied by 60.
 
-- [privacy/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/timestamp-OsEventsTimestampInterval.c)
+- [privacy/assets/pseudocode | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/pseudocode/timestamp-OsEventsTimestampInterval.c)
 
 ### Crash Dumps
 
@@ -83,8 +83,8 @@ There're two values named [`CrashDumpEnabled.New`](https://github.com/nohuto/reg
 \Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.Old
 ```
 
-- [privacy/assets | crashdmp.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp.c)
-- [privacy/assets | crashdmp-SecureDump_PrepareForInit.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp-SecureDump_PrepareForInit.c)
+- [privacy/assets/pseudocode | crashdmp.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/pseudocode/crashdmp.c)
+- [decompiled-pseudocode | SecureDump_PrepareForInit.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/SecureDump_PrepareForInit.c)
 
 ## Miscellaneous Notes
 
@@ -146,7 +146,7 @@ Related to [PCIe advanced error reporting](https://learn.microsoft.com/en-us/win
 ```
 Default is `0`, non zero would enable the behaviour? The value doesn't exist by default.
 
-- [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
+- [privacy/assets/pseudocode | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/pseudocode/wer-PciGetSystemWideHackFlagsFromRegistry.c)
 
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : TelemetryErrorDataEnabled

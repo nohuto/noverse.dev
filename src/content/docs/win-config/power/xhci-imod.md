@@ -88,7 +88,7 @@ Not complete yet.
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/power/images/usb-driver-stack.png" alt="" width="675" height="862" loading="lazy" decoding="async">
 
-[`Interrupter_PrepareInterrupter`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/USBXHCI/Interrupter_PrepareInterrupter.c) gets the register set at `RuntimeBase + 0x20 + 0x20 * InterrupterId`, [`Interrupter_InterruptEnable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/USBXHCI/Interrupter_InterruptEnable.c) then writes decimal `200` to `IMOD` (low half of `0x000000C8` sets `IMODI = 200`, the high writes `IMODC` to zero) and enables `IMAN.IE`, W10 1507 - W11 26H1 all use `200`.
+[`Interrupter_PrepareInterrupter`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBXHCI/Interrupter_PrepareInterrupter.c) gets the register set at `RuntimeBase + 0x20 + 0x20 * InterrupterId`, [`Interrupter_InterruptEnable`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBXHCI/Interrupter_InterruptEnable.c) then writes decimal `200` to `IMOD` (low half of `0x000000C8` sets `IMODI = 200`, the high writes `IMODC` to zero) and enables `IMAN.IE`, W10 1507 - W11 26H1 all use `200`.
 
 ```c
 // Interrupter_InterruptEnable
@@ -100,7 +100,7 @@ result = Ulong | 2; // IMAN.IE = 1
 return XilRegister_WriteUlong(v3, v6, result);
 ```
 
-[`Interrupter_CreateInterrupter`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/USBXHCI/Interrupter_CreateInterrupter.c) registers [`Interrupter_WdfEvtInterruptEnable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/USBXHCI/Interrupter_WdfEvtInterruptEnable.c) as the KMDF interrupt enable callback, which calls it whenever the controller enters D0 (as written in [Enabling and Disabling Interrupts](https://learn.microsoft.com/en-us/windows-hardware/drivers/wdf/enabling-and-disabling-interrupts)).
+[`Interrupter_CreateInterrupter`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBXHCI/Interrupter_CreateInterrupter.c) registers [`Interrupter_WdfEvtInterruptEnable`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBXHCI/Interrupter_WdfEvtInterruptEnable.c) as the KMDF interrupt enable callback, which calls it whenever the controller enters D0 (as written in [Enabling and Disabling Interrupts](https://learn.microsoft.com/en-us/windows-hardware/drivers/wdf/enabling-and-disabling-interrupts)).
 
 ## Mouse/Keyboard Input
 
@@ -277,7 +277,7 @@ lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980 // _BULK_STAGE_DATA.TrbRange a
 
 ## xhci_imod
 
-Download [xhci_imod.exe](https://github.com/nohuto/win-config/blob/main/power/assets/xhci_imod.exe) and the signed [inpoutx64.sys](https://github.com/nohuto/win-config/blob/main/power/assets/inpoutx64.sys) driver (kernel level port access driver), you can also build the executeable from [source](https://github.com/nohuto/win-config/tree/main/power/assets/xhci_imod):
+Download and extract [xhci_imod.zip](https://github.com/nohuto/utils/releases/download/0.1.0/xhci_imod.zip), keeping `xhci_imod.exe` and the signed `inpoutx64.sys` driver (kernel level port access driver) in the same folder. You can also build the executable from [source](https://github.com/nohuto/utils/tree/main/xhci_imod):
 
 ```powershell
 cmake -S . -B build

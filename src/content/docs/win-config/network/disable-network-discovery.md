@@ -107,7 +107,7 @@ RegistryKey<unsigned char>::Initialize(
 )
 ```
 
-- [network/assets | networkdisc-DataCenterBridgingConfiguration.c](https://github.com/nohuto/win-config/blob/main/network/assets/networkdisc-DataCenterBridgingConfiguration.c)
+- [network/assets/pseudocode | networkdisc-DataCenterBridgingConfiguration.c](https://github.com/nohuto/win-config/blob/main/network/assets/pseudocode/networkdisc-DataCenterBridgingConfiguration.c)
 
 ## [Windows Policies](https://noverse.dev/policies)
 

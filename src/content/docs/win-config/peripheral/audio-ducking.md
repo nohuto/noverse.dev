@@ -49,7 +49,7 @@ float __fastcall CDuckingManager::GetdBFromUserPreference(int a1)
 
 Fun fact: the `Reduce the volume of other sounds by 80%` audio ducking option isn't accurate at all (it's ~87%).
 
-- [LoadUserSettings](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/AudioSrvPolicyManager/-LoadUserSettings@@YAXPEAVTSSession@@PEAUHKEY__@@@Z.c)
+- [LoadUserSettings](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/AudioSrvPolicyManager/-LoadUserSettings@@YAXPEAVTSSession@@PEAUHKEY__@@@Z.c)
 
 ### MMSYS Capture
 

@@ -28,5 +28,5 @@ Disabled = `0`
 "ShowDlssIndicator"=dword:00000002
 ```
 
-- [nvidia/assets | dlss.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/dlss.c)
-- [nvidia/assets | dlss-NGXCubinGeneric.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/dlss-NGXCubinGeneric.cpp)
+- [nvidia/assets/pseudocode | dlss.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/pseudocode/dlss.c)
+- [nvidia/assets/reference | dlss-NGXCubinGeneric.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/reference/dlss-NGXCubinGeneric.cpp)

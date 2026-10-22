@@ -31,7 +31,7 @@ See '[PnP Device Values](https://noverse.dev/docs/win-config/power/pnp-device-va
 
 ### WakeOnInputDeviceTypes
 
-[`WakeOnInputDeviceTypes`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-UpdateWakeOnInputDeviceTypesFromRegistry%40CInputGlobals%40%40QEAAXXZ.c) (`\Registry\Machine\SYSTEM\INPUT`) probably handles wake on input behavior for all input devices, each bit represents a input device type?
+[`WakeOnInputDeviceTypes`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-UpdateWakeOnInputDeviceTypesFromRegistry@CInputGlobals@@QEAAXXZ.c) (`\Registry\Machine\SYSTEM\INPUT`) probably handles wake on input behavior for all input devices, each bit represents a input device type?
 
 ## query_flag
 

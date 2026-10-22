@@ -20,8 +20,8 @@ wevtutil sl Microsoft-Windows-UserModePowerService/Diagnostic /e:false
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-UserModePowerService/Diagnostic\Enabled	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-- [privacy/assets | sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c)
-- [privacy/assets | sleepstudy-PoFxInitPowerManagement.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/sleepstudy-PoFxInitPowerManagement.c)
+- [decompiled-pseudocode | FxLibraryGlobalsQueryRegistrySettings.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/Wdf01000/FxLibraryGlobalsQueryRegistrySettings.c)
+- [decompiled-pseudocode | PoFxInitPowerManagement.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/PoFxInitPowerManagement.c)
 
 ## Miscellaenous Notes
 

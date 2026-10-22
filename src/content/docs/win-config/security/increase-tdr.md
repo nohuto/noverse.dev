@@ -17,7 +17,7 @@ Disabling TDR removes a valuable layer of protection, so it is generally recomme
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/security/images/tdr-process.jpg" alt="" width="448" height="243" decoding="async">
 
-### [Registry Values](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/display/tdr-registry-keys.md)
+### [Registry Values](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/tdr-registry-keys)
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers"

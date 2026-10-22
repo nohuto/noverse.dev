@@ -23,7 +23,7 @@ mov rax, 0; ret // result = 0
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/visibility/images/angular.png" alt="" width="1007" height="522" loading="lazy" decoding="async">
 
-## [GetEffectiveCornerStyle](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-GetEffectiveCornerStyle%40CTopLevelWindow%40%40AEAA-AW4CORNER_STYLE%40%40XZ.c)
+## [GetEffectiveCornerStyle](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-GetEffectiveCornerStyle@CTopLevelWindow@@AEAA-AW4CORNER_STYLE@@XZ.c)
 
 That function calculates the effective corner mode, its callers include border/shadow/radius.
 ```c

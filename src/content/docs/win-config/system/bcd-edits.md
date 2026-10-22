@@ -379,7 +379,7 @@ Note that this doesn't show default states, instead it shows several options and
 
 ## Pseudocode Notes
 
-Notes on several features in relation of [HalpMiscGetParameters](https://github.com/nohuto/win-config/blob/main/system/assets/bcdedit-HalpMiscGetParameters.c).
+Notes on several features in relation of [HalpMiscGetParameters](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/HalpMiscGetParameters.c).
 
 ```c
 lkd> db HalpInterruptX2ApicPolicy l1

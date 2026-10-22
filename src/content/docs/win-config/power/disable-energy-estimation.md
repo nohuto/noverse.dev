@@ -13,10 +13,10 @@ Energy estimation accounts for estimated power usage, components report modeled 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
     "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator, 0 allows WNF_PO_DISCHARGE_ESTIMATE updates, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
     "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator, 0 clears WNF_PO_CHARGE_ESTIMATE, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
-    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled, https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PoEnergyEstimationEnabled.c
+    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PoEnergyEstimationEnabled.c
 ```
 
-- [power/assets | PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
+- [power/assets/pseudocode | PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/pseudocode/energyesti-PtInitializeTelemetry.c)
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/power/images/energyesti.png" alt="" width="607" height="384" decoding="async">
 
@@ -43,4 +43,4 @@ So these values seem to change the estimated energy *math* part.
 \Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME\IdleState\1 : IdleTimeLengthMs
 ```
 
-- [power/assets | PmPowerContextInitialization.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PmPowerContextInitialization.c)
+- [decompiled-pseudocode | PmPowerContextInitialization.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/partmgr/-PmPowerContextInitialization@@YAJPEAU_DISK_POWER_CONTEXT@@W4_DISK_DEVICEPOWER_TYPE@@@Z.c)

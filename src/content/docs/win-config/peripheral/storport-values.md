@@ -64,7 +64,7 @@ Values that include `(bool)` as comment accept range `0-4294967295` but any nonz
 // miscellaneous values from storport driver
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage";
-    "StorageD3InModernStandby" = 4294967295; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support - https://noverse.dev/docs/win-config/power/power-values/#suboptions
+    "StorageD3InModernStandby" = 4294967295; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support - https://noverse.dev/docs/win-config/power/power-values/#storaged3inmodernstandby
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage\\StorageTelemetry";
     "DeviceDumpLevel" = 2; // REG_DWORD, range 0-4294967295

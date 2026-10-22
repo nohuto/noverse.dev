@@ -171,7 +171,7 @@ HwQueueStagingList::ProcessHwQueue(this, (HwQueueStagingList *)((char *)v18 - 17
 
 ## query_hwsch
 
-`query_hwsch` calls `D3DKMTQueryAdapterInfo` (`KMTQAITYPE_WDDM_2_9_CAPS`/`KMTQAITYPE_WDDM_3_0_CAPS`) to get the `DriverSupportState`/`Enabled` bits, you can either use the [prebuild binary](https://github.com/nohuto/win-config/blob/main/system/assets/query_hwsch.exe), or build it yourself from [source](https://github.com/nohuto/win-config/tree/main/system/assets/query_hwsch):
+`query_hwsch` calls `D3DKMTQueryAdapterInfo` (`KMTQAITYPE_WDDM_2_9_CAPS`/`KMTQAITYPE_WDDM_3_0_CAPS`) to get the `DriverSupportState`/`Enabled` bits, you can either use the [prebuild binary](https://github.com/nohuto/utils/releases/download/0.1.0/query_hwsch.exe), or build it yourself from [source](https://github.com/nohuto/utils/tree/main/query_hwsch):
 
 ```powershell
 cmake -S . -B build

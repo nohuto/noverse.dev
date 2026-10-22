@@ -32,7 +32,7 @@ if ( (int)NtQueryWnfStateData(&WNF_RM_GAME_MODE_ACTIVE, 0LL, 0LL, &v6, &v4, &v5)
 
 ## gm_effects
 
-I've created [`gm_effects.exe`](https://github.com/nohuto/win-config/blob/main/system/assets/gm_effects.exe), which reads the current foreground PID, active Game Mode PID, process default CPU sets (and CPU set IDs), and the Game Mode power profile WNF low value. You can either use the prebuild binary, or build it yourself from [source](https://github.com/nohuto/win-config/blob/main/system/assets/gm_effects):
+I've created [`gm_effects.exe`](https://github.com/nohuto/utils/releases/download/0.1.0/gm_effects.exe), which reads the current foreground PID, active Game Mode PID, process default CPU sets (and CPU set IDs), and the Game Mode power profile WNF low value. You can either use the prebuild binary, or build it yourself from [source](https://github.com/nohuto/utils/tree/main/gm_effects):
 
 ```powershell
 cmake -S . -B build
@@ -716,11 +716,11 @@ Microsoft documents `GameMode` as a processor power management profile that OEMs
 > "*The power profiles are used by the power processor engine to adapt the performance and parking algorithm on various system use cases.*"
 > "*GameMode profile is enabled when the 'Game Mode' setting toggle is turned on and the user is playing a game.*"
 >
-> — Microsoft, [Processor power management options](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md#power-profiles)
+> — Microsoft, [Processor power management options](https://github.com/nohuto/win-config/blob/main/power/assets/reference/power-settings/configure-processor-power-management-options.md#power-profiles)
 
 > "*Power profiles provide system wide configuration of processor power management, impacting all running workloads equally.*"
 >
-> — Microsoft, [Processor power management options](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md#quality-of-service)
+> — Microsoft, [Processor power management options](https://github.com/nohuto/win-config/blob/main/power/assets/reference/power-settings/configure-processor-power-management-options.md#quality-of-service)
 
 ```c
 // RmpGameModeTryApplyPowerProfile

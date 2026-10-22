@@ -15,7 +15,7 @@ Note that is my current interpretation, don't see this as my final answer nor as
 
 ### Defaults / Ranges
 
-All four values are stored as small records on [`CMouseSensor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/--0CMouseSensor%40%40IEAA%40XZ.c) (name, current value, minimum, maximum).
+All four values are stored as small records on [`CMouseSensor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/--0CMouseSensor@@IEAA@XZ.c) (name, current value, minimum, maximum).
 
 | Value | Default | Range | Meaning |
 | --- | --- | --- | --- |
@@ -68,7 +68,7 @@ durationQpc = 10000000 * 8 / 1000 // 80,000 ticks
 
 ### Reading / Updating Values
 
-The values are reread through [`ReadRawMouseThrottlingThresholds`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/ReadRawMouseThrottlingThresholds.c), which is the function that finds the session `CMouseSensor` and calls [`CMouseSensor::ReadRawMouseThrottlingThresholds`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-ReadRawMouseThrottlingThresholds@CMouseSensor@@QEAAXPEAU_UNICODE_STRING@@@Z.c). Each value is accepted only if it's inside it's range, so invalid values are ignored. [`GetRawMouseThrottlingThresholds`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/GetRawMouseThrottlingThresholds.c) copies the current values for callers like [`ThrottleRawMouseInputToBackgroundListener`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-ThrottleRawMouseInputToBackgroundListener%40%40YA_NPEAUtagPROCESS_HID_TABLE%40%40PEAXPEBUtagRAWMOUSE%40%40_.c), or returns defaults if no sensor exists.
+The values are reread through [`ReadRawMouseThrottlingThresholds`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/ReadRawMouseThrottlingThresholds.c), which is the function that finds the session `CMouseSensor` and calls [`CMouseSensor::ReadRawMouseThrottlingThresholds`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-ReadRawMouseThrottlingThresholds@CMouseSensor@@QEAAXPEAU_UNICODE_STRING@@@Z.c). Each value is accepted only if it's inside it's range, so invalid values are ignored. [`GetRawMouseThrottlingThresholds`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/GetRawMouseThrottlingThresholds.c) copies the current values for callers like [`ThrottleRawMouseInputToBackgroundListener`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-ThrottleRawMouseInputToBackgroundListener@@YA_NPEAUtagPROCESS_HID_TABLE@@PEAXPEBUtagRAWMOUSE@@_.c), or returns defaults if no sensor exists.
 
 ```c
 // CMouseSensor::ReadRawMouseThrottlingThresholds
@@ -82,7 +82,7 @@ lambda_39f407e4fe10312c322b3b59a6fe001c_::operator()((__int64 **)&v3, (__int64)t
 *((_QWORD *)this + 184) = gliQpcFreq.QuadPart * (unsigned __int64)*((unsigned int *)this + 360) / 0x3E8; // Leeway ms -> QPC ticks
 ```
 
-[_lambda_39f407e4fe10312c322b3b59a6fe001c_--operator().c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/_lambda_39f407e4fe10312c322b3b59a6fe001c_--operator().c)
+[_lambda_39f407e4fe10312c322b3b59a6fe001c_--operator().c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/_lambda_39f407e4fe10312c322b3b59a6fe001c_--operator%28%29.c)
 
 ```c
 // _lambda_39f407e4fe10312c322b3b59a6fe001c_--operator()
@@ -187,9 +187,9 @@ Duration = 20ms ~= 50Hz
 
 ### riflags
 
-[`riflags`](https://github.com/nohuto/win-config/blob/main/peripheral/assets/riflags.exe) checks current raw input registrations, it injects [`riprobe.dll`](https://github.com/nohuto/win-config/blob/main/peripheral/assets/riprobe.dll) into each running process, calls `GetRegisteredRawInputDevices` there, then unloads the probe again.
+[`riflags`](https://github.com/nohuto/utils/releases/download/0.1.0/riflags.zip) checks current raw input registrations, it injects `riprobe.dll` into each running process, calls `GetRegisteredRawInputDevices` there, then unloads the probe again.
 
-You can either use the prebuild binary ([riflags.exe](https://github.com/nohuto/win-config/blob/main/peripheral/assets/riflags.exe), [riprobe.dll](https://github.com/nohuto/win-config/blob/main/peripheral/assets/riprobe.dll)) or build it yourself from [source](https://github.com/nohuto/win-config/tree/main/peripheral/assets/riflags) via:
+Download and extract [riflags.zip](https://github.com/nohuto/utils/releases/download/0.1.0/riflags.zip), keeping `riflags.exe` & `riprobe.dll` in the same folder, or build it yourself from [source](https://github.com/nohuto/utils/tree/main/riflags) via:
 
 ```powershell
 cmake -S . -B build
@@ -213,7 +213,7 @@ I've builds two small raw mouse listeners for comparing the two registration mod
 - `ri_0100.exe` registers with `0x0100` ([`RIDEV_INPUTSINK`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-rawinputdevice)), thats's the normal background raw mouse listener
 - `ri_8100.exe` registers with `0x8100`, that uses the `0x800` raw input flag, so `RawMouseThrottleForced = 0` should let this case bypass throttling
 
-Again, you can either use the prebuild binary ([ri_0100.exe](https://github.com/nohuto/win-config/blob/main/peripheral/assets/ri_0100.exe), [ri_8100.exe](https://github.com/nohuto/win-config/blob/main/peripheral/assets/ri_8100.exe)) or build it yourself from [source](https://github.com/nohuto/win-config/tree/main/peripheral/assets/ri_flagtest) via:
+Again, you can either use the prebuild binary ([ri_0100.exe](https://github.com/nohuto/utils/releases/download/0.1.0/ri_0100.exe), [ri_8100.exe](https://github.com/nohuto/utils/releases/download/0.1.0/ri_8100.exe)) or build it yourself from [source](https://github.com/nohuto/utils/tree/main/ri_flagtest) via:
 
 ```powershell
 cmake -S . -B build

@@ -94,11 +94,11 @@ Some additional info about HTTP request methods you may want to know:
 
 I personally use [AdGuard](https://adguard-dns.io/), since it's possible to add custom blocklists/user rules (and it supports all lists of Hagezi while [NextDNS](https://my.nextdns.io/) only supports the main ones), while [NextDNS](https://my.nextdns.io/) only provides a specific set of blocklists and doesn't allow custom rules (there're also several other reasons why I wouldn't use their private DNS at the moment, e.g.: their TIF isn't public ([and many other ones](https://github.com/nextdns/metadata))), they didn't solve issues which got reported months ago (), they use lists that aren't actively maintained by default (they also don't update [obselete links](https://github.com/nextdns/blocklists/tree/main/blocklists), causing 10 empty blocklists), they don't look into their GitHub issues (e.g. nextdns/blocklists). Use 'Configuration Profile' instead of downloading the app, you can configure the profile using the links below.
 
-## [Blocklist Manager](https://github.com/nohuto/win-config/blob/main/network/assets/Blocklist-Manger.ps1)
+## [Blocklist Manager](https://github.com/nohuto/win-config/blob/main/network/assets/scripts/Blocklist-Manger.ps1)
 
-This is an old project of mine ([preview video](https://github.com/nohuto/win-config/blob/main/network/assets/blocklist-mgr/blocklist-mgr.mp4)), which lets you select one or more blocklists (hosts or URLs, for e.g. UBO). The hosts file is a local DNS override used to block domains or redirect websites (`C:\Windows\System32\drivers\etc\hosts`).
+This is an old project of mine ([preview video](https://github.com/nohuto/win-config/blob/main/network/videos/blocklist-mgr/blocklist-mgr.mp4)), which lets you select one or more blocklists (hosts or URLs, for e.g. UBO). The hosts file is a local DNS override used to block domains or redirect websites (`C:\Windows\System32\drivers\etc\hosts`).
 
-- Download: [Blocklist-Manager.ps1](https://github.com/nohuto/win-config/blob/main/network/assets/Blocklist-Manger.ps1)
+- Download: [Blocklist-Manager.ps1](https://github.com/nohuto/win-config/blob/main/network/assets/scripts/Blocklist-Manger.ps1)
 
 Examples:
 
@@ -136,7 +136,7 @@ The presets are just examples, use lists from the vendor you prefer.
 | `Default` | Default preset, uses Pro/TIF without adding the extra lists that aren't included in them. |
 | `Maximum` | Aggressive blocking, uses Pro++, TIF and all additional security related lists which aren't included in them (doesn't apply any protections for children). |
 | `Import` | Imports the currently selected lists into the `hosts` file (if compatible). |
-| `Copy Links` | Copies URLs of all selected lists. Add these links to the custom filter lists:<br><img src="https://raw.githubusercontent.com/nohuto/win-config/main/network/assets/blocklist-mgr/ubolinks.png" alt="" width="2556" height="1120" loading="lazy" decoding="async"> |
+| `Copy Links` | Copies URLs of all selected lists. Add these links to the custom filter lists:<br><img src="https://raw.githubusercontent.com/nohuto/win-config/main/network/images/blocklist-mgr/ubolinks.png" alt="" width="2556" height="1120" loading="lazy" decoding="async"> |
 | `Restore` | Imports the backup from: `C:\Windows\System32\drivers\etc\hosts.noverse`. |
 | `Open File` | Opens the file: `C:\Windows\System32\drivers\etc\hosts`. |
 

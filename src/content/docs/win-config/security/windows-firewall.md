@@ -29,7 +29,7 @@ This is just to understand the `WF.msc` table properly, and to be able to create
 
 ## Setup Guide
 
-Start by downloading & opening [wfRules.ps1](https://github.com/nohuto/win-config/blob/main/security/assets/wfRules.ps1) since you'll have to modify it. WF adds some rules by default for network discovery/delivery optimization/troubleshooting etc., since you may not need many of them, disable them. I've already added kind of all to `$disableExistingRulePatterns`, only leaving some outbound core networking rules, means either leave it, or remove lines.
+Start by downloading & opening [wfRules.ps1](https://github.com/nohuto/win-config/blob/main/security/assets/scripts/wfRules.ps1) since you'll have to modify it. WF adds some rules by default for network discovery/delivery optimization/troubleshooting etc., since you may not need many of them, disable them. I've already added kind of all to `$disableExistingRulePatterns`, only leaving some outbound core networking rules, means either leave it, or remove lines.
 
 ```powershell
 .\wfRules.ps1 --reset

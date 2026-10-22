@@ -27,9 +27,9 @@ Use my [minimal (32 bit) bitmask calculator](https://noverse.dev/terminal#bitmas
 
 Using `disabledynamictick` can cause the issue while [per CPU clock tick scheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) is enabled. As shown in the '[ClockTickIdleEstimateFix (24H2+)](https://noverse.dev/docs/win-config/system/priority-separation/#clocktickidleestimatefix-24h2)' section, 24/25H2 have a new function which seems to try to fix the issue.
 
-Before a processor enters idle ([`PpmIdleExecuteTransition`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmIdleExecuteTransition.c)), Windows can stop its clock timer. After the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeResumeClockTimerFromIdle.c) usually programs the timer again, but with `disabledynamictick` (`KiDynamicTickDisableReason`) set, that function returns before doing so (unless something else programs the counter that means no `KeClockInterruptNotify`).
+Before a processor enters idle ([`PpmIdleExecuteTransition`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PpmIdleExecuteTransition.c)), Windows can stop its clock timer. After the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeResumeClockTimerFromIdle.c) usually programs the timer again, but with `disabledynamictick` (`KiDynamicTickDisableReason`) set, that function returns before doing so (unless something else programs the counter that means no `KeClockInterruptNotify`).
 
-Means that stopped timer no longer sends the clock interrupt used to call [`KiUpdateRunTime`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiUpdateRunTime.c), so the running threads `CycleTime >= QuantumTarget` check isn't reached and `KPRCB.QuantumEnd` isn't set.
+Means that stopped timer no longer sends the clock interrupt used to call [`KiUpdateRunTime`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiUpdateRunTime.c), so the running threads `CycleTime >= QuantumTarget` check isn't reached and `KPRCB.QuantumEnd` isn't set.
 
 ### ClockTickIdleEstimateFix (24H2+)
 
@@ -41,7 +41,7 @@ Means that stopped timer no longer sends the clock interrupt used to call [`KiUp
 CurrentPrcb->ClockTimerState.ClockTimerEntries[1].TypeFlags |= 3u; // KClockTimerKTimerExpirationPseudoHr
 ```
 
-Depending on the state of the feature, [`KiSetClockTimerKTimerDeadlines`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiSetClockTimerKTimerDeadlines.c) programs `KClockTimerKTimerExpirationPseudoHr`:
+Depending on the state of the feature, [`KiSetClockTimerKTimerDeadlines`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/KiSetClockTimerKTimerDeadlines.c) programs `KClockTimerKTimerExpirationPseudoHr`:
 
 ```c
 // KiSetClockTimerKTimerDeadlines (25H2)
@@ -59,7 +59,7 @@ lkd> .printf "state=%x direct=%u enabled=%u\n", @$t0, ((@$t0 >> 1) & 1), (@$t0 &
 state=47 direct=1 enabled=1
 ```
 
-With the feature enabled, `KClockTimerKTimerExpirationPseudoHr` has low bits `1`, so [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KePrepareClockTimerForIdle.c) keeps/rearms the timer (its clock interrupts reach `KiUpdateRunTime`), which also explains why the issue doesn't appear the same way on 25H2 as on 23H2.
+With the feature enabled, `KClockTimerKTimerExpirationPseudoHr` has low bits `1`, so [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/KePrepareClockTimerForIdle.c) keeps/rearms the timer (its clock interrupts reach `KiUpdateRunTime`), which also explains why the issue doesn't appear the same way on 25H2 as on 23H2.
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/system/images/ps-clocktickidleestimatefix-25h2.png" alt="" width="1876" height="709" decoding="async">
 
@@ -89,7 +89,7 @@ This is just to prove that when disabling per CPU clock tick scheduling, the iss
 
 ### QuantumTarget & Expiration
 
-[`KeInitializeClock`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeInitializeClock.c) sets `KiDynamicTickDisableReason` = `1` if the BCD settings include `DISABLEDYNAMICTICK`, see [Timer Expiration, KiDynamicTickDisableReason](https://noverse.dev/docs/win-config/system/timer-expiration/#kidynamictickdisablereason) for more details on the global.
+[`KeInitializeClock`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeInitializeClock.c) sets `KiDynamicTickDisableReason` = `1` if the BCD settings include `DISABLEDYNAMICTICK`, see [Timer Expiration, KiDynamicTickDisableReason](https://noverse.dev/docs/win-config/system/timer-expiration/#kidynamictickdisablereason) for more details on the global.
 
 ```c
 // KeInitializeClock (23H2)
@@ -103,7 +103,7 @@ lkd> db nt!KiDynamicTickDisableReason L1
 fffff806`6d71d300  01                                               .
 ```
 
-[`KiSetQuantumTargetThread`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiSetQuantumTargetThread.c) stores an absolute cycle target:
+[`KiSetQuantumTargetThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiSetQuantumTargetThread.c) stores an absolute cycle target:
 
 ```c
 // KiSetQuantumTargetThread (23H2)
@@ -112,7 +112,7 @@ v15 = v8 + KiCyclesPerClockQuantum * (unsigned int)*(unsigned __int8 *)(a1 + 651
 *(_QWORD *)(a1 + 32) = v15;
 ```
 
-XREFs (in 23/25H2) show that only [`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) & [`KiUpdateTime`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiUpdateTime.c) call `KiUpdateRunTime`, which programs `KClockTimerQuantumEnd` (`ClockTimerEntries[3]`), checks the current threads accumulated cycles and requests a dispatch interrupt when the target is reached:
+XREFs (in 23/25H2) show that only [`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) & [`KiUpdateTime`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiUpdateTime.c) call `KiUpdateRunTime`, which programs `KClockTimerQuantumEnd` (`ClockTimerEntries[3]`), checks the current threads accumulated cycles and requests a dispatch interrupt when the target is reached:
 
 ```c
 // KiUpdateRunTime (25H2)
@@ -134,9 +134,9 @@ The idle function shown below only treats entries whose low bits equal `1` as wa
 
 ### ClockTimer not Rearmed
 
-Before the processor enters idle, 23H2 uses [`KePrepareNonClockOwnerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KePrepareNonClockOwnerForIdle.c) in per CPU scheduling, while 25H2 uses [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KePrepareClockTimerForIdle.c).
+Before the processor enters idle, 23H2 uses [`KePrepareNonClockOwnerForIdle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KePrepareNonClockOwnerForIdle.c) in per CPU scheduling, while 25H2 uses [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/KePrepareClockTimerForIdle.c).
 
-If per CPU clock tick scheduling are disabled, `KiUpdateRunTime` doesn't program `KClockTimerQuantumEnd` & the clock owner uses [`KiForwardTick`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiForwardTick.c) to send ticks to the other processors, so their quantum checks don't depend on that per CPU timer being rearmed (see '[Per CPU Clock Tick Scheduling Disabled](https://noverse.dev/docs/win-config/system/priority-separation/#per-cpu-clock-tick-scheduling-disabled)' capture).
+If per CPU clock tick scheduling are disabled, `KiUpdateRunTime` doesn't program `KClockTimerQuantumEnd` & the clock owner uses [`KiForwardTick`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiForwardTick.c) to send ticks to the other processors, so their quantum checks don't depend on that per CPU timer being rearmed (see '[Per CPU Clock Tick Scheduling Disabled](https://noverse.dev/docs/win-config/system/priority-separation/#per-cpu-clock-tick-scheduling-disabled)' capture).
 
 You can see whether per CPU scheduling is used via ([Timer Expiration, EnablePerCpuClockTickScheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) for more details):
 
@@ -178,7 +178,7 @@ while ( (v8->TypeFlags & 3) != 1 )
 }
 ```
 
-As shown above `KClockTimerQuantumEnd` has low bits `3`, so the function skips it. If no other entry needs to wake the processor, the function stops the hardware timer and clears `ClockActive`/`ClockOwner`. When the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KeResumeClockTimerFromIdle.c) checks `KiDynamicTickDisableReason` before it calls [`KiSetClockTimer`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiSetClockTimer.c):
+As shown above `KClockTimerQuantumEnd` has low bits `3`, so the function skips it. If no other entry needs to wake the processor, the function stops the hardware timer and clears `ClockActive`/`ClockOwner`. When the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/KeResumeClockTimerFromIdle.c) checks `KiDynamicTickDisableReason` before it calls [`KiSetClockTimer`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/KiSetClockTimer.c):
 
 ```c
 // KeResumeClockTimerFromIdle (25H2)
@@ -201,7 +201,7 @@ KiSetClockTimer(
 
 ### WrQuantumEnd & WrDispatchInt
 
-[`KiDispatchInterrupt`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiDispatchInterrupt.c) reads the quantum flag first, if its set, it calls [`KiQuantumEnd`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiQuantumEnd.c). Its separate `NextThread` branch stores reason `31`:
+[`KiDispatchInterrupt`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/KiDispatchInterrupt.c) reads the quantum flag first, if its set, it calls [`KiQuantumEnd`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/KiQuantumEnd.c). Its separate `NextThread` branch stores reason `31`:
 
 ```c
 // KiDispatchInterrupt (25H2)
@@ -242,7 +242,7 @@ As everything below will reference to that function at some point, I'll quickly 
 
 ## PsPrioritySeparation (`1:0`)
 
-The priority applies to dynamic priorities below the RT (real time) range and is capped at priority `15`, disabling dynamic priority boosts for a thread/process would also prevent this FG boost. The quantum unit change is obviously only visible when the variable table is used, as all three in a fixed table are the same, so changing the low bits doesn't change its quantum. [`PsChangeQuantumTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c) clamps the field and saves it in `PsPrioritySeparation`:
+The priority applies to dynamic priorities below the RT (real time) range and is capped at priority `15`, disabling dynamic priority boosts for a thread/process would also prevent this FG boost. The quantum unit change is obviously only visible when the variable table is used, as all three in a fixed table are the same, so changing the low bits doesn't change its quantum. [`PsChangeQuantumTable`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c) clamps the field and saves it in `PsPrioritySeparation`:
 
 ```c
 // PsChangeQuantumTable
@@ -368,7 +368,7 @@ HKLM\SYSTEM\CurrentControlSet\Control\ProductOptions : ProductType
 
 ### FG Priority Boost
 
-[`KiApplyForegroundBoostThread`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiApplyForegroundBoostThread.c) shows the calculation, add `PsPrioritySeparation` to the base priority & cap the dynamic priority at `15`.
+[`KiApplyForegroundBoostThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiApplyForegroundBoostThread.c) shows the calculation, add `PsPrioritySeparation` to the base priority & cap the dynamic priority at `15`.
 
 ```c
 // KiApplyForegroundBoostThread
@@ -378,7 +378,7 @@ if ( v10 >= 16 )
   v10 = 15;
 ```
 
-The same separation is included in the priority when [`KiDeferredReadySingleThread`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiDeferredReadySingleThread.c) readies a FG thread after a wait:
+The same separation is included in the priority when [`KiDeferredReadySingleThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiDeferredReadySingleThread.c) readies a FG thread after a wait:
 
 ```c
 // KiDeferredReadySingleThread
@@ -389,7 +389,7 @@ v35 += (char)PsPrioritySeparation; // add PsPrioritySeparation to the priority
 
 #### ForceForegroundBoostDecay
 
-Controls whether dynamic priority decay can remove the FG priority boost added by `PsPrioritySeparation`, changing it to `1` allows scheduler functions such as [`KiQuantumEnd`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiQuantumEnd.c) to remove that boost during priority decay. If the process is still FG (and the thread can still get dynamic priority boosts), [`KiTryScheduleNextForegroundBoost`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiTryScheduleNextForegroundBoost.c) schedules the boost to be applied again (leaving the FG obviously removes the boost no matter what the value is set to).
+Controls whether dynamic priority decay can remove the FG priority boost added by `PsPrioritySeparation`, changing it to `1` allows scheduler functions such as [`KiQuantumEnd`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/KiQuantumEnd.c) to remove that boost during priority decay. If the process is still FG (and the thread can still get dynamic priority boosts), [`KiTryScheduleNextForegroundBoost`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/KiTryScheduleNextForegroundBoost.c) schedules the boost to be applied again (leaving the FG obviously removes the boost no matter what the value is set to).
 
 ```asm
 INIT:0000000140BA67E0                 dq offset aSessionManager_5 ; "Session Manager\\Kernel"
@@ -588,7 +588,7 @@ This is also a practical example of "*BG (background) processes use index `0`, F
 
 ### Variable/Fixed Quantum (`3:2`)
 
-[`PsChangeQuantumTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c) uses the variable table for `01` and the fixed table for `10`. You can imagine the difference between them like that ([process.c](https://doxygen.reactos.org/d2/d9f/ntoskrnl_2ps_2process_8c_source.html#l00031)):
+[`PsChangeQuantumTable`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c) uses the variable table for `01` and the fixed table for `10`. You can imagine the difference between them like that ([process.c](https://doxygen.reactos.org/d2/d9f/ntoskrnl_2ps_2process_8c_source.html#l00031)):
 
 ```c
 /* Fixed quantum table */
@@ -741,7 +741,7 @@ MM_SYSTEMSIZE MmSystemSize;
 
 ### Quantum Units (23H2)
 
-Without the 24H2 `ShortThreadQuantum` function, one QU is one third of the maximum clock interval. [`KeInitSystem`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeInitSystem.c) calculates the related processor cycle count:
+Without the 24H2 `ShortThreadQuantum` function, one QU is one third of the maximum clock interval. [`KeInitSystem`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeInitSystem.c) calculates the related processor cycle count:
 
 ```c
 // KeInitSystem
@@ -819,7 +819,7 @@ fffff805`4591d0d4  01260cb1
 
 #### Quantum Exceptions
 
-Most processes get their reset from the selected three entries in `PspForegroundQuantum`, but [`PspComputeQuantum`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PspComputeQuantum.c) has two exceptions, first are processes the *Idle* priority class (not the system Idle thread) which always get `6` QU. 
+Most processes get their reset from the selected three entries in `PspForegroundQuantum`, but [`PspComputeQuantum`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PspComputeQuantum.c) has two exceptions, first are processes the *Idle* priority class (not the system Idle thread) which always get `6` QU. 
 
 The other exception is for processes in a job when long + fixed is used, which select one of ten resets from `PspJobSchedulingClasses` instead of `PspForegroundQuantum`, means as every job gets class 5 (`36QU`) during `NtCreateJobObject`, processes within jobs get the same QU as FG/BG threads, but the class can be changed via `SetInformationJobObject` (classes above `5` require `SeIncreaseBasePriorityPrivilege`).
 
@@ -889,7 +889,7 @@ CHAR PspJobSchedulingClasses[PSP_JOB_SCHEDULING_CLASSES] =
 
 ### ShortThreadQuantum (24H2+)
 
-In 24H2+, [`KiInitializeVelocity`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiInitializeVelocity.c) calls the `Feature_ShortThreadQuantum__private_ReportDeviceUsage` helper and then sets bit `0x40000` in `KiVelocityFlags` (without conditions):
+In 24H2+, [`KiInitializeVelocity`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/KiInitializeVelocity.c) calls the `Feature_ShortThreadQuantum__private_ReportDeviceUsage` helper and then sets bit `0x40000` in `KiVelocityFlags` (without conditions):
 
 ```c
 // KiInitializeVelocity
@@ -902,7 +902,7 @@ lkd> ? dwo(nt!KiVelocityFlags) & 0x40000 // 25H2
 Evaluate expression: 262144 = 00000000`00040000 // 0x40000 = ShortThreadQuantum used
 ```
 
-With that flag, [`KeInitSystem`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KeInitSystem.c) divides the older quantum unit by another six:
+With that flag, [`KeInitSystem`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/KeInitSystem.c) divides the older quantum unit by another six:
 
 ```c
 // KeInitSystem
@@ -913,7 +913,7 @@ if ( (KiVelocityFlags & 0x40000) != 0 )
 }
 ```
 
-It also causes [`KeInitializeClock`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KeInitializeClock.c) to set `KeQuantumEndTimerIncrement` (doesn't exist in 23H2) to `1.740 ms`:
+It also causes [`KeInitializeClock`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/KeInitializeClock.c) to set `KeQuantumEndTimerIncrement` (doesn't exist in 23H2) to `1.740 ms`:
 
 ```c
 // KeInitializeClock
@@ -925,7 +925,7 @@ KiTimeUpdateTryAcquireTickLock = 1;
 KeQuantumEndTimerIncrement = v6;
 ```
 
-Clock interrupts call [`KiUpdateRunTime`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiUpdateRunTime.c), which checks the running threads quantum, 23H2 uses the normal clock interval (`KeMaximumIncrement`, up to `15.625 ms`), 24H2 caps the requested quantum end clock interrupt interval (`KeQuantumEndTimerIncrement`) at `1.740 ms` (which isn't good).
+Clock interrupts call [`KiUpdateRunTime`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/KiUpdateRunTime.c), which checks the running threads quantum, 23H2 uses the normal clock interval (`KeMaximumIncrement`, up to `15.625 ms`), 24H2 caps the requested quantum end clock interrupt interval (`KeQuantumEndTimerIncrement`) at `1.740 ms` (which isn't good).
 
 ```asm
 PAGE:0000000140B3D09C PspVariableQuantums_With_ShortQuantum dd 4240402h
@@ -959,7 +959,7 @@ Means with the `clock interval / 18` unit, the table now is:
 
 See '[Duration Captures, 6/18 QU, 25H2](https://noverse.dev/docs/win-config/system/priority-separation/#618-qu-25h2)' for a capture showing that threads use their `BamQosLevel` to get the QU, instead of the 6 (BG)/18 (FG) QU.
 
-`BamQosLevel` override doesn't use the `PspVariableQuantums`/`PspFixedQuantums` tables, those still fill `PspForegroundQuantum`, which [`PspComputeQuantum`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/PspComputeQuantum.c) uses to get the stored quantum reset (except for idle class & job scheduling class). When `ShortThreadQuantum` and variable quantums are used, [`KiQueryQuantumReset`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiQueryQuantumReset.c) (exists since 24H2) can instead return a QoS reset (fixed quantums set `KiVariableQuantumEnabled` to `0` and won't use that override, see '[18 QU, 25H2](https://noverse.dev/docs/win-config/system/priority-separation/#18-qu-25h2)' capture). `_KTHREAD.BamQosLevel` is at `0x204`, which is the `a1 + 516` byte read below.
+`BamQosLevel` override doesn't use the `PspVariableQuantums`/`PspFixedQuantums` tables, those still fill `PspForegroundQuantum`, which [`PspComputeQuantum`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/PspComputeQuantum.c) uses to get the stored quantum reset (except for idle class & job scheduling class). When `ShortThreadQuantum` and variable quantums are used, [`KiQueryQuantumReset`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/ntoskrnl/KiQueryQuantumReset.c) (exists since 24H2) can instead return a QoS reset (fixed quantums set `KiVariableQuantumEnabled` to `0` and won't use that override, see '[18 QU, 25H2](https://noverse.dev/docs/win-config/system/priority-separation/#18-qu-25h2)' capture). `_KTHREAD.BamQosLevel` is at `0x204`, which is the `a1 + 516` byte read below.
 
 ```c
 // KiQueryQuantumReset

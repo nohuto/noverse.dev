@@ -135,7 +135,7 @@ To read the current value, use:
 dd nt!KiSerializeTimerExpiration L1
 ```
 
-`SerializeTimerExpiration` gets read in [`KeInitializeTimerTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeInitializeTimerTable.c):
+`SerializeTimerExpiration` gets read in [`KeInitializeTimerTable`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeInitializeTimerTable.c):
 
 ```c
 // KeInitializeTimerTable
@@ -154,7 +154,7 @@ if ( !*(_DWORD *)(a1 + 36) ) // CPU 0
 }
 ```
 
-The callback used for the auto default gets set in [`HalpSetPlatformFlags`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/HalpSetPlatformFlags.c):
+The callback used for the auto default gets set in [`HalpSetPlatformFlags`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/HalpSetPlatformFlags.c):
 
 ```c
 // HalpSetPlatformFlags
@@ -164,7 +164,7 @@ if ( (*(_DWORD *)(a1 + 112) & 0x200000) != 0 ) // 0x200000 = bit 21
   HalpPlatformFlags |= 8u; // HAL flag set from FADT bit 21
 ```
 
-[`HalpAcpiAoacCapable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/HalpAcpiAoacCapable.c) returns `(HalpPlatformFlags & 8) != 0`, which is FADT flag bit 21:
+[`HalpAcpiAoacCapable`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/HalpAcpiAoacCapable.c) returns `(HalpPlatformFlags & 8) != 0`, which is FADT flag bit 21:
 
 > "*LOW_POWER_S0_IDLE_CAPABLE*
 > *Bit offset 21. Indicates that the platform supports low-power idle states within the ACPI S0 system power state that are more energy efficient than any Sx sleep state. If this flag is set, Windows won't try to sleep and resume, but will instead use platform idle states and connected standby.*"
@@ -173,7 +173,7 @@ if ( (*(_DWORD *)(a1 + 112) & 0x200000) != 0 ) // 0x200000 = bit 21
 
 ### ActiveTimerTable
 
-Serialized expiration uses CPU 0 timer table (`KiProcessorBlock[0]`) instead of the current processors timer table ([`KiTimerExpirationDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiTimerExpirationDpc.c) & [`KiCheckForTimerExpiration`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiCheckForTimerExpiration.c) work the same), non serialized uses the current PRCB timer table.
+Serialized expiration uses CPU 0 timer table (`KiProcessorBlock[0]`) instead of the current processors timer table ([`KiTimerExpirationDpc`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiTimerExpirationDpc.c) & [`KiCheckForTimerExpiration`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiCheckForTimerExpiration.c) work the same), non serialized uses the current PRCB timer table.
 
 ```c
 // KiSelectActiveTimerTable
@@ -279,7 +279,7 @@ lkd> dx ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockOwner
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/system/images/dyntick.png" alt="" width="1608" height="1111" loading="lazy" decoding="async">
 
-[`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KePrepareClockTimerForIdle.c) is that idle part:
+[`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KePrepareClockTimerForIdle.c) is that idle part:
 
 ```c
 // KePrepareClockTimerForIdle
@@ -330,7 +330,7 @@ KiClockTimerNextTickTime = InterruptTimePrecise + v25; // global next tick due t
 CurrentPrcb->ClockTimerState.NextTickDueTime = InterruptTimePrecise + v25; // per PRCB next tick due time
 ```
 
-When the system leaves that idle state, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeResumeClockTimerFromIdle.c) resumes clock handling, if per CPU clock timers are supported (`KiClockTimerPerCpu`), this can make the selected CPU the clock owner:
+When the system leaves that idle state, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeResumeClockTimerFromIdle.c) resumes clock handling, if per CPU clock timers are supported (`KiClockTimerPerCpu`), this can make the selected CPU the clock owner:
 
 ```c
 // KeResumeClockTimerFromIdle
@@ -550,7 +550,7 @@ dd nt!KiEnableClockTimerPerCpuTickScheduling L1 // registry value
 
 ### KiClockTimerPerCpu
 
-`KiClockTimerPerCpu` is set whenever [`HalpTimerGetClockConfiguration`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/HalpTimerGetClockConfiguration.c) returns flag `0x4` (can't really tell yet what requirement that has, related to `HalpClockTimer` flag `0x1`?):
+`KiClockTimerPerCpu` is set whenever [`HalpTimerGetClockConfiguration`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/HalpTimerGetClockConfiguration.c) returns flag `0x4` (can't really tell yet what requirement that has, related to `HalpClockTimer` flag `0x1`?):
 
 ```c
 // KeInitializeClock
@@ -566,7 +566,7 @@ if ( !(_BYTE)KiDynamicTickDisableReason && (v23 & 8) == 0 )
   KiDynamicTickDisableReason = 2;
 ```
 
-[`KeInitializeClock`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeInitializeClock.c) only checks `KiEnableClockTimerPerCpuTickScheduling` when `KiClockTimerPerCpu` is already true:
+[`KeInitializeClock`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeInitializeClock.c) only checks `KiEnableClockTimerPerCpuTickScheduling` when `KiClockTimerPerCpu` is already true:
 
 ```c
 // KeInitializeClock
@@ -577,7 +577,7 @@ if ( KiEnableClockTimerPerCpuTickScheduling && KiClockTimerPerCpu )
   KiClockTimerPerCpuTickScheduling = KiEnableClockTimerPerCpuTickScheduling == 1; // override
 ```
 
-[`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) has a branch for `KiClockTimerPerCpuTickScheduling && !KiSerializeTimerExpiration` (means `SerializeTimerExpiration = 0` on non AOAC platforms, or >= 2 & `EnablePerCpuClockTickScheduling = 1`), but I haven't looked into what it's used for yet.
+[`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) has a branch for `KiClockTimerPerCpuTickScheduling && !KiSerializeTimerExpiration` (means `SerializeTimerExpiration = 0` on non AOAC platforms, or >= 2 & `EnablePerCpuClockTickScheduling = 1`), but I haven't looked into what it's used for yet.
 
 ## Structures
 

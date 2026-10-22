@@ -11,7 +11,7 @@ sidebar:
 
 CM = configuration manager, it loads & manages registry hives, inserts the `\REGISTRY` key object into the namespace and more. See regkits '[Registry fundamentals](https://noverse.dev/docs/regkit/registry-internals/registry-fundamentals/)' documentation for more information on the topic.
 
-`CmControlVector` is a table used by [`CmpGetSystemControlValues`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/CmpGetSystemControlValues.c) while early CM init. Each entry is `0x30` bytes (six pointers), this is just a simple way to imagine each block:
+`CmControlVector` is a table used by [`CmpGetSystemControlValues`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/CmpGetSystemControlValues.c) while early CM init. Each entry is `0x30` bytes (six pointers), this is just a simple way to imagine each block:
 
 ```c
 struct CM_CONTROL_VECTOR_ENTRY {
@@ -598,7 +598,7 @@ if ( qword_1C00124C8 )
 
 #### DisplayPPMFlags
 
-Most masks below are the same for `amdppm`/`intelppm`, the labels are from [`DisplayPPMFlags`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/DisplayPPMFlags.c) WPP metadata extracted via [`tracepdb`](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/tracepdb).
+Most masks below are the same for `amdppm`/`intelppm`, the labels are from [`DisplayPPMFlags`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/amdppm/DisplayPPMFlags.c) WPP metadata extracted via [`tracepdb`](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/tracepdb).
 
 | Mask | `DisplayPPMFlags` label |
 | --- | --- |
@@ -640,10 +640,10 @@ Additional masks I found that aren't in `DisplayPPMFlags`:
 
 | Mask | Meaning |
 | --- | --- |
-| [`0x0000000000800000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/InitAcpiProcessorDomains.c) | ACPI processor domain init |
-| [`0x00000010FF300000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/ValidatePerfDomainSymmetry.c) | performance domain validation/registration |
-| [`0x0000800000000000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/EmiInit.c) | EMI init |
-| [`0x0001000000000000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/intelppm/InitDriver.c) | Energy counter init (not used by `amdppm`?) |
+| [`0x0000000000800000`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/amdppm/InitAcpiProcessorDomains.c) | ACPI processor domain init |
+| [`0x00000010FF300000`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/amdppm/ValidatePerfDomainSymmetry.c) | performance domain validation/registration |
+| [`0x0000800000000000`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/amdppm/EmiInit.c) | EMI init |
+| [`0x0001000000000000`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/intelppm/InitDriver.c) | Energy counter init (not used by `amdppm`?) |
 
 #### tracepdb
 
@@ -653,7 +653,7 @@ Short explanation of how to get the `DisplayPPMFlags` labels:
 .\tracepdb.exe -f "C:\Symbols\amdppm.pdb\0728D8E84177E8B0FCF8B265B1C92A591\amdppm.pdb" -p "$env:USERPROFILE\Desktop\tmf" -v
 ```
 
-In [`DisplayPPMFlags`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/DisplayPPMFlags.c) you can see the many masks + GUIDs + hex numbers, example:
+In [`DisplayPPMFlags`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/amdppm/DisplayPPMFlags.c) you can see the many masks + GUIDs + hex numbers, example:
 
 ```c
 if ( a2 < 5u
@@ -709,9 +709,9 @@ INIT:0000000140BA1A80                 dq offset KeTimerCheckFlags
 INIT:0000000140BA1A88                 align 20h
 ```
 
-`KeTimerCheckFlags` is used by [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c), only bit `0` seems to be meaningful, means any value with that bit set should behave like `1`.
+`KeTimerCheckFlags` is used by [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeCheckForTimer.c), only bit `0` seems to be meaningful, means any value with that bit set should behave like `1`.
 
-#### [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c)
+#### [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeCheckForTimer.c)
 
 That function checks active timer tables for a timer object/DPC object/DPC routine related to the memory range being checked.
 
@@ -740,7 +740,7 @@ if ( v18 >= BugCheckParameter3 && v18 < BugCheckParameter4 )
   KeBugCheckEx(0xC7u, 2uLL, v18, BugCheckParameter3, BugCheckParameter4); // DPC routine (parameter 1 = 0x2)
 ```
 
-The second argument to `KeBugCheckEx` = parameter 1 in the `0xC7` ([`TIMER_OR_DPC_INVALID`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)) bugcheck.
+The second argument to `KeBugCheckEx` = parameter 1 in the `0xC7` ([`TIMER_OR_DPC_INVALID`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/bug-check-0xc7--timer-or-dpc-invalid)) bugcheck.
 
 ```cpp
 VOID KeBugCheckEx(
@@ -767,7 +767,7 @@ VOID KeBugCheckEx(
 
 ##### Callers
 
-Pool free checks (in [ExpFreePoolChecks](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/ExpFreePoolChecks.c) & [ExFreeHeapPool](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/ExFreeHeapPool.c)) call [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) (only when `ExpPoolFlags & 1` is set?):
+Pool free checks (in [ExpFreePoolChecks](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/ExpFreePoolChecks.c) & [ExFreeHeapPool](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/ExFreeHeapPool.c)) call [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeCheckForTimer.c) (only when `ExpPoolFlags & 1` is set?):
 
 ```c
 // ExpFreePoolChecks / ExFreeHeapPool
@@ -776,7 +776,7 @@ if ( (ExpPoolFlags & 1) != 0 )
   KeCheckForTimer(BugCheckParameter3);
 ```
 
-[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://noverse.dev/diff?kind=pseudocode&left=11-23H2&right=11-25H2&module=ntoskrnl&name=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
+[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://noverse.dev/diff?kind=pseudocode&left=11-23H2&right=11-25H2&module=ntoskrnl&name=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
 
 ```c
 // VfMiscKeInitializeTimerEx_Entry (23H2)
@@ -818,7 +818,7 @@ if ( (ExpPoolFlags & 4) != 0 )
   ExpCheckForResource(BugCheckParameter3, a3); // ResourceCheckFlags (ERESOURCE check)
 ```
 
-[ExpCheckForResource](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/ExpCheckForResource.c) checks whether the freed range contains an `ERESOURCE` still linked in `ExpSystemResourcesList`, means `ExDeleteResourceLite` wasn't called before freeing its memory.
+[ExpCheckForResource](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/ExpCheckForResource.c) checks whether the freed range contains an `ERESOURCE` still linked in `ExpSystemResourcesList`, means `ExDeleteResourceLite` wasn't called before freeing its memory.
 
 ```c
 // ExpCheckForResource

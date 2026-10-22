@@ -42,25 +42,25 @@ void    CAppSettingsBasic::mapApiRes()
 
 Note that many settings like '*Triple buffering*', '*OpenGL Rendering GPU*', '*Threaded optimization*', '*Vulkan/OpenGL present method*' etc. are used OpenGL/old DX games only, and e.g. '*Virtual Reality pre-rendered frames*' for VR applications.
 
-I've created a folder [nv_params](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params) that includes NVIDIA driver parameter references for D3D, OpenGL, display, DRS, GFE, nView, ShadowPlay, stereo components. See [d3d](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params/d3d), [d3dogl](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params/d3dogl), [opengl](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params/opengl), [other](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params/other) for source files and more details.
+I've created a folder [nv_params](https://github.com/nohuto/win-config/tree/main/nvidia/assets/reference/nv_params) that includes NVIDIA driver parameter references for D3D, OpenGL, display, DRS, GFE, nView, ShadowPlay, stereo components. See [d3d](https://github.com/nohuto/win-config/tree/main/nvidia/assets/reference/nv_params/d3d), [d3dogl](https://github.com/nohuto/win-config/tree/main/nvidia/assets/reference/nv_params/d3dogl), [opengl](https://github.com/nohuto/win-config/tree/main/nvidia/assets/reference/nv_params/opengl), [other](https://github.com/nohuto/win-config/tree/main/nvidia/assets/reference/nv_params/other) for source files and more details.
 
-- [`parameters.txt`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/nv_params/parameters.txt) - all parameters exposed by [`d3dreg.exe`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/nv_params/d3dreg.exe)
-- [`dump_parameters.py`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/nv_params/dump_parameters.py) - recreates the catalog (parameters.txt)
+- [`parameters.txt`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/reference/nv_params/parameters.txt) - all parameters exposed by [`d3dreg.exe`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/reference/nv_params/d3dreg.exe)
+- [`dump_parameters.py`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/reference/nv_params/dump_parameters.py) - recreates the catalog (parameters.txt)
 
 Examples (which proof the mentioned settings above), you might not find the param names by searching for the option names in here, if so look through the `*.def` files in the folders which will show a `*_STRING` for it (remove `_STRING` when searching in parameters):
 
 ```powershell
-$ rg -i 'Virtual Reality pre-rendered frames' 'C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params'
-C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params\other\g_drsfeaturesNVAPI.def
+$ rg -i 'Virtual Reality pre-rendered frames' 'C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\reference\nv_params'
+C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\reference\nv_params\other\g_drsfeaturesNVAPI.def
 46:#define NVDRS_FEATURE_VRPRERENDER_LIMIT_STRING     L"Virtual Reality pre-rendered frames"
 
-C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params\d3dogl\g_d3doglNVAPIPrivate.def
+C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\reference\nv_params\d3dogl\g_d3doglNVAPIPrivate.def
 74:#define VRPRERENDERLIMIT_STRING                    L"Virtual Reality pre-rendered frames"
 
-C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params\d3dogl\g_d3doglNVAPI.def
+C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\reference\nv_params\d3dogl\g_d3doglNVAPI.def
 56:#define VRPRERENDERLIMIT_STRING                    L"Virtual Reality pre-rendered frames"
 
-C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params\other\g_drsfeaturesNVAPIPrivate.def
+C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\reference\nv_params\other\g_drsfeaturesNVAPIPrivate.def
 46:#define NVDRS_FEATURE_VRPRERENDER_LIMIT_STRING     L"Virtual Reality pre-rendered frames"
 ```
 
@@ -112,8 +112,8 @@ DEFAULT:    0x00000000
 ```
 
 - [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)
-- [Noverse-Minimal](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NV-Minimal.nip)
-- [Noverse-Compatible](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NV-Compatible.nip)
+- [Noverse-Minimal](https://github.com/nohuto/win-config/blob/main/nvidia/assets/profiles/NV-Minimal.nip)
+- [Noverse-Compatible](https://github.com/nohuto/win-config/blob/main/nvidia/assets/profiles/NV-Compatible.nip)
 
 ### Configure Surround, PhysX
 
@@ -145,7 +145,7 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\NVAPI\physxGpuId    Type: REG_BINARY, Length: 4, Data: 00 00 00 00
 ```
 
-- [nvidia/assets | physx-nvapi.h](https://github.com/nohuto/win-config/blob/main/nvidia/assets/physx-nvapi.h)
+- [nvidia/assets/reference | physx-nvapi.h](https://github.com/nohuto/win-config/blob/main/nvidia/assets/reference/physx-nvapi.h)
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/nvidia/images/nvcpl2.png" alt="" width="956" height="699" loading="lazy" decoding="async">
 
@@ -184,7 +184,7 @@ Controls the `Digital vibrance`, decimal value = percentage. `MONITOR` depends o
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITOR : HueRegistryKey
 ```
 
-`HueRegistryKey` controls the `Hue` options, it is a `REG_BINARY` type ([`displayDB.cpp`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-displayDB.cpp)):
+`HueRegistryKey` controls the `Hue` options, it is a `REG_BINARY` type ([`displayDB.cpp`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/reference/color-displayDB.cpp)):
 
 ```c
 // 0°
@@ -204,8 +204,8 @@ sin(0) = 0  = 0x00000000 hex
 = last 2 bytes
 ```
 
-- [nvidia/assets | color-displayDB.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-displayDB.cpp)
-- [nvidia/assets | color-DesktopColors.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp)
+- [nvidia/assets/reference | color-displayDB.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/reference/color-displayDB.cpp)
+- [nvidia/assets/reference | color-DesktopColors.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/reference/color-DesktopColors.cpp)
 
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\ADAPTER_10DE_2482_00000007_00000000 : StereoPreferredTargetIdRegistryKey

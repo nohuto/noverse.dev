@@ -95,7 +95,7 @@ Edit text sizes via [`TextScaleFactor`](https://learn.microsoft.com/en-us/uwp/ap
   }
 ```
 
-- [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
+- [visibility/assets/pseudocode | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/pseudocode/textsize-TextScaleDialogTemplate.c)
 
 Applying changes via `Accessibility > Text size`:
 ```c

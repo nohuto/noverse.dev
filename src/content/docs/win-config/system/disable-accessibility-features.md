@@ -44,7 +44,7 @@ Based on `SystemSettings > Accessibility`, not complete yet.
   // Disabled
   HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\EnableTransparency	Type: REG_DWORD, Length: 4, Data: 0
 
-  // Animation effects (https://noverse.dev/docs/win-config/visibility/optimize-visual-effects/#userpreferencesmask)
+  // Animation effects (https://noverse.dev/docs/win-config/visibility/minimal-visual-effects/#userpreferencesmask)
   // Enabled
   HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 92 12 07 80 10 00 00 00
   HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 96 12 07 80 10 00 00 00

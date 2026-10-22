@@ -17,7 +17,7 @@ Disables automatic network traffic on the settings page and prevents automatic d
 | `1`	Enabled | Force enable auto-update over metered connection. |
 | `65535` (Default)	Not configured | User's choice. |
 
-- [privacy/assets | maps.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/maps.c)
+- [privacy/assets/pseudocode | maps.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/pseudocode/maps.c)
 
 ## moshostcore Snippets
 

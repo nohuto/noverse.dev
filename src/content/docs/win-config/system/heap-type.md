@@ -17,13 +17,13 @@ Changing it to Segment Heap for a game won't impact FPS, rather read '[W10 Segme
 
 ## heapType GUI
 
-[`heapType.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/heapType.ps1) is a small GUI for the values (read everything below/above before using it):
+[`heapType.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/scripts/heapType.ps1) is a small GUI for the values (read everything below/above before using it):
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/system/images/heapType.png" alt="" width="1116" height="643" decoding="async">
 
 ## heap_dump
 
-[`heap_dump.exe`](https://github.com/nohuto/win-config/blob/main/system/assets/heap_dump.exe) queries all running processes and lists their heaps as `NT Heap`/`NT Heap (LFH)`/`Segment Heap`. You can either use the [prebuilt binary](https://github.com/nohuto/win-config/blob/main/system/assets/heap_dump.exe), or build it yourself from [source](https://github.com/nohuto/win-config/blob/main/system/assets/heap_dump):
+[`heap_dump.exe`](https://github.com/nohuto/utils/releases/download/0.1.0/heap_dump.exe) queries all running processes and lists their heaps as `NT Heap`/`NT Heap (LFH)`/`Segment Heap`. You can either use the [prebuilt binary](https://github.com/nohuto/utils/releases/download/0.1.0/heap_dump.exe), or build it yourself from [source](https://github.com/nohuto/utils/tree/main/heap_dump):
 
 ```powershell
 cmake -S . -B build
@@ -101,7 +101,7 @@ if ( v9 >= 0xFD0000 )
 >
 > — Microsoft, [RTL_HEAP_PARAMETERS](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-rtl_heap_parameters)
 
-[`PAGE_SIZE` = `4096`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntdll/RtlpExtendHeap.c) bytes, so `PAGE_SIZE * 2` = `8192`.
+[`PAGE_SIZE` = `4096`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpExtendHeap.c) bytes, so `PAGE_SIZE * 2` = `8192`.
 
 ```c
 // RtlpExtendHeap
@@ -274,4 +274,4 @@ __int64 IsDesktopHeapLoggingOn(void)
 
 `DesktopHeapLogging` seems to have a fallback of `0`, but the value exists by default and is set to `1`. Means deleting it/setting it to `0` should do the same.
 
-- [system/assets | IsDesktopHeapLoggingOn.c](https://github.com/nohuto/win-config/blob/main/system/assets/IsDesktopHeapLoggingOn.c)
+- [decompiled-pseudocode | IsDesktopHeapLoggingOn.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-IsDesktopHeapLoggingOn@@YAHXZ.c)

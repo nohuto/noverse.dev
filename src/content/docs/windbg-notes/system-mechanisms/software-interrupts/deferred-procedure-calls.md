@@ -7,7 +7,7 @@ sidebar:
   order: 15
 ---
 
-An ordinary DPC runs at `DISPATCH_LEVEL` IRQL, and can interrupt every thread regardless of its priority.
+An ordinary DPC runs at `DISPATCH_LEVEL` and prevents normal thread scheduling on that processor, regardless of thread priority.
 
 ## _KDPC Structure
 
@@ -28,15 +28,17 @@ lkd> dt nt!_KDPC
 
 ## _KDPC_DATA Structure
 
-Each `_KPRCB` includes `DpcData[2]`, and its `_KDPC_DATA` fields show the processors ordinary & threaded DPC queues (see [DpcCount](https://noverse.dev/docs/win-config/system/kernel-values/#dpccount)):
+Each `_KPRCB` (in 24H2 layout) includes `DpcData[2]`, `[0]` is the ordinary queue and `[1]` is the threaded queue. `DpcQueueDepth` counts queued work, `DpcCount` is a cumulative 32bit insertion counter for that queue (see [DpcCount](https://noverse.dev/docs/win-config/system/kernel-values/#dpccount)).
 
 ```c
 lkd> dt nt!_KDPC_DATA
    +0x000 DpcList          : _KDPC_LIST
    +0x010 DpcLock          : Uint8B
    +0x018 DpcQueueDepth    : Int4B // waiting in queue
-   +0x01c DpcCount         : Uint4B // ordinary/threaded
+   +0x01c DpcCount         : Uint4B // successful insertions into queue
    +0x020 ActiveDpc        : Ptr64 _KDPC // currently executing
    +0x028 LongDpcPresent   : Uint4B
    +0x02c Padding          : Uint4B
 ```
+
+If the DPC is already queued, [`KeInsertQueueDpc`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-keinsertqueuedpc) returns `FALSE` without inserting it again.

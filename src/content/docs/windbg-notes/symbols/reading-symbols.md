@@ -11,7 +11,7 @@ Symbols include variable names (local/global), functions, and any entry point in
 
 ## Reading Symbols
 
-A global variable can be read directly through `module!symbol`, if the PDB doesn't include symbol, then the same can be read using its RVA + `DriverStart`. Examples from '[MMCSS Values](https://noverse.dev/docs/win-config/system/mmcss-values/)' section:
+A global variable can be read through `module!symbol`, if its name isn't available, add its RVA from the matching binary to the loaded image base (`DriverStart`, see [RVA + DriverStart](/docs/windbg-notes/symbols/rva-driverstart/)). Examples from '[MMCSS Values](https://noverse.dev/docs/win-config/system/mmcss-values/)' section:
 
 ```c
 lkd> dd mmcss!CiSystemResponsiveness L1
@@ -32,7 +32,7 @@ My old [`disp-sym.ps1`](https://github.com/nohuto/windbg-notes/blob/main/assets/
 | `Reload Modules` | Reloads all modules using `.reload /f`, then lists the loaded modules with `lm` |
 | `Phase Folder` | Opens `$env:localappdata\Noverse\Symbols`<br>Each `.txt` file is saved in its module folder using such a structure:<br> - `<module>-Symbols.txt`<br> - `<module>-Filtered.txt`<br> - `<module>-KD.txt`<br> - `<module>-Dump.txt` |
 | `Dump` | Reads all symbols of the current selected module and writes them to the files |
-| `1` | Length size, default is `1`, it might not work properly with a length of `8 <` |
+| `1` | Decimal object count, default is `1` |
 | `dd` | Type of how the data should be displayed |
 
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/disp-sym.png" alt="" width="1855" height="836" decoding="async">
@@ -53,7 +53,7 @@ x /t <module>!<symbol>
 ?? sizeof(<module>!<symbol>)
 ```
 
-Public symbols often show a globals name without its type, when that happens use the data definition in IDA, e.g. `KiSerializeTimerExpiration` is a 4 byte value, so read it with `dd`.
+[Public symbols](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/public-and-private-symbols) can provide a globals name/address without its type, `sizeof` needs type information, `dv` also needs local variable symbols. If types are missing, check the matching binarys data definition and access widths in IDA, e.g. `KiSerializeTimerExpiration` is a 4 byte value, so read it with `dd`.
 
 ```c
 lkd> x /t mmcss!CiSystemResponsiveness

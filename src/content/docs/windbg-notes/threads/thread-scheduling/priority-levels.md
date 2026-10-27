@@ -9,7 +9,7 @@ sidebar:
 
 > "*Windows schedules threads, not processes.*" 
 
-Every thread has a (numeric) scheduling priority from `0` (lowest) up to `31` (highest). When a processor must choose the next thread, it selects a ready thread at the highest available priority (ready threads at the same priority are usually scheduled in round robin order, means that when a thread exhausts its quantum, its moved to the end of its priorities ready queue and the next thread gets a turn, as shown in [WrQuantumEnd](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/context-switching/#wrquantumend)). Also note that threads run at `PASSIVE_LEVEL`, while code running at `DISPATCH_LEVEL` (see [IRQLs](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels/)) or above prevents normal thread dispatch on that processor no matter what priority it has.
+Every thread has a (numeric) scheduling priority from `0` (lowest) up to `31` (highest). When a processor must choose the next thread, it selects a ready thread at the highest available priority (ready threads at the same priority are usually scheduled in round robin order, means that when a thread exhausts its quantum, its moved to the end of its priorities ready queue and the next thread gets a turn, as shown in [WrQuantumEnd](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/context-switching/#wrquantumend)). UM code runs at `PASSIVE_LEVEL`, KM code in thread context can run at raised IRQL, and code running at `DISPATCH_LEVEL` (see [IRQLs](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels/)) or above prevents normal thread dispatch on that processor no matter what priority the thread has.
 
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/thread-priority-levels.png" alt="" width="277" height="263" decoding="async">
 
@@ -121,7 +121,7 @@ fffff801`53c78680  00000018 00000006 0000000a // Real-Time 24, Below Normal 6, A
 
 Each thread has a relative priority within its process class, ordinary values are `Highest` (`+2`), `Above normal` (`+1`), `Normal` (`0`), `Below normal` (`-1`), `Lowest` (`-2`) and `Time critical`/`Idle` which are saturation values, means they select the top or bottom of the variable/RT range (which you can see below as there are always blocks on the far left/right in the range).
 
-Whenever threads use `Time critical`/`Idle` and the process base priority gets changed, these threads keep their thread base priority anyway.
+Whenever threads use `Time critical`/`Idle`, they keep their thread base priority when the process base changes within the same variable/RT range.
 
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/api-thread-priorities.png" alt="" width="838" height="447" loading="lazy" decoding="async">
 

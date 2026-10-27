@@ -7,7 +7,7 @@ sidebar:
   order: 12
 ---
 
-Each processor has a kernel processor control region (`_KPCR`), which includes processor specific data (see structure below), and an embedded kernel processor control block (`_KPRCB`). The PRCB structure is private to the kernel and stores scheduling, DPC, accounting and other states for one processor.
+Each logical processor has a kernel processor control region (`_KPCR`), which includes processor specific data (see structure below), and an embedded kernel processor control block (`_KPRCB`). The PRCB structure is private to the kernel and stores scheduling, DPC, accounting and other states for one processor.
 
 ```c
 lkd> dt nt!_KPCR CurrentPrcb Prcb
@@ -28,6 +28,8 @@ Times -- Dpc    00000003 Interrupt 00000014
          Kernel 000113c5 User      000003c4 
 ```
 
+The PRCBs `Number` is the systemwide processor index, while `Group` & `GroupIndex` identify it within a processor group (see [`KeGetCurrentProcessorNumberEx`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-kegetcurrentprocessornumberex)).
+
 The address after `at` is the processors `_KPRCB` address, `!prcb` defaults to processor 0. Instead of copying the address of the current processors PRCB, you can use `@$prcb` which is equal to the address:
 
 ```c
@@ -46,7 +48,7 @@ lkd> dt nt!_KPRCB fffff80065eb2180 ClockOwner ThreadDpcEnable MHz
    +0x33b8 ThreadDpcEnable : 0x1 ''
 
 lkd> dt nt!_KPRCB ffffa68161edc180 ClockOwner ThreadDpcEnable MHz // PRCB address of processor 1
-   +0x021 ClockOwner      : 0 '' // serialized timer expiration
+   +0x021 ClockOwner      : 0 '' // clock-owner flag is clear on this processor
    +0x044 MHz             : 0xe74
    +0x33b8 ThreadDpcEnable : 0x1 ''
 ```

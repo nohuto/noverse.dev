@@ -7,7 +7,7 @@ sidebar:
   order: 5
 ---
 
-An RVA (*Relative Virtual Address*) is an offset from a module's image base, it stays the same when ASLR relocates the image, while the absolute virtual address changes.
+An RVA (*Relative Virtual Address*) is an offset from a modules image base, it stays the same when ASLR relocates that image, while the absolute virtual address changes.
 
 ```c
 RVA = IDA address - IDA image base
@@ -32,7 +32,7 @@ RVA = 0x1C00082F8 - 0x1C0000000 = 0x82F8
 
 ## DriverStart
 
-`DriverStart` ("*Points to the base virtual address where the driver image is loaded in system memory. This address represents the beginning of the driver's code section in the kernel address space. The I/O manager sets this value when the driver is loaded.*") is the address at which the image is loaded in the current system. The simplest way to get it is the via module start address shown by `lm`:
+[`DriverStart`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_driver_object) is the loaded image base, including the PE headers, add the RVA to this base. The simplest way to get it is via the module start address shown by `lm`:
 
 ```c
 lkd> lm m mmcss
@@ -80,7 +80,7 @@ lkd> dt nt!_DRIVER_OBJECT
 
 ## Calculate Runtime Address
 
-Add the RVA from IDA to `DriverStart`:
+For a loaded image base of `0xfffff80180740000`, add the RVA from IDA:
 
 ```c
 runtime address = 0xfffff801`80740000 + 0x82F8 = 0xfffff801`807482F8

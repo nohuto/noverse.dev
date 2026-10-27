@@ -39,7 +39,7 @@ Per processor pointers are stored in [`_KPRCB`](https://noverse.dev/docs/windbg-
 lkd> dt nt!_KPRCB CurrentThread NextThread IdleThread KeContextSwitches
    +0x008 CurrentThread      : Ptr64 _KTHREAD // currently executing
    +0x010 NextThread         : Ptr64 _KTHREAD // pointer to next thread
-   +0x018 IdleThread         : Ptr64 _KTHREAD // used when theres no thread executing
+   +0x018 IdleThread         : Ptr64 _KTHREAD // processors idle thread
    +0x2d3c KeContextSwitches : Uint4B // cumulative switch counter
 
 lkd> !prcb 5
@@ -52,7 +52,7 @@ Times -- Dpc    00000007 Interrupt 00000000
          Kernel 00048caa User      00000000 
 
 lkd> dt nt!_KPRCB CurrentThread NextThread IdleThread KeContextSwitches ffffb90110b74180
-   +0x008 CurrentThread     : 0xffffe281`42547080 _KTHREAD // same as IdleThread so it currently runs no thread
+   +0x008 CurrentThread     : 0xffffe281`42547080 _KTHREAD // equals IdleThread, so the idle thread is current
    +0x010 NextThread        : (null) 
    +0x018 IdleThread        : 0xffffe281`42547080 _KTHREAD
    +0x2d3c KeContextSwitches : 0x726627
@@ -126,6 +126,8 @@ I've tried to create an readable function based on 23H2 assembly & WRK, this is 
 
 A context switch switches the kernel stack, saves/restores selected thread state, changes the process address space when necessary, and updates the current CPUs scheduling state.
 
+`SwapContext` compares the threads `ApcState.Process` pointers before switching address spaces, a thread [attached to another process](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-kestackattachprocess) can use a different address space from its owning process (`_KTHREAD.Process`).
+
 > "*A typical context switch requires saving and reloading the following data:*  
 > *- Instruction pointer*  
 > *- Kernel stack pointer*  
@@ -189,7 +191,7 @@ GDK docs shows a average CS time of 5 us, while a old [blog](https://devblogs.mi
 > 
 > — Microsoft, [High context switch rate](https://learn.microsoft.com/en-us/gaming/gdk/docs/gdk-dev/console-dev/overviews/threads/high-context-switches?view=gdk-2604)
 
-One cost is that when for example two threads use the same process address space, it doesn't need to be changed, but when they use different process address spaces, it also has to switch to the new process's address space context. This can cause higher TLB (translation lookaside buffer) costs & reduce cache locality, means a process context switch might be more expensive (probably only a few hundred nanoseconds).
+One cost is that when for example two threads use the same process address space, it doesn't need to be changed, but when they use different process address spaces, it also has to switch to the new process's address space context. This can cause higher TLB (translation lookaside buffer) costs & reduce cache locality, means a process context switch might be more expensive.
 
 Not complete yet.
 
@@ -234,6 +236,8 @@ You can see two different columns named `Context switches` & `Context switches d
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/si-context-switches-process.png" alt="" width="1473" height="849" loading="lazy" decoding="async">
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/si-context-switches-thread.png" alt="" width="1542" height="633" loading="lazy" decoding="async">
 
+Note that SI shows the ideal processor here (which is a preference), but since I've set the affinity, the ideal processor will also show that.
+
 - `Context switches` = cumulative context switch value currently stored for the process/thread
 - `Context switches delta` = increase since previous refresh
 
@@ -243,7 +247,7 @@ I've set both CPUStress threads to use the same CPU & be on the same priority, s
 
 ## CPUStress Example
 
-CPUStress uses two threads, both use `THREAD_PRIORITY_TIME_CRITICAL` (priority `15`, see '[Relative Thread Priority](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/priority-levels/#relative-thread-priority)'), and both are forced to run on processor 5 (affinity). As only one thread can execute on that logical processor at a time, they're switching between `Running`/`Ready` (see image above).
+CPUStress uses two active worker threads with normal base priority (`8`, see '[Relative Thread Priority](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/priority-levels/#relative-thread-priority)'), and both are forced to run on processor 5 (affinity). As only one thread can execute on that logical processor at a time, they're switching between `Running`/`Ready` (see image above).
 
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/CPUStress-context-switches.png" alt="" width="876" height="423" loading="lazy" decoding="async">
 

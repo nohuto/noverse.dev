@@ -7,7 +7,7 @@ sidebar:
   order: 8
 ---
 
-Thread activity = what a thread is currently doing and how much execution time (UM/KM) it has used. Rather use cycles (delta) than UM/KM time, that time gets calculated via `KeMaximumIncrement` (maximum time between clock interrupts), e.g.:
+Thread activity = what a thread is currently doing and how much execution time (UM/KM) it has used. Rather use cycles (delta) than the UM/KM time counters. [`NtQueryInformationThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/NtQueryInformationThread.c) scales those counters by `KeMaximumIncrement` (in 100ns units) for `ThreadTimes`, e.g.:
 
 ```c
 lkd> !thread ffffd8886cbd2080 6
@@ -36,6 +36,8 @@ There's no actual need to see the activity via WinDbg, use [System Informer](htt
 ## CPU Time & Cycles
 
 `User time` & `Kernel time` (see above to understand how they're getting calculated) are cumulative clock intervals counted to a thread in UM/KM (they don't include time spent waiting). [`CycleTime`](https://learn.microsoft.com/en-us/windows/win32/api/realtimeapiset/nf-realtimeapiset-querythreadcycletime) is the cumulative number of CPU clock cycles used by the thread in UM/KM, you can't really see the "live" delta via WinDbg (unless substracting cycles from two different times).
+
+The native cycle query uses [`KeQueryTotalCycleTimeThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeQueryTotalCycleTimeThread.c), which updates the current threads running period before returning its total.
 
 | System Informer | Meaning |
 | --- | --- |
@@ -95,7 +97,7 @@ lkd> dt nt!_KTHREAD ffffd8886cbd2080 CycleTime
 
 ### System Idle Process
 
-The *System Idle Process* (`PID 0`) is a fake process used to account for idle CPU cycle. It has one idle thread per logical processor, each processors `_KPRCB` (shown by `!pcr`) points to its idle thread, which runs only when that processor has no other thread to execute.
+The *System Idle Process* (`PID 0`) accounts for idle CPU cycles, it has one idle thread per logical processor, each processors `_KPRCB` (shown by `!prcb`) points to its idle thread, which runs when that processor has no ordinary ready thread to execute.
 
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/idle-process-cycles.png" alt="" width="1116" height="732" loading="lazy" decoding="async">
 

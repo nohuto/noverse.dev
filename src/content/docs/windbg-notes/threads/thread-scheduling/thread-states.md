@@ -7,7 +7,11 @@ sidebar:
   order: 9
 ---
 
+Legacy public/performance description (`7 = Unknown`, also used by [`System.Diagnostics.ThreadState`](https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.threadstate)):
+
 > "*Thread State is the current state of the thread.  It is 0 for Initialized, 1 for Ready, 2 for Running, 3 for Standby, 4 for Terminated, 5 for Wait, 6 for Transition, 7 for Unknown.  A Running thread is using a processor, a Standby thread is about to use one.  A Ready thread wants to use a processor, but is waiting for a processor because none are free.  A thread in Transition is waiting for a resource in order to execute, such as waiting for its execution stack to be paged in from disk.  A Waiting thread has no use for the processor because it is waiting for a peripheral operation to complete or a resource to become free.*"
+
+For `_KTHREAD.State` and [CSwitch events](https://learn.microsoft.com/en-us/windows/win32/etw/cswitch), `7` means `DeferredReady` (see the enum below).
 
 ## PerfMon Example
 
@@ -59,7 +63,7 @@ lkd> dt nt!_KTHREAD ffffd88863435080 State
 
 ### _KWAIT_REASON
 
-The wait reason is useful whenever a thread is waiting (comments were taken from [ntdoc](https://ntdoc.m417z.com/kwait_reason)). It's possible to see CS reasons via e.g. MXA (note that the list below is the kernels wait reason enum stored in `_KTHREAD.WaitReason`, several of them are used as CS reason):
+`_KTHREAD.WaitReason` includes both wait & scheduling reasons (see [ntdoc](https://ntdoc.m417z.com/kwait_reason)), so read it together with `State`. It's possible to see CS reasons via e.g. MXA:
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/system/images/WrQuantumEnd-23H2.png" alt="" width="2560" height="1400" loading="lazy" decoding="async">
 
@@ -109,10 +113,12 @@ lkd> dt nt!_KWAIT_REASON
    WrPhysicalFault = 0n39 // Waiting for a physical fault
    WrIoRing = 0n40 // Waiting for an I/O ring - 40
    WrMdlCache = 0n41 // Waiting for an MDL cache
-   MaximumWaitReason = 0n42
+   MaximumWaitReason = 0n42 // Enum sentinel, not a wait reason
 ```
 
-See the current `WaitReason` of a thread via:
+In [24H2](https://github.com/nohuto/type-layouts/blob/main/11-24H2/ntoskrnl/_KWAIT_REASON.cpp), `WrRcu = 42` & `MaximumWaitReason = 43` got added.
+
+Read the stored `WaitReason` via:
 
 ```c
 lkd> dt nt!_KTHREAD ffffd88863435080 WaitReason

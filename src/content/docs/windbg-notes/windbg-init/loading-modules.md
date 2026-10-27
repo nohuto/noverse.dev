@@ -7,7 +7,7 @@ sidebar:
   order: 1
 ---
 
-Use [`lm l`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/lm--list-loaded-modules-) to lists modules whose symbols are currently loaded, if you're in a LKD session `nt` will be already loaded.
+Use [`lm l`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/lm--list-loaded-modules-) to list modules whose symbols are currently loaded. In this LKD session `nt` is already loaded:
 
 ```c
 lkd> lm l
@@ -15,7 +15,7 @@ start             end                 module name
 fffff805`15c00000 fffff805`16c47000   nt         (pdb symbols)          c:\symbols\ntkrnlmp.pdb\7D91B8E878B8A42A1B9BFAB4FDC727BD1\ntkrnlmp.pdb
 ```
 
-Without `/f`, [`.reload`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-reload--reload-module-) updates the debuggers module info, discards existing symbol info for the selected module and leaves its symbols deferred:
+With the default lazy loading, [`.reload`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-reload--reload-module-) without `/f` updates the debuggers module info, discards existing symbols for the selected module and leaves them deferred:
 
 ```c
 lkd> .reload mmcss.sys
@@ -35,7 +35,7 @@ start             end                 module name
 fffff805`28440000 fffff805`28456000   mmcss      (pdb symbols)          c:\symbols\mmcss.pdb\9E36707273FDF82AB362DBA6ACCC09671\mmcss.pdb
 ```
 
-Unload the symbols for a module:
+Remove the module and its symbols from the debuggers module list (driver stays loaded in Windows):
 
 ```c
 .reload /u mmcss.sys

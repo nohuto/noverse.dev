@@ -7,7 +7,7 @@ sidebar:
   order: 14
 ---
 
-Interrupt request levels (IRQLs) are basically an interrupt source priority and a per processor priority state. Each interrupt source has such an IRQL, and each processor also has a current IRQL, which defines what source can interrupt that processor. I won't add `!irql` (displays `DebuggerSavedIRQL` of KPRCB) as the output within a debugger of it is meaningless.
+Interrupt request levels (IRQLs) are basically an interrupt source priority and a per processor priority state. Each interrupt source has such an IRQL, and each processor also has a current IRQL, which defines what source can interrupt that processor. [`!irql`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-irql) displays `KPRCB.DebuggerSavedIRQL`, the IRQL saved just before the debugger break. The debugger raises IRQL when it breaks in, so the saved value is usually more useful.
 
 Note that `PASSIVE_LEVEL`/`LOW_LEVEL` = IRQL `0`, where usually normal thread execution happens, means its not really a interrupt level, thread priorities only have a meaning if IRQL is less than 2.
 
@@ -36,19 +36,10 @@ Note that `PASSIVE_LEVEL`/`LOW_LEVEL` = IRQL `0`, where usually normal thread ex
 At `DISPATCH_LEVEL` and above:
 
 - Normal thread preemption cannot occur on that processor
-- Code cannot wait for a dispatcher object
+- Code cannot block waiting for a dispatcher object
 - Pageable memory cannot be accessed
 - A page fault cannot be handled
 
-This is also a reason why a DPC is used afterwards to keep the IRQL elevated for a short time (see [interrupt processing](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-dispatching/#interrupt-processing) for the full image).
+Moving the remaining ISR work to a DPC shortens time at DIRQL, the ordinary DPC runs at `DISPATCH_LEVEL`, where higher IRQL interrupts can still run (see [interrupt processing](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-dispatching/#interrupt-processing) for the entire image).
 
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/driver-isr.png" alt="" width="180" height="244" loading="lazy" decoding="async">
-
-## _KPCR Irql
-
-You can display the `Irql` of a processor via its field in the kernel processor control region (`KPCR`) structure (see '[Processor Control Region](https://noverse.dev/docs/windbg-notes/system-mechanisms/processor-execution-model/processor-control-region/)' for context):
-
-```c
-lkd> dt nt!_KPCR @$pcr Irql
-   +0x050 Irql             : 0 ''
-```

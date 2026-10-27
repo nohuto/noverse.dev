@@ -15,13 +15,13 @@ Context for the sections below, see 'Windows Internals: [Trap Dispatching](https
 
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/interrupt-control-flow.png" alt="" width="665" height="683" decoding="async">
 
-Means the device interrupt goes through the IOAPIC & LAPIC (of selected processor), the processor uses the interrupt vector (in IOAPIC fields) to index the IDT, which reaches the kernel interrupt dispatcher and the interrupt object (`_KINTERRUPT`). Then the dispatcher raises IRQL, synchronizes with the ISR, and the driver ISR handles the device work (often by requesting a DPC).
+This shows a line based device interrupt going through the IOAPIC & LAPIC (of the selected processor), the processor uses the interrupt vector to index the IDT, which reaches the kernel interrupt dispatcher and the interrupt object (`_KINTERRUPT`). Then the dispatcher raises IRQL, synchronizes with the ISR, and the driver ISR handles the device work (often by requesting a DPC).
 
 ## APIC
 
 <img src="https://raw.githubusercontent.com/nohuto/windbg-notes/main/images/ioapic.png" alt="" width="420" height="404" loading="lazy" decoding="async">
 
-There's one LAPIC per processor and one or more IOAPICs (for line based device interrupts), the LAPIC receives interrupts from the IOAPIC, while the IOAPIC receives interrupts from the device (and redirects them to the LAPIC) as shown above.
+There's one LAPIC per logical processor and one or more IOAPICs (for line based device interrupts), the LAPIC receives interrupts from the IOAPIC, while the IOAPIC receives interrupts from the device (and redirects them to the LAPIC) as shown above.
 
 Use `!apic` to display the LAPIC state for the current processor:
 
@@ -54,7 +54,7 @@ Here the `Vec` (vector) field shows `0x70`, when looking at the IDT below we'll 
 
 ## IDT
 
-The IDT (interrupt descriptor table) assingns interrupt vectors to handlers, see [WKE-IDT.txt](https://github.com/nohuto/windbg-notes/blob/main/assets/WKE-IDT.txt) for a dump using [WKE](https://github.com/AxtMueller/Windows-Kernel-Explorer).
+The IDT (interrupt descriptor table) assigns interrupt vectors to handlers, see [WKE-IDT.txt](https://github.com/nohuto/windbg-notes/blob/main/assets/WKE-IDT.txt) for a dump using [WKE](https://github.com/AxtMueller/Windows-Kernel-Explorer).
 
 ```c
 lkd> !idt
@@ -148,7 +148,9 @@ lkd> dt nt!_KINTERRUPT ffff970022900500 Vector Irql SynchronizeIrql ServiceRouti
 
 ## ISR
 
-The ISR (interrupt service routine) is the drivers routine for handling a hardware interrupt, which runs in interrupt context at the DIRQL (device IRQL, see [IRQLs](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels/)). The ISR should only dismiss the interrupt, save volatile state and queue any remaining work as a [DPC](https://noverse.dev/docs/windbg-notes/system-mechanisms/software-interrupts/deferred-procedure-calls/). The `ServiceRoutine` field in the `_KINTERRUPT` structure is the ISR address (`MessageServiceRoutine` address for MSI).
+The ISR (interrupt service routine) is the drivers routine for handling a hardware interrupt, the DIRQL ISR shown here runs in interrupt context at the device IRQL (see [IRQLs](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels/)). It should dismiss the interrupt, save volatile state and queue remaining work as a [DPC](https://noverse.dev/docs/windbg-notes/system-mechanisms/software-interrupts/deferred-procedure-calls/).
+
+Note that since W8, drivers can also register [passive-level ISRs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/using-passive-level-interrupt-handling-routines), which run at `PASSIVE_LEVEL` and use an event for synchronization, which explains the `PassiveEvent` field below.
 
 ## _KINTERRUPT Structure
 

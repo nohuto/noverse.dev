@@ -7,11 +7,13 @@ sidebar:
   order: 3
 ---
 
-You can either set it via WinDbg, or as environment variable.
+Set the env variable before starting WinDbg from that PowerShell session:
 
 ```powershell
 $env:_NT_SYMBOL_PATH = 'srv*C:\Symbols*https://msdl.microsoft.com/download/symbols'
 ```
+
+Use `.sympath` in an existing debugger session, then `.reload /f <module>` to load symbols immediately.
 
 ```c
 .sympath srv*C:\Symbols*https://msdl.microsoft.com/download/symbols

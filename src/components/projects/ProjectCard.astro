@@ -25,12 +25,17 @@ const onGitHub = href.startsWith('https://github.com/');
     </h3>
     <p class="project-desc">{project.description}</p>
   </div>
-  <details class="project-preview">
-    <summary aria-label={`Show ${project.title} preview`} title="Show preview">
-      <Icon name="chevron-down" />
-    </summary>
-    <ProjectMedia project={project} />
-  </details>
+  {(project.image || project.video) && (
+    <details class="project-preview">
+      <summary
+        aria-label={`Show ${project.title} preview`}
+        title="Show preview"
+      >
+        <Icon name="chevron-down" />
+      </summary>
+      <ProjectMedia project={project} />
+    </details>
+  )}
 </article>
 
 <script>

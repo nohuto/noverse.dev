@@ -3,7 +3,7 @@
   {"repo": "nohuto/regkit", "title": "RegKit", "image": "/main/images/projects/regkit-dark", "imageLight": "/main/images/projects/regkit-light", "home": {"order": 1}, "description": "Performant registry editor including several new features & improvements"},
   {"repo": "nohuto/win32-ui", "title": "Win32 UI Library", "description": "Static C++ library for my Win32 GUI projects, currently used by regkit & thread-sim"},
   {"repo": "nohuto/thread-sim", "title": "Thread Simulation", "image": "/main/images/projects/thread-sim", "description": "Tool for experimenting with thread scheduling"},
-  {"repo": "nohuto/utils", "title": "Utils", "image": "/main/images/projects/RawMouseThrottleForced", "description": "Collection of utilities used for demonstrations in the win-config docs"},
+  {"repo": "nohuto/utils", "title": "Utils", "description": "Collection of CLI utils used for demonstrations in win-config docs"},
   {"repo": "nohuto/windbg-notes", "title": "WinDbg Notes", "image": "/main/images/projects/windbg-notes", "description": "Personal notes on several topics (for learning purposes)"},
   {"repo": "nohuto/app-guides", "title": "App Guides", "image": "/main/images/projects/app-guides", "description": "App (Desktop/iOS) configurations for privacy/security & general recommendations"},
   {"repo": "nohuto/userscripts", "title": "Userscripts", "image": "/main/images/projects/userscripts-youtube", "description": "Userscripts to make YT/Twitch usable"},

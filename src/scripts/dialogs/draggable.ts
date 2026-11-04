@@ -13,11 +13,15 @@ export const trackPointer = (
     frame = 0;
     move(currentEvent);
   };
+  const isTracked = (event: PointerEvent) =>
+    event.pointerId === startEvent.pointerId;
   const onMove = (event: PointerEvent) => {
+    if (!isTracked(event)) return;
     currentEvent = event;
     if (!frame) frame = requestAnimationFrame(paint);
   };
-  const stop = () => {
+  const stop = (event: PointerEvent) => {
+    if (!isTracked(event)) return;
     if (frame) {
       cancelAnimationFrame(frame);
       paint();

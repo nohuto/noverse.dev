@@ -125,6 +125,7 @@
       order: 2;
       min-width: 0;
       width: auto;
+      margin-inline-start: 0;
     }
 
     html[data-has-sidebar][data-has-toc]:not([data-zen]) .right-sidebar {
@@ -189,7 +190,7 @@
   :root[data-zen] .sidebar-resizer,
   :root[data-zen] .pagination-links,
   :root[data-zen] .main-pane footer {
-    display: none !important;
+    display: none;
   }
   :root[data-zen] .main-frame {
     padding-top: 1rem;
@@ -206,7 +207,13 @@
     max-width: none;
   }
   .main-pane:has(.main-terminal) .content-panel:first-of-type {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .page:has(.policies-main) {
     height: 100dvh;

@@ -10,7 +10,37 @@ import {
   lightThemes,
   themes,
 } from '../../data/themes';
+import palette from '../../styles/palette.css?raw';
+
+interface Props {
+  background?: '--bg' | '--panel';
+}
+const { background = '--bg' } = Astro.props;
+const backgroundIn = (selector: string) =>
+  palette
+    .split('}')
+    .find((block) => block.includes(selector))
+    ?.match(new RegExp(`${background}:\\s*([^;]+);`))?.[1]
+    ?.trim();
+const themeColors = Object.fromEntries(
+  themes
+    .map(([value]) => [
+      value,
+      value === DEFAULT_DARK_THEME
+        ? backgroundIn(':root,')
+        : value === DEFAULT_LIGHT_THEME
+          ? backgroundIn(":root[data-theme='light']")
+          : backgroundIn(`:root[data-theme-setting='${value}']`),
+    ])
+    .filter(([, color]) => color),
+);
 ---
+
+<meta
+  name="theme-color"
+  content={themeColors[DEFAULT_DARK_THEME]}
+  data-background={background}
+/>
 
 <script
   is:inline
@@ -24,6 +54,7 @@ import {
     bgKey: BG_KEY,
     bgOptions: backgrounds,
     defaultBg: DEFAULT_BG,
+    themeColors,
   }}
 >
   {
@@ -45,6 +76,9 @@ import {
         : setting;
     root.dataset.themeSetting = setting;
     root.dataset.theme = lightOptions.includes(palette) ? 'light' : 'dark';
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', themeColors[palette]);
     const background = read(bgKey);
     root.dataset.bg = bgOptions.includes(background) ? background : defaultBg;
   }

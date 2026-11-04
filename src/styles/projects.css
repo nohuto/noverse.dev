@@ -45,7 +45,7 @@
 .project-title {
   margin: 0;
   padding-right: 32px;
-  font-size: 0.875rem;
+  font-size: var(--sl-text-sm);
 }
 
 .project-title a {

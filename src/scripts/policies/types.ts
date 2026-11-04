@@ -19,7 +19,7 @@ export interface PolicyElement {
   ClientExtension?: string;
 }
 
-export interface PolicyItem {
+interface PolicyItem {
   DisplayName?: string;
   Data?: string;
   Action?: string;
@@ -55,7 +55,7 @@ export interface PolicyCategory {
   path: CategorySegment[];
 }
 
-export interface SearchFields {
+interface SearchFields {
   names: string[];
   registry?: string[];
   details?: string[];
@@ -107,10 +107,22 @@ export interface StorageEntry {
   rows: StorageRow[];
 }
 
+export interface SearchOptions {
+  wildcards: boolean;
+  whole: boolean;
+  caseSensitive: boolean;
+  matchAny: boolean;
+  currentPath: boolean;
+  names: boolean;
+  registry: boolean;
+  details: boolean;
+}
+
 export interface PolicyColumn {
   id: string;
   label: string;
   width: number;
   minWidth: number;
+  filterable?: boolean;
   value: (policy: Policy) => string;
 }

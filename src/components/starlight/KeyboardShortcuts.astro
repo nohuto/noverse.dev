@@ -8,6 +8,7 @@ const { pagination } = Astro.locals.starlightRoute;
 ></keyboard-shortcuts>
 
 <script>
+  import { isTypingTarget } from '../../scripts/shell/typing-target';
   import { withZenMode } from '../../utils/zen-mode';
 
   class KeyboardShortcuts extends HTMLElement {
@@ -32,16 +33,6 @@ const { pagination } = Astro.locals.starlightRoute;
               element.dataset.tip = element.dataset.tip.replace('Ctrl', '⌘');
           });
 
-      const isTyping = (event: KeyboardEvent) => {
-        const target = (event.composedPath()[0] ??
-          event.target) as HTMLElement | null;
-        if (!target) return false;
-        return (
-          /^(?:input|select|textarea)$/i.test(target.nodeName) ||
-          target.isContentEditable
-        );
-      };
-
       const navigate = (href: string | undefined) => {
         if (href)
           window.location.assign(withZenMode(href, new URL(location.href)));
@@ -50,7 +41,11 @@ const { pagination } = Astro.locals.starlightRoute;
       document.addEventListener(
         'keydown',
         (event) => {
-          if (event.repeat || isTyping(event)) return;
+          if (
+            event.repeat ||
+            isTypingTarget(event.composedPath()[0] ?? event.target)
+          )
+            return;
           if (document.querySelector('dialog[open]')) return;
 
           const primaryKey = isApple ? event.metaKey : event.ctrlKey;

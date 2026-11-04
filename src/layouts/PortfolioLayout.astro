@@ -11,6 +11,8 @@ interface Props {
   description: string;
 }
 const { title, description } = Astro.props;
+const isHome = Astro.url.pathname === '/';
+const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
@@ -22,6 +24,16 @@ const { title, description } = Astro.props;
     <PullRefreshFix />
     <meta name="description" content={description} />
     <title>{title}</title>
+    {isHome && (
+      <>
+        <link rel="canonical" href={canonical} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta name="twitter:card" content="summary" />
+      </>
+    )}
     <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link
@@ -44,16 +56,19 @@ const { title, description } = Astro.props;
     <script>
       import '../scripts/tooltips';
 
+      const ART_IDLE_TIMEOUT_MS = 2000;
+      const ART_FALLBACK_DELAY_MS = 200;
       const art = document.querySelector<HTMLElement>('.site-art');
       const main = document.querySelector('main');
-      const start = () =>
-        import('../scripts/art/substrate').then(({ mountArt }) =>
-          mountArt(art!, main!),
-        );
-      if (art && main)
-        'requestIdleCallback' in window
-          ? requestIdleCallback(start, { timeout: 2000 })
-          : setTimeout(start, 200);
+      if (art && main) {
+        const start = () =>
+          import('../scripts/art/substrate').then(({ mountArt }) =>
+            mountArt(art, main),
+          );
+        if ('requestIdleCallback' in window)
+          requestIdleCallback(start, { timeout: ART_IDLE_TIMEOUT_MS });
+        else setTimeout(start, ART_FALLBACK_DELAY_MS);
+      }
     </script>
   </body>
 </html>

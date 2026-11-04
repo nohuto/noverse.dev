@@ -12,6 +12,16 @@ import '../styles/search.css';
     title: 'Group Policy Explorer',
     description: 'Group Policy Explorer',
     tableOfContents: false,
+    head: [
+      {
+        tag: 'link',
+        attrs: {
+          rel: 'preconnect',
+          href: 'https://raw.githubusercontent.com',
+          crossorigin: true,
+        },
+      },
+    ],
   }}
 >
   <div class="site-content not-content policies-main">
@@ -24,7 +34,6 @@ import '../styles/search.css';
                 <Icon name="search" class="search-icon" />
                 <input
                   id="policy-search"
-                  type="text"
                   autocomplete="off"
                   spellcheck="false"
                   aria-label="Search policies"
@@ -76,6 +85,11 @@ import '../styles/search.css';
                 <span>Table</span>
                 <span class="policy-view-chevron" aria-hidden="true"></span>
               </button>
+              <div
+                class="policy-column-menu"
+                id="policy-column-menu"
+                hidden
+              ></div>
             </div>
           </div>
         </div>
@@ -144,12 +158,12 @@ import '../styles/search.css';
                 <tbody id="policy-table-body"></tbody>
               </table>
             </div>
-            <div class="policy-table-note" id="policy-table-note"></div>
             <div
-              class="policy-column-menu"
-              id="policy-column-menu"
+              class="policy-filter-menu"
+              id="policy-filter-menu"
               hidden
             ></div>
+            <div class="policy-table-note" id="policy-table-note"></div>
           </section>
           <div
             class="policy-splitter"

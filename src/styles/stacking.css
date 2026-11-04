@@ -1,0 +1,9 @@
+:root {
+  --z-raised: 10;
+  --z-toast: 20;
+  --z-dropdown: 30;
+  --z-menu: 50;
+  --z-menu-raised: 52;
+  --z-overlay: 100;
+  --z-skip-link: 300;
+}

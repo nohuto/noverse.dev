@@ -33,6 +33,7 @@
 
 .policy-toolbar-actions {
   grid-column: 3;
+  grid-row: 1;
   display: flex;
   align-items: end;
   justify-content: flex-end;
@@ -42,13 +43,16 @@
 
 .policy-search-row {
   display: grid;
-  grid-template-columns: 100% 24px;
-  gap: 6px;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
   align-items: center;
-  width: 100%;
 }
 
 .policy-search-field {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  grid-template-columns: subgrid;
   min-width: 0;
 }
 
@@ -63,6 +67,9 @@
   color: var(--text);
   cursor: pointer;
   padding: 0;
+  grid-column: 2 / -1;
+  justify-self: start;
+  margin-left: 6px;
 }
 
 #policy-settings:hover {
@@ -121,7 +128,7 @@
   position: absolute;
   top: calc(100% + 4px);
   right: 0;
-  z-index: 52;
+  z-index: var(--z-menu-raised);
   min-width: 128px;
   border: 1px solid var(--border-strong);
   background: var(--panel);
@@ -129,7 +136,8 @@
   padding: 0;
 }
 
-.policy-view-option {
+.policy-view-option,
+.policy-column-choice {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -139,7 +147,8 @@
   cursor: pointer;
 }
 
-.policy-view-option:hover {
+.policy-view-option:hover,
+.policy-column-choice:hover {
   background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
@@ -327,7 +336,12 @@
   background: var(--accent);
 }
 
-.policy-tree-label {
+.policy-tree-item.is-active::before {
+  width: 2px;
+}
+
+.policy-tree-label,
+.policy-table-header-label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -378,12 +392,6 @@
   -webkit-user-select: none;
   user-select: none;
   cursor: pointer;
-}
-
-.policy-table-header-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .policy-table-header-content {
@@ -437,17 +445,22 @@ body.policy-column-resizing .policy-column-resizer::after {
 body.policy-column-resizing,
 body.policy-column-resizing * {
   cursor: col-resize !important;
-  -webkit-user-select: none !important;
-  user-select: none !important;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .policy-table tbody tr {
   cursor: pointer;
 }
 
-.policy-table tbody tr:hover td,
 .policy-table tbody tr.is-active td {
   background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+@media (hover: hover) {
+  .policy-table tbody tr:hover td {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
 }
 
 .policy-table tbody tr.is-active td:first-child {
@@ -461,6 +474,7 @@ body.policy-column-resizing * {
 }
 
 .policy-table-note {
+  font-variant-numeric: tabular-nums;
   min-height: 26px;
   padding: 6px 10px;
   border-top: 1px solid var(--border);
@@ -470,7 +484,7 @@ body.policy-column-resizing * {
 
 .policy-column-menu {
   position: fixed;
-  z-index: 50;
+  z-index: var(--z-menu);
   min-width: 150px;
   border: 1px solid var(--border-strong);
   background: var(--panel);
@@ -478,18 +492,107 @@ body.policy-column-resizing * {
   padding: 0;
 }
 
-.policy-column-choice {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 24px;
-  padding: 0 8px;
-  color: var(--text);
+.policy-table th.has-filter {
+  padding-right: 26px;
+}
+
+.policy-filter-button {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  translate: 0 -50%;
+  border: 0;
+  padding: 0;
+  background: transparent;
   cursor: pointer;
 }
 
-.policy-column-choice:hover {
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
+.policy-filter-button::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: var(--muted);
+  mask: var(--icon-filter) center / 12px 12px no-repeat;
+  transition: background-color var(--motion);
+}
+
+.policy-filter-button[aria-expanded='true']::before {
+  background: var(--text);
+}
+
+.policy-filter-button.is-active::before {
+  background: var(--accent);
+}
+
+@media (hover: hover) {
+  .policy-filter-button:hover::before {
+    background: var(--text);
+  }
+}
+
+.policy-filter-menu {
+  position: fixed;
+  z-index: var(--z-menu);
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  max-width: min(360px, calc(100vw - 8px));
+  border: 1px solid var(--border-strong);
+  background: var(--panel);
+  font-size: var(--font-size-control);
+}
+
+.policy-filter-menu[hidden],
+.policy-filter-choice[hidden] {
+  display: none;
+}
+
+.policy-filter-menu .policy-filter-search {
+  flex: none;
+  width: auto;
+  margin: 6px;
+}
+
+.policy-filter-options {
+  min-height: 0;
+  max-height: 320px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.policy-filter-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.policy-filter-count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.policy-filter-clear {
+  margin-left: 8px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .policy-filter-clear:hover {
+    text-decoration: underline;
+  }
 }
 
 .policy-detail-body {
@@ -505,7 +608,7 @@ body.policy-column-resizing * {
 
 .policy-detail-heading h2 {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--sl-text-sm);
   line-height: 1.35;
 }
 
@@ -564,8 +667,7 @@ body.policy-column-resizing * {
 
 .policy-code-list,
 .policy-registry-list,
-.policy-registry-values,
-.policy-data-list {
+.policy-registry-values {
   display: grid;
   gap: 6px;
 }
@@ -704,6 +806,7 @@ body.policy-column-resizing * {
 }
 
 .policy-data-list {
+  display: grid;
   width: min(100%, 380px);
   justify-self: end;
   gap: 4px;
@@ -807,17 +910,20 @@ body.policy-column-resizing * {
     align-items: end;
   }
 
-  .policy-search-field {
-    grid-column: 1 / -1;
-  }
-
   .policy-toolbar-actions {
     grid-column: auto;
+    grid-row: auto;
     justify-self: end;
   }
 
   .policy-search-row {
     grid-template-columns: minmax(0, 1fr) 24px;
+    gap: 6px;
+  }
+
+  #policy-settings {
+    grid-column: auto;
+    margin-left: 0;
   }
 
   #policy-explorer .policy-layout,
@@ -837,7 +943,7 @@ body.policy-column-resizing * {
   }
 
   .policy-splitter {
-    display: none !important;
+    display: none;
   }
 
   .policy-tree-panel,

@@ -6,10 +6,13 @@ const status = document.querySelector('#product-gallery-status');
 if (gallery) {
   const count = gallery.children.length;
   const current = () => Math.round(gallery.scrollLeft / gallery.clientWidth);
-  const move = (direction: number) => {
-    const next = (current() + direction + count) % count;
-    gallery.scrollTo({ left: next * gallery.clientWidth, behavior: 'instant' });
-  };
+  const show = (index: number) =>
+    gallery.scrollTo({
+      left: index * gallery.clientWidth,
+      behavior: 'instant',
+    });
+  const move = (direction: number) =>
+    show((current() + direction + count) % count);
 
   document
     .querySelectorAll<HTMLButtonElement>('[data-gallery-direction]')
@@ -24,6 +27,13 @@ if (gallery) {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
     event.preventDefault();
     move(event.key === 'ArrowLeft' ? -1 : 1);
+  });
+
+  gallery.addEventListener('focusin', (event) => {
+    const index = [...gallery.children].findIndex(
+      (slide) => event.target instanceof Node && slide.contains(event.target),
+    );
+    if (index >= 0 && index !== current()) show(index);
   });
 
   gallery.addEventListener('scroll', () => {

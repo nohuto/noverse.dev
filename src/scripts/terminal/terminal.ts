@@ -1,13 +1,23 @@
 /* Copyright (c) 2026 nohuto */
 import { trackPointer } from '../dialogs/draggable';
 import { applyBackground } from '../shell/background';
+import { isInteractiveTarget } from '../shell/typing-target';
 import { setTheme } from '../shell/theme';
-import { pageRoutes } from '../../data/navigation';
+import {
+  formatDisplayPath,
+  getNavigationTarget,
+  listDirs,
+  resolvePath,
+  rootPath,
+} from './paths';
+import { completeCommand, parseCommand } from './commands';
 import { backgrounds, themes, THEME_SYSTEM } from '../../data/themes';
 
+const TIMESTAMP_REFRESH_MS = 60_000;
 const consoleHistory: string[] = [];
 let consoleHistoryIndex = -1;
 let consoleAnimationCleanup: (() => void) | null = null;
+let consoleAnimationRequest = 0;
 
 const ASCII_ART = [
   '  \\  |                                    ',
@@ -23,6 +33,7 @@ const clampNumber = (value: number, min: number, max: number) =>
   Math.min(Math.max(min, value), max);
 
 function stopConsoleAnimation() {
+  consoleAnimationRequest++;
   if (!consoleAnimationCleanup) return;
   consoleAnimationCleanup();
   consoleAnimationCleanup = null;
@@ -87,18 +98,18 @@ function initConsole() {
   const output = document.getElementById('console-output')!;
   const lines = document.getElementById('console-lines')!;
   const form = document.getElementById('console-form') as HTMLFormElement;
-  const input = document.getElementById('console-command') as HTMLInputElement;
+  const input = document.getElementById(
+    'console-command',
+  ) as HTMLTextAreaElement;
   const preview = document.getElementById('console-preview')!;
 
   initConsoleWindow();
 
   const promptUser = 'nohuto';
   const promptHost = 'noverse';
-  const rootPath = '~/terminal';
   let currentPath = rootPath;
   const promptEl = consoleRoot.querySelector('.console-prompt');
   const timestampEl = document.getElementById('console-timestamp');
-  const DOCS_ROOT_PATH = `${rootPath}/docs`;
   const URL_PATTERN = /https?:\/\/[^\s<>"'`]+/i;
   let promptIndent = '';
   let promptMetricsDirty = true;
@@ -128,18 +139,6 @@ function initConsole() {
 
   const invalidatePromptMetrics = () => {
     promptMetricsDirty = true;
-  };
-
-  const formatDisplayPath = (path: string) => {
-    if (path === rootPath) return rootPath;
-    if (path === DOCS_ROOT_PATH) return '~/docs';
-    if (String(path || '').startsWith(`${DOCS_ROOT_PATH}/`)) {
-      return String(path).replace(`${DOCS_ROOT_PATH}/`, '~/docs/');
-    }
-    if (String(path || '').startsWith(`${rootPath}/`)) {
-      return String(path).replace(`${rootPath}/`, '~/');
-    }
-    return path;
   };
 
   const updatePrompt = () => {
@@ -181,39 +180,13 @@ function initConsole() {
     output.scrollTop = output.scrollHeight;
   };
 
-  const getCompletion = () => {
-    const raw = input.value;
-    if (!raw) return '';
-    const hasTrailingSpace = /\s$/.test(raw);
-    const parts = raw.trim().split(/\s+/).filter(Boolean);
-    if (parts.length === 0) return '';
-    const head = parts[0];
-    if (head === 'cd') {
-      const cdMatch = raw.match(/^cd\s+(.+)$/);
-      if (!cdMatch) return '';
-      const seed = cdMatch[1];
-      if (!seed) return '';
-      const useBackslash = seed.startsWith('.\\');
-      const options = listDirs().map((option) =>
-        useBackslash ? option.replace(/\//g, '\\') : option,
-      );
-      const match = options.find((option) => option.startsWith(seed));
-      return match ? `cd ${match}` : '';
-    }
-    if (
-      (head === 'theme' || head === 'bg') &&
-      (parts.length > 1 || hasTrailingSpace)
-    ) {
-      const seed = parts.length > 1 ? parts.slice(1).join(' ') : '';
-      const options = head === 'theme' ? themeNames : backgroundNames;
-      const match = options.find((option) => option.startsWith(seed));
-      return match ? `${head} ${match}` : '';
-    }
-    if (parts.length > 1) return '';
-    const commandMatch = commandNames.find((option) => option.startsWith(head));
-    if (commandMatch) return commandMatch;
-    return aliasNames.find((option) => option.startsWith(head)) || '';
-  };
+  const getCompletion = () =>
+    completeCommand(input.value, {
+      dirs: listDirs(currentPath),
+      commandNames,
+      themeNames,
+      backgroundNames,
+    });
 
   const updatePreview = (value: string, pos: number) => {
     const completion = pos === value.length ? getCompletion() : '';
@@ -331,14 +304,17 @@ function initConsole() {
     requestedHeight: number | null = null,
   ) => {
     try {
-      const { startTerminalAnimation } = await import('./animation');
       stopConsoleAnimation();
+      const request = consoleAnimationRequest;
+      const { startTerminalAnimation } = await import('./animation');
+      if (request !== consoleAnimationRequest) return;
       consoleAnimationCleanup = startTerminalAnimation(
         { output, form, addNodeLine, scrollToBottom },
         requestedWidth,
         requestedHeight,
       );
-    } catch {
+    } catch (error) {
+      console.error(error);
       addLine('animation unavailable', 'muted');
     }
   };
@@ -390,7 +366,8 @@ function initConsole() {
     return async () => {
       try {
         (await (tool ??= load().then((module) => module.create())))();
-      } catch {
+      } catch (error) {
+        console.error(error);
         tool = undefined;
         addLine('Tool unavailable. Please try again.', 'muted');
       }
@@ -400,114 +377,9 @@ function initConsole() {
   const openBitmaskTool = createLazyTool(() => import('./bitmask'));
   const openCalculatorTool = createLazyTool(() => import('./calculator'));
 
-  const NAV_MAP: Record<string, string> = Object.fromEntries(
-    pageRoutes.map((route) => [route.slug, route.path]),
-  );
-  const rootDirectories = [
-    ...pageRoutes
-      .filter((route) => route.slug !== 'terminal')
-      .map((route) => route.slug),
-    'docs',
-  ];
-  const normalizePath = (input: string) =>
-    (input || '').replace(/\\/g, '/').trim();
-  const trimSlashes = (value: string) =>
-    (value || '').replace(/^\/+|\/+$/g, '');
-
-  const resolvePath = (input: string) => {
-    if (!input) return rootPath;
-    let raw = normalizePath(input);
-    if (!raw || raw === '~' || raw === '/' || raw === rootPath) return rootPath;
-    if (raw === '.' || raw === './' || raw === '.\\') return currentPath;
-    if (raw === '..' || raw.startsWith('../')) return rootPath;
-    if (raw.startsWith('~/')) raw = raw.slice(2);
-    if (raw.startsWith(`${rootPath}/`)) raw = raw.slice(rootPath.length + 1);
-    if (raw.startsWith('./')) raw = raw.slice(2);
-    if (raw === 'terminal') return rootPath;
-    if (raw.startsWith('terminal/')) raw = raw.slice(9);
-    raw = raw.replace(/^\/+/, '');
-
-    const segments = raw.split('/').filter(Boolean);
-    if (!segments.length) return rootPath;
-    if (segments[0] === 'terminal') return rootPath;
-
-    if (segments[0] === 'docs') {
-      const docsTail = trimSlashes(segments.slice(1).join('/'));
-      return docsTail ? `${DOCS_ROOT_PATH}/${docsTail}` : DOCS_ROOT_PATH;
-    }
-
-    if (segments.length === 1 && rootDirectories.includes(segments[0])) {
-      return `${rootPath}/${segments[0]}`;
-    }
-    return null;
-  };
-
-  const listDirs = () => {
-    if (currentPath === rootPath) {
-      return rootDirectories;
-    }
-    return ['..'];
-  };
-
   const navigateToPath = (nextPath: string) => {
-    if (
-      nextPath === DOCS_ROOT_PATH ||
-      nextPath.startsWith(`${DOCS_ROOT_PATH}/`)
-    ) {
-      const docsRelative =
-        nextPath === DOCS_ROOT_PATH
-          ? ''
-          : nextPath.slice(DOCS_ROOT_PATH.length + 1);
-      const cleanRelative = trimSlashes(docsRelative);
-      const target = cleanRelative ? `/docs/${cleanRelative}/` : '/docs/';
-      const currentPathname = location.pathname || '/';
-      const normalizedCurrent = currentPathname.endsWith('/')
-        ? currentPathname
-        : `${currentPathname}/`;
-      if (normalizedCurrent === target) return;
-      location.href = target;
-      return;
-    }
-
-    const segment =
-      nextPath === rootPath
-        ? 'terminal'
-        : nextPath.slice(nextPath.lastIndexOf('/') + 1);
-    const target = NAV_MAP[segment];
-    if (!target) return;
-    const currentPath = location.pathname.replace(/\/+$/g, '') || '/';
-    if (currentPath === target) return;
-    location.href = target;
-  };
-
-  const aliases: Readonly<Record<string, string>> = Object.freeze({
-    h: 'help',
-    '?': 'help',
-    usage: 'help',
-    cmds: 'help',
-    commands: 'help',
-    cls: 'clear',
-    dir: 'ls',
-    ll: 'ls',
-    la: 'ls',
-    cprod: 'cd product',
-    cproj: 'cd projects',
-    cdiff: 'cd diff',
-    cpolicies: 'cd policies',
-    cdocs: 'cd docs',
-    cabout: 'about',
-    calculator: 'calc',
-    quit: 'exit',
-    '..': 'cd ..',
-  });
-
-  const expandAlias = (input: string) => {
-    const parts = input.trim().split(/\s+/);
-    const key = parts[0];
-    const expansion = aliases[key];
-    if (!expansion) return input;
-    const rest = parts.slice(1).join(' ');
-    return rest ? `${expansion} ${rest}` : expansion;
+    const target = getNavigationTarget(nextPath, location.pathname);
+    if (target) location.href = target;
   };
 
   const themeNames: readonly string[] = themes.map(([value]) => value);
@@ -570,7 +442,7 @@ function initConsole() {
       ASCII_ART.forEach((line) => addLine(line, 'art'));
     },
     ls: () => {
-      const entries = listDirs();
+      const entries = listDirs(currentPath);
       if (!entries.length) {
         addLine('empty', 'muted');
         return;
@@ -582,7 +454,7 @@ function initConsole() {
     },
     cd: (args) => {
       const target = args.join(' ');
-      const nextPath = resolvePath(target);
+      const nextPath = resolvePath(target, currentPath);
       if (!nextPath) {
         addLine(`cd: no such directory: ${target || ''}`.trim(), 'muted');
         return;
@@ -607,7 +479,7 @@ function initConsole() {
         addLine(`bg not found: ${next}`, 'muted');
         return;
       }
-      const applied = applyBackground(next, true);
+      const applied = applyBackground(next, { persist: true });
       addLine(`bg set: ${applied}`);
     },
     theme: (args) => {
@@ -651,7 +523,6 @@ function initConsole() {
     },
   };
   const commandNames = Object.keys(commands).sort((a, b) => a.localeCompare(b));
-  const aliasNames = Object.keys(aliases).sort((a, b) => a.localeCompare(b));
 
   const runCommand = async (raw: string) => {
     const trimmed = raw.trim();
@@ -660,9 +531,7 @@ function initConsole() {
       { text: `${promptLabel()} `, className: 'console-prompt-text' },
       { text: trimmed, className: 'console-muted' },
     ]);
-    const expanded = expandAlias(trimmed);
-    const [head = '', ...args] = expanded.split(' ').filter(Boolean);
-    const command = head.toLowerCase();
+    const { command, args } = parseCommand(trimmed);
     const handler = commands[command];
     if (!handler) {
       addLine(`unknown command: ${command}`, 'muted');
@@ -710,21 +579,15 @@ function initConsole() {
       form.requestSubmit();
       return;
     }
-    if (e.key === 'Tab' || e.key === 'ArrowRight') {
-      if (e.key === 'ArrowRight') {
-        const value = input.value;
-        const pos =
-          typeof input.selectionStart === 'number'
-            ? input.selectionStart
-            : value.length;
-        const completion = getCompletion();
-        const canApply =
-          pos === value.length &&
-          completion &&
-          completion !== value &&
-          completion.startsWith(value);
-        if (!canApply) return;
-      }
+    if ((e.key === 'Tab' && !e.shiftKey) || e.key === 'ArrowRight') {
+      const value = input.value;
+      const completion = getCompletion();
+      const canApply =
+        input.selectionStart === value.length &&
+        completion &&
+        completion !== value &&
+        completion.startsWith(value);
+      if (!canApply) return;
       e.preventDefault();
       autocomplete();
       return;
@@ -761,29 +624,15 @@ function initConsole() {
   });
 
   document.addEventListener('keydown', (e) => {
-    if (
-      e.ctrlKey ||
-      e.metaKey ||
-      e.altKey ||
-      ['Control', 'Meta', 'Alt', 'Shift'].includes(e.key)
-    )
-      return;
-    const target = e.target as HTMLElement;
-    if (
-      target.tagName === 'INPUT' ||
-      target.tagName === 'TEXTAREA' ||
-      target.tagName === 'SELECT' ||
-      target.tagName === 'BUTTON' ||
-      target.isContentEditable
-    )
-      return;
+    if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+    if (isInteractiveTarget(e.target)) return;
     input.focus({ preventScroll: true });
   });
 
   updatePrompt();
   updatePromptIndent();
   updateTimestamp();
-  setInterval(updateTimestamp, 60000);
+  setInterval(updateTimestamp, TIMESTAMP_REFRESH_MS);
 
   requestAnimationFrame(() => {
     input.focus({ preventScroll: true });

@@ -69,7 +69,7 @@
 }
 
 .product-price {
-  font-size: 1.25rem;
+  font-size: var(--sl-text-xl);
   color: var(--text);
   font-weight: 600;
 }
@@ -145,6 +145,10 @@
   background: var(--bg-alt);
 }
 
+.product-slide picture {
+  display: contents;
+}
+
 .product-slide img {
   width: 100%;
   height: auto;
@@ -177,9 +181,14 @@
   right: 1px;
 }
 
-.product-gallery-arrow:hover,
 .product-gallery-arrow:focus-visible {
   background: color-mix(in srgb, var(--bg-alt) 90%, transparent);
+}
+
+@media (hover: hover) {
+  .product-gallery-arrow:hover {
+    background: color-mix(in srgb, var(--bg-alt) 90%, transparent);
+  }
 }
 
 .product-gallery-arrow:focus-visible {
@@ -248,7 +257,7 @@
 
 .legal-item summary:focus-visible {
   outline: 1px solid var(--accent);
-  outline-offset: 4px;
+  outline-offset: 2px;
 }
 
 .legal-item p {

@@ -14,10 +14,18 @@ function sourceImage(path: string): ImageMetadata {
 }
 
 export async function webpWidths(path: string, widths: number[]) {
+  return imageWidths(path, widths, 'webp');
+}
+
+export async function imageWidths(
+  path: string,
+  widths: number[],
+  format: 'webp' | 'avif',
+) {
   const src = sourceImage(path);
   const images = await Promise.all(
     widths.map((width) =>
-      getImage({ src, width, format: 'webp', quality: 80 }),
+      getImage({ src, width, format, quality: format === 'avif' ? 60 : 80 }),
     ),
   );
   return {

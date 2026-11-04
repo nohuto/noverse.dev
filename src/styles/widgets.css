@@ -107,7 +107,7 @@
   color: var(--text);
   opacity: 0;
   pointer-events: none;
-  z-index: 20;
+  z-index: var(--z-toast);
   font-size: 0.8125rem;
 }
 

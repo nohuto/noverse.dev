@@ -1,4 +1,5 @@
 /* Copyright (c) 2026 nohuto */
+import { literalAt } from './scanner';
 import { createSource } from './source';
 
 const expectedTypeNames = (typeName: string) => {
@@ -15,49 +16,21 @@ const expectedTypeNames = (typeName: string) => {
 
 const findBlockEnd = (source: string, openIndex: number) => {
   let depth = 0;
-  let state = 'code';
-  let escape = false;
   for (let i = openIndex; i < source.length; i += 1) {
-    const char = source[i];
-    const next = source[i + 1] || '';
-    if (state === 'code') {
-      if (char === '/' && next === '*') {
-        state = 'block';
-        i += 1;
-      } else if (char === '/' && next === '/') {
-        state = 'line';
-        i += 1;
-      } else if (char === '"') {
-        state = 'string';
-        escape = false;
-      } else if (char === "'") {
-        state = 'char';
-        escape = false;
-      } else if (char === '{') {
-        depth += 1;
-      } else if (char === '}') {
-        depth -= 1;
-        if (depth === 0) {
-          let end = i + 1;
-          while (/[ \t]/.test(source[end] || '')) end += 1;
-          if (source[end] === ';') end += 1;
-          if (source[end] === '\n') end += 1;
-          return end;
-        }
+    const literal = literalAt(source, i);
+    if (literal) {
+      i = literal.end - 1;
+    } else if (source[i] === '{') {
+      depth += 1;
+    } else if (source[i] === '}') {
+      depth -= 1;
+      if (depth === 0) {
+        let end = i + 1;
+        while (/[ \t]/.test(source[end] || '')) end += 1;
+        if (source[end] === ';') end += 1;
+        if (source[end] === '\n') end += 1;
+        return end;
       }
-    } else if (state === 'block' && char === '*' && next === '/') {
-      state = 'code';
-      i += 1;
-    } else if (state === 'line' && char === '\n') {
-      state = 'code';
-    } else if (state === 'string' || state === 'char') {
-      if (escape) escape = false;
-      else if (char === '\\') escape = true;
-      else if (
-        (state === 'string' && char === '"') ||
-        (state === 'char' && char === "'")
-      )
-        state = 'code';
     }
   }
   return source.length;
@@ -84,57 +57,23 @@ const extractPrimaryLayout = (text: string, typeName: string) => {
 };
 
 const stripComments = (source: string) => {
-  let state = 'code';
-  let escape = false;
   const output: string[] = [];
   for (let i = 0; i < source.length; i += 1) {
-    const char = source[i]!;
-    const next = source[i + 1] || '';
-    if (state === 'code') {
-      if (char === '/' && next === '/') {
-        state = 'line';
-        i += 1;
-        continue;
-      }
-      if (char === '/' && next === '*') {
-        state = 'block';
-        i += 1;
-        continue;
-      }
-      if (char === '"') {
-        state = 'string';
-        escape = false;
-      } else if (char === "'") {
-        state = 'char';
-        escape = false;
-      }
-      output.push(char);
+    const literal = literalAt(source, i);
+    if (!literal) {
+      output.push(source[i]!);
       continue;
     }
-    if (state === 'line') {
-      if (char === '\n') {
+    if (literal.kind === 'lineComment') {
+      if (literal.closed) {
         while (output.length && /\s/.test(output[output.length - 1]!))
           output.pop();
         output.push('\n');
-        state = 'code';
       }
-      continue;
+    } else if (literal.kind !== 'blockComment') {
+      for (let j = i; j < literal.end; j += 1) output.push(source[j]!);
     }
-    if (state === 'block') {
-      if (char === '*' && next === '/') {
-        state = 'code';
-        i += 1;
-      }
-      continue;
-    }
-    output.push(char);
-    if (escape) escape = false;
-    else if (char === '\\') escape = true;
-    else if (
-      (state === 'string' && char === '"') ||
-      (state === 'char' && char === "'")
-    )
-      state = 'code';
+    i = literal.end - 1;
   }
   return `${output
     .join('')

@@ -51,6 +51,8 @@ export function startTerminalAnimation(
   let rafId = 0;
   let lastFrame = 0;
   let stopped = false;
+  let visible = true;
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   const getThemePalette = () => {
     const rootStyle = getComputedStyle(document.documentElement);
@@ -145,14 +147,10 @@ export function startTerminalAnimation(
     for (let y = 0; y < rowCount; y += 1) yTerms[y] = Math.sin((y - cy) / 8.0);
 
     scrollToBottom();
+    resume();
   };
 
-  const render = (ticks: number) => {
-    if (stopped || !line.isConnected) return;
-    rafId = requestAnimationFrame(render);
-    if (ticks - lastFrame < targetFrameMs) return;
-    lastFrame = ticks;
-
+  const draw = (ticks: number) => {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     const t = 100 + ticks * 0.001;
 
@@ -179,20 +177,41 @@ export function startTerminalAnimation(
     }
   };
 
+  const render = (ticks: number) => {
+    rafId = 0;
+    if (stopped || !line.isConnected || !visible || reducedMotion.matches)
+      return;
+    rafId = requestAnimationFrame(render);
+    if (ticks - lastFrame < targetFrameMs) return;
+    lastFrame = ticks;
+    draw(ticks);
+  };
+
+  function resume() {
+    if (stopped) return;
+    if (reducedMotion.matches) draw(lastFrame);
+    else if (visible && !rafId) rafId = requestAnimationFrame(render);
+  }
+
+  const visibilityObserver = new IntersectionObserver(([entry]) => {
+    visible = entry?.isIntersecting ?? true;
+    resume();
+  });
   const resizeObserver = new ResizeObserver(updateSize);
+  visibilityObserver.observe(line);
   resizeObserver.observe(line);
   resizeObserver.observe(output);
   document.addEventListener('theme-change', updateSize);
-  requestAnimationFrame(() => {
-    updateSize();
-    rafId = requestAnimationFrame(render);
-  });
+  reducedMotion.addEventListener('change', resume);
+  requestAnimationFrame(updateSize);
 
   return () => {
     stopped = true;
     cancelAnimationFrame(rafId);
+    visibilityObserver.disconnect();
     resizeObserver.disconnect();
     document.removeEventListener('theme-change', updateSize);
+    reducedMotion.removeEventListener('change', resume);
     line.remove();
   };
 }

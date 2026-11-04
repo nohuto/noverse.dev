@@ -1,0 +1,36 @@
+.calc-tools button,
+.calc-grid button,
+.calc-actions button,
+.bitmask-bit,
+.product-gallery-arrow {
+  touch-action: manipulation;
+}
+
+@media (pointer: coarse) {
+  .icon-button,
+  .theme-toggle,
+  button[data-open-modal],
+  .site-nav > :is(a, button),
+  .work-preview summary {
+    position: relative;
+  }
+
+  :is(
+    .icon-button,
+    .theme-toggle,
+    button[data-open-modal],
+    .site-nav > :is(a, button),
+    .work-preview summary,
+    .project-preview summary,
+    .image-expand,
+    .policy-filter-button
+  )::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    translate: -50% -50%;
+  }
+}

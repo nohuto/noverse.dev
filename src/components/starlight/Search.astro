@@ -131,18 +131,25 @@ const dataAttributes: DOMStringMap = {
       } catch {}
 
       let pagefindReady: Promise<void> | undefined;
+      const searchRoot = dialog.querySelector('#starlight__search');
+      const bundlePath =
+        import.meta.env.BASE_URL.replace(/\/$/, '') + '/pagefind/';
 
       const loadPagefind = () => {
         if (import.meta.env.DEV) return Promise.resolve();
         pagefindReady ??= (async () => {
           // @ts-expect-error Missing types for @pagefind/default-ui package.
           const { PagefindUI } = await import('@pagefind/default-ui');
+          const backend = await fetch(`${bundlePath}pagefind.js`, {
+            method: 'HEAD',
+          });
+          if (!backend.ok) throw new Error(`Pagefind HTTP ${backend.status}`);
+          searchRoot?.replaceChildren();
           new PagefindUI({
             ...pagefindUserConfig,
             element: '#starlight__search',
             baseUrl: import.meta.env.BASE_URL,
-            bundlePath:
-              import.meta.env.BASE_URL.replace(/\/$/, '') + '/pagefind/',
+            bundlePath,
             autofocus: true,
             showImages: false,
             translations,
@@ -156,7 +163,15 @@ const dataAttributes: DOMStringMap = {
               return result;
             },
           });
-        })();
+        })().catch((error: unknown) => {
+          pagefindReady = undefined;
+          console.error(error);
+          const notice = document.createElement('p');
+          notice.className = 'search-error';
+          notice.setAttribute('role', 'alert');
+          notice.textContent = 'Search couldn’t load. Please reload the page.';
+          searchRoot?.replaceChildren(notice);
+        });
         return pagefindReady;
       };
     }
@@ -190,7 +205,7 @@ const dataAttributes: DOMStringMap = {
 
     @media (min-width: 50rem) {
       button[data-open-modal] {
-        font-size: 0.78125rem;
+        font-size: var(--font-size-navigation);
         width: 100%;
       }
 
@@ -393,8 +408,10 @@ const dataAttributes: DOMStringMap = {
       padding: var(--sl-search-result-pad-block) 0;
     }
 
-    #starlight__search .pagefind-ui__result:hover {
-      background-color: color-mix(in srgb, var(--text) 10%, transparent);
+    @media (hover: hover) {
+      #starlight__search .pagefind-ui__result:hover {
+        background-color: color-mix(in srgb, var(--text) 10%, transparent);
+      }
     }
 
     #starlight__search .pagefind-ui__result:focus-within {

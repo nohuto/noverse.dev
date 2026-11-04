@@ -4,14 +4,22 @@ import Icon from '../components/Icon.astro';
 import '../styles/widgets.css';
 import '../styles/product.css';
 import '../styles/section-heading.css';
-import { webpWidths } from '../utils/images';
+import { imageWidths } from '../utils/images';
 import paypalMethods from '../image-sources/main/images/paypal-methods.svg?url';
 
+const galleryWidths = [480, 640, 720, 960];
+const gallerySizes =
+  '(max-width: 749px) calc(100vw - 46px), (max-width: 1024px) calc(100vw - 342px), (max-width: 1155px) calc(55vw - 196px), (max-width: 1299px) calc(100vw - 598px), (max-width: 1839px) calc(47vw - 233px), 629px';
 const preview = async (name: string, label: string, linkOriginal = true) => {
-  const image = await webpWidths(`/main/images/${name}.png`, [640, 960]);
+  const path = `/main/images/${name}.png`;
+  const [image, avif] = await Promise.all([
+    imageWidths(path, galleryWidths, 'webp'),
+    imageWidths(path, galleryWidths, 'avif'),
+  ]);
   return {
     label,
     image,
+    avif,
     href: linkOriginal ? image.source.src : image.byWidth[960],
   };
 };
@@ -44,7 +52,7 @@ const previews = await Promise.all([
           <div class="product-intro">
             <p>
               A tool for modifying your system alongside my documentation
-              (reading it isn't required, as each section includes templates),
+              (reading it isn’t required, as each section includes templates),
               whether you follow my choices or test your own.
             </p>
           </div>
@@ -74,24 +82,31 @@ const previews = await Promise.all([
             role="group"
             aria-label="Screenshots, use left and right arrow keys"
           >
-            {previews.map(({ label, href, image }, index) => (
+            {previews.map(({ label, href, image, avif }, index) => (
               <a
                 class="product-slide"
                 href={href}
                 data-image-view={`WinConfig in ${label}`}
                 aria-label={`Open full-size ${label} screenshot`}
               >
-                <img
-                  decoding="async"
-                  src={image.byWidth[640]}
-                  srcset={image.srcset}
-                  sizes="(max-width: 759px) calc(100vw - 56px), 640px"
-                  width={image.source.width}
-                  height={image.source.height}
-                  alt={`WinConfig in ${label}`}
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  fetchpriority={index === 0 ? 'high' : undefined}
-                />
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcset={avif.srcset}
+                    sizes={gallerySizes}
+                  />
+                  <img
+                    decoding="async"
+                    src={image.byWidth[640]}
+                    srcset={image.srcset}
+                    sizes={gallerySizes}
+                    width={image.source.width}
+                    height={image.source.height}
+                    alt={`WinConfig in ${label}`}
+                    loading={index === 0 ? undefined : 'lazy'}
+                    fetchpriority={index === 0 ? 'high' : undefined}
+                  />
+                </picture>
                 <span class="image-expand" aria-hidden="true">
                   <Icon name="zen" />
                 </span>
@@ -198,7 +213,7 @@ const previews = await Promise.all([
                   <Icon name="chevron-down" />
                 </summary>
                 <p>
-                  Each purchase includes one hardware bound license. Keys don't
+                  Each purchase includes one hardware bound license. Keys don’t
                   transfer across devices without reregistration (which is
                   possible within certain limits). Updates and a Discord role
                   are included.
@@ -215,7 +230,7 @@ const previews = await Promise.all([
                   WinConfig uses three hardware identifiers for license
                   registration and verification, SMBIOS UUID, baseboard serial,
                   and CPU ID (with MAC address or device IDs as fallbacks).
-                  Saved login data is stored locally, I don't have access to
+                  Saved login data is stored locally, I don’t have access to
                   your password.
                 </p>
               </details>
@@ -239,11 +254,11 @@ const previews = await Promise.all([
                 <p id="after-purchase">
                   To get access, you must either include your Discord ID in the
                   purchase message or send me your transaction ID so I can
-                  assign the Discord role. The role isn't assigned
+                  assign the Discord role. The role isn’t assigned
                   automatically, so one of these is required. Once the role is
-                  assigned, you'll get access to a download link for the tool.
+                  assigned, you’ll get access to a download link for the tool.
                   After downloading, you must register yourself via the tool,
-                  and then I'll validate your registration (which may take some
+                  and then I’ll validate your registration (which may take some
                   time). Joining, or already being in the{' '}
                   <a
                     class="link"

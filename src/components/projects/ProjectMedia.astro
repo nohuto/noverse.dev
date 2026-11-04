@@ -1,4 +1,6 @@
 ---
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import type { Project } from '../../data/projects';
 import Icon from '../Icon.astro';
 import { webpWidths } from '../../utils/images';
@@ -16,6 +18,10 @@ const poster = project.video
       [960],
     )
   : null;
+const videoPath = `/main/media/projects/${project.video}`;
+const hasAv1 =
+  project.video &&
+  existsSync(path.join(process.cwd(), 'public', `${videoPath}.av1.mp4`));
 const images =
   !project.video && project.image
     ? await Promise.all(
@@ -35,7 +41,6 @@ const images =
 {poster ? (
   <video
     class="project-media"
-    src={`/main/media/projects/${project.video}.mp4`}
     poster={poster.byWidth[960]}
     width={poster.source.width}
     height={poster.source.height}
@@ -43,7 +48,15 @@ const images =
     preload="none"
     playsinline
     muted
-  ></video>
+  >
+    {hasAv1 && (
+      <source
+        src={`${videoPath}.av1.mp4`}
+        type="video/mp4; codecs=av01.0.12M.08"
+      />
+    )}
+    <source src={`${videoPath}.mp4`} type="video/mp4" />
+  </video>
 ) : (
   images.map(({ theme, image }) => (
     <div class:list={['project-image-preview', theme]}>

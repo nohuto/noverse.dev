@@ -1,99 +1,43 @@
 /* Copyright (c) 2026 nohuto */
-import { copyText, showToast } from '../shell/clipboard';
 import { createDraggableDialog } from '../dialogs/draggable';
-import { wildcardPattern } from '../shell/wildcard';
 import type {
   CategoryNode,
   CategorySegment,
-  MetaItem,
   Policy,
   PolicyCategory,
   PolicyColumn,
-  PolicyElement,
-  PolicyPayload,
   RawPolicy,
-  StorageEntry,
-  StorageRow,
 } from './types';
+import { loadPolicyPayload } from './data';
+import {
+  categoryMatches,
+  getCategory,
+  getPolicyScope,
+  getPolicyShareId,
+  getPolicyValue,
+  getPrimaryPath,
+  makeCategoryKey,
+  normalizeCategorySegment,
+  normalizePolicyShareId,
+  preparePolicySearchFields,
+  splitSearchTerms,
+} from './model';
+import { closeOnFocusLeave, createNode } from './dom';
+import { replaceUrl, setQueryParam } from './url';
+import { renderPolicyDetail } from './detail';
+import { createPolicyMatcher } from './search';
 
-const POLICY_DATA_URL =
-  'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policies.json';
-const POLICY_CATEGORY_DATA_URL =
-  'https://raw.githubusercontent.com/nohuto/admx-parser/main/assets/policyCategories.json';
+const IDLE_TIMEOUT_MS = 300;
+const IDLE_FALLBACK_MS = 16;
 const yieldToMain = () => new Promise((resolve) => setTimeout(resolve, 0));
 const yieldUntilIdle = () =>
   new Promise((resolve) => {
     if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(resolve, { timeout: 300 });
+      window.requestIdleCallback(resolve, { timeout: IDLE_TIMEOUT_MS });
       return;
     }
-    setTimeout(resolve, 16);
+    setTimeout(resolve, IDLE_FALLBACK_MS);
   });
-
-const loadPolicyPayload = async (): Promise<PolicyPayload> => {
-  const [policyResponse, categoryResponse] = await Promise.all([
-    fetch(POLICY_DATA_URL, { cache: 'force-cache' }),
-    fetch(POLICY_CATEGORY_DATA_URL, { cache: 'force-cache' }),
-  ]);
-  if (!policyResponse.ok)
-    throw new Error(`Policy data request failed (${policyResponse.status})`);
-  const [data, categoryJson] = await Promise.all([
-    policyResponse.json(),
-    categoryResponse.ok ? categoryResponse.json() : null,
-  ]);
-  return {
-    data,
-    categories: categoryJson?.categories ?? {},
-    categoryWarning: categoryResponse.ok ? '' : 'Category details unavailable',
-  };
-};
-
-const getPolicyScope = (policy: RawPolicy) => {
-  const hives = new Set(
-    (policy.KeyPath || [])
-      .map((path) =>
-        String(path || '')
-          .split('\\')[0]
-          .toUpperCase(),
-      )
-      .filter(Boolean),
-  );
-  const hasMachine = hives.has('HKLM');
-  const hasUser = hives.has('HKCU');
-  if (hasMachine && hasUser) return 'Both';
-  if (hasUser) return 'User';
-  return 'Machine';
-};
-
-const formatPolicyRange = (element: PolicyElement) => {
-  const maxValue = element?.MaxValue;
-  const minValue = element?.MinValue ?? '0';
-  if (maxValue !== null && maxValue !== undefined && maxValue !== '')
-    return `${minValue} - ${maxValue}`;
-  return `${minValue}+`;
-};
-
-const createNode = <K extends keyof HTMLElementTagNameMap>(
-  tag: K,
-  className: string | null = null,
-  text?: string,
-): HTMLElementTagNameMap[K] => {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (typeof text === 'string') node.textContent = text;
-  return node;
-};
-
-const getPolicyElementValueNames = (policy: RawPolicy) => {
-  const elements = Array.isArray(policy?.Elements) ? policy.Elements : [];
-  return [
-    ...new Set(
-      elements
-        .map((element) => String(element?.ValueName || '').trim())
-        .filter(Boolean),
-    ),
-  ];
-};
 
 function initPolicyExplorer() {
   const root = document.getElementById('policy-explorer');
@@ -126,6 +70,7 @@ function initPolicyExplorer() {
   const tableBody = root.querySelector<HTMLElement>('#policy-table-body');
   const tableNote = root.querySelector<HTMLElement>('#policy-table-note');
   const columnMenu = root.querySelector<HTMLElement>('#policy-column-menu');
+  const filterMenu = root.querySelector<HTMLElement>('#policy-filter-menu');
   const detailBody = root.querySelector<HTMLElement>('#policy-detail-body');
   const settingsButton = root.querySelector<HTMLElement>('#policy-settings');
   const settingsModal = root.querySelector<HTMLDialogElement>(
@@ -179,6 +124,11 @@ function initPolicyExplorer() {
   let policyById = new Map<string, Policy>();
   let policyByShareId = new Map<string, Policy>();
   let filtered: Policy[] = [];
+  let searchFiltered: Policy[] = [];
+  const columnFilters = new Map<string, Set<string>>();
+  let filterMenuTrigger: HTMLElement | null = null;
+  let filterMenuColumn: PolicyColumn | null = null;
+  let filterSearchState = '';
   let selectedId: string | null = null;
   let selectedCategoryKey = '';
   let categoryMap = new Map<string, PolicyCategory>();
@@ -226,61 +176,52 @@ function initPolicyExplorer() {
   const setBusy = (busy: boolean) => {
     root.setAttribute('aria-busy', busy ? 'true' : 'false');
   };
-
-  const getCategory = (policy: RawPolicy) =>
-    policy.CategoryName || 'Uncategorized';
-  const normalizeCategorySegment = (segment: string) =>
-    String(segment || '')
-      .trim()
-      .toLowerCase();
-  const makeCategoryKey = (path: CategorySegment[]) =>
-    path
-      .map((segment) =>
-        normalizeCategorySegment(segment.name || segment.displayName),
-      )
-      .join('\u001f');
   const getCategoryPath = (policy: RawPolicy): CategorySegment[] => {
     const categoryName = getCategory(policy);
     const meta = categoryMap.get(categoryName);
     if (meta?.path?.length) return meta.path;
     return [{ name: categoryName, displayName: categoryName }];
   };
-  const getPrimaryPath = (policy: RawPolicy) => (policy.KeyPath || [])[0] || '';
-  const getPolicyValue = (policy: RawPolicy) => {
-    if (policy.ValueName) return policy.ValueName;
-    const valueNames = getPolicyElementValueNames(policy);
-    return valueNames.length ? valueNames.join(', ') : '<ElementDefined>';
-  };
   const POLICY_QUERY_PARAM = 'p';
-  const getPolicyShareId = (policy: RawPolicy) => {
-    const policyName = String(policy?.PolicyName || '').trim();
-    if (!policyName) return '';
-    const fileName = String(policy?.File || '')
-      .trim()
-      .replace(/\.admx$/i, '');
-    if (fileName) return `${fileName}*${policyName}`;
-    const namespace = String(policy?.NameSpace || '').trim();
-    return namespace ? `${namespace}*${policyName}` : policyName;
-  };
-  const normalizePolicyShareId = (value: string) =>
-    String(value || '')
-      .trim()
-      .toLowerCase();
+  const SEARCH_QUERY_PARAM = 'q';
+  const CATEGORY_QUERY_PARAM = 'category';
+  const CATEGORY_URL_SEPARATOR = '>';
   const updatePolicyUrl = (policy: Policy | null) => {
     const url = new URL(location.href);
-    const shareId = policy?.shareId || '';
-    if (shareId) {
-      url.searchParams.set(POLICY_QUERY_PARAM, shareId);
-    } else {
-      url.searchParams.delete(POLICY_QUERY_PARAM);
-    }
-    const nextUrl = `${url.pathname}${url.search}${url.hash}`;
-    history.replaceState(
-      { ...(history.state || {}), url: nextUrl },
-      '',
-      nextUrl,
-    );
+    setQueryParam(url, POLICY_QUERY_PARAM, policy?.shareId || '');
+    replaceUrl(url);
   };
+  const updateFilterUrl = () => {
+    const url = new URL(location.href);
+    setQueryParam(url, SEARCH_QUERY_PARAM, searchInput.value.trim());
+    setQueryParam(
+      url,
+      CATEGORY_QUERY_PARAM,
+      selectedCategoryKey.split('\u001f').join(CATEGORY_URL_SEPARATOR),
+    );
+    filterColumns.forEach((column) => {
+      url.searchParams.delete(column.id);
+      columnFilters
+        .get(column.id)
+        ?.forEach((value) => url.searchParams.append(column.id, value));
+    });
+    replaceUrl(url);
+  };
+  const applyColumnFiltersFromUrl = () => {
+    const params = new URLSearchParams(location.search);
+    filterColumns.forEach((column) => {
+      const values = params.getAll(column.id);
+      if (!values.length) return;
+      columnFilters.set(column.id, new Set(values));
+      visibleColumns.add(column.id);
+    });
+  };
+  const getCategoryKeyFromUrl = () =>
+    (new URLSearchParams(location.search).get(CATEGORY_QUERY_PARAM) || '')
+      .split(CATEGORY_URL_SEPARATOR)
+      .map(normalizeCategorySegment)
+      .filter(Boolean)
+      .join('\u001f');
   const getPolicyFromUrl = () => {
     const rawId = new URLSearchParams(location.search).get(POLICY_QUERY_PARAM);
     if (!rawId) return null;
@@ -292,6 +233,13 @@ function initPolicyExplorer() {
       null
     );
   };
+  const expandTreeForCategory = (categoryKey: string) => {
+    expandedTreeNodes.add('__admin__');
+    const parts = categoryKey.split('\u001f');
+    parts.forEach((_, index) => {
+      expandedTreeNodes.add(parts.slice(0, index + 1).join('\u001f'));
+    });
+  };
   const expandTreeForPolicy = (policy: Policy) => {
     expandedTreeNodes.add('__admin__');
     const path = Array.isArray(policy?.categoryPath) ? policy.categoryPath : [];
@@ -299,364 +247,6 @@ function initPolicyExplorer() {
       expandedTreeNodes.add(makeCategoryKey(path.slice(0, index + 1)));
     });
   };
-  const isNumericData = (value: string | undefined) =>
-    /^-?\d+$/.test(String(value ?? '').trim());
-  const getElementRegistryType = (element: PolicyElement) => {
-    const type = element?.Type || '';
-    if (type === 'Text')
-      return element?.Expandable ? 'REG_EXPAND_SZ' : 'REG_SZ';
-    if (type === 'MultiText') return 'REG_MULTI_SZ';
-    if (type === 'List') return 'REG_SZ';
-    if (type === 'LongDecimal') return 'REG_QWORD';
-    if (type === 'Decimal')
-      return element?.StoreAsText ? 'REG_SZ' : 'REG_DWORD';
-    if (type === 'Boolean' || type === 'TrueValue' || type === 'FalseValue')
-      return 'REG_DWORD';
-    if (type === 'Enum') {
-      const items = Array.isArray(element.Items) ? element.Items : [];
-      return items.some(
-        (item) =>
-          item.Data !== null &&
-          item.Data !== undefined &&
-          !isNumericData(item.Data),
-      )
-        ? 'REG_SZ'
-        : 'REG_DWORD';
-    }
-    if (
-      type === 'EnabledValue' ||
-      type === 'DisabledValue' ||
-      type === 'EnabledList' ||
-      type === 'DisabledList'
-    ) {
-      if (element?.Action === 'Delete') return 'Delete';
-      return isNumericData(element.Data) ? 'REG_DWORD' : 'REG_SZ';
-    }
-    return 'Unknown';
-  };
-  const getElementDisplayType = (element: PolicyElement) => {
-    const type = element?.Type || 'Element';
-    if (
-      type === 'EnabledValue' ||
-      type === 'DisabledValue' ||
-      type === 'EnabledList' ||
-      type === 'DisabledList'
-    ) {
-      return getElementRegistryType(element);
-    }
-    return type;
-  };
-  const appendUnique = (target: string[], value: string) => {
-    if (value === null || value === undefined) return;
-    const normalized = String(value);
-    if (!normalized && value !== '') return;
-    if (!target.includes(normalized)) target.push(normalized);
-  };
-  const formatPolicyMetaValue = (value: string | boolean) => {
-    if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-    if (value === '') return '""';
-    return String(value);
-  };
-  const addPolicyMeta = (
-    group: { meta: MetaItem[] },
-    label: string,
-    value: string | boolean | null | undefined,
-  ) => {
-    if (value === null || value === undefined) return;
-    const text = formatPolicyMetaValue(value);
-    const existing = group.meta.find((item) => item.label === label);
-    if (existing) {
-      appendUnique(existing.values, text);
-    } else {
-      group.meta.push({ label, values: [text] });
-    }
-  };
-  const addElementMeta = (
-    entry: { meta: MetaItem[] },
-    element: PolicyElement | null,
-  ) => {
-    const fields: [string, string | boolean | undefined][] = [
-      ['Required', element?.Required],
-      ['Max length', element?.MaxLength],
-      ['Max strings', element?.MaxStrings],
-      ['Expandable', element?.Expandable],
-      ['Stored as text', element?.StoreAsText],
-      ['Client extension', element?.ClientExtension],
-    ];
-    fields.forEach(([label, value]) => addPolicyMeta(entry, label, value));
-  };
-  const getPathTail = (path: string | undefined) => {
-    const parts = String(path || '')
-      .split('\\')
-      .filter(Boolean);
-    return parts[parts.length - 1] || '';
-  };
-  const getActionValue = (
-    item: { Action?: string; Data?: string } | null | undefined,
-  ) => (item?.Action === 'Delete' ? 'Delete' : (item?.Data ?? ''));
-  const getEntryValueLabel = (
-    valueName: string,
-    element: PolicyElement | null,
-    paths: string[],
-  ) => {
-    const cleanValue = String(valueName || '').trim();
-    if (cleanValue) return cleanValue;
-    if (element?.Type === 'List') return '<ListEntries>';
-    if (element?.Type === 'EnabledList' || element?.Type === 'DisabledList')
-      return '<ListValue>';
-    return getPathTail(paths[0]) || '<ElementDefined>';
-  };
-  const getElementPaths = (
-    policy: RawPolicy,
-    element: PolicyElement | null,
-  ) => {
-    const elementPaths = Array.isArray(element?.KeyPath)
-      ? element.KeyPath.filter(Boolean)
-      : [];
-    if (elementPaths.length) return elementPaths;
-    return Array.isArray(policy?.KeyPath) ? policy.KeyPath.filter(Boolean) : [];
-  };
-  const makePathGroupKey = (paths: string[]) =>
-    (paths.length ? paths : ['__no_key__'])
-      .map((path) => String(path || '').toLowerCase())
-      .join('\u001f');
-  const getPolicyStorageGroups = (policy: RawPolicy) => {
-    const groups: { keyPaths: string[]; entries: StorageEntry[] }[] = [];
-    const groupByPath = new Map<string, (typeof groups)[number]>();
-    const ensureGroup = (paths: string[]) => {
-      const normalizedPaths = paths.length
-        ? paths
-        : ['<RegistryPathNotSpecified>'];
-      const key = makePathGroupKey(normalizedPaths);
-      if (!groupByPath.has(key)) {
-        const group: (typeof groups)[number] = {
-          keyPaths: normalizedPaths,
-          entries: [],
-        };
-        groupByPath.set(key, group);
-        groups.push(group);
-      }
-      return groupByPath.get(key)!;
-    };
-    const addEntry = (
-      paths: string[],
-      valueName: string,
-      element: PolicyElement | null,
-      rows: StorageRow[],
-      copyValue: string | null = valueName,
-    ) => {
-      const group = ensureGroup(paths);
-      const label = getEntryValueLabel(valueName, element, paths);
-      const entryKey = `${label}\u001f${copyValue ?? ''}`;
-      let entry = group.entries.find((item) => item.key === entryKey);
-      if (!entry) {
-        entry = {
-          key: entryKey,
-          valueName: label,
-          copyValue,
-          meta: [],
-          rows: [],
-        };
-        group.entries.push(entry);
-      }
-      addElementMeta(entry, element);
-      entry.rows.push(...rows);
-      return entry;
-    };
-    const policyValueName = String(policy?.ValueName || '').trim();
-    const elements = Array.isArray(policy?.Elements) ? policy.Elements : [];
-
-    elements.forEach((element) => {
-      const type = element?.Type || '';
-      const paths = getElementPaths(policy, element);
-      if (
-        (type === 'EnabledValue' || type === 'DisabledValue') &&
-        policyValueName
-      ) {
-        addEntry(
-          paths,
-          policyValueName,
-          element,
-          [
-            {
-              type,
-              registryType: getElementRegistryType(element),
-              label: type === 'EnabledValue' ? 'Enabled' : 'Disabled',
-              value: getActionValue(element),
-            },
-          ],
-          policyValueName,
-        );
-        return;
-      }
-
-      const rawValueName = String(element?.ValueName || '').trim();
-      if (
-        type === 'Enum' &&
-        Array.isArray(element.Items) &&
-        element.Items.length
-      ) {
-        const rows = element.Items.map((item) => ({
-          type: 'Enum',
-          registryType: getElementRegistryType(element),
-          label: item.DisplayName || '<Option>',
-          value: getActionValue(item),
-        }));
-        addEntry(
-          paths,
-          rawValueName || policyValueName,
-          element,
-          rows,
-          rawValueName || policyValueName || null,
-        );
-        element.Items.forEach((item) => {
-          const valueList = Array.isArray(item.ValueList) ? item.ValueList : [];
-          valueList.forEach((listItem) => {
-            const listPaths = getElementPaths(policy, listItem);
-            const listValueName = String(listItem?.ValueName || '').trim();
-            addEntry(
-              listPaths,
-              listValueName,
-              listItem,
-              [
-                {
-                  type: 'Enum option',
-                  registryType:
-                    listItem.Action === 'Delete'
-                      ? 'Delete'
-                      : isNumericData(listItem.Data)
-                        ? 'REG_DWORD'
-                        : 'REG_SZ',
-                  label: `When ${item.DisplayName || '<Option>'}`,
-                  value: getActionValue(listItem),
-                },
-              ],
-              listValueName || null,
-            );
-          });
-        });
-        return;
-      }
-      if (type === 'Boolean') {
-        addEntry(
-          paths,
-          rawValueName || policyValueName,
-          element,
-          [
-            {
-              type: 'Boolean',
-              registryType: getElementRegistryType(element),
-              label: 'True',
-              value:
-                element.TrueAction === 'Delete'
-                  ? 'Delete'
-                  : (element.TrueValue ?? '1'),
-            },
-            {
-              type: 'Boolean',
-              registryType: getElementRegistryType(element),
-              label: 'False',
-              value:
-                element.FalseAction === 'Delete'
-                  ? 'Delete'
-                  : (element.FalseValue ?? '0'),
-            },
-          ],
-          rawValueName || policyValueName || null,
-        );
-        return;
-      }
-      if (type === 'Decimal' || type === 'LongDecimal') {
-        addEntry(
-          paths,
-          rawValueName || policyValueName,
-          element,
-          [
-            {
-              type,
-              registryType: getElementRegistryType(element),
-              label: 'Range',
-              value: formatPolicyRange(element),
-            },
-          ],
-          rawValueName || policyValueName || null,
-        );
-        return;
-      }
-      if (type === 'EnabledList' || type === 'DisabledList') {
-        addEntry(
-          paths,
-          rawValueName,
-          element,
-          [
-            {
-              type,
-              registryType: getElementRegistryType(element),
-              label: type === 'EnabledList' ? 'Enabled' : 'Disabled',
-              value: getActionValue(element),
-            },
-          ],
-          rawValueName || null,
-        );
-        return;
-      }
-      const fallbackValueName =
-        type === 'List' && !rawValueName ? '' : rawValueName || policyValueName;
-      addEntry(
-        paths,
-        fallbackValueName,
-        element,
-        [
-          {
-            type: getElementDisplayType(element),
-            registryType: getElementRegistryType(element),
-            label: type === 'List' ? '<InputEntries>' : '<InputValue>',
-            value: '',
-          },
-        ],
-        fallbackValueName || null,
-      );
-    });
-
-    if (!groups.length && policyValueName) {
-      addEntry(getElementPaths(policy, null), policyValueName, null, []);
-    }
-    const policyPathKey = makePathGroupKey(
-      Array.isArray(policy?.KeyPath) ? policy.KeyPath.filter(Boolean) : [],
-    );
-    return groups.sort((left, right) => {
-      const leftMain = makePathGroupKey(left.keyPaths) === policyPathKey;
-      const rightMain = makePathGroupKey(right.keyPaths) === policyPathKey;
-      if (leftMain === rightMain) return 0;
-      return leftMain ? -1 : 1;
-    });
-  };
-  const getPolicyValueGroups = (policy: RawPolicy) =>
-    getPolicyStorageGroups(policy).flatMap((group) =>
-      group.entries.map((entry) => ({
-        valueName: entry.valueName,
-        keyPaths: group.keyPaths,
-        meta: entry.meta,
-        rows: entry.rows.map((row) => ({
-          type: row.type,
-          registryType: row.registryType,
-          text: [row.label, row.value]
-            .filter((value) => value !== '')
-            .join(': '),
-        })),
-      })),
-    );
-  const getEntryRegistryTypes = (entry: StorageEntry) => [
-    ...new Set(
-      entry.rows
-        .map((row) =>
-          row.registryType && row.registryType !== 'Unknown'
-            ? row.registryType
-            : row.type,
-        )
-        .filter(Boolean),
-    ),
-  ];
 
   const columns: PolicyColumn[] = [
     {
@@ -678,6 +268,7 @@ function initPolicyExplorer() {
       label: 'Scope',
       width: 90,
       minWidth: 58,
+      filterable: true,
       value: (policy) => policy.scope || '',
     },
     {
@@ -685,6 +276,7 @@ function initPolicyExplorer() {
       label: 'Supported On',
       width: 240,
       minWidth: 150,
+      filterable: true,
       value: (policy) => policy.Supported || '',
     },
     {
@@ -713,66 +305,17 @@ function initPolicyExplorer() {
       label: 'ADMX',
       width: 150,
       minWidth: 90,
+      filterable: true,
       value: (policy) => policy.File || '',
     },
   ];
+  const filterColumns = columns.filter((column) => column.filterable);
   const visibleColumns = new Set(['setting', 'scope', 'supported', 'value']);
   let tableWidthSignature = '';
 
   const getVisibleColumns = () =>
     columns.filter((column) => visibleColumns.has(column.id));
   const getColumnMinWidth = (column: PolicyColumn) => column.minWidth || 80;
-
-  const copyPolicyText = async (text: string, successMessage = 'Copied') => {
-    if (!text) return;
-    showToast((await copyText(text)) ? successMessage : 'Copy failed');
-  };
-
-  const createCopyBox = (
-    className: string,
-    text: string,
-    label = 'Copy',
-    successMessage = 'Copied',
-    prefixText = '',
-  ) => {
-    const box = createNode('div', className);
-    const labelNode = createNode('span', 'policy-copy-text', text || '');
-    box.appendChild(labelNode);
-    if (prefixText) {
-      box.classList.add('has-prefix');
-      box.appendChild(createNode('span', 'policy-copy-prefix', prefixText));
-    }
-    const button = createNode('button', 'policy-copy-button');
-    button.type = 'button';
-    button.title = label;
-    button.setAttribute('aria-label', label);
-    const iconNode = createNode('span', 'policy-copy-icon');
-    iconNode.setAttribute('aria-hidden', 'true');
-    button.appendChild(iconNode);
-    button.addEventListener('click', () =>
-      copyPolicyText(text || '', successMessage),
-    );
-    box.appendChild(button);
-    return box;
-  };
-  const createPolicyValueTitle = (entry: StorageEntry, typeText: string) => {
-    if (entry.copyValue !== null) {
-      return createCopyBox(
-        'policy-copy-box policy-value-name',
-        entry.valueName,
-        'Copy value name',
-        'Copied value',
-        typeText,
-      );
-    }
-
-    const title = createNode('div', 'policy-value-title');
-    title.appendChild(createNode('span', 'policy-copy-text', entry.valueName));
-    if (typeText) {
-      title.appendChild(createNode('span', 'policy-copy-prefix', typeText));
-    }
-    return title;
-  };
 
   const updatePaneLayout = () => {
     root.classList.toggle('policy-hide-tree', !paneState.tree);
@@ -825,130 +368,7 @@ function initPolicyExplorer() {
     if (!policy || !paneState.detail) {
       return;
     }
-
-    const heading = createNode('div', 'policy-detail-heading');
-    heading.appendChild(
-      createNode('h2', null, policy.DisplayName || policy.PolicyName),
-    );
-    detailBody.appendChild(heading);
-
-    const fields = createNode('div', 'policy-detail-grid');
-    const detailFields: [string, string | undefined][] = [
-      ['Policy', policy.PolicyName],
-      ['Scope', policy.scope],
-      ['ADMX', policy.File],
-      ['Namespace', policy.NameSpace],
-      ['Supported', policy.Supported],
-      ['Category', policy.categoryDisplayPath],
-    ];
-    if (policy.ClientExtension) {
-      detailFields.splice(4, 0, ['Client Extension', policy.ClientExtension]);
-    }
-    detailFields.forEach(([label, value]) => {
-      const row = createNode('div', 'policy-detail-field');
-      row.appendChild(createNode('span', 'policy-field-label', label));
-      row.appendChild(
-        createNode('span', 'policy-field-value', value || 'Not specified'),
-      );
-      fields.appendChild(row);
-    });
-    detailBody.appendChild(fields);
-
-    if (policy.ExplainText) {
-      const explain = createNode('p', 'policy-explain', policy.ExplainText);
-      detailBody.appendChild(explain);
-    }
-
-    const elementSection = createNode('section', 'policy-section');
-    elementSection.appendChild(createNode('h3', null, 'Registry Values'));
-    const storageGroups = getPolicyStorageGroups(policy);
-    if (!storageGroups.length) {
-      elementSection.appendChild(
-        createNode(
-          'div',
-          'policy-muted',
-          'No ADMX elements exported for this policy',
-        ),
-      );
-    } else {
-      const registryList = createNode('div', 'policy-registry-list');
-      storageGroups.forEach((group) => {
-        const groupNode = createNode('div', 'policy-registry-group');
-        const pathList = createNode(
-          'div',
-          'policy-code-list policy-registry-paths',
-        );
-        group.keyPaths.forEach((path) => {
-          pathList.appendChild(
-            createCopyBox(
-              'policy-copy-box',
-              path,
-              'Copy registry path',
-              'Copied key',
-            ),
-          );
-        });
-        groupNode.appendChild(pathList);
-
-        const entries = createNode('div', 'policy-registry-values');
-        group.entries.forEach((entry) => {
-          const entryNode = createNode('div', 'policy-value-entry');
-          const header = createNode('div', 'policy-value-header');
-          const registryTypes = getEntryRegistryTypes(entry);
-          const typeText = registryTypes.length ? registryTypes.join(', ') : '';
-          header.appendChild(createPolicyValueTitle(entry, typeText));
-          if (entry.meta.length) {
-            const metaRow = createNode('div', 'policy-value-meta-row');
-            const meta = createNode('span', 'policy-value-attrs');
-            meta.textContent = entry.meta
-              .map((item) => `${item.label}: ${item.values.join(', ')}`)
-              .join('  |  ');
-            metaRow.appendChild(meta);
-            header.appendChild(metaRow);
-          }
-          entryNode.appendChild(header);
-
-          if (entry.rows.length) {
-            const rows = createNode('div', 'policy-data-list');
-            if (entry.rows.some((row) => row.value !== '')) {
-              const head = createNode(
-                'div',
-                'policy-data-row policy-data-head',
-              );
-              head.appendChild(
-                createNode('span', 'policy-data-label', 'Meaning'),
-              );
-              head.appendChild(createNode('span', 'policy-data-value', 'Data'));
-              rows.appendChild(head);
-            }
-            entry.rows.forEach((row) => {
-              const hasValue = row.value !== '';
-              const item = createNode(
-                'div',
-                hasValue
-                  ? 'policy-data-row'
-                  : 'policy-data-row policy-data-row-single',
-              );
-              item.appendChild(
-                createNode('span', 'policy-data-label', row.label),
-              );
-              if (hasValue) {
-                item.appendChild(
-                  createNode('span', 'policy-data-value', row.value),
-                );
-              }
-              rows.appendChild(item);
-            });
-            entryNode.appendChild(rows);
-          }
-          entries.appendChild(entryNode);
-        });
-        groupNode.appendChild(entries);
-        registryList.appendChild(groupNode);
-      });
-      elementSection.appendChild(registryList);
-    }
-    detailBody.appendChild(elementSection);
+    renderPolicyDetail(detailBody, policy);
   };
 
   const sortPolicies = (rows: Policy[]) => {
@@ -984,7 +404,11 @@ function initPolicyExplorer() {
           visibleColumns.delete(column.id);
         }
         renderTableHeader();
-        renderTable();
+        if (!checkbox.checked && columnFilters.delete(column.id)) {
+          applyFilters();
+        } else {
+          renderTable();
+        }
       });
       label.append(checkbox, createNode('span', null, column.label));
       columnMenu.appendChild(label);
@@ -997,6 +421,7 @@ function initPolicyExplorer() {
     options: { fromTrigger?: boolean } = {},
   ) => {
     if (!columnMenu) return;
+    closeFilterMenu();
     renderColumnMenu();
     columnMenu.hidden = false;
     columnMenu.style.left = `${x}px`;
@@ -1028,58 +453,167 @@ function initPolicyExplorer() {
     columnTrigger?.setAttribute('aria-expanded', 'false');
   };
 
-  const wildcardToRegExp = (term: string) => {
-    const pattern = wildcardPattern(term);
-    return new RegExp(
-      searchOptions.whole ? `^${pattern}$` : pattern,
-      searchOptions.caseSensitive ? '' : 'i',
-    );
+  const passesColumnFilters = (policy: Policy, skipId = '') => {
+    for (const column of filterColumns) {
+      if (column.id === skipId) continue;
+      const values = columnFilters.get(column.id);
+      if (values && !values.has(column.value(policy))) return false;
+    }
+    return true;
   };
 
-  const splitSearchTerms = (value: string) => {
-    const terms: string[] = [];
-    String(value || '').replace(/"([^"]+)"|(\S+)/g, (_, quoted, bare) => {
-      const term = quoted || bare;
-      if (term) terms.push(term);
-      return '';
-    });
-    return terms;
+  const updateFilterButtons = () => {
+    tableHead
+      .querySelectorAll<HTMLElement>('.policy-filter-button')
+      .forEach((button) => {
+        button.classList.toggle(
+          'is-active',
+          columnFilters.has(button.dataset.column || ''),
+        );
+      });
   };
 
-  const getSearchFields = (policy: Policy, lowercase = false) => {
-    if (searchOptions.registry || searchOptions.details)
-      preparePolicySearchFields(policy);
-    const source = lowercase ? policy.searchFieldsLower : policy.searchFields;
-    const fields: string[] = [];
-    if (searchOptions.names) fields.push(...source.names);
-    if (searchOptions.registry) fields.push(...(source.registry || []));
-    if (searchOptions.details) fields.push(...(source.details || []));
-    return fields;
+  const positionFilterMenu = () => {
+    if (!filterMenu || filterMenu.hidden || !filterMenuTrigger) return;
+    const header = filterMenuTrigger.closest('th') || filterMenuTrigger;
+    const rect = header.getBoundingClientRect();
+    const width = filterMenu.offsetWidth;
+    const below = window.innerHeight - rect.bottom - 8;
+    const above = rect.top - 8;
+    const openAbove = below < 200 && above > below;
+    filterMenu.style.maxHeight = `${Math.max(120, openAbove ? above : below)}px`;
+    filterMenu.style.left = `${Math.max(4, Math.min(rect.left, window.innerWidth - width - 4))}px`;
+    filterMenu.style.top = openAbove
+      ? `${Math.max(4, rect.top - 4 - filterMenu.offsetHeight)}px`
+      : `${rect.bottom + 4}px`;
   };
 
-  const compileSearchTerm = (
-    term: string,
-  ):
-    | { regex: RegExp; value?: undefined }
-    | { regex?: undefined; value: string } => {
-    if (searchOptions.wildcards) return { regex: wildcardToRegExp(term) };
-    return { value: searchOptions.caseSensitive ? term : term.toLowerCase() };
+  const closeFilterMenu = ({ restoreFocus = false } = {}) => {
+    if (!filterMenu || filterMenu.hidden) return;
+    filterMenu.hidden = true;
+    filterMenu.replaceChildren();
+    filterMenuTrigger?.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) filterMenuTrigger?.focus({ preventScroll: true });
+    filterMenuTrigger = null;
+    filterMenuColumn = null;
   };
 
-  const termMatchesPolicy = (
-    policy: Policy,
-    matcher: ReturnType<typeof compileSearchTerm>,
+  const getFilterChoices = () =>
+    filterMenu
+      ? Array.from(
+          filterMenu.querySelectorAll<HTMLInputElement>(
+            '.policy-filter-choice:not([hidden]) input',
+          ),
+        )
+      : [];
+
+  const openFilterMenu = (
+    column: PolicyColumn,
+    trigger: HTMLElement,
+    { focus = true } = {},
   ) => {
-    const fields = getSearchFields(
-      policy,
-      !searchOptions.caseSensitive && !matcher.regex,
+    if (!filterMenu) return;
+    closeColumnMenu();
+    closeViewMenu();
+    const counts = new Map<string, number>();
+    searchFiltered.forEach((policy) => {
+      if (!passesColumnFilters(policy, column.id)) return;
+      const value = column.value(policy);
+      counts.set(value, (counts.get(value) || 0) + 1);
+    });
+    const selected = columnFilters.get(column.id);
+    selected?.forEach((value) => {
+      if (!counts.has(value)) counts.set(value, 0);
+    });
+    const entries = [...counts].sort(
+      (left, right) =>
+        right[1] - left[1] || collator.compare(left[0], right[0]),
     );
-    if (!fields.length) return false;
-    if (matcher.regex) return fields.some((field) => matcher.regex.test(field));
-    return searchOptions.whole
-      ? fields.some((field) => field === matcher.value)
-      : fields.some((field) => field.includes(matcher.value));
+    const total = entries.reduce((sum, [, count]) => sum + count, 0);
+
+    const createChoice = (text: string, count: number, checked: boolean) => {
+      const label = createNode(
+        'label',
+        'policy-column-choice policy-filter-choice',
+      );
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = checked;
+      const textNode = createNode('span', 'policy-filter-value', text);
+      textNode.title = text;
+      label.append(
+        checkbox,
+        textNode,
+        createNode('span', 'policy-filter-count', String(count)),
+      );
+      return { label, checkbox };
+    };
+
+    const all = createChoice('All', total, !selected);
+    const valueChoices = entries.map(([value, count]) => {
+      const choice = createChoice(
+        value || 'None',
+        count,
+        Boolean(selected?.has(value)),
+      );
+      choice.checkbox.addEventListener('change', () => {
+        const values = columnFilters.get(column.id) || new Set<string>();
+        if (choice.checkbox.checked) values.add(value);
+        else values.delete(value);
+        if (values.size) columnFilters.set(column.id, values);
+        else columnFilters.delete(column.id);
+        all.checkbox.checked = !values.size;
+        applyFilters();
+      });
+      return { ...choice, search: (value || 'None').toLowerCase() };
+    });
+    all.checkbox.addEventListener('change', () => {
+      all.checkbox.checked = true;
+      if (!columnFilters.delete(column.id)) return;
+      valueChoices.forEach(({ checkbox }) => {
+        checkbox.checked = false;
+      });
+      applyFilters();
+    });
+
+    const list = createNode('div', 'policy-filter-options');
+    list.append(all.label, ...valueChoices.map(({ label }) => label));
+    filterMenu.replaceChildren();
+    filterMenu.setAttribute('aria-label', `Filter ${column.label}`);
+    if (entries.length > 10) {
+      const searchBox = createNode('div', 'search-box policy-filter-search');
+      const icon = createNode('span', 'icon icon-search search-icon');
+      icon.setAttribute('aria-hidden', 'true');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.autocomplete = 'off';
+      input.spellcheck = false;
+      input.setAttribute('aria-label', `Search ${column.label} values`);
+      input.addEventListener('input', () => {
+        const query = input.value.trim().toLowerCase();
+        valueChoices.forEach(({ label, search }) => {
+          label.hidden = Boolean(query) && !search.includes(query);
+        });
+      });
+      searchBox.append(icon, input);
+      filterMenu.appendChild(searchBox);
+    }
+    filterMenu.appendChild(list);
+
+    filterMenuTrigger?.setAttribute('aria-expanded', 'false');
+    filterMenuTrigger = trigger;
+    filterMenuColumn = column;
+    trigger.setAttribute('aria-expanded', 'true');
+    filterMenu.hidden = false;
+    positionFilterMenu();
+    if (focus)
+      (filterMenu.querySelector('input') as HTMLElement | null)?.focus({
+        preventScroll: true,
+      });
   };
+
+  const { compileSearchTerm, termMatchesPolicy } =
+    createPolicyMatcher(searchOptions);
 
   const applyTableColumnWidths = () => {
     if (!tableEl || !tableCols) return;
@@ -1183,6 +717,7 @@ function initPolicyExplorer() {
   };
 
   const renderTableHeader = () => {
+    closeFilterMenu();
     tableHead.replaceChildren();
     tableHead.hidden = false;
     getVisibleColumns().forEach((column) => {
@@ -1209,6 +744,32 @@ function initPolicyExplorer() {
         headerContent.appendChild(sortIcon);
       }
       th.appendChild(headerContent);
+      if (column.filterable) {
+        th.classList.add('has-filter');
+        const filterButton = createNode('button', 'policy-filter-button');
+        filterButton.type = 'button';
+        filterButton.dataset.column = column.id;
+        filterButton.title = `Filter ${column.label}`;
+        filterButton.setAttribute('aria-label', `Filter ${column.label}`);
+        filterButton.setAttribute('aria-controls', 'policy-filter-menu');
+        filterButton.setAttribute('aria-expanded', 'false');
+        filterButton.classList.toggle(
+          'is-active',
+          columnFilters.has(column.id),
+        );
+        filterButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          if (filterMenuTrigger === filterButton) {
+            closeFilterMenu();
+          } else {
+            openFilterMenu(column, filterButton, {
+              focus:
+                event.detail === 0 || matchMedia('(pointer: fine)').matches,
+            });
+          }
+        });
+        th.appendChild(filterButton);
+      }
       const resizer = createNode('span', 'policy-column-resizer');
       th.appendChild(resizer);
       th.addEventListener('click', (event) => {
@@ -1294,21 +855,32 @@ function initPolicyExplorer() {
             : filtered.length
               ? ''
               : 'No matching policies';
-        tableNote.textContent = [countNote, policyLoadWarning]
+        const filterNote = columnFilters.size
+          ? `Filtered by ${filterColumns
+              .filter((column) => columnFilters.has(column.id))
+              .map((column) => column.label)
+              .join(', ')}`
+          : '';
+        tableNote.textContent = [countNote, filterNote, policyLoadWarning]
           .filter(Boolean)
           .join(' - ');
+        if (filterNote) {
+          const clear = createNode(
+            'button',
+            'policy-filter-clear',
+            'Clear filters',
+          );
+          clear.type = 'button';
+          clear.addEventListener('click', () => {
+            columnFilters.clear();
+            applyFilters();
+          });
+          tableNote.appendChild(clear);
+        }
       }
     };
 
     appendRows(0);
-  };
-
-  const categoryMatches = (policy: Policy, categoryKey: string) => {
-    if (!categoryKey) return true;
-    return (
-      policy.categoryPathKey === categoryKey ||
-      policy.categoryPathKey.startsWith(`${categoryKey}\u001f`)
-    );
   };
 
   const selectPolicy = (
@@ -1364,7 +936,7 @@ function initPolicyExplorer() {
     item.focus({ preventScroll: true });
   };
 
-  const toggleTreeNode = (nodeKey: string, restoreFocus = false) => {
+  const toggleTreeNode = (nodeKey: string, { restoreFocus = false } = {}) => {
     if (expandedTreeNodes.has(nodeKey)) {
       expandedTreeNodes.delete(nodeKey);
     } else {
@@ -1589,7 +1161,7 @@ function initPolicyExplorer() {
     clearPendingSearch();
     const terms = splitSearchTerms(searchInput.value).map(compileSearchTerm);
 
-    filtered =
+    searchFiltered =
       !terms.length && !selectedCategoryKey
         ? policies
         : policies.filter((policy) => {
@@ -1603,6 +1175,23 @@ function initPolicyExplorer() {
               ? terms.some((term) => termMatchesPolicy(policy, term))
               : terms.every((term) => termMatchesPolicy(policy, term));
           });
+    filtered = columnFilters.size
+      ? searchFiltered.filter((policy) => passesColumnFilters(policy))
+      : searchFiltered;
+    const searchState = JSON.stringify([
+      searchInput.value,
+      selectedCategoryKey,
+      searchOptions,
+    ]);
+    if (
+      searchState !== filterSearchState &&
+      filterMenuColumn &&
+      filterMenuTrigger
+    )
+      openFilterMenu(filterMenuColumn, filterMenuTrigger, {
+        focus: Boolean(filterMenu?.contains(document.activeElement)),
+      });
+    filterSearchState = searchState;
 
     if (selectedId && !filtered.some((policy) => policy.id === selectedId)) {
       selectedId = null;
@@ -1611,8 +1200,10 @@ function initPolicyExplorer() {
       updatePaneLayout();
     }
     updateTreeActive();
+    updateFilterButtons();
     renderTable();
     renderDetail(selectedId ? policyById.get(selectedId) : undefined);
+    updateFilterUrl();
   };
 
   const normalizePolicy = (policy: RawPolicy, index: number): Policy => {
@@ -1649,53 +1240,6 @@ function initPolicyExplorer() {
         names: nameFields.map((value) => value.toLowerCase()),
       },
     };
-  };
-
-  const preparePolicySearchFields = (policy: Policy) => {
-    if (policy.searchFields.registry) return;
-    const elements = Array.isArray(policy.Elements) ? policy.Elements : [];
-    const valueGroups = getPolicyValueGroups(policy);
-    const keyText = [
-      ...(policy.KeyPath || []),
-      ...valueGroups.flatMap((group) => group.keyPaths),
-    ].join(' ');
-    policy.searchFields.registry = [
-      keyText,
-      policy.ValueName,
-      getPolicyValue(policy),
-    ]
-      .filter((value) => value !== null && value !== undefined && value !== '')
-      .map(String);
-    policy.searchFields.details = [
-      policy.Supported,
-      policy.ExplainText,
-      valueGroups
-        .flatMap((group) => [
-          group.valueName,
-          ...group.keyPaths,
-          ...group.meta.flatMap((item) => [item.label, ...item.values]),
-          ...group.rows.flatMap((row) => [
-            row.type,
-            row.registryType,
-            row.text,
-          ]),
-        ])
-        .join(' '),
-      elements
-        .map(
-          (element) =>
-            `${element.Type || ''} ${getElementRegistryType(element)}`,
-        )
-        .join(' '),
-    ]
-      .filter((value) => value !== null && value !== undefined && value !== '')
-      .map(String);
-    policy.searchFieldsLower.registry = policy.searchFields.registry.map(
-      (value) => value.toLowerCase(),
-    );
-    policy.searchFieldsLower.details = policy.searchFields.details.map(
-      (value) => value.toLowerCase(),
-    );
   };
 
   const warmPolicySearchFields = async () => {
@@ -1858,7 +1402,7 @@ function initPolicyExplorer() {
     else if (event.key === 'ArrowRight') {
       if (current.getAttribute('aria-expanded') === 'false') {
         event.preventDefault();
-        toggleTreeNode(current.dataset.nodeKey || '', true);
+        toggleTreeNode(current.dataset.nodeKey || '', { restoreFocus: true });
         return;
       }
       if (current.getAttribute('aria-expanded') === 'true') {
@@ -1869,7 +1413,7 @@ function initPolicyExplorer() {
     } else if (event.key === 'ArrowLeft') {
       if (current.getAttribute('aria-expanded') === 'true') {
         event.preventDefault();
-        toggleTreeNode(current.dataset.nodeKey || '', true);
+        toggleTreeNode(current.dataset.nodeKey || '', { restoreFocus: true });
         return;
       }
       const currentDepth = Number(current.dataset.depth);
@@ -2009,6 +1553,8 @@ function initPolicyExplorer() {
       renderDetail(selectedId ? policyById.get(selectedId) : undefined);
     });
   });
+  closeOnFocusLeave(viewDropdown, closeViewMenu);
+  closeOnFocusLeave(columnDropdown, closeColumnMenu);
 
   document.addEventListener('click', (event) => {
     const target = event.target;
@@ -2027,11 +1573,50 @@ function initPolicyExplorer() {
       !viewDropdown.contains(target)
     )
       closeViewMenu();
+    if (
+      filterMenu &&
+      !filterMenu.contains(target) &&
+      !filterMenuTrigger?.contains(target)
+    )
+      closeFilterMenu();
   });
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
     closeColumnMenu();
     closeViewMenu();
+    closeFilterMenu({
+      restoreFocus: Boolean(filterMenu?.contains(document.activeElement)),
+    });
+  });
+  document.addEventListener('focusin', (event) => {
+    const target = event.target;
+    if (
+      filterMenu &&
+      target instanceof Node &&
+      !filterMenu.contains(target) &&
+      !filterMenuTrigger?.contains(target)
+    )
+      closeFilterMenu();
+  });
+  filterMenu?.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    const choices = getFilterChoices();
+    if (!choices.length) return;
+    event.preventDefault();
+    const index = choices.indexOf(document.activeElement as HTMLInputElement);
+    const step = event.key === 'ArrowDown' ? 1 : -1;
+    const next =
+      index < 0
+        ? step > 0
+          ? 0
+          : choices.length - 1
+        : Math.min(choices.length - 1, Math.max(0, index + step));
+    choices[next].focus();
+  });
+  window.addEventListener('resize', positionFilterMenu);
+  window.addEventListener('scroll', positionFilterMenu, {
+    capture: true,
+    passive: true,
   });
   if (tableWrap)
     new ResizeObserver(() =>
@@ -2055,14 +1640,26 @@ function initPolicyExplorer() {
         }
       });
       const linkedPolicy = getPolicyFromUrl();
+      const linkedCategoryKey = getCategoryKeyFromUrl();
+      searchInput.value =
+        new URLSearchParams(location.search).get(SEARCH_QUERY_PARAM) ||
+        searchInput.value;
+      if (linkedCategoryKey && !linkedPolicy) {
+        selectedCategoryKey = linkedCategoryKey;
+        expandTreeForCategory(linkedCategoryKey);
+      }
       if (linkedPolicy) {
         selectedId = linkedPolicy.id;
         paneState.detail = true;
-        selectedCategoryKey = linkedPolicy.categoryPathKey || '';
+        selectedCategoryKey =
+          linkedCategoryKey && categoryMatches(linkedPolicy, linkedCategoryKey)
+            ? linkedCategoryKey
+            : linkedPolicy.categoryPathKey || '';
         expandTreeForPolicy(linkedPolicy);
       } else if (new URLSearchParams(location.search).has(POLICY_QUERY_PARAM)) {
         updatePolicyUrl(null);
       }
+      applyColumnFiltersFromUrl();
       categoryTree = buildCategoryTree();
       updatePaneLayout();
       renderTree();

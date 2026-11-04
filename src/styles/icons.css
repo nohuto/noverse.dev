@@ -59,9 +59,6 @@ span.icon {
 .icon-chevron-right {
   --icon: var(--icon-chevron-right);
 }
-.icon-copy {
-  --icon: var(--icon-copy);
-}
 .icon-copyright {
   --icon: var(--icon-copyright);
 }
@@ -71,12 +68,6 @@ span.icon {
 .icon-discord-brand {
   --icon: var(--icon-discord-brand);
   color: #5865f2;
-}
-.icon-file {
-  --icon: var(--icon-file);
-}
-.icon-filter {
-  --icon: var(--icon-filter);
 }
 .icon-github {
   --icon: var(--icon-github);

@@ -1,17 +1,18 @@
 /* inspired by antfu.me, Anthony Fu, MIT). */
 @import './palette.css';
 @import './fonts.css';
+@import './stacking.css';
 @import './widgets.css';
 @import './scrollbar.css';
 @import './links.css';
 @import './icons.css';
 @import './motion.css';
+@import './touch.css';
 @import './tooltips.css';
 
 @font-face {
   font-family: 'Inter';
   src: url('/main/fonts/InterVariable-latin.woff2') format('woff2');
-  font-style: normal;
   font-weight: 100 900;
   font-display: swap;
 }
@@ -90,7 +91,7 @@ h3 {
   position: fixed;
   top: 8px;
   left: 8px;
-  z-index: 300;
+  z-index: var(--z-skip-link);
   padding: 7px 10px;
   border: 1px solid var(--accent);
   background: var(--panel);
@@ -107,7 +108,7 @@ h3 {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: var(--z-raised);
   display: flex;
   justify-content: flex-end;
   padding: 1.5rem 2rem;

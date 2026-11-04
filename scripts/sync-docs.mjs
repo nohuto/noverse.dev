@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -14,6 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SITE_DIR = path.resolve(__dirname, '..');
 const CONTENT_DIR = path.join(SITE_DIR, 'src', 'content', 'docs');
+const PDF_DIR = path.join(SITE_DIR, 'public', 'main', 'docs');
 
 const INCLUDED_WIN_CONFIG_CATEGORIES = new Set(WIN_CONFIG_CATEGORIES);
 
@@ -103,6 +105,7 @@ const DOC_REPO_ORDER = REPOSITORIES.map((repo) => repo.name);
 const MARKDOWN_IMAGE_RE = /!\[([^\]\r\n]*)\]\((https?:\/\/[^\s)\r\n]+)\)/gi;
 const IMAGE_METADATA_CONCURRENCY = 12;
 const IMAGE_FETCH_TIMEOUT_MS = 15_000;
+const GIT_TIMEOUT_MS = 120_000;
 const KNOWN_REMOTE_IMAGE_DIMENSIONS = new Map([
   [
     'https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-wired.jpg?raw=true',
@@ -310,6 +313,7 @@ function resolveRepoDirectory(repoName, repoUrl) {
     execFileSync('git', ['clone', '--depth', '1', cloneUrl, cacheDir], {
       stdio: 'pipe',
       cwd: SITE_DIR,
+      timeout: GIT_TIMEOUT_MS,
     });
     return cacheDir;
   } catch {
@@ -318,20 +322,21 @@ function resolveRepoDirectory(repoName, repoUrl) {
 }
 
 function refreshRepoCache(cacheDir) {
+  const git = (args) =>
+    execFileSync('git', args, {
+      cwd: cacheDir,
+      stdio: 'pipe',
+      timeout: GIT_TIMEOUT_MS,
+    });
   try {
-    execFileSync('git', ['reset', '--hard', 'HEAD'], {
-      cwd: cacheDir,
-      stdio: 'pipe',
-    });
-    execFileSync('git', ['fetch', '--depth', '1', 'origin', 'main'], {
-      cwd: cacheDir,
-      stdio: 'pipe',
-    });
-    execFileSync('git', ['reset', '--hard', 'FETCH_HEAD'], {
-      cwd: cacheDir,
-      stdio: 'pipe',
-    });
-  } catch {}
+    git(['reset', '--hard', 'HEAD']);
+    git(['fetch', '--depth', '1', 'origin', 'main']);
+    git(['reset', '--hard', 'FETCH_HEAD']);
+  } catch (error) {
+    console.warn(
+      `[sync-docs] Using the cached copy of ${path.basename(cacheDir)}, refresh failed: ${error.message}`,
+    );
+  }
 }
 
 function generateReadmeOverview(repo, repoDir) {
@@ -385,10 +390,9 @@ function generateMarkdownFiles(repo, repoDir) {
       (titleMatch
         ? titleMatch[1].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim()
         : toTitleCase(path.posix.basename(sourcePath, '.md')));
-    const body = rewriteRelativeMarkdownLinks(
-      stripFirstH1(raw).trim(),
-      repo,
-      sourcePath,
+    const body = replacePdfEmbeds(
+      rewriteRelativeMarkdownLinks(stripFirstH1(raw).trim(), repo, sourcePath),
+      repoDir,
     );
     const outputPath = sourceOutputPath(repo, sourcePath);
     const displaySourcePath = sourcePath.includes('/')
@@ -408,7 +412,72 @@ function generateMarkdownFiles(repo, repoDir) {
   return repo.files.length;
 }
 
+function getFencedRanges(markdown) {
+  const isFenced = createFenceTracker();
+  const ranges = [];
+  let offset = 0;
+  for (const line of markdown.split('\n')) {
+    if (isFenced(line)) ranges.push([offset, offset + line.length]);
+    offset += line.length + 1;
+  }
+  return ranges;
+}
+
+function replacePdfEmbeds(markdown, repoDir) {
+  const fenced = getFencedRanges(markdown);
+  return markdown.replace(
+    /<iframe\s+src="https:\/\/cdn\.jsdelivr\.net\/gh\/[^/"]+\/[^@"]+@[^/"]+\/([^"]+\.pdf)"[^>]*>\s*<\/iframe>/gi,
+    (match, assetPath, offset) => {
+      if (fenced.some(([start, end]) => offset >= start && offset <= end))
+        return match;
+      const bytes = fs.readFileSync(
+        path.join(repoDir, ...assetPath.split('/')),
+      );
+      const baseName = path.posix.basename(assetPath, '.pdf');
+      const hash = createHash('sha256').update(bytes).digest('hex').slice(0, 8);
+      const fileName = `${baseName}.${hash}.pdf`;
+      fs.mkdirSync(PDF_DIR, { recursive: true });
+      for (const existing of fs.readdirSync(PDF_DIR))
+        if (existing.startsWith(`${baseName}.`) && existing !== fileName)
+          fs.rmSync(path.join(PDF_DIR, existing));
+      fs.writeFileSync(path.join(PDF_DIR, fileName), bytes);
+      return `[Open ${baseName}.pdf](/main/docs/${fileName})`;
+    },
+  );
+}
+
+function createFenceTracker() {
+  let openMarker = '';
+  return (line) => {
+    const match = line.match(/^\s*(`{3,}|~{3,})(.*)$/);
+    if (!match) return Boolean(openMarker);
+    const [, marker, rest] = match;
+    if (!openMarker) openMarker = marker;
+    else if (
+      marker[0] === openMarker[0] &&
+      marker.length >= openMarker.length &&
+      !rest.trim()
+    )
+      openMarker = '';
+    return true;
+  };
+}
+
+function mapOutsideFences(markdown, transform) {
+  const inFence = createFenceTracker();
+  return markdown
+    .split('\n')
+    .map((line) => (inFence(line) ? line : transform(line)))
+    .join('\n');
+}
+
 function rewriteRelativeMarkdownLinks(markdown, repo, sourcePath) {
+  return mapOutsideFences(markdown, (line) =>
+    rewriteRelativeMarkdownLine(line, repo, sourcePath),
+  );
+}
+
+function rewriteRelativeMarkdownLine(markdown, repo, sourcePath) {
   return markdown.replace(
     /\]\((?![a-z]+:|\/|#)([^)\s]+\.md)(#[^)]*)?\)/gi,
     (_, target, hash = '') => {
@@ -581,11 +650,7 @@ async function readImageDimensions(imageUrl, sourceRepos) {
     if (localPath)
       return normalizeImageDimensions(await sharp(localPath).metadata());
 
-    const response = await fetch(toRawImageUrl(imageUrl), {
-      headers: { 'User-Agent': 'docs-sync' },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(IMAGE_FETCH_TIMEOUT_MS),
-    });
+    const response = await fetchImage(toRawImageUrl(imageUrl));
     if (!response.ok) return knownDimensions;
 
     const image = Buffer.from(await response.arrayBuffer());
@@ -594,6 +659,24 @@ async function readImageDimensions(imageUrl, sourceRepos) {
     );
   } catch {
     return knownDimensions;
+  }
+}
+
+async function fetchImage(url, retries = 1) {
+  const request = () =>
+    fetch(url, {
+      headers: { 'User-Agent': 'docs-sync' },
+      redirect: 'follow',
+      signal: AbortSignal.timeout(IMAGE_FETCH_TIMEOUT_MS),
+    });
+  try {
+    const response = await request();
+    if (retries > 0 && (response.status === 429 || response.status >= 500))
+      return fetchImage(url, retries - 1);
+    return response;
+  } catch (error) {
+    if (retries > 0) return fetchImage(url, retries - 1);
+    throw error;
   }
 }
 
@@ -874,20 +957,35 @@ function writeEntries() {
     routeSet.add(entry.route);
   }
 
+  const stagingDir = path.join(SITE_DIR, '.cache', 'docs-staging');
+  fs.rmSync(stagingDir, { recursive: true, force: true });
+  for (const entry of sorted) {
+    const targetPath = path.join(stagingDir, entry.relativePath);
+    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+    fs.writeFileSync(targetPath, buildMarkdown(entry), 'utf8');
+  }
+
+  const previousDir = path.join(SITE_DIR, '.cache', 'docs-previous');
+  fs.rmSync(previousDir, { recursive: true, force: true });
+  fs.mkdirSync(previousDir, { recursive: true });
   fs.mkdirSync(CONTENT_DIR, { recursive: true });
   for (const name of [...DOC_REPO_ORDER, 'index.md']) {
     const target = path.resolve(CONTENT_DIR, name);
     if (path.dirname(target) !== CONTENT_DIR) {
       throw new Error(`Unsafe generated content path: ${target}`);
     }
-    fs.rmSync(target, { recursive: true, force: true });
+    const previous = path.join(previousDir, name);
+    if (fs.existsSync(target)) fs.renameSync(target, previous);
+    const staged = path.join(stagingDir, name);
+    try {
+      if (fs.existsSync(staged)) fs.renameSync(staged, target);
+    } catch (error) {
+      if (fs.existsSync(previous)) fs.renameSync(previous, target);
+      throw error;
+    }
   }
-
-  for (const entry of sorted) {
-    const targetPath = path.join(CONTENT_DIR, entry.relativePath);
-    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-    fs.writeFileSync(targetPath, buildMarkdown(entry), 'utf8');
-  }
+  fs.rmSync(previousDir, { recursive: true, force: true });
+  fs.rmSync(stagingDir, { recursive: true, force: true });
 }
 
 function buildMarkdown(entry) {
@@ -972,24 +1070,11 @@ function splitByHeadingLevel(markdown, level) {
   const headingPrefix = '#'.repeat(level);
   const headingRegex = new RegExp(`^${headingPrefix}\\s+(.+?)\\s*$`);
 
-  let inFence = false;
-  let fenceChar = '';
+  const isFenced = createFenceTracker();
   let current = { heading: null, lines: [] };
 
   for (const line of lines) {
-    const fenceMatch = line.match(/^\s*(```|~~~)/);
-    if (fenceMatch) {
-      const marker = fenceMatch[1];
-      if (!inFence) {
-        inFence = true;
-        fenceChar = marker;
-      } else if (marker === fenceChar) {
-        inFence = false;
-        fenceChar = '';
-      }
-    }
-
-    const headingMatch = !inFence ? line.match(headingRegex) : null;
+    const headingMatch = !isFenced(line) ? line.match(headingRegex) : null;
     if (headingMatch) {
       if (current.heading !== null || current.lines.length > 0) {
         sections.push(current);
@@ -1035,7 +1120,13 @@ function uniqueSlug(baseSlug, set) {
 }
 
 function stripFirstH1(markdown) {
-  return markdown.replace(/^(?:\uFEFF)?#\s+.+\n?/m, '').trimStart();
+  const lines = markdown.split('\n');
+  const isFenced = createFenceTracker();
+  const index = lines.findIndex(
+    (line) => !isFenced(line) && /^(?:\uFEFF)?#\s+.+/.test(line),
+  );
+  if (index >= 0) lines.splice(index, 1);
+  return lines.join('\n').trimStart();
 }
 
 function normalizeWinConfigTitle(value) {

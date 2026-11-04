@@ -3,6 +3,7 @@
 type Crack = { x: number; y: number; t: number; side: number };
 
 const BLOCKED = -1e4;
+const RESIZE_REDRAW_DELAY_MS = 300;
 const EMPTY = 1e4;
 
 function mulberry32(seed: number) {
@@ -172,6 +173,6 @@ export function mountArt(el: HTMLElement, main: HTMLElement) {
       const dw = Math.abs(el.clientWidth - drawn.w) / (drawn.w || 1);
       const dh = Math.abs(el.clientHeight - drawn.h) / (drawn.h || 1);
       if (dw > 0.15 || dh > 0.25) draw(false);
-    }, 300);
+    }, RESIZE_REDRAW_DELAY_MS);
   });
 }

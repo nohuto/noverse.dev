@@ -1,9 +1,11 @@
 @import '../../../styles/fonts.css';
 @import '../../../styles/palette.css';
+@import '../../../styles/stacking.css';
 @import '../../../styles/scrollbar.css' layer(rapide);
 @import '../../../styles/links.css' layer(rapide);
 @import '../../../styles/icons.css' layer(rapide);
 @import '../../../styles/motion.css' layer(rapide);
+@import '../../../styles/touch.css' layer(rapide);
 @import '../../../styles/tooltips.css' layer(rapide);
 
 @layer rapide {

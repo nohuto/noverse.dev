@@ -24,6 +24,13 @@ function applyTheme(setting: string) {
   const isLight = lightThemes.has(palette);
   root.dataset.themeSetting = selected;
   root.dataset.theme = isLight ? 'light' : 'dark';
+  const themeColor = document.querySelector<HTMLMetaElement>(
+    'meta[name="theme-color"]',
+  );
+  if (themeColor)
+    themeColor.content = getComputedStyle(root)
+      .getPropertyValue(themeColor.dataset.background || '--bg')
+      .trim();
   document
     .querySelectorAll<HTMLElement>('[data-theme-toggle]')
     .forEach((button) => {

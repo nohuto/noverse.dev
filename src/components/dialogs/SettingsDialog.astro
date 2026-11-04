@@ -52,6 +52,7 @@ const { prefix } = Astro.props;
     width: min(460px, calc(100vw - 24px));
     max-height: calc(100dvh - 24px);
     overflow-y: auto;
+    overscroll-behavior: contain;
     border: 1px solid var(--border);
     background: var(--panel);
   }
@@ -73,7 +74,7 @@ const { prefix } = Astro.props;
 
   :where(.site-content) .settings-header h2 {
     margin: 0;
-    font-size: 0.625rem;
+    font-size: 0.6875rem;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -155,7 +156,7 @@ const { prefix } = Astro.props;
 
   :where(.site-content) .settings-action {
     height: 24px;
-    min-width: 72px;
+    min-width: 92px;
     padding: 0 8px;
     border: 1px solid var(--border);
     background: var(--panel);

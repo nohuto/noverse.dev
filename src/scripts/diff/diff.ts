@@ -66,7 +66,7 @@ const compareReleaseNames = (left: string, right: string) =>
 const loadAsset = (element: HTMLScriptElement | HTMLLinkElement) =>
   new Promise<void>((resolve, reject) => {
     element.onload = () => resolve();
-    element.onerror = () => reject(new Error('Couldnt load diff assets'));
+    element.onerror = () => reject(new Error('Couldn’t load diff assets'));
     document.head.append(element);
   });
 
@@ -95,7 +95,7 @@ const replaceOptions = (
   select: HTMLSelectElement,
   options: string[],
   preferred: string,
-  virtual = false,
+  { virtual = false } = {},
 ) => {
   select.replaceChildren();
   const selected = options.includes(preferred) ? preferred : options[0] || '';
@@ -224,7 +224,7 @@ const setMaximized = (maximized: boolean) => {
   }
 };
 
-const setFontSize = (size: string | number, persist = true) => {
+const setFontSize = (size: string | number, { persist = true } = {}) => {
   currentFontSize = clampFontSize(size);
   output.style.setProperty('--bindiff-font-size', `${currentFontSize / 16}rem`);
   fontDecreaseButton.disabled = currentFontSize <= MIN_FONT_SIZE;
@@ -246,7 +246,8 @@ const clearResult = () => {
   lastRender = null;
 };
 
-const showError = (message: string) => {
+const showError = (message: string, error?: unknown) => {
+  if (error !== undefined) console.error(error);
   clearResult();
   const notice = document.createElement('p');
   notice.className = 'bindiff-error';
@@ -289,8 +290,20 @@ const rememberSelection = () => {
   });
 };
 
+let kindRequest = 0;
+let sourceRequest: AbortController | undefined;
+
+const nextSourceSignal = () => {
+  sourceRequest?.abort();
+  sourceRequest = new AbortController();
+  return sourceRequest.signal;
+};
+
 const setKind = async (kind: Kind) => {
-  activeSource = (await SOURCES[kind]()).source;
+  const request = ++kindRequest;
+  const { source } = await SOURCES[kind]();
+  if (request !== kindRequest) return false;
+  activeSource = source;
   activeKind = kind;
   settingsButton.disabled = false;
   const nameText =
@@ -301,6 +314,7 @@ const setKind = async (kind: Kind) => {
     button.classList.toggle('is-active', active);
     button.setAttribute('aria-pressed', String(active));
   });
+  return true;
 };
 
 const setViewMode = (mode: string | undefined) => {
@@ -458,7 +472,7 @@ const rerender = () => {
   updateUrl();
 };
 
-const refreshNames = async (preferredName = '', autoRun = false) => {
+const refreshNames = async (preferredName = '', { autoRun = false } = {}) => {
   const left = leftSelect.value;
   const right = rightSelect.value;
   const module = moduleSelect.value;
@@ -478,13 +492,15 @@ const refreshNames = async (preferredName = '', autoRun = false) => {
       .map((file) => file.name)
       .filter((name) => rightFiles.has(name))
       .sort(COLLATOR.compare);
-    const selected = replaceOptions(nameSelect, names, preferredName, true);
+    const selected = replaceOptions(nameSelect, names, preferredName, {
+      virtual: true,
+    });
     displayButton.disabled = runButton.disabled = names.length === 0;
     if (!names.length) clearResult();
     else if (autoRun && selected) await runCompare();
-  } catch {
+  } catch (error) {
     if (currentToken === token)
-      showError('Couldnt load file names. Please try again.');
+      showError('Couldn’t load file names. Please try again.', error);
   } finally {
     if (currentToken === token) setBusy(false);
   }
@@ -493,7 +509,7 @@ const refreshNames = async (preferredName = '', autoRun = false) => {
 const refreshModules = async (
   preferredModule = '',
   preferredName = '',
-  autoRun = false,
+  { autoRun = false } = {},
 ) => {
   const left = leftSelect.value;
   const right = rightSelect.value;
@@ -516,10 +532,13 @@ const refreshModules = async (
       preferredModule || activeSource.defaultModule,
     );
     if (!modules.length) clearResult();
-    else await refreshNames(preferredName, autoRun && Boolean(selected));
-  } catch {
+    else
+      await refreshNames(preferredName, {
+        autoRun: autoRun && Boolean(selected),
+      });
+  } catch (error) {
     if (currentToken === token)
-      showError('Couldnt load modules. Please try again.');
+      showError('Couldn’t load modules. Please try again.', error);
   } finally {
     if (currentToken === token) setBusy(false);
   }
@@ -542,10 +561,10 @@ const refreshReleases = async (preferred: Selection) => {
     const right = pick(preferred.right, DEFAULT_RIGHT_RELEASE) || other;
     replaceOptions(leftSelect, releases, left);
     replaceOptions(rightSelect, releases, right !== left ? right : other);
-    await refreshModules(preferred.module, preferred.name, false);
-  } catch {
+    await refreshModules(preferred.module, preferred.name);
+  } catch (error) {
     if (currentToken === token)
-      showError('Couldnt load builds. Please try again.');
+      showError('Couldn’t load builds. Please try again.', error);
   } finally {
     if (currentToken === token) setBusy(false);
   }
@@ -565,10 +584,11 @@ async function runDisplay() {
     leftFile,
   };
   const currentToken = ++token;
+  const signal = nextSourceSignal();
   setBusy(true);
   try {
     const [leftSource] = await Promise.all([
-      fetchText(leftFile.downloadUrl),
+      fetchText(leftFile.downloadUrl, signal),
       ensureDiffAssets(),
     ]);
     if (currentToken !== token) return;
@@ -578,9 +598,9 @@ async function runDisplay() {
     lastRender = { kind: activeKind, single: true, leftSource, options };
     rememberSelection();
     updateUrl();
-  } catch {
+  } catch (error) {
     if (currentToken === token)
-      showError('Couldnt display this file. Please try again.');
+      showError('Couldn’t display this file. Please try again.', error);
   } finally {
     if (currentToken === token) setBusy(false);
   }
@@ -597,11 +617,12 @@ async function runCompare() {
     rightFile,
   };
   const currentToken = ++token;
+  const signal = nextSourceSignal();
   setBusy(true);
   try {
     const [leftSource, rightSource] = await Promise.all([
-      fetchText(leftFile.downloadUrl),
-      fetchText(rightFile.downloadUrl),
+      fetchText(leftFile.downloadUrl, signal),
+      fetchText(rightFile.downloadUrl, signal),
       ensureDiffAssets(),
     ]);
     if (currentToken !== token) return;
@@ -617,9 +638,9 @@ async function runCompare() {
     };
     rememberSelection();
     updateUrl();
-  } catch {
+  } catch (error) {
     if (currentToken === token)
-      showError('Couldnt compare these files. Please try again.');
+      showError('Couldn’t compare these files. Please try again.', error);
   } finally {
     if (currentToken === token) setBusy(false);
   }
@@ -652,11 +673,11 @@ kindButtons.forEach((button) => {
     rememberSelection();
     setBusy(true);
     try {
-      await setKind(kind);
+      if (!(await setKind(kind))) return;
       await refreshReleases(selectionMemory.get(kind) || {});
       updateUrl();
-    } catch {
-      showError('Couldnt load this source. Please try again.');
+    } catch (error) {
+      showError('Couldn’t load this source. Please try again.', error);
     } finally {
       setBusy(false);
     }
@@ -674,6 +695,9 @@ moduleSelect.addEventListener('change', () => {
   refreshNames(nameSelect.value);
 });
 nameSelect.addEventListener('change', () => {
+  token += 1;
+  sourceRequest?.abort();
+  setBusy(false);
   clearResult();
   rememberSelection();
   updateUrl();
@@ -688,7 +712,9 @@ fontIncreaseButton.addEventListener('click', () =>
 );
 swapButton.addEventListener('click', () => {
   [leftSelect.value, rightSelect.value] = [rightSelect.value, leftSelect.value];
-  refreshModules(moduleSelect.value, nameSelect.value, true);
+  for (const select of [leftSelect, rightSelect])
+    select.dispatchEvent(new Event('value-updated'));
+  refreshModules(moduleSelect.value, nameSelect.value, { autoRun: true });
 });
 viewButtons.forEach((button) => {
   button.addEventListener('click', () => {
@@ -732,16 +758,21 @@ document.addEventListener('theme-change', () => {
   if (lastRender) applyRenderedTheme();
 });
 
-setFontSize(storageGet(FONT_SIZE_KEY, String(DEFAULT_FONT_SIZE)), false);
+setFontSize(storageGet(FONT_SIZE_KEY, String(DEFAULT_FONT_SIZE)), {
+  persist: false,
+});
 (async () => {
   setBusy(true);
   try {
     const state = readUrlState();
-    await setKind(state.kind);
+    if (!(await setKind(state.kind))) return;
     setViewMode(state.mode);
     await refreshReleases(state);
-  } catch {
-    showError('Couldnt load the diff explorer. Please reload the page.');
+  } catch (error) {
+    showError(
+      'Couldn’t load the diff explorer. Please reload the page.',
+      error,
+    );
   } finally {
     setBusy(false);
   }

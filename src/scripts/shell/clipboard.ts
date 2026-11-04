@@ -1,4 +1,5 @@
 const EMAIL_KEY = 23;
+const TOAST_DURATION_MS = 2000;
 const EMAIL_BYTES = [
   116, 120, 121, 99, 118, 116, 99, 87, 121, 120, 97, 114, 101, 100, 114, 57,
   115, 114, 97,
@@ -28,7 +29,10 @@ export function showToast(message: string): void {
   requestAnimationFrame(() => (toast.textContent = message));
   toast.classList.add('show');
   if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+  toastTimer = setTimeout(
+    () => toast.classList.remove('show'),
+    TOAST_DURATION_MS,
+  );
 }
 
 export async function copyText(value: string): Promise<boolean> {

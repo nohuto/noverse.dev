@@ -1,12 +1,4 @@
 @layer rapide {
-  html[data-theme='light'] {
-    color-scheme: light;
-  }
-
-  html[data-theme='dark'] {
-    color-scheme: dark;
-  }
-
   body {
     font-size: var(--sl-text-body);
     font-weight: 350;
@@ -197,7 +189,7 @@
   }
 
   .sidebar-pane {
-    --sidebar-tree-font-size: 0.78125rem;
+    --sidebar-tree-font-size: var(--font-size-navigation);
     border-inline-end: 1px solid var(--sl-color-hairline-shade);
   }
 
@@ -207,6 +199,7 @@
     gap: 0;
     font-size: var(--sidebar-tree-font-size);
     padding: 0.2em var(--sl-sidebar-item-padding-inline);
+    color: var(--sl-color-gray-3);
   }
 
   .sidebar-pane ul ul li {
@@ -217,10 +210,6 @@
 
   .sidebar-pane .top-level > li + li {
     margin-top: 0.75rem;
-  }
-
-  .sidebar-pane summary {
-    color: var(--sl-color-gray-3);
   }
 
   .sidebar-pane summary .large {
@@ -330,7 +319,7 @@
       var(--sl-color-bg)
     );
     color: var(--sl-color-text);
-    font-size: 0.78125rem;
+    font-size: var(--font-size-navigation);
     height: var(--header-control-height);
     line-height: var(--header-control-height);
     padding: 0 88px 0 29px;
@@ -377,9 +366,6 @@
     color: var(--sl-color-gray-3);
     font-size: 0.6875rem;
     line-height: 1.35;
-  }
-
-  .sidebar-docs-copyright {
     --icon-size: 1em;
   }
 
@@ -535,7 +521,7 @@
     position: fixed;
     right: 35px;
     bottom: 40px;
-    z-index: 100;
+    z-index: var(--z-overlay);
     display: grid;
     place-items: center;
     width: 47px;
@@ -577,10 +563,6 @@
   .expressive-code .copy button::before,
   .expressive-code .copy .feedback {
     border-radius: var(--ui-radius) !important;
-  }
-
-  .expressive-code .frame {
-    box-shadow: none !important;
   }
 
   .sidebar-sections {

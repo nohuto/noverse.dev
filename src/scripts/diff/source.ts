@@ -2,9 +2,10 @@
 import { storageGet, storageSet } from '../shell/storage';
 import type { DiffFile, DiffSource, Settings, SourceConfig } from './types';
 
-export const fetchText = async (url: string) => {
-  const response = await fetch(url, { cache: 'force-cache' });
-  if (!response.ok) throw new Error(`Couldnt load ${url} (${response.status})`);
+export const fetchText = async (url: string, signal?: AbortSignal) => {
+  const response = await fetch(url, { cache: 'force-cache', signal });
+  if (!response.ok)
+    throw new Error(`Couldn’t load ${url} (${response.status})`);
   return response.text();
 };
 

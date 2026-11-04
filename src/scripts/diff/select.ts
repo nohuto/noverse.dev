@@ -6,7 +6,7 @@ const DEFAULT_LIMIT = 300;
 type Item = { value: string; text: string; lower: string; disabled: boolean };
 
 let openSelectUI: HTMLElement | null = null;
-const closeSelectUIs = (restoreFocus = false) => {
+const closeSelectUIs = ({ restoreFocus = false } = {}) => {
   if (!openSelectUI) return;
   const trigger = openSelectUI.querySelector<HTMLElement>('.select-trigger');
   openSelectUI.classList.remove('open', 'open-up');
@@ -211,6 +211,17 @@ document
         list.style.maxHeight = `${Math.max(0, list.offsetHeight - Math.ceil(overflow))}px`;
     };
 
+    const showOption = (option: HTMLButtonElement | undefined) => {
+      if (!option) return;
+      option.focus({ preventScroll: true });
+      const optionRect = option.getBoundingClientRect();
+      const listRect = list.getBoundingClientRect();
+      if (optionRect.top < listRect.top)
+        list.scrollTop -= listRect.top - optionRect.top;
+      else if (optionRect.bottom > listRect.bottom)
+        list.scrollTop += optionRect.bottom - listRect.bottom;
+    };
+
     const focusListOption = (target: string) => {
       const options = Array.from(
         list.querySelectorAll<HTMLButtonElement>(
@@ -226,7 +237,7 @@ document
           : target === 'active' && activeIndex >= 0
             ? activeIndex
             : 0;
-      options[index]?.focus({ preventScroll: true });
+      showOption(options[index]);
     };
 
     const toggleOpen = (focusTarget = 'active') => {
@@ -247,6 +258,7 @@ document
 
     updateActive();
     select.addEventListener('change', syncMenuOptions);
+    select.addEventListener('value-updated', syncMenuOptions);
     select.addEventListener('options-updated', (event) => {
       const detail = (event as CustomEvent).detail;
       if (searchInput && detail?.resetSearch)
@@ -307,13 +319,18 @@ document
       else if (event.key === 'Tab') return closeSelectUIs();
       if (nextIndex < 0 || !options.length) return;
       event.preventDefault();
-      options[nextIndex]?.focus({ preventScroll: true });
+      showOption(options[nextIndex]);
     });
     menu.addEventListener('keydown', (event) => {
       if (event.key !== 'Tab') return;
       requestAnimationFrame(() => {
         if (!wrapper.contains(document.activeElement)) closeSelectUIs();
       });
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      event.preventDefault();
+      focusListOption(event.key === 'ArrowUp' ? 'last' : 'first');
     });
     searchInput?.addEventListener('input', () => {
       searchValue = searchInput!.value;
@@ -341,7 +358,7 @@ document.addEventListener('click', (event) => {
   if (!(event.target as Element).closest('.select-ui')) closeSelectUIs();
 });
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') closeSelectUIs(true);
+  if (event.key === 'Escape') closeSelectUIs({ restoreFocus: true });
 });
 window.addEventListener('resize', () => closeSelectUIs());
 window.addEventListener('scroll', () => closeSelectUIs(), { passive: true });

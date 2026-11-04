@@ -1,0 +1,78 @@
+---
+import { readFile } from 'node:fs/promises';
+
+const brands = import.meta.glob<string>('../../icons/si-*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+const supported = [
+  'arrow-left',
+  'arrow-right',
+  'arrows-in',
+  'arrows-left-right',
+  'arrows-out',
+  'book-bookmark',
+  'books',
+  'caret-double-up',
+  'caret-down',
+  'caret-left',
+  'caret-right',
+  'columns',
+  'copyright',
+  'discord-logo',
+  'envelope-simple',
+  'gear',
+  'git-branch',
+  'github-logo',
+  'house',
+  'key',
+  'list',
+  'magnifying-glass',
+  'magnifying-glass-minus',
+  'magnifying-glass-plus',
+  'moon',
+  'rows',
+  'si-discord',
+  'si-tuta',
+  'sidebar-simple',
+  'sun',
+  'terminal',
+  'user-list',
+  'windows-logo',
+  'wrench',
+  'x',
+] as const;
+
+export type IconName = (typeof supported)[number];
+
+interface Props {
+  name: IconName;
+  weight?: 'regular' | 'bold';
+  size?: string;
+  class?: string;
+}
+
+const { name, weight = 'regular', size, class: className } = Astro.props;
+
+const file = weight === 'regular' ? `${name}.svg` : `${name}-${weight}.svg`;
+const source =
+  brands[`../../icons/${name}.svg`] ??
+  (await readFile(
+    new URL(
+      `../../../node_modules/@phosphor-icons/core/assets/${weight}/${file}`,
+      import.meta.url,
+    ),
+    'utf8',
+  ));
+
+const classes = ['icon', className].filter(Boolean).join(' ');
+const dimensions = size ? ` width="${size}" height="${size}"` : '';
+const markup = source.replace(
+  '<svg ',
+  `<svg class="${classes}"${dimensions} aria-hidden="true" focusable="false" `,
+);
+---
+
+<Fragment set:html={markup} />

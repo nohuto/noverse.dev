@@ -1,5 +1,5 @@
-/* Copyright (c) 2026 nohuto */
 import { trackPointer } from '../dialogs/draggable';
+import { copyText, emailAddress } from '../shell/clipboard';
 import { applyBackground } from '../shell/background';
 import { isInteractiveTarget } from '../shell/typing-target';
 import { setTheme } from '../shell/theme';
@@ -166,7 +166,7 @@ function initConsole() {
   const updateTimestamp = () => {
     if (!timestampEl) return;
     const now = new Date();
-    const day = new Intl.DateTimeFormat(undefined, {
+    const day = new Intl.DateTimeFormat('en-US', {
       weekday: 'long',
     }).format(now);
     const time = new Intl.DateTimeFormat(undefined, {
@@ -425,10 +425,16 @@ function initConsole() {
     },
     bitmask: openBitmaskTool,
     calc: openCalculatorTool,
-    contact: () => {
+    contact: async () => {
+      const copied = await copyText(emailAddress());
       addLine('contact:');
       addKeyValueLines([
-        ['email', 'use the email icon to copy it'],
+        [
+          'email',
+          copied
+            ? 'copied to the clipboard'
+            : 'copy failed, use the email icon on noverse.dev',
+        ],
         ['discord', DISCORD_URL],
       ]);
     },
@@ -532,7 +538,9 @@ function initConsole() {
       { text: trimmed, className: 'console-muted' },
     ]);
     const { command, args } = parseCommand(trimmed);
-    const handler = commands[command];
+    const handler = Object.hasOwn(commands, command)
+      ? commands[command]
+      : undefined;
     if (!handler) {
       addLine(`unknown command: ${command}`, 'muted');
       addLine('type "help" to list commands.', 'muted');

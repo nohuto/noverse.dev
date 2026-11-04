@@ -18,6 +18,7 @@
 .home-contact .icon {
   --icon-size: 1.05em;
   margin-right: 0.25em;
+  vertical-align: -0.2em;
 }
 
 .home-email {

@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import './select';
 import { createDraggableDialog } from '../dialogs/draggable';
 import { storageGet, storageSet } from '../shell/storage';
@@ -488,16 +487,14 @@ const refreshNames = async (preferredName = '', { autoRun = false } = {}) => {
     if (currentToken !== token) return;
     leftFiles = new Map(leftList.map((file) => [file.name, file]));
     rightFiles = new Map(rightList.map((file) => [file.name, file]));
-    const names = leftList
-      .map((file) => file.name)
-      .filter((name) => rightFiles.has(name))
-      .sort(COLLATOR.compare);
+    const names = leftList.map((file) => file.name).sort(COLLATOR.compare);
     const selected = replaceOptions(nameSelect, names, preferredName, {
       virtual: true,
     });
-    displayButton.disabled = runButton.disabled = names.length === 0;
+    displayButton.disabled = names.length === 0;
+    runButton.disabled = !rightFiles.has(selected);
     if (!names.length) clearResult();
-    else if (autoRun && selected) await runCompare();
+    else if (autoRun && rightFiles.has(selected)) await runCompare();
   } catch (error) {
     if (currentToken === token)
       showError('Couldn’t load file names. Please try again.', error);
@@ -696,6 +693,7 @@ moduleSelect.addEventListener('change', () => {
 });
 nameSelect.addEventListener('change', () => {
   token += 1;
+  runButton.disabled = !rightFiles.has(nameSelect.value);
   sourceRequest?.abort();
   setBusy(false);
   clearResult();

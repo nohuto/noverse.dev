@@ -1,6 +1,6 @@
 ---
 import { sidebarRepos } from '../../data/docs-sidebar.mjs';
-import Icon from '../Icon.astro';
+import Icon from '../ui/Icon.astro';
 
 const [section, repo = ''] = Astro.locals.starlightRoute.id
   .split('/')
@@ -17,7 +17,7 @@ const activeRepo =
   data-tip="Ctrl+Shift+X"
   data-zen-toggle
 >
-  <Icon name="zen" />
+  <Icon name="arrows-out" />
 </button>
 {activeRepo && (
   <a
@@ -27,7 +27,7 @@ const activeRepo =
     rel="noopener noreferrer"
     aria-label={`Open ${activeRepo} repository`}
   >
-    <Icon name="repo" />
+    <Icon name="book-bookmark" />
   </a>
 )}
 <a
@@ -36,7 +36,7 @@ const activeRepo =
   rel="me"
   aria-label="GitHub"
 >
-  <Icon name="github" />
+  <Icon name="github-logo" />
 </a>
 <a
   class="icon-button"
@@ -44,7 +44,7 @@ const activeRepo =
   rel="me"
   aria-label="Discord"
 >
-  <Icon name="discord" />
+  <Icon name="discord-logo" />
 </a>
 <a class="icon-button" href="/" aria-label="Portfolio">
   <Icon name="user-list" />

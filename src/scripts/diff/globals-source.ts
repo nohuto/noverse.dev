@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { createSource } from './source';
 
 export const source = createSource({

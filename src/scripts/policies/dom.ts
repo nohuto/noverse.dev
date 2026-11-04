@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { copyText, showToast } from '../shell/clipboard';
 import type { StorageEntry } from './types';
 

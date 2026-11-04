@@ -1,6 +1,6 @@
 ---
 import PortfolioLayout from '../layouts/PortfolioLayout.astro';
-import Icon from '../components/Icon.astro';
+import Icon from '../components/ui/Icon.astro';
 import ProjectMedia from '../components/projects/ProjectMedia.astro';
 import { projects } from '../data/projects';
 import '../styles/home.css';
@@ -11,7 +11,7 @@ const selected = projects
 ---
 
 <PortfolioLayout title="nohuto" description="Current work and projects">
-  <main id="main" class="home-main">
+  <main id="main">
     <section>
       <header class="home-intro">
         <h1>nohuto</h1>
@@ -33,9 +33,9 @@ const selected = projects
               data-email
               data-toast="Email copied"
               title="Copy email address"
-            ><Icon name="tuta" /><span data-email-text></span></button>
+            ><Icon name="si-tuta" /><span data-email-text></span></button>
             or via
-            <a class="link" href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer"><Icon name="discord-brand" />discord</a>,
+            <a class="link" href="https://discord.noverse.dev" target="_blank" rel="noopener noreferrer"><Icon name="si-discord" />discord</a>,
             my public key is available
             <a class="link" href="https://pgp.noverse.dev">here</a>.
           </p>
@@ -68,7 +68,7 @@ const selected = projects
                   aria-label={`Show ${project.title} preview`}
                   title="Show preview"
                 >
-                  <Icon name="chevron-down" />
+                  <Icon name="caret-down" />
                 </summary>
                 <ProjectMedia
                   project={project}

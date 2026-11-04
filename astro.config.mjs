@@ -38,20 +38,11 @@ export default defineConfig({
             sizes: '180x180',
           },
         },
-        {
-          tag: 'link',
-          attrs: {
-            rel: 'preload',
-            href: '/main/fonts/Mono-2407.24.woff2',
-            as: 'font',
-            type: 'font/woff2',
-            crossorigin: true,
-          },
-        },
       ],
       tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 6 },
       routeMiddleware: './src/route-data.ts',
       components: {
+        Head: './src/components/starlight/Head.astro',
         PageFrame: './src/components/starlight/PageFrame.astro',
         Header: './src/components/starlight/Header.astro',
         Search: './src/components/starlight/Search.astro',

@@ -4,7 +4,8 @@ import path from 'node:path';
 
 const dist = path.resolve(import.meta.dirname, '../dist');
 const headersFile = path.join(dist, '_headers');
-const inlineScript = /<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/g;
+const inlineScript =
+  /<script(?![^>]*\ssrc=)(?![^>]*\stype="application\/(?:ld\+)?json")[^>]*>([\s\S]*?)<\/script>/g;
 const inlineStyle = /\sstyle="([^"]*)"/g;
 const hash = (text) =>
   `'sha256-${createHash('sha256').update(text).digest('base64')}'`;

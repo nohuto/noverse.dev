@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { normalize } from './normalization';
 import { createSource } from './source';
 

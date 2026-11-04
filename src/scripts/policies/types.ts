@@ -79,7 +79,6 @@ export interface PolicyPayload {
 }
 
 export interface CategoryNode {
-  key: string;
   name: string;
   label: string;
   categoryKey: string;

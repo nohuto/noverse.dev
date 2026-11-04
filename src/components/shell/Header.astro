@@ -1,5 +1,5 @@
 ---
-import Icon from '../Icon.astro';
+import Icon from '../ui/Icon.astro';
 import ThemeControls from './ThemeControls.astro';
 ---
 
@@ -8,9 +8,7 @@ import ThemeControls from './ThemeControls.astro';
 </a>
 <header class="site-header">
   <nav class="site-nav soft-backdrop" aria-label="Site">
-    <a class="site-nav-text" href="/overview/">
-      Main site
-    </a>
+    <a href="/overview/">Main site</a>
     <span class="site-nav-divider" aria-hidden="true"></span>
     <a
       href="https://github.com/nohuto"
@@ -19,7 +17,7 @@ import ThemeControls from './ThemeControls.astro';
       aria-label="GitHub"
       title="GitHub"
     >
-      <Icon name="github" />
+      <Icon name="github-logo" />
     </a>
     <button
       type="button"
@@ -28,7 +26,7 @@ import ThemeControls from './ThemeControls.astro';
       aria-label="Copy email address"
       title="Copy email address"
     >
-      <Icon name="mail" />
+      <Icon name="envelope-simple" />
     </button>
     <a
       href="https://discord.noverse.dev"
@@ -37,7 +35,7 @@ import ThemeControls from './ThemeControls.astro';
       aria-label="Discord"
       title="Discord"
     >
-      <Icon name="discord" />
+      <Icon name="discord-logo" />
     </a>
     <a
       href="https://pgp.noverse.dev"

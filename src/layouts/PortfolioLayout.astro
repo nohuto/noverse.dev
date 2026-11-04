@@ -3,7 +3,8 @@ import Header from '../components/shell/Header.astro';
 import ThemeInit from '../components/shell/ThemeInit.astro';
 import PullRefreshFix from '../components/shell/PullRefreshFix.astro';
 import ImageViewer from '../components/ImageViewer.astro';
-import Icon from '../components/Icon.astro';
+import Icon from '../components/ui/Icon.astro';
+import manropeUrl from '../fonts/Manrope-latin.woff2?url';
 import '../styles/site.css';
 
 interface Props {
@@ -38,7 +39,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link
       rel="preload"
-      href="/main/fonts/InterVariable-latin.woff2"
+      href={manropeUrl}
       as="font"
       type="font/woff2"
       crossorigin

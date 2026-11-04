@@ -14,7 +14,7 @@ export function startTerminalAnimation(
   requestedHeight: number | null,
 ) {
   const container = document.createElement('div');
-  container.className = 'console-animation console-animation-trippy';
+  container.className = 'console-animation';
 
   const gridContainer = document.createElement('div');
   gridContainer.className = 'trippy-grid-container';

@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 type Token =
   | { type: 'number'; value: number }
   | { type: 'name' | 'op' | 'paren' | 'comma'; value: string };

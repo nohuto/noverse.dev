@@ -68,7 +68,7 @@
 
 .code-expand .icon {
   position: absolute;
-  background: var(--ec-frm-inlBtnFg);
+  color: var(--ec-frm-inlBtnFg);
   z-index: 1;
 }
 
@@ -84,8 +84,13 @@
   opacity: var(--ec-frm-inlBtnBgActOpa);
 }
 
-.code-expand[aria-expanded='true'] .icon {
-  --icon: var(--icon-zen-exit);
+.code-expand .icon-minimize,
+.code-expand[aria-expanded='true'] .icon-maximize {
+  display: none;
+}
+
+.code-expand[aria-expanded='true'] .icon-minimize {
+  display: block;
 }
 
 .expressive-code .frame :nth-child(1 of .ec-line) .code {

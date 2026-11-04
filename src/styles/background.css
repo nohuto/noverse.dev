@@ -206,7 +206,6 @@ html[data-bg='starfield'] .background-star::after {
 
 html[data-bg='starfield'] .background-stars {
   perspective: 340px;
-  perspective-origin: 50% 50%;
 }
 
 @keyframes fly {

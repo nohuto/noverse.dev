@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 interface Literal {
   kind: 'lineComment' | 'blockComment' | 'string' | 'char';
   end: number;

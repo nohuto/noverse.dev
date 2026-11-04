@@ -1,5 +1,5 @@
 ---
-import Icon from './Icon.astro';
+import Icon from './ui/Icon.astro';
 ---
 
 <dialog class="image-viewer" aria-label="Image">
@@ -10,7 +10,7 @@ import Icon from './Icon.astro';
     aria-keyshortcuts="Escape"
     data-tip="Esc"
   >
-    <Icon name="zen-exit" />
+    <Icon name="arrows-in" />
   </button>
   <img alt="" />
 </dialog>
@@ -44,6 +44,19 @@ import Icon from './Icon.astro';
       if (docImage && !docImage.closest('a'))
         open(docImage.currentSrc || docImage.src, docImage.alt);
     });
+    for (const docImage of document.querySelectorAll<HTMLImageElement>(
+      '.sl-markdown-content img',
+    )) {
+      if (docImage.closest('a')) continue;
+      docImage.tabIndex = 0;
+      docImage.setAttribute('role', 'button');
+      docImage.setAttribute('aria-haspopup', 'dialog');
+      docImage.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        open(docImage.currentSrc || docImage.src, docImage.alt);
+      });
+    }
     dialog.addEventListener('click', (event) => {
       if (event.target !== image) dialog.close();
     });

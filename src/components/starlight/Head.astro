@@ -1,0 +1,7 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro';
+import monoUrl from '../../fonts/Mono-2407.24.woff2?url';
+---
+
+<Default />
+<link rel="preload" href={monoUrl} as="font" type="font/woff2" crossorigin />

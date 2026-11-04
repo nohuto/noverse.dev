@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { pageRoutes } from '../../data/navigation';
 
 export const rootPath = '~/terminal';
@@ -89,6 +88,6 @@ export const getNavigationTarget = (nextPath: string, pathname: string) => {
       : nextPath.slice(nextPath.lastIndexOf('/') + 1);
   const target = NAV_MAP[segment];
   if (!target) return null;
-  const currentPath = pathname.replace(/\/+$/g, '') || '/';
-  return currentPath === target ? null : target;
+  const trim = (value: string) => value.replace(/\/+$/g, '') || '/';
+  return trim(pathname) === trim(target) ? null : target;
 };

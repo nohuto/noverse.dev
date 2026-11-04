@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { createDraggableDialog } from '../dialogs/draggable';
 import type {
   CategoryNode,
@@ -143,6 +142,7 @@ function initPolicyExplorer() {
   let searchDelayTimer = 0;
   let tableFocusId: string | null = null;
   let policyLoadWarning = '';
+  let policyLoadError = '';
   const openSettingsDialog =
     settingsModal && settingsDialog && settingsHeader
       ? createDraggableDialog({
@@ -582,8 +582,7 @@ function initPolicyExplorer() {
     filterMenu.setAttribute('aria-label', `Filter ${column.label}`);
     if (entries.length > 10) {
       const searchBox = createNode('div', 'search-box policy-filter-search');
-      const icon = createNode('span', 'icon icon-search search-icon');
-      icon.setAttribute('aria-hidden', 'true');
+      const icon = document.querySelector('.search-icon')?.cloneNode(true);
       const input = document.createElement('input');
       input.type = 'text';
       input.autocomplete = 'off';
@@ -595,7 +594,8 @@ function initPolicyExplorer() {
           label.hidden = Boolean(query) && !search.includes(query);
         });
       });
-      searchBox.append(icon, input);
+      if (icon) searchBox.append(icon);
+      searchBox.append(input);
       filterMenu.appendChild(searchBox);
     }
     filterMenu.appendChild(list);
@@ -731,7 +731,8 @@ function initPolicyExplorer() {
           sortState.direction === 'asc' ? 'ascending' : 'descending',
         );
       }
-      const headerContent = createNode('span', 'policy-table-header-content');
+      const headerContent = createNode('button', 'policy-table-header-content');
+      headerContent.type = 'button';
       headerContent.appendChild(
         createNode('span', 'policy-table-header-label', column.label),
       );
@@ -781,6 +782,12 @@ function initPolicyExplorer() {
         sortState.id = column.id;
         renderTableHeader();
         renderTable();
+        if (event.detail === 0)
+          tableHead
+            .querySelector<HTMLButtonElement>(
+              `[data-column="${column.id}"] .policy-table-header-content`,
+            )
+            ?.focus();
       });
       th.addEventListener('contextmenu', (event) => {
         event.preventDefault();
@@ -850,11 +857,12 @@ function initPolicyExplorer() {
         setTimeout(() => appendRows(end), 0);
       } else if (tableNote) {
         const countNote =
-          filtered.length > visible.length
+          policyLoadError ||
+          (filtered.length > visible.length
             ? `Showing ${visible.length} of ${filtered.length}`
             : filtered.length
               ? ''
-              : 'No matching policies';
+              : 'No matching policies');
         const filterNote = columnFilters.size
           ? `Filtered by ${filterColumns
               .filter((column) => columnFilters.has(column.id))
@@ -1050,7 +1058,6 @@ function initPolicyExplorer() {
 
   const buildCategoryTree = () => {
     const rootNode: CategoryNode = {
-      key: '',
       name: '',
       label: '',
       categoryKey: '',
@@ -1065,7 +1072,6 @@ function initPolicyExplorer() {
         );
         if (!cursor.children.has(key)) {
           cursor.children.set(key, {
-            key,
             name: segment.name || segment.displayName,
             label: segment.displayName || segment.name,
             categoryKey: '',
@@ -1091,6 +1097,7 @@ function initPolicyExplorer() {
     return rootNode;
   };
 
+  let treeGroupId = 0;
   const appendCategoryNodes = (
     parent: HTMLElement | DocumentFragment,
     node: CategoryNode,
@@ -1101,19 +1108,20 @@ function initPolicyExplorer() {
       .forEach((child) => {
         const hasChildren = child.children.size > 0;
         const nodeKey = child.categoryKey;
-        parent.appendChild(
-          createTreeButton({
-            label: child.label,
-            count: child.count,
-            categoryKey: child.categoryKey,
-            depth,
-            nodeKey,
-            hasChildren,
-          }),
-        );
+        const treeButton = createTreeButton({
+          label: child.label,
+          count: child.count,
+          categoryKey: child.categoryKey,
+          depth,
+          nodeKey,
+          hasChildren,
+        });
+        parent.appendChild(treeButton);
         if (expandedTreeNodes.has(nodeKey)) {
           const childLevel = createNode('div', 'policy-tree-level');
           childLevel.setAttribute('role', 'group');
+          childLevel.id = `policy-tree-group-${++treeGroupId}`;
+          treeButton.setAttribute('aria-owns', childLevel.id);
           childLevel.style.setProperty(
             '--policy-tree-depth',
             String(depth + 1),
@@ -1431,6 +1439,7 @@ function initPolicyExplorer() {
       item.tabIndex = item === target ? 0 : -1;
     });
     target.focus({ preventScroll: true });
+    target.scrollIntoView({ block: 'nearest' });
   });
   tableBody.addEventListener('click', (event) => {
     const row =
@@ -1472,6 +1481,7 @@ function initPolicyExplorer() {
       });
       tableFocusId = target.dataset.id || null;
       target.focus({ preventScroll: true });
+      target.scrollIntoView({ block: 'nearest' });
       return;
     }
 
@@ -1668,9 +1678,7 @@ function initPolicyExplorer() {
       void warmPolicySearchFields();
     })
     .catch((error) => {
-      if (tableNote)
-        tableNote.textContent =
-          error.message || 'Failed to load policy definitions';
+      policyLoadError = error.message || 'Failed to load policy definitions';
       renderTree();
       renderTable();
       renderDetail(null);

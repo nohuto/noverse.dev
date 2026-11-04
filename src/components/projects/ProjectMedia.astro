@@ -2,7 +2,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import type { Project } from '../../data/projects';
-import Icon from '../Icon.astro';
+import Icon from '../ui/Icon.astro';
 import { webpWidths } from '../../utils/images';
 interface Props {
   project: Project;
@@ -78,7 +78,7 @@ const images =
         aria-label={`Open full-size ${project.title} image`}
         title="Open full-size image"
       >
-        <Icon name="zen" />
+        <Icon name="arrows-out" />
       </a>
     </div>
   ))

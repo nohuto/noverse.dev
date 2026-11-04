@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { wildcardPattern } from '../shell/wildcard';
 
 const DEFAULT_LIMIT = 300;

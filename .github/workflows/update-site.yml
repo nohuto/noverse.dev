@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout site repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
@@ -31,37 +31,37 @@ jobs:
         run: python scripts/update-diff-manifests.py
 
       - name: Checkout win-config
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: nohuto/win-config
           ref: main
           path: sources/win-config
 
       - name: Checkout regkit
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: nohuto/regkit
           ref: main
           path: sources/regkit
 
       - name: Checkout app-guides
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: nohuto/app-guides
           ref: main
           path: sources/app-guides
 
       - name: Checkout windbg-notes
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: nohuto/windbg-notes
           ref: main
           path: sources/windbg-notes
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: 24
           cache: npm
           cache-dependency-path: package-lock.json
 
@@ -84,7 +84,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git status --porcelain | grep .; then
-            git add -A -- src/content/docs src/data public/main/data public/main/media src/image-sources
+            git add -A -- src/content/docs src/data public/main/data public/main/docs public/main/media src/image-sources
             git commit -m "update docs data"
             git push
           else

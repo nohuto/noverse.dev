@@ -1,5 +1,5 @@
 ---
-import Icon from './Icon.astro';
+import Icon from './ui/Icon.astro';
 import '../styles/code-blocks.css';
 ---
 
@@ -18,7 +18,8 @@ import '../styles/code-blocks.css';
     aria-controls="code-fullscreen"
     aria-expanded="false"
   >
-    <Icon name="zen" />
+    <Icon name="arrows-out" class="icon-maximize" />
+    <Icon name="arrows-in" class="icon-minimize" />
   </button>
 </template>
 

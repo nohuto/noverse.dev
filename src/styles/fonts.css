@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'Mono';
-  src: url('/main/fonts/Mono-2407.24.woff2') format('woff2');
+  src: url('../fonts/Mono-2407.24.woff2') format('woff2');
   font-weight: 200 700;
-  font-display: block;
+  font-display: swap;
 }
 
 :root {

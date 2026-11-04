@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 const aliases: Readonly<Record<string, string>> = Object.freeze({
   h: 'help',
   '?': 'help',
@@ -24,7 +23,7 @@ const aliasNames = Object.keys(aliases).sort((a, b) => a.localeCompare(b));
 const expandAlias = (input: string) => {
   const parts = input.trim().split(/\s+/);
   const key = parts[0];
-  const expansion = aliases[key];
+  const expansion = Object.hasOwn(aliases, key) ? aliases[key] : undefined;
   if (!expansion) return input;
   const rest = parts.slice(1).join(' ');
   return rest ? `${expansion} ${rest}` : expansion;

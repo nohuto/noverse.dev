@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 export const setQueryParam = (url: URL, name: string, value: string) => {
   if (value) url.searchParams.set(name, value);
   else url.searchParams.delete(name);

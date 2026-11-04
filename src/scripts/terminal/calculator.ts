@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { initFloatingTool } from './tool';
 import {
   evaluateExpression,

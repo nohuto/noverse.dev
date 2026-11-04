@@ -6,9 +6,18 @@
   :root {
     --motion: 0s;
   }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-span.icon,
+svg.icon,
 summary .caret {
   transition: transform var(--motion);
 }

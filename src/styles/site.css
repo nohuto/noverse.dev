@@ -1,4 +1,4 @@
-/* inspired by antfu.me, Anthony Fu, MIT). */
+/* inspired by antfu.me, Anthony Fu (MIT) */
 @import './palette.css';
 @import './fonts.css';
 @import './stacking.css';
@@ -11,14 +11,14 @@
 @import './tooltips.css';
 
 @font-face {
-  font-family: 'Inter';
-  src: url('/main/fonts/InterVariable-latin.woff2') format('woff2');
-  font-weight: 100 900;
+  font-family: 'Manrope';
+  src: url('../fonts/Manrope-latin.woff2') format('woff2');
+  font-weight: 200 800;
   font-display: swap;
 }
 
 :root {
-  --font-family: 'Inter', system-ui, sans-serif;
+  --font-family: 'Manrope', system-ui, sans-serif;
   --page-width: min(41rem, 100%);
 }
 
@@ -44,7 +44,7 @@ body.site-content {
   min-height: 100svh;
   margin: 0;
   color: var(--muted);
-  font: 400 1rem / 1.75 var(--font-family);
+  font: 450 1rem / 1.75 var(--font-family);
 }
 
 h1,

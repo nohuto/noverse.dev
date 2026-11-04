@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { wildcardPattern } from '../shell/wildcard';
 import { preparePolicySearchFields } from './model';
 import type { Policy, SearchOptions } from './types';

@@ -7,12 +7,6 @@
   Referrer-Policy: no-referrer
   X-Robots-Tag: noai, noimageai
 
-/main/fonts/Mono-2407.24.woff2
-  Cache-Control: public, max-age=31556952, immutable
-
-/main/fonts/InterVariable-latin.woff2
-  Cache-Control: public, max-age=31556952, immutable
-
 /_astro/*
   Cache-Control: public, max-age=31556952, immutable
 

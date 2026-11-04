@@ -1,6 +1,6 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
-import Icon from '../components/Icon.astro';
+import Icon from '../components/ui/Icon.astro';
 import '../styles/widgets.css';
 import SettingsDialog from '../components/dialogs/SettingsDialog.astro';
 import '../styles/policies.css';
@@ -31,7 +31,7 @@ import '../styles/search.css';
           <div class="policy-search-field">
             <div class="policy-search-row">
               <div class="search-box">
-                <Icon name="search" class="search-icon" />
+                <Icon name="magnifying-glass" class="search-icon" />
                 <input
                   id="policy-search"
                   autocomplete="off"
@@ -45,7 +45,7 @@ import '../styles/search.css';
                 aria-label="Settings"
                 title="Settings"
               >
-                <Icon name="settings" />
+                <Icon name="gear" />
               </button>
             </div>
           </div>

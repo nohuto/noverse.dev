@@ -1,6 +1,6 @@
 ---
 import ProjectMedia from './ProjectMedia.astro';
-import Icon from '../Icon.astro';
+import Icon from '../ui/Icon.astro';
 import type { Project } from '../../data/projects';
 interface Props {
   project: Project;
@@ -31,7 +31,7 @@ const onGitHub = href.startsWith('https://github.com/');
         aria-label={`Show ${project.title} preview`}
         title="Show preview"
       >
-        <Icon name="chevron-down" />
+        <Icon name="caret-down" />
       </summary>
       <ProjectMedia project={project} />
     </details>

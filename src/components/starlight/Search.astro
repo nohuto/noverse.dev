@@ -138,7 +138,6 @@ const dataAttributes: DOMStringMap = {
       const loadPagefind = () => {
         if (import.meta.env.DEV) return Promise.resolve();
         pagefindReady ??= (async () => {
-          // @ts-expect-error Missing types for @pagefind/default-ui package.
           const { PagefindUI } = await import('@pagefind/default-ui');
           const backend = await fetch(`${bundlePath}pagefind.js`, {
             method: 'HEAD',
@@ -167,7 +166,6 @@ const dataAttributes: DOMStringMap = {
           pagefindReady = undefined;
           console.error(error);
           const notice = document.createElement('p');
-          notice.className = 'search-error';
           notice.setAttribute('role', 'alert');
           notice.textContent = 'Search couldn’t load. Please reload the page.';
           searchRoot?.replaceChildren(notice);
@@ -278,7 +276,7 @@ const dataAttributes: DOMStringMap = {
       --sl-search-cancel-space: 5rem;
     }
 
-    :root[data-theme='light'] #starlight__search {
+    :global(:root[data-theme='light']) #starlight__search {
       --pagefind-ui-tag: var(--sl-color-gray-6);
     }
 

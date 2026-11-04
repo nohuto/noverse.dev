@@ -1,5 +1,3 @@
-/* Copyright (c) 2026 nohuto */
-
 .trippy-grid-container {
   width: 100%;
   max-width: 100%;
@@ -535,7 +533,16 @@ body:has(.main-terminal) {
     grid-template-columns: repeat(2, max-content);
   }
 
-  .calc-tools,
+  .calc-tools {
+    grid-column: 1 / -1;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--calc-key-size);
+    contain: inline-size;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
   .calc-actions [data-calc-value='!'],
   .calc-actions [data-calc-value='%'] {
     display: none;

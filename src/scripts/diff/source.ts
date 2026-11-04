@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { storageGet, storageSet } from '../shell/storage';
 import type { DiffFile, DiffSource, Settings, SourceConfig } from './types';
 

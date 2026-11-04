@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import type { PolicyPayload } from './types';
 
 const POLICY_DATA_URL =
@@ -9,17 +8,17 @@ const POLICY_CATEGORY_DATA_URL =
 export const loadPolicyPayload = async (): Promise<PolicyPayload> => {
   const [policyResponse, categoryResponse] = await Promise.all([
     fetch(POLICY_DATA_URL, { cache: 'force-cache' }),
-    fetch(POLICY_CATEGORY_DATA_URL, { cache: 'force-cache' }),
+    fetch(POLICY_CATEGORY_DATA_URL, { cache: 'force-cache' }).catch(() => null),
   ]);
   if (!policyResponse.ok)
     throw new Error(`Policy data request failed (${policyResponse.status})`);
   const [data, categoryJson] = await Promise.all([
     policyResponse.json(),
-    categoryResponse.ok ? categoryResponse.json() : null,
+    categoryResponse?.ok ? categoryResponse.json() : null,
   ]);
   return {
     data,
     categories: categoryJson?.categories ?? {},
-    categoryWarning: categoryResponse.ok ? '' : 'Category details unavailable',
+    categoryWarning: categoryResponse?.ok ? '' : 'Category details unavailable',
   };
 };

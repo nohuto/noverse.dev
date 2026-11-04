@@ -1,8 +1,7 @@
-/* Copyright (c) 2026 nohuto */
 import { literalAt } from './scanner';
 import type { Settings } from './types';
 
-const XREF_COMMENT_RE = /\bXREFs of\b|\bCallers:\b|\bCallees:\b/;
+const XREF_COMMENT_RE = /\bXREFs of\b|\bCallers:|\bCallees:/;
 const ADDRESS_PREFIX_RE =
   /^(qword|dword|word|byte|xmmword|ymmword|zmmword|oword|unk|loc|off|stru|sub|nullsub)_(?:0x)?[0-9A-Fa-f]{6,}$/i;
 const LARGE_HEX_ADDR_RE = /^0[xX][0-9A-Fa-f]{8,}(?:[uUlL]{0,3})$/;
@@ -32,13 +31,8 @@ const isIdentifierPart = (char: string) => /[A-Za-z0-9_]/.test(char);
 const parseIntegerLiteral = (token: string) => {
   const match = token.match(/^(0[xX][0-9A-Fa-f]+|\d+)([uUlL]{0,3})$/);
   if (!match) return null;
-  const valueToken = match[1];
-  const suffix = match[2] || '';
   try {
-    const value = valueToken.toLowerCase().startsWith('0x')
-      ? BigInt(valueToken)
-      : BigInt(valueToken);
-    return { value, suffix };
+    return BigInt(match[1]);
   } catch {
     return null;
   }
@@ -46,8 +40,8 @@ const parseIntegerLiteral = (token: string) => {
 
 const canonicalizeIntegerLiteral = (token: string) => {
   const parsed = parseIntegerLiteral(token);
-  if (!parsed) return token;
-  return parsed.value.toString(10);
+  if (parsed === null) return token;
+  return parsed.toString(10);
 };
 
 const stripXrefBlocks = (source: string) => {

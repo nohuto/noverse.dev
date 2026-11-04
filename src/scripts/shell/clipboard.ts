@@ -5,7 +5,7 @@ const EMAIL_BYTES = [
   115, 114, 97,
 ];
 
-function emailAddress(): string {
+export function emailAddress(): string {
   return EMAIL_BYTES.map((byte) => String.fromCharCode(byte ^ EMAIL_KEY)).join(
     '',
   );

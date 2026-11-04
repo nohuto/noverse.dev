@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { createCopyBox, createNode, createPolicyValueTitle } from './dom';
 import { getEntryRegistryTypes, getPolicyStorageGroups } from './model';
 import type { Policy } from './types';

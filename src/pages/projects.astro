@@ -1,6 +1,6 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
-import Icon from '../components/Icon.astro';
+import Icon from '../components/ui/Icon.astro';
 import '../styles/widgets.css';
 import ProjectCard from '../components/projects/ProjectCard.astro';
 import { projects } from '../data/projects';
@@ -39,7 +39,7 @@ const sections = [
       <div class="project-filter">
         <div class="filter-row">
           <div class="search-box">
-            <Icon name="search" class="search-icon" />
+            <Icon name="magnifying-glass" class="search-icon" />
             <input
               id="project-search"
               autocomplete="off"

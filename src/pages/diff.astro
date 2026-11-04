@@ -1,5 +1,5 @@
 ---
-import Icon from '../components/Icon.astro';
+import Icon from '../components/ui/Icon.astro';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import '../styles/widgets.css';
 import SettingsDialog from '../components/dialogs/SettingsDialog.astro';
@@ -31,8 +31,8 @@ import '../styles/diff.css';
         </div>
 
         <div class="bindiff-controls">
-          <div class="bindiff-grid diff-grid">
-            <div class="bindiff-field bindiff-field-compact diff-build-field">
+          <div class="bindiff-grid">
+            <div class="bindiff-field diff-build-field">
               <label for="diff-left-release">Left build</label>
               <select
                 class="select-enhanced"
@@ -42,7 +42,7 @@ import '../styles/diff.css';
                 <option value=""></option>
               </select>
             </div>
-            <div class="bindiff-field bindiff-field-compact diff-build-field">
+            <div class="bindiff-field diff-build-field">
               <label for="diff-right-release">Right build</label>
               <select
                 class="select-enhanced"
@@ -52,7 +52,7 @@ import '../styles/diff.css';
                 <option value=""></option>
               </select>
             </div>
-            <div class="bindiff-field bindiff-field-compact diff-kind-field">
+            <div class="bindiff-field diff-kind-field">
               <div
                 class="diff-kind-toggle"
                 id="diff-kind-toggle"
@@ -79,13 +79,13 @@ import '../styles/diff.css';
                 </button>
               </div>
             </div>
-            <div class="bindiff-field bindiff-field-compact diff-module-field">
+            <div class="bindiff-field diff-module-field">
               <label for="diff-module">Module</label>
               <select class="select-enhanced" id="diff-module" name="module">
                 <option value=""></option>
               </select>
             </div>
-            <div class="bindiff-field bindiff-field-compact diff-name-field">
+            <div class="bindiff-field diff-name-field">
               <label for="diff-name">Type</label>
               <select
                 class="select-enhanced"
@@ -130,7 +130,7 @@ import '../styles/diff.css';
                   title="Side by side"
                   aria-pressed="true"
                 >
-                  <Icon name="layout-column" />
+                  <Icon name="columns" />
                 </button>
                 <button
                   class="bindiff-view-button"
@@ -140,7 +140,7 @@ import '../styles/diff.css';
                   title="Line by line"
                   aria-pressed="false"
                 >
-                  <Icon name="layout-row" />
+                  <Icon name="rows" />
                 </button>
               </div>
             </div>
@@ -152,7 +152,7 @@ import '../styles/diff.css';
                 aria-label="Decrease font size"
                 title="Decrease font size"
               >
-                <Icon name="zoom-out" />
+                <Icon name="magnifying-glass-minus" />
               </button>
               <button
                 class="bindiff-icon-button"
@@ -161,7 +161,7 @@ import '../styles/diff.css';
                 aria-label="Increase font size"
                 title="Increase font size"
               >
-                <Icon name="zoom-in" />
+                <Icon name="magnifying-glass-plus" />
               </button>
             </div>
             <button
@@ -171,7 +171,7 @@ import '../styles/diff.css';
               aria-label="Swap builds"
               title="Swap builds"
             >
-              <Icon name="swap" />
+              <Icon name="arrows-left-right" />
             </button>
             <button
               class="bindiff-icon-button"
@@ -181,7 +181,7 @@ import '../styles/diff.css';
               title="Settings"
               disabled
             >
-              <Icon name="settings" />
+              <Icon name="gear" />
             </button>
             <button
               class="bindiff-icon-button"
@@ -191,8 +191,8 @@ import '../styles/diff.css';
               aria-label="Maximize"
               title="Maximize"
             >
-              <Icon name="zen" class="icon-maximize" />
-              <Icon name="zen-exit" class="icon-minimize" />
+              <Icon name="arrows-out" class="icon-maximize" />
+              <Icon name="arrows-in" class="icon-minimize" />
             </button>
           </div>
           <div id="diff-output" class="bindiff-output"></div>

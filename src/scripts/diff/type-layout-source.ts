@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { literalAt } from './scanner';
 import { createSource } from './source';
 

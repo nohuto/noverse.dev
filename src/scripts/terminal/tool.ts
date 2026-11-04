@@ -1,4 +1,3 @@
-/* Copyright (c) 2026 nohuto */
 import { createDraggableDialog } from '../dialogs/draggable';
 
 export const initFloatingTool = ({

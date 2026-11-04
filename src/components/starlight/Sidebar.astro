@@ -2,9 +2,8 @@
 import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
 import SidebarSublist from '@astrojs/starlight/components/SidebarSublist.astro';
 import SidebarRestorePoint from '@astrojs/starlight/components/SidebarRestorePoint.astro';
-import { Icon as StarlightIcon } from '@astrojs/starlight/components';
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
-import Icon from '../Icon.astro';
+import Icon from '../ui/Icon.astro';
 import SectionLinks from './SectionLinks.astro';
 import MobileMenuFooter from './MobileMenuFooter.astro';
 
@@ -15,11 +14,11 @@ const renderedSidebar = structuredClone(sidebar);
 markOverviewGroup(renderedSidebar, Astro.url.pathname);
 
 const sectionIcons = {
-  Home: 'home',
-  Product: 'product',
-  Projects: 'projects',
-  'Web Tools': 'tools',
-  Documentation: 'book',
+  Home: 'house',
+  Product: 'windows-logo',
+  Projects: 'git-branch',
+  'Web Tools': 'wrench',
+  Documentation: 'books',
 } as const;
 const sectionIcon = (label: string) =>
   sectionIcons[label as keyof typeof sectionIcons];
@@ -118,7 +117,7 @@ function markOverviewGroup(entries: SidebarEntry[], pathname: string) {
                   <span class="large">{entry.label}</span>
                 </span>
                 <span class="sidebar-section-caret">
-                  <StarlightIcon name="right-caret" size="1.25rem" />
+                  <Icon name="caret-right" />
                 </span>
               </summary>
               <SidebarRestorePoint />

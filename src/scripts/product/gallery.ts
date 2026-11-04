@@ -11,8 +11,11 @@ if (gallery) {
       left: index * gallery.clientWidth,
       behavior: 'instant',
     });
-  const move = (direction: number) =>
-    show((current() + direction + count) % count);
+  const move = (direction: number) => {
+    const index = (current() + direction + count) % count;
+    show(index);
+    return index;
+  };
 
   document
     .querySelectorAll<HTMLButtonElement>('[data-gallery-direction]')
@@ -26,7 +29,14 @@ if (gallery) {
   gallery.parentElement?.addEventListener('keydown', (event) => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
     event.preventDefault();
-    move(event.key === 'ArrowLeft' ? -1 : 1);
+    const index = move(event.key === 'ArrowLeft' ? -1 : 1);
+    const slide = gallery.children[index];
+    if (
+      event.target instanceof Node &&
+      gallery.contains(event.target) &&
+      slide instanceof HTMLElement
+    )
+      slide.focus({ preventScroll: true });
   });
 
   gallery.addEventListener('focusin', (event) => {

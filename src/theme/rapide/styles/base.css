@@ -549,9 +549,12 @@
     outline: none;
   }
 
-  .scroll-to-top-button svg {
-    width: 1.7rem;
-    height: 1.7rem;
+  .scroll-to-top-button {
+    --icon-size: 1rem;
+  }
+
+  .pagination-links {
+    --icon-size: 0.875rem;
   }
 
   .pagination-links a,
@@ -593,8 +596,17 @@
   .sidebar-sections summary::-webkit-details-marker {
     display: none;
   }
+  :is(.sidebar-sections, #starlight__mobile-toc) svg.caret {
+    background-color: currentColor;
+    mask: var(--icon-chevron-right) center / 0.75rem no-repeat;
+  }
+  :is(.sidebar-sections, #starlight__mobile-toc) svg.caret path {
+    display: none;
+  }
   .sidebar-section-caret {
+    --icon-size: 0.75rem;
     flex: none;
+    padding: 0.25rem;
     transition: transform var(--motion);
   }
   .sidebar-sections details[open] > summary > .sidebar-section-caret {

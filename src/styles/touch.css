@@ -26,7 +26,6 @@
     .site-nav > :is(a, button),
     .work-preview summary,
     .project-preview summary,
-    .image-expand,
     .policy-filter-button
   )::after {
     content: '';

@@ -138,6 +138,18 @@ import Icon from './ui/Icon.astro';
     }
   }
 
+  @media (hover: none) {
+    .image-expand {
+      opacity: 0;
+    }
+
+    a.image-expand {
+      inset: 0;
+      width: auto;
+      height: auto;
+    }
+  }
+
   .sl-markdown-content img:not(a img) {
     cursor: zoom-in;
   }

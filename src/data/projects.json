@@ -31,5 +31,5 @@
   {"repo": "nohuto/gpu-oc-uv", "title": "GPU OC/UV Guide", "image": "/main/images/projects/gpu-oc-uv-oc", "section": "archive", "description": "Guide on how to OC/UV your GPU via MSI Afterburner"},
   {"repo": "nohuto/noverse.dev", "title": "noverse.dev", "href": "https://noverse.dev", "image": "/main/images/projects/noverse-dev", "section": "websites", "description": "Website code, including some web tools & docs"},
   {"repo": "nohuto/iambmusic.me", "title": "iambmusic.me", "href": "https://iambmusic.me", "image": "/main/images/projects/iambmusic-me", "section": "websites", "description": "Music artist portfolio for an acquaintance"},
-  {"repo": "nohuto/katzenfreunde.bb", "title": "katzenfreunde.bb", "image": "/main/images/projects/katzenfreunde-bb", "section": "websites", "description": "Website code for a nonprofit club where I volunteer"}
+  {"repo": "nohuto/katzenfreunde.bb", "title": "katzenfreunde.bb", "href": "https://katzenfreunde-bietigheim-bissingen.de", "image": "/main/images/projects/katzenfreunde-bb", "section": "websites", "description": "Website code for a nonprofit club where I volunteer"}
 ]

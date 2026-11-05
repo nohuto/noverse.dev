@@ -27,7 +27,7 @@ export default defineConfig({
       ],
       title: 'Noverse',
       titleDelimiter: '-',
-      description: 'Docs from win-config, regkit, app-guides, windbg-notes.',
+      description: 'Docs from win-config, regkit, app-guides, windbg-notes',
       favicon: '/favicon.png',
       head: [
         {

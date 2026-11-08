@@ -133,6 +133,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/visibility/images/wallpaper/Mountains.png" alt="" width="2560" height="1440" loading="lazy" decoding="async">
 
+### Mountains Art
+
+<img src="https://raw.githubusercontent.com/nohuto/win-config/main/visibility/images/wallpaper/Mountains-Art.png" alt="" width="3840" height="2160" loading="lazy" decoding="async">
+
 ### Mountains Sunset
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/visibility/images/wallpaper/Mountains-Sunset.png" alt="" width="3840" height="2160" loading="lazy" decoding="async">

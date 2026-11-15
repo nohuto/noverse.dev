@@ -6,6 +6,7 @@ import type {
   RawPolicy,
   StorageEntry,
   StorageRow,
+  ValueType,
 } from './types';
 
 export const getPolicyScope = (policy: RawPolicy) => {
@@ -52,18 +53,18 @@ export const normalizeCategorySegment = (segment: string) =>
     .trim()
     .toLowerCase();
 
-export const makeCategoryKey = (path: CategorySegment[]) =>
-  path
-    .map((segment) =>
-      normalizeCategorySegment(segment.name || segment.displayName),
-    )
-    .join('\u001f');
+export const makeCategoryKey = (path: Pick<CategorySegment, 'key'>[]) =>
+  path.map((segment) => normalizeCategorySegment(segment.key)).join('\u001f');
 
 export const getPrimaryPath = (policy: RawPolicy) =>
   (policy.KeyPath || [])[0] || '';
 
+// ADMX valueName "" is the key's default value
+const DEFAULT_VALUE_NAME = '(Default)';
+
 export const getPolicyValue = (policy: RawPolicy) => {
-  if (policy.ValueName) return policy.ValueName;
+  if (typeof policy.ValueName === 'string')
+    return policy.ValueName || DEFAULT_VALUE_NAME;
   const valueNames = getPolicyElementValueNames(policy);
   return valueNames.length ? valueNames.join(', ') : '<ElementDefined>';
 };
@@ -84,39 +85,38 @@ export const normalizePolicyShareId = (value: string) =>
     .trim()
     .toLowerCase();
 
-const isNumericData = (value: string | undefined) =>
-  /^-?\d+$/.test(String(value ?? '').trim());
+const VALUE_REGISTRY_TYPES: Record<ValueType, string> = {
+  Decimal: 'REG_DWORD',
+  LongDecimal: 'REG_QWORD',
+  String: 'REG_SZ',
+  Delete: 'Delete',
+};
+
+const getValueRegistryType = (valueType: ValueType | undefined) =>
+  (valueType && VALUE_REGISTRY_TYPES[valueType]) || 'Unknown';
 
 const getElementRegistryType = (element: PolicyElement) => {
   const type = element?.Type || '';
   if (type === 'Text') return element?.Expandable ? 'REG_EXPAND_SZ' : 'REG_SZ';
   if (type === 'MultiText') return 'REG_MULTI_SZ';
-  if (type === 'List') return 'REG_SZ';
+  if (type === 'List') return element?.Expandable ? 'REG_EXPAND_SZ' : 'REG_SZ';
   if (type === 'LongDecimal') return 'REG_QWORD';
   if (type === 'Decimal') return element?.StoreAsText ? 'REG_SZ' : 'REG_DWORD';
-  if (type === 'Boolean' || type === 'TrueValue' || type === 'FalseValue')
-    return 'REG_DWORD';
+  if (type === 'Boolean')
+    return [
+      ...new Set(
+        [element.TrueType, element.FalseType].map(getValueRegistryType),
+      ),
+    ].join(', ');
   if (type === 'Enum') {
     const items = Array.isArray(element.Items) ? element.Items : [];
-    return items.some(
-      (item) =>
-        item.Data !== null &&
-        item.Data !== undefined &&
-        !isNumericData(item.Data),
-    )
-      ? 'REG_SZ'
-      : 'REG_DWORD';
+    return (
+      [
+        ...new Set(items.map((item) => getValueRegistryType(item.ValueType))),
+      ].join(', ') || 'Unknown'
+    );
   }
-  if (
-    type === 'EnabledValue' ||
-    type === 'DisabledValue' ||
-    type === 'EnabledList' ||
-    type === 'DisabledList'
-  ) {
-    if (element?.Action === 'Delete') return 'Delete';
-    return isNumericData(element.Data) ? 'REG_DWORD' : 'REG_SZ';
-  }
-  return 'Unknown';
+  return getValueRegistryType(element?.ValueType);
 };
 
 const getElementDisplayType = (element: PolicyElement) => {
@@ -170,6 +170,10 @@ const addElementMeta = (
     ['Max strings', element?.MaxStrings],
     ['Expandable', element?.Expandable],
     ['Stored as text', element?.StoreAsText],
+    ['Additive', element?.Additive],
+    ['Explicit value names', element?.ExplicitValue],
+    ['Value prefix', element?.ValuePrefix],
+    ['Soft', element?.Soft],
     ['Client extension', element?.ClientExtension],
   ];
   fields.forEach(([label, value]) => addPolicyMeta(entry, label, value));
@@ -182,9 +186,10 @@ const getPathTail = (path: string | undefined) => {
   return parts[parts.length - 1] || '';
 };
 
-const getActionValue = (
-  item: { Action?: string; Data?: string } | null | undefined,
-) => (item?.Action === 'Delete' ? 'Delete' : (item?.Data ?? ''));
+const getValueText = (
+  valueType: ValueType | undefined,
+  data: string | undefined,
+) => (valueType === 'Delete' ? 'Delete' : (data ?? ''));
 
 const getEntryValueLabel = (
   valueName: string,
@@ -255,29 +260,62 @@ export const getPolicyStorageGroups = (policy: RawPolicy) => {
     entry.rows.push(...rows);
     return entry;
   };
+  const addValueListEntries = (
+    list: PolicyElement[] | undefined,
+    label: string,
+  ) => {
+    (Array.isArray(list) ? list : []).forEach((listItem) => {
+      const listValueName = String(listItem?.ValueName || '').trim();
+      addEntry(
+        getElementPaths(policy, listItem),
+        listValueName,
+        listItem,
+        [
+          {
+            type: 'Value list',
+            registryType: getValueRegistryType(listItem.ValueType),
+            label,
+            value: getValueText(listItem.ValueType, listItem.Data),
+          },
+        ],
+        listValueName || null,
+      );
+    });
+  };
+  const hasPolicyValue = typeof policy?.ValueName === 'string';
   const policyValueName = String(policy?.ValueName || '').trim();
+  const policyValueLabel = policyValueName || DEFAULT_VALUE_NAME;
   const elements = Array.isArray(policy?.Elements) ? policy.Elements : [];
+
+  if (hasPolicyValue)
+    addEntry(
+      getElementPaths(policy, null),
+      policyValueLabel,
+      null,
+      [],
+      policyValueName || null,
+    );
 
   elements.forEach((element) => {
     const type = element?.Type || '';
     const paths = getElementPaths(policy, element);
     if (
       (type === 'EnabledValue' || type === 'DisabledValue') &&
-      policyValueName
+      hasPolicyValue
     ) {
       addEntry(
         paths,
-        policyValueName,
+        policyValueLabel,
         element,
         [
           {
             type,
             registryType: getElementRegistryType(element),
             label: type === 'EnabledValue' ? 'Enabled' : 'Disabled',
-            value: getActionValue(element),
+            value: getValueText(element.ValueType, element.Data),
           },
         ],
-        policyValueName,
+        policyValueName || null,
       );
       return;
     }
@@ -290,9 +328,9 @@ export const getPolicyStorageGroups = (policy: RawPolicy) => {
     ) {
       const rows = element.Items.map((item) => ({
         type: 'Enum',
-        registryType: getElementRegistryType(element),
+        registryType: getValueRegistryType(item.ValueType),
         label: item.DisplayName || '<Option>',
-        value: getActionValue(item),
+        value: getValueText(item.ValueType, item.Data),
       }));
       addEntry(
         paths,
@@ -301,32 +339,12 @@ export const getPolicyStorageGroups = (policy: RawPolicy) => {
         rows,
         rawValueName || policyValueName || null,
       );
-      element.Items.forEach((item) => {
-        const valueList = Array.isArray(item.ValueList) ? item.ValueList : [];
-        valueList.forEach((listItem) => {
-          const listPaths = getElementPaths(policy, listItem);
-          const listValueName = String(listItem?.ValueName || '').trim();
-          addEntry(
-            listPaths,
-            listValueName,
-            listItem,
-            [
-              {
-                type: 'Enum option',
-                registryType:
-                  listItem.Action === 'Delete'
-                    ? 'Delete'
-                    : isNumericData(listItem.Data)
-                      ? 'REG_DWORD'
-                      : 'REG_SZ',
-                label: `When ${item.DisplayName || '<Option>'}`,
-                value: getActionValue(listItem),
-              },
-            ],
-            listValueName || null,
-          );
-        });
-      });
+      element.Items.forEach((item) =>
+        addValueListEntries(
+          item.ValueList,
+          `When ${item.DisplayName || '<Option>'}`,
+        ),
+      );
       return;
     }
     if (type === 'Boolean') {
@@ -337,25 +355,21 @@ export const getPolicyStorageGroups = (policy: RawPolicy) => {
         [
           {
             type: 'Boolean',
-            registryType: getElementRegistryType(element),
+            registryType: getValueRegistryType(element.TrueType),
             label: 'True',
-            value:
-              element.TrueAction === 'Delete'
-                ? 'Delete'
-                : (element.TrueValue ?? '1'),
+            value: getValueText(element.TrueType, element.TrueValue),
           },
           {
             type: 'Boolean',
-            registryType: getElementRegistryType(element),
+            registryType: getValueRegistryType(element.FalseType),
             label: 'False',
-            value:
-              element.FalseAction === 'Delete'
-                ? 'Delete'
-                : (element.FalseValue ?? '0'),
+            value: getValueText(element.FalseType, element.FalseValue),
           },
         ],
         rawValueName || policyValueName || null,
       );
+      addValueListEntries(element.TrueList, 'When True');
+      addValueListEntries(element.FalseList, 'When False');
       return;
     }
     if (type === 'Decimal' || type === 'LongDecimal') {
@@ -385,7 +399,7 @@ export const getPolicyStorageGroups = (policy: RawPolicy) => {
             type,
             registryType: getElementRegistryType(element),
             label: type === 'EnabledList' ? 'Enabled' : 'Disabled',
-            value: getActionValue(element),
+            value: getValueText(element.ValueType, element.Data),
           },
         ],
         rawValueName || null,
@@ -410,9 +424,6 @@ export const getPolicyStorageGroups = (policy: RawPolicy) => {
     );
   });
 
-  if (!groups.length && policyValueName) {
-    addEntry(getElementPaths(policy, null), policyValueName, null, []);
-  }
   const policyPathKey = makePathGroupKey(
     Array.isArray(policy?.KeyPath) ? policy.KeyPath.filter(Boolean) : [],
   );

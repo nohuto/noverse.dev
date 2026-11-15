@@ -1,34 +1,43 @@
+export type ValueType = 'Decimal' | 'LongDecimal' | 'String' | 'Delete';
+
 export interface PolicyElement {
   Type?: string;
+  ValueType?: ValueType;
   Data?: string;
   ValueName?: string | null;
   KeyPath?: string[];
   Items?: PolicyItem[];
   Required?: boolean;
+  TrueType?: ValueType;
   TrueValue?: string;
+  FalseType?: ValueType;
   FalseValue?: string;
-  TrueAction?: string;
-  FalseAction?: string;
+  TrueList?: PolicyElement[];
+  FalseList?: PolicyElement[];
   MinValue?: string;
   MaxValue?: string | null;
   MaxLength?: string;
   MaxStrings?: string;
   StoreAsText?: boolean;
   Expandable?: boolean;
-  Action?: string;
+  Additive?: boolean;
+  ExplicitValue?: boolean;
+  ValuePrefix?: string;
+  Soft?: boolean;
   ClientExtension?: string;
 }
 
 interface PolicyItem {
   DisplayName?: string;
+  ValueType?: ValueType;
   Data?: string;
-  Action?: string;
   ValueList?: PolicyElement[];
 }
 
 export interface RawPolicy {
   File?: string;
   CategoryName?: string;
+  CategoryKey?: string;
   PolicyName?: string;
   Class?: string;
   NameSpace?: string;
@@ -42,6 +51,7 @@ export interface RawPolicy {
 }
 
 export interface CategorySegment {
+  key: string;
   name: string;
   displayName: string;
 }
@@ -52,6 +62,7 @@ export interface PolicyCategory {
   parent?: string;
   file?: string;
   explainText?: string;
+  missing?: boolean;
   path: CategorySegment[];
 }
 
@@ -79,7 +90,7 @@ export interface PolicyPayload {
 }
 
 export interface CategoryNode {
-  name: string;
+  key: string;
   label: string;
   categoryKey: string;
   count: number;

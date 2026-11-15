@@ -178,9 +178,12 @@ function initPolicyExplorer() {
   };
   const getCategoryPath = (policy: RawPolicy): CategorySegment[] => {
     const categoryName = getCategory(policy);
-    const meta = categoryMap.get(categoryName);
+    const categoryKey = policy.CategoryKey || categoryName;
+    const meta = categoryMap.get(categoryKey);
     if (meta?.path?.length) return meta.path;
-    return [{ name: categoryName, displayName: categoryName }];
+    return [
+      { key: categoryKey, name: categoryName, displayName: categoryName },
+    ];
   };
   const POLICY_QUERY_PARAM = 'p';
   const SEARCH_QUERY_PARAM = 'q';
@@ -1058,7 +1061,7 @@ function initPolicyExplorer() {
 
   const buildCategoryTree = () => {
     const rootNode: CategoryNode = {
-      name: '',
+      key: '',
       label: '',
       categoryKey: '',
       count: 0,
@@ -1067,12 +1070,10 @@ function initPolicyExplorer() {
     policies.forEach((policy) => {
       let cursor = rootNode;
       policy.categoryPath.forEach((segment) => {
-        const key = normalizeCategorySegment(
-          segment.name || segment.displayName,
-        );
+        const key = normalizeCategorySegment(segment.key);
         if (!cursor.children.has(key)) {
           cursor.children.set(key, {
-            name: segment.name || segment.displayName,
+            key: segment.key,
             label: segment.displayName || segment.name,
             categoryKey: '',
             count: 0,
@@ -1083,12 +1084,12 @@ function initPolicyExplorer() {
         cursor.count += 1;
       });
     });
-    const applyKeys = (node: CategoryNode, prefix: CategorySegment[] = []) => {
+    const applyKeys = (
+      node: CategoryNode,
+      prefix: Pick<CategorySegment, 'key'>[] = [],
+    ) => {
       [...node.children.values()].forEach((child) => {
-        const path = [
-          ...prefix,
-          { name: child.name, displayName: child.label },
-        ];
+        const path = [...prefix, { key: child.key }];
         child.categoryKey = makeCategoryKey(path);
         applyKeys(child, path);
       });

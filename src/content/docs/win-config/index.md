@@ -17,5 +17,4 @@ sidebar:
 - [Security](/docs/win-config/security/)
 - [NVIDIA](/docs/win-config/nvidia/)
 - [Misc](/docs/win-config/misc/)
-- [Policies](/docs/win-config/policies/)
 - [Affinities](/docs/win-config/affinities/)

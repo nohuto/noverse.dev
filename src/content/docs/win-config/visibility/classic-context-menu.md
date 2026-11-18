@@ -29,7 +29,6 @@ Use it on W11, unless you like the new menu. This works via causing COM to not l
 
 Instead of creating a `.txt` file, then renaming it to e.g. `.bat` / `.ps1`, you can add these options to the 'new' context menu. This may also change the `Type` shown in the explorer (only `.bat` is affected of the three).
 
-`Remove 'Add to Favorites' Option`, `Remove 'Share' Option`, `Remove 'Send to' Option`, `Remove 'bmp'/'zip' Options` don't have a revert yet.
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/visibility/images/newcontext1.png" alt="" width="634" height="103" loading="lazy" decoding="async">
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/visibility/images/newcontext2.png" alt="" width="403" height="284" loading="lazy" decoding="async">

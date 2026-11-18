@@ -19,6 +19,227 @@ const PDF_DIR = path.join(SITE_DIR, 'public', 'main', 'docs');
 
 const INCLUDED_WIN_CONFIG_CATEGORIES = new Set(WIN_CONFIG_CATEGORIES);
 
+const WIN_CONFIG_DOC_ORDER = {
+  system: [
+    'priority-separation.md',
+    'mmcss-values.md',
+    'timer-expiration.md',
+    'dwm-values.md',
+    'kernel-values.md',
+    'game-mode.md',
+    'dxg-kernel-values.md',
+    'hags.md',
+    'heap-type.md',
+    'memory-compression.md',
+    'page-combining.md',
+    'disable-services-drivers.md',
+    'disable-scheduled-tasks.md',
+    'bcd-edits.md',
+    'page-file.md',
+    'disable-notifications.md',
+    'minimal-window-snapping.md',
+    'file-system-values.md',
+    'disable-hyper-v.md',
+    'service-splitting.md',
+    'disable-storage-sense.md',
+    'disable-accessibility-features.md',
+    'disable-windows-search.md',
+    'enable-fso.md',
+    'time-zone.md',
+    'display-scaling.md',
+    'disable-hung-screen.md',
+    'detailed-status-messages.md',
+    'disable-autoruns.md',
+    'export-explorer-taskbar-pins.md',
+  ],
+  visibility: [
+    'explorer-options.md',
+    'desktop-wallpaper.md',
+    'pointer-style.md',
+    'disable-rounded-corners.md',
+    'night-light.md',
+    'minimal-visual-effects.md',
+    'mouse-hover-time.md',
+    'enable-dark-theme.md',
+    'disable-transparency.md',
+    'disable-animations.md',
+    'taskbar-settings.md',
+    'accent-color.md',
+    'account-picture.md',
+    'system-fonts.md',
+    'disable-audio-video-preview.md',
+    'classic-context-menu.md',
+    'hide-shortcut-icon.md',
+    'desktop-icon-spacing.md',
+    'detailed-file-transfer.md',
+    'alt-tab-app-tabs.md',
+    'hide-lock-screen.md',
+    'powershell-colors.md',
+    'classic-control-panel.md',
+    'oem-information.md',
+    'settings-page-visibility.md',
+  ],
+  peripheral: [
+    'mouse-values.md',
+    'sample-rate.md',
+    'sound-mode.md',
+    'disable-audio-enhancements.md',
+    'usbflags-values.md',
+    'usb-values.md',
+    'usbhub-values.md',
+    'keyboard-values.md',
+    'audio-values.md',
+    'stornvme-values.md',
+    'storport-values.md',
+    'audio-ducking.md',
+    'disable-autoplay-autorun.md',
+    'disable-touch-tablet.md',
+    'disable-bluetooth.md',
+    'device-manager.md',
+    'disable-wake-on-input.md',
+    'disable-dynamic-lighting.md',
+    'disable-system-sounds.md',
+    'disable-printers.md',
+    'monitor-settings.md',
+  ],
+  power: [
+    'xhci-imod.md',
+    'power-plan.md',
+    'disable-timer-coalescing.md',
+    'pnp-device-values.md',
+    'power-values.md',
+    'usb-audio-idle.md',
+    'disable-nic-power-savings.md',
+    'disable-hibernation.md',
+    'remove-power-options.md',
+    'disable-energy-estimation.md',
+  ],
+  privacy: [
+    'app-configuration.md',
+    'disable-general-telemetry.md',
+    'disable-wer.md',
+    'troubleshooter-preference.md',
+    'disable-suggestions-tips-tricks.md',
+    'disable-automatic-map-downloads.md',
+    'disable-time-sync.md',
+    'disable-cross-device-experiences.md',
+    'disable-phone-linking.md',
+    'hide-last-logged-in-user.md',
+    'disable-background-apps.md',
+    'disable-apps-for-websites.md',
+    'disable-clipboard.md',
+    'disable-auto-maintenance.md',
+    'disable-microsoft-copilot.md',
+    'disable-recall.md',
+    'disable-xbox-game-bar.md',
+    'disable-location-access.md',
+    'disable-sensors.md',
+    'disable-powershell-net-telemetry.md',
+    'disable-biometrics.md',
+    'disable-remote-desktop.md',
+    'deny-app-access.md',
+    'disable-startup-ets.md',
+    'disable-text-input-hosts.md',
+    'disable-camera.md',
+    'disable-synchronization.md',
+    'disable-activity-history.md',
+    'disable-file-history.md',
+    'disable-mdm-enrollment.md',
+    'disable-cortana.md',
+    'disable-drm-internet-access.md',
+    'disable-sleep-study.md',
+    'disable-csc.md',
+    'disable-cloud-content-search.md',
+    'microsoft-accounts.md',
+    'disable-font-providers.md',
+    'disable-thumbnail-caching.md',
+    'disable-application-compatibility.md',
+    'disable-onesettings-download.md',
+    'disable-f1-help-key.md',
+    'disable-find-my-device.md',
+    'disable-wmplayer-telemetry.md',
+  ],
+  network: [
+    'encrypted-dns.md',
+    'enable-network-offloads.md',
+    'smb.md',
+    'disable-network-discovery.md',
+    'ndis-poll-mode.md',
+    'congestion-provider.md',
+    'speed-duplex.md',
+    'disable-wi-fi.md',
+    'static-ip.md',
+    'disable-active-probing.md',
+    'disable-vpns.md',
+    'disable-netbios-mdns-llmnr.md',
+    'disable-ipv6.md',
+    'disable-wi-fi-sense.md',
+    'disable-wol.md',
+    'network-buffers.md',
+    'interrupt-moderation.md',
+    'enable-rss.md',
+    'disable-ics-mobile-hotspot.md',
+    'disable-llse.md',
+    'disable-flow-control.md',
+    'enable-jumbo-packets.md',
+    'disable-vmq.md',
+    'disable-sr-iov.md',
+    'disable-fec.md',
+    'disable-file-printer-sharing.md',
+    'disable-microsoft-client-multiplexor.md',
+    'qos-policy.md',
+    'enable-legacy-switch-compatibility-mode.md',
+  ],
+  security: [
+    'windows-firewall.md',
+    'windows-defender.md',
+    'windows-update.md',
+    'uac.md',
+    'ps-execution-policy.md',
+    'process-mitigations.md',
+    'disable-wpbt.md',
+    'dma-remapping.md',
+    'disable-vbs-hvci.md',
+    'disable-bitlocker-efs.md',
+    'disable-p2p-updates.md',
+    'disable-system-restore.md',
+    'disable-downloads-blocking.md',
+    'disable-password-reveal.md',
+    'enable-usb-write-protection.md',
+    'increase-tdr.md',
+    'password-age.md',
+    'enable-dynamic-lock.md',
+    'sudo.md',
+    'enable-camera-osd-indicator.md',
+    'administrator-account.md',
+    'guest-account.md',
+    'defaultuser0-account.md',
+  ],
+  nvidia: [
+    'nvcpl-settings.md',
+    'debloated-driver.md',
+    'nvapi-cli.md',
+    'temporary-nvcpl.md',
+    'hide-tray-icon.md',
+    'disable-dlss-indicator.md',
+    'disable-scheduled-tasks.md',
+    'disable-telemetry.md',
+    'enable-developer-settings.md',
+    'remove-context-menu-entry.md',
+    'nvlddmkm-hex-values.md',
+  ],
+  misc: [
+    'explorer-blur.md',
+    'startallback-config.md',
+    'system-informer.md',
+    'nvfetch.md',
+    '7-zip-settings.md',
+    'onedrive.md',
+    'hash-generator.md',
+  ],
+  affinities: ['interrupt-handling-affinities.md'],
+};
+
 const REPOSITORIES = [
   {
     name: 'win-config',
@@ -238,20 +459,25 @@ function assertDirectory(dirPath, label) {
 }
 
 function generateWinConfig(winConfigDir) {
-  const descFiles = findDescFiles(winConfigDir);
-  const sorted = sortCategories(descFiles);
+  const docGroups = findWinConfigDocs(winConfigDir);
+  const sorted = sortCategories(docGroups);
 
   let optionPages = 0;
 
-  for (const { category, filePath } of sorted) {
+  for (const { category, files } of sorted) {
     if (!INCLUDED_WIN_CONFIG_CATEGORIES.has(category)) continue;
 
     const categoryLabel = CATEGORY_LABELS[category] || toTitleCase(category);
 
-    const raw = readText(filePath);
-    const sections = splitByHeadingLevel(raw, 1).filter(
-      (section) => section.heading,
-    );
+    const sections = files.map((filePath) => {
+      const sections = splitByHeadingLevel(readText(filePath), 1).filter(
+        (section) => section.heading,
+      );
+      if (sections.length !== 1) {
+        throw new Error(`Expected one option heading in ${filePath}`);
+      }
+      return sections[0];
+    });
 
     if (sections.length === 0) {
       continue;
@@ -275,6 +501,10 @@ function generateWinConfig(winConfigDir) {
         body: section.lines.join('\n').trim(),
       });
     }
+  }
+
+  if (optionPages === 0) {
+    throw new Error('No win-config option docs found in <category>/docs/*.md');
   }
 
   return { optionPages };
@@ -1023,24 +1253,29 @@ function yamlString(value) {
   return `'${String(value).replace(/'/g, "''")}'`;
 }
 
-function findDescFiles(rootDir) {
+function findWinConfigDocs(rootDir) {
   const out = [];
-  const stack = [rootDir];
 
-  while (stack.length > 0) {
-    const current = stack.pop();
-    const dirents = fs.readdirSync(current, { withFileTypes: true });
+  for (const category of WIN_CONFIG_CATEGORIES) {
+    const docsDir = path.join(rootDir, category, 'docs');
+    if (!fs.existsSync(docsDir)) continue;
 
-    for (const dirent of dirents) {
-      const fullPath = path.join(current, dirent.name);
-      if (dirent.isDirectory()) {
-        if (dirent.name === '.git' || dirent.name === 'node_modules') continue;
-        stack.push(fullPath);
-      } else if (dirent.isFile() && dirent.name.toLowerCase() === 'desc.md') {
-        const category = path.basename(path.dirname(fullPath)).toLowerCase();
-        out.push({ category, filePath: fullPath });
-      }
-    }
+    const order = new Map(
+      (WIN_CONFIG_DOC_ORDER[category] || []).map((name, index) => [
+        name,
+        index,
+      ]),
+    );
+    const files = fs
+      .readdirSync(docsDir, { withFileTypes: true })
+      .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+      .sort((a, b) => {
+        const aRank = order.get(a.name) ?? Number.MAX_SAFE_INTEGER;
+        const bRank = order.get(b.name) ?? Number.MAX_SAFE_INTEGER;
+        return aRank - bRank || a.name.localeCompare(b.name);
+      })
+      .map((entry) => path.join(docsDir, entry.name));
+    out.push({ category, files });
   }
 
   return out;

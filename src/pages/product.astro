@@ -54,9 +54,9 @@ const previews = await Promise.all([
             <p>
               A tool for modifying your system alongside my documentation
               (reading it isn’t required, as the main sections include presets),
-              whether you follow my choices or test your own. Windows 10 and 11
-              (x64). Windows 11 is preferred, as most of my research is based on
-              it.
+              whether you follow my choices or test your own. It supports W10 &
+              11 (x64), even tho W11 is preferred, as most of my research is
+              based on it.
             </p>
           </div>
           <ul class="product-highlights">
@@ -156,10 +156,10 @@ const previews = await Promise.all([
               <span class="price-label">One time payment</span>
             </div>
             <div class="product-buttons">
-              <a class="product-button" href="/product/buy">
+              <span class="product-button disabled" aria-disabled="true">
                 <Icon name="si-paddle" />
                 <span set:text="Buy" />
-              </a>
+              </span>
               <a
                 class="product-button secondary"
                 href="https://github.com/nohuto/win-config/releases/latest"
@@ -183,6 +183,9 @@ const previews = await Promise.all([
               ))}
             </ul>
           </div>
+          <p class="purchase-note">
+            Buying works once Paddle has approved the site.
+          </p>
           <p class="purchase-note">
             The release includes the installer and its <code>.sig</code>
             signature from my

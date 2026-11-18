@@ -136,6 +136,12 @@
   filter: brightness(0.95);
 }
 
+.product-button.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: none;
+}
+
 .product-gallery {
   grid-area: gallery;
   position: relative;

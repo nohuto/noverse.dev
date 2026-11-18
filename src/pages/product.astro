@@ -5,7 +5,15 @@ import '../styles/widgets.css';
 import '../styles/product.css';
 import '../styles/section-heading.css';
 import { imageWidths } from '../utils/images';
-import paypalMethods from '../image-sources/main/images/paypal-methods.svg?url';
+import paypalBadge from '../image-sources/main/images/payment/paypal.svg?url';
+import applePayBadge from '../image-sources/main/images/payment/apple-pay.svg?url';
+import bancontactBadge from '../image-sources/main/images/payment/bancontact.svg?url';
+
+const paymentMethods = [
+  { src: paypalBadge, name: 'PayPal' },
+  { src: applePayBadge, name: 'Apple Pay' },
+  { src: bancontactBadge, name: 'Bancontact' },
+];
 
 const galleryWidths = [480, 640, 720, 960];
 const gallerySizes =
@@ -24,10 +32,10 @@ const preview = async (name: string, label: string, linkOriginal = true) => {
   };
 };
 const previews = await Promise.all([
-  preview('darkbluelogs', 'dark mode blue logs', false),
-  preview('lightblue', 'light mode blue'),
-  preview('lightviolet', 'light mode violet'),
-  preview('darkred', 'dark mode red'),
+  preview('winconfig-dark-system', 'dark theme'),
+  preview('winconfig-light-system', 'light theme'),
+  preview('winconfig-dark-activity', 'dark theme with the Activity list'),
+  preview('winconfig-dark-power', 'dark theme, Power section'),
 ]);
 ---
 
@@ -36,14 +44,7 @@ const previews = await Promise.all([
     title: 'Windows Configuration',
     description: 'Windows Configuration product',
   }}
-  headings={[
-    { depth: 2, slug: 'terms', text: 'Miscellaneous Information' },
-    { depth: 3, slug: 'refund-policy', text: 'Refund Policy' },
-    { depth: 3, slug: 'license', text: 'License' },
-    { depth: 3, slug: 'data-privacy', text: 'Data Privacy' },
-    { depth: 3, slug: 'usage-redistribution', text: 'Usage & Redistribution' },
-    { depth: 3, slug: 'after-purchase', text: 'After Purchase' },
-  ]}
+  headings={[{ depth: 2, slug: 'getting-started', text: 'Getting started' }]}
 >
   <div class="site-content not-content product-main">
     <section id="product">
@@ -52,12 +53,14 @@ const previews = await Promise.all([
           <div class="product-intro">
             <p>
               A tool for modifying your system alongside my documentation
-              (reading it isn’t required, as each section includes templates),
-              whether you follow my choices or test your own.
+              (reading it isn’t required, as the main sections include presets),
+              whether you follow my choices or test your own. Windows 10 and 11
+              (x64). Windows 11 is preferred, as most of my research is based on
+              it.
             </p>
           </div>
           <ul class="product-highlights">
-            <li>Transparent logs for each change</li>
+            <li>An Activity list of each change</li>
             <li>
               <a
                 class="link"
@@ -66,7 +69,7 @@ const previews = await Promise.all([
               />{' '}
               for each option
             </li>
-            <li>Templates for each section</li>
+            <li>Presets for the main sections</li>
           </ul>
         </div>
         <div
@@ -150,32 +153,40 @@ const previews = await Promise.all([
           <div class="product-cta">
             <div class="product-pricing">
               <span class="product-price">9,99&nbsp;EUR</span>
-              <span class="price-label">Lifetime license</span>
+              <span class="price-label">One time payment</span>
             </div>
-            <form
-              action="https://www.paypal.com/ncp/payment/C4XUQMQZHS948"
-              method="post"
-              target="_blank"
-            >
-              <button class="paypal-button" type="submit">
-                <span>Buy via</span>
-                <img
-                  decoding="async"
-                  class="paypal-button-logo"
-                  src={paypalMethods}
-                  width="140"
-                  height="20"
-                  alt="PayPal"
-                  loading="lazy"
-                />
-              </button>
-            </form>
+            <div class="product-buttons">
+              <a class="product-button" href="/product/buy">
+                <Icon name="si-paddle" />
+                <span set:text="Buy" />
+              </a>
+              <a
+                class="product-button secondary"
+                href="https://github.com/nohuto/win-config/releases/latest"
+              >
+                <Icon name="windows-logo" />
+                <span set:text="Download" />
+              </a>
+            </div>
+            <ul class="payment-methods" aria-label="Payment methods">
+              {paymentMethods.map(({ src, name }) => (
+                <li>
+                  <img
+                    src={src}
+                    width="38"
+                    height="24"
+                    alt={name}
+                    title={name}
+                    decoding="async"
+                  />
+                </li>
+              ))}
+            </ul>
           </div>
-          <!-- prettier-ignore -->
           <p class="purchase-note">
-            Access is assigned manually via Discord, see <span class="purchase-reference">'<a
-              class="link"
-              href="#after-purchase">After Purchase</a>'</span> for more.
+            The release includes the installer and its <code>.sig</code>
+            signature from my
+            <a class="link" href="/public.asc" set:text="PGP key" />.
           </p>
         </div>
         <div class="product-documentation">
@@ -189,93 +200,38 @@ const previews = await Promise.all([
         </div>
       </div>
 
-      <div class="product-terms">
-        <div class="legal-section" id="terms">
-          <div class="section-heading">
-            <h2>Miscellaneous information</h2>
-          </div>
-          <div class="legal-list">
-            <div class="legal-column">
-              <details class="legal-item">
-                <summary id="refund-policy">
-                  Refund Policy
-                  <Icon name="caret-down" />
-                </summary>
-                <p>
-                  Refunds are available only if no registration has been made
-                  and no Discord role has been assigned. Include proof of
-                  purchase when submitting a refund request.
-                </p>
-              </details>
-              <details class="legal-item">
-                <summary id="license">
-                  License
-                  <Icon name="caret-down" />
-                </summary>
-                <p>
-                  Each purchase includes one hardware bound license. Keys don’t
-                  transfer across devices without reregistration (which is
-                  possible within certain limits). Updates and a Discord role
-                  are included.
-                </p>
-              </details>
-            </div>
-            <div class="legal-column">
-              <details class="legal-item">
-                <summary id="data-privacy">
-                  Data Privacy
-                  <Icon name="caret-down" />
-                </summary>
-                <p>
-                  WinConfig uses three hardware identifiers for license
-                  registration and verification, SMBIOS UUID, baseboard serial,
-                  and CPU ID (with MAC address or device IDs as fallbacks).
-                  Saved login data is stored locally, I don’t have access to
-                  your password.
-                </p>
-              </details>
-              <details class="legal-item">
-                <summary id="usage-redistribution">
-                  Usage &amp; Redistribution
-                  <Icon name="caret-down" />
-                </summary>
-                <p>
-                  Licenses are for personal use only. Reselling, transferring,
-                  redistributing, or SRE of WinConfig is prohibited unless you
-                  receive explicit written permission from me (nohuto). By
-                  purchasing or using WinConfig, you accept these terms.
-                </p>
-              </details>
-              <details class="legal-item">
-                <summary>
-                  After Purchase
-                  <Icon name="caret-down" />
-                </summary>
-                <p id="after-purchase">
-                  To get access, you must either include your Discord ID in the
-                  purchase message or send me your transaction ID so I can
-                  assign the Discord role. The role isn’t assigned
-                  automatically, so one of these is required. Once the role is
-                  assigned, you’ll get access to a download link for the tool.
-                  After downloading, you must register yourself via the tool,
-                  and then I’ll validate your registration (which may take some
-                  time). Joining, or already being in the{' '}
-                  <a
-                    class="link"
-                    href="https://discord.noverse.dev"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    set:text="Discord server"
-                  />{' '}
-                  is recommended for now so you receive updates, announcements,
-                  and support. Otherwise you may miss app updates (config
-                  updates would theoretically work as long as no new
-                  section/helper gets added).
-                </p>
-              </details>
-            </div>
-          </div>
+      <div class="product-steps-section" id="getting-started">
+        <div class="section-heading">
+          <h2>Getting started</h2>
         </div>
+        <ol class="product-steps">
+          <li>Download the installer and run it</li>
+          <li>Sign in with Discord in the app</li>
+          <li>
+            Buy in the app or on this page, the license belongs to your Discord
+            account
+          </li>
+          <li>
+            Run <code>/verify</code> in the
+            <a
+              class="link"
+              href="https://discord.noverse.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              set:text="Discord server"
+            />{' '}
+            to get the buyer role
+          </li>
+        </ol>
+        <nav class="product-legal" aria-label="Legal">
+          <a class="link" href="/product/terms/" set:text="Terms" />
+          <a
+            class="link"
+            href="/product/refund-policy/"
+            set:text="Refund policy"
+          />
+          <a class="link" href="/product/privacy/" set:text="Privacy" />
+        </nav>
       </div>
     </section>
   </div>

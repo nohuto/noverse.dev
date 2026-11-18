@@ -1,0 +1,25 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Refund policy',
+    description: 'WinConfig refund policy',
+    tableOfContents: false,
+  }}
+>
+  <p>Paddle.com is my reseller and processes every refund.</p>
+  <p>I refund:</p>
+  <ul>
+    <li>
+      when you can't use WinConfig, e.g. because it doesn't run on your PC, or
+      for another good reason (ask before you apply changes)
+    </li>
+    <li>when you paid twice for the same Discord account</li>
+  </ul>
+  <p>
+    To ask, write to contact@noverse.dev with your order number, or request it
+    at <a href="https://paddle.net">paddle.net</a>.
+  </p>
+</StarlightPage>

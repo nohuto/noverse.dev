@@ -1,0 +1,45 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Privacy policy',
+    description: 'WinConfig privacy policy',
+  }}
+  headings={[
+    { depth: 2, slug: 'what-i-store', text: 'What I Store' },
+    { depth: 2, slug: 'who-processes-it', text: 'Who Processes It' },
+    { depth: 2, slug: 'how-long', text: 'How Long' },
+    { depth: 2, slug: 'your-rights', text: 'Your Rights' },
+  ]}
+>
+  <h2 id="what-i-store">What I Store</h2>
+  <ul>
+    <li>
+      Discord user ID (sign-in with the <code>identify</code> scope only)
+    </li>
+    <li>Your PCs public key &amp; its PC moves</li>
+    <li>
+      Session data, means a hash of your sign-in token, timestamps, and a coarse
+      network value (first part of your IP address, your network operator &amp;
+      country), I never store your full IP address
+    </li>
+    <li>Purchase data from Paddle</li>
+  </ul>
+  <p>The app sends no usage statistics or crash reports.</p>
+  <h2 id="who-processes-it">Who Processes It</h2>
+  <p>Cloudflare, Discord, Paddle</p>
+  <h2 id="how-long">How Long</h2>
+  <p>
+    Account and license data as long as your account exists, sessions end after
+    90 days unused, security logs and PC move history are deleted after 90 days,
+    and transaction records are kept as tax law requires.
+  </p>
+  <h2 id="your-rights">Your Rights</h2>
+  <p>
+    You can ask for access, correction, deletion, restriction or a copy of your
+    data, and object to the processing on the basis of a legitimate interest
+    (contact@noverse.dev).
+  </p>
+</StarlightPage>

@@ -491,8 +491,8 @@
   --quiet: color-mix(in srgb, var(--text) 60%, var(--bg));
   --separator: color-mix(in srgb, var(--muted) 30%, transparent);
   --row-hover: color-mix(in srgb, var(--text) 6%, transparent);
-  --row-selected: color-mix(in srgb, var(--accent) 12%, transparent);
-  --row-selected-hover: color-mix(in srgb, var(--accent) 18%, transparent);
+  --row-selected: color-mix(in srgb, var(--accent) 18%, transparent);
+  --row-selected-hover: color-mix(in srgb, var(--accent) 24%, transparent);
 }
 
 ::selection {

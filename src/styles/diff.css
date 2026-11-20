@@ -141,16 +141,12 @@
   pointer-events: none;
 }
 
-:where(.site-content) .select-option.is-active {
-  background: var(--row-selected);
-}
-
 :where(.site-content) .select-option:focus {
   background: var(--row-hover);
 }
 
-:where(.site-content) .select-option.is-active:focus {
-  background: var(--row-selected-hover);
+:where(.site-content) .select-option.is-active {
+  background: var(--row-selected);
 }
 
 @media (hover: hover) {

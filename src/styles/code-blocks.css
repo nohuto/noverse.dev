@@ -121,6 +121,19 @@
   }
 }
 
+@media (hover: none) {
+  .expressive-code:not(.code-fullscreen > *)
+    .frame:not(:focus-within)
+    .code-actions {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .expressive-code .code-actions {
+    transition: opacity var(--motion);
+  }
+}
+
 :root:has(.code-fullscreen[open]) {
   overflow: hidden;
 }

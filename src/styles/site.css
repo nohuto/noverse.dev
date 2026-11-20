@@ -2,6 +2,7 @@
 @import './palette.css';
 @import './fonts.css';
 @import './stacking.css';
+@import './radius.css';
 @import './widgets.css';
 @import './scrollbar.css';
 @import './links.css';
@@ -17,6 +18,19 @@
   font-display: swap;
 }
 
+:root,
+::backdrop {
+  --bg: #050505;
+  --bg-alt: #050505;
+  --panel: #0b0b0b;
+  --panel-alt: #131313;
+  --border: #323232;
+  --border-strong: #454545;
+  --text: #eeeeee;
+  --muted: #b2b2b2;
+  --accent-contrast: #050505;
+}
+
 :root {
   --font-family: 'Manrope', system-ui, sans-serif;
   --page-width: min(41rem, 100%);
@@ -30,12 +44,6 @@ html {
   background: var(--bg);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
 }
 
 body.site-content {
@@ -98,6 +106,7 @@ h3 {
   color: var(--text);
   text-decoration: none;
   transform: translateY(calc(-100% - 16px));
+  border-radius: var(--ui-radius);
 }
 
 .skip-link:focus {

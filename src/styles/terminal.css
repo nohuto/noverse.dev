@@ -79,6 +79,7 @@ body:has(.main-terminal) {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border-radius: var(--ui-radius);
 }
 
 .console-window-header {
@@ -130,6 +131,7 @@ body:has(.main-terminal) {
   background: var(--panel);
   display: flex;
   flex-direction: column;
+  border-radius: var(--ui-radius);
 }
 
 .tool-resize-handle {
@@ -262,6 +264,7 @@ body:has(.main-terminal) {
   display: grid;
   place-items: center;
   cursor: pointer;
+  border-radius: var(--ui-radius);
 }
 
 .bitmask-bit:focus-visible {
@@ -276,8 +279,7 @@ body:has(.main-terminal) {
 
 .bitmask-bit[aria-pressed='true'] {
   border-color: var(--accent);
-  background: var(--accent);
-  color: var(--accent-contrast);
+  background: var(--row-selected);
 }
 
 .bitmask-values {
@@ -310,6 +312,7 @@ body:has(.main-terminal) {
   line-height: 22px;
   scrollbar-width: none;
   white-space: nowrap;
+  border-radius: var(--ui-radius);
 }
 
 .bitmask-values input[aria-invalid='true'] {
@@ -385,6 +388,7 @@ body:has(.main-terminal) {
   text-align: left;
   font-size: var(--font-size-body);
   line-height: 28px;
+  border-radius: var(--ui-radius);
 }
 
 #calc-input {
@@ -480,6 +484,7 @@ body:has(.main-terminal) {
   line-height: 1;
   font-size: var(--calc-key-font-size);
   text-align: center;
+  border-radius: var(--ui-radius);
 }
 
 .calc-tools button {
@@ -699,6 +704,7 @@ body:has(.main-terminal) {
 }
 
 .console-input textarea {
+  field-sizing: content;
   width: 100%;
   min-height: 1.5em;
   appearance: none;
@@ -732,7 +738,10 @@ body:has(.main-terminal) {
   inset: 0;
   z-index: -1;
   background: var(--accent);
-  animation: blink 1.1s steps(1) infinite;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: blink 1.1s steps(1) infinite;
+  }
 }
 
 .console[data-input-active='true']
@@ -819,11 +828,5 @@ body:has(.main-terminal) {
 
   .calc-window {
     height: min(286px, calc(100svh - 24px));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .console-block-cursor::before {
-    animation: none;
   }
 }

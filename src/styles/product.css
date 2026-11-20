@@ -40,7 +40,6 @@
 }
 
 .product-intro > p {
-  color: var(--muted);
   text-wrap: balance;
 }
 
@@ -51,7 +50,6 @@
 .product-highlights {
   margin: 16px 0 0;
   padding-left: 18px;
-  color: var(--muted);
 }
 
 .product-highlights li + li {
@@ -111,6 +109,7 @@
   text-decoration: none;
   padding: 6px 18px;
   width: fit-content;
+  border-radius: var(--ui-radius);
 }
 
 .product-button .icon {
@@ -161,6 +160,7 @@
   scrollbar-width: none;
   overscroll-behavior-x: contain;
   border: 1px solid var(--border-strong);
+  border-radius: var(--ui-radius);
 }
 
 .product-slides:focus-visible {
@@ -242,7 +242,6 @@
 .product-steps {
   margin: 0;
   padding-left: 18px;
-  color: var(--muted);
   line-height: 1.55;
 }
 

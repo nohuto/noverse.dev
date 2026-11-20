@@ -31,13 +31,16 @@ import '../styles/code-blocks.css';
   const placeholder = document.createElement('div');
   let trigger: HTMLButtonElement | null = null;
 
-  for (const frame of document.querySelectorAll('.expressive-code .frame')) {
+  for (const frame of document.querySelectorAll<HTMLElement>(
+    '.expressive-code .frame',
+  )) {
     const actions = document.createElement('div');
     actions.className = 'code-actions';
     const copy = frame.querySelector('.copy');
     if (copy) actions.append(copy);
     actions.append(template.content.cloneNode(true));
     frame.append(actions);
+    frame.tabIndex = -1;
   }
   template.remove();
 

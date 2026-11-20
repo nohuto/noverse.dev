@@ -80,6 +80,8 @@
   display: none;
   font-size: var(--font-size-control);
   z-index: var(--z-dropdown);
+  border-radius: var(--ui-radius);
+  overflow: hidden;
 }
 
 :where(.site-content) .select-ui.open-up .select-menu {
@@ -118,6 +120,7 @@
   text-align: left;
   background: transparent;
   border: none;
+  border-radius: 0;
   padding: 4px 10px;
   color: var(--text);
   font: inherit;
@@ -139,23 +142,33 @@
 }
 
 :where(.site-content) .select-option.is-active {
-  background: var(--accent);
-  color: var(--accent-contrast);
+  background: var(--row-selected);
 }
 
 :where(.site-content) .select-option:focus {
-  background: color-mix(in srgb, var(--accent) 90%, var(--text));
-  color: var(--accent-contrast);
+  background: var(--row-hover);
+}
+
+:where(.site-content) .select-option.is-active:focus {
+  background: var(--row-selected-hover);
 }
 
 @media (hover: hover) {
   :where(.site-content) .select-option:hover {
-    background: color-mix(in srgb, var(--accent) 90%, var(--text));
-    color: var(--accent-contrast);
+    background: var(--row-hover);
+  }
+
+  :where(.site-content) .select-option.is-active:hover {
+    background: var(--row-selected-hover);
   }
 }
 
-:where(.site-content) :is(.select-option, .select-trigger):focus-visible {
+:where(.site-content) .select-option:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+}
+
+:where(.site-content) .select-trigger:focus-visible {
   outline: none;
 }
 
@@ -220,7 +233,6 @@
 
 .bindiff-intro p {
   margin-bottom: 16px;
-  color: var(--muted);
 }
 
 .bindiff-controls {
@@ -295,6 +307,7 @@
   height: 24px;
   border: 0;
   border-bottom: 1px solid var(--border);
+  border-radius: 0;
   background: var(--panel-alt);
 }
 
@@ -310,6 +323,7 @@
   grid-template-columns: repeat(3, max-content);
   border: 1px solid var(--border);
   background: var(--panel);
+  border-radius: var(--ui-radius);
 }
 
 .diff-kind-field {
@@ -322,6 +336,7 @@
   padding: 2px 12px;
   border: 0;
   border-right: 1px solid var(--border);
+  border-radius: 0;
   background: transparent;
   color: var(--text);
   font-size: var(--font-size-control);
@@ -329,13 +344,17 @@
   cursor: pointer;
 }
 
+.diff-kind-toggle button:first-child {
+  border-radius: calc(var(--ui-radius) - 1px) 0 0 calc(var(--ui-radius) - 1px);
+}
+
 .diff-kind-toggle button:last-child {
   border-right: 0;
+  border-radius: 0 calc(var(--ui-radius) - 1px) calc(var(--ui-radius) - 1px) 0;
 }
 
 .diff-kind-toggle button.is-active {
-  background: var(--accent);
-  color: var(--accent-contrast);
+  background: var(--row-selected);
 }
 
 .bindiff-field .select-menu-meta {
@@ -420,8 +439,7 @@
 }
 
 .bindiff-view-button.is-active {
-  background: var(--accent);
-  color: var(--accent-contrast);
+  background: var(--row-selected);
 }
 
 .bindiff-actions {
@@ -517,6 +535,7 @@
   min-height: 80px;
   border: 1px solid var(--border);
   background: var(--panel);
+  border-radius: var(--ui-radius);
 }
 
 .bindiff-output:empty::before {

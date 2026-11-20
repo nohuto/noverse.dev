@@ -1,6 +1,7 @@
 @import '../../../styles/fonts.css';
 @import '../../../styles/palette.css';
 @import '../../../styles/stacking.css';
+@import '../../../styles/radius.css';
 @import '../../../styles/scrollbar.css' layer(rapide);
 @import '../../../styles/links.css' layer(rapide);
 @import '../../../styles/icons.css' layer(rapide);
@@ -22,7 +23,6 @@
     --sl-text-h4: 0.9375rem;
     --sl-text-h5: 0.9375rem;
     --sl-text-h6: 0.9375rem;
-    --ui-radius: 0px;
     --icon-size: 18px;
     --sl-menu-button-size: 28px;
     --header-control-height: 26px;

@@ -14,7 +14,6 @@
 
 :where(.site-content) :where(p) {
   margin: 0 0 12px;
-  color: var(--muted);
   line-height: 1.6;
 }
 
@@ -69,18 +68,9 @@
   background: var(--panel);
   border: 1px solid var(--border);
   padding: 6px 10px;
-  border-radius: 0;
+  border-radius: var(--ui-radius);
   outline: none;
   font-size: var(--font-size-control);
-}
-
-:where(.site-content)
-  :where(a, button, input, select, textarea, [tabindex]):not([tabindex='-1']) {
-  transition:
-    color var(--motion),
-    background-color var(--motion),
-    border-color var(--motion),
-    opacity var(--motion);
 }
 
 :where(.site-content) select:focus,
@@ -109,6 +99,7 @@
   pointer-events: none;
   z-index: var(--z-toast);
   font-size: 0.8125rem;
+  border-radius: var(--ui-radius);
 }
 
 .toast.show {
@@ -161,13 +152,13 @@
 }
 
 :where(.site-content) input[type='checkbox']:checked {
-  background: var(--accent);
+  background: var(--row-selected);
   border-color: var(--accent);
 }
 
 :where(.site-content) input[type='checkbox']:checked::after {
-  border-right-color: var(--accent-contrast);
-  border-bottom-color: var(--accent-contrast);
+  border-right-color: var(--accent);
+  border-bottom-color: var(--accent);
   opacity: 1;
 }
 

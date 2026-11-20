@@ -204,14 +204,8 @@ function initConsole() {
     suggestion.textContent = hint.slice(1);
   };
 
-  const resizeInput = () => {
-    input.style.height = 'auto';
-    input.style.height = `${input.scrollHeight}px`;
-  };
-
   const updateCaret = () => {
     updatePromptIndent();
-    resizeInput();
     const value = input.value;
     const pos =
       typeof input.selectionStart === 'number'

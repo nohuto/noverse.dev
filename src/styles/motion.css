@@ -1,36 +1,79 @@
 :root {
-  --motion: 0.2s ease-in-out;
+  --motion: 0.12s ease-out;
+  --motion-slide: 0.25s cubic-bezier(0.87, 0, 0.13, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion: 0s;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    --motion-slide: 0s;
   }
 }
 
-svg.icon,
-summary .caret {
+:where(a, button, input, select, textarea, summary, [tabindex]):not(
+  [tabindex='-1']
+) {
+  transition:
+    color var(--motion),
+    background-color var(--motion),
+    border-color var(--motion),
+    opacity var(--motion);
+}
+
+:is(
+    #starlight__sidebar,
+    starlight-toc,
+    #starlight__mobile-toc,
+    #starlight__search,
+    .select-list,
+    [role='tree']
+  )
+  :is(a, button, summary) {
+  transition: none;
+}
+
+svg.icon {
   transition: transform var(--motion);
 }
 
+summary :is(svg.icon, .caret) {
+  transition: transform var(--motion-slide);
+}
+
 details::details-content {
-  opacity: 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: clip;
+  overflow-clip-margin: 4px;
   transition:
-    opacity var(--motion),
-    content-visibility var(--motion) allow-discrete;
+    grid-template-rows var(--motion-slide),
+    content-visibility var(--motion-slide) allow-discrete;
 }
 
 details[open]::details-content {
-  opacity: 1;
+  grid-template-rows: 1fr;
+}
+
+details > :not(summary) {
+  min-height: 0;
+}
+
+:is(.work-preview, .project-preview) {
+  &::details-content {
+    display: block;
+    opacity: 0;
+    transition:
+      opacity var(--motion),
+      content-visibility var(--motion) allow-discrete;
+  }
+
+  &[open]::details-content {
+    opacity: 1;
+  }
+
+  & summary svg.icon {
+    transition: transform var(--motion);
+  }
 }
 
 dialog[open]:not(.modal),

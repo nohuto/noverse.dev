@@ -10,4 +10,10 @@
       transform: translate(0.25rem, 0.25rem) rotate(45deg) scale(1.35);
     }
   }
+
+  @media (hover: none) {
+    .sl-markdown-content .sl-anchor-link {
+      display: none;
+    }
+  }
 }

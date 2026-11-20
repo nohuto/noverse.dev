@@ -9,6 +9,7 @@
   background: var(--bg-alt);
   color: var(--text);
   font: 0.6875rem / 1 var(--font-family-mono);
+  border-radius: var(--ui-radius);
 }
 
 .shortcut-tip::before {

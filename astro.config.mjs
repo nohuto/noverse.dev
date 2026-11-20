@@ -62,6 +62,7 @@ export default defineConfig({
       ],
       expressiveCode: {
         themes: ['vitesse-dark', 'vitesse-light'],
+        defaultProps: { frame: 'code' },
         styleOverrides: {
           codeFontFamily: 'var(--sl-font-mono)',
           codeFontSize: '0.8125rem',

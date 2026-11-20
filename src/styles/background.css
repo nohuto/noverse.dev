@@ -178,7 +178,10 @@ html[data-bg='starfield'] .background-star {
   box-shadow: var(--starfield-shadow);
   transform-style: preserve-3d;
   will-change: transform;
-  animation: fly var(--starfield-speed) linear infinite;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fly var(--starfield-speed) linear infinite;
+  }
 }
 
 html[data-bg='starfield'] .background-star::before,
@@ -192,12 +195,18 @@ html[data-bg='starfield'] .background-star::after {
 
 html[data-bg='starfield'] .background-star::before {
   transform: translateZ(calc(var(--starfield-depth) * -1));
-  animation: fade1 var(--starfield-speed) linear infinite;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fade1 var(--starfield-speed) linear infinite;
+  }
 }
 
 html[data-bg='starfield'] .background-star::after {
   transform: translateZ(calc(var(--starfield-depth) * -2));
-  animation: fade2 var(--starfield-speed) linear infinite;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fade2 var(--starfield-speed) linear infinite;
+  }
 }
 
 .background-stars {
@@ -235,13 +244,5 @@ html[data-bg='starfield'] .background-stars {
 
   100% {
     opacity: 0.5;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html[data-bg='starfield'] .background-star,
-  html[data-bg='starfield'] .background-star::before,
-  html[data-bg='starfield'] .background-star::after {
-    animation: none;
   }
 }

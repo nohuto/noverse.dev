@@ -132,6 +132,8 @@
   background: var(--panel);
   font-size: var(--font-size-control);
   padding: 0;
+  border-radius: var(--ui-radius);
+  overflow: hidden;
 }
 
 .policy-view-option,
@@ -147,7 +149,17 @@
 
 .policy-view-option:hover,
 .policy-column-choice:hover {
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  background: var(--row-hover);
+}
+
+.policy-view-option:has(:checked),
+.policy-column-choice:has(:checked) {
+  background: var(--row-selected);
+}
+
+.policy-view-option:has(:checked):hover,
+.policy-column-choice:has(:checked):hover {
+  background: var(--row-selected-hover);
 }
 
 .policy-muted {
@@ -208,6 +220,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border-radius: var(--ui-radius);
 }
 
 .policy-splitter {
@@ -467,17 +480,17 @@ body.policy-column-resizing * {
 }
 
 .policy-table tbody tr.is-active td {
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  background: var(--row-selected);
 }
 
 @media (hover: hover) {
   .policy-table tbody tr:hover td {
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    background: var(--row-hover);
   }
-}
 
-.policy-table tbody tr.is-active td:first-child {
-  border-inline-start: 2px solid var(--accent);
+  .policy-table tbody tr.is-active:hover td {
+    background: var(--row-selected-hover);
+  }
 }
 
 .policy-table td[data-column='scope'],
@@ -503,6 +516,8 @@ body.policy-column-resizing * {
   background: var(--panel);
   font-size: var(--font-size-control);
   padding: 0;
+  border-radius: var(--ui-radius);
+  overflow: hidden;
 }
 
 .policy-table th.has-filter {
@@ -557,6 +572,8 @@ body.policy-column-resizing * {
   border: 1px solid var(--border-strong);
   background: var(--panel);
   font-size: var(--font-size-control);
+  border-radius: var(--ui-radius);
+  overflow: hidden;
 }
 
 .policy-filter-menu .policy-filter-search {
@@ -726,6 +743,7 @@ body.policy-column-resizing * {
   padding: 3px 8px;
   color: var(--text);
   overflow-wrap: anywhere;
+  border-radius: var(--ui-radius);
 }
 
 .policy-value-attrs {
@@ -760,6 +778,7 @@ body.policy-column-resizing * {
   cursor: text;
   -webkit-user-select: text;
   user-select: text;
+  border-radius: var(--ui-radius);
 }
 
 .policy-copy-box.has-prefix {
@@ -864,6 +883,7 @@ body.policy-column-resizing * {
   padding: 0 8px;
   border: 1px solid var(--border);
   background: var(--panel-alt);
+  border-radius: var(--ui-radius);
 }
 
 .policy-data-label {

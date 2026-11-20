@@ -4,22 +4,6 @@
     font-weight: 350;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    html {
-      scroll-behavior: smooth;
-    }
-  }
-
-  :where(a, button, input, select, textarea, summary, [tabindex]):not(
-    [tabindex='-1']
-  ) {
-    transition:
-      color var(--motion),
-      background-color var(--motion),
-      border-color var(--motion),
-      opacity var(--motion);
-  }
-
   :where(a, button, input, select, textarea, summary, [tabindex]):not(
       .sidebar-tree-search-input,
       [data-open-modal],
@@ -593,7 +577,8 @@
     user-select: none;
     list-style: none;
   }
-  .sidebar-sections summary::-webkit-details-marker {
+  .sidebar-sections summary::-webkit-details-marker,
+  sl-sidebar-restore {
     display: none;
   }
   :is(.sidebar-sections, #starlight__mobile-toc) svg.caret {
@@ -607,7 +592,7 @@
     --icon-size: 0.75rem;
     flex: none;
     padding: 0.25rem;
-    transition: transform var(--motion);
+    transition: transform var(--motion-slide);
   }
   .sidebar-sections details[open] > summary > .sidebar-section-caret {
     transform: rotate(90deg);

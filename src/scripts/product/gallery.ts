@@ -50,23 +50,3 @@ if (gallery) {
     if (status) status.textContent = `Screenshot ${current() + 1} of ${count}`;
   });
 }
-
-function revealFragment(hash = location.hash) {
-  if (!hash) return;
-  let target: HTMLElement | null;
-  try {
-    target = document.getElementById(decodeURIComponent(hash.slice(1)));
-  } catch {
-    return;
-  }
-  const disclosure = target?.closest('details');
-  if (disclosure) disclosure.open = true;
-}
-revealFragment();
-window.addEventListener('hashchange', () => revealFragment());
-document.addEventListener('click', (event) => {
-  const link =
-    event.target instanceof Element ? event.target.closest('a') : null;
-  if (link?.origin === location.origin && link.pathname === location.pathname)
-    revealFragment(link.hash);
-});

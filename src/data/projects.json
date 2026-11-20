@@ -1,5 +1,5 @@
 [
-  {"repo": "nohuto/win-config", "title": "Windows Configuration", "image": "/main/images/darkbluelogs", "imageLight": "/main/images/lightblue", "home": {"order": 2}, "description": "Documentation on several topics (detailed where undocumented)"},
+  {"repo": "nohuto/win-config", "title": "WinConfig", "image": "/main/images/winconfig-dark-system", "imageLight": "/main/images/winconfig-light-system", "home": {"order": 2}, "description": "Documentation on several topics (detailed where undocumented)"},
   {"repo": "nohuto/regkit", "title": "RegKit", "image": "/main/images/projects/regkit-dark", "imageLight": "/main/images/projects/regkit-light", "home": {"order": 1}, "description": "Performant registry editor including several new features & improvements"},
   {"repo": "nohuto/win32-ui", "title": "Win32 UI Library", "description": "Shared library"},
   {"repo": "nohuto/thread-sim", "title": "Thread Simulation", "image": "/main/images/projects/thread-sim", "description": "Experiment with thread scheduling"},

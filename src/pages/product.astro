@@ -15,6 +15,10 @@ const paymentMethods = [
   { src: bancontactBadge, name: 'Bancontact' },
 ];
 
+const verifyUrl = 'https://github.com/nohuto/win-config#verify-binaries';
+const presetSections =
+  'System, Visibility, Peripheral, Power, Privacy, Security, Network';
+
 const galleryWidths = [480, 640, 720, 960];
 const gallerySizes =
   '(max-width: 749px) calc(100vw - 46px), (max-width: 1024px) calc(100vw - 342px), (max-width: 1155px) calc(55vw - 196px), (max-width: 1299px) calc(100vw - 598px), (max-width: 1839px) calc(47vw - 233px), 629px';
@@ -41,165 +45,180 @@ const previews = await Promise.all([
 
 <StarlightPage
   frontmatter={{
-    title: 'Windows Configuration',
-    description: 'Windows Configuration product',
+    title: 'WinConfig',
+    description: 'WinConfig product',
   }}
   headings={[{ depth: 2, slug: 'getting-started', text: 'Getting started' }]}
 >
   <div class="site-content not-content product-main">
     <section id="product">
       <div class="product-overview">
-        <div class="product-details">
-          <div class="product-intro">
-            <p>
-              A tool for modifying your system alongside my documentation
-              (reading it isn’t required, as the main sections include presets),
-              whether you follow my choices or test your own. It supports W10 &
-              11 (x64), even tho W11 is preferred, as most of my research is
-              based on it.
+        <div class="product-info">
+          <div class="product-details">
+            <div class="product-intro">
+              <p>
+                A tool for modifying your system alongside my documentation
+                (reading it isn’t required, as the main sections include
+                presets), whether you follow my choices or test your own. It
+                supports W10 & 11 (x64), even tho W11 is preferred, as most of
+                my research is based on it. Reverting an option restores its
+                previous value, or the Windows default if WinConfig didn’t
+                change it.
+              </p>
+            </div>
+            <ul class="product-highlights">
+              <li>An Activity list of each change</li>
+              <li>
+                <a
+                  class="link"
+                  href="/docs/win-config/"
+                  set:text="Documentation"
+                />{' '}
+                for each option
+              </li>
+              <li>
+                Presets for the
+                <span data-tip={presetSections} tabindex="0" set:text="main" />
+                <span class="sr-only">({presetSections})</span>
+                sections
+              </li>
+              <li>Includes app & content updates</li>
+            </ul>
+          </div>
+          <div class="product-purchase">
+            <div class="product-cta">
+              <div class="product-pricing">
+                <span class="product-price">9,99&nbsp;EUR</span>
+                <span class="price-label">One time payment</span>
+              </div>
+              <div class="product-buttons">
+                <span class="product-button disabled" aria-disabled="true">
+                  <Icon name="si-paddle" />
+                  <span set:text="Buy" />
+                </span>
+                <a
+                  class="product-button secondary"
+                  href="https://github.com/nohuto/win-config/releases/latest"
+                >
+                  <Icon name="windows-logo" />
+                  <span set:text="Download" />
+                </a>
+              </div>
+              <ul class="payment-methods" aria-label="Payment methods">
+                {paymentMethods.map(({ src, name }) => (
+                  <li>
+                    <img
+                      src={src}
+                      width="38"
+                      height="24"
+                      alt={name}
+                      title={name}
+                      decoding="async"
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p class="purchase-note">
+              Buying works once Paddle has approved the site.
+            </p>
+            <p class="purchase-note">
+              The installer is signed with my PGP key, see
+              <a class="link" href={verifyUrl} set:text="how to verify it" />.
             </p>
           </div>
-          <ul class="product-highlights">
-            <li>An Activity list of each change</li>
-            <li>
+        </div>
+        <div class="product-media">
+          <div
+            class="product-gallery"
+            role="region"
+            aria-label="Product screenshots"
+            aria-roledescription="carousel"
+          >
+            <div
+              class="product-slides"
+              id="product-slides"
+              tabindex="0"
+              role="group"
+              aria-label="Screenshots, use left and right arrow keys"
+            >
+              {previews.map(({ label, href, image, avif }, index) => (
+                <a
+                  class="product-slide"
+                  href={href}
+                  data-image-view={`WinConfig in ${label}`}
+                  aria-label={`Open full-size ${label} screenshot`}
+                >
+                  <picture>
+                    <source
+                      type="image/avif"
+                      srcset={avif.srcset}
+                      sizes={gallerySizes}
+                    />
+                    <img
+                      decoding="async"
+                      src={image.byWidth[640]}
+                      srcset={image.srcset}
+                      sizes={gallerySizes}
+                      width={image.source.width}
+                      height={image.source.height}
+                      alt={`WinConfig in ${label}`}
+                      loading={index === 0 ? undefined : 'lazy'}
+                      fetchpriority={index === 0 ? 'high' : undefined}
+                    />
+                  </picture>
+                  <span class="image-expand" aria-hidden="true">
+                    <Icon name="arrows-out" />
+                  </span>
+                </a>
+              ))}
+            </div>
+            <button
+              class="product-gallery-arrow previous"
+              type="button"
+              data-gallery-direction="-1"
+              aria-label="Previous screenshot"
+              aria-keyshortcuts="ArrowLeft"
+              data-tip="Left arrow"
+              aria-controls="product-slides"
+              hidden
+            >
+              <Icon name="caret-left" />
+            </button>
+            <button
+              class="product-gallery-arrow next"
+              type="button"
+              data-gallery-direction="1"
+              aria-label="Next screenshot"
+              aria-keyshortcuts="ArrowRight"
+              data-tip="Right arrow"
+              aria-controls="product-slides"
+              hidden
+            >
+              <Icon name="caret-right" />
+            </button>
+            <span
+              id="product-gallery-status"
+              class="sr-only"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              Screenshot 1 of {previews.length}
+            </span>
+          </div>
+          <div class="product-documentation">
+            <p>
+              WinConfig is based on my personal research on several topics,
+              which I began documenting around July 2024. Purchasing a license
+              supports my research and ongoing work. The detail of each options
               <a
                 class="link"
                 href="/docs/win-config/"
-                set:text="Documentation"
-              />{' '}
-              for each option
-            </li>
-            <li>Presets for the main sections</li>
-          </ul>
-        </div>
-        <div
-          class="product-gallery"
-          role="region"
-          aria-label="Product screenshots"
-          aria-roledescription="carousel"
-        >
-          <div
-            class="product-slides"
-            id="product-slides"
-            tabindex="0"
-            role="group"
-            aria-label="Screenshots, use left and right arrow keys"
-          >
-            {previews.map(({ label, href, image, avif }, index) => (
-              <a
-                class="product-slide"
-                href={href}
-                data-image-view={`WinConfig in ${label}`}
-                aria-label={`Open full-size ${label} screenshot`}
-              >
-                <picture>
-                  <source
-                    type="image/avif"
-                    srcset={avif.srcset}
-                    sizes={gallerySizes}
-                  />
-                  <img
-                    decoding="async"
-                    src={image.byWidth[640]}
-                    srcset={image.srcset}
-                    sizes={gallerySizes}
-                    width={image.source.width}
-                    height={image.source.height}
-                    alt={`WinConfig in ${label}`}
-                    loading={index === 0 ? undefined : 'lazy'}
-                    fetchpriority={index === 0 ? 'high' : undefined}
-                  />
-                </picture>
-                <span class="image-expand" aria-hidden="true">
-                  <Icon name="arrows-out" />
-                </span>
-              </a>
-            ))}
+                set:text="documentation"
+              />
+              depends on whether trustworthy public documentation exists.
+            </p>
           </div>
-          <button
-            class="product-gallery-arrow previous"
-            type="button"
-            data-gallery-direction="-1"
-            aria-label="Previous screenshot"
-            aria-keyshortcuts="ArrowLeft"
-            data-tip="Left arrow"
-            aria-controls="product-slides"
-            hidden
-          >
-            <Icon name="caret-left" />
-          </button>
-          <button
-            class="product-gallery-arrow next"
-            type="button"
-            data-gallery-direction="1"
-            aria-label="Next screenshot"
-            aria-keyshortcuts="ArrowRight"
-            data-tip="Right arrow"
-            aria-controls="product-slides"
-            hidden
-          >
-            <Icon name="caret-right" />
-          </button>
-          <span
-            id="product-gallery-status"
-            class="sr-only"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            Screenshot 1 of {previews.length}
-          </span>
-        </div>
-        <div class="product-purchase">
-          <div class="product-cta">
-            <div class="product-pricing">
-              <span class="product-price">9,99&nbsp;EUR</span>
-              <span class="price-label">One time payment</span>
-            </div>
-            <div class="product-buttons">
-              <span class="product-button disabled" aria-disabled="true">
-                <Icon name="si-paddle" />
-                <span set:text="Buy" />
-              </span>
-              <a
-                class="product-button secondary"
-                href="https://github.com/nohuto/win-config/releases/latest"
-              >
-                <Icon name="windows-logo" />
-                <span set:text="Download" />
-              </a>
-            </div>
-            <ul class="payment-methods" aria-label="Payment methods">
-              {paymentMethods.map(({ src, name }) => (
-                <li>
-                  <img
-                    src={src}
-                    width="38"
-                    height="24"
-                    alt={name}
-                    title={name}
-                    decoding="async"
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-          <p class="purchase-note">
-            Buying works once Paddle has approved the site.
-          </p>
-          <p class="purchase-note">
-            The release includes the installer and its <code>.sig</code>
-            signature from my
-            <a class="link" href="/public.asc" set:text="PGP key" />.
-          </p>
-        </div>
-        <div class="product-documentation">
-          <p>
-            WinConfig is based on my personal research on several topics, which
-            I began documenting around July 2024. Purchasing a license supports
-            my research and ongoing work. The detail of each options
-            <a class="link" href="/docs/win-config/" set:text="documentation" />
-            depends on whether trustworthy public documentation exists.
-          </p>
         </div>
       </div>
 

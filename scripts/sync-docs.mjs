@@ -231,7 +231,6 @@ const WIN_CONFIG_DOC_ORDER = {
   misc: [
     'explorer-blur.md',
     'startallback-config.md',
-    'system-informer.md',
     'nvfetch.md',
     '7-zip-settings.md',
     'onedrive.md',

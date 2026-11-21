@@ -10,7 +10,6 @@ sidebar:
 
 - [Explorer Blur](/docs/win-config/misc/explorer-blur/)
 - [StartAllBack Config](/docs/win-config/misc/startallback-config/)
-- [System Informer](/docs/win-config/misc/system-informer/)
 - [NVFetch](/docs/win-config/misc/nvfetch/)
 - [7-Zip Settings](/docs/win-config/misc/7-zip-settings/)
 - [OneDrive](/docs/win-config/misc/onedrive/)

@@ -8,7 +8,6 @@ export const WIN_CONFIG_CATEGORIES = [
   'security',
   'nvidia',
   'misc',
-  'policies',
   'affinities',
 ];
 
@@ -18,7 +17,6 @@ export const CATEGORY_LABELS = {
   network: 'Network',
   nvidia: 'NVIDIA',
   peripheral: 'Peripheral',
-  policies: 'Policies',
   power: 'Power',
   privacy: 'Privacy',
   security: 'Security',

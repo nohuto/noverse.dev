@@ -19,6 +19,6 @@ NET ACCOUNTS
 [/UNIQUEPW:number] [/DOMAIN]
 ```
 
-Congigure the policy yourself via `Computer Configuration > Windows Settings > Security Settings > Account Policies > Password Policy`:
+Configure the policy yourself via `Computer Configuration > Windows Settings > Security Settings > Account Policies > Password Policy`:
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/security/images/passwordage.png" alt="" width="974" height="530" decoding="async">

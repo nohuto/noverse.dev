@@ -4,16 +4,18 @@ title: 'PowerShell & .NET Telemetry'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 20
+  order: 18
 ---
 
-### [POWERSHELL_TELEMETRY_OPTOUT](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_telemetry?view=powershell-7.2)
+### [POWERSHELL_TELEMETRY_OPTOUT](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_telemetry?view=powershell-7.5)
 
 > "*At startup, PowerShell sends diagnostic data including OS manufacturer, name, and version; PowerShell version; `POWERSHELL_DISTRIBUTION_CHANNEL`; Application Insights SDK version; approximate location from IP; command-line parameters (without values); current Execution Policy; and randomly generated GUIDs for the user and session.*"
 
 ```bat
 setx POWERSHELL_TELEMETRY_OPTOUT 1
 ```
+
+The var only affects PS 7 (`pwsh`).
 
 ### [DOTNET_CLI_TELEMETRY_OPTOUT](https://learn.microsoft.com/en-us/dotnet/core/tools/telemetry#how-to-opt-out)
 

@@ -4,8 +4,10 @@ title: 'Microsoft Accounts'
 description: 'Privacy option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 36
+  order: 32
 ---
+
+Local Security Policy option "Accounts: Block Microsoft accounts" (Security Settings > Local Policies > Security Options, [Accounts: Block Microsoft accounts](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/accounts-block-microsoft-accounts)):
 
 > "*This setting prevents using the Settings app to add a Microsoft account for single sign-on (SSO) authentication for Microsoft services and some background services, or using a Microsoft account for single sign-on to other applications or services.*
 >

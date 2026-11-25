@@ -4,7 +4,7 @@ title: 'Interrupt Moderation'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 17
+  order: 16
 ---
 
 > "*To control interrupt moderation, some network adapters expose different interrupt moderation levels, different buffer coalescing parameters (sometimes separately for send and receive buffers), or both.*
@@ -75,8 +75,8 @@ Miscellaneous notes (NVIDIA/Mellanox ConnectX coalescing values):
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
-  "RecvIntModCount" = ?; // range 0-1000, mlx5.sys
-  "RecvIntModTime" = ?; // ipoib6x.sys, mlx4eth63.sys
-  "SendIntModCount" = ?; // range 0-1000, mlx5.sys
-  "SendIntModTime" = ?; // range 0-1000, mlx5.sys
+  "RecvIntModCount" = ?; // range 0-1000
+  "RecvIntModTime" = ?; // ipoib6x.sys
+  "SendIntModCount" = ?; // range 0-1000
+  "SendIntModTime" = ?; // range 0-1000
 ```

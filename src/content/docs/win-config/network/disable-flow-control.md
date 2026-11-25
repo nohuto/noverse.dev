@@ -4,7 +4,7 @@ title: 'Flow Control'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 21
+  order: 20
 ---
 
 > "*This feature enables adapters to more effectively regulate traffic. Adapters generate flow control frames when their receive queues reach a pre-defined limit. Generating flow control frames signals the transmitter to slow transmission. Adapters respond to flow control frames by pausing packet transmission for the time specified in the flow control frame.*

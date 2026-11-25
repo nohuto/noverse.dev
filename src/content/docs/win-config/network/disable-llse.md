@@ -4,7 +4,7 @@ title: 'LLSE'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 20
+  order: 19
 ---
 
 Turns off the System log entries an Intel NIC writes when its link goes up/down, nothing more.

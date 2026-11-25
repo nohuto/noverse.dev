@@ -4,7 +4,7 @@ title: 'QoS Policy'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 26
+  order: 25
 ---
 
 > "*The DSCP value provides network traffic classification at the Internet Protocol (IP) level, which routers use to decide traffic queuing behavior.*"

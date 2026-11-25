@@ -4,7 +4,7 @@ title: 'Wi-Fi Sense'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 14
+  order: 13
 ---
 
 > "*Wi-Fi Sense automatically connects devices to known hotspots and to the wireless networks the person’s contacts have shared with them.*"

@@ -4,7 +4,7 @@ title: 'Network Buffers'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 16
+  order: 15
 ---
 
 Each driver has its own range (see `Ndi\Params\*ReceiveBuffers` & `*TransmitBuffers` of your adapter).

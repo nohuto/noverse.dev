@@ -4,7 +4,7 @@ title: 'WoL'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 15
+  order: 14
 ---
 
 > "*The wake-on-LAN (WOL) feature wakes the computer from a low power state when a network adapter detects a WOL event (typically, a specially constructed Ethernet packet). WOL is supported from `S3` sleep or `S4` hibernate. It's not supported from fast startup or `S5` soft off shutdown states. NICs aren't armed for wake in these states because users don't expect their systems to wake up on their own. WOL is not officially supported from the `S5` soft off state. However, the BIOS on some systems might support arming NICs for wake, even though Windows isn't involved in the process.*"
@@ -20,17 +20,16 @@ powercfg /devicequery wake_armed
 
 ## Registry Values
 
-
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
-  "*WakeOnMagicPacket" = 1; // REG_SZ, range 0-1 (all drivers)
-  "*WakeOnPattern" = 1; // REG_SZ, range 0-1 (all drivers)
-  "WakeOn" = 0; // REG_SZ, range 0-4, e1i68x64.sys
-  "WakeFromS5" = 2; // REG_SZ, range 0-65535, e1i68x64.sys
-  "WakeOnLink" = 0; // REG_SZ, range 0-2, e1i68x64.sys
-  "WakeOnFastStartup" = 0; // REG_SZ, e1i68x64.sys
-  "EnableWakeOnManagmentOnTCO" = 0; // REG_SZ, range 0-1, e1i68x64.sys
-  "WakeOnMagicPacketFromS5" = 1; // REG_SZ, e2fn.sys
+  "*WakeOnMagicPacket" = 1; // REG_SZ (bool)
+  "*WakeOnPattern" = 1; // REG_SZ (bool)
+  "WakeOn" = 0; // REG_SZ, range 0-4
+  "WakeFromS5" = 2; // REG_SZ, range 0-65535
+  "WakeOnLink" = 0; // REG_SZ, range 0-2
+  "WakeOnFastStartup" = 0; // REG_SZ
+  "EnableWakeOnManagmentOnTCO" = 0; // REG_SZ (bool)
+  "WakeOnMagicPacketFromS5" = 1; // REG_SZ
   "S5WakeOnLan" = ?; // REG_SZ
   "WakeOnLinkChange" = ?; // REG_SZ
   "ShutdownWake" = ?; // REG_SZ

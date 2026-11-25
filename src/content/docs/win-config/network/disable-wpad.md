@@ -4,7 +4,7 @@ title: 'WPAD'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 27
+  order: 26
 ---
 
 Only use this option if you don't need a proxy that gets discovered automatically, a manually set proxy/PAC URL keeps working.

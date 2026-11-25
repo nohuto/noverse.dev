@@ -4,7 +4,7 @@ title: 'IPv6'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 13
+  order: 27
 ---
 
 - `Disable` = `DisabledComponents = 0xFF` & unchecks Internet Protocol Version 6 (`ms_tcpip6`)

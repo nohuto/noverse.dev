@@ -20,7 +20,6 @@ sidebar:
 - [Active Probing](/docs/win-config/network/disable-active-probing/)
 - [VPNs](/docs/win-config/network/disable-vpns/)
 - [NetBIOS/mDNS/LLMNR](/docs/win-config/network/disable-netbios-mdns-llmnr/)
-- [IPv6](/docs/win-config/network/ipv6/)
 - [Wi-Fi Sense](/docs/win-config/network/disable-wi-fi-sense/)
 - [WoL](/docs/win-config/network/disable-wol/)
 - [Network Buffers](/docs/win-config/network/network-buffers/)
@@ -35,3 +34,4 @@ sidebar:
 - [File/Printer Sharing](/docs/win-config/network/disable-file-printer-sharing/)
 - [QoS Policy](/docs/win-config/network/qos-policy/)
 - [WPAD](/docs/win-config/network/disable-wpad/)
+- [IPv6](/docs/win-config/network/ipv6/)

@@ -4,7 +4,7 @@ title: 'ICS / Mobile Hotspot'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 19
+  order: 18
 ---
 
 Disables Internet Connection Sharing (ICS), which lets Windows use one network adapter as the public/uplink interface and another as the private/downlink interface. In full mode, ICS turns the PC into a small gateway for other devices by providing NAT and local network services such as addressing through DHCP and name resolution on the private side.

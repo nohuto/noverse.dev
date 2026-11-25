@@ -4,7 +4,7 @@ title: 'File/Printer Sharing'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 25
+  order: 24
 ---
 
 Turns off "Allow others on the network to access shared files and printers on this device" (firewall group `@FirewallAPI.dll,-28502`), unbinds File and Printer Sharing (`ms_server`) and Client for Microsoft Networks (`ms_msclient`) from every physical adapter and disables the services below.

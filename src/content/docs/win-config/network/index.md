@@ -34,3 +34,4 @@ sidebar:
 - [SR-IOV](/docs/win-config/network/disable-sr-iov/)
 - [File/Printer Sharing](/docs/win-config/network/disable-file-printer-sharing/)
 - [QoS Policy](/docs/win-config/network/qos-policy/)
+- [WPAD](/docs/win-config/network/disable-wpad/)

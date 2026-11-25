@@ -20,7 +20,7 @@ sidebar:
 - [Active Probing](/docs/win-config/network/disable-active-probing/)
 - [VPNs](/docs/win-config/network/disable-vpns/)
 - [NetBIOS/mDNS/LLMNR](/docs/win-config/network/disable-netbios-mdns-llmnr/)
-- [IPv6 <!-- id: disable-ipv6 -->](/docs/win-config/network/ipv6-id-disable-ipv6/)
+- [IPv6](/docs/win-config/network/ipv6/)
 - [Wi-Fi Sense](/docs/win-config/network/disable-wi-fi-sense/)
 - [WoL](/docs/win-config/network/disable-wol/)
 - [Network Buffers](/docs/win-config/network/network-buffers/)

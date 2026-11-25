@@ -1,6 +1,6 @@
 ---
-slug: 'docs/win-config/network/ipv6-id-disable-ipv6'
-title: 'IPv6 <!-- id: disable-ipv6 -->'
+slug: 'docs/win-config/network/ipv6'
+title: 'IPv6'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:

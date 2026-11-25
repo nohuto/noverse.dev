@@ -4,10 +4,12 @@ title: 'File/Printer Sharing'
 description: 'Network option documentation from win-config.'
 editUrl: false
 sidebar:
-  order: 26
+  order: 25
 ---
 
-Disables "Allow other on the network to access shared files and printers on this device" via `@FirewallAPI.dll,-28502` & `ms_server`.
+Turns off "Allow others on the network to access shared files and printers on this device" (firewall group `@FirewallAPI.dll,-28502`), unbinds File and Printer Sharing (`ms_server`) and Client for Microsoft Networks (`ms_msclient`) from every physical adapter and disables the services below.
+
+`ms_server` binds the SMB server to an adapter. `ms_msclient` binds the LANMan redirector, which turns file I/O on network paths into SMB requests, so this also stops access to shares on other PCs. The SMBv1 option only removes the old protocol, this one removes the client binding that every SMB version uses.
 
 ```powershell
 PS C:\Users\Nohuto> Get-NetFirewallRule | sort -unique Group | sort DisplayGroup | ft DisplayGroup, Group

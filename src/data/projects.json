@@ -11,7 +11,7 @@
   {"title": "Calculator", "href": "/terminal#calc", "description": "Yet minimal scientific calculator.", "image": "/main/images/projects/calc", "section": "web"},
   {"title": "Bitmask Calculator (Web)", "href": "/terminal#bitmask", "description": "32 bit bitmask calculator.", "image": "/main/images/projects/bitmask", "section": "web"},
   {"title": "Policies Table", "href": "/policies", "description": "Table of (Windows) policy definitions, based on admx-parser.", "image": "/main/images/projects/policies", "section": "web"},
-  {"repo": "nohuto/decompiled-pseudocode", "title": "Decompiled Pseudocode", "image": "/main/images/projects/pseudocode-diff-KeInitializeClock", "section": "resources", "description": "Function pseudocode from binaries of different builds"},
+  {"repo": "nohuto/decompiled-pseudocode", "title": "Decompiled Pseudocode", "image": "/main/images/projects/pseudocode-diff-KeInitializeClock", "section": "resources", "description": "Decompiled pseudocode of Windows binaries across builds, with PDB symbols"},
   {"repo": "nohuto/type-layouts", "title": "Type Layouts", "image": "/main/images/projects/type-layouts", "section": "resources", "description": "Type layouts from some modules of different builds"},
   {"repo": "nohuto/globals", "title": "Globals", "image": "/main/images/projects/globals", "section": "resources", "description": "Extracted globals (including symbol name, RVA, PE section, type, storage size, init value)"},
   {"repo": "nohuto/admx-parser", "title": "ADMX Parser", "image": "/main/images/projects/admx-parser", "section": "resources", "description": "Parses PolicyDefinitions folder to JSON/YAML format"},

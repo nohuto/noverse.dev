@@ -11,17 +11,19 @@ sidebar:
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/system/images/HwQueue.png" alt="" width="1914" height="1124" decoding="async">
 
+See '[DXG Kernel Values](https://noverse.dev/docs/win-config/system/dxg-kernel-values/#registry-values)' for types and ranges.
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers";
-    "HwSchMode" = 0; // REG_DWORD, range 0-2, >=3 = 0
-    "HwSchOverrideBlockList" = 1; // REG_DWORD (bool)
-    "HwSchTreatExperimentalAsStable" = 0; // REG_DWORD (bool)
+    "HwSchMode" = 0;
+    "HwSchOverrideBlockList" = 1;
+    "HwSchTreatExperimentalAsStable" = 0;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler";
-    "HwSchThreadOffloadMode" = 2; // REG_DWORD, 24H2+
-    "HwQueuedRenderPacketGroupLimit" = 2; // REG_DWORD, min 1
-    "HwQueuedRenderPacketGroupLimitPerNode" = ?; // REG_BINARY
-    "HwQueuePacketCap" = ?; // REG_DWORD, driver default, range 1-14
+    "HwSchThreadOffloadMode" = 2;
+    "HwQueuedRenderPacketGroupLimit" = 2;
+    "HwQueuedRenderPacketGroupLimitPerNode" = ?;
+    "HwQueuePacketCap" = ?;
 ```
 
 Query the current states using the name RVAs (`dword_1C01404B8` = HwSchMode, `byte_1C01404BC` = HwSchOverrideBlockList, `byte_1C01404BD` = HwSchTreatExperimentalAsStable for the part below, obviously these names depend on the IDA auto generation so they'll unlikely be the same for you), follow the [DriverStart + RVAs](https://noverse.dev/docs/win-config/system/mmcss-values/#driverstart--rvas) guide if you want to try it.

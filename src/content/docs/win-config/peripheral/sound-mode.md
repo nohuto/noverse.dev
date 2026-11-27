@@ -13,33 +13,26 @@ sidebar:
 >
 > — Microsoft, [Spatial Sound for app developers for Windows, Xbox, and Hololens 2](https://learn.microsoft.com/en-us/windows/win32/coreaudio/spatial-sound)
 
-
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/peripheral/images/spatial.jpeg" alt="" width="1920" height="1080" decoding="async">
 
 ### Registry Values
 
-See '[Audio Values](https://noverse.dev/docs/win-config/peripheral/audio-values/)' for other related values.
+See '[Audio Values](https://noverse.dev/docs/win-config/peripheral/audio-values/#registry-values)' for what the values do and other related values.
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
-  // BlockSpatialAudioRegistryGates
-  "DisableSpatialAudioGlobal" = 0; // REG_DWORD (bool)
-  "DisableSpatialAudioPerEndpoint" = 1; // REG_DWORD (bool), nonzero = PKEY_Endpoint_SpatialNotAllowed
-  "DisableSpatialAudioVssFeature" = 0; // REG_DWORD (bool)
-  "SpatialAudioHrtfOnByDefault" = 0; // REG_DWORD (bool)
-
-  // IsSpatialComboEndpointDeterminationDisabled
-  "DisableSpatialOnComboEndpoints" = 1; // REG_DWORD (bool)
+  "DisableSpatialAudioGlobal" = 0;
+  "DisableSpatialAudioPerEndpoint" = 1;
+  "DisableSpatialAudioVssFeature" = 0;
+  "SpatialAudioHrtfOnByDefault" = 0;
+  "DisableSpatialOnComboEndpoints" = 0;
 
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio\\Policy\\Spatial";
-  // AtmosCheck::GetSpatialAudioLicenseGracePeriodInMs
-  "SpatialAudioLicenseCheckStartDelay" = 5; // REG_DWORD, range 1-900000 ms, 0/>900000 = 5 ms
-
-  // IsMultiUserSKU
-  "SpatialAudioLicenseCheckRequiresUserContext" = 0; // REG_DWORD (bool)
+  "SpatialAudioLicenseCheckStartDelay" = 5;
+  "SpatialAudioLicenseCheckRequiresUserContext" = 0;
 ```
 
-Disabling spatial sound via these values would gray out the option in the device properites, but Windows itself doesn't disable/enable it via them.
+Disabling spatial sound via these values would gray out the option in the device properties, but Windows itself doesn't disable/enable it via them.
 
 <img src="https://raw.githubusercontent.com/nohuto/win-config/main/peripheral/images/spatialsystemsettings.png" alt="" width="1053" height="514" loading="lazy" decoding="async">
 

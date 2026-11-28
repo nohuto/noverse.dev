@@ -33,3 +33,4 @@ sidebar:
 - [Classic Control Panel](/docs/win-config/visibility/classic-control-panel/)
 - [OEM Information](/docs/win-config/visibility/oem-information/)
 - [Settings Page Visibility](/docs/win-config/visibility/settings-page-visibility/)
+- [StartAllBack Config](/docs/win-config/visibility/startallback-config/)

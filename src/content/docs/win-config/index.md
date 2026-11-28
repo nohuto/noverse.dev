@@ -16,5 +16,4 @@ sidebar:
 - [Network](/docs/win-config/network/)
 - [Security](/docs/win-config/security/)
 - [NVIDIA](/docs/win-config/nvidia/)
-- [Misc](/docs/win-config/misc/)
 - [Affinities](/docs/win-config/affinities/)

@@ -47,3 +47,4 @@ sidebar:
 - [F1 Help Key](/docs/win-config/privacy/disable-f1-help-key/)
 - [Find My Device](/docs/win-config/privacy/disable-find-my-device/)
 - [Location & Sensors](/docs/win-config/privacy/disable-location-sensors/)
+- [OneDrive](/docs/win-config/privacy/onedrive/)
